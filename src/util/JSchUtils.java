@@ -14,7 +14,7 @@ public class JSchUtils {
             return true;
         }
         try {
-            Session session = new JSch().getSession("hvthinh", "sedna", 22);
+            session = new JSch().getSession("hvthinh", "sedna", 22);
             session.setConfig("StrictHostKeyChecking", "no");
             session.setPassword("1234abcdABCD");
 

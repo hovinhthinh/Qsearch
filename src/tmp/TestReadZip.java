@@ -10,10 +10,7 @@ import java.nio.charset.StandardCharsets;
 public class TestReadZip {
     public static void main(String[] args) throws Exception {
         ZipArchiveInputStream zipInput =
-                new ZipArchiveInputStream(
-//                        new FileInputStream("/home/hvthinh/datasets/BriQ-tableM/other.zip")
-                        JSchUtils.getFileInputStreamFromServer("/GW/archive-6/projects/BriQ/data/TableM/pages_by_cat/other.zip")
-                );
+                new ZipArchiveInputStream(JSchUtils.getFileInputStreamFromServer("/GW/D5data-10/hvthinh/BriQ-TableM/health.zip"));
 
         ZipArchiveEntry entry;
 //        PrintWriter out = FileUtils.getPrintWriter("/home/hvthinh/datasets/BriQ-tableM/health_filtered.gz", "UTF-8");
