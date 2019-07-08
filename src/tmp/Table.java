@@ -1,12 +1,12 @@
 package tmp;
 
 public class Table {
-    public static final int FORMAT_MAX = 30;
+    public static final int MAX_COLUMN_WIDTH = 35;
     String[][] header; // row -> column
     String[][] data; // row -> column
 
-
-    public void printTable() {
+    @Override
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         int nColumns = 0;
         for (int i = 0; i < header.length; ++i) {
@@ -19,7 +19,7 @@ public class Table {
         for (String[][] part : new String[][][]{header, data}) {
             for (int i = 0; i < part.length; ++i) {
                 for (int j = 0; j < part[i].length; ++j) {
-                    columnMaxWidth[j] = Math.max(columnMaxWidth[j], Math.min(FORMAT_MAX, part[i][j].length()));
+                    columnMaxWidth[j] = Math.max(columnMaxWidth[j], Math.min(MAX_COLUMN_WIDTH, part[i][j].length()));
                 }
             }
         }
@@ -56,6 +56,6 @@ public class Table {
 
         }
 
-        System.out.println(sb.toString());
+        return sb.toString();
     }
 }
