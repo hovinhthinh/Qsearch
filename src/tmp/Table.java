@@ -9,13 +9,13 @@ public class Table {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         int nColumns = 0;
-        for (int i = 0; i < header.length; ++i) {
-            nColumns = Math.max(nColumns, header[i].length);
-        }
-        for (int i = 0; i < data.length; ++i) {
-            nColumns = Math.max(nColumns, data[i].length);
+        for (String[][] part : new String[][][]{header, data}) {
+            for (int i = 0; i < part.length; ++i) {
+                nColumns = Math.max(nColumns, part[i].length);
+            }
         }
         int[] columnMaxWidth = new int[nColumns];
+
         for (String[][] part : new String[][][]{header, data}) {
             for (int i = 0; i < part.length; ++i) {
                 for (int j = 0; j < part[i].length; ++j) {
@@ -23,6 +23,7 @@ public class Table {
                 }
             }
         }
+
         boolean headerPrinted = true;
         for (String[][] part : new String[][][]{header, data}) {
             for (int i = 0; i < part.length; ++i) {
