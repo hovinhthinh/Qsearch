@@ -12,6 +12,7 @@ import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 import util.JSchUtils;
 
+import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -54,8 +55,8 @@ public class ReadTabEL {
 
         System.out.println("Looping");
         for (String line : new FileUtils.LineStream(new GzipCompressorInputStream(
-                JSchUtils.getFileInputStreamFromServer
-//                        new FileInputStream
+//                JSchUtils.getFileInputStreamFromServer
+                        new FileInputStream
         ("/GW/D5data/hvthinh/TabEL/tables.json.gz")), StandardCharsets.UTF_8)) {
             JSONObject o = new JSONObject(line);
 //            System.out.println("-----Link: " + "https://en.wikipedia.org/wiki/" + URLEncoder.encode(o.getString("pgTitle").replaceAll("\\s", "_")));
