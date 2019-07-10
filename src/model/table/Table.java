@@ -11,7 +11,7 @@ public class Table {
     public String source;
 
     public String getTableContentPrintable() {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(source).append("\r\n");
         int[] columnMaxWidth = new int[nColumn];
 
         for (Cell[][] part : new Cell[][][]{header, data}) {

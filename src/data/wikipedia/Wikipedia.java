@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
+
 public class Wikipedia {
 
     // Input is from "/GW/D5data/hvthinh/TabEL/tables.json.gz"
@@ -50,7 +52,7 @@ public class Wikipedia {
                 }
             }
 
-            table.source = "WIKIPEDIA:" + json.getString("pgTitle");
+            table.source = "WIKIPEDIA:Link:" + "https://en.wikipedia.org/wiki/" + URLEncoder.encode(json.getString("pgTitle").replaceAll("\\s", "_"));
 
             return table;
         } catch (JSONException e) {
