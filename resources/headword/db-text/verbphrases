@@ -1,0 +1,4375 @@
+200001740	2	take a breath	v	1	3
+200003662	1	force out	v	8	0
+200004227	3	breathe out	v	1	0
+200004605	2	give forth	v	1	1
+200005041	3	breathe in	v	1	1
+200006238	2	cough up	v	2	0
+200006238	3	cough out	v	1	0
+200006238	4	spit up	v	2	0
+200006238	5	spit out	v	3	0
+200008435	3	blink away	v	1	0
+200009492	2	peel off	v	5	0
+200010054	1	move involuntarily	v	1	0
+200010054	2	move reflexively	v	1	0
+200010241	1	act involuntarily	v	1	0
+200010241	2	act reflexively	v	1	0
+200011361	1	fall over backwards	v	1	0
+200011361	2	bend over backwards	v	1	0
+200013615	3	act as	v	2	0
+200014549	1	be active	v	1	0
+200014742	4	log Z`s	v	1	0
+200014742	5	catch some Z`s	v	1	0
+200015163	2	practice bundling	v	1	0
+200015498	3	catch a wink	v	1	1
+200015806	1	sleep late	v	1	0
+200015806	2	sleep in	v	1	1
+200015946	2	hole up	v	3	0
+200016855	1	zonk out	v	2	0
+200017031	2	saw wood	v	1	0
+200017031	3	saw logs	v	1	0
+200017282	1	fall asleep	v	1	8
+200017282	2	dope off	v	1	0
+200017282	3	flake out	v	1	0
+200017282	4	drift off	v	1	0
+200017282	5	nod off	v	1	0
+200017282	6	drop off	v	2	1
+200017282	7	doze off	v	1	0
+200017282	8	drowse off	v	1	0
+200017531	1	bed down	v	1	1
+200017531	2	bunk down	v	1	0
+200017674	2	doss down	v	1	0
+200017865	1	go to bed	v	1	4
+200017865	2	turn in	v	4	0
+200017865	4	crawl in	v	1	0
+200017865	5	kip down	v	1	0
+200017865	6	hit the hay	v	1	0
+200017865	7	hit the sack	v	1	0
+200017865	8	sack out	v	1	0
+200017865	9	go to sleep	v	1	3
+200018158	1	get up	v	2	6
+200018158	2	turn out	v	12	0
+200018405	1	get up	v	4	3
+200018526	1	wake up	v	2	7
+200018526	6	come alive	v	1	1
+200018813	5	wake up	v	1	8
+200019273	1	cause to sleep	v	1	0
+200020259	1	stay up	v	1	0
+200020259	2	sit up	v	1	3
+200020449	1	keep up	v	5	0
+200021065	5	put under	v	1	0
+200021065	6	put out	v	10	0
+200022099	1	bring to	v	1	0
+200022099	2	bring back	v	2	1
+200022099	3	bring round	v	2	0
+200022099	4	bring around	v	3	0
+200022686	6	perk up	v	2	0
+200023473	1	perk up	v	1	1
+200023473	4	pick up	v	16	0
+200023473	5	gain vigor	v	1	0
+200023646	4	pass out	v	1	1
+200023868	1	zonk out	v	1	0
+200023868	2	pass out	v	3	0
+200023868	3	black out	v	4	1
+200024047	1	come to	v	4	2
+200024814	4	freshen up	v	2	0
+200025034	1	wash up	v	1	1
+200025203	3	tense up	v	2	0
+200025654	4	loosen up	v	5	0
+200025654	6	make relaxed	v	1	0
+200026153	2	tense up	v	1	0
+200026385	2	loosen up	v	4	0
+200026385	6	slow down	v	5	0
+200026734	1	vege out	v	1	0
+200026941	1	sit back	v	1	3
+200026941	2	take it easy	v	1	3
+200027064	1	limber up	v	2	0
+200027064	2	warm up	v	5	1
+200027064	3	loosen up	v	3	0
+200027705	2	stretch out	v	3	1
+200027705	3	put out	v	4	1
+200027705	5	hold out	v	1	5
+200027705	6	stretch forth	v	1	2
+200028167	2	stretch out	v	5	0
+200030366	1	break up	v	19	0
+200030366	2	crack up	v	3	0
+200030647	1	break down	v	8	0
+200030853	1	drop like flies	v	1	0
+200031277	1	fall over	v	1	1
+200031277	2	go over	v	4	1
+200031540	2	laugh loudly	v	1	0
+200031663	3	laugh softly	v	1	1
+200031820	2	express joy	v	1	0
+200031820	3	express mirth	v	1	0
+200034288	2	make a face	v	1	0
+200034288	3	pull a face	v	1	0
+200034634	1	screw up	v	4	0
+200035089	1	clear the throat	v	1	0
+200036685	1	sponge down	v	2	0
+200036780	2	scrub up	v	1	0
+200038365	2	comb out	v	2	0
+200038687	2	slick down	v	1	0
+200038687	3	sleek down	v	1	0
+200040766	1	clean up	v	4	0
+200040928	1	make up	v	9	0
+200043078	1	doll up	v	1	0
+200043078	2	do up	v	2	0
+200043078	3	pretty up	v	1	0
+200043078	4	glam up	v	1	0
+200043278	1	spruce up	v	2	0
+200043278	3	slick up	v	2	0
+200043278	4	smarten up	v	2	0
+200044037	1	tart up	v	2	0
+200044149	2	dress up	v	1	5
+200044149	3	fig out	v	1	0
+200044149	4	fig up	v	1	0
+200044149	5	deck up	v	1	0
+200044149	6	gussy up	v	1	0
+200044149	7	fancy up	v	1	0
+200044149	8	trick up	v	1	0
+200044149	9	deck out	v	1	1
+200044149	10	trick out	v	1	1
+200044149	13	get up	v	6	1
+200044149	14	rig out	v	1	0
+200044149	15	tog up	v	1	0
+200044149	16	tog out	v	1	0
+200044797	2	dress up	v	5	0
+200045145	2	prim up	v	1	0
+200045145	3	prim out	v	1	0
+200045346	1	dress down	v	2	0
+200045817	2	melt off	v	1	1
+200045817	3	lose weight	v	1	1
+200045817	7	slim down	v	1	0
+200046022	1	sweat off	v	1	0
+200046151	2	put on	v	9	0
+200046382	2	flesh out	v	3	0
+200046382	3	fill out	v	6	0
+200046534	2	get dressed	v	1	0
+200047032	1	bundle up	v	2	0
+200047317	1	try on	v	1	1
+200047945	9	fit out	v	2	0
+200048633	2	wrap up	v	4	0
+200049900	6	strip down	v	1	0
+200050315	1	peel off	v	2	1
+200050454	1	take off	v	6	1
+200050652	2	put on	v	1	18
+200050652	3	get into	v	5	1
+200051170	1	slip on	v	1	1
+200051370	1	slip off	v	1	0
+200051761	2	dress up	v	4	0
+200052374	2	have on	v	1	8
+200053159	2	knock up	v	1	0
+200053159	3	bang up	v	2	0
+200053159	4	prang up	v	1	0
+200054628	8	bring forth	v	4	1
+200056930	1	give birth	v	1	2
+200057410	1	lie in	v	2	0
+200058897	2	have young	v	1	0
+200059019	1	have a bun in the oven	v	1	0
+200059559	1	carry to term	v	1	0
+200065495	1	be well	v	1	1
+200067999	4	ooze out	v	1	0
+200071037	1	disagree with	v	1	0
+200072012	9	make water	v	1	0
+200072012	10	relieve oneself	v	1	1
+200072012	11	take a leak	v	1	0
+200072012	12	spend a penny	v	1	0
+200072012	15	pass water	v	1	1
+200074038	4	take a shit	v	1	0
+200074038	5	take a crap	v	1	0
+200074834	1	shed blood	v	2	0
+200075021	2	wear upon	v	1	0
+200075021	3	tire out	v	1	2
+200075021	7	wear out	v	1	2
+200075021	9	wear down	v	1	1
+200075021	10	fag out	v	1	0
+200075421	2	wash up	v	5	0
+200075421	5	tucker out	v	1	0
+200076400	2	vomit up	v	1	0
+200076400	7	be sick	v	1	0
+200076400	19	throw up	v	1	1
+200077071	2	spew out	v	1	0
+200077369	1	keep down	v	3	0
+200078760	2	care for	v	3	0
+200081725	1	bring around	v	2	0
+200083809	1	operate on	v	1	0
+200085046	2	dope up	v	1	0
+200087454	2	come down	v	4	1
+200088120	1	catch cold	v	1	0
+200093020	1	snap back	v	1	0
+200093327	6	fall back	v	6	0
+200096648	1	work up	v	2	1
+200096648	2	get up	v	5	1
+200098346	3	bring up	v	8	0
+200099089	1	skin over	v	1	0
+200099517	1	poop out	v	1	0
+200099517	2	peter out	v	2	0
+200099517	3	run down	v	4	2
+200099517	4	run out	v	8	0
+200099517	5	conk out	v	2	0
+200099721	2	work out	v	4	5
+200100551	3	work out	v	8	0
+200100905	1	warm up	v	4	1
+200101277	2	tone up	v	1	0
+200101434	2	stretch out	v	4	0
+200101629	2	break wind	v	1	0
+200102303	3	spit out	v	1	2
+200105333	3	pass off	v	6	0
+200105778	2	clown around	v	1	0
+200106217	1	feel like a million	v	1	0
+200106217	2	feel like a million dollars	v	1	0
+200106960	1	run down	v	3	2
+200106960	2	run over	v	1	3
+200107110	1	pack on	v	1	2
+200107468	1	make as if	v	1	0
+200118435	1	keep out	v	2	0
+200118764	1	keep up	v	4	2
+200118764	2	keep abreast	v	1	1
+200118922	1	sit tight	v	1	0
+200121214	2	take turns	v	1	2
+200125078	2	roll up	v	7	0
+200125447	3	glass over	v	1	0
+200125447	4	glaze over	v	2	0
+200136991	2	leave alone	v	1	0
+200136991	3	leave behind	v	3	0
+200137313	3	bear upon	v	1	1
+200137313	4	bear on	v	2	2
+200137313	5	touch on	v	4	0
+200137791	1	strike a blow	v	1	0
+200138069	1	tell on	v	2	1
+200138508	1	change by reversal	v	1	0
+200139160	1	turn the tables	v	1	1
+200139160	2	turn the tide	v	1	0
+200140123	1	change integrity	v	1	0
+200140751	1	switch over	v	1	0
+200140967	1	change shape	v	1	0
+200140967	2	change form	v	1	0
+200145147	2	round out	v	4	0
+200145147	3	round off	v	1	1
+200145448	2	square up	v	1	2
+200145623	1	round off	v	3	0
+200145623	2	round down	v	1	0
+200145623	3	round out	v	3	0
+200146023	2	pooch out	v	1	0
+200146138	1	change state	v	1	0
+200148472	1	fall off	v	3	0
+200148472	2	fall away	v	2	2
+200148597	1	fall in love	v	1	7
+200149118	1	sober up	v	1	3
+200149296	1	sober up	v	2	0
+200150776	2	conform to	v	3	1
+200150977	1	go by	v	4	0
+200152887	1	drop off	v	1	1
+200154608	1	build up	v	1	7
+200155143	2	go up	v	2	7
+200155547	3	climb up	v	3	0
+200156276	1	ease up	v	3	0
+200156276	2	ease off	v	2	0
+200156276	3	let up	v	2	1
+200156485	1	ease up	v	2	1
+200156485	2	ease off	v	1	0
+200156485	3	slacken off	v	1	0
+200157347	1	add to	v	1	0
+200158687	1	bump up	v	1	0
+200158804	4	pile up	v	1	4
+200159553	1	run up	v	1	2
+200163441	3	freshen up	v	1	0
+200167934	2	straighten out	v	3	1
+200167934	3	see the light	v	1	0
+200169651	1	change magnitude	v	1	0
+200170997	1	soup up	v	1	0
+200170997	2	hop up	v	1	0
+200170997	3	hot up	v	3	0
+200171852	1	build up	v	5	0
+200172381	1	round out	v	2	3
+200172381	2	fill out	v	2	1
+200173338	3	take away	v	2	5
+200178235	2	clear up	v	3	1
+200178898	1	tear away	v	1	2
+200178898	2	tear off	v	1	0
+200179060	1	take off	v	2	6
+200179311	1	take away	v	3	4
+200179311	2	take out	v	3	4
+200180315	1	chip away	v	1	0
+200180315	2	chip away at	v	1	0
+200180602	1	knock out	v	3	1
+200181559	1	clear off	v	1	0
+200181559	2	clear away	v	1	0
+200181875	2	clutter up	v	1	0
+200183241	1	gild the lily	v	2	0
+200183241	2	paint the lily	v	2	0
+200183506	1	work in	v	1	0
+200183757	1	add on	v	1	1
+200184117	2	mix in	v	2	0
+200184511	1	put on	v	2	3
+200184786	1	put on	v	5	1
+200187526	4	stick in	v	2	1
+200187526	5	put in	v	1	6
+200189511	2	feed in	v	1	0
+200190389	2	string up	v	2	0
+200192659	1	jazz up	v	1	0
+200192659	2	juice up	v	1	0
+200192659	3	pep up	v	2	0
+200192659	4	ginger up	v	1	0
+200192836	3	liven up	v	1	0
+200193130	2	spirit up	v	1	0
+200196252	1	burn off	v	2	1
+200201618	2	cut up	v	4	0
+200201722	3	edit out	v	1	2
+200201906	1	black out	v	3	1
+200202089	1	blank out	v	2	0
+200202569	1	break in	v	6	0
+200204391	2	drop off	v	5	0
+200204391	3	drop away	v	1	0
+200204391	4	fall away	v	1	2
+200205598	1	turn around	v	3	0
+200205598	2	pick up	v	13	1
+200205766	2	brisk up	v	1	0
+200206797	1	turn around	v	2	0
+200208055	1	iron out	v	1	1
+200208055	2	straighten out	v	1	2
+200208055	3	put right	v	1	0
+200208691	1	go to pot	v	1	0
+200208691	2	go to the dogs	v	1	0
+200209174	2	break up	v	18	0
+200209174	3	break down	v	7	0
+200210259	2	go bad	v	2	0
+200211108	3	dry up	v	1	2
+200213794	3	put up	v	6	1
+200215491	1	tumble dry	v	1	0
+200218475	2	dry out	v	3	0
+200219403	2	dry out	v	1	2
+200220869	2	beef up	v	1	1
+200221718	2	brace up	v	1	0
+200223109	2	back up	v	3	1
+200223374	2	bolster up	v	1	0
+200224168	1	die down	v	2	0
+200226071	3	thin out	v	3	0
+200227667	1	heat up	v	3	0
+200227667	2	hot up	v	2	0
+200227667	3	screw up	v	1	1
+200228521	2	hose down	v	1	0
+200230276	1	follow up	v	2	0
+200230562	1	touch up	v	1	1
+200232714	2	grow over	v	1	0
+200233089	2	pare down	v	1	1
+200234536	1	draw the line	v	1	1
+200234536	2	draw a line	v	1	0
+200234725	1	mark off	v	1	1
+200234725	2	mark out	v	1	0
+200235763	1	hold down	v	2	0
+200235918	2	keep down	v	1	1
+200236592	4	cut back	v	4	0
+200236999	2	boil down	v	3	0
+200237259	1	boil down	v	2	0
+200237704	2	come down	v	2	2
+200237704	3	boil down	v	1	1
+200240131	2	scale down	v	2	0
+200240293	1	blow up	v	2	1
+200241689	2	shrivel up	v	1	0
+200242026	1	die back	v	1	0
+200242026	2	die down	v	1	0
+200242205	2	dry up	v	2	0
+200245059	2	let up	v	1	1
+200245059	3	slack off	v	1	0
+200245059	5	die away	v	1	2
+200248026	3	get on	v	7	0
+200248659	2	come on	v	3	2
+200248659	3	come along	v	2	2
+200248659	5	get on	v	6	1
+200248659	6	get along	v	3	0
+200248659	7	shape up	v	1	0
+200250691	1	find oneself	v	1	1
+200251270	1	work out	v	1	16
+200251270	2	work up	v	4	0
+200251463	2	work out	v	3	6
+200252990	1	build up	v	2	6
+200252990	2	work up	v	1	4
+200253277	1	build up	v	4	0
+200253277	2	work up	v	3	0
+200253277	4	ramp up	v	1	0
+200253761	2	make grow	v	1	0
+200254486	3	mellow out	v	1	0
+200256507	2	swell up	v	1	0
+200257535	2	belly out	v	1	0
+200257947	2	take in water	v	1	0
+200260648	6	furbish up	v	1	0
+200260648	8	touch on	v	3	0
+200262703	2	patch up	v	1	1
+200263682	2	puff up	v	2	1
+200263682	3	blow up	v	8	0
+200263682	4	puff out	v	1	1
+200264034	2	blow up	v	7	0
+200264386	2	blow up	v	6	0
+200264578	1	puff up	v	1	1
+200267681	2	dwindle away	v	1	0
+200267681	3	dwindle down	v	1	0
+200267855	1	turn down	v	5	0
+200268011	1	get well	v	1	0
+200268011	2	get over	v	3	1
+200268011	3	bounce back	v	1	2
+200268165	1	get worse	v	1	1
+200273257	1	steel oneself against	v	1	0
+200273257	2	steel onself for	v	1	0
+200273257	3	brace oneself for	v	1	0
+200273257	4	prepare for	v	1	7
+200274633	2	eat away	v	2	0
+200274724	2	eat away	v	1	0
+200275253	3	gnaw at	v	1	1
+200275253	4	eat at	v	1	0
+200275253	5	wear away	v	3	0
+200275843	2	tidy up	v	1	1
+200275843	3	clean up	v	1	8
+200275843	6	straighten out	v	6	0
+200275843	7	square away	v	1	1
+200276068	2	make up	v	6	1
+200276214	2	mess up	v	3	0
+200276601	3	throw out of kilter	v	1	0
+200279822	2	bleach out	v	1	0
+200280112	1	wash out	v	7	0
+200280930	2	lighten up	v	4	0
+200282343	1	wash out	v	6	0
+200283911	7	color in	v	1	0
+200283911	8	colour in	v	1	0
+200288192	1	fast dye	v	1	0
+200288314	1	double dye	v	1	0
+200290302	3	step up	v	1	3
+200290740	3	step down	v	2	0
+200291873	4	light up	v	2	1
+200292507	2	cut off	v	2	6
+200292672	3	cut up	v	2	1
+200292877	3	cut short	v	4	0
+200293528	1	dress up	v	2	1
+200293760	2	blossom out	v	1	0
+200293760	3	blossom forth	v	1	0
+200293977	1	spruce up	v	1	0
+200293977	5	smarten up	v	1	0
+200293977	6	slick up	v	1	0
+200293977	7	spiff up	v	1	0
+200294522	2	burst forth	v	3	0
+200294718	2	spike out	v	1	1
+200295346	2	tune up	v	2	0
+200295966	2	tune up	v	1	0
+200297333	2	zero in	v	2	0
+200303806	1	white out	v	2	0
+200303940	1	let out	v	4	0
+200304100	1	take in	v	17	0
+200304252	1	flare out	v	1	0
+200305417	1	taper off	v	2	0
+200305846	2	go off	v	6	0
+200306298	3	blow up	v	5	0
+200306539	2	burst forth	v	2	0
+200306539	3	break loose	v	1	2
+200306723	3	blow up	v	1	4
+200306723	4	set off	v	4	2
+200307295	1	go off	v	2	3
+200307785	3	flare up	v	2	1
+200307785	5	break open	v	3	0
+200307785	6	burst out	v	3	0
+200309074	3	break out	v	5	1
+200309310	3	break open	v	2	0
+200310274	2	stave in	v	2	0
+200312648	1	black out	v	2	1
+200312648	2	blacken out	v	1	0
+200312815	2	lighten up	v	3	0
+200313987	2	blot out	v	1	6
+200315956	2	write off	v	4	0
+200315956	3	write down	v	2	0
+200317241	2	cut short	v	3	0
+200317888	4	draw out	v	2	1
+200318706	2	spin out	v	1	0
+200324806	3	cook out	v	1	0
+200325085	1	pan roast	v	1	0
+200326459	1	stir fry	v	1	0
+200328370	2	oven broil	v	1	0
+200330565	1	break up	v	17	0
+200333426	1	screen off	v	1	0
+200333426	2	separate off	v	1	0
+200334186	3	split up	v	4	0
+200334186	4	fall apart	v	4	0
+200334186	5	come apart	v	1	0
+200335555	1	break in	v	5	0
+200335697	1	stave in	v	1	0
+200336158	2	knock down	v	3	0
+200338071	1	break up	v	16	0
+200339738	2	come up	v	2	8
+200339934	3	go on	v	2	24
+200339934	4	pass off	v	5	0
+200339934	7	fall out	v	5	0
+200339934	8	come about	v	1	4
+200339934	9	take place	v	1	54
+200341757	2	drag on	v	2	0
+200341757	3	drag out	v	2	0
+200343898	1	go off	v	5	0
+200343898	2	come off	v	2	1
+200343898	3	go over	v	2	2
+200344042	1	come around	v	2	0
+200344042	2	roll around	v	1	0
+200345184	1	spin off	v	1	0
+200345508	2	break out	v	1	4
+200345761	1	get down	v	7	0
+200345761	4	start out	v	1	7
+200345761	6	set about	v	3	0
+200345761	7	set out	v	1	9
+200346714	1	strike out	v	6	0
+200346958	1	break out	v	2	3
+200347104	1	jump off	v	1	1
+200347276	1	get to	v	2	3
+200347804	1	break in	v	3	2
+200348103	1	come on	v	5	0
+200348422	1	take up	v	1	9
+200348541	1	get cracking	v	1	0
+200348541	2	bestir oneself	v	1	0
+200348541	3	get going	v	2	0
+200348541	4	get moving	v	1	0
+200348541	5	get weaving	v	1	0
+200348541	6	get started	v	1	5
+200348541	7	get rolling	v	1	0
+200348746	2	lead off	v	2	0
+200349592	2	usher in	v	1	1
+200349785	1	set off	v	6	1
+200349951	1	carry over	v	1	4
+200350283	2	take up	v	13	0
+200350461	3	hang in	v	1	1
+200350461	4	hang on	v	2	3
+200350461	5	hold on	v	3	2
+200351048	1	ask for it	v	1	0
+200351048	2	ask for trouble	v	1	0
+200351266	2	plug away	v	2	0
+200351406	1	stick to	v	2	3
+200351406	2	stick with	v	1	0
+200351576	1	pass away	v	2	1
+200351719	1	close out	v	3	0
+200352310	1	cut out	v	6	0
+200352419	1	go out	v	4	2
+200352558	1	finish up	v	2	1
+200352558	2	land up	v	2	0
+200352558	3	fetch up	v	1	0
+200352558	4	end up	v	1	3
+200352558	5	wind up	v	1	4
+200353639	1	give the axe	v	2	0
+200353639	2	give the bounce	v	1	0
+200353639	3	give the gate	v	1	0
+200355038	1	stamp out	v	1	2
+200355803	2	break up	v	15	0
+200355955	2	break up	v	14	0
+200356258	1	change surface	v	1	0
+200356649	2	level off	v	1	3
+200357332	6	burgeon forth	v	1	0
+200358431	6	pass away	v	1	3
+200358431	9	kick the bucket	v	1	0
+200358431	10	cash in one`s chips	v	1	0
+200358431	11	buy the farm	v	1	0
+200358431	13	give-up the ghost	v	1	0
+200358431	14	drop dead	v	1	2
+200358431	15	pop off	v	2	0
+200358431	18	snuff it	v	1	0
+200359806	1	buy it	v	1	1
+200359806	2	pip out	v	1	0
+200360092	2	leave behind	v	2	0
+200360932	1	be born	v	1	52
+200361208	1	come to life	v	1	2
+200361208	2	come into being	v	1	3
+200361388	1	cloud over	v	2	0
+200361495	2	mist over	v	1	0
+200362348	2	break off	v	2	2
+200362610	1	hold on	v	2	4
+200362805	1	cut short	v	1	3
+200362805	2	break short	v	1	0
+200362805	3	break off	v	1	2
+200363003	1	hang up	v	3	1
+200363110	2	knock off	v	5	0
+200363268	1	nolle pros	v	1	0
+200363268	2	nolle prosequi	v	1	0
+200363742	1	bog down	v	1	1
+200363916	1	bog down	v	4	0
+200364297	3	break up	v	13	0
+200368662	2	break apart	v	3	0
+200369864	3	cool down	v	3	0
+200370126	2	cool off	v	2	1
+200370126	3	cool down	v	2	0
+200370412	3	cool down	v	1	0
+200371264	2	heat up	v	2	0
+200372665	2	hot up	v	1	0
+200372665	3	heat up	v	1	1
+200373112	1	warm up	v	2	2
+200373250	2	warm up	v	3	1
+200375268	1	boil over	v	1	0
+200375417	1	deep freeze	v	1	0
+200377351	1	burn down	v	1	3
+200377351	2	burn up	v	3	0
+200377351	3	go up	v	6	1
+200378664	3	burn down	v	2	2
+200380159	2	change over	v	1	1
+200381013	2	change over	v	2	0
+200386715	1	turn back	v	5	0
+200387310	5	turn back	v	2	4
+200388635	1	lay waste to	v	1	0
+200389992	1	pine away	v	1	0
+200391417	1	choke off	v	1	2
+200391417	2	choke down	v	1	0
+200391417	3	choke back	v	1	0
+200396035	1	blend in	v	2	0
+200396035	2	mix in	v	1	2
+200396234	1	cut in	v	5	0
+200397405	2	fall apart	v	3	0
+200402831	2	snarl up	v	1	0
+200406243	3	set up	v	15	0
+200406243	5	gear up	v	1	0
+200407848	1	set up	v	4	6
+200407848	2	lay out	v	2	1
+200408085	3	set up	v	14	0
+200413195	2	take in	v	16	0
+200415398	3	take root	v	1	4
+200415398	4	steady down	v	1	0
+200415398	5	settle down	v	2	4
+200415743	1	set in	v	3	0
+200416705	2	even out	v	4	0
+200416880	2	even out	v	3	0
+200418765	3	tighten up	v	1	1
+200418921	1	clamp down	v	1	0
+200418921	2	crack down	v	1	0
+200421691	3	blow over	v	1	0
+200421691	4	pass off	v	4	0
+200423257	1	wash up	v	4	0
+200423430	1	come to light	v	1	1
+200423430	2	come to hand	v	1	0
+200423702	1	come on	v	1	9
+200423702	2	come out	v	1	33
+200423702	3	turn up	v	1	8
+200423702	5	show up	v	1	8
+200424337	1	get on	v	5	1
+200424337	2	be on	v	1	1
+200425071	2	come along	v	1	7
+200425522	1	turn out	v	5	2
+200425845	2	crop out	v	1	0
+200425967	2	come out	v	2	6
+200426156	1	pop out	v	1	3
+200426156	2	burst out	v	2	1
+200426749	1	break through	v	2	1
+200426749	2	come through	v	1	6
+200426958	3	go away	v	4	0
+200427558	1	skip town	v	1	0
+200427558	2	take a powder	v	1	0
+200427683	1	die out	v	1	2
+200427683	2	die off	v	1	0
+200428247	1	scale down	v	1	0
+200428418	1	scale up	v	1	0
+200429060	2	cut down	v	1	8
+200429060	3	cut back	v	2	1
+200429060	5	trim down	v	1	1
+200429060	6	trim back	v	1	0
+200429060	8	bring down	v	6	0
+200430370	1	thin out	v	1	1
+200430494	1	thin out	v	2	0
+200431826	2	go down	v	3	3
+200432176	1	wear on	v	1	2
+200432572	1	shoot up	v	1	2
+200432839	2	fall off	v	2	0
+200434374	2	go bad	v	1	0
+200434374	3	give way	v	4	0
+200434374	5	give out	v	4	0
+200434374	6	conk out	v	1	0
+200434374	9	break down	v	4	2
+200434919	2	go down	v	8	0
+200435103	1	give way	v	3	1
+200435294	1	blow out	v	1	2
+200435294	2	burn out	v	1	0
+200435688	1	roll up	v	6	0
+200435688	2	wrap up	v	3	0
+200435853	1	roll up	v	1	1
+200436404	2	branch out	v	1	1
+200437449	4	narrow down	v	2	0
+200438178	2	speed up	v	1	3
+200438495	2	slow down	v	4	0
+200439343	3	speed up	v	2	0
+200439698	1	rev up	v	2	0
+200439849	1	rev up	v	1	0
+200439849	2	step up	v	2	2
+200439958	3	slow down	v	1	5
+200439958	4	slow up	v	3	0
+200440580	2	slow down	v	2	2
+200440580	3	slow up	v	1	1
+200440786	2	slow down	v	3	1
+200440786	3	slow up	v	2	0
+200441212	3	slack up	v	1	0
+200444629	3	melt down	v	1	0
+200445711	2	freeze out	v	1	2
+200445711	3	freeze down	v	1	2
+200447309	3	break up	v	6	1
+200447771	2	fade out	v	1	1
+200447771	3	fade away	v	1	0
+200448864	1	clean out	v	1	5
+200448864	2	clear out	v	3	0
+200449011	1	flow away	v	1	0
+200449011	2	flow off	v	1	0
+200449426	1	bail out	v	2	0
+200449426	2	bale out	v	1	0
+200451153	1	knock out	v	5	0
+200451838	2	fill up	v	2	1
+200452394	1	rack up	v	4	0
+200452512	2	fill up	v	1	2
+200452512	3	make full	v	1	0
+200453294	1	top off	v	2	0
+200453803	3	fill again	v	1	0
+200455079	1	wash down	v	2	1
+200455079	2	flush down	v	1	0
+200459498	4	look sharp	v	1	0
+200459776	3	hold up	v	3	3
+200460759	1	buy time	v	1	1
+200461493	5	shut up	v	3	1
+200461493	6	hush up	v	2	0
+200462092	2	stamp down	v	1	1
+200463469	2	flatten out	v	1	0
+200464321	3	line up	v	4	1
+200465291	2	true up	v	1	0
+200467151	1	build in	v	1	0
+200469382	2	wear off	v	1	1
+200469382	3	wear out	v	3	1
+200469382	4	wear down	v	2	0
+200469382	5	wear thin	v	1	1
+200470701	5	wipe out	v	2	1
+200470701	7	carry off	v	3	0
+200471196	1	cancel out	v	1	3
+200471196	2	wipe out	v	6	0
+200471711	3	get rid of	v	2	3
+200471711	4	do away with	v	1	1
+200472426	1	knock out	v	1	4
+200472671	1	cut out	v	1	2
+200473799	3	round off	v	2	0
+200473799	4	polish up	v	1	0
+200473799	5	brush up	v	2	0
+200475183	3	make pure	v	1	0
+200478217	1	snuff out	v	1	1
+200478682	1	stub out	v	1	1
+200478682	2	crush out	v	1	0
+200478682	4	press out	v	1	1
+200478830	3	wipe out	v	5	0
+200479176	3	mow down	v	1	0
+200479391	2	wipe out	v	4	0
+200481941	4	nail down	v	3	0
+200483801	3	cut up	v	3	0
+200484712	2	top off	v	1	0
+200484892	1	get through	v	1	4
+200484892	2	wrap up	v	2	0
+200484892	3	finish off	v	1	0
+200484892	4	mop up	v	3	0
+200484892	5	polish off	v	1	1
+200484892	6	clear up	v	2	1
+200484892	7	finish up	v	1	1
+200485147	1	see through	v	3	0
+200485274	1	round out	v	1	3
+200485274	2	finish out	v	1	0
+200485435	1	cap off	v	1	0
+200486018	1	follow through	v	2	0
+200486018	2	follow up	v	1	0
+200486018	3	follow out	v	1	0
+200486018	4	carry out	v	2	16
+200486018	6	put through	v	1	2
+200486018	7	go through	v	5	0
+200486703	2	settle on	v	1	1
+200488175	1	water down	v	2	0
+200488301	1	water down	v	1	1
+200488430	3	doctor up	v	1	0
+200488770	3	air out	v	2	0
+200491551	1	click off	v	1	1
+200495808	3	keep apart	v	1	0
+200495808	4	set apart	v	2	1
+200512482	1	lay up	v	1	0
+200513492	2	play down	v	1	0
+200513757	1	pick up	v	10	2
+200513936	1	wave off	v	1	1
+200514069	4	play up	v	1	1
+200514463	1	bring out	v	4	1
+200514463	2	set off	v	3	2
+200519363	6	form bubbles	v	1	0
+200520194	1	cut in	v	4	0
+200520602	1	cut short	v	2	1
+200522282	1	take effect	v	1	0
+200524682	4	take on	v	1	10
+200526441	2	hack on	v	1	0
+200528339	2	go back	v	3	0
+200528990	3	come out	v	3	5
+200528990	4	come forth	v	1	2
+200528990	5	go forth	v	2	0
+200529411	1	pop out	v	4	0
+200532115	1	take away	v	7	0
+200538323	3	become flat	v	1	0
+200539546	1	lead up	v	1	4
+200539770	1	break through	v	1	3
+200539936	2	open up	v	3	2
+200540101	2	open up	v	2	2
+200542533	1	wash out	v	5	0
+200542668	2	set aside	v	2	2
+200542809	2	dress out	v	1	0
+200543161	1	bring home	v	1	3
+200543287	1	catch on	v	2	1
+200546080	1	flow out	v	1	1
+200548153	1	come back	v	1	3
+200548266	2	come out	v	11	0
+200548266	3	break through	v	3	0
+200548266	4	push through	v	1	1
+200548479	1	turn on	v	4	1
+200549396	1	break into	v	2	2
+200549552	2	make unnecessary	v	1	0
+200549771	1	turn to	v	2	9
+200557686	2	wash out	v	4	0
+200557686	3	wash off	v	1	0
+200557686	4	wash away	v	2	0
+200558061	2	calm down	v	3	0
+200559919	2	spice up	v	2	0
+200560247	2	run out	v	7	0
+200560247	3	give out	v	3	0
+200561571	1	run out	v	1	5
+200561714	1	run out	v	6	0
+200564695	2	fold up	v	2	0
+200565592	2	felt up	v	1	0
+200565592	3	mat up	v	1	0
+200565592	5	matte up	v	1	0
+200571061	2	take away	v	6	0
+200571273	1	wash away	v	1	0
+200572661	1	leave off	v	3	0
+200572788	1	play out	v	4	0
+200572940	1	turn down	v	4	0
+200576228	2	clear out	v	2	0
+200576228	3	drive out	v	3	0
+200584604	1	roll in	v	1	0
+200584810	2	flip out	v	2	0
+200586241	2	sex up	v	1	0
+200587675	1	carve out	v	2	0
+200588221	2	get the picture	v	1	1
+200588703	1	lie low	v	2	0
+200589469	2	smell out	v	2	0
+200590366	1	catch on	v	1	3
+200590366	2	get wise	v	1	0
+200590366	3	get onto	v	1	1
+200590366	5	latch on	v	3	0
+200590366	6	cotton on	v	1	0
+200590366	8	get it	v	1	4
+200591755	2	get through	v	5	0
+200591755	4	come home	v	1	1
+200591755	5	get across	v	2	1
+200591755	6	sink in	v	1	2
+200591755	8	fall into place	v	1	0
+200592037	2	come across	v	5	0
+200592186	1	strike a chord	v	1	1
+200592341	2	take account	v	1	2
+200592544	1	do justice	v	2	0
+200593363	1	write off	v	1	2
+200595134	1	keep track	v	1	0
+200595306	1	lose track	v	1	0
+200596342	1	have down	v	1	0
+200596484	1	know the score	v	1	1
+200596484	2	be with it	v	1	0
+200596484	3	be on the ball	v	1	0
+200596484	4	know what`s going on	v	1	0
+200596484	5	know what`s what	v	1	0
+200597216	2	live over	v	1	0
+200597634	2	get the hang	v	1	0
+200598753	1	catch up	v	2	0
+200598954	3	get word	v	1	1
+200598954	4	get wind	v	1	0
+200598954	5	pick up	v	5	4
+200598954	6	find out	v	2	17
+200598954	7	get a line	v	1	0
+200599434	1	get the goods	v	1	0
+200599613	1	wise up	v	1	1
+200599720	1	wise up	v	2	0
+200599835	1	trip up	v	1	1
+200601043	7	soak up	v	2	0
+200601822	4	sweep up	v	2	1
+200602112	1	take up	v	2	5
+200602112	2	latch on	v	2	0
+200602112	3	fasten on	v	1	0
+200602112	4	hook on	v	1	0
+200602112	5	seize on	v	1	0
+200602255	4	take in	v	9	1
+200605783	2	grind away	v	1	0
+200605783	4	bone up	v	1	0
+200605783	6	get up	v	8	0
+200605783	7	mug up	v	1	0
+200605783	8	swot up	v	1	0
+200606471	1	hammer in	v	1	0
+200606471	2	drill in	v	1	0
+200606471	3	ram down	v	2	0
+200606471	4	beat in	v	1	0
+200607114	2	hit the books	v	1	0
+200607780	4	call back	v	2	1
+200607780	5	call up	v	3	1
+200608978	2	slip one`s mind	v	1	0
+200609100	3	blank out	v	1	0
+200609100	4	draw a blank	v	1	0
+200609352	1	come to mind	v	1	3
+200609352	2	spring to mind	v	1	0
+200609506	2	bear in mind	v	1	2
+200609683	2	think of	v	1	53
+200610770	1	take back	v	6	0
+200611256	2	think back	v	1	2
+200613393	2	give up	v	10	2
+200614664	1	walk out	v	3	0
+200614999	6	leave out	v	2	1
+200615774	3	leave out	v	1	3
+200615774	4	leave off	v	2	2
+200615774	6	take out	v	14	0
+200616498	2	pass over	v	1	2
+200616498	4	skip over	v	1	0
+200616670	1	attend to	v	1	1
+200616670	2	take to heart	v	1	1
+200618057	2	slip up	v	1	0
+200618057	3	trip up	v	3	0
+200619869	6	be amiss	v	1	0
+200620379	2	mix up	v	2	0
+200621058	2	clear up	v	5	0
+200621058	3	shed light on	v	1	2
+200621058	8	straighten out	v	5	0
+200621058	9	sort out	v	2	2
+200621504	1	read between the lines	v	1	0
+200621653	1	puzzle over	v	1	3
+200625841	1	dip into	v	1	0
+200626300	1	make out	v	3	2
+200627824	2	skim over	v	1	1
+200629492	1	rationalize away	v	1	0
+200629492	2	rationalise away	v	1	0
+200629889	1	think out	v	1	2
+200630380	1	chew over	v	1	1
+200630380	2	think over	v	1	3
+200630380	10	mull over	v	1	0
+200632236	3	take for granted	v	1	3
+200634472	2	reason out	v	1	0
+200634906	2	work out	v	7	0
+200634906	3	figure out	v	1	6
+200634906	4	puzzle out	v	1	2
+200637259	5	work out	v	6	0
+200638585	1	work out	v	5	0
+200639998	2	average out	v	1	1
+200640385	2	factor in	v	2	0
+200640385	3	factor out	v	2	0
+200640650	2	factor in	v	1	0
+200640650	3	factor out	v	1	0
+200640828	2	add together	v	2	0
+200641138	2	foot up	v	1	0
+200641252	3	take off	v	9	0
+200641532	1	carry back	v	1	0
+200643473	3	break down	v	2	3
+200643473	5	take apart	v	3	0
+200646135	1	put out feelers	v	1	1
+200647094	3	measure out	v	1	0
+200649362	1	cast about	v	1	0
+200649362	2	beat about	v	1	0
+200649362	3	cast around	v	1	1
+200650016	2	know apart	v	1	0
+200650353	9	tell apart	v	2	0
+200652346	4	key out	v	1	0
+200654446	1	come round	v	1	0
+200654446	2	come around	v	1	1
+200654625	5	sort out	v	1	3
+200659776	2	come in	v	5	0
+200659776	3	come out	v	6	2
+200661824	2	check up on	v	1	0
+200661824	3	look into	v	2	2
+200661824	4	check out	v	1	6
+200661824	5	suss out	v	1	0
+200661824	6	check over	v	1	0
+200661824	7	go over	v	3	1
+200661824	8	check into	v	1	1
+200662182	2	check off	v	1	0
+200662182	4	mark off	v	2	0
+200662182	5	tick off	v	1	0
+200662589	4	see to it	v	1	4
+200665235	1	prove oneself	v	1	1
+200665476	1	lay down	v	1	8
+200668099	3	stick out	v	3	0
+200668099	12	put up	v	4	2
+200668805	2	live with	v	1	0
+200669099	1	stand for	v	4	1
+200669099	2	hold still for	v	1	1
+200669243	1	bear up	v	1	1
+200669366	1	take lying down	v	1	0
+200669528	1	take it on the chin	v	1	0
+200669630	1	take a joke	v	1	0
+200670179	1	sit out	v	2	0
+200670261	2	pass judgment	v	1	0
+200671653	1	sell short	v	2	0
+200674237	1	frown on	v	1	0
+200674237	2	frown upon	v	1	1
+200674607	4	pick out	v	1	4
+200677021	3	take out	v	13	0
+200677203	1	cull out	v	1	0
+200677445	1	cream off	v	2	0
+200677445	2	skim off	v	2	0
+200677544	1	sieve out	v	1	0
+200677544	2	pick over	v	1	0
+200677683	3	set apart	v	1	1
+200679239	1	single out	v	1	2
+200679715	1	opt out	v	1	0
+200679715	2	cop out	v	1	0
+200685419	1	rule out	v	3	1
+200685419	3	winnow out	v	1	0
+200689950	1	think of	v	3	26
+200689950	3	regard as	v	1	31
+200689950	4	look upon	v	1	10
+200689950	5	look on	v	2	1
+200689950	7	take to be	v	1	2
+200693780	3	view as	v	1	13
+200693780	4	take for	v	1	2
+200694508	1	think the world of	v	1	1
+200696414	2	look back	v	2	4
+200696700	2	go over	v	1	5
+200696852	2	brush up	v	1	1
+200697589	2	make up one`s mind	v	1	10
+200701724	1	carry weight	v	1	0
+200705227	2	be after	v	1	3
+200705517	1	draw a bead on	v	2	0
+200705517	4	shoot for	v	1	0
+200706047	2	go for	v	3	1
+200706804	3	draw up	v	4	1
+200711040	1	lay out	v	5	0
+200711236	1	block out	v	1	1
+200711715	2	think of	v	2	26
+200711715	3	toy with	v	1	1
+200711715	4	flirt with	v	1	1
+200711715	5	think about	v	2	8
+200712135	4	count on	v	1	1
+200713167	2	tie in	v	2	0
+200713167	6	link up	v	3	0
+200715541	1	pin down	v	1	1
+200715541	2	peg down	v	2	0
+200715541	3	nail down	v	2	0
+200715541	4	narrow down	v	1	1
+200717921	2	flip out	v	1	0
+200720497	1	look forward	v	1	7
+200720617	1	look to	v	1	4
+200721755	1	rake up	v	1	1
+200722065	1	ferret out	v	1	1
+200723222	1	think of	v	6	0
+200723545	2	take into account	v	1	12
+200723851	1	budget for	v	1	0
+200724150	4	set aside	v	1	6
+200725563	1	explode a bombshell	v	1	0
+200726153	3	bowl over	v	2	0
+200730052	1	think of	v	4	20
+200730052	2	have in mind	v	1	8
+200731574	1	find out	v	4	0
+200731574	2	catch out	v	1	0
+200733804	1	fall in line	v	1	0
+200733895	1	believe in	v	1	24
+200734054	4	look at	v	1	17
+200734348	1	think about	v	1	21
+200735389	2	date stamp	v	1	0
+200735571	2	set up	v	13	0
+200736429	1	factor analyse	v	1	0
+200736429	2	factor analyze	v	1	0
+200737005	1	drink in	v	1	0
+200737193	1	keep note	v	1	1
+200737656	3	get hold of	v	3	0
+200738159	1	take one`s lumps	v	1	0
+200738159	2	get one`s lumps	v	1	0
+200742149	1	shrug off	v	1	1
+200742320	2	pass on	v	7	0
+200742320	4	pass along	v	1	0
+200742320	5	put across	v	1	0
+200742865	1	send a message	v	1	0
+200743344	2	get through	v	4	0
+200743344	3	get hold of	v	2	0
+200744572	1	reach out	v	3	0
+200744776	1	draw out	v	1	1
+200744904	1	get across	v	1	1
+200744904	2	put over	v	1	1
+200748282	2	bring down	v	3	1
+200749584	1	talk down	v	3	0
+200749794	1	point the way	v	1	2
+200750979	1	bear down	v	6	0
+200751131	3	flood out	v	1	0
+200752764	3	call for	v	1	24
+200757056	1	make out	v	10	0
+200761713	3	talk terms	v	1	1
+200763399	2	square off	v	1	0
+200763399	3	square up	v	3	0
+200764902	2	patch up	v	2	0
+200764902	3	make up	v	8	0
+200765649	2	urge on	v	2	0
+200765977	2	bear on	v	3	1
+200767122	1	bring round	v	1	0
+200767122	2	bring around	v	1	0
+200767807	1	chat up	v	2	0
+200767918	1	blaze away	v	3	0
+200768389	1	talk out of	v	1	0
+200768512	1	talk into	v	1	7
+200768630	1	rope in	v	2	0
+200769553	2	win over	v	1	0
+200772967	3	lay out	v	4	0
+200775692	1	fall out	v	1	1
+200778275	3	break up	v	5	1
+200778275	4	cut off	v	1	8
+200778885	1	put away	v	7	0
+200778885	2	put aside	v	2	0
+200779360	3	catch one`s breath	v	1	1
+200779360	4	take a breather	v	1	1
+200779908	1	take five	v	1	0
+200780052	1	take ten	v	1	0
+200780191	1	chime in	v	1	0
+200780191	2	cut in	v	3	0
+200780191	3	put in	v	3	2
+200780191	4	butt in	v	1	0
+200780191	5	chisel in	v	1	0
+200780191	6	barge in	v	2	0
+200780191	7	break in	v	2	2
+200780444	1	burst in on	v	1	0
+200780444	2	burst upon	v	1	0
+200781000	2	go on	v	4	17
+200781000	3	carry on	v	3	1
+200781303	1	go ahead	v	1	6
+200781303	2	plow ahead	v	1	1
+200783956	1	lead on	v	1	1
+200787049	1	cross examine	v	1	0
+200787049	2	cross question	v	1	0
+200789138	2	look into	v	1	6
+200789448	3	call up	v	2	1
+200789934	1	cell phone	v	1	0
+200790135	1	call in	v	5	1
+200790509	1	hang on	v	3	0
+200790509	2	hold the line	v	2	0
+200790509	3	hold on	v	4	1
+200791506	2	call back	v	4	0
+200791764	1	call back	v	3	0
+200792011	1	call in	v	2	2
+200792471	2	send for	v	1	4
+200794640	1	call on	v	1	8
+200794880	1	book up	v	1	0
+200796976	3	freeze off	v	1	0
+200796976	7	turn down	v	3	0
+200797697	3	go for	v	2	1
+200798249	1	contract in	v	1	0
+200798402	1	contract out	v	2	0
+200799076	2	take back	v	5	0
+200799383	2	pull back	v	5	0
+200799383	3	back out	v	2	0
+200799383	4	back away	v	1	1
+200799383	6	crawfish out	v	1	0
+200799383	7	pull in one`s horns	v	1	0
+200800242	2	renege on	v	1	0
+200800242	3	renegue on	v	1	0
+200800242	4	go back on	v	1	0
+200800586	2	bracket out	v	1	0
+200800750	1	cross off	v	1	1
+200800750	2	cross out	v	1	0
+200800750	3	strike out	v	1	2
+200800750	4	strike off	v	1	0
+200800930	3	brush aside	v	1	2
+200800930	4	brush off	v	1	0
+200800930	6	push aside	v	2	1
+200801522	1	pass off	v	2	1
+200801626	2	throw out	v	5	1
+200801977	1	turn a blind eye	v	1	0
+200802136	1	laugh off	v	1	1
+200802136	2	laugh away	v	1	0
+200804476	2	give in	v	2	1
+200804476	4	knuckle under	v	1	2
+200804476	5	buckle under	v	1	0
+200804802	4	take issue	v	1	1
+200805910	1	see eye to eye	v	1	1
+200808162	2	take exception	v	1	1
+200809071	1	check out	v	7	0
+200809071	2	sound out	v	2	0
+200809071	3	feel out	v	1	0
+200809654	4	put off	v	5	0
+200810729	1	get off	v	5	1
+200810729	2	get away	v	2	4
+200810729	3	get by	v	3	1
+200810729	4	get out	v	7	0
+200811171	3	go around	v	5	0
+200811171	4	get around	v	2	2
+200811720	1	keep off	v	2	0
+200811720	2	stay off	v	1	0
+200811995	1	shy away from	v	1	4
+200812298	2	face up	v	1	3
+200813044	4	turn over	v	9	0
+200813651	2	kick around	v	3	0
+200813978	1	hash out	v	1	0
+200813978	3	talk over	v	1	1
+200814621	1	hold forth	v	1	0
+200816353	2	come back	v	4	1
+200817752	1	make no bones about	v	1	0
+200817909	1	make a clean breast of	v	1	0
+200817909	2	own up	v	1	0
+200817909	3	fess up	v	1	0
+200818974	2	take a firm stand	v	1	0
+200819163	1	stand pat	v	1	0
+200819163	2	stand firm	v	2	0
+200819163	3	hold firm	v	1	0
+200819163	4	stand fast	v	1	0
+200819335	1	hunker down	v	3	0
+200824767	1	call on the carpet	v	1	0
+200824767	2	take to task	v	1	0
+200824767	10	dress down	v	1	0
+200824767	11	call down	v	2	0
+200824767	15	bawl out	v	1	0
+200824767	17	chew out	v	1	0
+200824767	18	chew up	v	1	0
+200824767	19	have words	v	1	0
+200825648	1	tell off	v	1	0
+200825648	2	brush down	v	1	0
+200825776	1	lip off	v	1	0
+200825776	2	shoot one`s mouth off	v	1	0
+200826509	4	pick apart	v	1	0
+200827458	1	come down	v	5	0
+200833392	1	fill in	v	1	4
+200835506	1	beat around the bush	v	1	0
+200836236	4	stand for	v	1	5
+200838524	3	make believe	v	1	0
+200838786	1	go through the motions	v	1	0
+200838995	1	play possum	v	1	1
+200839085	1	take a dive	v	1	0
+200839194	4	pull the wool over someone`s eyes	v	1	0
+200839194	5	lead by the nose	v	1	0
+200839194	6	play false	v	1	0
+200839526	1	talk through one`s hat	v	1	0
+200840980	1	bear down	v	5	0
+200841986	2	tell on	v	1	1
+200841986	4	give away	v	4	0
+200842772	2	find fault	v	1	0
+200845909	3	pick at	v	3	0
+200846344	2	tear apart	v	1	1
+200848169	4	drag through the mud	v	1	1
+200848894	1	bristle at	v	1	1
+200848894	2	bridle at	v	1	0
+200848894	3	bridle up	v	1	0
+200848894	4	bristle up	v	1	0
+200851100	1	pull the leg of	v	1	2
+200851239	3	set off	v	7	0
+200851239	4	stir up	v	4	0
+200851933	5	laugh at	v	1	8
+200851933	6	jest at	v	1	0
+200851933	8	make fun	v	1	3
+200851933	9	poke fun	v	1	1
+200854150	1	horse around	v	1	0
+200854150	2	arse around	v	2	0
+200854150	3	fool around	v	1	2
+200854420	3	lead astray	v	3	0
+200854904	7	put on	v	8	0
+200854904	8	take in	v	2	2
+200854904	9	put one over	v	1	0
+200854904	10	put one across	v	1	0
+200855794	2	peer review	v	1	0
+200858781	2	root on	v	1	0
+200858781	6	urge on	v	1	0
+200858781	8	pep up	v	1	1
+200859153	2	cheer up	v	2	0
+200859153	3	chirk up	v	1	0
+200859325	2	cheer up	v	1	0
+200859325	3	jolly along	v	1	0
+200859325	4	jolly up	v	1	0
+200860136	2	lighten up	v	2	0
+200860136	3	buoy up	v	1	1
+200861333	1	crack up	v	2	0
+200862683	4	lash out	v	1	0
+200864814	1	talk down	v	1	1
+200867409	3	call into question	v	1	0
+200867644	2	answer for	v	1	0
+200868270	1	call one`s bluff	v	1	0
+200868979	1	call out	v	3	0
+200873469	1	tip off	v	1	0
+200873682	3	give notice	v	2	0
+200873682	4	send word	v	1	1
+200875000	1	get into	v	4	1
+200875806	2	throw out	v	4	1
+200876200	1	feed back	v	2	0
+200877083	3	look up	v	1	8
+200877559	2	confer with	v	1	3
+200878136	3	put forward	v	1	1
+200878348	5	give in	v	1	5
+200879212	1	report out	v	1	2
+200879356	2	make a motion	v	1	0
+200879540	2	put up	v	9	0
+200879540	3	put forward	v	4	0
+200879764	2	declare oneself	v	1	0
+200879764	4	pop the question	v	1	0
+200880978	7	suck up	v	3	0
+200881329	1	curry favor	v	1	0
+200881329	2	curry favour	v	1	0
+200881329	3	court favor	v	1	0
+200881329	4	court favour	v	1	0
+200881534	1	butter up	v	1	0
+200882682	1	speak of the devil	v	1	0
+200883226	4	shoot a line	v	1	0
+200884814	1	swear off	v	1	2
+200885768	1	tie down	v	2	0
+200888519	1	take the veil	v	1	0
+200892315	2	give thanks	v	1	1
+200893878	3	let off	v	1	0
+200894221	2	beg off	v	1	0
+200894499	1	take the Fifth	v	1	0
+200894499	2	take the Fifth Amendment	v	1	0
+200895304	3	fend for	v	1	0
+200895641	1	stand up	v	5	2
+200895641	2	stick up	v	2	0
+200895855	1	cover for	v	1	0
+200897564	2	turn to	v	1	12
+200898019	1	shake hands	v	1	2
+200898568	1	cross oneself	v	1	0
+200898691	2	bow down	v	2	0
+200899041	1	take a bow	v	2	0
+200899204	1	take a bow	v	1	0
+200900728	2	usher out	v	1	0
+200900961	1	say farewell	v	1	0
+200902654	1	wash one`s hands	v	1	0
+200905059	1	get off	v	4	1
+200907147	4	sound off	v	3	0
+200908621	5	keep going	v	3	0
+200909134	1	stoop to	v	1	1
+200910654	1	raise hell	v	1	1
+200910654	2	make a stink	v	1	0
+200910654	3	raise a stink	v	1	0
+200912048	3	cry out	v	1	10
+200912048	5	call out	v	1	12
+200913065	2	shout out	v	1	1
+200914420	3	pipe up	v	2	0
+200914769	2	come in	v	4	1
+200914769	4	put in	v	6	0
+200914769	5	throw in	v	3	1
+200915265	2	shout out	v	2	0
+200915423	2	holler out	v	1	1
+200916123	1	speak up	v	2	0
+200918872	3	find out	v	1	33
+200920336	3	find out	v	3	1
+200924612	3	point out	v	2	7
+200924612	4	call attention	v	1	0
+200927900	1	clue in	v	1	0
+200930009	1	burst out	v	1	3
+200930194	1	rip out	v	1	0
+200930368	3	paint a picture	v	1	1
+200931085	1	make out	v	9	0
+200931852	4	stand for	v	2	2
+200932798	2	twist around	v	1	0
+200933239	1	speak in tongues	v	1	0
+200933566	1	tone down	v	2	0
+200933821	3	let on	v	1	1
+200933821	4	bring out	v	9	0
+200933821	10	give away	v	2	3
+200933821	11	let out	v	2	2
+200935141	2	come out	v	10	0
+200935456	1	come out of the closet	v	1	0
+200935456	3	come out	v	9	0
+200935987	2	get out	v	6	0
+200935987	3	get around	v	1	4
+200936169	2	leak out	v	1	4
+200936763	1	sell out	v	2	1
+200937208	1	spill the beans	v	1	0
+200937208	2	let the cat out of the bag	v	1	0
+200937208	9	babble out	v	1	0
+200937208	10	blab out	v	1	0
+200937619	1	keep quiet	v	1	0
+200937619	2	shut one`s mouth	v	1	0
+200937619	3	keep one`s mouth shut	v	1	0
+200937879	2	spell out	v	3	0
+200939621	1	account for	v	2	6
+200939857	2	clear up	v	1	3
+200940384	5	give tongue to	v	1	0
+200941565	1	pour out	v	1	2
+200941855	1	get off	v	11	0
+200943563	1	talk of	v	1	3
+200943563	2	talk about	v	2	10
+200943732	2	blubber out	v	1	0
+200944548	3	give vent	v	1	6
+200944788	2	drone on	v	1	0
+200945648	1	rattle down	v	1	0
+200945648	2	rattle off	v	1	0
+200945648	3	reel off	v	2	0
+200945648	4	spiel off	v	1	0
+200945648	5	roll off	v	1	0
+200947717	1	count down	v	1	0
+200949288	3	tot up	v	1	1
+200949288	5	sum up	v	3	0
+200949288	7	tote up	v	1	0
+200949288	9	add together	v	1	0
+200949288	11	add up	v	2	2
+200949841	2	chalk up	v	2	1
+200949974	3	send back	v	1	0
+200950206	1	take a dare	v	2	0
+200950206	2	pick up the gauntlet	v	1	0
+200950337	1	take a dare	v	1	0
+200955601	6	flesh out	v	2	0
+200956405	7	blow up	v	4	0
+200959524	1	hark back	v	1	0
+200959524	3	come back	v	2	2
+200959714	2	go back	v	2	4
+200963015	1	talk down	v	2	0
+200963872	1	run on	v	1	1
+200964365	1	talk turkey	v	1	0
+200966152	1	check in	v	1	3
+200966152	2	sign in	v	1	0
+200966330	1	clock in	v	1	0
+200966330	2	punch in	v	1	1
+200966330	3	clock on	v	1	0
+200966492	1	check out	v	2	1
+200966640	1	clock out	v	1	0
+200966640	2	punch out	v	1	0
+200966640	3	clock off	v	1	0
+200967625	2	bring out	v	3	1
+200967625	3	put out	v	9	0
+200968211	11	pass around	v	2	0
+200969873	1	go around	v	2	1
+200970107	1	bandy about	v	1	0
+200974031	1	sign off	v	1	0
+200974786	2	blazon out	v	1	0
+200975202	2	trump out	v	1	0
+200975334	1	blare out	v	1	0
+200975334	2	blat out	v	1	0
+200975584	1	call out	v	2	6
+200975733	1	count off	v	1	0
+200978549	4	sound out	v	1	0
+200980453	1	give voice	v	1	0
+200981944	1	blurt out	v	1	0
+200981944	3	blunder out	v	1	0
+200983824	3	let out	v	1	2
+200983824	4	let loose	v	1	1
+200985706	1	bite out	v	1	2
+200986417	1	break into	v	1	4
+200989490	1	take the floor	v	2	0
+200990655	3	come up to	v	1	3
+200993453	1	write in	v	2	0
+200994076	7	write in code	v	1	0
+200999270	1	tape record	v	1	0
+201000058	1	ring up	v	1	1
+201000214	3	put down	v	8	0
+201001294	1	set forth	v	1	15
+201001643	2	file away	v	1	1
+201002618	1	log up	v	1	0
+201002618	2	clock up	v	1	0
+201005904	1	spell out	v	1	8
+201006056	1	jot down	v	1	1
+201006699	1	block out	v	4	0
+201007027	2	drop a line	v	1	0
+201007924	1	sum up	v	1	5
+201009097	3	hash over	v	1	0
+201009986	1	get out	v	4	2
+201013230	2	point out	v	3	3
+201014186	1	point up	v	1	6
+201014362	1	drive home	v	2	0
+201014362	2	ram home	v	1	0
+201014362	3	press home	v	1	0
+201014821	3	take the stand	v	1	1
+201014821	4	bear witness	v	2	1
+201015244	2	bear witness	v	1	1
+201017501	1	swear in	v	1	1
+201020356	1	write down	v	1	4
+201020356	2	set down	v	1	2
+201020356	3	get down	v	6	0
+201020356	4	put down	v	7	0
+201020594	1	dash down	v	1	0
+201020594	2	dash off	v	2	0
+201020731	2	fill out	v	1	5
+201020731	3	fill in	v	4	0
+201020731	4	make out	v	8	0
+201020934	2	take down	v	4	0
+201021629	2	fix up	v	2	2
+201021871	1	firm up	v	1	0
+201024190	3	bring up	v	7	0
+201024763	1	touch on	v	1	4
+201025246	2	bring up	v	6	0
+201025455	1	call up	v	1	2
+201025455	2	bring forward	v	2	1
+201025602	1	slip in	v	1	1
+201025602	2	stick in	v	1	1
+201025602	3	sneak in	v	2	0
+201025785	1	drag up	v	1	0
+201025785	2	dredge up	v	1	0
+201027361	1	toss in	v	1	0
+201027668	2	speak up	v	1	1
+201027668	3	speak out	v	1	0
+201027668	5	sound off	v	1	1
+201029368	1	go by	v	3	1
+201029368	2	go under	v	3	0
+201034312	2	talk about	v	1	40
+201034766	1	talk shop	v	1	1
+201036188	1	give and take	v	1	1
+201037498	3	yack away	v	1	0
+201037498	4	rattle on	v	1	0
+201037498	5	yap away	v	1	0
+201037910	1	chat up	v	1	0
+201038666	1	chew the fat	v	1	0
+201038666	2	shoot the breeze	v	1	0
+201041061	1	close up	v	4	0
+201041061	2	clam up	v	1	0
+201041061	3	dummy up	v	2	0
+201041061	4	shut up	v	1	6
+201041061	5	belt up	v	1	0
+201041061	6	button up	v	1	0
+201041061	7	be quiet	v	1	1
+201041061	8	keep mum	v	1	0
+201041298	1	open up	v	7	0
+201041954	1	dish the dirt	v	1	0
+201045318	2	spit out	v	2	1
+201050565	1	pipe up	v	1	0
+201051956	2	mouth off	v	1	0
+201051956	5	rabbit on	v	1	0
+201052936	2	make vibrant sounds	v	1	0
+201057342	1	barrage jam	v	1	0
+201057558	1	point jam	v	1	0
+201057709	1	spot jam	v	1	0
+201057837	1	blanket jam	v	1	0
+201058574	4	point out	v	1	42
+201061881	1	hem and haw	v	1	0
+201062555	2	get off	v	3	1
+201062555	3	send off	v	3	0
+201063529	1	come across	v	4	0
+201063529	2	come over	v	1	1
+201063695	2	call for	v	3	1
+201064151	1	thrash out	v	1	1
+201064151	2	hammer out	v	1	0
+201064799	1	write out	v	2	0
+201064799	3	make out	v	2	2
+201065115	2	bring out	v	8	0
+201065272	2	puff up	v	4	0
+201066292	1	think twice	v	1	1
+201068134	1	write up	v	1	1
+201072133	1	harsh on	v	1	0
+201072641	1	put in	v	5	1
+201072807	1	try for	v	1	1
+201072807	2	go for	v	5	0
+201073953	1	line up	v	6	0
+201076953	2	bluff out	v	1	0
+201079339	1	take the bull by the horns	v	1	0
+201079480	4	take on	v	5	1
+201081152	4	play off	v	1	0
+201081505	1	run off	v	7	0
+201081652	1	play out	v	3	0
+201082023	1	bear down	v	4	0
+201083044	1	drop out	v	1	2
+201083044	2	give up	v	3	5
+201083044	3	fall by the wayside	v	1	0
+201083044	4	drop by the wayside	v	1	0
+201083044	5	throw in	v	2	1
+201083044	6	throw in the towel	v	1	1
+201083044	8	chuck up the sponge	v	1	0
+201083920	1	cut to ribbons	v	1	1
+201084048	1	face off	v	1	0
+201084048	2	bully off	v	1	0
+201084170	1	tee off	v	1	0
+201087197	2	build up	v	3	2
+201089285	2	team up	v	1	2
+201089737	2	gang up	v	1	2
+201091160	1	join battle	v	1	0
+201091427	3	fight back	v	2	0
+201091427	4	fight down	v	1	1
+201092128	2	get back	v	3	0
+201092284	1	fight back	v	1	2
+201093465	1	go to war	v	1	1
+201093465	2	take arms	v	1	0
+201093465	3	take up arms	v	1	1
+201093587	1	make peace	v	1	1
+201093786	2	take the field	v	1	1
+201097309	1	sign up	v	2	1
+201097500	3	muster in	v	1	0
+201097743	2	muster out	v	1	0
+201097960	1	call up	v	4	0
+201099866	1	go down	v	6	1
+201101313	1	count out	v	1	0
+201101913	2	beat out	v	1	2
+201102667	1	walk over	v	1	0
+201102997	3	mop up	v	2	0
+201102997	5	rack up	v	3	0
+201103836	1	break down	v	1	3
+201104018	1	get the best	v	1	1
+201104018	2	have the best	v	1	0
+201104376	1	get the jump	v	1	0
+201104509	1	cut down	v	4	1
+201104509	2	cut out	v	5	0
+201107895	1	take the cake	v	1	0
+201108148	1	get the better of	v	1	0
+201108627	2	get over	v	4	0
+201108951	2	rout out	v	3	0
+201111028	4	pull ahead	v	1	0
+201111028	5	make headway	v	1	0
+201111028	6	get ahead	v	1	4
+201111028	7	gain ground	v	1	0
+201111570	1	win back	v	1	2
+201111570	2	get back	v	1	4
+201111816	4	rack up	v	1	1
+201113264	1	hole up	v	2	0
+201113620	1	drive in	v	1	4
+201113806	1	fall back	v	4	1
+201113806	3	drop off	v	4	0
+201113806	4	fall behind	v	1	2
+201113975	1	keep up	v	1	6
+201114143	1	keep step	v	1	0
+201114143	2	keep pace	v	1	0
+201115411	3	get even	v	1	1
+201115585	2	give up	v	9	2
+201116585	2	hold out	v	2	3
+201116585	4	stand firm	v	1	0
+201116980	1	stand out	v	4	0
+201117086	1	stand up	v	2	5
+201117325	1	hold off	v	1	3
+201120069	3	set on	v	1	0
+201121719	2	bear down	v	3	0
+201125209	1	take the count	v	1	0
+201125209	2	remain down	v	1	0
+201126700	2	set upon	v	1	0
+201126846	2	seal off	v	2	1
+201126961	2	block off	v	1	1
+201127411	4	hem in	v	2	1
+201129064	1	look out	v	2	1
+201129591	1	ward off	v	2	0
+201130607	4	fence in	v	2	0
+201131197	3	fight off	v	1	0
+201131197	5	drive back	v	1	0
+201131473	2	turn back	v	4	1
+201131473	6	hold back	v	1	4
+201132355	1	carpet bomb	v	1	0
+201132541	1	bomb out	v	1	0
+201133488	1	letter bomb	v	1	0
+201134238	3	go off	v	3	1
+201134375	1	loose off	v	1	0
+201134375	2	let fly	v	1	1
+201134375	3	let drive	v	1	1
+201135086	1	blaze away	v	2	1
+201135783	1	open fire	v	1	1
+201136835	1	machine gun	v	1	1
+201136964	1	gun down	v	1	1
+201138204	7	lie in wait	v	1	1
+201138822	1	shoot craps	v	1	0
+201139104	1	bet on	v	1	4
+201139623	2	double up	v	3	0
+201143410	1	net fish	v	1	0
+201143838	3	hunt down	v	1	2
+201143838	4	track down	v	1	3
+201146290	1	extend oneself	v	1	0
+201146382	1	kill oneself	v	1	0
+201146382	2	overexert oneself	v	1	0
+201147562	1	rule out	v	2	1
+201147562	2	rule in	v	1	1
+201148710	2	root for	v	1	0
+201151110	4	take aim	v	1	1
+201151627	1	draw a bead on	v	1	0
+201153007	1	range in	v	1	0
+201153007	2	home in	v	1	0
+201153007	3	zero in	v	1	1
+201153165	2	strike back	v	1	0
+201153762	1	get even	v	2	0
+201153762	2	get back	v	2	1
+201153947	1	pay back	v	2	0
+201153947	2	pay off	v	6	0
+201154175	2	strike out	v	5	0
+201154382	1	put out	v	8	0
+201154554	1	take the field	v	2	0
+201155090	3	catch up with	v	1	9
+201156706	1	drop one`s serve	v	1	0
+201156834	3	take in	v	15	0
+201157517	2	eat up	v	2	1
+201157517	3	use up	v	1	3
+201157517	7	run through	v	2	1
+201157517	8	wipe out	v	1	1
+201160193	1	pull out all the stops	v	1	0
+201161830	1	take in vain	v	1	0
+201161947	1	work through	v	1	1
+201161947	2	run through	v	1	4
+201161947	3	go through	v	2	2
+201163197	1	make hay	v	1	0
+201164081	1	strip mine	v	1	0
+201164081	2	surface mine	v	1	0
+201166940	1	take out	v	12	0
+201166940	2	take away	v	5	0
+201167290	1	wash down	v	1	2
+201167537	1	eat in	v	1	0
+201167537	2	dine in	v	1	0
+201167640	1	eat out	v	1	0
+201167640	2	dine out	v	1	0
+201169205	2	wolf down	v	1	0
+201169433	2	swill down	v	1	0
+201170983	2	lap up	v	1	0
+201171941	2	bar hop	v	1	0
+201172545	1	break bread	v	1	0
+201173057	1	pitch in	v	1	0
+201173057	2	dig in	v	2	1
+201173208	1	tuck in	v	1	0
+201173208	2	tuck away	v	1	0
+201173208	3	put away	v	6	0
+201173656	1	pick at	v	2	0
+201173656	2	peck at	v	1	0
+201173813	2	pick up	v	15	0
+201174099	1	garbage down	v	1	0
+201174099	2	gobble up	v	1	0
+201174099	3	shovel in	v	2	0
+201174099	4	bolt down	v	2	0
+201175937	1	drain the cup	v	1	0
+201175937	2	drink up	v	1	1
+201177314	1	live in	v	1	1
+201177314	2	sleep in	v	2	0
+201177505	1	live out	v	2	0
+201177505	2	sleep out	v	1	0
+201180351	2	serve up	v	1	1
+201180351	3	dish out	v	2	0
+201180351	4	dish up	v	1	1
+201186428	7	give suck	v	1	0
+201188342	1	be full	v	1	0
+201189823	1	keep off	v	1	0
+201190277	4	hit it up	v	1	1
+201191232	1	have a ball	v	1	0
+201191232	2	have a good time	v	1	0
+201191512	1	live it up	v	1	1
+201192179	1	sow one`s oats	v	1	1
+201192179	2	sow one`s wild oats	v	1	0
+201192773	1	run low	v	1	0
+201192773	2	run short	v	1	0
+201193099	14	pig out	v	1	0
+201193099	16	scarf out	v	1	0
+201194661	1	wine and dine	v	2	0
+201194777	1	wine and dine	v	1	0
+201194938	3	flesh out	v	1	0
+201194938	4	fill out	v	5	0
+201194938	6	plump out	v	2	0
+201194938	7	fatten out	v	1	0
+201194938	8	fatten up	v	1	0
+201195299	3	try out	v	4	0
+201195804	2	frivol away	v	1	0
+201195804	5	fritter away	v	1	0
+201195804	7	fool away	v	1	0
+201196524	2	give up	v	12	1
+201196802	1	eat up	v	1	2
+201196802	3	polish off	v	3	0
+201197014	4	go through	v	4	0
+201197980	1	take in	v	14	0
+201197980	2	sop up	v	2	0
+201197980	3	suck in	v	1	2
+201197980	4	take up	v	12	0
+201199661	1	skin pop	v	1	0
+201199755	1	take a hit	v	1	0
+201199881	1	light up	v	5	0
+201199881	2	fire up	v	2	0
+201200440	2	do drugs	v	1	0
+201200934	2	trip out	v	1	0
+201200934	3	turn on	v	7	0
+201200934	4	get off	v	10	0
+201201856	2	get down	v	4	1
+201202374	1	toss off	v	2	0
+201202374	3	bolt down	v	1	0
+201202374	4	belt down	v	1	0
+201202374	5	pour down	v	1	0
+201202374	7	drink down	v	1	0
+201203234	1	feed on	v	1	2
+201203234	2	feed upon	v	1	1
+201203369	1	fix up	v	1	5
+201203893	1	fill up	v	4	0
+201205000	1	burn off	v	1	1
+201205000	3	burn up	v	2	0
+201205331	1	go down	v	5	1
+201207402	1	pick up	v	2	19
+201207817	1	break in	v	4	0
+201207951	2	spread over	v	1	3
+201209025	2	grass over	v	1	0
+201212024	1	lay hands on	v	1	0
+201214265	2	get hold of	v	1	1
+201214597	1	bring out	v	7	0
+201214597	2	get out	v	2	9
+201214786	1	take in	v	8	1
+201214786	2	gather in	v	1	0
+201215017	2	break up	v	12	0
+201215137	5	pick up	v	7	3
+201216004	2	hold on	v	1	5
+201216194	1	latch on	v	1	0
+201216670	2	take hold	v	2	2
+201217043	4	hold up	v	1	4
+201218512	2	buoy up	v	3	0
+201219004	1	prop up	v	1	2
+201219004	3	shore up	v	1	2
+201219544	2	jack up	v	1	0
+201220303	1	cling to	v	1	10
+201220303	2	hold close	v	1	0
+201220303	3	hold tight	v	1	0
+201222958	2	flip over	v	1	0
+201222958	3	turn over	v	8	0
+201223833	5	kink up	v	1	0
+201224211	2	fiddle with	v	1	0
+201226875	2	dig into	v	1	4
+201226875	3	poke into	v	2	0
+201228753	1	poke into	v	1	1
+201228866	1	sneak in	v	1	0
+201228866	2	creep in	v	1	0
+201230710	3	egg on	v	1	1
+201231252	2	poke at	v	1	1
+201232738	2	rub down	v	2	0
+201235224	1	board up	v	1	0
+201236164	3	impinge on	v	1	2
+201236164	4	run into	v	3	1
+201236164	5	collide with	v	1	1
+201238500	1	bottom out	v	2	0
+201238640	2	strike hard	v	1	0
+201239862	2	knock down	v	1	5
+201239862	3	cut down	v	3	1
+201239862	4	push down	v	1	1
+201239862	5	pull down	v	2	0
+201240308	1	run into	v	2	1
+201240308	2	bump into	v	1	1
+201240308	3	jar against	v	1	0
+201240308	4	butt against	v	2	0
+201240308	5	knock against	v	1	1
+201242537	1	lam into	v	1	0
+201242537	2	tear into	v	1	0
+201242537	3	lace into	v	1	0
+201242537	4	pitch into	v	1	0
+201242537	5	lay into	v	1	0
+201242689	2	flap down	v	1	0
+201243298	1	pull back	v	4	0
+201245325	2	steam clean	v	1	0
+201247550	1	skim over	v	2	0
+201247684	1	squeak by	v	2	0
+201247684	2	squeak through	v	1	0
+201250795	1	sponge down	v	1	0
+201250795	2	sponge off	v	1	2
+201252875	2	muddy up	v	1	0
+201254013	4	rub down	v	1	0
+201254013	5	rub off	v	1	0
+201254324	1	wear away	v	2	0
+201254324	2	wear off	v	2	0
+201254477	2	slice up	v	1	1
+201254692	2	cut off	v	6	0
+201254912	1	slough off	v	2	0
+201255967	2	cut up	v	1	2
+201256600	2	chip at	v	1	0
+201257507	1	chop down	v	1	1
+201258091	2	chop up	v	1	0
+201258302	3	strike down	v	3	0
+201258302	4	cut down	v	6	0
+201259458	3	cut off	v	5	0
+201259458	4	break off	v	5	0
+201259691	2	chip off	v	1	0
+201259691	3	come off	v	3	0
+201259691	4	break away	v	2	1
+201259691	5	break off	v	3	1
+201259951	1	peel off	v	4	0
+201259951	3	flake off	v	1	0
+201260685	2	hew out	v	1	0
+201261018	2	skim off	v	1	2
+201261018	3	cream off	v	1	0
+201263215	1	peel off	v	1	1
+201265386	1	brush on	v	1	1
+201267611	1	hard surface	v	1	0
+201277974	2	fold up	v	1	1
+201277974	3	turn up	v	2	3
+201278427	6	scrunch up	v	2	0
+201279015	3	ruck up	v	1	0
+201281343	1	gouge out	v	1	0
+201281611	2	force out	v	7	0
+201282142	1	suck in	v	3	1
+201282142	2	draw in	v	6	0
+201282294	1	scoop out	v	1	1
+201282545	2	hollow out	v	1	0
+201282545	3	core out	v	1	0
+201282888	2	cavern out	v	1	0
+201283208	2	wrap up	v	1	1
+201283611	1	do up	v	1	0
+201286038	1	tie up	v	5	0
+201286038	2	bind off	v	1	1
+201286436	1	chain up	v	1	0
+201286913	1	tie down	v	1	0
+201286913	2	tie up	v	1	3
+201287242	3	faggot up	v	1	0
+201287537	1	lash together	v	1	1
+201289330	1	rope up	v	1	0
+201290945	1	blow off	v	1	1
+201291941	1	close up	v	3	0
+201295275	2	bring together	v	1	6
+201297624	2	couple on	v	1	0
+201297624	3	couple up	v	1	0
+201298931	2	break off	v	4	0
+201298931	3	snap off	v	1	0
+201299268	1	cut off	v	3	2
+201299268	2	chop off	v	1	0
+201299268	3	lop off	v	1	1
+201299758	2	come off	v	1	2
+201299758	3	come away	v	1	2
+201300040	1	fall off	v	1	1
+201302365	2	pound up	v	1	0
+201304716	2	cast anchor	v	1	0
+201304716	3	drop anchor	v	1	0
+201305542	3	tie up	v	4	0
+201306425	2	batten down	v	1	0
+201307142	3	even out	v	2	0
+201308381	2	put back	v	1	2
+201309027	1	hang up	v	1	8
+201309143	3	scratch up	v	1	0
+201309701	3	cut into	v	1	0
+201309701	4	turn over	v	4	1
+201311103	2	dig out	v	3	0
+201312261	1	dig out	v	2	0
+201312371	2	scoop out	v	2	0
+201312371	3	lift out	v	1	1
+201312371	4	scoop up	v	1	3
+201312371	5	take up	v	9	1
+201313923	2	dig up	v	1	2
+201313923	3	turn up	v	5	0
+201314208	1	grub up	v	1	0
+201314208	2	grub out	v	1	0
+201314440	1	grope for	v	1	1
+201315613	3	look for	v	1	50
+201316209	1	leave no stone unturned	v	1	0
+201317424	1	seek out	v	1	14
+201317533	1	quest for	v	1	0
+201317533	2	go after	v	2	1
+201317533	3	quest after	v	1	0
+201319562	2	cut down	v	5	0
+201321002	8	cut back	v	3	0
+201322675	2	cut down	v	2	1
+201324996	1	commit suicide	v	1	0
+201325934	1	strike down	v	2	0
+201326323	1	take off	v	8	0
+201326528	2	put down	v	6	0
+201327133	1	put away	v	5	0
+201327133	2	put to sleep	v	2	0
+201327301	5	knock off	v	1	3
+201327301	6	do in	v	1	1
+201327582	2	kill off	v	1	1
+201328513	2	tag on	v	1	0
+201328513	3	tack on	v	1	1
+201328513	5	hang on	v	1	4
+201328705	2	add on	v	2	0
+201329239	2	run up	v	3	1
+201329239	3	sew together	v	1	0
+201331988	1	scotch tape	v	1	0
+201335322	2	white out	v	1	0
+201336159	2	plank over	v	1	0
+201340149	1	pin down	v	3	0
+201340149	2	pin up	v	1	0
+201340283	2	peg down	v	1	1
+201345589	1	roll up	v	5	0
+201345877	1	pen up	v	1	0
+201346003	2	open up	v	1	2
+201346430	1	break open	v	1	2
+201346548	1	click open	v	1	1
+201346804	2	open up	v	6	0
+201347172	1	fly open	v	1	1
+201347519	1	coop up	v	1	0
+201347519	2	coop in	v	1	0
+201347678	1	lock in	v	2	1
+201347678	2	lock away	v	1	0
+201347678	4	put away	v	1	2
+201347678	5	shut up	v	2	1
+201347678	6	shut away	v	1	0
+201347678	7	lock up	v	2	3
+201348013	1	lock in	v	1	1
+201348013	2	seal in	v	1	0
+201348452	1	lock up	v	1	3
+201349318	1	wring out	v	1	0
+201349318	2	squeeze out	v	3	1
+201351170	2	pull out	v	3	1
+201351170	4	pull up	v	4	0
+201351170	5	take out	v	11	0
+201351170	6	draw out	v	6	0
+201351754	1	press out	v	3	0
+201352154	2	winkle out	v	2	0
+201352390	1	take out	v	6	1
+201352996	2	drive in	v	3	0
+201353311	1	screw up	v	3	0
+201353670	1	zip up	v	1	0
+201354006	2	seal off	v	1	3
+201354673	4	link up	v	2	0
+201355906	1	put through	v	2	0
+201356370	2	stick on	v	2	0
+201356750	2	hold fast	v	1	0
+201356750	6	stick to	v	1	4
+201357141	1	leech onto	v	1	0
+201357288	1	gum up	v	1	0
+201358737	2	block out	v	3	0
+201360715	1	string out	v	1	1
+201360715	2	spread out	v	2	2
+201362430	2	plaster over	v	1	1
+201362430	3	stick on	v	1	0
+201363648	1	put on	v	7	0
+201364874	1	sponge on	v	1	0
+201364997	1	slap on	v	1	0
+201364997	2	clap on	v	1	0
+201364997	3	slam on	v	1	1
+201366426	1	hook up	v	1	1
+201368597	2	straighten out	v	4	0
+201369346	3	wear out	v	2	1
+201369346	5	fall apart	v	2	0
+201370126	1	break down	v	6	0
+201371454	1	kick back	v	2	1
+201371651	1	kick up	v	1	1
+201374587	3	slosh around	v	1	0
+201374587	4	slush around	v	1	0
+201375637	2	force out	v	6	0
+201375637	3	squeeze out	v	6	0
+201380638	4	pull together	v	1	1
+201381549	4	come up	v	12	0
+201381549	5	muster up	v	1	0
+201381913	1	round up	v	1	4
+201384439	2	pull in	v	4	0
+201384638	2	file away	v	2	0
+201384752	2	scrape up	v	1	1
+201384752	4	come up	v	11	0
+201385643	1	beat up	v	2	0
+201385643	2	drum up	v	1	0
+201387493	2	ruffle up	v	1	0
+201387493	4	mess up	v	2	0
+201389186	1	bear down	v	2	0
+201389329	3	pack together	v	1	0
+201389942	1	wall in	v	1	0
+201389942	2	wall up	v	1	1
+201390078	1	brick in	v	1	0
+201390078	2	brick up	v	1	0
+201390078	3	brick over	v	1	0
+201390833	2	iron out	v	2	0
+201391280	1	roll out	v	1	1
+201391946	1	fluff up	v	1	0
+201391946	2	plump up	v	1	0
+201391946	3	shake up	v	6	0
+201392237	2	pass over	v	5	0
+201392918	1	wipe off	v	1	3
+201392918	2	wipe away	v	1	0
+201393339	1	wipe up	v	1	1
+201393339	2	mop up	v	1	2
+201396091	3	gold plate	v	1	0
+201397210	2	beat up	v	1	0
+201397210	3	work over	v	1	0
+201398323	1	rough up	v	1	0
+201402173	1	ground out	v	1	1
+201404538	1	bounce out	v	1	1
+201404774	1	foul out	v	1	1
+201406016	1	follow through	v	1	0
+201408153	2	hole out	v	1	1
+201408297	2	drag a bunt	v	1	1
+201412346	4	knock down	v	2	1
+201414088	1	knock cold	v	1	0
+201414088	2	knock out	v	2	2
+201417705	2	knock about	v	1	1
+201419473	5	shake up	v	5	0
+201419473	6	stir up	v	3	1
+201419473	7	raise up	v	1	2
+201421122	1	plug in	v	1	2
+201421122	2	plug into	v	1	0
+201422886	2	stop up	v	1	0
+201423285	2	fill up	v	3	0
+201423623	2	cork up	v	1	0
+201424948	6	draw close	v	1	1
+201426153	2	make out	v	7	0
+201426397	1	sleep together	v	1	0
+201426397	2	roll in the hay	v	1	0
+201426397	4	make out	v	6	0
+201426397	5	make love	v	1	1
+201426397	6	sleep with	v	1	1
+201426397	7	get laid	v	1	0
+201426397	8	have sex	v	1	0
+201426397	10	do it	v	1	0
+201426397	11	be intimate	v	1	2
+201426397	12	have intercourse	v	1	0
+201426397	13	have it away	v	1	0
+201426397	14	have it off	v	1	0
+201426397	20	lie with	v	1	0
+201426397	22	have a go at it	v	1	0
+201426397	24	get it on	v	1	0
+201430633	3	fuck off	v	3	0
+201430633	5	jack off	v	1	0
+201430633	6	jerk off	v	1	0
+201432914	1	spirit away	v	2	0
+201434278	1	take away	v	1	5
+201434278	2	bear off	v	1	0
+201434278	3	bear away	v	1	0
+201434278	4	carry away	v	1	6
+201434278	5	carry off	v	2	0
+201435000	1	spirit away	v	1	0
+201435000	2	spirit off	v	1	0
+201435128	1	whisk off	v	2	0
+201435128	2	whisk away	v	1	1
+201435254	2	whisk off	v	1	0
+201436391	1	pipe in	v	1	1
+201437254	2	send out	v	1	10
+201437597	1	send in	v	1	1
+201437725	1	mail out	v	1	1
+201437888	2	get off	v	9	0
+201438681	3	swear out	v	1	1
+201439190	3	take hold of	v	1	1
+201439745	2	snatch up	v	1	1
+201440010	2	swoop up	v	1	1
+201440139	2	reach out	v	1	4
+201440646	1	cut off	v	4	0
+201440646	2	cut out	v	3	1
+201442578	2	break up	v	11	0
+201443740	1	center punch	v	1	2
+201445756	1	snap at	v	1	1
+201445756	2	bite off	v	1	2
+201445932	2	seize with teeth	v	1	0
+201449053	1	pull back	v	3	0
+201451665	1	cart off	v	1	1
+201451665	2	cart away	v	1	0
+201451665	3	haul off	v	1	0
+201451665	4	haul away	v	1	0
+201453718	3	pull along	v	1	0
+201455506	2	trice up	v	2	0
+201455639	2	trice up	v	1	0
+201455754	2	run up	v	2	1
+201455866	2	heave up	v	1	0
+201455866	4	heft up	v	1	0
+201456199	1	weigh anchor	v	1	1
+201456199	2	weigh the anchor	v	1	0
+201456463	2	nip off	v	1	0
+201456463	5	snip off	v	1	0
+201457954	2	sink in	v	2	0
+201458664	4	separate out	v	1	2
+201458664	5	filter out	v	1	0
+201463520	3	straighten out	v	2	1
+201463792	2	tease apart	v	1	0
+201463963	2	set up	v	5	4
+201466978	7	butt against	v	1	2
+201466978	8	butt on	v	1	0
+201468058	2	force out	v	5	0
+201468576	2	chuck out	v	2	0
+201468576	4	turf out	v	1	0
+201468576	5	boot out	v	2	0
+201468576	6	turn out	v	7	1
+201468948	1	show the door	v	1	0
+201469263	3	lay over	v	2	1
+201469770	2	ask in	v	1	0
+201469960	1	call in	v	1	2
+201470225	2	take in	v	7	1
+201472807	3	throw together	v	2	0
+201473176	3	potter around	v	1	0
+201473176	4	putter around	v	1	2
+201473346	2	mess around	v	1	2
+201473346	6	monkey around	v	1	0
+201473346	7	muck about	v	1	0
+201473346	8	muck around	v	1	0
+201474209	3	lay out	v	1	7
+201474209	4	set out	v	2	5
+201474550	1	let go of	v	1	5
+201474550	2	let go	v	1	6
+201475301	1	bring out	v	2	2
+201475301	2	let out	v	3	0
+201475536	2	let loose	v	2	0
+201476483	7	close up	v	2	0
+201477014	1	tie up	v	3	0
+201477224	2	dam up	v	1	0
+201477394	1	shut off	v	3	0
+201477394	2	block off	v	3	0
+201477394	3	close off	v	3	0
+201477538	2	block out	v	2	0
+201477888	1	land up	v	1	0
+201477888	2	earth up	v	1	0
+201478002	5	block off	v	2	0
+201478002	6	block up	v	1	0
+201478603	2	choke off	v	2	1
+201478603	3	clog up	v	1	0
+201478603	4	back up	v	5	0
+201479009	1	crap up	v	1	0
+201479333	3	choke up	v	1	0
+201479545	1	silt up	v	1	0
+201479682	2	loosen up	v	1	1
+201481360	2	hang up	v	2	3
+201483131	2	load down	v	1	0
+201484392	2	bunch up	v	2	0
+201485513	2	take out	v	2	6
+201485732	1	break out	v	4	1
+201487008	2	bundle up	v	1	0
+201487008	3	roll up	v	4	0
+201487185	1	roll out	v	2	0
+201487311	4	weight down	v	1	1
+201488463	1	bomb up	v	1	0
+201489465	2	drop off	v	3	0
+201489465	3	set down	v	6	0
+201489465	4	put down	v	5	0
+201489989	4	load up	v	1	1
+201494178	1	put to sleep	v	1	1
+201499692	2	tee up	v	2	0
+201499849	1	rack up	v	2	0
+201500372	1	set down	v	4	1
+201500372	2	put down	v	1	6
+201500372	3	place down	v	1	0
+201500572	6	plump down	v	2	0
+201500572	7	plunk down	v	1	0
+201501347	3	sow in	v	1	0
+201502122	1	set down	v	3	1
+201504298	1	pile up	v	2	2
+201504298	2	heap up	v	1	0
+201504298	3	stack up	v	1	0
+201505254	3	pull in	v	1	4
+201505254	5	draw in	v	2	1
+201506157	4	force back	v	1	0
+201506157	5	push back	v	1	3
+201506157	6	beat back	v	1	0
+201506583	1	draw in	v	1	1
+201509280	1	strike out	v	2	1
+201509824	2	throw overboard	v	2	0
+201510399	1	switch on	v	1	5
+201510399	2	turn on	v	1	12
+201510576	1	switch off	v	1	2
+201510576	3	turn off	v	1	8
+201510576	4	turn out	v	11	0
+201513145	1	throw back	v	1	1
+201513145	2	toss back	v	1	1
+201513430	3	cast off	v	1	1
+201513430	4	shake off	v	2	2
+201513430	6	throw off	v	1	2
+201513430	7	throw away	v	2	0
+201514126	2	set up	v	12	0
+201514248	2	camp down	v	1	0
+201515056	1	blast off	v	1	0
+201515196	2	set in motion	v	1	4
+201515791	2	send off	v	2	0
+201521367	3	ravel out	v	1	0
+201521603	2	lace up	v	1	0
+201522052	2	wind up	v	4	0
+201523520	1	reel off	v	1	0
+201523654	2	wind off	v	1	0
+201524298	4	chock up	v	1	0
+201526483	2	tick over	v	1	0
+201526605	1	go on	v	5	3
+201526605	2	come up	v	8	1
+201526605	3	come on	v	4	0
+201526792	1	go off	v	4	0
+201526956	2	fill out	v	4	0
+201531124	2	dig in	v	1	2
+201532589	2	make clean	v	1	0
+201533166	1	wash up	v	3	0
+201533166	2	do the dishes	v	1	0
+201533442	2	clean house	v	1	0
+201534745	4	muck up	v	2	0
+201535117	1	dry clean	v	1	0
+201535742	1	wash out	v	2	1
+201536168	2	rinse off	v	1	0
+201536508	2	pan out	v	2	0
+201536508	3	pan off	v	1	0
+201537114	1	machine wash	v	1	0
+201539063	4	soak up	v	1	0
+201539063	5	sop up	v	1	0
+201539063	6	suck up	v	1	1
+201539063	8	take in	v	13	0
+201539063	9	take up	v	11	0
+201539487	1	sponge up	v	1	0
+201540449	2	take up	v	8	1
+201540693	2	draw out	v	5	0
+201540693	3	suck out	v	1	0
+201540844	1	take in	v	12	0
+201540844	2	take up	v	10	0
+201541803	3	pour forth	v	1	1
+201543123	2	sit down	v	3	1
+201543998	3	sit down	v	2	1
+201544692	2	put down	v	2	2
+201545314	4	scrunch up	v	1	0
+201545314	6	hunker down	v	1	1
+201546111	2	stand up	v	4	2
+201546633	1	stand back	v	2	1
+201546768	2	stand up	v	3	2
+201546768	3	place upright	v	1	0
+201547925	1	lie awake	v	1	2
+201548718	2	rub out	v	1	0
+201548718	3	score out	v	1	0
+201548718	5	wipe off	v	2	0
+201549719	1	scratch out	v	1	0
+201549719	2	cut out	v	4	0
+201552390	1	whittle away	v	1	0
+201552390	2	whittle down	v	1	0
+201552390	3	wear away	v	1	0
+201553987	1	cut away	v	2	0
+201554799	1	cut out	v	2	1
+201555034	2	die out	v	2	0
+201560984	2	break up	v	10	0
+201562061	2	break up	v	4	1
+201562061	3	break apart	v	2	0
+201563724	2	partition off	v	1	0
+201563996	2	pound off	v	1	0
+201564836	1	do a job on	v	1	0
+201566185	1	bust up	v	1	0
+201566705	1	bang up	v	1	0
+201566705	2	smash up	v	1	0
+201566916	4	root out	v	1	1
+201569017	2	put out	v	3	1
+201569566	3	put in	v	4	1
+201569566	4	set up	v	9	2
+201570108	3	set up	v	10	1
+201570403	2	put up	v	1	4
+201572510	2	take apart	v	2	1
+201573891	2	tear up	v	1	0
+201573891	3	rip up	v	1	0
+201574571	1	tamp down	v	1	0
+201574766	1	press down	v	1	0
+201575146	2	ram down	v	1	0
+201579813	3	spread out	v	7	0
+201582409	3	swallow up	v	1	2
+201582409	5	eat up	v	3	0
+201586738	1	kick in	v	3	0
+201586738	2	kick down	v	1	0
+201586850	2	frame in	v	1	2
+201587062	2	close in	v	2	0
+201587062	4	shut in	v	1	0
+201587575	2	glass in	v	1	0
+201588134	2	fence in	v	1	0
+201588297	1	rope in	v	1	0
+201588297	2	rope off	v	1	0
+201588297	3	cordon off	v	1	0
+201590007	1	lean on	v	1	6
+201590007	2	rest on	v	1	8
+201590007	3	lean against	v	1	5
+201590389	2	vamp up	v	2	0
+201592456	3	pull off	v	1	2
+201592456	4	pick off	v	2	1
+201592774	1	draw off	v	1	1
+201592774	2	draw away	v	2	0
+201592774	3	pull off	v	4	0
+201593134	1	hike up	v	1	1
+201593134	2	hitch up	v	1	1
+201593763	3	swing out	v	1	0
+201595149	2	crank up	v	2	0
+201595491	1	dip solder	v	1	0
+201597096	1	drag down	v	1	0
+201597096	2	bear down	v	1	1
+201597096	3	bear down on	v	2	0
+201597096	4	press down on	v	1	1
+201597096	5	weigh down	v	2	0
+201598637	2	double birdie	v	1	0
+201598785	1	double bogey	v	1	1
+201601025	2	cut across	v	3	0
+201603620	2	limber up	v	1	0
+201605537	1	ooze through	v	1	0
+201605692	2	soak through	v	1	0
+201605851	1	wash out	v	3	0
+201607072	2	bring together	v	2	3
+201607072	3	draw together	v	1	2
+201607716	1	hem in	v	1	1
+201607871	1	mound over	v	1	1
+201609115	1	pick at	v	1	1
+201609115	2	pluck at	v	1	0
+201609115	3	pull at	v	1	0
+201609773	2	pull back	v	2	0
+201609773	3	draw back	v	2	0
+201609953	1	draw close	v	3	0
+201610463	2	break up	v	9	0
+201615020	2	hedge in	v	1	0
+201615457	1	put out	v	7	0
+201615991	1	put away	v	4	0
+201615991	2	put aside	v	1	0
+201616151	1	shed blood	v	1	0
+201619725	4	make over	v	2	1
+201621219	1	wipe out	v	3	0
+201621219	2	sweep away	v	1	2
+201623365	1	clap up	v	1	0
+201623365	2	clap together	v	1	0
+201623365	3	slap together	v	1	0
+201623656	2	dummy up	v	1	0
+201623792	1	turn out	v	3	10
+201625044	1	churn out	v	2	0
+201625532	1	put out	v	2	1
+201626600	1	cobble together	v	1	0
+201626600	2	cobble up	v	1	0
+201627355	2	bring forth	v	1	2
+201627779	1	come up	v	1	9
+201629589	5	make for	v	1	13
+201629958	3	conjure up	v	1	5
+201629958	7	call down	v	1	0
+201629958	9	bring up	v	1	3
+201629958	10	put forward	v	3	0
+201629958	11	call forth	v	2	0
+201630532	5	draw out	v	4	0
+201630751	2	wring from	v	1	0
+201631534	1	create by mental act	v	1	0
+201631534	2	create mentally	v	1	0
+201631959	1	give birth	v	2	1
+201634142	1	think up	v	1	2
+201634142	2	think of	v	5	16
+201634142	3	dream up	v	1	3
+201634424	3	cook up	v	2	0
+201634424	4	make up	v	5	1
+201635056	1	trump up	v	1	1
+201636397	2	conceive of	v	1	6
+201640855	1	carry through	v	1	4
+201640855	4	carry out	v	1	21
+201641341	1	get over	v	2	1
+201642311	1	strike up	v	2	0
+201642717	1	phase in	v	1	0
+201642820	1	phase out	v	1	0
+201642924	3	set up	v	8	2
+201643657	5	set off	v	1	4
+201643657	6	spark off	v	1	0
+201643657	8	trigger off	v	1	0
+201643657	9	touch off	v	1	3
+201644050	2	bring on	v	1	6
+201644238	1	bring on	v	3	0
+201645421	2	open up	v	4	1
+201646866	3	call forth	v	1	0
+201646866	4	kick up	v	2	0
+201648684	1	tee up	v	1	0
+201649251	2	put on	v	6	0
+201649809	1	put on	v	4	1
+201649809	2	turn in	v	3	1
+201650610	2	start up	v	2	0
+201650610	3	embark on	v	1	3
+201651110	1	sound off	v	2	0
+201651110	2	strike up	v	1	4
+201651293	2	set about	v	2	1
+201651444	5	get up	v	7	0
+201652139	2	turn out	v	6	1
+201653013	1	create from raw material	v	1	0
+201653013	2	create from raw stuff	v	1	0
+201655763	2	frame up	v	1	1
+201656788	3	put together	v	1	4
+201656788	4	set up	v	2	10
+201656788	6	tack together	v	1	0
+201657254	3	mix up	v	1	0
+201657977	3	take apart	v	1	1
+201657977	4	break up	v	8	0
+201657977	5	break apart	v	1	0
+201660547	1	mound over	v	2	0
+201661243	4	set up	v	3	8
+201661243	5	put up	v	3	3
+201661472	1	set up	v	6	3
+201661655	1	rig up	v	1	1
+201661804	5	tear down	v	1	5
+201661804	6	take down	v	3	0
+201661804	7	pull down	v	1	2
+201662118	4	root out	v	2	0
+201662614	2	press out	v	2	0
+201663339	1	sand cast	v	1	0
+201665185	1	put on	v	3	2
+201666002	1	whip up	v	1	0
+201666002	2	whomp up	v	1	0
+201666131	2	cook up	v	1	1
+201666604	1	run up	v	5	0
+201668603	2	work on	v	2	5
+201669070	2	cold work	v	1	0
+201669285	2	make over	v	1	1
+201670315	4	dress up	v	3	0
+201671463	1	cast on	v	1	0
+201671609	1	cast off	v	2	0
+201671885	1	purl stitch	v	1	0
+201673007	1	shell stitch	v	1	0
+201673137	1	double crochet	v	1	0
+201673137	2	double stitch	v	1	0
+201673305	1	single crochet	v	1	0
+201673305	2	single stitch	v	1	0
+201675780	2	squeeze out	v	5	0
+201677242	1	gild the lily	v	1	0
+201677242	2	paint the lily	v	1	0
+201678140	1	tart up	v	1	0
+201679339	1	dress ship	v	1	0
+201694620	1	back up	v	4	0
+201695567	2	fill in	v	2	1
+201697406	2	mock up	v	1	0
+201697628	2	chalk out	v	1	0
+201697816	1	create verbally	v	1	0
+201699172	1	write on	v	1	3
+201699172	2	write of	v	1	4
+201699172	3	write about	v	1	4
+201700149	1	spell out	v	2	0
+201700540	1	write off	v	2	1
+201700655	1	dash off	v	1	0
+201700655	2	scratch off	v	1	0
+201700655	3	knock off	v	4	0
+201700655	4	toss off	v	1	0
+201700655	5	fling off	v	1	0
+201701152	1	write copy	v	1	0
+201704030	1	belt out	v	1	1
+201704129	1	descant on	v	1	0
+201706014	1	set to music	v	1	0
+201708676	2	trip the light fantastic	v	1	0
+201708676	3	trip the light fantastic toe	v	1	0
+201710048	1	tap dance	v	1	0
+201710190	1	belly dance	v	1	0
+201711336	1	stage direct	v	1	0
+201712554	1	cut corners	v	1	1
+201713587	1	blaze away	v	1	1
+201714095	1	churn out	v	1	0
+201715185	1	play out	v	2	0
+201718535	2	try out	v	3	0
+201722447	3	act out	v	2	1
+201722645	1	act out	v	1	1
+201723437	1	walk through	v	1	0
+201728213	1	bang out	v	1	0
+201728355	1	play along	v	2	0
+201728613	1	sing along	v	1	0
+201734131	1	double tongue	v	1	0
+201736299	2	run off	v	6	0
+201738347	1	play back	v	1	1
+201739545	2	vamp up	v	1	0
+201739675	1	fudge together	v	1	0
+201739675	2	throw together	v	1	0
+201743313	1	take off	v	5	1
+201744450	1	take after	v	2	0
+201747602	1	copy out	v	1	0
+201748273	2	print over	v	1	0
+201751173	2	ham it up	v	1	0
+201752495	2	bring forth	v	3	1
+201752884	2	bring about	v	2	0
+201752884	3	give rise	v	1	9
+201753272	1	grind out	v	1	1
+201753272	2	crank out	v	1	0
+201753465	1	make up	v	2	4
+201754452	1	rough in	v	1	0
+201754452	3	rough out	v	1	1
+201754576	1	write out	v	1	2
+201754576	2	write up	v	2	0
+201756149	2	map out	v	1	1
+201758526	1	carve out	v	1	0
+201759926	1	strike a chord	v	3	0
+201759926	2	touch a chord	v	1	0
+201760143	2	ask for	v	1	4
+201761120	2	stir up	v	2	1
+201761120	6	fire up	v	1	0
+201761706	3	shake up	v	4	0
+201762283	4	turn on	v	6	0
+201762283	5	wind up	v	3	1
+201762528	3	turn on	v	5	0
+201762528	7	charge up	v	1	0
+201763101	1	bubble over	v	1	1
+201763101	3	spill over	v	1	1
+201763482	1	hype up	v	1	0
+201763482	2	psych up	v	1	0
+201763829	2	calm down	v	1	4
+201763829	3	cool off	v	1	1
+201763829	4	chill out	v	1	0
+201763829	5	simmer down	v	1	0
+201763829	6	settle down	v	3	1
+201763829	7	cool it	v	1	0
+201764800	2	calm down	v	2	0
+201766273	2	eat on	v	1	1
+201768764	1	strike dumb	v	1	0
+201769220	1	hit home	v	1	0
+201769220	2	strike home	v	1	1
+201769220	3	strike a chord	v	2	0
+201769220	4	strike a note	v	1	0
+201770370	1	sweep away	v	2	1
+201770370	2	sweep off	v	1	0
+201771194	2	get under one`s skin	v	1	0
+201773825	1	eat into	v	1	0
+201775914	1	fall for	v	1	1
+201776214	1	care for	v	2	0
+201776214	3	hold dear	v	1	0
+201776468	2	go for	v	4	0
+201776468	3	take to	v	1	4
+201777707	1	cool off	v	3	0
+201781387	1	hold over	v	1	2
+201781520	6	boss around	v	1	0
+201781520	8	push around	v	1	1
+201782432	2	quail at	v	1	0
+201784148	1	freak out	v	1	0
+201784148	3	gross out	v	2	0
+201784295	1	break down	v	3	2
+201784295	2	lose it	v	1	0
+201785579	1	crack up	v	1	1
+201785579	3	crock up	v	1	0
+201785579	4	break up	v	7	0
+201785748	3	scare off	v	1	2
+201785748	5	frighten off	v	1	0
+201785748	6	scare away	v	1	0
+201785748	7	frighten away	v	1	1
+201787106	2	see red	v	1	0
+201787469	1	raise the roof	v	1	1
+201787955	3	get to	v	3	0
+201787955	5	get at	v	3	0
+201790739	4	put off	v	4	0
+201792951	1	break someone`s heart	v	1	0
+201795428	1	flip one`s lid	v	1	0
+201795428	2	blow up	v	3	0
+201795428	3	throw a fit	v	1	0
+201795428	4	hit the roof	v	1	0
+201795428	5	hit the ceiling	v	1	0
+201795428	6	have kittens	v	1	0
+201795428	7	have a fit	v	1	0
+201795428	9	blow one`s stack	v	1	0
+201795428	10	fly off the handle	v	1	0
+201795428	11	flip one`s wig	v	1	0
+201795428	12	lose one`s temper	v	1	0
+201795428	13	blow a fuse	v	1	0
+201795428	14	go ballistic	v	1	0
+201796215	1	foam at the mouth	v	1	0
+201796215	2	froth at the mouth	v	1	0
+201798936	2	let down	v	2	0
+201799484	1	fall short	v	1	1
+201799484	2	come short	v	1	0
+201800422	1	take down	v	2	0
+201800422	5	put down	v	4	0
+201802494	1	express emotion	v	1	1
+201802494	2	express feelings	v	1	0
+201803936	2	keep in line	v	1	0
+201804753	1	cozy up	v	1	0
+201804753	2	cotton up	v	1	0
+201804753	3	shine up	v	1	0
+201804753	4	play up	v	2	0
+201804753	5	sidle up	v	1	0
+201804753	6	suck up	v	2	0
+201804961	2	look for	v	2	3
+201804961	3	look to	v	2	2
+201805113	1	warm to	v	1	2
+201805247	2	moon around	v	2	0
+201805247	3	moon about	v	1	0
+201806407	1	take heart	v	1	1
+201806407	2	buck up	v	1	1
+201808374	5	churn up	v	1	0
+201808626	1	turn off	v	3	1
+201808626	2	put off	v	2	1
+201809064	3	ball over	v	1	0
+201809064	4	blow out of the water	v	1	0
+201809064	5	take aback	v	1	1
+201809321	3	sweep over	v	1	3
+201809784	1	shout down	v	1	0
+201809980	1	knock out	v	4	0
+201811736	2	lift up	v	2	1
+201811736	4	pick up	v	12	1
+201812324	2	tickle pink	v	1	0
+201813668	2	walk on air	v	1	1
+201813668	3	be on cloud nine	v	1	0
+201813668	4	jump for joy	v	1	0
+201814074	2	lighten up	v	1	0
+201814074	3	buoy up	v	2	0
+201814266	1	weigh down	v	1	0
+201814266	2	weigh on	v	1	0
+201814396	3	cast down	v	1	1
+201814396	4	get down	v	5	0
+201818538	1	draw out	v	3	0
+201818669	1	bring out	v	6	0
+201819387	2	put off	v	3	0
+201819772	1	throw cold water on	v	1	0
+201819772	2	pour cold water on	v	1	0
+201820648	1	feast one`s eyes	v	1	0
+201821996	1	feel for	v	1	1
+201821996	4	condole with	v	1	0
+201821996	5	sympathize with	v	1	3
+201823149	1	care a hang	v	1	1
+201823149	2	give a hoot	v	1	0
+201823149	3	give a hang	v	1	0
+201823149	4	give a damn	v	1	0
+201824050	1	drift apart	v	1	0
+201824050	2	drift away	v	1	0
+201824532	2	wish well	v	1	0
+201826184	1	feel like	v	1	12
+201827745	1	drool over	v	1	0
+201827745	2	slobber over	v	1	0
+201827858	2	look up to	v	1	0
+201828070	1	look down on	v	1	0
+201828256	1	lust after	v	1	0
+201828256	2	lech after	v	1	0
+201828623	1	care for	v	1	4
+201828993	1	take pride	v	1	0
+201828993	2	pride oneself	v	1	0
+201829126	1	fall apart	v	1	0
+201829126	2	go to pieces	v	1	1
+201829625	1	fly high	v	1	1
+201830307	1	bring down	v	5	0
+201833508	1	drop back	v	1	1
+201833717	1	hit the dirt	v	1	1
+201833717	2	hit the deck	v	1	1
+201834485	1	stand still	v	1	7
+201834730	2	stop dead	v	1	1
+201834896	1	grind to a halt	v	1	0
+201834896	2	get stuck	v	1	0
+201834896	3	bog down	v	3	0
+201835103	2	bog down	v	2	0
+201839963	1	betake oneself	v	1	0
+201840092	1	pass over	v	4	1
+201841591	1	pull over	v	1	0
+201842204	1	go out	v	2	10
+201842888	1	get around	v	4	0
+201842888	2	get about	v	1	1
+201843689	1	travel to	v	1	2
+201845587	1	take the road	v	1	0
+201848355	1	stay in place	v	1	1
+201848465	1	move over	v	1	2
+201848465	2	give way	v	1	7
+201848465	4	ease up	v	1	1
+201848718	2	go away	v	1	4
+201849054	1	shove off	v	1	0
+201849054	2	shove along	v	1	1
+201849221	2	come up	v	3	7
+201849746	2	come near	v	3	0
+201849983	1	get on	v	4	1
+201850135	1	drive up	v	1	1
+201852591	1	take back	v	4	0
+201853542	3	siphon off	v	1	0
+201854132	2	take out	v	10	0
+201855982	1	move in	v	3	0
+201856096	1	move in	v	1	4
+201856211	1	move out	v	2	0
+201856350	1	clear out	v	1	2
+201857392	3	stick around	v	2	0
+201857392	4	stay put	v	1	2
+201857717	2	start up	v	1	2
+201858362	2	rein in	v	3	0
+201858796	2	crank up	v	1	0
+201859854	1	bring up	v	5	1
+201860320	1	cut away	v	1	1
+201860485	1	cut to	v	1	0
+201860620	1	flag down	v	1	0
+201861230	1	pull up short	v	1	0
+201861927	1	turn on a dime	v	1	0
+201862090	2	rein in	v	1	2
+201862918	2	stop over	v	2	0
+201863158	1	draw up	v	5	0
+201863158	2	pull up	v	1	6
+201863158	3	haul up	v	1	1
+201863410	1	draw up	v	3	1
+201863410	2	pull up	v	3	0
+201864230	3	get going	v	1	2
+201864438	1	get off the ground	v	1	2
+201864438	2	take off	v	7	0
+201865051	2	shake up	v	1	1
+201865051	3	bump around	v	1	0
+201865866	1	bob around	v	1	0
+201865866	2	bob about	v	1	0
+201866192	2	turn over	v	3	1
+201867504	1	tramp down	v	1	0
+201867504	3	tread down	v	1	0
+201867816	1	roll over	v	1	3
+201873157	1	push out	v	1	0
+201873157	3	thrust out	v	1	1
+201873294	1	push aside	v	1	3
+201873294	2	push away	v	1	1
+201873417	1	muscle into	v	1	1
+201873530	1	push up	v	1	2
+201873784	1	boost up	v	1	1
+201874071	1	shoulder in	v	1	1
+201875144	1	travel purposefully	v	1	0
+201876530	1	move back and forth	v	1	0
+201878949	1	swing around	v	1	2
+201878949	2	swing about	v	1	0
+201878949	3	turn around	v	1	10
+201880560	1	beat out	v	2	0
+201880560	2	tap out	v	1	0
+201880560	3	thump out	v	1	0
+201882170	2	take the air	v	1	0
+201882689	3	jazz around	v	1	0
+201883550	1	beat down	v	3	0
+201883716	11	run around	v	1	3
+201883716	12	lark about	v	1	0
+201884577	2	cant over	v	1	0
+201890351	2	shake up	v	3	0
+201890792	3	thresh about	v	1	0
+201890792	5	thrash about	v	1	1
+201892104	3	take a hop	v	1	0
+201892734	2	bound off	v	1	0
+201893313	3	turn turtle	v	1	0
+201895612	2	waltz around	v	1	0
+201896295	4	contra danse	v	1	0
+201896484	1	break dance	v	1	0
+201897885	1	slam dance	v	1	0
+201898769	1	folk dance	v	1	0
+201898893	1	square dance	v	1	0
+201899017	2	call off	v	2	0
+201900760	2	trip up	v	2	0
+201902126	2	mill about	v	2	0
+201902126	3	mill around	v	2	0
+201902783	3	be adrift	v	1	0
+201903935	2	ebb away	v	1	0
+201903935	3	ebb down	v	1	0
+201903935	4	ebb out	v	1	0
+201903935	5	ebb off	v	1	0
+201904120	1	fall back	v	3	2
+201906322	2	leg it	v	1	0
+201906322	4	hoof it	v	1	0
+201908658	1	turn off	v	2	1
+201908809	1	turn away	v	1	13
+201909397	2	turn over	v	7	0
+201909397	3	tip over	v	2	0
+201909397	4	tump over	v	2	0
+201909812	2	move around	v	1	1
+201909978	2	tip over	v	1	0
+201909978	3	turn over	v	2	2
+201909978	5	knock over	v	1	2
+201909978	6	bowl over	v	1	0
+201909978	7	tump over	v	1	0
+201910965	2	walk about	v	1	1
+201910965	3	walk around	v	1	6
+201911232	2	walk around	v	2	3
+201912159	5	pass over	v	3	1
+201912159	6	get over	v	1	4
+201912159	7	get across	v	3	0
+201912159	8	cut through	v	1	1
+201912159	9	cut across	v	1	4
+201913363	2	pass through	v	3	1
+201915365	2	pass through	v	1	18
+201915365	3	move through	v	1	0
+201915365	4	pass across	v	1	0
+201915365	5	pass over	v	2	1
+201916033	1	slice into	v	1	0
+201916033	2	slice through	v	1	0
+201918669	2	mope around	v	1	0
+201920220	1	file in	v	1	0
+201920330	1	pop in	v	1	2
+201920457	1	pop out	v	3	0
+201920594	1	file out	v	1	3
+201921964	2	climb up	v	1	3
+201921964	4	go up	v	5	2
+201923058	3	rope down	v	1	0
+201923414	1	hop on	v	1	0
+201923414	3	mount up	v	1	2
+201923414	4	get on	v	3	1
+201923414	5	jump on	v	1	1
+201923414	6	climb on	v	1	1
+201923732	1	hop out	v	1	0
+201923732	2	get off	v	8	0
+201927211	1	run bases	v	1	1
+201927992	1	bear down on	v	1	2
+201927992	2	bear down upon	v	1	0
+201929133	1	goose step	v	1	0
+201931375	1	test drive	v	1	0
+201932834	1	stand out	v	3	1
+201936361	1	strike out	v	4	0
+201937222	1	ice skate	v	1	0
+201937394	1	figure skate	v	1	0
+201937534	1	roller skate	v	1	0
+201938288	1	speed skate	v	1	0
+201940248	1	water ski	v	1	1
+201941006	1	fly on	v	1	2
+201941704	1	fly blind	v	1	0
+201941838	1	fly contact	v	1	0
+201942137	1	test fly	v	1	0
+201943718	2	soar up	v	1	0
+201943718	3	soar upwards	v	1	0
+201943949	1	go up	v	4	2
+201946408	2	wear round	v	1	0
+201946660	1	wear ship	v	1	0
+201946817	4	change course	v	1	0
+201955009	1	bundle off	v	1	0
+201955127	3	send off	v	1	0
+201955508	2	send on	v	1	2
+201955808	1	hang glide	v	1	0
+201956708	3	tool around	v	1	1
+201957107	1	pick up	v	3	6
+201958103	1	ride herd	v	1	1
+201958452	4	get off	v	7	0
+201958452	5	get down	v	3	1
+201958615	1	ride horseback	v	1	0
+201961510	2	break water	v	1	0
+201965331	1	ski jump	v	1	0
+201966501	1	leap out	v	2	0
+201966501	2	rush out	v	1	2
+201966501	3	sally out	v	2	0
+201966501	4	burst forth	v	1	0
+201966706	2	roll down	v	1	0
+201968045	1	sky dive	v	1	0
+201968569	4	move up	v	2	3
+201968569	5	go up	v	1	19
+201968569	6	come up	v	6	2
+201969216	2	go up	v	7	0
+201969779	2	move up	v	1	3
+201970348	2	come up	v	10	0
+201970646	2	go down	v	7	0
+201970646	3	go under	v	2	0
+201970826	3	go down	v	1	11
+201970826	4	come down	v	1	14
+201973125	2	take down	v	1	3
+201973125	3	let down	v	1	7
+201973125	4	get down	v	2	1
+201973125	5	bring down	v	1	3
+201973486	1	get down	v	1	3
+201974062	4	get up	v	3	5
+201974062	5	bring up	v	4	1
+201975387	2	chin up	v	1	1
+201975912	2	hike up	v	2	0
+201976089	1	pick up	v	1	22
+201976089	2	lift up	v	1	1
+201976089	3	gather up	v	1	2
+201976702	1	keel over	v	1	1
+201978069	1	plonk down	v	1	0
+201978069	2	plump down	v	1	0
+201978069	3	plank down	v	1	0
+201978340	2	flump down	v	1	0
+201978576	2	climb down	v	1	3
+201979241	3	set down	v	5	0
+201979702	1	touch down	v	1	1
+201979901	2	set down	v	2	1
+201980300	1	drive in	v	2	1
+201980766	1	crash land	v	1	0
+201981036	2	put down	v	3	1
+201981036	3	bring down	v	4	0
+201981279	2	shoot down	v	2	1
+201981436	2	set ashore	v	1	0
+201981623	2	rise up	v	3	0
+201981791	1	rear back	v	1	1
+201981933	1	rear back	v	2	0
+201982253	1	drop open	v	1	0
+201982253	2	fall open	v	1	1
+201982395	4	take up	v	7	1
+201982686	1	draw up	v	2	2
+201982686	2	pull up	v	2	1
+201982686	3	straighten up	v	1	4
+201983006	1	prick up	v	1	1
+201983006	3	cock up	v	1	0
+201983264	4	get up	v	1	15
+201983264	5	stand up	v	1	23
+201983508	1	take the floor	v	1	2
+201983597	3	stand up	v	7	0
+201983771	1	change posture	v	1	0
+201984317	2	fall down	v	1	0
+201984902	1	sit down	v	1	38
+201985029	1	lie down	v	1	11
+201985271	2	stretch out	v	2	1
+201985757	2	sag down	v	1	1
+201985923	3	drop down	v	1	0
+201987648	1	square up	v	2	0
+201987648	3	even up	v	2	0
+201988458	2	settle down	v	1	4
+201988886	2	slide down	v	1	0
+201989053	2	fall in	v	1	3
+201989053	3	cave in	v	1	2
+201989053	5	give way	v	2	1
+201989873	3	go down	v	2	5
+201989873	4	go under	v	1	1
+201990281	2	come up	v	4	3
+201990281	3	rise up	v	1	4
+201990946	1	bubble up	v	1	0
+201991931	2	travel along	v	1	1
+201992503	3	pass on	v	3	2
+201992503	4	move on	v	1	7
+201992503	5	march on	v	1	3
+201992503	6	go on	v	3	23
+201993212	1	creep up	v	1	1
+201993212	2	sneak up	v	1	1
+201993549	1	press on	v	1	1
+201993549	2	push on	v	1	0
+201993549	3	plough on	v	1	0
+201993805	2	string along	v	1	0
+201993926	2	bring forward	v	1	1
+201994288	2	set ahead	v	1	0
+201994442	3	pull away	v	1	1
+201994442	4	draw back	v	1	8
+201994442	6	pull back	v	1	1
+201994442	8	move back	v	1	4
+201995211	3	pull out	v	2	4
+201995211	4	get out	v	5	0
+201995211	5	take out	v	9	0
+201995549	2	go forward	v	1	6
+201996574	2	thrust ahead	v	1	0
+201996574	3	push forward	v	1	0
+201997376	1	back out	v	1	2
+201997680	1	back up	v	2	3
+201997680	2	back off	v	1	6
+201997680	3	back down	v	1	2
+201997862	3	fall back	v	2	2
+201997862	4	fall behind	v	2	0
+201998793	1	catch up	v	1	2
+201998982	1	come back	v	3	1
+201999688	1	draw away	v	1	0
+202000288	4	lead astray	v	2	0
+202001858	2	chase after	v	2	0
+202001858	6	give chase	v	1	0
+202001858	8	go after	v	1	7
+202002720	1	chase away	v	1	0
+202002720	2	drive out	v	1	1
+202002720	3	turn back	v	3	1
+202002720	4	drive away	v	1	1
+202002720	6	drive off	v	1	2
+202002720	7	run off	v	3	1
+202003186	1	clear the air	v	1	0
+202003480	1	shoo off	v	1	0
+202003480	3	shoo away	v	1	1
+202004227	1	run down	v	7	0
+202004528	2	turn back	v	1	7
+202004528	3	double back	v	1	0
+202004701	1	cut back	v	1	1
+202004701	2	flash back	v	1	0
+202005496	1	go home	v	1	21
+202005496	2	head home	v	1	1
+202006453	1	roll up	v	3	0
+202006709	2	come in	v	2	12
+202007111	1	max out	v	1	0
+202007237	1	break even	v	2	1
+202007417	2	get at	v	1	1
+202007680	1	flood in	v	1	0
+202007898	1	bottom out	v	1	0
+202008066	1	top out	v	3	0
+202008396	2	take leave	v	1	2
+202008674	1	fall out	v	4	0
+202008863	1	walk out of	v	1	2
+202009122	1	pop off	v	1	0
+202009347	1	beat a retreat	v	1	0
+202009433	2	go forth	v	1	0
+202009433	3	go away	v	2	3
+202010082	1	walk off	v	2	0
+202010082	2	walk away	v	1	0
+202010400	1	walk out	v	2	1
+202010572	1	come away	v	2	1
+202010864	2	buzz off	v	1	0
+202010864	3	fuck off	v	2	0
+202010864	5	bugger off	v	1	0
+202011040	1	run off	v	2	1
+202011040	2	run out	v	3	3
+202011040	4	bolt out	v	1	1
+202011040	5	beetle off	v	1	0
+202011302	1	ride off	v	1	1
+202011302	2	ride away	v	1	2
+202011437	1	go out	v	3	3
+202013427	1	carry over	v	4	0
+202013427	2	carry forward	v	1	1
+202013840	1	force out	v	4	0
+202013840	2	crowd out	v	1	0
+202014165	4	start out	v	2	2
+202014165	5	set forth	v	2	0
+202014165	6	set off	v	2	3
+202014165	7	set out	v	3	3
+202014165	8	take off	v	1	15
+202014553	1	take off	v	3	4
+202014553	2	lift off	v	1	0
+202014733	1	roar off	v	1	1
+202014863	2	blaze out	v	1	1
+202015031	1	sally forth	v	1	0
+202015031	2	sally out	v	1	0
+202015168	1	pull out	v	1	4
+202015168	2	get out	v	3	3
+202015384	1	pull in	v	3	0
+202015384	2	get in	v	4	1
+202015384	3	move in	v	2	0
+202015384	4	draw in	v	5	0
+202015598	2	go out	v	1	21
+202015598	3	get out	v	1	31
+202016062	1	get off	v	1	3
+202016401	1	step out	v	1	6
+202016523	2	come in	v	1	44
+202016523	3	get into	v	2	7
+202016523	4	get in	v	1	13
+202016523	5	go into	v	1	39
+202016523	6	go in	v	1	10
+202016523	7	move into	v	1	12
+202017149	1	walk in	v	1	0
+202017299	1	call at	v	1	0
+202017299	2	out in	v	1	0
+202017416	1	plump in	v	1	0
+202017550	1	plump out	v	1	0
+202017663	1	take water	v	1	0
+202017775	1	turn in	v	1	2
+202017937	1	edge in	v	1	0
+202017937	2	edge up	v	1	1
+202018049	2	get on	v	2	1
+202019011	1	barge in	v	1	1
+202019175	1	move in on	v	1	1
+202019716	1	intrude on	v	1	0
+202019716	3	obtrude upon	v	1	1
+202019716	4	encroach upon	v	1	1
+202020027	1	foray into	v	1	0
+202020590	5	arrive at	v	1	20
+202021921	1	get through	v	3	1
+202021921	2	come through	v	2	1
+202022162	3	get to	v	1	4
+202022162	4	progress to	v	1	1
+202022359	2	run aground	v	2	0
+202022486	3	run aground	v	1	0
+202022977	1	meet up with	v	1	2
+202023107	2	run into	v	4	0
+202023107	4	run across	v	1	2
+202023107	5	come across	v	3	0
+202023992	2	fort up	v	1	4
+202026868	1	body guard	v	1	0
+202027030	1	tag along	v	1	0
+202027226	2	huddle together	v	1	3
+202027411	1	bunch together	v	1	0
+202027411	3	bunch up	v	1	0
+202027612	2	crowd together	v	1	1
+202028994	4	spread out	v	6	0
+202029663	1	break up	v	3	2
+202030424	4	break up	v	1	5
+202031430	2	rail off	v	1	0
+202031826	1	shut off	v	2	0
+202031826	2	close off	v	2	0
+202032010	1	curtain off	v	1	0
+202033703	1	peel off	v	3	0
+202034300	3	turn away	v	2	4
+202034511	2	turn away	v	4	1
+202035315	2	arch over	v	1	0
+202035559	3	hunch forward	v	1	0
+202035559	4	hunch over	v	1	1
+202036650	2	line up	v	5	0
+202036755	1	line up	v	3	1
+202036755	2	queue up	v	1	0
+202039156	1	lean back	v	1	3
+202039315	1	fall back	v	1	2
+202041877	4	break down	v	5	1
+202043190	2	pass around	v	1	0
+202043190	3	pass on	v	6	0
+202043501	1	send around	v	1	0
+202045043	2	go around	v	4	0
+202045415	1	turn out	v	10	0
+202045415	3	spread out	v	5	0
+202046075	2	wheel around	v	2	0
+202046441	2	wheel around	v	1	0
+202046755	2	spin around	v	1	3
+202047857	3	whirl around	v	1	0
+202049963	1	get by	v	2	1
+202050132	2	go through	v	3	0
+202050132	3	go across	v	1	0
+202051444	1	cycle on	v	1	0
+202051694	1	travel by	v	1	0
+202051694	2	pass by	v	1	6
+202051694	4	go past	v	1	2
+202051694	5	go by	v	2	6
+202052226	1	run by	v	1	1
+202052358	1	fly by	v	1	2
+202052476	2	make pass	v	1	0
+202052965	1	pass off	v	3	0
+202053190	1	pass through	v	2	14
+202053829	1	zip by	v	1	0
+202053829	2	fly by	v	2	0
+202053829	3	whisk by	v	1	1
+202053941	3	come on	v	2	5
+202053941	4	go up	v	3	4
+202053941	5	draw near	v	1	3
+202053941	6	draw close	v	2	0
+202053941	7	come near	v	2	2
+202054541	2	come together	v	1	0
+202054703	1	close in	v	1	7
+202054703	2	draw in	v	4	0
+202054989	3	stretch out	v	1	2
+202055267	3	shoot down	v	1	1
+202055521	2	zoom along	v	1	0
+202055521	4	whizz along	v	1	0
+202055649	1	travel rapidly	v	1	0
+202056466	1	rout out	v	2	1
+202056466	2	drive out	v	2	0
+202056466	3	force out	v	3	0
+202056854	1	smoke out	v	1	0
+202057878	1	cut in	v	2	0
+202058049	1	drive around	v	1	1
+202058191	2	bustle about	v	1	1
+202058756	3	get behind	v	1	1
+202058756	4	hang back	v	1	1
+202058756	5	drop behind	v	1	1
+202058756	6	drop back	v	2	0
+202058994	7	pelt along	v	1	0
+202058994	8	rush along	v	1	0
+202058994	9	cannonball along	v	1	0
+202058994	10	bucket along	v	1	0
+202058994	11	belt along	v	1	0
+202058994	12	step on it	v	1	0
+202059675	1	rush off	v	1	2
+202059675	2	rush away	v	1	0
+202060141	3	spread out	v	1	6
+202060141	4	fan out	v	1	4
+202061366	1	shrink back	v	1	2
+202063309	1	double over	v	1	1
+202063309	3	double up	v	1	1
+202063610	2	bow down	v	1	1
+202067889	2	run off	v	5	0
+202068223	1	run down	v	2	2
+202069788	2	pour out	v	4	1
+202069888	2	run out	v	5	0
+202070150	1	spill over	v	2	0
+202070150	2	spill out	v	1	3
+202070150	3	pour out	v	3	1
+202070296	3	pour out	v	2	1
+202070466	2	well out	v	1	0
+202071316	2	cascade down	v	1	1
+202071457	2	run out	v	2	3
+202072159	3	well over	v	1	0
+202072159	4	run over	v	2	1
+202072159	5	brim over	v	1	1
+202072673	2	rachet up	v	1	0
+202072673	3	ratchet down	v	1	0
+202072849	4	slip by	v	1	0
+202072849	5	glide by	v	1	0
+202072849	6	slip away	v	2	1
+202072849	7	go by	v	1	6
+202072849	8	slide by	v	1	0
+202072849	9	go along	v	3	1
+202073233	2	break out	v	3	2
+202073233	3	break away	v	1	2
+202073545	2	shake off	v	1	3
+202073545	3	throw off	v	2	0
+202073545	4	escape from	v	1	6
+202073714	5	run off	v	1	2
+202073714	6	go off	v	1	4
+202073714	7	make off	v	1	0
+202074186	2	run off	v	4	0
+202074677	2	get away	v	1	8
+202074677	3	break loose	v	2	1
+202075049	4	turn tail	v	1	0
+202075049	6	run away	v	1	12
+202075049	7	hightail it	v	1	0
+202075049	9	head for the hills	v	1	0
+202075049	10	take to the woods	v	1	0
+202075049	12	fly the coop	v	1	0
+202075049	13	break away	v	5	0
+202075462	3	take flight	v	1	0
+202076027	1	slip away	v	1	1
+202076027	2	steal away	v	1	1
+202076027	3	sneak away	v	1	0
+202076027	4	sneak off	v	1	2
+202076027	5	sneak out	v	1	1
+202076857	2	break camp	v	1	2
+202077148	2	spread out	v	4	0
+202077546	1	bush out	v	1	0
+202078294	2	take back	v	1	5
+202078294	3	bring back	v	1	6
+202078591	1	bring in	v	1	18
+202079330	1	carry over	v	2	2
+202080482	1	wash up	v	2	0
+202080652	1	pipe in	v	2	0
+202080783	1	bring in	v	5	0
+202081578	1	leave behind	v	1	5
+202081946	4	pop out	v	2	0
+202081946	6	bulge out	v	1	0
+202081946	7	bug out	v	1	1
+202081946	8	come out	v	8	0
+202082355	1	revolve around	v	2	0
+202082355	2	circle around	v	1	0
+202082355	3	circle round	v	1	0
+202082690	3	spread out	v	3	0
+202083923	2	march out	v	1	0
+202084104	2	bring outside	v	1	0
+202085446	2	go around	v	3	0
+202087979	1	wind up	v	2	1
+202089174	1	come to the fore	v	1	1
+202089174	2	step forward	v	1	1
+202089174	3	come forward	v	1	1
+202089174	4	step up	v	3	0
+202089174	5	step to the fore	v	1	1
+202089174	6	come out	v	7	1
+202089420	2	turn over	v	6	0
+202090679	1	bring about	v	1	0
+202092039	1	step on	v	1	3
+202092039	2	tread on	v	1	3
+202095390	3	sleep around	v	1	0
+202095900	1	island hop	v	1	0
+202097925	1	come out	v	5	2
+202097925	2	fall out	v	3	0
+202098332	1	make way	v	1	3
+202098458	1	curl up	v	1	1
+202098458	3	draw in	v	3	0
+202098680	1	sit up	v	2	1
+202100476	1	run away	v	2	1
+202102002	2	move around	v	2	0
+202105082	3	jump off	v	2	0
+202105657	2	climb up	v	2	0
+202107248	1	pick up	v	9	2
+202108791	3	come to	v	1	10
+202110220	3	go through	v	1	8
+202112891	1	air out	v	1	0
+202117170	4	go down on	v	1	0
+202117955	2	pick up	v	14	0
+202118793	1	take notice	v	1	2
+202118933	2	take note	v	1	2
+202119353	1	pass up	v	2	0
+202122522	1	act up	v	2	0
+202123903	1	cause to be perceived	v	1	0
+202124632	1	reach one`s nostrils	v	1	0
+202125460	1	sniff out	v	1	0
+202125460	2	scent out	v	1	0
+202125460	3	smell out	v	1	0
+202125460	4	nose out	v	1	0
+202126022	1	stink up	v	1	0
+202126022	2	smell up	v	1	0
+202126022	3	stink out	v	1	0
+202126269	1	get a noseful	v	1	0
+202126269	2	get a whiff	v	1	0
+202128653	2	look on	v	1	3
+202129879	1	catch sight	v	1	0
+202129879	2	get a look	v	1	3
+202129879	3	catch a glimpse	v	1	2
+202130017	1	lose sight of	v	1	0
+202130160	2	lay eyes on	v	1	1
+202130300	3	look at	v	2	6
+202131777	1	take a look	v	1	7
+202131777	2	have a look	v	1	6
+202131777	3	get a load	v	1	0
+202132099	1	look back	v	1	11
+202132099	2	look backward	v	1	0
+202132263	1	look away	v	1	2
+202132420	1	look around	v	1	13
+202132579	1	see double	v	1	0
+202132989	1	stare down	v	1	0
+202134492	1	pass off	v	1	1
+202136138	1	come across	v	2	0
+202138453	1	do justice	v	1	1
+202139544	2	show up	v	2	4
+202141146	2	bring forth	v	2	1
+202141414	1	turn on	v	3	1
+202141559	1	hold up	v	2	3
+202141973	3	show off	v	1	4
+202143283	2	bring out	v	1	9
+202143756	2	dig up	v	2	0
+202143756	3	dig out	v	1	0
+202143906	1	trot out	v	1	1
+202145814	2	hide out	v	1	1
+202146175	1	stow away	v	1	0
+202146377	1	hunker down	v	2	0
+202146525	1	hole up	v	1	0
+202146674	1	lie low	v	1	1
+202146790	2	hold back	v	6	0
+202146790	3	hold in	v	3	0
+202148109	2	gloss over	v	2	0
+202148109	3	sleek over	v	1	0
+202148109	4	hush up	v	1	0
+202148369	2	cover up	v	1	0
+202150948	5	take in	v	6	1
+202151966	2	look out	v	1	7
+202151966	3	watch out	v	1	5
+202152278	4	glance over	v	1	0
+202152278	5	run down	v	5	1
+202153253	1	zoom in	v	1	0
+202153387	1	size up	v	1	2
+202153387	2	take stock	v	1	1
+202156546	3	go away	v	3	0
+202156963	1	bob under	v	1	0
+202157100	2	bring on	v	2	0
+202157100	3	bring out	v	5	0
+202157519	1	crop up	v	1	2
+202157519	2	pop up	v	1	4
+202157731	5	haze over	v	1	0
+202158034	1	film over	v	1	0
+202158034	2	glaze over	v	1	0
+202159427	2	guide on	v	1	2
+202160321	1	beat down	v	2	0
+202164186	1	give the glad eye	v	1	0
+202167210	1	keep one`s eyes peeled	v	1	0
+202167210	2	keep one`s eyes skinned	v	1	0
+202167210	3	keep one`s eyes open	v	1	0
+202167435	1	look after	v	1	5
+202167875	1	give the eye	v	1	0
+202167875	2	give the once over	v	1	0
+202169119	2	horn in	v	1	0
+202170181	1	hear out	v	1	0
+202170304	1	listen in	v	1	1
+202170427	4	pay heed	v	1	0
+202170427	5	give ear	v	1	1
+202171039	3	take heed	v	1	0
+202171514	1	tune in	v	1	1
+202172534	1	drown out	v	1	3
+202172888	1	make noise	v	1	2
+202174662	2	boom out	v	1	0
+202175861	1	ring out	v	1	4
+202189168	2	take in	v	11	0
+202189714	1	listen in	v	2	0
+202190188	5	quiet down	v	1	1
+202190188	6	pipe down	v	1	0
+202191106	1	change intensity	v	1	0
+202191311	6	tone down	v	1	0
+202192570	3	spice up	v	1	1
+202193194	6	pick out	v	2	2
+202193194	7	make out	v	1	8
+202193194	8	tell apart	v	1	1
+202194913	2	gross out	v	1	0
+202195191	3	turn one`s stomach	v	1	0
+202196948	1	change taste	v	1	0
+202197250	1	get off	v	6	0
+202198973	1	see through	v	2	0
+202200341	1	cough up	v	1	0
+202200341	2	pony up	v	1	0
+202200341	3	spit up	v	1	0
+202201644	2	give out	v	2	1
+202201644	3	hand out	v	1	5
+202201644	4	pass out	v	2	0
+202201855	1	give away	v	1	3
+202201975	2	raffle off	v	1	0
+202202384	2	hold on	v	5	0
+202202802	1	carry over	v	3	0
+202202802	2	hold over	v	2	1
+202203362	2	have got	v	1	16
+202205719	1	take away	v	4	2
+202205887	1	take back	v	2	1
+202206014	1	come by	v	2	3
+202206014	2	come into	v	1	2
+202207890	1	buy back	v	1	0
+202209499	1	hire out	v	1	0
+202209499	2	rent out	v	1	2
+202209499	3	farm out	v	2	1
+202209745	2	subscribe to	v	1	1
+202212646	1	enter upon	v	1	0
+202212646	2	come upon	v	2	1
+202212646	3	luck into	v	1	1
+202213336	1	line up	v	2	1
+202213336	2	get hold	v	1	0
+202213336	3	come up	v	9	0
+202213690	2	keep back	v	3	0
+202214042	1	keep to oneself	v	2	0
+202216560	2	take over	v	8	0
+202217990	2	fund raise	v	1	0
+202218173	2	take in	v	5	1
+202219442	2	bring home the bacon	v	2	0
+202219732	1	see through	v	1	0
+202221959	1	change hands	v	1	0
+202221959	2	change owners	v	1	0
+202222318	4	toss out	v	1	0
+202222318	5	toss away	v	1	2
+202222318	6	chuck out	v	1	0
+202222318	7	cast aside	v	1	2
+202222318	9	throw out	v	2	3
+202222318	10	cast out	v	2	0
+202222318	11	throw away	v	1	5
+202222318	12	cast away	v	1	0
+202222318	13	put away	v	2	1
+202222846	1	slough off	v	1	0
+202222994	2	give it the deep six	v	1	0
+202223630	1	weed out	v	1	2
+202223630	2	comb out	v	1	0
+202223858	1	work off	v	1	0
+202224055	1	get rid of	v	1	7
+202227741	2	give up	v	2	5
+202230247	1	pass on	v	4	1
+202230615	1	hand down	v	1	1
+202230772	4	pass on	v	1	4
+202230772	5	turn over	v	1	5
+202234803	2	ration out	v	1	0
+202235229	4	give up	v	8	2
+202235549	1	yield up	v	1	1
+202236624	4	take on	v	4	1
+202237338	3	pass up	v	1	1
+202237338	4	turn down	v	1	5
+202237782	1	put up	v	8	0
+202239261	1	take out	v	4	2
+202239405	1	get in	v	3	1
+202239405	2	get into	v	3	4
+202239846	1	eke out	v	4	0
+202239846	2	squeeze out	v	4	0
+202239997	1	eke out	v	3	0
+202239997	2	squeeze out	v	2	1
+202242256	2	black market	v	1	0
+202243186	1	sell short	v	1	0
+202244248	1	sell off	v	1	0
+202244426	1	foist off	v	1	0
+202244426	2	palm off	v	1	1
+202244426	3	fob off	v	1	0
+202244773	2	auction off	v	1	0
+202246166	1	black marketeer	v	1	0
+202247390	2	bring in	v	3	1
+202247584	1	sell out	v	1	2
+202247584	2	sell up	v	1	0
+202249147	1	log in	v	1	0
+202249147	2	log on	v	1	0
+202249293	1	log out	v	1	0
+202249293	2	log off	v	1	0
+202250467	1	go Dutch	v	1	0
+202252931	1	pay up	v	1	0
+202252931	2	ante up	v	1	0
+202253456	2	pay off	v	4	1
+202253456	3	make up	v	3	3
+202253766	2	default on	v	1	0
+202254671	1	clean up	v	3	0
+202255942	2	deed over	v	1	0
+202256354	2	cash in	v	1	0
+202256853	2	pay off	v	3	2
+202258617	3	stand in	v	1	1
+202258617	4	fill in	v	3	0
+202259387	1	beat down	v	1	0
+202259387	2	bargain down	v	1	0
+202260085	2	trade in	v	1	1
+202261256	1	turn over	v	5	0
+202262601	2	pension off	v	2	0
+202262932	1	bring in	v	4	0
+202265979	2	lay aside	v	1	0
+202265979	3	save up	v	1	0
+202266422	2	wanton away	v	2	0
+202266422	3	trifle away	v	1	0
+202267989	3	use up	v	2	0
+202268704	1	tighten one`s belt	v	1	0
+202271490	1	roll over	v	3	0
+202271667	1	roll over	v	2	0
+202271923	1	tie up	v	2	0
+202274299	1	take over	v	5	3
+202274299	2	buy out	v	1	2
+202274299	3	buy up	v	1	2
+202274482	4	take over	v	1	12
+202275365	2	lay claim	v	1	1
+202277448	1	hold up	v	4	2
+202277448	2	stick up	v	1	0
+202278727	1	line one`s pockets	v	1	0
+202278830	2	turn a profit	v	1	0
+202279113	1	turn a nice dime	v	1	0
+202279113	2	turn a nice penny	v	1	0
+202279113	3	turn a nice dollar	v	1	0
+202279315	1	clean up	v	2	0
+202279513	1	cash in on	v	1	1
+202279772	3	take advantage	v	1	11
+202280018	1	break even	v	1	1
+202280132	4	keep up	v	3	4
+202280869	1	run down	v	6	0
+202280869	3	play out	v	1	0
+202281093	2	hive away	v	1	0
+202281093	3	lay in	v	1	0
+202281093	4	put in	v	2	2
+202281093	5	salt away	v	1	1
+202281093	6	stack away	v	1	0
+202281093	7	stash away	v	1	0
+202283324	3	keep back	v	2	0
+202283324	4	hold back	v	5	0
+202283608	1	hold down	v	1	1
+202283716	1	keep open	v	1	0
+202283716	2	hold open	v	1	0
+202284096	4	grease one`s palms	v	1	0
+202284544	1	buy into	v	1	0
+202284662	1	rake off	v	1	0
+202284803	1	buy off	v	1	0
+202284803	2	pay off	v	5	0
+202284951	4	give back	v	1	0
+202286204	2	turn up	v	3	2
+202286687	1	fall upon	v	1	0
+202286687	3	come upon	v	1	10
+202286687	4	light upon	v	1	0
+202286687	5	chance upon	v	1	0
+202286687	6	come across	v	1	3
+202286687	7	chance on	v	1	0
+202286687	8	happen upon	v	1	1
+202287041	1	pick up	v	8	2
+202288042	1	sleep off	v	1	1
+202288828	2	turn a loss	v	1	0
+202289295	2	take in	v	10	0
+202289295	8	pull in	v	2	0
+202289295	9	bring in	v	2	4
+202289854	1	take home	v	1	0
+202289854	2	bring home	v	2	0
+202290029	1	rake in	v	1	0
+202290029	2	shovel in	v	1	0
+202290956	2	do good	v	1	5
+202291258	3	sack up	v	1	0
+202292004	1	pay off	v	1	4
+202292265	1	rout up	v	1	0
+202292265	2	rout out	v	1	1
+202293321	1	hand over	v	1	5
+202293321	2	fork over	v	1	0
+202293321	3	fork out	v	1	0
+202293321	4	fork up	v	1	0
+202293321	5	turn in	v	2	1
+202293915	1	give away	v	3	0
+202294056	1	barter away	v	1	0
+202294179	2	divvy up	v	1	0
+202294179	3	portion out	v	1	0
+202294436	3	mete out	v	1	0
+202294436	5	parcel out	v	1	0
+202294436	8	shell out	v	1	0
+202294436	9	deal out	v	1	0
+202294436	10	dish out	v	1	0
+202294436	12	dole out	v	1	1
+202295208	3	partake in	v	2	0
+202295447	1	cut in	v	1	0
+202295717	1	double up	v	2	0
+202296153	4	pass on	v	2	3
+202297571	1	put up	v	5	1
+202301502	2	pay out	v	1	3
+202301825	2	take over	v	4	5
+202302081	1	face the music	v	1	0
+202302081	2	carry-the can	v	1	0
+202303235	1	dispense with	v	3	0
+202303331	2	give up	v	1	9
+202303331	3	throw overboard	v	1	0
+202304648	1	snap up	v	1	1
+202304982	1	roll up	v	2	0
+202304982	4	pile up	v	3	0
+202305586	2	pick up	v	4	5
+202305586	3	gather up	v	2	1
+202305586	4	call for	v	4	0
+202305856	4	lay away	v	1	0
+202305856	5	hive up	v	1	0
+202305856	6	squirrel away	v	1	0
+202308741	3	chip in	v	1	0
+202308741	4	kick in	v	2	0
+202310157	1	feed back	v	1	1
+202311260	2	check out	v	6	0
+202311387	3	take out	v	8	0
+202311387	4	draw off	v	2	0
+202312014	2	hive off	v	2	0
+202312478	2	call in	v	7	0
+202312478	3	call back	v	1	1
+202313098	2	smooth out	v	1	1
+202314784	1	clean out	v	3	0
+202316304	5	give up	v	6	3
+202317548	1	pay cash	v	1	0
+202318843	1	feather one`s nest	v	1	0
+202319824	1	mark up	v	1	0
+202319946	1	hold the line	v	1	0
+202320078	1	mark down	v	1	0
+202321245	1	chalk up	v	1	1
+202321245	2	run up	v	4	0
+202322230	5	knock off	v	3	0
+202322433	1	walk off	v	1	1
+202323286	2	buy in	v	1	0
+202323286	3	stock up	v	1	0
+202326955	1	take out	v	7	0
+202326955	2	buy food	v	1	0
+202338629	1	gas up	v	1	1
+202339413	3	fit out	v	1	1
+202340360	1	turn out	v	9	0
+202341200	1	kit out	v	1	0
+202341200	2	kit up	v	1	0
+202342580	1	eke out	v	1	2
+202342580	2	fill out	v	3	0
+202342800	3	fly high	v	2	0
+202343816	1	sign away	v	1	0
+202343816	2	sign over	v	1	0
+202344381	3	pay back	v	1	0
+202345647	2	give up	v	5	3
+202345647	3	part with	v	1	0
+202345647	4	dispense with	v	1	1
+202346724	3	take over	v	7	1
+202346724	4	take up	v	6	1
+202349597	2	knock off	v	2	1
+202352019	2	pay off	v	2	2
+202352538	1	close out	v	2	0
+202355259	1	kick back	v	1	1
+202355410	1	pick up	v	6	3
+202356974	1	throw in	v	1	2
+202358327	2	drive home	v	1	0
+202359061	2	call in	v	6	0
+202360497	2	top out	v	2	0
+202363742	1	check out	v	5	0
+202366575	1	lay out	v	3	0
+202367032	4	give up	v	7	2
+202370433	1	play it by ear	v	1	0
+202371239	1	let it go	v	1	1
+202371352	1	keep to oneself	v	1	1
+202371469	1	sweep under the rug	v	1	1
+202373785	2	put forward	v	2	0
+202373974	1	come close	v	1	3
+202374099	1	sit by	v	1	1
+202374099	2	sit back	v	2	1
+202374282	1	whip through	v	1	1
+202374449	2	bull through	v	1	0
+202374924	1	make bold	v	1	1
+202376289	1	put up	v	2	3
+202376429	2	follow up on	v	1	0
+202376429	3	act on	v	1	5
+202376631	1	act on	v	2	2
+202376833	1	run down	v	1	2
+202376833	2	check out	v	4	0
+202378330	1	lie dormant	v	1	2
+202378851	2	go against	v	3	0
+202379528	2	take up	v	5	2
+202380571	1	pension off	v	1	0
+202380760	1	bow out	v	2	0
+202380980	1	chicken out	v	1	0
+202380980	2	back off	v	2	0
+202380980	3	pull out	v	4	0
+202380980	4	back down	v	2	0
+202380980	5	bow out	v	1	0
+202381726	3	take on	v	2	6
+202381726	4	take over	v	2	8
+202382367	1	leave office	v	1	0
+202382367	3	step down	v	1	1
+202382742	1	top out	v	1	0
+202382938	1	drop out	v	3	0
+202383174	1	drop out	v	2	0
+202383440	3	pull up stakes	v	1	0
+202383842	1	take office	v	1	0
+202384686	2	ask over	v	1	0
+202384686	3	ask round	v	1	0
+202384940	2	pay for	v	1	0
+202386266	1	take orders	v	2	0
+202389346	1	get in touch	v	1	5
+202389346	2	touch base	v	1	0
+202389815	2	get around	v	3	0
+202390287	1	hang out	v	1	0
+202394662	4	step in	v	2	0
+202395782	2	kick off	v	1	0
+202397637	4	kick upstairs	v	1	0
+202398161	1	bring up	v	3	1
+202398314	1	spot promote	v	1	1
+202399331	5	kick downstairs	v	1	0
+202400378	2	screen out	v	1	0
+202400637	1	vote in	v	1	1
+202401809	2	throw out	v	3	1
+202401809	3	drum out	v	1	1
+202401809	4	boot out	v	1	0
+202401809	5	kick out	v	2	0
+202402271	1	take time by the forelock	v	1	0
+202402409	4	bring down	v	2	1
+202402825	3	give notice	v	1	0
+202402825	6	give the axe	v	1	0
+202402825	7	send away	v	2	0
+202402825	9	force out	v	2	0
+202402825	10	give the sack	v	1	0
+202403408	1	clean out	v	2	0
+202403537	2	lay off	v	2	1
+202404076	1	squeeze out	v	1	1
+202404467	1	pull off	v	2	1
+202404622	1	winkle out	v	1	0
+202404904	1	take out	v	1	7
+202404904	2	move out	v	1	0
+202405120	1	call in	v	4	1
+202405252	2	force out	v	1	0
+202405390	4	supervene upon	v	1	0
+202406585	2	come after	v	2	0
+202407766	2	come before	v	1	0
+202407987	2	put to work	v	1	1
+202409941	3	sign on	v	1	0
+202409941	4	sign up	v	1	2
+202410175	4	keep on	v	1	0
+202410719	1	contract out	v	1	0
+202410855	2	do work	v	1	1
+202411950	1	take off	v	4	2
+202411950	2	take time off	v	1	1
+202412089	1	get off	v	2	1
+202412175	1	take over	v	3	5
+202412647	2	walk out	v	1	2
+202414272	1	pull one`s weight	v	1	0
+202414913	2	beaver away	v	1	0
+202415039	1	work at	v	1	6
+202415039	2	work on	v	1	21
+202415573	1	plug away	v	1	0
+202415573	2	peg away	v	1	0
+202415573	4	keep one`s nose to the grindstone	v	1	0
+202415573	5	keep one`s shoulder to the wheel	v	1	0
+202416030	3	play around	v	2	0
+202416278	2	join forces	v	1	2
+202416278	4	get together	v	3	1
+202417208	1	play along	v	1	0
+202417208	2	go along	v	1	4
+202417389	1	connive at	v	1	0
+202417389	2	wink at	v	1	0
+202417908	2	moon around	v	1	0
+202417908	3	moon on	v	1	1
+202418029	1	ride the bench	v	1	1
+202418029	2	warm the bench	v	1	0
+202419266	1	drive around	v	2	0
+202419438	1	walk around	v	4	0
+202419613	3	splash around	v	1	0
+202421199	2	break one`s back	v	1	1
+202421199	3	buckle down	v	1	0
+202421199	4	knuckle down	v	1	0
+202422663	3	keep back	v	1	0
+202422663	4	hold back	v	2	1
+202423650	1	give up	v	11	1
+202423762	2	bottle up	v	1	0
+202424128	3	keep down	v	2	0
+202425763	1	call to order	v	1	0
+202426171	2	open up	v	5	0
+202426395	1	close up	v	1	0
+202426395	4	shut down	v	1	2
+202426395	5	close down	v	1	0
+202427103	2	set up	v	1	17
+202427334	2	get rid of	v	3	0
+202428316	1	get around to	v	1	4
+202429475	1	turn out	v	8	0
+202430078	1	band oneself	v	1	0
+202430078	2	league together	v	1	0
+202431320	3	split up	v	3	0
+202431320	6	break up	v	2	3
+202431834	1	break with	v	1	3
+202433123	3	shake up	v	2	0
+202433991	1	hold one`s own	v	2	0
+202434737	1	ally with	v	1	1
+202434859	1	fall in	v	2	1
+202434976	2	fall in	v	3	0
+202434976	3	get together	v	4	0
+202437157	1	come to grips	v	1	4
+202437157	2	get to grips	v	1	0
+202437340	1	dispose of	v	1	2
+202437707	1	take care	v	2	8
+202439281	1	set about	v	1	3
+202439281	2	go about	v	1	5
+202440770	1	take hold	v	1	3
+202440770	2	take charge	v	1	4
+202440770	3	take control	v	1	0
+202440914	1	move in on	v	2	0
+202442106	1	hold sway	v	1	1
+202442737	2	rein in	v	2	0
+202442737	3	draw rein	v	1	1
+202444397	1	warm up	v	1	2
+202445509	2	carry on	v	1	9
+202448642	1	choose up	v	1	1
+202448734	1	draw up	v	1	2
+202449340	2	keep out	v	1	3
+202449340	3	shut out	v	1	3
+202449717	1	lock out	v	1	0
+202449847	2	let in	v	1	1
+202450256	2	take part	v	1	12
+202450417	1	partake in	v	1	0
+202451113	1	keep away	v	1	2
+202452092	1	set back	v	2	1
+202453321	7	head off	v	1	3
+202453321	8	stave off	v	1	3
+202453321	9	fend off	v	1	0
+202453321	11	ward off	v	1	0
+202453889	4	plump for	v	1	1
+202453889	5	plunk for	v	1	0
+202455159	1	stand guard	v	1	2
+202455159	2	stand watch	v	1	1
+202455159	3	keep guard	v	1	1
+202455159	4	stand sentinel	v	1	1
+202455407	4	watch over	v	1	1
+202455407	5	keep an eye on	v	1	3
+202455861	1	keep tabs on	v	1	0
+202456493	5	lay to rest	v	1	2
+202457233	4	abide by	v	2	0
+202458405	1	take back	v	3	0
+202458566	1	get along with	v	1	1
+202458566	2	get on with	v	1	0
+202458566	3	get on	v	1	2
+202458566	4	get along	v	2	4
+202459173	2	put up	v	7	0
+202461063	2	farm out	v	1	1
+202461807	1	write in	v	1	0
+202462030	1	turn thumbs down	v	1	0
+202462030	2	vote down	v	2	0
+202462858	1	bullet vote	v	1	0
+202463704	3	shrink from	v	1	2
+202464481	1	turn a trick	v	1	0
+202465939	2	send packing	v	1	0
+202465939	3	send away	v	1	1
+202466134	4	shop at	v	1	1
+202466134	5	buy at	v	1	0
+202467662	3	split up	v	2	0
+202467662	6	carve up	v	1	0
+202468465	1	hive off	v	1	0
+202470685	1	band together	v	1	1
+202472495	2	take stock	v	2	0
+202473688	2	shoot down	v	3	0
+202473688	4	vote down	v	1	1
+202473688	5	vote out	v	1	0
+202474958	1	bar mitzvah	v	1	0
+202475109	1	bat mitzvah	v	1	0
+202477334	2	strike down	v	1	0
+202477655	1	write off	v	3	0
+202477755	2	call off	v	1	1
+202482425	5	bump off	v	1	2
+202482425	7	polish off	v	2	0
+202483267	2	put to death	v	1	2
+202483564	3	draw and quarter	v	1	0
+202484875	1	pick off	v	1	1
+202485451	2	string up	v	1	0
+202486232	1	go steady	v	1	1
+202486232	2	go out	v	6	1
+202486534	1	pick up	v	11	1
+202486693	1	ask out	v	1	1
+202486693	2	invite out	v	1	0
+202486693	3	take out	v	5	1
+202486932	2	get together	v	2	1
+202487368	1	stick together	v	1	1
+202487368	2	stay together	v	1	1
+202487573	2	call in	v	3	1
+202488168	1	send in	v	2	0
+202488641	1	drop by	v	1	1
+202488641	2	drop in	v	1	1
+202488641	3	come by	v	1	4
+202488834	2	get married	v	1	5
+202488834	5	hook up with	v	1	0
+202488834	6	get hitched with	v	1	0
+202490430	2	pair off	v	1	0
+202490430	3	partner off	v	1	0
+202490634	2	split up	v	1	0
+202491383	3	make whoopie	v	1	0
+202491383	4	make merry	v	1	0
+202491383	5	make happy	v	1	1
+202491383	6	whoop it up	v	1	1
+202492584	1	take in	v	4	1
+202494259	1	bail out	v	1	0
+202494356	5	put behind bars	v	1	0
+202494356	9	put away	v	3	0
+202495592	1	bind over	v	1	0
+202496036	2	cage in	v	1	0
+202496185	2	pin down	v	2	0
+202496388	1	keep in	v	1	2
+202497062	2	set free	v	1	0
+202500397	1	get it	v	2	1
+202500489	1	catch it	v	1	1
+202501738	2	throw out	v	1	3
+202501738	3	kick out	v	1	0
+202502232	1	send down	v	1	0
+202502536	2	allow in	v	1	2
+202502536	3	let in	v	2	0
+202502916	2	turn down	v	2	0
+202502916	3	turn away	v	3	1
+202504017	6	cast out	v	1	0
+202505141	1	turn up the heat	v	1	0
+202505141	2	turn up the pressure	v	1	0
+202506068	1	squeeze for	v	1	0
+202507278	1	bring oneself	v	1	3
+202507464	1	trouble oneself	v	1	1
+202507464	4	inconvenience oneself	v	1	0
+202507736	2	put out	v	1	2
+202510184	1	pull the plug	v	1	0
+202510337	2	hold in	v	2	1
+202512305	3	single out	v	2	1
+202514187	3	do by	v	1	1
+202514704	1	handle with kid gloves	v	1	0
+202514881	1	fall all over	v	1	0
+202515583	1	ride roughshod	v	1	0
+202515583	2	run roughshod	v	1	1
+202516107	1	do well by	v	1	0
+202516255	1	gloss over	v	1	1
+202516255	2	skate over	v	1	1
+202516255	3	smooth over	v	1	2
+202516255	4	slur over	v	1	0
+202516255	5	skimp over	v	1	0
+202516978	1	kick around	v	2	0
+202517443	1	fall from grace	v	1	0
+202517655	1	act up	v	1	0
+202517655	2	carry on	v	4	0
+202517827	3	lower oneself	v	1	0
+202518043	1	hugger mugger	v	1	0
+202518625	1	walk around	v	3	0
+202519055	1	assert oneself	v	1	4
+202520730	1	make up	v	4	1
+202520730	2	catch up with	v	2	2
+202522581	1	breeze through	v	1	0
+202522581	3	pass with flying colors	v	1	0
+202522581	4	sweep through	v	1	1
+202522581	5	sail through	v	1	0
+202522864	1	pull off	v	3	0
+202522864	3	bring off	v	1	0
+202522864	4	carry off	v	1	0
+202523521	4	flush it	v	1	0
+202524171	3	come through	v	4	0
+202524171	4	bring home the bacon	v	1	0
+202524171	5	deliver the goods	v	1	0
+202524739	1	luck out	v	1	0
+202524739	2	hit the jackpot	v	1	0
+202524897	1	nail down	v	1	1
+202525044	2	make it	v	3	0
+202525985	1	pan out	v	1	0
+202526811	1	come to	v	3	4
+202527651	5	botch up	v	1	0
+202527651	9	screw up	v	2	0
+202527651	10	ball up	v	1	0
+202527651	12	muck up	v	1	1
+202527651	16	bollix up	v	1	0
+202527651	18	bollocks up	v	1	0
+202527651	21	louse up	v	1	2
+202527651	22	foul up	v	1	1
+202527651	23	mess up	v	1	1
+202527651	24	fuck up	v	1	2
+202528380	2	go wrong	v	1	12
+202528833	1	strike out	v	3	0
+202530003	1	fall through	v	1	0
+202530003	2	fall flat	v	1	0
+202530770	1	have a go	v	1	0
+202530770	2	give it a try	v	2	0
+202531088	1	take pains	v	1	3
+202531088	2	be at pains	v	1	0
+202531625	4	try out	v	1	8
+202532458	1	give it a whirl	v	1	1
+202532458	2	give it a try	v	1	0
+202532886	2	try out	v	2	0
+202534062	6	dispense with	v	2	0
+202535093	2	chase after	v	1	0
+202535360	1	take the stage	v	1	0
+202535360	2	take stage	v	1	0
+202535457	3	break away	v	4	0
+202535716	2	break away	v	3	0
+202536329	2	pull strings	v	1	0
+202536329	3	pull wires	v	1	0
+202536557	2	act upon	v	1	0
+202537238	2	swing over	v	1	0
+202537642	1	fall for	v	2	0
+202537812	1	double cross	v	1	1
+202538765	2	step in	v	1	2
+202539686	2	take in charge	v	1	0
+202539788	3	bring up	v	2	2
+202540347	1	grow up	v	1	17
+202540445	1	come of age	v	1	1
+202540670	2	attend to	v	2	0
+202540670	3	wait on	v	1	1
+202542141	1	speak for	v	1	6
+202542280	3	abide by	v	1	2
+202542706	1	toe the line	v	1	2
+202543023	1	take orders	v	1	0
+202543482	1	sit in	v	2	0
+202544348	5	take chances	v	1	1
+202544348	7	run a risk	v	1	7
+202544348	8	take a chance	v	1	6
+202544781	1	go for broke	v	1	0
+202544937	1	luck it	v	1	0
+202544937	2	luck through	v	1	0
+202545578	2	put on the line	v	1	0
+202545578	3	lay on the line	v	1	0
+202545939	1	bell the cat	v	1	0
+202548422	1	help out	v	1	1
+202549581	2	take care	v	3	6
+202550296	2	give care	v	1	0
+202551832	2	carry through	v	2	0
+202551832	3	pull through	v	2	0
+202551832	4	bring through	v	1	0
+202553428	3	sort out	v	3	0
+202556126	2	back up	v	1	3
+202560999	1	bring to bear	v	1	4
+202563120	1	go all out	v	1	1
+202563120	2	give one`s best	v	1	0
+202563120	3	do one`s best	v	1	3
+202563120	4	give full measure	v	1	0
+202566227	1	drop the ball	v	1	0
+202566528	5	go against	v	2	0
+202567147	2	run afoul	v	1	0
+202569630	3	take on	v	3	2
+202570062	2	take advantage	v	2	1
+202570684	1	break in	v	1	2
+202573127	2	set up	v	11	0
+202573275	2	rip off	v	1	0
+202575082	2	lead on	v	2	0
+202575723	2	play a joke on	v	2	0
+202575723	3	play tricks	v	1	0
+202575723	7	pull a fast one on	v	1	0
+202575723	8	play a trick on	v	1	0
+202576503	1	cheat on	v	1	0
+202577586	2	pull someone`s leg	v	1	0
+202577586	3	play a joke on	v	1	0
+202578008	4	set up	v	7	2
+202579140	1	make good	v	1	1
+202580392	1	lead off	v	1	1
+202580392	2	lead astray	v	1	0
+202583139	4	rise up	v	2	0
+202585050	3	stir up	v	1	1
+202585860	2	make it	v	2	3
+202585860	3	get in	v	2	2
+202585860	4	go far	v	1	2
+202586371	1	get at	v	2	0
+202587239	3	grind down	v	1	0
+202587532	2	get by	v	1	3
+202587532	3	make out	v	5	1
+202587532	4	make do	v	1	1
+202588464	1	scrape along	v	1	0
+202588464	2	scrape by	v	1	0
+202588464	3	scratch along	v	1	0
+202588464	4	squeak by	v	1	0
+202588464	5	squeeze by	v	1	0
+202588464	6	rub along	v	1	0
+202588871	2	pal up	v	1	0
+202588871	3	chum up	v	1	0
+202589013	2	pass on	v	5	0
+202590072	1	fall back	v	5	0
+202591171	1	take up	v	3	4
+202591597	1	take care	v	1	9
+202592543	1	do the honors	v	1	0
+202593551	1	lord it over	v	1	0
+202593551	2	queen it over	v	1	0
+202593551	3	put on airs	v	1	0
+202593551	4	act superior	v	1	0
+202594674	3	cope with	v	1	18
+202594833	1	rain out	v	1	0
+202594833	2	wash out	v	1	1
+202595234	1	make a point	v	1	0
+202595234	2	make sure	v	1	5
+202595662	2	take over	v	6	1
+202596371	1	come near	v	1	3
+202596908	2	puff up	v	3	0
+202597968	1	remember oneself	v	1	0
+202598143	3	get together	v	1	1
+202598642	1	play around	v	1	1
+202598642	2	fool around	v	2	0
+202599004	2	get away	v	3	1
+202600779	1	take to	v	2	1
+202601271	1	call the shots	v	1	0
+202601271	2	call the tune	v	1	0
+202601271	3	wear the trousers	v	1	0
+202602212	2	loosen up	v	2	0
+202602458	1	go off half-cocked	v	1	0
+202602458	2	go off at half-cock	v	1	0
+202604305	1	kick around	v	1	0
+202604305	2	knock about	v	2	0
+202604305	3	kick about	v	1	0
+202607658	1	cut across	v	2	2
+202607830	2	stretch along	v	1	0
+202609439	1	set in	v	1	1
+202609439	2	kick in	v	1	0
+202610845	1	turn out	v	4	6
+202610845	2	come out	v	4	3
+202611106	1	work out	v	2	8
+202612762	2	go to	v	1	31
+202613140	1	sit in	v	1	0
+202613487	2	offer up	v	1	0
+202614023	1	bunk off	v	1	0
+202614023	2	play hooky	v	1	0
+202615300	2	live down	v	1	0
+202615739	2	pig it	v	1	0
+202616236	1	eke out	v	2	0
+202617567	3	make out	v	4	1
+202617567	5	get along	v	1	4
+202618149	4	live on	v	1	0
+202618149	7	hold up	v	5	1
+202618149	8	hold out	v	5	0
+202618688	1	stand up	v	6	0
+202618688	2	hold up	v	7	0
+202618688	3	hold water	v	1	0
+202619020	1	live out	v	1	1
+202619122	1	last out	v	1	0
+202619122	3	ride out	v	1	0
+202619612	1	make sense	v	1	9
+202619612	2	add up	v	4	0
+202619924	2	pull through	v	1	0
+202619924	3	pull round	v	1	0
+202619924	4	come through	v	3	0
+202619924	5	make it	v	1	7
+202620587	3	make up	v	1	19
+202622033	1	hang together	v	1	1
+202622234	3	link up	v	1	0
+202623194	2	bridge over	v	2	0
+202623346	1	tide over	v	1	0
+202623346	2	bridge over	v	1	0
+202623346	3	keep going	v	2	0
+202623906	2	take form	v	1	5
+202623906	3	take shape	v	1	5
+202624263	6	spring up	v	1	8
+202625016	1	come forth	v	2	0
+202625786	2	come up	v	5	2
+202625786	3	bob up	v	1	0
+202626405	1	well up	v	1	3
+202627363	2	add up	v	1	4
+202627666	1	originate in	v	1	7
+202627934	8	call for	v	2	21
+202629111	1	cry out for	v	1	1
+202629111	2	cry for	v	1	0
+202629256	2	rid of	v	1	0
+202629390	2	rule out	v	1	6
+202629390	3	close out	v	1	0
+202631005	1	give off	v	1	2
+202633881	2	turn out	v	1	32
+202633881	3	turn up	v	4	0
+202634133	1	turn out	v	2	10
+202634567	1	be due	v	1	25
+202634567	2	flow from	v	1	1
+202635033	1	account for	v	1	24
+202636810	1	get into	v	1	11
+202636810	2	tangle with	v	1	2
+202638206	1	kick one`s heels	v	1	1
+202638206	2	cool one`s heels	v	1	0
+202638444	1	stand by	v	2	2
+202638444	2	stick around	v	1	0
+202638444	3	stick about	v	1	0
+202638630	1	stand by	v	3	0
+202638630	2	stick by	v	1	0
+202639075	7	hang around	v	1	7
+202639075	8	mess about	v	1	0
+202639075	12	mill about	v	1	1
+202639075	13	mill around	v	1	0
+202639606	2	bum around	v	1	0
+202639606	3	bum about	v	1	0
+202639606	4	arse around	v	1	0
+202639606	5	arse about	v	1	0
+202639606	6	fuck off	v	1	0
+202639606	8	frig around	v	1	0
+202639606	9	waste one`s time	v	1	0
+202639606	10	lounge around	v	1	0
+202639606	12	loll around	v	1	0
+202639606	13	lounge about	v	1	1
+202639905	1	lie about	v	1	0
+202639905	2	lie around	v	1	1
+202640226	1	dwell on	v	1	1
+202640226	2	linger over	v	1	0
+202641463	2	hold off	v	2	0
+202641463	3	hold back	v	4	0
+202641741	1	hold out	v	4	1
+202642238	3	drag one`s feet	v	1	2
+202642238	4	drag one`s heels	v	1	0
+202642814	3	hold over	v	5	0
+202642814	4	put over	v	2	0
+202642814	7	set back	v	1	1
+202642814	10	put off	v	1	1
+202643280	1	hold over	v	4	0
+202645007	3	add up	v	3	0
+202645389	2	average out	v	2	0
+202646601	1	have it coming	v	1	0
+202647497	3	die hard	v	1	0
+202648110	2	run for	v	1	0
+202648639	3	lodge in	v	1	0
+202649493	1	take up	v	4	3
+202649600	1	stay at	v	1	3
+202651193	2	live together	v	1	0
+202651193	3	shack up	v	1	1
+202652729	1	sleep over	v	1	0
+202652729	2	stay over	v	1	0
+202652922	1	lay over	v	1	1
+202652922	2	stop over	v	1	0
+202653381	4	lie in	v	1	22
+202653996	3	camp out	v	1	1
+202655698	1	stand back	v	1	1
+202655698	2	keep one`s eyes off	v	1	0
+202655698	3	keep one`s distance	v	1	0
+202655698	4	keep one`s hands off	v	1	0
+202655698	5	stay away	v	1	0
+202656995	1	take in	v	1	3
+202658283	2	check out	v	3	0
+202660819	1	collocate with	v	1	0
+202660819	2	construe with	v	1	0
+202660819	3	cooccur with	v	1	0
+202660819	4	co-occur with	v	1	0
+202660819	5	go with	v	2	1
+202663340	3	bear out	v	1	3
+202663643	1	repose on	v	1	0
+202663643	2	rest on	v	2	6
+202663643	3	build on	v	1	2
+202663643	4	build upon	v	1	0
+202663848	1	depend on	v	3	0
+202663848	2	rely on	v	2	0
+202664017	1	depend on	v	2	0
+202664017	2	depend upon	v	2	0
+202664017	3	rely on	v	1	0
+202664017	4	rely upon	v	1	0
+202664413	1	hang by a thread	v	1	0
+202664413	2	hang by a hair	v	1	0
+202665617	1	look like	v	1	59
+202665767	1	come to life	v	2	0
+202665937	1	take after	v	1	0
+202666060	2	come close	v	2	2
+202667419	1	come in	v	3	1
+202667558	1	go out	v	5	1
+202667900	3	conform to	v	1	6
+202668170	1	fit the bill	v	1	0
+202668170	2	fill the bill	v	1	0
+202668523	2	go against	v	1	2
+202668798	1	fly in the face of	v	1	0
+202668798	2	fly in the teeth of	v	1	0
+202668956	1	conform to	v	2	2
+202669081	5	go past	v	2	0
+202670270	1	go a long way	v	1	1
+202670578	2	serve well	v	1	0
+202671613	1	act as	v	1	24
+202671761	1	fall short of	v	1	3
+202671880	4	live up to	v	1	5
+202672540	4	make up	v	7	0
+202672540	5	even out	v	1	0
+202672540	6	even off	v	1	0
+202672540	7	even up	v	1	0
+202673965	2	stand out	v	2	4
+202674447	1	shine at	v	1	0
+202674447	2	excel at	v	1	0
+202674564	1	leap out	v	1	0
+202674564	2	jump out	v	1	1
+202674564	4	stand out	v	1	4
+202674564	5	stick out	v	2	0
+202675603	1	follow suit	v	1	1
+202676054	5	come to	v	2	4
+202676054	6	bear on	v	1	2
+202676054	8	touch on	v	2	1
+202676054	9	have-to doe with	v	1	0
+202676496	1	focus on	v	1	6
+202676496	2	center on	v	1	7
+202676496	3	revolve around	v	1	2
+202676496	4	revolve about	v	1	2
+202676496	5	concentrate on	v	1	5
+202676789	3	go for	v	1	1
+202677797	4	sweep up	v	1	1
+202677797	6	drag in	v	1	0
+202678663	1	matter to	v	1	4
+202679012	2	measure up	v	1	1
+202679530	3	keep up	v	2	5
+202679899	3	carry on	v	2	1
+202679899	4	bear on	v	4	0
+202680531	1	shut off	v	1	1
+202680531	2	close off	v	1	1
+202680814	4	give up	v	4	3
+202680814	6	lay off	v	1	3
+202681335	1	call it quits	v	1	0
+202681335	2	call it a day	v	1	0
+202682424	1	hold over	v	3	0
+202683671	1	taper off	v	1	1
+202683671	2	peter out	v	1	1
+202683671	3	fizzle out	v	1	0
+202684078	1	leave off	v	1	2
+202684254	1	run on	v	2	0
+202684254	2	keep going	v	1	0
+202684453	1	ramble on	v	1	1
+202684784	1	run out	v	4	1
+202684924	2	go on	v	1	44
+202684924	4	go along	v	2	3
+202685665	2	extend to	v	1	4
+202690093	2	poke out	v	1	0
+202690093	3	reach out	v	2	3
+202690299	1	reach into	v	1	3
+202692882	2	sit around	v	1	0
+202698443	2	body forth	v	1	0
+202699497	2	stand for	v	3	1
+202700104	6	fit in	v	1	2
+202700455	3	blend in	v	1	0
+202702120	2	remain firm	v	1	2
+202702674	1	set back	v	3	0
+202702674	2	knock back	v	1	0
+202702674	3	put back	v	2	0
+202703539	2	run along	v	1	1
+202703952	1	border on	v	1	3
+202704213	1	line up	v	1	3
+202705132	2	hold out	v	3	2
+202705428	1	drag on	v	1	0
+202705428	2	drag out	v	1	1
+202705535	1	inhere in	v	1	0
+202705535	2	attach to	v	2	0
+202705680	1	fall into	v	1	14
+202705680	2	fall under	v	1	0
+202706816	4	hold up	v	6	0
+202707251	4	brave out	v	1	0
+202707429	1	lend oneself	v	1	1
+202708123	3	wanton away	v	1	0
+202708123	4	piddle away	v	1	0
+202709277	1	while away	v	1	1
+202709277	2	get through	v	2	1
+202711114	2	hold in	v	1	1
+202711543	2	rail in	v	1	0
+202711721	1	box in	v	1	1
+202711721	2	box up	v	1	0
+202711987	1	depend on	v	1	39
+202711987	2	devolve on	v	1	0
+202711987	3	depend upon	v	1	16
+202711987	5	turn on	v	2	2
+202711987	6	hinge on	v	1	1
+202711987	7	hinge upon	v	1	0
+202713372	1	stick out	v	1	1
+202713372	3	jut out	v	1	1
+202713852	2	push up	v	2	0
+202714200	2	spear up	v	1	0
+202715923	1	abound in	v	1	1
+202715923	2	teem in	v	1	0
+202715923	3	pullulate with	v	1	0
+202716165	1	attach to	v	1	3
+202716165	3	come with	v	1	6
+202716165	4	go with	v	1	10
+202716767	4	keep company	v	1	3
+202717831	3	set off	v	5	1
+202719246	1	take kindly to	v	1	1
+202719399	2	be given	v	1	0
+202719930	1	belong to	v	1	34
+202720149	2	fall out	v	2	0
+202720354	2	come after	v	1	2
+202721438	2	allow for	v	1	8
+202721840	1	come up	v	7	1
+202721966	1	look out on	v	1	2
+202721966	2	look out over	v	1	1
+202721966	4	look across	v	1	2
+202723445	1	center on	v	2	1
+202723564	1	do well	v	1	6
+202723564	2	had best	v	1	0
+202723951	1	go back	v	1	4
+202723951	2	date back	v	1	5
+202723951	3	date from	v	1	3
+202725460	1	come in handy	v	1	1
+202726044	2	hold back	v	3	0
+202726164	1	help oneself	v	1	0
+202726385	1	stand by	v	1	4
+202726543	1	sit out	v	1	1
+202727462	2	stay on	v	1	5
+202729023	2	head up	v	1	2
+202729260	1	come in for	v	1	2
+202730326	1	run into	v	1	6
+202733673	1	go far	v	2	1
+202733673	2	go deep	v	1	1
+202733806	1	go down	v	4	2
+202734800	2	stay fresh	v	1	0
+202736106	1	tie in	v	1	2
+202736259	1	go into	v	2	3
+202737063	1	let go	v	2	4
+202738126	1	go around	v	1	1
+202740859	1	hold one`s own	v	1	0
+202743921	1	issue forth	v	1	0
+202744061	4	bulk large	v	1	0
+202747922	2	persist in	v	1	3
+202752695	4	sum up	v	2	0
+202755232	1	cash out	v	1	0
+202755452	1	put out	v	6	0
+202756558	2	rain down	v	1	0
+202756821	2	come down	v	3	1
+202757651	2	shower down	v	1	0
+202758033	4	rain cats and dogs	v	1	0
+202758033	5	rain buckets	v	1	0
+202758399	2	sluice down	v	1	0
+202758581	1	ice up	v	1	0
+202758581	2	frost over	v	1	0
+202758581	3	ice over	v	1	0
+202760139	1	set ablaze	v	1	1
+202760139	2	set aflame	v	1	0
+202760139	3	set on fire	v	1	2
+202760139	4	set afire	v	1	0
+202760495	2	put out	v	5	0
+202760622	3	catch fire	v	1	1
+202760622	4	take fire	v	1	0
+202761012	1	blow out	v	3	0
+202761229	1	light up	v	1	1
+202761897	1	snuff out	v	2	0
+202761897	2	blow out	v	2	0
+202762299	1	black out	v	1	1
+202762806	2	flame up	v	1	2
+202762806	3	blaze up	v	1	0
+202762806	4	burn up	v	1	1
+202764122	1	light up	v	4	0
+202764245	1	flare up	v	1	1
+202765464	2	take in	v	3	1
+202765692	2	suck in	v	2	1
+202767308	2	give out	v	1	1
+202767308	3	give off	v	2	0
+202768702	3	shade off	v	1	0
+202769642	1	set in	v	2	0
+202771020	2	cloud over	v	1	1
+202771020	3	cloud up	v	1	0
+202771169	1	clear up	v	4	0
+202771169	3	light up	v	3	0
+202771756	1	run dry	v	1	0
+202771756	2	dry out	v	2	0
+202771888	1	fog up	v	1	0
