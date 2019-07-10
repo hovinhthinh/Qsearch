@@ -74,6 +74,8 @@ public class ReadTabEL {
         Scanner in = new Scanner(System.in);
 
         int count = 0;
+
+        System.out.println("Looping");
         for (String line : new FileUtils.LineStream(new GzipCompressorInputStream(
                 JSchUtils.getFileInputStreamFromServer
 //                        new FileInputStream
