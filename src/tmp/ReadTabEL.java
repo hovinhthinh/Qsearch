@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class ReadTabEL {
-    static HashMap<String, String[]> entity2Types = new HashMap<>();
+    static HashMap<String, String[]> entity2Types = new HashMap<>(10000000);
 
     static Gson gson = new Gson();
 
