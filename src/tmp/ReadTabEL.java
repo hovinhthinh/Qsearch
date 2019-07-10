@@ -65,7 +65,7 @@ public class ReadTabEL {
             for (Cell[] r : t.data) {
                 for (Cell c : r) {
                     for (Link l : c.links) {
-                        if (entityHasTypeOf("<" + l.target + ">", queryType)) {
+                        if (entityHasTypeOf("<" + l.target.substring(19) + ">", queryType)) {
                             ok = true;
                             break loop;
                         }
