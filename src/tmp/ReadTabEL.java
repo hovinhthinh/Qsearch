@@ -1,5 +1,6 @@
 package tmp;
 
+import com.google.gson.Gson;
 import data.wikipedia.Wikipedia;
 import model.table.Cell;
 import model.table.Link;
@@ -12,39 +13,18 @@ import util.FileUtils;
 import util.JSchUtils;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class ReadTabEL {
     static HashMap<String, String[]> entity2Types = new HashMap<>();
 
+    static Gson gson = new Gson();
+
     public static void importYago(String input) {
-        String e = null;
-        ArrayList<String> ts = new ArrayList<>();
         for (String line : FileUtils.getLineStream(input)) {
             String[] arr = line.split("\t");
-            if (arr.length != 4 || !arr[2].equals("rdf:type")) {
-                continue;
-            }
-            String entity = arr[1];
-            String type = NLP.stripSentence(arr[3].replaceAll("[^A-Za-z0-9]", " ")).toLowerCase();
-            type = NLP.fastStemming(type, Morpha.noun);
-            if (type.startsWith("wikicat ")) {
-                type = type.substring(8);
-            }
-            if (type.startsWith("wordnet ")) {
-                type = type.substring(type.indexOf(" ") + 1, type.lastIndexOf(" "));
-            }
-            if (e != null && !e.equals(entity)) {
-                entity2Types.put(e, ts.toArray(new String[0]));
-                ts.clear();
-            }
-            e = entity;
-            ts.add(type);
-        }
-        if (ts.size() > 0) {
-            entity2Types.put(e, ts.toArray(new String[0]));
+            entity2Types.put(arr[0], gson.fromJson(arr[1], String[].class));
         }
     }
 
@@ -66,14 +46,11 @@ public class ReadTabEL {
     public static void main(String[] args) throws Exception {
 
         System.out.println("Loading Yago...");
-        importYago("/GW/D5data-10/hvthinh/yagoTransitiveType.tsv");
-
+        importYago("/GW/D5data-10/hvthinh/yagoTransitiveTypeCompact.tsv");
         String queryType = NLP.stripSentence(NLP.fastStemming(args[0].toLowerCase(), Morpha.noun));
         int top = Integer.parseInt(args[1]);
 
         Scanner in = new Scanner(System.in);
-
-        int count = 0;
 
         System.out.println("Looping");
         for (String line : new FileUtils.LineStream(new GzipCompressorInputStream(
