@@ -71,8 +71,11 @@ public class MapQfactInTextToTable {
         loop:
         for (int r = 0; r < t.nDataRow; ++r) {
             ArrayList<Link> ls = new ArrayList<>();
-            for (int ec = 0; ec < 2; ++ec) {
-                ls.addAll(Arrays.asList(t.data[r][ec].links));
+            int entityColumn = t.isNumericColumn[0] ? 1 : 0;
+            ls.addAll(Arrays.asList(t.data[r][entityColumn].links));
+
+            if (ls.size() != 1 || !ls.get(0).text.equals(t.data[r][entityColumn].text)) {
+                continue loop;
             }
 
             for (Link el : ls) {
@@ -99,7 +102,8 @@ public class MapQfactInTextToTable {
                         model.quantity.Quantity qt = model.quantity.Quantity.fromQuantityString(o.getString("quantity"));
                         if (qConstraint.match(qt)) {
                             ++goodRow;
-                            linkedData.append(el.target.substring(el.target.lastIndexOf(":") + 1)).append(" ==> ").append(o.toString()).append("\r\n");
+                            linkedData.append("<" + el.target.substring(el.target.lastIndexOf(":") + 1) + ">")
+                                    .append(" ==> ").append(o.toString()).append("\r\n");
                             continue loop;
                         }
                     }
