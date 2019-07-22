@@ -87,18 +87,18 @@ public class MapQfactInTextToTable {
                         double maxDiff = Math.max(Math.abs(qt.value), Math.abs(q.value)) * 0.05;
                         if (Math.abs(qt.value - q.value) < maxDiff) {
                             ++goodRow;
-                            linkedData.append(el.target.substring(el.target.lastIndexOf(":") + 1)).append(" ==> ").append(o.toString());
+                            linkedData.append(el.target.substring(el.target.lastIndexOf(":") + 1)).append(" ==> ").append(o.toString()).append("\r\n");
                             continue loop;
                         }
                     }
                 }
             }
         }
-        return goodRow >= 2 ? linkedData.toString() : null;
+        return goodRow >= 3 ? linkedData.toString() : null;
     }
 
     public void run(String[] args) throws Exception {
-        importSeedQfactsFromText("/local/home/hvthinh/datasets/yagoImport5361304505893531106_pos+neg.gz");
+        importSeedQfactsFromText("/GW/D5data-11/hvthinh/yagoImport5361304505893531106_pos+neg.gz");
         for (String line : new FileUtils.LineStream(new GzipCompressorInputStream(
 //                JSchUtils.getFileInputStreamFromServer
                 new FileInputStream
@@ -106,8 +106,9 @@ public class MapQfactInTextToTable {
             Table t = Wikipedia.parseFromJSON(line);
             String linkedData;
             if ((linkedData = getLinkedDataFromText(t)) != null) {
-                System.out.println(linkedData);
                 System.out.println(t.getTableContentPrintable(true));
+                System.out.println(linkedData);
+                System.out.println("------------------------------------------------------------");
             }
         }
     }
