@@ -11,6 +11,7 @@ import nlp.Static;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.json.JSONObject;
 import util.FileUtils;
+import util.Pair;
 
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
@@ -66,8 +67,11 @@ public class MapQfactInTextToTable {
         }
 
         int goodRow = 0;
+        ArrayList<Pair<String, JSONObject>> linkedQuantitiesPerColumn[] = new ArrayList[t.nColumn];
+        for (int i = 0; i < t.nColumn; ++i) {
+            linkedQuantitiesPerColumn[i] = new ArrayList<>();
+        }
 
-        StringBuilder linkedData = new StringBuilder();
         loop:
         for (int r = 0; r < t.nDataRow; ++r) {
             ArrayList<Link> ls = new ArrayList<>();
@@ -78,39 +82,51 @@ public class MapQfactInTextToTable {
                 continue loop;
             }
 
-            for (Link el : ls) {
-                ArrayList<JSONObject> linkedQuantities = entity2facts.get("<" + el.target.substring(el.target.lastIndexOf(":") + 1) + ">");
-                if (linkedQuantities == null) {
+            Link el = ls.get(0);
+            ArrayList<JSONObject> linkedQuantities = entity2facts.get("<" + el.target.substring(el.target.lastIndexOf(":") + 1) + ">");
+            if (linkedQuantities == null) {
+                continue;
+            }
+            for (int qc = 1; qc < t.nColumn; ++qc) {
+                Quantity q = extractQuantityFromMention(t.data[r][qc].text);
+                if (q == null) {
                     continue;
                 }
-                for (int qc = 1; qc < t.nColumn; ++qc) {
-                    Quantity q = extractQuantityFromMention(t.data[r][qc].text);
-                    if (q == null) {
-                        continue;
-                    }
-                    QuantityConstraint qConstraint = new QuantityConstraint();
-                    qConstraint.quantity = new model.quantity.Quantity(q.value, q.units, q.bound);
-                    qConstraint.resolutionCode = QuantityConstraint.QuantityResolution.Value.APPROXIMATE;
-                    qConstraint.domain = QuantityDomain.getDomain(qConstraint.quantity);
+                QuantityConstraint qConstraint = new QuantityConstraint();
+                qConstraint.quantity = new model.quantity.Quantity(q.value, q.units, q.bound);
+                qConstraint.resolutionCode = QuantityConstraint.QuantityResolution.Value.APPROXIMATE;
+                qConstraint.domain = QuantityDomain.getDomain(qConstraint.quantity);
 
-                    // check money domain.
-                    if (qConstraint.domain != QuantityDomain.Domain.MONEY) {
-                        continue;
-                    }
+                // check money domain.
+                if (qConstraint.domain != QuantityDomain.Domain.MONEY) {
+                    continue;
+                }
 
-                    for (JSONObject o : linkedQuantities) {
-                        model.quantity.Quantity qt = model.quantity.Quantity.fromQuantityString(o.getString("quantity"));
-                        if (qConstraint.match(qt)) {
-                            ++goodRow;
-                            linkedData.append("<" + el.target.substring(el.target.lastIndexOf(":") + 1) + ">")
-                                    .append(" ==> ").append(o.toString()).append("\r\n");
-                            continue loop;
-                        }
+                for (JSONObject o : linkedQuantities) {
+                    model.quantity.Quantity qt = model.quantity.Quantity.fromQuantityString(o.getString("quantity"));
+                    if (qConstraint.match(qt)) {
+                        ++goodRow;
+                        linkedQuantitiesPerColumn[qc].add(new Pair("<" + el.target.substring(el.target.lastIndexOf(":") + 1) + ">", o));
                     }
                 }
             }
         }
-        return goodRow >= 3 ? linkedData.toString() : null;
+        int max = 0;
+        int maxIndex = 0;
+        for (int i = 0; i < t.nColumn; ++i) {
+            if (linkedQuantitiesPerColumn[i].size() > max) {
+                max = linkedQuantitiesPerColumn[i].size();
+                maxIndex = i;
+            }
+        }
+        if (max < 3) {
+            return null;
+        }
+        StringBuilder linkedData = new StringBuilder();
+        for (Pair<String, JSONObject> p : linkedQuantitiesPerColumn[maxIndex]) {
+            linkedData.append(p.first).append(" ==> ").append(p.second.toString());
+        }
+        return linkedData.toString();
     }
 
     public void run(String[] args) throws Exception {
