@@ -3,6 +3,8 @@ package tmp;
 import data.wikipedia.Wikipedia;
 import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
+import model.quantity.QuantityConstraint;
+import model.quantity.QuantityDomain;
 import model.table.Link;
 import model.table.Table;
 import nlp.Static;
@@ -57,6 +59,7 @@ public class MapQfactInTextToTable {
         return null;
     }
 
+
     String getLinkedDataFromText(Table t) {
         if (t.nColumn < 2) {
             return null;
@@ -82,10 +85,19 @@ public class MapQfactInTextToTable {
                     if (q == null) {
                         continue;
                     }
+                    QuantityConstraint qConstraint = new QuantityConstraint();
+                    qConstraint.quantity = new model.quantity.Quantity(q.value, q.units, q.bound);
+                    qConstraint.resolutionCode = QuantityConstraint.QuantityResolution.Value.APPROXIMATE;
+                    qConstraint.domain = QuantityDomain.getDomain(qConstraint.quantity);
+
+                    // check money domain.
+                    if (qConstraint.domain != QuantityDomain.Domain.MONEY) {
+                        continue;
+                    }
+
                     for (JSONObject o : linkedQuantities) {
                         model.quantity.Quantity qt = model.quantity.Quantity.fromQuantityString(o.getString("quantity"));
-                        double maxDiff = Math.max(Math.abs(qt.value), Math.abs(q.value)) * 0.05;
-                        if (Math.abs(qt.value - q.value) < maxDiff) {
+                        if (qConstraint.match(qt)) {
                             ++goodRow;
                             linkedData.append(el.target.substring(el.target.lastIndexOf(":") + 1)).append(" ==> ").append(o.toString()).append("\r\n");
                             continue loop;
