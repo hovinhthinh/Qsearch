@@ -28,14 +28,14 @@ public class JSchUtils {
         }
     }
 
-    public static FileUtils.LineStream getLineStreamFromServer(String file, Charset charset) {
+    public static FileUtils.LineStream getLineStreamFromServer(String file, String charset) {
         if (channel == null) {
             if (!start()) {
                 return null;
             }
         }
         try {
-            return new FileUtils.LineStream(channel.get(file), charset);
+            return new FileUtils.LineStream(channel.get(file), Charset.forName(charset));
         } catch (SftpException e) {
             e.printStackTrace();
             return null;

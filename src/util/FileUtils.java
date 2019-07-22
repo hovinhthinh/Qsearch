@@ -121,6 +121,10 @@ public class FileUtils {
         return getLineStream(new File(file), Charset.forName(charset));
     }
 
+    public static LineStream getLineStreamFromServer(String file, String charset) {
+        return JSchUtils.getLineStreamFromServer(file, charset);
+    }
+
     public static PrintWriter getPrintWriter(File file, Charset charset) {
         try {
             return new PrintWriter(new BufferedWriter(new OutputStreamWriter(getFileEncodedStream(file), charset)));
