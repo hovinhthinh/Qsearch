@@ -7,7 +7,7 @@ public class Cell {
     public String getDisambiguatedText() {
         String text = this.text;
         for (Link l : links) {
-            text = text.replace(l.text, "<" + l.target + ">");
+            text = text.replace(l.text, "<" + l.target.substring(l.target.lastIndexOf(":") + 1) + ">");
         }
         return text;
     }
