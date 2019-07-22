@@ -17,7 +17,8 @@ public class Table {
         for (Cell[][] part : new Cell[][][]{header, data}) {
             for (int i = 0; i < part.length; ++i) {
                 for (int j = 0; j < part[i].length; ++j) {
-                    columnMaxWidth[j] = Math.max(columnMaxWidth[j], Math.min(MAX_COLUMN_WIDTH, part[i][j].text.length()));
+                    columnMaxWidth[j] = Math.max(columnMaxWidth[j], Math.min(MAX_COLUMN_WIDTH,
+                            disambiguateEntity ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length()));
                 }
             }
         }
