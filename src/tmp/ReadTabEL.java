@@ -13,6 +13,7 @@ import util.FileUtils;
 import util.JSchUtils;
 
 import java.io.FileInputStream;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -56,10 +57,10 @@ public class ReadTabEL {
         System.out.println("Looping");
         for (String line : new FileUtils.LineStream(new GzipCompressorInputStream(
 //                JSchUtils.getFileInputStreamFromServer
-                        new FileInputStream
-        ("/GW/D5data/hvthinh/TabEL/tables.json.gz")), StandardCharsets.UTF_8)) {
+                new FileInputStream
+                        ("/GW/D5data/hvthinh/TabEL/tables.json.gz")), StandardCharsets.UTF_8)) {
             JSONObject o = new JSONObject(line);
-//            System.out.println("-----Link: " + "https://en.wikipedia.org/wiki/" + URLEncoder.encode(o.getString("pgTitle").replaceAll("\\s", "_")));
+            System.out.println("-----Link: " + "https://en.wikipedia.org/wiki/" + URLEncoder.encode(o.getString("pgTitle").replaceAll("\\s", "_")));
             Table t = Wikipedia.parseFromJSON(line);
             boolean ok = false;
             loop:
@@ -75,7 +76,7 @@ public class ReadTabEL {
             }
 
             if (ok) {
-                System.out.println(t.getTableContentPrintable());
+                System.out.println(t.getTableContentPrintable(false));
                 --top;
                 if (top == 0) {
                     break;
