@@ -5,10 +5,8 @@ import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
 import model.table.Link;
 import model.table.Table;
-import nlp.NLP;
 import nlp.Static;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
-import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 import org.json.JSONObject;
 import util.FileUtils;
 
@@ -89,7 +87,7 @@ public class MapQfactInTextToTable {
                         double maxDiff = Math.max(Math.abs(qt.value), Math.abs(q.value)) * 0.05;
                         if (Math.abs(qt.value - q.value) < maxDiff) {
                             ++goodRow;
-                            linkedData.append( el.target.substring(el.target.lastIndexOf(":") + 1)).append(" ==> ").append(o.toString());
+                            linkedData.append(el.target.substring(el.target.lastIndexOf(":") + 1)).append(" ==> ").append(o.toString());
                             continue loop;
                         }
                     }
