@@ -59,8 +59,6 @@ public class ReadTabEL {
 //                JSchUtils.getFileInputStreamFromServer
                 new FileInputStream
                         ("/GW/D5data/hvthinh/TabEL/tables.json.gz")), StandardCharsets.UTF_8)) {
-            JSONObject o = new JSONObject(line);
-            System.out.println("-----Link: " + "https://en.wikipedia.org/wiki/" + URLEncoder.encode(o.getString("pgTitle").replaceAll("\\s", "_")));
             Table t = Wikipedia.parseFromJSON(line);
             boolean ok = false;
             loop:
