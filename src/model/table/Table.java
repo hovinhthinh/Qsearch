@@ -10,7 +10,7 @@ public class Table {
 
     public String source;
 
-    public String getTableContentPrintable() {
+    public String getTableContentPrintable(boolean disambiguateEntity) {
         StringBuilder sb = new StringBuilder(source).append("\r\n");
         int[] columnMaxWidth = new int[nColumn];
 
@@ -26,7 +26,7 @@ public class Table {
         for (Cell[][] part : new Cell[][][]{header, data}) {
             for (int i = 0; i < part.length; ++i) {
                 for (int j = 0; j < part[i].length; ++j) {
-                    String str = part[i][j].text;
+                    String str = disambiguateEntity ? part[i][j].getDisambiguatedText() : part[i][j].text;
                     if (str.length() > columnMaxWidth[j]) {
                         str = str.substring(0, (columnMaxWidth[j] - 3) - (columnMaxWidth[j] - 3) / 2) + "..." +
                                 str.substring(str.length() - (columnMaxWidth[j] - 3) / 2);
