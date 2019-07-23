@@ -124,7 +124,7 @@ public class MapQfactInTextToTable {
         }
         StringBuilder linkedData = new StringBuilder();
         for (Pair<String, JSONObject> p : linkedQuantitiesPerColumn[maxIndex]) {
-            linkedData.append(p.first).append(" ==> ").append(p.second.toString());
+            linkedData.append("> ").append(p.first).append(" ==> ").append(p.second.toString()).append("\r\n\r\n");
         }
         return linkedData.toString();
     }
