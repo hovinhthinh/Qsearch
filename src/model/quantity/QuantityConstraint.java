@@ -67,7 +67,7 @@ public class QuantityConstraint {
 
     public static class QuantityResolution {
         private static final int APPROXIMATE_THRESHOLD = 1000;
-        private static final double APPROXIMATE_RATE = 0.01;
+        private static final double APPROXIMATE_RATE = 0.001;
         private static final HashSet<String> UPPER_BOUND_SIGNAL = new HashSet<>(Arrays.asList(
                 "within", "less than", "below", "lesser", "lower than", "under", "at most", "up to", "smaller than", "<", "<="
         ));
