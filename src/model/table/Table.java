@@ -18,20 +18,21 @@ public class Table {
         StringBuilder sb = new StringBuilder();
         int[] columnMaxWidth = new int[nColumn];
 
-        for (Cell[][] part : new Cell[][][]{header, data}) {
-            for (int i = 0; i < part.length; ++i) {
-                for (int j = 0; j < part[i].length; ++j) {
-                    columnMaxWidth[j] = Math.max(columnMaxWidth[j], Math.min(MAX_COLUMN_WIDTH,
-                            disambiguateEntity ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length()));
-                }
-            }
-        }
-
         boolean headerPrinted = true;
         for (Cell[][] part : new Cell[][][]{header, data}) {
             for (int i = 0; i < part.length; ++i) {
                 for (int j = 0; j < part[i].length; ++j) {
-                    String str = disambiguateEntity ? part[i][j].getDisambiguatedText() : part[i][j].text;
+                    columnMaxWidth[j] = Math.max(columnMaxWidth[j], Math.min(MAX_COLUMN_WIDTH,
+                            (headerPrinted && isNumericColumn[j] ? 1 : 0) + (disambiguateEntity ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length())));
+                }
+            }
+            headerPrinted = false;
+        }
+        headerPrinted = true;
+        for (Cell[][] part : new Cell[][][]{header, data}) {
+            for (int i = 0; i < part.length; ++i) {
+                for (int j = 0; j < part[i].length; ++j) {
+                    String str = (headerPrinted && isNumericColumn[j] ? "*" : "") + (disambiguateEntity ? part[i][j].getDisambiguatedText() : part[i][j].text);
                     if (str.length() > columnMaxWidth[j]) {
                         str = str.substring(0, (columnMaxWidth[j] - 3) - (columnMaxWidth[j] - 3) / 2) + "..." +
                                 str.substring(str.length() - (columnMaxWidth[j] - 3) / 2);
@@ -61,5 +62,15 @@ public class Table {
         }
 
         return sb.toString();
+    }
+
+    // Not checking the first column (this could be the index column).
+    public boolean containsNumericColumn() {
+        for (int i = 1; i < nColumn; ++i) {
+            if (isNumericColumn[i]) {
+                return true;
+            }
+        }
+        return false;
     }
 }
