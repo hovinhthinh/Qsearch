@@ -1,7 +1,7 @@
 package model.table;
 
 public class Table {
-    public static final int MAX_COLUMN_WIDTH = 35;
+    public static final int MAX_COLUMN_WIDTH = 50;
     public Cell[][] header; // row -> column
     public Cell[][] data; // row -> column
     public int nHeaderRow, nDataRow, nColumn;
