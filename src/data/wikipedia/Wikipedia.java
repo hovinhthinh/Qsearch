@@ -61,7 +61,7 @@ public class Wikipedia {
             }
 
             table.source = "WIKIPEDIA:Link:" + "https://en.wikipedia.org/wiki/" + URLEncoder.encode(json.getString("pgTitle").replaceAll("\\s", "_"));
-
+            table.caption = json.getString("tableCaption");
             return table;
         } catch (JSONException e) {
             return null;

@@ -10,11 +10,12 @@ public class Table {
     // internal signal from Wikipedia.
 
     public String surroundingText;
+    public String caption;
 
     public String source;
 
     public String getTableContentPrintable(boolean disambiguateEntity) {
-        StringBuilder sb = new StringBuilder(source).append("\r\n");
+        StringBuilder sb = new StringBuilder();
         int[] columnMaxWidth = new int[nColumn];
 
         for (Cell[][] part : new Cell[][][]{header, data}) {
