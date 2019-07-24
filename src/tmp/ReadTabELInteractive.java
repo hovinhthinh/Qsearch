@@ -19,11 +19,15 @@ public class ReadTabELInteractive {
 //                new FileInputStream
         ("/GW/D5data-11/hvthinh/TabEL.json.shuf.gz")), StandardCharsets.UTF_8)) {
             Table t = Wikipedia.parseFromJSON(line);
+            if (t == null) {
+                continue;
+            }
             ++passed;
             if (!t.containsNumericColumn()) {
                 continue;
             }
             System.out.println(++n + "/" + passed);
+            System.out.println(line);
             System.out.println(t.source);
             System.out.println(t.caption);
             System.out.println(t.getTableContentPrintable(true));
