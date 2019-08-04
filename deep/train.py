@@ -4,7 +4,7 @@ import tensorflow as tf
 from model.data import *
 from model.node import get_model
 
-dict, embedding = load_glove()  # of word not in dict then index should be len(dict)
+dict, embedding = load_glove()  # if word not in dict then index should be len(embedding)
 
 ##########
 data_path = 'data'
