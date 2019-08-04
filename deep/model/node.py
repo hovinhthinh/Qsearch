@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+
 from model.config import *
 
 
@@ -45,10 +46,13 @@ def _description_encoder(scope, word_embedding_t, description):
         return tf.tanh(tf.nn.bias_add(tf.matmul(entity_encoded, feed_forward_matrix), feed_forward_bias))
 
 
-def get_optimizer(word_embedding):
+def get_model(word_embedding):
+    print('building model')
     # constants
-    with tf.variable_scope('constants'):
+    with tf.variable_scope('input'):
         word_embedding_t = tf.constant(word_embedding, name='word_embedding', dtype=np.float32)
+        unknown_embedding = tf.get_variable('unknown_embedding', shape=[1, embedding_size], dtype=np.float32)
+        word_embedding_t = tf.concat([word_embedding_t, unknown_embedding], axis=0)
 
     # placeholders
     with tf.variable_scope('placeholders'):
