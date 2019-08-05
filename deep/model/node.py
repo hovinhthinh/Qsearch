@@ -19,13 +19,19 @@ def _attention(scope, input, attention_dim):  # input: [batch_size, n_word, embe
         output = tf.reduce_sum(tf.multiply(input, tf.expand_dims(attention_weight, -1)), 1)
         return output
 
+
+def _self_attention(scope, input, attention_dim):
+    # TODO:
+    pass
+
+
 def _description_encoder(scope, word_embedding_t, description):
     with tf.variable_scope(scope):
         entity_type_emb = tf.nn.embedding_lookup(word_embedding_t, description)
 
         masking = tf.cast(tf.greater(description, 0), tf.int32)
 
-        # bi-lstm
+        bi - lstm
         entity_forward_cell = tf.nn.rnn_cell.LSTMCell(lstm_hidden_dim)
         entity_backward_cell = tf.nn.rnn_cell.LSTMCell(lstm_hidden_dim)
         (output_fw, output_bw), _ = (
