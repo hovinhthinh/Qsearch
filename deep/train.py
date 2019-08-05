@@ -9,7 +9,7 @@ dictionary, embedding = load_glove()  # if word not in dict then index should be
 ##########
 data_path = './data'
 
-data = load_training_data(data_path)
+data = load_input_data(data_path)
 
 (entity_type_desc, quantity_desc, label), loss, optimizer = get_model(embedding)
 

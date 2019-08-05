@@ -14,3 +14,4 @@ max_entity_type_desc_len = 10
 max_quantity_desc_len = 10
 
 glove_path = '/home/hvthinh/Qsearch/resources/glove'
+yago_type_path = '/home/hvthinh/TabQs/resources/yagoTransitiveTypeCompact.tsv.gz'
