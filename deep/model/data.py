@@ -1,9 +1,9 @@
-import os
-import random
 import gzip
 import json
+import os
+import random
+
 import numpy as np
-import sys
 
 from model.config import *
 
@@ -12,37 +12,41 @@ _entity_to_types = {}
 with gzip.open(yago_type_path, 'rt') as f:
     for line in f:
         arr = line.strip().split('\t')
-        _entity_to_types[arr[0]] =  json.loads(arr[1])
+        _entity_to_types[arr[0]] = json.loads(arr[1])
+
 
 def load_glove():
     _glove_path = os.path.join(glove_path, 'glove.6B.' + str(embedding_size) + 'd.txt')
 
-    dictionary = {}
+    word_dict = {}
     embedding = [[0.0 for i in range(embedding_size)]]  # first index is 'nothing' token
 
     print('loading Glove from %s' % _glove_path)
     with open(_glove_path) as f:
         for line in f:
             arr = line.strip().split()
-            dictionary[arr[0]] = len(dictionary)
+            word_dict[arr[0]] = len(word_dict)
             embedding.append([float(v) for v in arr[1:]])
 
-    return dictionary, np.asarray(embedding, dtype=np.float32)
+    return word_dict, np.asarray(embedding, dtype=np.float32)
 
 
-def load_input_data(data_path):
-    positive_samples = []
+def load_input_data(data_path): # [[entity, context],...]
+    input_data = []
     with open(os.path.join(data_path, 'train.txt')) as f:  # train.txt contains only positive samples
         for line in f:
             arr = line.strip().lower().split('\t')
-            positive_samples.append([*arr, 1])
-    return positive_samples
+            input_data.append(arr)
+    return input_data
 
-def sample_training_data():
+
+def sample_training_data(input_data, word_dict):
+    # convert input data -> triples [entity_type_desc, quantity_desc, label (0/1)]
     pass
     # TODO
 
-def convert_input_to_tensor(data, dict, embedding):
+
+def convert_input_to_tensor(data, word_dict, embedding):
     entity_type_desc = []
     quantity_desc = []
     label = []
@@ -54,7 +58,7 @@ def convert_input_to_tensor(data, dict, embedding):
         etd_decoded = []
         for i in range(max_entity_type_desc_len):
             if i < len(etd):
-                etd_decoded.append(dict[etd[i]] if etd[i] in dict else len(embedding))
+                etd_decoded.append(word_dict[etd[i]] if etd[i] in word_dict else len(embedding))
             else:
                 etd_decoded.append(0)
         entity_type_desc.append(etd_decoded)
@@ -64,7 +68,7 @@ def convert_input_to_tensor(data, dict, embedding):
         qd_decoded = []
         for i in range(max_quantity_desc_len):
             if i < len(qd):
-                qd_decoded.append(dict[qd[i]] if qd[i] in dict else len(embedding))
+                qd_decoded.append(word_dict[qd[i]] if qd[i] in word_dict else len(embedding))
             else:
                 qd_decoded.append(0)
         quantity_desc.append(qd_decoded)

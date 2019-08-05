@@ -4,7 +4,7 @@ import tensorflow as tf
 from model.data import *
 from model.node import get_model
 
-dictionary, embedding = load_glove()  # if word not in dict then index should be len(embedding)
+word_dict, embedding = load_glove()  # if word not in dict then index should be len(embedding)
 
 ##########
 data_path = './data'
@@ -22,7 +22,7 @@ with tf.Session() as sess:
 
     best_lost = math.inf
     for epoch in range(max_num_epoches):
-        et, qt, ls = convert_input_to_tensor(data, dictionary, embedding)
+        et, qt, ls = convert_input_to_tensor(data, word_dict, embedding)
 
         n_chunk = (len(ls) - 1) // batch_size + 1
         batches = [np.array_split(et, n_chunk), np.array_split(qt, n_chunk), np.array_split(ls, n_chunk)]
