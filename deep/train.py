@@ -16,6 +16,7 @@ data = load_training_data(data_path)
 init_op = tf.global_variables_initializer()
 
 saver = tf.train.Saver()
+
 with tf.Session() as sess:
     sess.run(init_op)
 

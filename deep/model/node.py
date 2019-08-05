@@ -4,6 +4,21 @@ import tensorflow as tf
 from model.config import *
 
 
+def _attention(scope, input, attention_dim):  # input: [batch_size, n_word, embedding_size]
+    with tf.variable_scope(scope):
+        attention_weight_matrix = tf.get_variable(dtype=tf.float32, shape=[attention_dim, lstm_hidden_dim * 2],
+                                                  name='attention_weight_matrix')
+        attention_weight_bias = tf.get_variable(dtype=tf.float32, shape=[attention_dim],
+                                                name='attention_weight_bias')
+        attention_weight_scale = tf.get_variable(dtype=tf.float32, shape=[attention_dim],
+                                                 name='attention_weight_scale')
+        attention_weight = tf.tanh(
+            tf.nn.bias_add(tf.tensordot(input, attention_weight_matrix, axes=[2, 1]), attention_weight_bias))
+        attention_weight = tf.nn.softmax(tf.tensordot(attention_weight, attention_weight_scale, axes=[2, 0]))
+
+        output = tf.reduce_sum(tf.multiply(input, tf.expand_dims(attention_weight, -1)), 1)
+        return output
+
 def _description_encoder(scope, word_embedding_t, description):
     with tf.variable_scope(scope):
         entity_type_emb = tf.nn.embedding_lookup(word_embedding_t, description)
@@ -25,17 +40,7 @@ def _description_encoder(scope, word_embedding_t, description):
         lstm_output = tf.concat([output_fw, output_bw], 2)
 
         # attention
-        attention_weight_matrix = tf.get_variable(dtype=tf.float32, shape=[attention_dim, lstm_hidden_dim * 2],
-                                                  name='attention_weight_matrix')
-        attention_weight_bias = tf.get_variable(dtype=tf.float32, shape=[attention_dim],
-                                                name='attention_weight_bias')
-        attention_weight_scale = tf.get_variable(dtype=tf.float32, shape=[attention_dim],
-                                                 name='attention_weight_scale')
-        attention_weight = tf.tanh(
-            tf.nn.bias_add(tf.tensordot(lstm_output, attention_weight_matrix, axes=[2, 1]), attention_weight_bias))
-        attention_weight = tf.nn.softmax(tf.tensordot(attention_weight, attention_weight_scale, axes=[2, 0]))
-
-        entity_encoded = tf.reduce_sum(tf.multiply(lstm_output, tf.expand_dims(attention_weight, -1)), 1)
+        entity_encoded = _attention('attention', lstm_output, attention_dim)
 
         # feed forward
         feed_forward_matrix = tf.get_variable(dtype=tf.float32, shape=[lstm_hidden_dim * 2, feed_forward_dim],
