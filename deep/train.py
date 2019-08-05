@@ -4,10 +4,10 @@ import tensorflow as tf
 from model.data import *
 from model.node import get_model
 
-dict, embedding = load_glove()  # if word not in dict then index should be len(embedding)
+dictionary, embedding = load_glove()  # if word not in dict then index should be len(embedding)
 
 ##########
-data_path = 'data'
+data_path = './data'
 
 data = load_training_data(data_path)
 
@@ -21,10 +21,13 @@ with tf.Session() as sess:
 
     best_lost = math.inf
     for epoch in range(max_num_epoches):
-        e, q, l = convert_input_to_tensor(data, dict, embedding)
-        batches = np.array_split(e, batch_size), np.array_split(q, batch_size), np.array_split(l, batch_size)
+        et, qt, ls = convert_input_to_tensor(data, dictionary, embedding)
+
+        n_chunk = (len(ls) - 1) // batch_size + 1
+        batches = [np.array_split(et, n_chunk), np.array_split(qt, n_chunk), np.array_split(ls, n_chunk)]
+
         epoch_loss = 0
-        for i in range(len(batches[0])):
+        for i in range(n_chunk):
             bl, _ = sess.run([loss, optimizer], feed_dict={
                 entity_type_desc: batches[0][i],
                 quantity_desc: batches[1][i],

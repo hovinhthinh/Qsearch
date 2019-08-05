@@ -5,10 +5,10 @@ import numpy as np
 
 from model.config import *
 
-_glove_path = os.path.join('/home/hvthinh/Qsearch/resources/glove', 'glove.6B.' + str(embedding_size) + 'd.txt')
-
 
 def load_glove():
+    _glove_path = os.path.join(glove_path, 'glove.6B.' + str(embedding_size) + 'd.txt')
+
     dict = {}
     embedding = [[0.0 for i in range(embedding_size)]]  # first index is 'nothing' token
 
