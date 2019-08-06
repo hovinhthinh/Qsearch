@@ -1,8 +1,8 @@
 embedding_size = 50  # 50, 100, 200, 300
 
-lstm_hidden_dim = 300
-attention_dim = 100
-feed_forward_dim = 50
+attention_hidden_dim = 64
+attention_output_dim = 128
+feed_forward_dim = 64
 
 batch_size = 100
 learning_rate = 0.001

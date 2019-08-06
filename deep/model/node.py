@@ -4,25 +4,35 @@ import tensorflow as tf
 from model.config import *
 
 
-def _attention(scope, input, attention_dim):  # input: [batch_size, n_word, embedding_size]
+def _attention(scope, input, attention_input_dim, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
     with tf.variable_scope(scope):
-        attention_weight_matrix = tf.get_variable(dtype=tf.float32, shape=[attention_dim, lstm_hidden_dim * 2],
+        attention_weight_matrix = tf.get_variable(dtype=tf.float32, shape=[attention_input_dim, attention_hidden_dim],
                                                   name='attention_weight_matrix')
-        attention_weight_bias = tf.get_variable(dtype=tf.float32, shape=[attention_dim],
+        attention_weight_bias = tf.get_variable(dtype=tf.float32, shape=[attention_hidden_dim],
                                                 name='attention_weight_bias')
-        attention_weight_scale = tf.get_variable(dtype=tf.float32, shape=[attention_dim],
+        attention_weight_scale = tf.get_variable(dtype=tf.float32, shape=[attention_hidden_dim],
                                                  name='attention_weight_scale')
         attention_weight = tf.tanh(
-            tf.nn.bias_add(tf.tensordot(input, attention_weight_matrix, axes=[2, 1]), attention_weight_bias))
+            tf.nn.bias_add(tf.tensordot(input, attention_weight_matrix, axes=[2, 0]), attention_weight_bias))
         attention_weight = tf.nn.softmax(tf.tensordot(attention_weight, attention_weight_scale, axes=[2, 0]))
 
         output = tf.reduce_sum(tf.multiply(input, tf.expand_dims(attention_weight, -1)), 1)
         return output
 
 
-def _self_attention(scope, input, attention_dim):
-    # TODO:
-    pass
+def _self_attention(scope, input, hidden_dim, attention_dim):
+    with tf.variable_scope(scope):
+        Q = tf.layers.dense(input, hidden_dim)
+        K = tf.layers.dense(input, hidden_dim)
+        V = tf.layers.dense(input, attention_dim)
+
+        attention = tf.matmul(Q, K, transpose_b=True)
+        # scale
+        attention = tf.divide(attention, tf.sqrt(tf.cast(tf.shape(K)[-1], dtype=tf.float32)))
+
+        attention = tf.nn.softmax(attention)
+
+        return tf.matmul(attention, V)
 
 
 def _description_encoder(scope, word_embedding_t, description):
@@ -32,24 +42,26 @@ def _description_encoder(scope, word_embedding_t, description):
         masking = tf.cast(tf.greater(description, 0), tf.int32)
 
         # bi-lstm
-        entity_forward_cell = tf.nn.rnn_cell.LSTMCell(lstm_hidden_dim)
-        entity_backward_cell = tf.nn.rnn_cell.LSTMCell(lstm_hidden_dim)
-        (output_fw, output_bw), _ = (
-            tf.nn.bidirectional_dynamic_rnn(
-                entity_forward_cell,
-                entity_backward_cell,
-                entity_type_emb,
-                sequence_length=tf.reduce_sum(masking, 1),
-                dtype=tf.float32
-            )
-        )
-        lstm_output = tf.concat([output_fw, output_bw], 2)
+        # entity_forward_cell = tf.nn.rnn_cell.LSTMCell(lstm_hidden_dim)
+        # entity_backward_cell = tf.nn.rnn_cell.LSTMCell(lstm_hidden_dim)
+        # (output_fw, output_bw), _ = (
+        #     tf.nn.bidirectional_dynamic_rnn(
+        #         entity_forward_cell,
+        #         entity_backward_cell,
+        #         entity_type_emb,
+        #         sequence_length=tf.reduce_sum(masking, 1),
+        #         dtype=tf.float32
+        #     )
+        # )
+        # mixing_output = tf.concat([output_fw, output_bw], 2)
+
+        mixing_output = _self_attention('self_attention', entity_type_emb, attention_hidden_dim, attention_output_dim)
 
         # attention
-        entity_encoded = _attention('attention', lstm_output, attention_dim)
+        entity_encoded = _attention('attention', mixing_output, attention_output_dim, attention_hidden_dim)
 
         # feed forward
-        feed_forward_matrix = tf.get_variable(dtype=tf.float32, shape=[lstm_hidden_dim * 2, feed_forward_dim],
+        feed_forward_matrix = tf.get_variable(dtype=tf.float32, shape=[attention_output_dim, feed_forward_dim],
                                               name='feed_forward_matrix')
         feed_forward_bias = tf.get_variable(dtype=tf.float32, shape=[feed_forward_dim],
                                             name='feed_forward_bias')

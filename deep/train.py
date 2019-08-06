@@ -9,9 +9,15 @@ word_dict, embedding = load_glove()  # if word not in dict then index should be 
 ##########
 data_path = './data'
 
-data = load_input_data(data_path)
+#data = load_input_data(data_path)
+
+data= [['country', 'population', 1], ['country', 'population', 1]]
 
 (entity_type_desc, quantity_desc, label), loss, optimizer = get_model(embedding)
+
+print('nodes:')
+for n in tf.get_default_graph().as_graph_def().node:
+    print(n.name)
 
 init_op = tf.global_variables_initializer()
 
