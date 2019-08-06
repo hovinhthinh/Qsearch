@@ -9,9 +9,9 @@ word_dict, embedding = load_glove()  # if word not in dict then index should be 
 ##########
 data_path = './data'
 
-#data = load_input_data(data_path)
+# data = load_input_data(data_path)
 
-data= [['country', 'population', 1], ['country', 'population', 1]]
+data = [['country', 'population', 1], ['country', 'population', 1]]
 
 (entity_type_desc, quantity_desc, label), loss, optimizer = get_model(embedding)
 

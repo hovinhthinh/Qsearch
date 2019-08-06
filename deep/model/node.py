@@ -4,16 +4,14 @@ import tensorflow as tf
 from model.config import *
 
 
-def _attention(scope, input, attention_input_dim, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
+def _attention(scope, input, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
     with tf.variable_scope(scope):
-        attention_weight_matrix = tf.get_variable(dtype=tf.float32, shape=[attention_input_dim, attention_hidden_dim],
-                                                  name='attention_weight_matrix')
-        attention_weight_bias = tf.get_variable(dtype=tf.float32, shape=[attention_hidden_dim],
-                                                name='attention_weight_bias')
+        attention_weight = tf.layers.dense(input, attention_hidden_dim, name='weight', use_bias=True,
+                                           activation=tf.tanh)
+
         attention_weight_scale = tf.get_variable(dtype=tf.float32, shape=[attention_hidden_dim],
-                                                 name='attention_weight_scale')
-        attention_weight = tf.tanh(
-            tf.nn.bias_add(tf.tensordot(input, attention_weight_matrix, axes=[2, 0]), attention_weight_bias))
+                                                 name='weight_scale')
+
         attention_weight = tf.nn.softmax(tf.tensordot(attention_weight, attention_weight_scale, axes=[2, 0]))
 
         output = tf.reduce_sum(tf.multiply(input, tf.expand_dims(attention_weight, -1)), 1)
@@ -22,9 +20,9 @@ def _attention(scope, input, attention_input_dim, attention_hidden_dim):  # inpu
 
 def _self_attention(scope, input, hidden_dim, attention_dim):
     with tf.variable_scope(scope):
-        Q = tf.layers.dense(input, hidden_dim)
-        K = tf.layers.dense(input, hidden_dim)
-        V = tf.layers.dense(input, attention_dim)
+        Q = tf.layers.dense(input, hidden_dim, name='query', use_bias=False)
+        K = tf.layers.dense(input, hidden_dim, name='key', use_bias=False)
+        V = tf.layers.dense(input, attention_dim, name='value', use_bias=False)
 
         attention = tf.matmul(Q, K, transpose_b=True)
         # scale
@@ -58,7 +56,7 @@ def _description_encoder(scope, word_embedding_t, description):
         mixing_output = _self_attention('self_attention', entity_type_emb, attention_hidden_dim, attention_output_dim)
 
         # attention
-        entity_encoded = _attention('attention', mixing_output, attention_output_dim, attention_hidden_dim)
+        entity_encoded = _attention('attention', mixing_output, attention_hidden_dim)
 
         # feed forward
         feed_forward_matrix = tf.get_variable(dtype=tf.float32, shape=[attention_output_dim, feed_forward_dim],
