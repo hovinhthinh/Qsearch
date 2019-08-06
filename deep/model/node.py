@@ -31,7 +31,7 @@ def _description_encoder(scope, word_embedding_t, description):
 
         masking = tf.cast(tf.greater(description, 0), tf.int32)
 
-        bi - lstm
+        # bi-lstm
         entity_forward_cell = tf.nn.rnn_cell.LSTMCell(lstm_hidden_dim)
         entity_backward_cell = tf.nn.rnn_cell.LSTMCell(lstm_hidden_dim)
         (output_fw, output_bw), _ = (
