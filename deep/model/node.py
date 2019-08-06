@@ -37,7 +37,7 @@ def _description_encoder(scope, word_embedding_t, description):
     with tf.variable_scope(scope):
         entity_type_emb = tf.nn.embedding_lookup(word_embedding_t, description)
 
-        masking = tf.cast(tf.greater(description, 0), tf.int32)
+        masking = tf.cast(tf.greater(description, 0), tf.float32)
 
         # bi-lstm
         # entity_forward_cell = tf.nn.rnn_cell.LSTMCell(lstm_hidden_dim)
@@ -52,6 +52,10 @@ def _description_encoder(scope, word_embedding_t, description):
         #     )
         # )
         # mixing_output = tf.concat([output_fw, output_bw], 2)
+
+        entity_type_emb = tf.multiply(entity_type_emb, tf.tensordot(masking,
+                                                                    tf.constant([1 for i in range(embedding_size)],
+                                                                                dtype=tf.float32), axes=0))
 
         mixing_output = _self_attention('self_attention', entity_type_emb, attention_hidden_dim, attention_output_dim)
 
