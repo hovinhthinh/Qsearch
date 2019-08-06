@@ -63,12 +63,7 @@ def _description_encoder(scope, word_embedding_t, description):
         entity_encoded = _attention('attention', mixing_output, attention_hidden_dim)
 
         # feed forward
-        feed_forward_matrix = tf.get_variable(dtype=tf.float32, shape=[attention_output_dim, feed_forward_dim],
-                                              name='feed_forward_matrix')
-        feed_forward_bias = tf.get_variable(dtype=tf.float32, shape=[feed_forward_dim],
-                                            name='feed_forward_bias')
-
-        return tf.tanh(tf.nn.bias_add(tf.matmul(entity_encoded, feed_forward_matrix), feed_forward_bias))
+        return tf.layers.dense(entity_encoded, feed_forward_dim, name='feed_forward', use_bias=True)
 
 
 def get_model(word_embedding):
