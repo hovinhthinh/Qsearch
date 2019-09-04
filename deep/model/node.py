@@ -4,7 +4,7 @@ import tensorflow as tf
 from model.config import *
 
 
-def _attention(scope, input, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
+def _attention(scope, input, masking, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
     with tf.variable_scope(scope):
         attention_weight = tf.layers.dense(input, attention_hidden_dim, name='weight', use_bias=True,
                                            activation=tf.tanh)
@@ -12,13 +12,17 @@ def _attention(scope, input, attention_hidden_dim):  # input: [batch_size, n_wor
         attention_weight_scale = tf.get_variable(dtype=tf.float32, shape=[attention_hidden_dim],
                                                  name='weight_scale')
 
-        attention_weight = tf.nn.softmax(tf.tensordot(attention_weight, attention_weight_scale, axes=[2, 0]))
+        attention_weight = tf.tensordot(attention_weight, attention_weight_scale, axes=[2, 0]) # Shimaoka, ACL2017
+
+        # adder for attention mask
+        adder = (1.0 - tf.cast(masking, tf.float32)) * -10000.0 # Ignore padding, Like BERT
+        attention_weight = tf.nn.softmax(tf.add(attention_weight, adder))
 
         output = tf.reduce_sum(tf.multiply(input, tf.expand_dims(attention_weight, -1)), 1)
         return output
 
 
-def _self_attention(scope, input, hidden_dim, attention_dim):
+def _self_attention(scope, input, masking, hidden_dim, attention_dim):
     with tf.variable_scope(scope):
         Q = tf.layers.dense(input, hidden_dim, name='query', use_bias=False)
         K = tf.layers.dense(input, hidden_dim, name='key', use_bias=False)
@@ -28,6 +32,11 @@ def _self_attention(scope, input, hidden_dim, attention_dim):
         # scale
         attention = tf.divide(attention, tf.sqrt(tf.cast(tf.shape(K)[-1], dtype=tf.float32)))
 
+        # adder for attention mask
+        adder = (1.0 - tf.cast(masking, tf.float32)) * -10000.0 # Ignore padding, Like BERT
+        adder = tf.expand_dims(adder, 1)
+
+        attention = tf.add(attention, adder)
         attention = tf.nn.softmax(attention)
 
         return tf.matmul(attention, V)
@@ -57,10 +66,10 @@ def _description_encoder(scope, word_embedding_t, description):
                                                                     tf.constant([1 for i in range(embedding_size)],
                                                                                 dtype=tf.float32), axes=0))
 
-        mixing_output = _self_attention('self_attention', entity_type_emb, attention_hidden_dim, attention_output_dim)
+        mixing_output = _self_attention('self_attention', entity_type_emb, masking, attention_hidden_dim, attention_output_dim)
 
         # attention
-        entity_encoded = _attention('attention', mixing_output, attention_hidden_dim)
+        entity_encoded = _attention('attention', mixing_output, masking, attention_hidden_dim)
 
         # feed forward
         return tf.layers.dense(entity_encoded, feed_forward_dim, name='feed_forward', use_bias=True)

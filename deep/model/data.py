@@ -33,12 +33,12 @@ _blocked_general_types = {
 print('loading entity types')
 _yago_types = set()
 _entity_to_types = {}
-with gzip.open(yago_type_path, 'rt') as f:
-    for line in f:
-        arr = line.strip().split('\t')
-        types = json.loads(arr[1])
-        _yago_types.update(types)
-        _entity_to_types[arr[0]] = [t for t in types if t not in _blocked_general_types]
+# with gzip.open(yago_type_path, 'rt') as f:
+#     for line in f:
+#         arr = line.strip().split('\t')
+#         types = json.loads(arr[1])
+#         _yago_types.update(types)
+#         _entity_to_types[arr[0]] = [t for t in types if t not in _blocked_general_types]
 
 
 def load_glove():
