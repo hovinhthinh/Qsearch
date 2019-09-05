@@ -93,7 +93,7 @@ def sample_epoch_training_data(training_data):
             ++n_pos
             samples.append([random.choice(_entity_to_types[entity]), context, 1])
         ++n_neg
-        samples.append([random.choice(_yago_type[entity]), context, 0])
+        samples.append([random.choice(_yago_type), context, 0])
     print('randomized %d positive and %d negative training samples' % (n_pos, n_neg))
     return samples
 
