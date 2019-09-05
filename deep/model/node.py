@@ -14,9 +14,7 @@ def _attention(scope, input, masking, attention_hidden_dim):  # input: [batch_si
 
         attention_weight = tf.tensordot(attention_weight, attention_weight_scale, axes=[2, 0]) # Shimaoka, ACL2017
 
-        # adder for attention mask
-        adder = (1.0 - tf.cast(masking, tf.float32)) * -10000.0 # Ignore padding, Like BERT
-        attention_weight = tf.nn.softmax(tf.add(attention_weight, adder))
+        attention_weight = tf.nn.softmax(tf.add(attention_weight, masking))
 
         output = tf.reduce_sum(tf.multiply(input, tf.expand_dims(attention_weight, -1)), 1)
         return output
@@ -33,8 +31,7 @@ def _self_attention(scope, input, masking, hidden_dim, attention_dim):
         attention = tf.divide(attention, tf.sqrt(tf.cast(tf.shape(K)[-1], dtype=tf.float32)))
 
         # adder for attention mask
-        adder = (1.0 - tf.cast(masking, tf.float32)) * -10000.0 # Ignore padding, Like BERT
-        adder = tf.expand_dims(adder, 1)
+        adder = tf.expand_dims(masking, 1)
 
         attention = tf.add(attention, adder)
         attention = tf.nn.softmax(attention)
@@ -46,7 +43,7 @@ def _description_encoder(scope, word_embedding_t, description):
     with tf.variable_scope(scope):
         entity_type_emb = tf.nn.embedding_lookup(word_embedding_t, description)
 
-        masking = tf.cast(tf.greater(description, 0), tf.float32)
+        masking = (1.0 - tf.cast(tf.greater(description, 0), tf.float32)) * -10000.0  # Ignore padding, Like BERT
 
         # bi-lstm
         # entity_forward_cell = tf.nn.rnn_cell.LSTMCell(lstm_hidden_dim)
@@ -62,9 +59,9 @@ def _description_encoder(scope, word_embedding_t, description):
         # )
         # mixing_output = tf.concat([output_fw, output_bw], 2)
 
-        entity_type_emb = tf.multiply(entity_type_emb, tf.tensordot(masking,
-                                                                    tf.constant([1 for i in range(embedding_size)],
-                                                                                dtype=tf.float32), axes=0))
+        # entity_type_emb = tf.multiply(entity_type_emb, tf.tensordot(masking,
+        #                                                             tf.constant([1 for i in range(embedding_size)],
+        #                                                                         dtype=tf.float32), axes=0))
 
         mixing_output = _self_attention('self_attention', entity_type_emb, masking, attention_hidden_dim, attention_output_dim)
 
