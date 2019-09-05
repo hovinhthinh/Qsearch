@@ -6,14 +6,11 @@ from model.node import get_model
 
 print("GPU Available: ", tf.test.is_gpu_available())
 
-word_dict, embedding = load_glove()  # if word not in dict then index should be len(embedding)
+word_dict, embedding = get_glove()  # if word not in dict then index should be len(embedding)
 
 ##########
 data_path = './data'
-
-# data = load_input_data(data_path)
-
-data = [['country', 'population', 1], ['country', 'population', 1]]
+training_data = get_training_data(os.path.join(data_path, 'train.gz'))
 
 (entity_type_desc, quantity_desc, label), loss, optimizer = get_model(embedding)
 
@@ -25,11 +22,13 @@ init_op = tf.global_variables_initializer()
 
 saver = tf.train.Saver()
 
+print('start training')
 with tf.Session() as sess:
     sess.run(init_op)
 
     best_lost = math.inf
     for epoch in range(max_num_epoches):
+        data = sample_epoch_training_data(training_data)
         et, qt, ls = convert_input_to_tensor(data, word_dict, embedding)
 
         n_chunk = (len(ls) - 1) // batch_size + 1

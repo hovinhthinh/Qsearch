@@ -29,23 +29,35 @@ _blocked_general_types = {
     'objects',
     'physical objects'
 }
+
 # load entity types
-print('loading entity types')
-_yago_types = set()
-_entity_to_types = {}
-# with gzip.open(yago_type_path, 'rt') as f:
-#     for line in f:
-#         arr = line.strip().split('\t')
-#         types = json.loads(arr[1])
-#         _yago_types.update(types)
-#         _entity_to_types[arr[0]] = [t for t in types if t not in _blocked_general_types]
+_yago_type = None
+_entity_to_types = None
 
 
-def load_glove():
+def load_yago_type():
+    global _yago_type
+    _yago_type = []
+    global _entity_to_types
+    _entity_to_types = {}
+
+    yago_types_set = set()
+    print('loading Yago entity types from %s' % yago_type_path)
+    with gzip.open(yago_type_path, 'rt', encoding='utf-8') as f:
+        for line in f:
+            arr = line.strip().split('\t')
+            types = json.loads(arr[1])
+            yago_types_set.update(types)
+            _entity_to_types[arr[0]] = [t for t in types if t not in _blocked_general_types]
+    for type in yago_types_set:
+        _yago_type.append(type)
+
+
+def get_glove():
     _glove_path = os.path.join(glove_path, 'glove.6B.' + str(embedding_size) + 'd.txt')
 
     word_dict = {}
-    embedding = [[0.0 for i in range(embedding_size)]]  # first index is 'nothing' token
+    embedding = [[0.0 for i in range(embedding_size)]]  # first index is 'padding' token, len(embedding) is 'unknown'
 
     print('loading Glove from %s' % _glove_path)
     with open(_glove_path) as f:
@@ -57,18 +69,22 @@ def load_glove():
     return word_dict, np.asarray(embedding, dtype=np.float32)
 
 
-def load_input_data(data_path):  # [[entity, context],...]
-    input_data = []
-    with open(os.path.join(data_path, 'train.txt')) as f:  # train.txt contains only positive samples
+# load training data, each line contains: <entity>[tab]<context>
+def get_training_data(input_path):
+    training_data = []  # [[entity, context]]
+    with gzip.open(input_path, 'rt', encoding='utf-8') as f:
         for line in f:
-            arr = line.strip().lower().split('\t')
-            input_data.append(arr)
-    return input_data
+            arr = line.strip().split('\t')
+            training_data.append(arr)
+    return training_data
 
 
-def sample_training_data(input_data, word_dict):
-    # convert input data -> triples [entity_type_desc, quantity_desc, label (0/1)]
-    pass
+# training_data is the output from 'get_training_data'
+def sample_epoch_training_data(training_data):
+    if _yago_type is None:
+        load_yago_type()
+    # convert training_datas -> triples [[entity_type_desc, quantity_desc, label (0/1)]]
+    return []
     # TODO
 
 
