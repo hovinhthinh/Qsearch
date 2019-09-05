@@ -92,9 +92,9 @@ def sample_epoch_training_data(training_data):
     samples = []
     for entity, context in training_data:
         if entity in _entity_to_types:
-            ++n_pos
+            n_pos += 1
             samples.append([random.choice(_entity_to_types[entity]), context, 1])
-        ++n_neg
+        n_neg += 1
         samples.append([random.choice(_yago_type), context, 0])
     print('randomized %d positive and %d negative training samples' % (n_pos, n_neg))
     return samples
