@@ -81,11 +81,21 @@ def get_training_data(input_path):
 
 # training_data is the output from 'get_training_data'
 def sample_epoch_training_data(training_data):
+    # convert training_data -> triples [[entity_type_desc, quantity_desc, label (0/1)]]
     if _yago_type is None:
         load_yago_type()
-    # convert training_datas -> triples [[entity_type_desc, quantity_desc, label (0/1)]]
-    return []
-    # TODO
+
+    n_pos = 0
+    n_neg = 0
+    samples = []
+    for entity, context in training_data:
+        if entity in _entity_to_types:
+            ++n_pos
+            samples.append([random.choice(_entity_to_types[entity]), context, 1])
+        ++n_neg
+        samples.append([random.choice(_yago_type[entity]), context, 0])
+    print('randomized %d positive and %d negative training samples' % (n_pos, n_neg))
+    return samples
 
 
 def convert_input_to_tensor(data, word_dict, embedding):
