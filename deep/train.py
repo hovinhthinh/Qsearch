@@ -41,7 +41,7 @@ with tf.Session() as sess:
                 quantity_desc: batches[1][i],
                 label: batches[2][i],
             })
-            epoch_loss += bl / len(batches)
+            epoch_loss += bl / n_chunk
 
         print('epoch %d loss: %.5f' % (epoch, epoch_loss))
 
