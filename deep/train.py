@@ -12,7 +12,7 @@ word_dict, embedding = get_glove()  # if word not in dict then index should be l
 data_path = './data'
 training_data = get_training_data(os.path.join(data_path, 'train.gz'))
 
-(entity_type_desc, quantity_desc, label), loss, optimizer = get_model(embedding)
+(entity_type_desc, quantity_desc, label), loss, optimizer, n_true = get_model(embedding)
 
 # print('nodes:')
 # for n in tf.get_default_graph().as_graph_def().node:
@@ -35,15 +35,17 @@ with tf.Session() as sess:
         batches = [np.array_split(et, n_chunk), np.array_split(qt, n_chunk), np.array_split(ls, n_chunk)]
 
         epoch_loss = 0
+        prec = 0
         for i in range(n_chunk):
-            bl, _ = sess.run([loss, optimizer], feed_dict={
+            _, nt, bl = sess.run([optimizer, n_true, loss], feed_dict={
                 entity_type_desc: batches[0][i],
                 quantity_desc: batches[1][i],
                 label: batches[2][i],
             })
             epoch_loss += bl / len(ls)
+            prec += nt / len(ls)
 
-        print('epoch %d loss: %.5f' % (epoch, epoch_loss))
+        print('epoch %d loss: %.5f prec: %.3f' % (epoch, epoch_loss, prec))
 
         if (epoch % save_model_frequency == (save_model_frequency - 1)) and (epoch_loss < best_lost):
             best_lost = epoch_loss
