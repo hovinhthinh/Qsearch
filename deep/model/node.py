@@ -22,9 +22,9 @@ def _attention(scope, input, masking, attention_hidden_dim):  # input: [batch_si
 
 def _self_attention(scope, input, masking, hidden_dim, attention_dim):
     with tf.variable_scope(scope):
-        Q = tf.layers.dense(input, hidden_dim, name='query', use_bias=False)
-        K = tf.layers.dense(input, hidden_dim, name='key', use_bias=False)
-        V = tf.layers.dense(input, attention_dim, name='value', use_bias=False)
+        Q = tf.layers.dense(input, hidden_dim, name='query', use_bias=True)
+        K = tf.layers.dense(input, hidden_dim, name='key', use_bias=True)
+        V = tf.layers.dense(input, attention_dim, name='value', use_bias=True)
 
         attention = tf.matmul(Q, K, transpose_b=True)
         # scale
