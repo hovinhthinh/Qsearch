@@ -103,5 +103,5 @@ def get_model(word_embedding):
 
     # optimizer
     with tf.variable_scope('optimizer'):
-        loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(labels=label, logits=score))
+        loss = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(labels=label, logits=score))
         return (entity_type_desc, quantity_desc, label), loss, tf.train.AdamOptimizer(learning_rate).minimize(loss)
