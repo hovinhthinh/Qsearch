@@ -1,4 +1,3 @@
-import numpy as np
 import tensorflow as tf
 
 from model.config import *
@@ -12,7 +11,7 @@ def _attention(scope, input, masking, attention_hidden_dim):  # input: [batch_si
         attention_weight_scale = tf.get_variable(dtype=tf.float32, shape=[attention_hidden_dim],
                                                  name='weight_scale')
 
-        attention_weight = tf.tensordot(attention_weight, attention_weight_scale, axes=[2, 0]) # Shimaoka, ACL2017
+        attention_weight = tf.tensordot(attention_weight, attention_weight_scale, axes=[2, 0])  # Shimaoka, ACL2017
 
         attention_weight = tf.nn.softmax(tf.add(attention_weight, masking))
 
@@ -63,7 +62,8 @@ def _description_encoder(scope, word_embedding_t, description):
         #                                                             tf.constant([1 for i in range(embedding_size)],
         #                                                                         dtype=tf.float32), axes=0))
 
-        mixing_output = _self_attention('self_attention', entity_type_emb, masking, attention_hidden_dim, attention_output_dim)
+        mixing_output = _self_attention('self_attention', entity_type_emb, masking, attention_hidden_dim,
+                                        attention_output_dim)
 
         # attention
         entity_encoded = _attention('attention', mixing_output, masking, attention_hidden_dim)
@@ -76,8 +76,8 @@ def get_model(word_embedding):
     print('building model')
     # constants
     with tf.variable_scope('input'):
-        word_embedding_t = tf.constant(word_embedding, name='word_embedding', dtype=np.float32)
-        unknown_embedding = tf.get_variable('unknown_embedding', shape=[1, embedding_size], dtype=np.float32)
+        word_embedding_t = tf.constant(word_embedding, name='word_embedding', dtype=tf.float32)
+        unknown_embedding = tf.get_variable('unknown_embedding', shape=[1, embedding_size], dtype=tf.float32)
         word_embedding_t = tf.concat([word_embedding_t, unknown_embedding], axis=0)
 
     # placeholders
@@ -105,4 +105,5 @@ def get_model(word_embedding):
     with tf.variable_scope('optimizer'):
         n_true = tf.reduce_sum(tf.abs(tf.cast(tf.less(score, 0), tf.float32) - label))
         loss = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(labels=label, logits=score))
-        return (entity_type_desc, quantity_desc, label), loss, tf.train.AdamOptimizer(learning_rate).minimize(loss), n_true
+        return (entity_type_desc, quantity_desc, label), loss, tf.train.AdamOptimizer(learning_rate).minimize(
+            loss), n_true
