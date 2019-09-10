@@ -1,8 +1,15 @@
+import subprocess
+
 import tensorflow as tf
 from tensor2tensor.layers.common_layers import flatten4d3d
 from tensor2tensor.models import transformer
 
 from model.config import *
+
+try:
+    _n_GPUs = str(subprocess.check_output(["nvidia-smi", "-L"])).count('UUID')
+except:
+    _n_GPUs = 0
 
 _hparams = transformer.transformer_base()
 _hparams.num_hidden_layers = 2
@@ -106,7 +113,11 @@ def get_model(word_embedding):
     entity_encoded = _description_encoder('entity_type_desc', word_embedding_t, entity_type_desc)
 
     # encode quantity desc
-    quantity_encoded = _description_encoder('quantity_desc', word_embedding_t, quantity_desc)
+    if (tf.test.is_gpu_available() and _n_GPUs > 1):
+        with tf.device('/device:GPU:1'):
+            quantity_encoded = _description_encoder('quantity_desc', word_embedding_t, quantity_desc)
+    else:
+        quantity_encoded = _description_encoder('quantity_desc', word_embedding_t, quantity_desc)
 
     # fusion
     with tf.variable_scope('fusion'):
