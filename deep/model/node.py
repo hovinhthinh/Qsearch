@@ -12,7 +12,7 @@ except:
     _n_GPUs = 0
 
 _hparams = transformer.transformer_base()
-_hparams.num_hidden_layers = 2
+_hparams.num_hidden_layers = 3
 
 _transformer_encoder = transformer.TransformerEncoder(_hparams, mode=tf.estimator.ModeKeys.TRAIN)
 
