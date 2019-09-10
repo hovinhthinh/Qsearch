@@ -5,6 +5,7 @@ from tensor2tensor.models import transformer
 from model.config import *
 
 _hparams = transformer.transformer_base()
+_hparams.num_hidden_layers = 2
 
 _transformer_encoder = transformer.TransformerEncoder(_hparams, mode=tf.estimator.ModeKeys.TRAIN)
 
