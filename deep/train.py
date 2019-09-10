@@ -24,7 +24,7 @@ init_op = tf.global_variables_initializer()
 saver = tf.train.Saver()
 
 print('start training')
-with tf.Session() as sess:
+with tf.Session(config=tf.ConfigProto(allow_soft_placement = True)) as sess:
     sess.run(init_op)
 
     best_lost = math.inf
