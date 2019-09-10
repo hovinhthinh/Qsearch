@@ -1,6 +1,12 @@
 import tensorflow as tf
+from tensor2tensor.layers.common_layers import flatten4d3d
+from tensor2tensor.models import transformer
 
 from model.config import *
+
+_hparams = transformer.transformer_base()
+
+_transformer_encoder = transformer.TransformerEncoder(_hparams, mode=tf.estimator.ModeKeys.TRAIN)
 
 
 def _attention(scope, input, masking, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
@@ -13,7 +19,8 @@ def _attention(scope, input, masking, attention_hidden_dim):  # input: [batch_si
 
         attention_weight = tf.tensordot(attention_weight, attention_weight_scale, axes=[2, 0])  # Shimaoka, ACL2017
 
-        attention_weight = tf.nn.softmax(tf.add(attention_weight, masking))
+        # attention_weight = tf.nn.softmax(tf.add(attention_weight, masking))
+        attention_weight = tf.nn.softmax(attention_weight)
 
         output = tf.reduce_sum(tf.multiply(input, tf.expand_dims(attention_weight, -1)), 1)
         return output
@@ -21,27 +28,31 @@ def _attention(scope, input, masking, attention_hidden_dim):  # input: [batch_si
 
 def _self_attention(scope, input, masking, hidden_dim, attention_dim):
     with tf.variable_scope(scope):
-        Q = tf.layers.dense(input, hidden_dim, name='query', use_bias=True)
-        K = tf.layers.dense(input, hidden_dim, name='key', use_bias=True)
-        V = tf.layers.dense(input, attention_dim, name='value', use_bias=True)
+        input = tf.expand_dims(input, 2)
+        output = _transformer_encoder({"inputs": input, "targets": 0, "target_space_id": 0})
+        return flatten4d3d(output[0])
 
-        attention = tf.matmul(Q, K, transpose_b=True)
-        # scale
-        attention = tf.divide(attention, tf.sqrt(tf.cast(tf.shape(K)[-1], dtype=tf.float32)))
-
-        # adder for attention mask
-        adder = tf.expand_dims(masking, 1)
-
-        attention = tf.add(attention, adder)
-        attention = tf.nn.softmax(attention)
-
-        return tf.matmul(attention, V)
+        # Q = tf.layers.dense(input, hidden_dim, name='query', use_bias=True)
+        # K = tf.layers.dense(input, hidden_dim, name='key', use_bias=True)
+        # V = tf.layers.dense(input, attention_dim, name='value', use_bias=True)
+        #
+        # attention = tf.matmul(Q, K, transpose_b=True)
+        # # scale
+        # attention = tf.divide(attention, tf.sqrt(tf.cast(tf.shape(K)[-1], dtype=tf.float32)))
+        #
+        # # adder for attention mask
+        # adder = tf.expand_dims(masking, 1)
+        #
+        # attention = tf.add(attention, adder)
+        # attention = tf.nn.softmax(attention)
+        #
+        # return tf.matmul(attention, V)
 
 
 def _description_encoder(scope, word_embedding_t, description):
     with tf.variable_scope(scope):
         entity_type_emb = tf.nn.embedding_lookup(word_embedding_t, description)
-
+        entity_type_emb = tf.layers.dense(entity_type_emb, _hparams.hidden_size, name='project', use_bias=True)
         masking = (1.0 - tf.cast(tf.greater(description, 0), tf.float32)) * -10000.0  # Ignore padding, Like BERT
 
         # bi-lstm

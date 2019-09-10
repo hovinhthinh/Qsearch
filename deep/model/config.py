@@ -1,4 +1,4 @@
-embedding_size = 50  # 50, 100, 200, 300
+embedding_size = 300  # 50, 100, 200, 300
 
 attention_hidden_dim = 64
 attention_output_dim = 128

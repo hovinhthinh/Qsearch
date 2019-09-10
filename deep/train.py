@@ -11,6 +11,7 @@ word_dict, embedding = get_glove()  # if word not in dict then index should be l
 ##########
 data_path = './data'
 training_data = get_training_data(os.path.join(data_path, 'train.gz'))
+# training_data = []
 
 (entity_type_desc, quantity_desc, label), loss, optimizer, n_true = get_model(embedding)
 
@@ -29,6 +30,7 @@ with tf.Session() as sess:
     best_lost = math.inf
     for epoch in range(max_num_epoches):
         data = sample_epoch_training_data(training_data)
+        # data = [('asian country', 'population', 1)]
         et, qt, ls = convert_input_to_tensor(data, word_dict, embedding)
 
         n_chunk = (len(ls) - 1) // batch_size + 1
