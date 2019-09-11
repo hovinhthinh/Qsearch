@@ -18,7 +18,7 @@ _transformer_encoder_train = transformer.TransformerEncoder(_hparams, mode=tf.es
 _transformer_encoder_predict = transformer.TransformerEncoder(_hparams, mode=tf.estimator.ModeKeys.PREDICT)
 
 
-def _attention(scope, input, masking, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
+def _attention(scope, input, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
     with tf.variable_scope(scope):
         attention_weight = tf.layers.dense(input, attention_hidden_dim, name='weight', use_bias=True,
                                            activation=tf.tanh)
@@ -28,14 +28,13 @@ def _attention(scope, input, masking, attention_hidden_dim):  # input: [batch_si
 
         attention_weight = tf.tensordot(attention_weight, attention_weight_scale, axes=[2, 0])  # Shimaoka, ACL2017
 
-        # attention_weight = tf.nn.softmax(tf.add(attention_weight, masking))
         attention_weight = tf.nn.softmax(attention_weight)
 
         output = tf.reduce_sum(tf.multiply(input, tf.expand_dims(attention_weight, -1)), 1)
         return output
 
 
-def _self_attention(scope, input, masking, hidden_dim, attention_dim, mode):
+def _self_attention(scope, input, mode):
     with tf.variable_scope(scope):
         input = tf.expand_dims(input, 2)
         encoder = None
@@ -48,52 +47,16 @@ def _self_attention(scope, input, masking, hidden_dim, attention_dim, mode):
         output = encoder({"inputs": input, "targets": 0, "target_space_id": 0})
         return flatten4d3d(output[0])
 
-        # Q = tf.layers.dense(input, hidden_dim, name='query', use_bias=True)
-        # K = tf.layers.dense(input, hidden_dim, name='key', use_bias=True)
-        # V = tf.layers.dense(input, attention_dim, name='value', use_bias=True)
-        #
-        # attention = tf.matmul(Q, K, transpose_b=True)
-        # # scale
-        # attention = tf.divide(attention, tf.sqrt(tf.cast(tf.shape(K)[-1], dtype=tf.float32)))
-        #
-        # # adder for attention mask
-        # adder = tf.expand_dims(masking, 1)
-        #
-        # attention = tf.add(attention, adder)
-        # attention = tf.nn.softmax(attention)
-        #
-        # return tf.matmul(attention, V)
-
 
 def _description_encoder(scope, word_embedding_t, description, mode):
     with tf.variable_scope(scope):
         entity_type_emb = tf.nn.embedding_lookup(word_embedding_t, description)
         entity_type_emb = tf.layers.dense(entity_type_emb, _hparams.hidden_size, name='project', use_bias=True)
-        masking = (1.0 - tf.cast(tf.greater(description, 0), tf.float32)) * -10000.0  # Ignore padding, Like BERT
 
-        # bi-lstm
-        # entity_forward_cell = tf.nn.rnn_cell.LSTMCell(lstm_hidden_dim)
-        # entity_backward_cell = tf.nn.rnn_cell.LSTMCell(lstm_hidden_dim)
-        # (output_fw, output_bw), _ = (
-        #     tf.nn.bidirectional_dynamic_rnn(
-        #         entity_forward_cell,
-        #         entity_backward_cell,
-        #         entity_type_emb,
-        #         sequence_length=tf.reduce_sum(masking, 1),
-        #         dtype=tf.float32
-        #     )
-        # )
-        # mixing_output = tf.concat([output_fw, output_bw], 2)
-
-        # entity_type_emb = tf.multiply(entity_type_emb, tf.tensordot(masking,
-        #                                                             tf.constant([1 for i in range(embedding_size)],
-        #                                                                         dtype=tf.float32), axes=0))
-
-        transformer_output = _self_attention('self_attention', entity_type_emb, masking, attention_hidden_dim,
-                                        attention_output_dim, mode)
+        transformer_output = _self_attention('self_attention', entity_type_emb, mode)
 
         # attention
-        entity_encoded = _attention('attention', transformer_output, masking, attention_hidden_dim)
+        entity_encoded = _attention('attention', transformer_output, attention_hidden_dim)
 
         # feed forward
         return tf.layers.dense(entity_encoded, feed_forward_dim, name='feed_forward', use_bias=True)
