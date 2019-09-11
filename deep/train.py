@@ -9,12 +9,11 @@ print("GPU Available: ", tf.test.is_gpu_available())
 
 word_dict, embedding = get_glove()  # if word not in dict then index should be len(embedding)
 
-##########
 data_path = './data'
 training_data = get_training_data(os.path.join(data_path, 'train.gz'))
 # training_data = []
 
-(entity_type_desc, quantity_desc, label), loss, optimizer, n_true = get_model(embedding)
+(entity_type_desc, quantity_desc, label), loss, optimizer, n_true, _ = get_model(embedding)
 
 # print('nodes:')
 # for n in tf.get_default_graph().as_graph_def().node:
