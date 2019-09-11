@@ -23,8 +23,7 @@ def _attention(scope, input, attention_hidden_dim):  # input: [batch_size, n_wor
         attention_weight = tf.layers.dense(input, attention_hidden_dim, name='weight', use_bias=True,
                                            activation=tf.tanh)
 
-        attention_weight_scale = tf.get_variable(dtype=tf.float32, shape=[attention_hidden_dim],
-                                                 name='weight_scale')
+        attention_weight_scale = tf.get_variable(dtype=tf.float32, shape=[attention_hidden_dim], name='weight_scale')
 
         attention_weight = tf.tensordot(attention_weight, attention_weight_scale, axes=[2, 0])  # Shimaoka, ACL2017
 
@@ -59,7 +58,7 @@ def _description_encoder(scope, word_embedding_t, description, mode):
         entity_encoded = _attention('attention', transformer_output, attention_hidden_dim)
 
         # feed forward
-        return tf.layers.dense(entity_encoded, feed_forward_dim, name='feed_forward', use_bias=True)
+        return tf.layers.dense(entity_encoded, feed_forward_dim, name='feed_forward', use_bias=True, activation=tf.tanh)
 
 
 def get_model(word_embedding, mode):
