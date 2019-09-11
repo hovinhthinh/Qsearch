@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 
 from model.data import *
 from model.node import get_model
@@ -29,7 +30,22 @@ def get_score(entity_desc_text, quantity_desc_text):
     })[0][0]
 
 
+def get_best_entity_desc_text(entity_desc_text_arr, quantity_desc_text):
+    data = []
+    for entity_desc_text in entity_desc_text_arr:
+        data.append((entity_desc_text, quantity_desc_text))
+    et, qt, _ = convert_input_to_tensor(data, word_dict)
+    p = sess.run([prob], feed_dict={
+        entity_type_desc: et,
+        quantity_desc: qt
+    })[0]
+
+    return np.argmax(p), p
+
+
 if __name__ == "__main__":
     print(get_score('country', 'population'))
     print(get_score('european country', 'number of cities'))
     print(get_score('hybrid car', 'salary'))
+
+    print(get_best_entity_desc_text(['vehicle', 'manufacture'], 'annual fuel cost'))
