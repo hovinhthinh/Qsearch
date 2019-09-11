@@ -30,7 +30,7 @@ with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
 
     best_lost = math.inf
     for epoch in range(max_num_epoches):
-        with timer.elap('epoch %d' % (epoch)):
+        with timer.elap('epoch_%d' % epoch):
             data = sample_epoch_training_data(training_data)
             # data = [('asian country', 'population', 1)]
             et, qt, ls = convert_input_to_tensor(data, word_dict)
