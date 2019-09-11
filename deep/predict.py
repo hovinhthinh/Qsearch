@@ -43,8 +43,5 @@ def get_best_entity_desc_text(entity_desc_text_arr, quantity_desc_text):
 
 
 if __name__ == "__main__":
-    print(get_score('country', 'population'))
-    print(get_score('european country', 'number of cities'))
-    print(get_score('hybrid car', 'salary'))
-
-    print(get_best_entity_desc_text(['vehicle', 'manufacture'], 'annual fuel cost'))
+    print(get_best_entity_desc_text(['team', 'stadium', 'dog'], 'capacity'))
+    print(get_best_entity_desc_text(['team', 'stadium', 'dog'], 'number of foots'))
