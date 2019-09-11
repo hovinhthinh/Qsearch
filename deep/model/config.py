@@ -4,7 +4,7 @@ attention_hidden_dim = 64
 attention_output_dim = 128
 feed_forward_dim = 64
 
-batch_size = 100
+batch_size = 128
 learning_rate = 0.001
 
 max_num_epoches = 100
