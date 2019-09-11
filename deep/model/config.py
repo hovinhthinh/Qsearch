@@ -1,10 +1,9 @@
 embedding_size = 300  # 50, 100, 200, 300
 
 attention_hidden_dim = 64
-attention_output_dim = 128
 feed_forward_dim = 64
 
-batch_size = 128
+batch_size = 64
 learning_rate = 0.001
 
 max_num_epoches = 100
