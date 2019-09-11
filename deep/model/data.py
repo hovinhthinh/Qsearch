@@ -35,7 +35,7 @@ _yago_type = None
 _entity_to_types = None
 
 
-def load_yago_type():
+def _load_yago_type():
     global _yago_type
     _yago_type = []
     global _entity_to_types
@@ -55,17 +55,18 @@ def load_yago_type():
         _yago_type.append(type)
 
 
+# first index is 'padding' token, len(word_dict) + 1 is 'unknown'
 def get_glove():
     _glove_path = os.path.join(glove_path, 'glove.6B.' + str(embedding_size) + 'd.txt')
 
     word_dict = {}
-    embedding = [[0.0 for i in range(embedding_size)]]  # first index is 'padding' token, len(embedding) is 'unknown'
+    embedding = []
 
     print('loading Glove from %s' % _glove_path)
     with open(_glove_path) as f:
         for line in f:
             arr = line.strip().split()
-            word_dict[arr[0]] = len(word_dict)
+            word_dict[arr[0]] = len(word_dict) + 1
             embedding.append([float(v) for v in arr[1:]])
 
     return word_dict, np.asarray(embedding, dtype=np.float32)
@@ -85,7 +86,7 @@ def get_training_data(input_path):
 def sample_epoch_training_data(training_data):
     # convert training_data -> triples [[entity_type_desc, quantity_desc, label (0/1)]]
     if _yago_type is None:
-        load_yago_type()
+        _load_yago_type()
 
     n_pos = 0
     n_neg = 0
@@ -100,7 +101,7 @@ def sample_epoch_training_data(training_data):
     return samples
 
 
-def convert_input_to_tensor(data, word_dict, embedding):
+def convert_input_to_tensor(data, word_dict):
     entity_type_desc = []
     quantity_desc = []
     label = []
@@ -112,7 +113,7 @@ def convert_input_to_tensor(data, word_dict, embedding):
         etd_decoded = []
         for i in range(max_entity_type_desc_len):
             if i < len(etd):
-                etd_decoded.append(word_dict[etd[i]] if etd[i] in word_dict else len(embedding))
+                etd_decoded.append(word_dict[etd[i]] if etd[i] in word_dict else len(word_dict) + 1)
             else:
                 etd_decoded.append(0)
         entity_type_desc.append(etd_decoded)
@@ -122,7 +123,7 @@ def convert_input_to_tensor(data, word_dict, embedding):
         qd_decoded = []
         for i in range(max_quantity_desc_len):
             if i < len(qd):
-                qd_decoded.append(word_dict[qd[i]] if qd[i] in word_dict else len(embedding))
+                qd_decoded.append(word_dict[qd[i]] if qd[i] in word_dict else len(word_dict) + 1)
             else:
                 qd_decoded.append(0)
         quantity_desc.append(qd_decoded)

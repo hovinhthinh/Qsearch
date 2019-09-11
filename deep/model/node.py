@@ -12,7 +12,7 @@ except:
     _n_GPUs = 0
 
 _hparams = transformer.transformer_base()
-_hparams.num_hidden_layers = 3
+_hparams.num_hidden_layers = 6
 
 _transformer_encoder = transformer.TransformerEncoder(_hparams, mode=tf.estimator.ModeKeys.TRAIN)
 
@@ -96,8 +96,9 @@ def get_model(word_embedding):
     # constants
     with tf.variable_scope('input'):
         word_embedding_t = tf.constant(word_embedding, name='word_embedding', dtype=tf.float32)
+        padding_embedding = tf.get_variable('padding_embedding', shape=[1, embedding_size], dtype=tf.float32)
         unknown_embedding = tf.get_variable('unknown_embedding', shape=[1, embedding_size], dtype=tf.float32)
-        word_embedding_t = tf.concat([word_embedding_t, unknown_embedding], axis=0)
+        word_embedding_t = tf.concat([padding_embedding, word_embedding_t, unknown_embedding], axis=0)
 
     # placeholders
     with tf.variable_scope('placeholders'):

@@ -31,7 +31,7 @@ with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
     for epoch in range(max_num_epoches):
         data = sample_epoch_training_data(training_data)
         # data = [('asian country', 'population', 1)]
-        et, qt, ls = convert_input_to_tensor(data, word_dict, embedding)
+        et, qt, ls = convert_input_to_tensor(data, word_dict)
 
         n_chunk = (len(ls) - 1) // batch_size + 1
         batches = [np.array_split(et, n_chunk), np.array_split(qt, n_chunk), np.array_split(ls, n_chunk)]
