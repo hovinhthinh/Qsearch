@@ -84,11 +84,7 @@ def get_model(word_embedding, mode):
     entity_encoded = _description_encoder('entity_type_desc', word_embedding_t, entity_type_desc, mode)
 
     # encode quantity desc
-    if tf.test.is_gpu_available() and _n_GPUs > 1:
-        with tf.device('/device:GPU:1'):
-            quantity_encoded = _description_encoder('quantity_desc', word_embedding_t, quantity_desc, mode)
-    else:
-        quantity_encoded = _description_encoder('quantity_desc', word_embedding_t, quantity_desc, mode)
+    quantity_encoded = _description_encoder('quantity_desc', word_embedding_t, quantity_desc, mode)
 
     # fusion
     with tf.variable_scope('fusion'):
@@ -97,8 +93,16 @@ def get_model(word_embedding, mode):
 
     # optimizer
     with tf.variable_scope('optimizer'):
-        n_true = tf.reduce_sum(tf.abs(tf.cast(tf.less(score, 0), tf.float32) - label))
-        loss = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(labels=label, logits=score))
-        prob = tf.sigmoid(score)
-        return (entity_type_desc, quantity_desc, label), loss, tf.train.AdamOptimizer(learning_rate).minimize(
-            loss), n_true, prob
+        if tf.test.is_gpu_available() and _n_GPUs > 1:
+            with tf.device('/device:GPU:1'):
+                n_true = tf.reduce_sum(tf.abs(tf.cast(tf.less(score, 0), tf.float32) - label))
+                loss = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(labels=label, logits=score))
+                prob = tf.sigmoid(score)
+                return (entity_type_desc, quantity_desc, label), loss, tf.train.AdamOptimizer(learning_rate).minimize(
+                    loss), n_true, prob
+        else:
+            n_true = tf.reduce_sum(tf.abs(tf.cast(tf.less(score, 0), tf.float32) - label))
+            loss = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(labels=label, logits=score))
+            prob = tf.sigmoid(score)
+            return (entity_type_desc, quantity_desc, label), loss, tf.train.AdamOptimizer(learning_rate).minimize(
+                loss), n_true, prob
