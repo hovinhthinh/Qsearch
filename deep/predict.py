@@ -9,7 +9,7 @@ word_dict, embedding = get_glove()  # if word not in dict then index should be l
 
 data_path = './data'
 
-(entity_type_desc, quantity_desc, _), _, _, _, prob = get_model(embedding)
+(entity_type_desc, quantity_desc, _), _, _, _, prob = get_model(embedding, tf.estimator.ModeKeys.PREDICT)
 
 init_op = tf.global_variables_initializer()
 

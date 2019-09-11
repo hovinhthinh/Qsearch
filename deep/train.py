@@ -13,7 +13,7 @@ data_path = './data'
 training_data = get_training_data(os.path.join(data_path, 'train.gz'))
 # training_data = []
 
-(entity_type_desc, quantity_desc, label), loss, optimizer, n_true, _ = get_model(embedding)
+(entity_type_desc, quantity_desc, label), loss, optimizer, n_true, _ = get_model(embedding, tf.estimator.ModeKeys.TRAIN)
 
 # print('nodes:')
 # for n in tf.get_default_graph().as_graph_def().node:

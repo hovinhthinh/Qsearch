@@ -14,7 +14,8 @@ except:
 _hparams = transformer.transformer_base()
 _hparams.num_hidden_layers = 6
 
-_transformer_encoder = transformer.TransformerEncoder(_hparams, mode=tf.estimator.ModeKeys.TRAIN)
+_transformer_encoder_train = transformer.TransformerEncoder(_hparams, mode=tf.estimator.ModeKeys.TRAIN)
+_transformer_encoder_predict = transformer.TransformerEncoder(_hparams, mode=tf.estimator.ModeKeys.PREDICT)
 
 
 def _attention(scope, input, masking, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
@@ -34,10 +35,17 @@ def _attention(scope, input, masking, attention_hidden_dim):  # input: [batch_si
         return output
 
 
-def _self_attention(scope, input, masking, hidden_dim, attention_dim):
+def _self_attention(scope, input, masking, hidden_dim, attention_dim, mode):
     with tf.variable_scope(scope):
         input = tf.expand_dims(input, 2)
-        output = _transformer_encoder({"inputs": input, "targets": 0, "target_space_id": 0})
+        encoder = None
+        if mode == tf.estimator.ModeKeys.TRAIN:
+            encoder = _transformer_encoder_train
+        elif mode == tf.estimator.ModeKeys.PREDICT:
+            encoder = _transformer_encoder_predict
+        else:
+            raise Exception('invalid mode')
+        output = encoder({"inputs": input, "targets": 0, "target_space_id": 0})
         return flatten4d3d(output[0])
 
         # Q = tf.layers.dense(input, hidden_dim, name='query', use_bias=True)
@@ -57,7 +65,7 @@ def _self_attention(scope, input, masking, hidden_dim, attention_dim):
         # return tf.matmul(attention, V)
 
 
-def _description_encoder(scope, word_embedding_t, description):
+def _description_encoder(scope, word_embedding_t, description, mode):
     with tf.variable_scope(scope):
         entity_type_emb = tf.nn.embedding_lookup(word_embedding_t, description)
         entity_type_emb = tf.layers.dense(entity_type_emb, _hparams.hidden_size, name='project', use_bias=True)
@@ -81,17 +89,17 @@ def _description_encoder(scope, word_embedding_t, description):
         #                                                             tf.constant([1 for i in range(embedding_size)],
         #                                                                         dtype=tf.float32), axes=0))
 
-        mixing_output = _self_attention('self_attention', entity_type_emb, masking, attention_hidden_dim,
-                                        attention_output_dim)
+        transformer_output = _self_attention('self_attention', entity_type_emb, masking, attention_hidden_dim,
+                                        attention_output_dim, mode)
 
         # attention
-        entity_encoded = _attention('attention', mixing_output, masking, attention_hidden_dim)
+        entity_encoded = _attention('attention', transformer_output, masking, attention_hidden_dim)
 
         # feed forward
         return tf.layers.dense(entity_encoded, feed_forward_dim, name='feed_forward', use_bias=True)
 
 
-def get_model(word_embedding):
+def get_model(word_embedding, mode):
     print('building model')
     # constants
     with tf.variable_scope('input'):
@@ -111,14 +119,14 @@ def get_model(word_embedding):
         label = tf.placeholder(dtype=tf.float32, name='label', shape=[None])
     # graph
     # encode entity type
-    entity_encoded = _description_encoder('entity_type_desc', word_embedding_t, entity_type_desc)
+    entity_encoded = _description_encoder('entity_type_desc', word_embedding_t, entity_type_desc, mode)
 
     # encode quantity desc
     if tf.test.is_gpu_available() and _n_GPUs > 1:
         with tf.device('/device:GPU:1'):
-            quantity_encoded = _description_encoder('quantity_desc', word_embedding_t, quantity_desc)
+            quantity_encoded = _description_encoder('quantity_desc', word_embedding_t, quantity_desc, mode)
     else:
-        quantity_encoded = _description_encoder('quantity_desc', word_embedding_t, quantity_desc)
+        quantity_encoded = _description_encoder('quantity_desc', word_embedding_t, quantity_desc, mode)
 
     # fusion
     with tf.variable_scope('fusion'):
