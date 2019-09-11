@@ -1,5 +1,4 @@
 import tensorflow as tf
-import numpy as np
 
 from model.data import *
 from model.node import get_model
