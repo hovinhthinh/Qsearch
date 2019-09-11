@@ -8,7 +8,7 @@ batch_size = 100
 learning_rate = 0.001
 
 max_num_epoches = 100
-save_model_frequency = 10
+save_model_frequency = 1
 
 max_entity_type_desc_len = 10
 max_quantity_desc_len = 10
