@@ -20,7 +20,7 @@ _transformer_encoder_predict = transformer.TransformerEncoder(_hparams, mode=tf.
 
 def _attention(scope, input, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
     with tf.variable_scope(scope):
-        attention_weight = tf.layers.dense(input, attention_hidden_dim, name='weight', use_bias=True,
+        attention_weight = tf.layers.dense(input, attention_hidden_dim, name='weight', use_bias=False,
                                            activation=tf.tanh)
 
         attention_weight_scale = tf.get_variable(dtype=tf.float32, shape=[attention_hidden_dim], name='weight_scale')
@@ -58,7 +58,8 @@ def _description_encoder(scope, word_embedding_t, description, mode):
         entity_encoded = _attention('attention', transformer_output, attention_hidden_dim)
 
         # feed forward
-        return tf.layers.dense(entity_encoded, feed_forward_dim, name='feed_forward', use_bias=True, activation=tf.tanh)
+        return tf.layers.dense(entity_encoded, feed_forward_dim, name='feed_forward', use_bias=True,
+                               activation=tf.nn.leaky_relu)
 
 
 def get_model(word_embedding, mode):
@@ -88,12 +89,12 @@ def get_model(word_embedding, mode):
 
     # fusion
     with tf.variable_scope('fusion'):
-        # fusion_bias = tf.get_variable('fusion_bias', shape=[], dtype=tf.float32)
-        # score = tf.reduce_sum(tf.multiply(entity_encoded, quantity_encoded), 1) + fusion_bias
-        both_encoded = tf.concat([entity_encoded, quantity_encoded], axis=-1)
-        both_encoded = tf.layers.dense(both_encoded, feed_forward_dim, name='concat', use_bias=True, activation=tf.tanh)
-        score = tf.layers.dense(both_encoded, 1, name='feed_forward', use_bias=True)
-        score = tf.squeeze(score, axis=[1])
+        fusion_bias = tf.get_variable('fusion_bias', shape=[], dtype=tf.float32)
+        score = tf.reduce_sum(tf.multiply(entity_encoded, quantity_encoded), 1) + fusion_bias
+        # both_encoded = tf.concat([entity_encoded, quantity_encoded], axis=-1)
+        # both_encoded = tf.layers.dense(both_encoded, feed_forward_dim, name='concat', use_bias=True, activation=tf.tanh)
+        # score = tf.layers.dense(both_encoded, 1, name='feed_forward', use_bias=True)
+        # score = tf.squeeze(score, axis=[1])
 
     # optimizer
     with tf.variable_scope('optimizer'):
