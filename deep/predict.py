@@ -1,3 +1,5 @@
+import sys
+
 import tensorflow as tf
 
 from model.data import *
@@ -43,5 +45,10 @@ def get_best_entity_desc_text(entity_desc_text_arr, quantity_desc_text):
 
 
 if __name__ == "__main__":
-    print(get_best_entity_desc_text(['team', 'stadium', 'dog'], 'capacity'))
-    print(get_best_entity_desc_text(['team', 'stadium', 'dog'], 'number of foots'))
+    # print(get_best_entity_desc_text(['team', 'stadium', 'dog'], 'capacity'))
+    # print(get_best_entity_desc_text(['team', 'stadium', 'dog'], 'number of foots'))
+    while True:
+        # read sentence
+        line = sys.stdin.readline().strip()
+        d = json.loads(line)  # {'entities_desc': [<EDS>], 'quantity_desc': '<QD>'}
+        print("%d\t%.9f" % get_best_entity_desc_text(d["entities_desc"], d['quantity_desc']))
