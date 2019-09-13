@@ -52,4 +52,4 @@ if __name__ == "__main__":
         line = sys.stdin.readline().strip()
         d = json.loads(line)  # {'entities_desc': [<EDS>], 'quantity_desc': '<QD>'}
         out = get_best_entity_desc_text(d["entities_desc"], d['quantity_desc'])
-        print("%s" % json.dumps({'best_index': out[0], 'scores': out[1].tolist()}))
+        print("%s" % json.dumps({'best_index': out[0].item(), 'scores': out[1].tolist()}))
