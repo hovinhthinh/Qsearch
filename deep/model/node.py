@@ -21,7 +21,7 @@ _transformer_encoder_predict = transformer.TransformerEncoder(_hparams, mode=tf.
 def _attention(scope, input, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
     with tf.variable_scope(scope):
         attention_weight = tf.layers.dense(input, attention_hidden_dim, name='weight', use_bias=False,
-                                           activation=tf.relu)
+                                           activation=tf.nn.relu)
 
         attention_weight_scale = tf.get_variable(dtype=tf.float32, shape=[attention_hidden_dim], name='weight_scale')
 
