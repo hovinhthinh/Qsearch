@@ -89,12 +89,13 @@ def get_model(word_embedding, mode):
 
     # fusion
     with tf.variable_scope('fusion'):
-        # fusion_bias = tf.get_variable('fusion_bias', shape=[], dtype=tf.float32)
+        fusion_bias = tf.get_variable('fusion_bias', shape=[], dtype=tf.float32)
+
         # score = tf.reduce_sum(tf.multiply(entity_encoded, quantity_encoded), 1) + fusion_bias
         both_encoded = tf.concat([entity_encoded, quantity_encoded], axis=-1)
         both_encoded = tf.layers.dense(both_encoded, feed_forward_dim, name='concat', use_bias=True, activation=tf.nn.relu)
-        score = tf.layers.dense(both_encoded, 1, name='feed_forward', use_bias=True)
-        score = tf.squeeze(score, axis=[1])
+        fusion_scale = tf.get_variable(dtype=tf.float32, shape=[feed_forward_dim], name='fusion_scale')
+        score = tf.reduce_sum(tf.multiply(both_encoded, fusion_scale), 1) + fusion_bias
 
     # optimizer
     with tf.variable_scope('optimizer'):
