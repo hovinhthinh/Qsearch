@@ -29,7 +29,7 @@ def _attention(scope, input, attention_hidden_dim):  # input: [batch_size, n_wor
 
         attention_weight = tf.nn.softmax(attention_weight)
 
-        output = tf.reduce_sum(tf.multiply(input, tf.expand_dims(attention_weight, -1)), 1)
+        output = tf.nn.relu(tf.reduce_sum(tf.multiply(input, tf.expand_dims(attention_weight, -1)), 1))
         return output
 
 
