@@ -1,7 +1,7 @@
 embedding_size = 300  # 50, 100, 200, 300
 
-attention_hidden_dim = 64
-feed_forward_dim = 64
+feed_forward_dim_medium = 128
+feed_forward_dim_small = 64
 
 batch_size = 64
 learning_rate = 0.001
