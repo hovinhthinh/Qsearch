@@ -94,7 +94,7 @@ def get_model(word_embedding, mode):
         # score = tf.reduce_sum(tf.multiply(entity_encoded, quantity_encoded), 1) + fusion_bias
         both_encoded = tf.concat([entity_encoded, quantity_encoded], axis=-1)
         both_encoded = tf.layers.dense(both_encoded, feed_forward_dim_medium, name='feed_forward', use_bias=True, activation=tf.nn.relu)
-        both_encoded = tf.layers.dense(both_encoded, feed_forward_dim_small, name='feed_forward', use_bias=True, activation=tf.nn.relu)
+        both_encoded = tf.layers.dense(both_encoded, feed_forward_dim_small, name='feed_forward_2', use_bias=True, activation=tf.nn.relu)
         fusion_scale = tf.get_variable(dtype=tf.float32, shape=[feed_forward_dim_small], name='fusion_scale')
         score = tf.reduce_sum(tf.multiply(both_encoded, fusion_scale), 1) + fusion_bias
 
