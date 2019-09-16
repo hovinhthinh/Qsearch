@@ -1,8 +1,11 @@
 package model.table;
 
+import java.util.ArrayList;
+
 public class Cell {
     public String text; // surface text
-    public EntityLink[] entityLinks;
+    public ArrayList<EntityLink> entityLinks;
+    public ArrayList<QuantityLink> quantityLinks;
 
     private transient String disambiguatedText = null;
 
@@ -16,4 +19,25 @@ public class Cell {
         }
         return disambiguatedText;
     }
+
+    // returns null if either:
+    // - has no or more than 1 entity links
+    // - the surface text of cell has extra words bot belonging to the entity
+    public EntityLink getRepresentativeEntityLink() {
+        if (entityLinks.size() != 1) {
+            return null;
+        }
+        return text.equals(entityLinks.get(0).text) ? entityLinks.get(0) : null;
+    }
+
+    // returns null if either:
+    // - has no or more than 1 quantity links
+    // - the surface text of cell has extra words bot belonging to the entity
+    public QuantityLink getRepresentativeQuantityLink() {
+        if (quantityLinks.size() != 1) {
+            return null;
+        }
+        return text.equals(quantityLinks.get(0).text) ? quantityLinks.get(0) : null;
+    }
+
 }
