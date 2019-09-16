@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 public class WIKIPEDIA_DeepTaggingPipeline {
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
-                new WIKIPEDIA_EntityTaggingNode(),
                 new EntityFilteringNode(),
                 new QuantityTaggingNode(),
                 new QuantityFilteringNode(),
