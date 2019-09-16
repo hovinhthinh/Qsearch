@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 // Read from TabEL (entity links are from original wikipedia)
 public class WIKIPEDIA {
@@ -18,13 +19,14 @@ public class WIKIPEDIA {
         cell.text = json.getString("text");
         JSONArray links = json.getJSONArray("surfaceLinks");
 
-        cell.entityLinks = new EntityLink[links.length()];
+        cell.entityLinks = new ArrayList<>();
         for (int i = 0; i < links.length(); ++i) {
-            cell.entityLinks[i] = new EntityLink();
+            EntityLink el = new EntityLink();
             JSONObject linkI = links.getJSONObject(i);
 
-            cell.entityLinks[i].text = linkI.getString("surface");
-            cell.entityLinks[i].target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + linkI.getJSONObject("target").getString("title");
+            el.text = linkI.getString("surface");
+            el.target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + linkI.getJSONObject("target").getString("title");
+            cell.entityLinks.add(el);
         }
 
         return cell;
