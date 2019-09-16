@@ -1,4 +1,4 @@
-package model.table;
+package model.table.link;
 
 public class EntityLink {
     public String target; // target # e.g., YAGO:Cristiano_Ronaldo

@@ -1,5 +1,8 @@
 package model.table;
 
+import model.table.link.EntityLink;
+import model.table.link.QuantityLink;
+
 import java.util.ArrayList;
 
 public class Cell {

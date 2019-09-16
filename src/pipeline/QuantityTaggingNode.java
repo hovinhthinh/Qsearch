@@ -2,10 +2,9 @@ package pipeline;
 
 import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
+import model.table.Cell;
 import model.table.Table;
-import model.text.Sentence;
-import model.text.tag.QuantityTag;
-import model.text.tag.Tag;
+import model.table.link.QuantityLink;
 import nlp.NLP;
 import nlp.Static;
 
@@ -17,8 +16,6 @@ import java.util.ArrayList;
 // TODO: Problem: "Paris still has more than 2,000 troops deployed in Mali .": troops are in both quantity and context.
 // TODO: Completed in 2010 , the Zifeng Tower in Nanjing has an architectural height of 1,476 feet ( 450 meters ) and is occupied to a height of 1,039 feet ( 316.6 meters ) .
 // TODO: In 2013 , SBB Cargo had 3,061 employees and achieved consolidated sales of CHF 953 million .
-
-@Deprecated
 public class QuantityTaggingNode implements TaggingNode {
     public static void main(String[] args) {
         String sentStr = "Neymar to earn $ 916k a week after record transfer .";
@@ -31,49 +28,26 @@ public class QuantityTaggingNode implements TaggingNode {
         }
     }
 
-    private void tagSentence(Sentence sent) {
-        sent.quantityTags = new ArrayList<>();
-        String sentStr = sent.toString();
-        for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(sentStr, true)) {
+    // TODO:
+    // - We may need to extends units from the header.
+    // - We also may need to add dumpy data: '$916k' - > 'This is $916k.'
+    private void tagCell(Cell cell) {
+        cell.quantityLinks = new ArrayList<>();
+        for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(cell.text, true)) {
             if (span.object instanceof Quantity) {
-                String qStr = sentStr.substring(span.start, span.end).trim();
-                String passed = sentStr.substring(0, span.start).trim();
-                int startToken = 0;
-                if (!passed.isEmpty()) {
-                    startToken = NLP.splitSentence(passed).size();
-                    // FIX_FOR:"NFor further information , please contact : Virtue PR & Marketing Communications P.O
-                    // Box : 191931 Dubai , United Arab Emirates Tel : +97144508835"
-                    if (sentStr.charAt(span.start) != ' ' && sentStr.charAt(span.start - 1) != ' ') {
-                        --startToken;
-                    }
-                }
-                int endToken = startToken + NLP.splitSentence(qStr).size();
                 Quantity q = (Quantity) span.object;
-                // Check if there is no overlap tag.
-                boolean flag = true;
-                loop:
-                for (ArrayList tagList : new ArrayList[]{sent.entityTags, sent.timeTags}) {
-                    for (Object o : tagList) {
-                        Tag et = (Tag) o;
-                        if (et.beginIndex < endToken && startToken < et.endIndex) {
-                            flag = false;
-                            break loop;
-                        }
-                    }
-                }
-                if (flag) {
-                    sent.quantityTags.add(
-                            new QuantityTag(startToken, endToken, q.value, NLP.stripSentence(q.units), q.bound));
-                }
+                cell.quantityLinks.add(new QuantityLink(cell.text.substring(span.start, span.end), q.value, NLP.stripSentence(q.units), q.bound));
             }
         }
     }
 
     @Override
     public boolean process(Table table) {
-//        for (Sentence sent : table.sentences) {
-//            tagSentence(sent);
-//        }
-        return false;
+        for (Cell[] row : table.data) {
+            for (Cell c : row) {
+                tagCell(c);
+            }
+        }
+        return true;
     }
 }

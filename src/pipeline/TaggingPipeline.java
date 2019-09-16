@@ -14,9 +14,7 @@ public class TaggingPipeline {
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
                 new EntityTaggingNode(),
-                new EntityFilteringNode(),
                 new QuantityTaggingNode(),
-                new QuantityFilteringNode(),
                 new DeepColumnScoringNode(),
                 new PostFilteringNode()
         );

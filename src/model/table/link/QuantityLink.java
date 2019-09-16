@@ -1,4 +1,4 @@
-package model.table;
+package model.table.link;
 
 import model.quantity.Quantity;
 

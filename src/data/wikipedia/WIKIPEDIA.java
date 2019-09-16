@@ -1,7 +1,7 @@
 package data.wikipedia;
 
 import model.table.Cell;
-import model.table.EntityLink;
+import model.table.link.EntityLink;
 import model.table.Table;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,6 +11,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 // Read from TabEL (entity links are from original wikipedia)
+// Entity Linking and Quantity Columns are already detected.
 public class WIKIPEDIA {
 
     // Input is from "/GW/D5data/hvthinh/TabEL/tables.json.gz"
