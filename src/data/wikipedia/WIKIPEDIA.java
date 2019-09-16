@@ -1,7 +1,7 @@
 package data.wikipedia;
 
 import model.table.Cell;
-import model.table.Link;
+import model.table.EntityLink;
 import model.table.Table;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import java.net.URLEncoder;
 
+// Read from TabEL (entity links are from original wikipedia)
 public class WIKIPEDIA {
 
     // Input is from "/GW/D5data/hvthinh/TabEL/tables.json.gz"
@@ -17,13 +18,13 @@ public class WIKIPEDIA {
         cell.text = json.getString("text");
         JSONArray links = json.getJSONArray("surfaceLinks");
 
-        cell.links = new Link[links.length()];
+        cell.entityLinks = new EntityLink[links.length()];
         for (int i = 0; i < links.length(); ++i) {
-            cell.links[i] = new Link();
+            cell.entityLinks[i] = new EntityLink();
             JSONObject linkI = links.getJSONObject(i);
 
-            cell.links[i].text = linkI.getString("surface");
-            cell.links[i].target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + linkI.getJSONObject("target").getString("title");
+            cell.entityLinks[i].text = linkI.getString("surface");
+            cell.entityLinks[i].target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + linkI.getJSONObject("target").getString("title");
         }
 
         return cell;
@@ -55,12 +56,12 @@ public class WIKIPEDIA {
             table.isNumericColumn = new boolean[table.nColumn];
 
             // TODO: need to check using another tool.
-            JSONArray numericColumns = json.getJSONArray("numericColumns");
-            for (int i = 0; i < numericColumns.length(); ++i) {
-                table.isNumericColumn[numericColumns.getInt(i)] = true;
-            }
+//            JSONArray numericColumns = json.getJSONArray("numericColumns");
+//            for (int i = 0; i < numericColumns.length(); ++i) {
+//                table.isNumericColumn[numericColumns.getInt(i)] = true;
+//            }
 
-            table.source = "WIKIPEDIA:Link:" + "https://en.wikipedia.org/wiki/" + URLEncoder.encode(json.getString("pgTitle").replaceAll("\\s", "_"));
+            table.source = "WIKIPEDIA:EntityLink:" + "https://en.wikipedia.org/wiki/" + URLEncoder.encode(json.getString("pgTitle").replaceAll("\\s", "_"));
             table.caption = json.has("tableCaption") ? json.getString("tableCaption") : null;
             return table;
         } catch (JSONException e) {

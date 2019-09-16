@@ -1,7 +1,11 @@
 package model.table;
 
+import java.util.HashMap;
+
 public class Table {
-    public static final int MAX_COLUMN_WIDTH = 50;
+    public transient static final int MAX_COLUMN_WIDTH = 50;
+    public transient HashMap<String, Object> attributes = new HashMap<>(); // Used for any other purpose.
+
     public Cell[][] header; // row -> column
     public Cell[][] data; // row -> column
     public int nHeaderRow, nDataRow, nColumn;

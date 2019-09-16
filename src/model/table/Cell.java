@@ -2,16 +2,16 @@ package model.table;
 
 public class Cell {
     public String text; // surface text
-    public Link[] links;
+    public EntityLink[] entityLinks;
 
-    private String disambiguatedText = null;
+    private transient String disambiguatedText = null;
 
     public String getDisambiguatedText() {
         if (disambiguatedText != null) {
             return disambiguatedText;
         }
         disambiguatedText = this.text;
-        for (Link l : links) {
+        for (EntityLink l : entityLinks) {
             disambiguatedText = disambiguatedText.replace(l.text, "<" + l.target.substring(l.target.lastIndexOf(":") + 1) + ">");
         }
         return disambiguatedText;
