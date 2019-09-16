@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+    <entry key="storage.elasticsearch.protocol">http</entry>
+    <entry key="storage.elasticsearch.address">localhost:9200</entry>
+    <entry key="storage.elasticsearch.index">yago_tabqs</entry>
+    <entry key="storage.elasticsearch.type">entity</entry>
+
+    <entry key="search.server.default-port">6993</entry>
+</properties>
