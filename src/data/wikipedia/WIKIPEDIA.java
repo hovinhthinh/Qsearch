@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import java.net.URLEncoder;
 
-public class Wikipedia {
+public class WIKIPEDIA {
 
     // Input is from "/GW/D5data/hvthinh/TabEL/tables.json.gz"
     private static Cell parseCellFromJSONObject(JSONObject json) {
