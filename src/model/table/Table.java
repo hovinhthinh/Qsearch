@@ -3,7 +3,7 @@ package model.table;
 import java.util.HashMap;
 
 public class Table {
-    public transient static final int MAX_COLUMN_WIDTH = 30;
+    public transient static final int MAX_COLUMN_WIDTH = 40;
     public transient HashMap<String, Object> attributes = new HashMap<>(); // Used for any other purpose.
 
     public Cell[][] header; // row -> column
@@ -62,7 +62,7 @@ public class Table {
                     }
                     for (int l = 0; l < nLine; ++l) {
                         for (int j = 0; j < part[i].length; ++j) {
-                            sb.append(l == 0 ? "[" : "-");
+                            sb.append(l == 0 ? "[" : "→");
                             int startIndex = l * columnMaxWidth[j], endIndex = (l + 1) * columnMaxWidth[j];
                             String substr = endIndex < strs[j].length()
                                     ? strs[j].substring(startIndex, endIndex)
@@ -71,7 +71,7 @@ public class Table {
                             for (int k = 0; k < columnMaxWidth[j] - substr.length(); ++k) {
                                 sb.append(" ");
                             }
-                            sb.append(l == nLine - 1 ? "] " : "- ");
+                            sb.append(l == nLine - 1 ? "] " : "← ");
                         }
                         sb.append("\r\n");
                     }
@@ -81,10 +81,10 @@ public class Table {
                 printHeader = false;
                 for (int i = 0; i < columnMaxWidth.length; ++i) {
                     for (int j = 0; j < columnMaxWidth[i] + 2; ++j) {
-                        sb.append("-");
+                        sb.append("─");
                     }
                     if (i > 0) {
-                        sb.append("-");
+                        sb.append("─");
                     }
                 }
                 sb.append("\r\n");
