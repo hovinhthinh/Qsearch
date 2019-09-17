@@ -46,12 +46,12 @@ public class Table {
                             strs[j] = strs[j].substring(0, (columnMaxWidth[j] - 3) - (columnMaxWidth[j] - 3) / 2) + "..." +
                                     strs[j].substring(strs[j].length() - (columnMaxWidth[j] - 3) / 2);
                         }
-                        sb.append("[");
+                        sb.append("⎡");
                         sb.append(strs[j]);
                         for (int k = 0; k < columnMaxWidth[j] - strs[j].length(); ++k) {
                             sb.append(" ");
                         }
-                        sb.append("] ");
+                        sb.append("⎦ ");
                     }
                     sb.append("\r\n");
                 } else {
@@ -62,7 +62,7 @@ public class Table {
                     }
                     for (int l = 0; l < nLine; ++l) {
                         for (int j = 0; j < part[i].length; ++j) {
-                            sb.append(l == 0 ? "[" : "→");
+                            sb.append(l == 0 ? "⎡" : "⎜");
                             int startIndex = l * columnMaxWidth[j], endIndex = (l + 1) * columnMaxWidth[j];
                             String substr = endIndex < strs[j].length()
                                     ? strs[j].substring(startIndex, endIndex)
@@ -71,7 +71,7 @@ public class Table {
                             for (int k = 0; k < columnMaxWidth[j] - substr.length(); ++k) {
                                 sb.append(" ");
                             }
-                            sb.append(l == nLine - 1 ? "] " : "← ");
+                            sb.append(l == nLine - 1 ? "⎦ " : "⎟ ");
                         }
                         sb.append("\r\n");
                     }
