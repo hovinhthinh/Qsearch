@@ -78,6 +78,6 @@ public class YagoType {
 
 
     public static void main(String[] args) {
-        System.out.println(entity2Types.get("<Cristiano_Ronaldo>"));
+        System.out.println(getSpecificTypes("<Cristiano_Ronaldo>"));
     }
 }
