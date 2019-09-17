@@ -15,7 +15,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
                 new QuantityTaggingNode(),
-                new DeepColumnScoringNode(),
+                new DeepColumnScoringNode(0),
                 new PostFilteringNode()
         );
     }

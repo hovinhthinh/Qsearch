@@ -3,6 +3,7 @@ package data.wikipedia;
 import model.table.Cell;
 import model.table.link.EntityLink;
 import model.table.Table;
+import nlp.NLP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,7 +18,7 @@ public class WIKIPEDIA {
     // Input is from "/GW/D5data/hvthinh/TabEL/tables.json.gz"
     private static Cell parseCellFromJSONObject(JSONObject json) {
         Cell cell = new Cell();
-        cell.text = json.getString("text");
+        cell.text = String.join(" ", NLP.tokenize(json.getString("text")));
         JSONArray links = json.getJSONArray("surfaceLinks");
 
         cell.entityLinks = new ArrayList<>();
@@ -25,7 +26,7 @@ public class WIKIPEDIA {
             EntityLink el = new EntityLink();
             JSONObject linkI = links.getJSONObject(i);
 
-            el.text = linkI.getString("surface");
+            el.text = String.join(" ", NLP.tokenize(linkI.getString("surface")));
             el.target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + linkI.getJSONObject("target").getString("title");
             cell.entityLinks.add(el);
         }

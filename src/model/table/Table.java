@@ -10,9 +10,9 @@ public class Table {
     public Cell[][] data; // row -> column
     public int nHeaderRow, nDataRow, nColumn;
 
-    public boolean[] isNumericColumn; // TODO: this needs to be checked again using external tool, instead of using
-    // internal signal from Wikipedia.
-    public int[] quantityToEntityColumn;
+    public boolean[] isNumericColumn; // TODO: this needs to be checked again using external tool, instead of using internal signal from Wikipedia.
+
+    public int[] quantityToEntityColumn; // -1 means there is no connection.
 
     public String surroundingText;
     public String caption;

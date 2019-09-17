@@ -1,10 +1,12 @@
 package nlp;
 
+import edu.knowitall.tool.tokenize.Token;
 import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.trees.CollinsHeadFinder;
 import edu.stanford.nlp.trees.HeadFinder;
 import edu.stanford.nlp.trees.Tree;
 import org.json.JSONObject;
+import scala.collection.JavaConversions;
 import util.Triple;
 import util.headword.StringUtils;
 
@@ -17,6 +19,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class NLP {
     public static final HeadFinder HEAD_FINDER = new CollinsHeadFinder();
@@ -271,5 +274,16 @@ public class NLP {
             sb.append(s);
         }
         return sb.toString();
+    }
+
+
+    public static final List<String> tokenize(String text) {
+        text = NLP.stripSentence(text);
+        List<Token> tokens = JavaConversions.seqAsJavaList(Static.getOpenIe().tokenizer().tokenize(Static.getOpenIe().clean(text)));
+        return tokens.stream().map(o -> o.string()).collect(Collectors.toList());
+    }
+
+    public static void main(String[] args) {
+        System.out.println(String.join(" ", tokenize("$916k.")));
     }
 }
