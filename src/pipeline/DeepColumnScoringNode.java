@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 public class DeepColumnScoringNode implements TaggingNode {
     public static final Logger LOGGER = Logger.getLogger(DeepColumnScoringNode.class.getName());
-    
+
     private double minConf;
     private DeepScoringClient scoringClient;
 
@@ -72,6 +72,6 @@ public class DeepColumnScoringNode implements TaggingNode {
 
             table.quantityToEntityColumn[pivotCol] = targetCol;
         }
-        return false;
+        return true;
     }
 }
