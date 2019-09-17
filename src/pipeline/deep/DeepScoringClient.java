@@ -62,7 +62,8 @@ public class DeepScoringClient {
 
     // return: <optimal position>\t<scores>
     public synchronized ArrayList<Double> getScores(List<String> entitiesDesc, String quantityDesc) {
-        JSONObject o = new JSONObject().put("quantity_desc", quantityDesc).put("type_desc", new JSONArray(entitiesDesc));
+        JSONObject o = new JSONObject().put("quantity_desc", quantityDesc.toLowerCase())
+                .put("type_desc", new JSONArray(entitiesDesc.stream().map(x -> x.toLowerCase()).collect(Collectors.toList())));
         out.println(o.toString());
         out.flush();
         try {
@@ -74,7 +75,7 @@ public class DeepScoringClient {
     }
 
     public synchronized double getScore(String typeDesc, String quantityDesc) {
-        JSONObject o = new JSONObject().put("quantity_desc", quantityDesc).put("type_desc", new JSONArray().put(typeDesc));
+        JSONObject o = new JSONObject().put("quantity_desc", quantityDesc.toLowerCase()).put("type_desc", new JSONArray().put(typeDesc.toLowerCase()));
         out.println(o.toString());
         out.flush();
         try {
