@@ -138,7 +138,7 @@ public class MapQfactInTextToTable {
             Table t = WIKIPEDIA.parseFromJSON(line);
             String linkedData;
             if ((linkedData = getLinkedDataFromText(t)) != null) {
-                System.out.println(t.getTableContentPrintable(true));
+                System.out.println(t.getTableContentPrintable(true, true));
                 System.out.println(linkedData);
                 System.out.println("------------------------------------------------------------");
             }

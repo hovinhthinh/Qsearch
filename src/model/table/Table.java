@@ -3,7 +3,7 @@ package model.table;
 import java.util.HashMap;
 
 public class Table {
-    public transient static final int MAX_COLUMN_WIDTH = 50;
+    public transient static final int MAX_COLUMN_WIDTH = 30;
     public transient HashMap<String, Object> attributes = new HashMap<>(); // Used for any other purpose.
 
     public Cell[][] header; // row -> column
@@ -20,40 +20,65 @@ public class Table {
 
     public String source;
 
-    public String getTableContentPrintable(boolean disambiguateEntity) {
+    public String getTableContentPrintable(boolean disambiguateEntity, boolean multipleLine) {
         StringBuilder sb = new StringBuilder();
         int[] columnMaxWidth = new int[nColumn];
-
-        boolean headerPrinted = true;
+        boolean printHeader = true;
         for (Cell[][] part : new Cell[][][]{header, data}) {
             for (int i = 0; i < part.length; ++i) {
                 for (int j = 0; j < part[i].length; ++j) {
                     columnMaxWidth[j] = Math.max(columnMaxWidth[j], Math.min(MAX_COLUMN_WIDTH,
-                            (headerPrinted && isNumericColumn[j] ? 1 : 0) + (disambiguateEntity ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length())));
+                            (printHeader && isNumericColumn[j] ? 1 : 0) + (disambiguateEntity ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length())));
                 }
             }
-            headerPrinted = false;
+            printHeader = false;
         }
-        headerPrinted = true;
+        printHeader = true;
         for (Cell[][] part : new Cell[][][]{header, data}) {
             for (int i = 0; i < part.length; ++i) {
+                String[] strs = new String[part[i].length];
                 for (int j = 0; j < part[i].length; ++j) {
-                    String str = (headerPrinted && isNumericColumn[j] ? "*" : "") + (disambiguateEntity ? part[i][j].getDisambiguatedText() : part[i][j].text);
-                    if (str.length() > columnMaxWidth[j]) {
-                        str = str.substring(0, (columnMaxWidth[j] - 3) - (columnMaxWidth[j] - 3) / 2) + "..." +
-                                str.substring(str.length() - (columnMaxWidth[j] - 3) / 2);
-                    }
-                    sb.append("[");
-                    for (int k = 0; k < columnMaxWidth[j] - str.length(); ++k) {
-                        sb.append(" ");
-                    }
-                    sb.append(str);
-                    sb.append("] ");
+                    strs[j] = (printHeader && isNumericColumn[j] ? "*" : "") + (disambiguateEntity ? part[i][j].getDisambiguatedText() : part[i][j].text);
                 }
-                sb.append("\r\n");
+                if (!multipleLine) {
+                    for (int j = 0; j < part[i].length; ++j) {
+                        if (strs[j].length() > columnMaxWidth[j]) {
+                            strs[j] = strs[j].substring(0, (columnMaxWidth[j] - 3) - (columnMaxWidth[j] - 3) / 2) + "..." +
+                                    strs[j].substring(strs[j].length() - (columnMaxWidth[j] - 3) / 2);
+                        }
+                        sb.append("[");
+                        sb.append(strs[j]);
+                        for (int k = 0; k < columnMaxWidth[j] - strs[j].length(); ++k) {
+                            sb.append(" ");
+                        }
+                        sb.append("] ");
+                    }
+                    sb.append("\r\n");
+                } else {
+                    int nLine = 0;
+                    for (int j = 0; j < part[i].length; ++j) {
+                        int cellLength = strs[j].length();
+                        nLine = Math.max(nLine, cellLength == 0 ? 1 : (cellLength - 1) / columnMaxWidth[j] + 1);
+                    }
+                    for (int l = 0; l < nLine; ++l) {
+                        for (int j = 0; j < part[i].length; ++j) {
+                            sb.append(l == 0 ? "[" : "-");
+                            int startIndex = l * columnMaxWidth[j], endIndex = (l + 1) * columnMaxWidth[j];
+                            String substr = endIndex < strs[j].length()
+                                    ? strs[j].substring(startIndex, endIndex)
+                                    : (startIndex < strs[j].length() ? strs[j].substring(startIndex) : "");
+                            sb.append(substr);
+                            for (int k = 0; k < columnMaxWidth[j] - substr.length(); ++k) {
+                                sb.append(" ");
+                            }
+                            sb.append(l == nLine - 1 ? "] " : "- ");
+                        }
+                        sb.append("\r\n");
+                    }
+                }
             }
-            if (headerPrinted) {
-                headerPrinted = false;
+            if (printHeader) {
+                printHeader = false;
                 for (int i = 0; i < columnMaxWidth.length; ++i) {
                     for (int j = 0; j < columnMaxWidth[i] + 2; ++j) {
                         sb.append("-");
@@ -64,7 +89,6 @@ public class Table {
                 }
                 sb.append("\r\n");
             }
-
         }
 
         return sb.toString();

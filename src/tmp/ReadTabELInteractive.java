@@ -30,7 +30,7 @@ public class ReadTabELInteractive {
             System.out.println(line);
             System.out.println(t.source);
             System.out.println(t.caption);
-            System.out.println(t.getTableContentPrintable(true));
+            System.out.println(t.getTableContentPrintable(true, true));
             System.out.println("------------------------------------------------------------");
             String wait = in.nextLine();
         }
