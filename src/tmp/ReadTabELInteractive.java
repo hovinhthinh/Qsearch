@@ -1,6 +1,6 @@
 package tmp;
 
-import data.wikipedia.Wikipedia;
+import data.wikipedia.WIKIPEDIA;
 import model.table.Table;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import util.FileUtils;
@@ -18,7 +18,7 @@ public class ReadTabELInteractive {
                 JSchUtils.getFileInputStreamFromServer
 //                new FileInputStream
         ("/GW/D5data-11/hvthinh/TabEL.json.shuf.gz")), StandardCharsets.UTF_8)) {
-            Table t = Wikipedia.parseFromJSON(line);
+            Table t = WIKIPEDIA.parseFromJSON(line);
             if (t == null) {
                 continue;
             }

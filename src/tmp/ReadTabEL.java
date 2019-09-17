@@ -1,19 +1,17 @@
 package tmp;
 
 import com.google.gson.Gson;
-import data.wikipedia.Wikipedia;
+import data.wikipedia.WIKIPEDIA;
 import model.table.Cell;
-import model.table.Link;
+import model.table.link.EntityLink;
 import model.table.Table;
 import nlp.NLP;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
-import org.json.JSONObject;
 import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 import util.JSchUtils;
 
 import java.io.FileInputStream;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -59,12 +57,12 @@ public class ReadTabEL {
 //                JSchUtils.getFileInputStreamFromServer
                 new FileInputStream
                         ("/GW/D5data/hvthinh/TabEL/tables.json.gz")), StandardCharsets.UTF_8)) {
-            Table t = Wikipedia.parseFromJSON(line);
+            Table t = WIKIPEDIA.parseFromJSON(line);
             boolean ok = false;
             loop:
             for (Cell[] r : t.data) {
                 for (Cell c : r) {
-                    for (Link l : c.links) {
+                    for (EntityLink l : c.entityLinks) {
                         if (entityHasTypeOf("<" + l.target.substring(19) + ">", queryType)) {
                             ok = true;
                             break loop;
@@ -82,7 +80,5 @@ public class ReadTabEL {
             }
         }
         JSchUtils.stop();
-
-
     }
 }

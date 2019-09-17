@@ -1,11 +1,11 @@
 package tmp;
 
-import data.wikipedia.Wikipedia;
+import data.wikipedia.WIKIPEDIA;
 import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
 import model.quantity.QuantityConstraint;
 import model.quantity.QuantityDomain;
-import model.table.Link;
+import model.table.link.EntityLink;
 import model.table.Table;
 import nlp.Static;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
@@ -74,15 +74,15 @@ public class MapQfactInTextToTable {
 
         loop:
         for (int r = 0; r < t.nDataRow; ++r) {
-            ArrayList<Link> ls = new ArrayList<>();
+            ArrayList<EntityLink> ls = new ArrayList<>();
             int entityColumn = t.isNumericColumn[0] ? 1 : 0;
-            ls.addAll(Arrays.asList(t.data[r][entityColumn].links));
+            ls.addAll(t.data[r][entityColumn].entityLinks);
 
             if (ls.size() != 1 || !ls.get(0).text.equals(t.data[r][entityColumn].text)) {
                 continue loop;
             }
 
-            Link el = ls.get(0);
+            EntityLink el = ls.get(0);
             ArrayList<JSONObject> linkedQuantities = entity2facts.get("<" + el.target.substring(el.target.lastIndexOf(":") + 1) + ">");
             if (linkedQuantities == null) {
                 continue;
@@ -135,7 +135,7 @@ public class MapQfactInTextToTable {
 //                JSchUtils.getFileInputStreamFromServer
                 new FileInputStream
                         ("/GW/D5data/hvthinh/TabEL/tables.json.gz")), StandardCharsets.UTF_8)) {
-            Table t = Wikipedia.parseFromJSON(line);
+            Table t = WIKIPEDIA.parseFromJSON(line);
             String linkedData;
             if ((linkedData = getLinkedDataFromText(t)) != null) {
                 System.out.println(t.getTableContentPrintable(true));
