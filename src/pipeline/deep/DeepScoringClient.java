@@ -2,10 +2,10 @@ package pipeline.deep;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import util.Pair;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,7 +40,7 @@ public class DeepScoringClient {
     public static void main(String[] args) {
         DeepScoringClient client = new DeepScoringClient();
         System.out.println(client.getScore("stadium in europe", "capacity"));
-        System.out.println(client.getScore(Arrays.asList("team", "stadium", "dog"), "capacity"));
+        System.out.println(client.getScores(Arrays.asList("team", "stadium", "dog"), "capacity"));
     }
 
     @Override
@@ -61,13 +61,12 @@ public class DeepScoringClient {
     }
 
     // return: <optimal position>\t<scores>
-    public synchronized Pair<Integer, Double[]> getScore(List<String> entitiesDesc, String quantityDesc) {
+    public synchronized ArrayList<Double> getScores(List<String> entitiesDesc, String quantityDesc) {
         JSONObject o = new JSONObject().put("quantity_desc", quantityDesc).put("type_desc", new JSONArray(entitiesDesc));
         out.println(o.toString());
         out.flush();
         try {
-            JSONObject response = new JSONObject(in.readLine());
-            return new Pair<>(response.getInt("best_index"), response.getJSONArray("scores").toList().toArray(new Double[0]));
+            return new JSONArray(in.readLine()).toList().stream().map(x -> ((Double) x)).collect(Collectors.toCollection(ArrayList::new));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -79,7 +78,7 @@ public class DeepScoringClient {
         out.println(o.toString());
         out.flush();
         try {
-            return new JSONObject(in.readLine()).getJSONArray("scores").getDouble(0);
+            return new JSONArray(in.readLine()).getDouble(0);
         } catch (IOException e) {
             e.printStackTrace();
             return -1;

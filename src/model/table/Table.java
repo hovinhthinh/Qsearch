@@ -7,6 +7,7 @@ public class Table {
     public transient HashMap<String, Object> attributes = new HashMap<>(); // Used for any other purpose.
 
     public Cell[][] header; // row -> column
+    private transient String[] combinedHeader;
     public Cell[][] data; // row -> column
     public int nHeaderRow, nDataRow, nColumn;
 
@@ -77,5 +78,23 @@ public class Table {
             }
         }
         return false;
+    }
+
+    public String getCombinedHeader(int columnIndex) {
+        if (combinedHeader == null) {
+            combinedHeader = new String[nColumn];
+        }
+        if (combinedHeader[columnIndex] != null) {
+            return combinedHeader[columnIndex];
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < nHeaderRow; ++i) {
+            if (sb.length() > 0) {
+                sb.append(" ");
+            }
+            sb.append(header[i][columnIndex].text);
+        }
+
+        return combinedHeader[columnIndex] = sb.toString();
     }
 }

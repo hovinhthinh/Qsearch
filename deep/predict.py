@@ -31,7 +31,7 @@ def get_score(entity_desc_text, quantity_desc_text):
     })[0][0]
 
 
-def get_best_entity_desc_text(entity_desc_text_arr, quantity_desc_text):
+def get_scores(entity_desc_text_arr, quantity_desc_text):
     data = []
     for entity_desc_text in entity_desc_text_arr:
         data.append((entity_desc_text, quantity_desc_text))
@@ -41,7 +41,7 @@ def get_best_entity_desc_text(entity_desc_text_arr, quantity_desc_text):
         quantity_desc: qt
     })[0]
 
-    return np.argmax(p), p
+    return p
 
 
 if __name__ == "__main__":
@@ -51,5 +51,5 @@ if __name__ == "__main__":
         # read sentence
         line = sys.stdin.readline().strip()
         d = json.loads(line)  # {'entities_desc': [<EDS>], 'quantity_desc': '<QD>'}
-        out = get_best_entity_desc_text(d["type_desc"], d['quantity_desc'])
-        print("%s" % json.dumps({'best_index': out[0].item(), 'scores': out[1].tolist()}))
+        out = get_scores(d["type_desc"], d['quantity_desc'])
+        print("%s" % json.dumps(out.tolist()))
