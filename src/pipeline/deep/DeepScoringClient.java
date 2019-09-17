@@ -2,11 +2,13 @@ package pipeline.deep;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import util.Pair;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DeepScoringClient {
 
@@ -37,6 +39,7 @@ public class DeepScoringClient {
 
     public static void main(String[] args) {
         DeepScoringClient client = new DeepScoringClient();
+        System.out.println(client.getScore("stadium in europe", "capacity"));
         System.out.println(client.getScore(Arrays.asList("team", "stadium", "dog"), "capacity"));
     }
 
@@ -57,16 +60,29 @@ public class DeepScoringClient {
         super.finalize();
     }
 
-    // return: <optimal position>\t<score>
-    public synchronized String getScore(List<String> entitiesDesc, String quantityDesc) {
-        JSONObject o = new JSONObject().put("quantity_desc", quantityDesc).put("entities_desc", new JSONArray(entitiesDesc));
+    // return: <optimal position>\t<scores>
+    public synchronized Pair<Integer, Double[]> getScore(List<String> entitiesDesc, String quantityDesc) {
+        JSONObject o = new JSONObject().put("quantity_desc", quantityDesc).put("type_desc", new JSONArray(entitiesDesc));
         out.println(o.toString());
         out.flush();
         try {
-            return in.readLine();
+            JSONObject response = new JSONObject(in.readLine());
+            return new Pair<>(response.getInt("best_index"), response.getJSONArray("scores").toList().toArray(new Double[0]));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public synchronized double getScore(String typeDesc, String quantityDesc) {
+        JSONObject o = new JSONObject().put("quantity_desc", quantityDesc).put("type_desc", new JSONArray().put(typeDesc));
+        out.println(o.toString());
+        out.flush();
+        try {
+            return new JSONObject(in.readLine()).getJSONArray("scores").getDouble(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -1;
         }
     }
 }
