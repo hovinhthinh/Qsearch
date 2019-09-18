@@ -28,7 +28,8 @@ public class Table {
             for (int i = 0; i < part.length; ++i) {
                 for (int j = 0; j < part[i].length; ++j) {
                     columnMaxWidth[j] = Math.max(columnMaxWidth[j], Math.min(MAX_COLUMN_WIDTH,
-                            (printHeader && isNumericColumn[j] ? 1 : 0) + (disambiguateEntity ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length())));
+                            (printHeader && isNumericColumn[j] ? (quantityToEntityColumn == null || quantityToEntityColumn[j] == -1 ? 2 : String.valueOf(quantityToEntityColumn[j]).length() + 1) : 0)
+                                    + (disambiguateEntity ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length())));
                 }
             }
             printHeader = false;
@@ -38,7 +39,8 @@ public class Table {
             for (int i = 0; i < part.length; ++i) {
                 String[] strs = new String[part[i].length];
                 for (int j = 0; j < part[i].length; ++j) {
-                    strs[j] = (printHeader && isNumericColumn[j] ? "*" : "") + (disambiguateEntity ? part[i][j].getDisambiguatedText() : part[i][j].text);
+                    strs[j] = (printHeader && isNumericColumn[j] ? (quantityToEntityColumn == null || quantityToEntityColumn[j] == -1 ? "?@" : quantityToEntityColumn[j] + "@") : "")
+                            + (disambiguateEntity ? part[i][j].getDisambiguatedText() : part[i][j].text);
                 }
                 if (!multipleLine) {
                     for (int j = 0; j < part[i].length; ++j) {
