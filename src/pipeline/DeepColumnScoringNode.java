@@ -26,6 +26,7 @@ public class DeepColumnScoringNode implements TaggingNode {
         table.quantityToEntityColumn = new int[table.nColumn];
         Arrays.fill(table.quantityToEntityColumn, -1);
 
+        boolean result = false;
         // loop for quantity columns.
         for (int pivotCol = 0; pivotCol < table.nColumn; ++pivotCol) {
             if (!table.isNumericColumn[pivotCol]) {
@@ -66,12 +67,13 @@ public class DeepColumnScoringNode implements TaggingNode {
                     if (targetCol == -1 || totalConf > linkingConf) {
                         targetCol = col;
                         linkingConf = totalConf;
+                        result = true;
                     }
                 }
             }
 
             table.quantityToEntityColumn[pivotCol] = targetCol;
         }
-        return true;
+        return result;
     }
 }
