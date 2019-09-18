@@ -22,8 +22,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
 
     // Args: <input> <output>
     public static void main(String[] args) {
-//        args = "/home/hvthinh/datasets/STICS/news-en-documents_20181120.tar.gz ./temp/output
-// ./deep/data/stics+nyt/length/model".split("\\s++");
+//        args = "/local/home/hvthinh/datasets/TabEL.json.shuf.gz /local/home/hvthinh/datasets/TabEL.json.shuf.out.gz".split("\\s++");
 
         TaggingPipeline pipeline = getDefaultTaggingPipeline();
         PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
@@ -40,6 +39,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
                 continue;
             }
             out.println(gson.toJson(table));
+            out.flush();
         }
         out.close();
     }
