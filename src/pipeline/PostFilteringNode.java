@@ -8,6 +8,6 @@ import org.junit.Assert;
 public class PostFilteringNode implements TaggingNode {
     @Override
     public boolean process(Table table) {
-        return false;
+        return true;
     }
 }
