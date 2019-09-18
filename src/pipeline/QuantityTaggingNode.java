@@ -30,13 +30,14 @@ public class QuantityTaggingNode implements TaggingNode {
 
     // TODO:
     // - We may need to extends units from the header.
-    // - We also may need to add dumpy data: '$916k' - > 'This is $916k.'
+    // - We also may need to add dumpy data: '$916k' - > 'This is $916k.' [DONE]
     private void tagCell(Cell cell) {
         cell.quantityLinks = new ArrayList<>();
-        for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(cell.text, true)) {
+        String dumpyText = "This is " + cell.text + " .";
+        for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(dumpyText, true)) {
             if (span.object instanceof Quantity) {
                 Quantity q = (Quantity) span.object;
-                cell.quantityLinks.add(new QuantityLink(cell.text.substring(span.start, span.end), q.value, NLP.stripSentence(q.units), q.bound));
+                cell.quantityLinks.add(new QuantityLink(dumpyText.substring(span.start, span.end), q.value, NLP.stripSentence(q.units), q.bound));
             }
         }
     }
