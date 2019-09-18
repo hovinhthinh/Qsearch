@@ -5,6 +5,7 @@ import model.table.link.EntityLink;
 import nlp.YagoType;
 import pipeline.deep.DeepScoringClient;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -55,10 +56,12 @@ public class DeepColumnScoringNode implements TaggingNode {
                     if (types == null) {
                         continue;
                     }
-                    double score = Math.max(
-                            Collections.max(scoringClient.getScores(types, table.getCombinedHeader(pivotCol))),
-                            Collections.max(scoringClient.getScores(types, table.header[table.nHeaderRow - 1][pivotCol].text))
-                    );
+                    ArrayList<Double> srcs = scoringClient.getScores(types, table.getCombinedHeader(pivotCol));
+                    srcs.addAll(scoringClient.getScores(types, table.header[table.nHeaderRow - 1][pivotCol].text));
+                    if (srcs.isEmpty()) {
+                        continue;
+                    }
+                    double score = Collections.max(srcs);
                     entityLinkingConf = (entityLinkingConf == -1 ? score : Math.min(entityLinkingConf, score));
                 }
 

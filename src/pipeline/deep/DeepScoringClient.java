@@ -62,6 +62,9 @@ public class DeepScoringClient {
 
     // return: <optimal position>\t<scores>
     public synchronized ArrayList<Double> getScores(List<String> entitiesDesc, String quantityDesc) {
+        if (entitiesDesc.isEmpty()) {
+            return new ArrayList<>();
+        }
         JSONObject o = new JSONObject().put("quantity_desc", quantityDesc.toLowerCase())
                 .put("type_desc", new JSONArray(entitiesDesc.stream().map(x -> x.toLowerCase()).collect(Collectors.toList())));
         out.println(o.toString());
