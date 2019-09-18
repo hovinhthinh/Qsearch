@@ -39,7 +39,6 @@ public class WIKIPEDIA_DeepTaggingPipeline {
                 continue;
             }
             out.println(gson.toJson(table));
-            out.flush();
         }
         out.close();
     }
