@@ -101,7 +101,7 @@ def sample_epoch_training_data(training_data):
     return samples
 
 
-def convert_input_to_tensor(data, word_dict):
+def convert_input_to_tensor(data, word_dict, is_train=True):
     entity_type_desc = []
     quantity_desc = []
     label = []
@@ -131,14 +131,16 @@ def convert_input_to_tensor(data, word_dict):
     # shuffle data
     if len(label) > 0:
         tmp = [(entity_type_desc[i], quantity_desc[i], label[i]) for i in range(len(entity_type_desc))]
-        random.shuffle(tmp)
+        if is_train:
+            random.shuffle(tmp)
         entity_type_desc = [v[0] for v in tmp]
         quantity_desc = [v[1] for v in tmp]
         label = [v[2] for v in tmp]
         return entity_type_desc, quantity_desc, label
     else:
         tmp = [(entity_type_desc[i], quantity_desc[i]) for i in range(len(entity_type_desc))]
-        random.shuffle(tmp)
+        if is_train:
+            random.shuffle(tmp)
         entity_type_desc = [v[0] for v in tmp]
         quantity_desc = [v[1] for v in tmp]
         return entity_type_desc, quantity_desc, None

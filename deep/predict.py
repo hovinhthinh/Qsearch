@@ -16,8 +16,6 @@ data_path = './data'
 
 (entity_type_desc, quantity_desc, _), _, _, _, prob = get_model(embedding, tf.estimator.ModeKeys.PREDICT)
 
-init_op = tf.global_variables_initializer()
-
 saver = tf.train.Saver()
 
 sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True))
@@ -27,7 +25,7 @@ print('__ready_to_predict__')
 
 def get_score(entity_desc_text, quantity_desc_text):
     data = [(entity_desc_text, quantity_desc_text)]
-    et, qt, _ = convert_input_to_tensor(data, word_dict)
+    et, qt, _ = convert_input_to_tensor(data, word_dict, is_train=False)
     return sess.run([prob], feed_dict={
         entity_type_desc: et,
         quantity_desc: qt
@@ -38,7 +36,7 @@ def get_scores(entity_desc_text_arr, quantity_desc_text):
     data = []
     for entity_desc_text in entity_desc_text_arr:
         data.append((entity_desc_text, quantity_desc_text))
-    et, qt, _ = convert_input_to_tensor(data, word_dict)
+    et, qt, _ = convert_input_to_tensor(data, word_dict, is_train=False)
     p = sess.run([prob], feed_dict={
         entity_type_desc: et,
         quantity_desc: qt
