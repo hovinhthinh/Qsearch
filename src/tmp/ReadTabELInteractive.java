@@ -20,13 +20,14 @@ public class ReadTabELInteractive {
                 JSchUtils.getFileInputStreamFromServer
 //                new FileInputStream
         ("/GW/D5data-11/hvthinh/TabEL/TabEL.json.shuf.gz.part00.out.gz.part00.gz")), StandardCharsets.UTF_8)) {
-            Table t = WIKIPEDIA.parseFromJSON(line);
+            Table t;
+            try {
+                t = gson.fromJson(line, Table.class);
+            } catch (Exception e) {
+                t = WIKIPEDIA.parseFromJSON(line);
+            }
             if (t == null) {
-                try {
-                    t = gson.fromJson(line, t.getClass());
-                } catch (Exception e) {
-                    continue;
-                }
+                continue;
             }
             ++passed;
             if (!t.containsNumericColumn()) {
@@ -36,7 +37,7 @@ public class ReadTabELInteractive {
             System.out.println("#numericTables/#total: " + (++n) + "/" + passed);
             System.out.println("source: " + t.source);
             System.out.println("caption: " + t.caption);
-            System.out.println(t.getTableContentPrintable(true, true));
+            System.out.println(t.getTableContentPrintable(false, true));
             System.out.println("--------------------------------------------------------------------------------");
             System.out.flush();
             String wait = in.nextLine();
