@@ -19,15 +19,14 @@ public class ReadTabELInteractive {
         for (String line : new FileUtils.LineStream(new GzipCompressorInputStream(
                 JSchUtils.getFileInputStreamFromServer
 //                new FileInputStream
-        ("/GW/D5data-11/hvthinh/TabEL/TabEL.json.shuf.gz")), StandardCharsets.UTF_8)) {
+        ("/GW/D5data-11/hvthinh/TabEL/TabEL.json.shuf.gz.part00.out.gz.part00.gz")), StandardCharsets.UTF_8)) {
             Table t = WIKIPEDIA.parseFromJSON(line);
             if (t == null) {
-                continue;
-            }
-            try {
-                t = gson.fromJson(line, t.getClass());
-            } catch (Exception e) {
-                continue;
+                try {
+                    t = gson.fromJson(line, t.getClass());
+                } catch (Exception e) {
+                    continue;
+                }
             }
             ++passed;
             if (!t.containsNumericColumn()) {
