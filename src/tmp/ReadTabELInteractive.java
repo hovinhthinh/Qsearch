@@ -1,5 +1,6 @@
 package tmp;
 
+import com.google.gson.Gson;
 import data.wikipedia.WIKIPEDIA;
 import model.table.Table;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
@@ -14,12 +15,18 @@ public class ReadTabELInteractive {
         Scanner in = new Scanner(System.in);
         int n = 0;
         int passed = 0;
+        Gson gson = new Gson();
         for (String line : new FileUtils.LineStream(new GzipCompressorInputStream(
                 JSchUtils.getFileInputStreamFromServer
 //                new FileInputStream
         ("/GW/D5data-11/hvthinh/TabEL/TabEL.json.shuf.gz")), StandardCharsets.UTF_8)) {
             Table t = WIKIPEDIA.parseFromJSON(line);
             if (t == null) {
+                continue;
+            }
+            try {
+                t = gson.fromJson(line, t.getClass());
+            } catch (Exception e) {
                 continue;
             }
             ++passed;
