@@ -14,9 +14,6 @@ except:
 _hparams = transformer.transformer_base()
 _hparams.num_hidden_layers = 2
 
-_transformer_encoder_train = transformer.TransformerEncoder(_hparams, mode=tf.estimator.ModeKeys.TRAIN)
-_transformer_encoder_predict = transformer.TransformerEncoder(_hparams, mode=tf.estimator.ModeKeys.PREDICT)
-
 
 def _attention(scope, input, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
     with tf.variable_scope(scope):
@@ -33,26 +30,28 @@ def _attention(scope, input, attention_hidden_dim):  # input: [batch_size, n_wor
         return output
 
 
-def _self_attention(scope, input, mode):
+def _self_attention(scope, input, mode, pos_encoding):
+    _hparams.pos = "timing" if pos_encoding else "none"
+
     with tf.variable_scope(scope):
         input = tf.expand_dims(input, 2)
         encoder = None
         if mode == tf.estimator.ModeKeys.TRAIN:
-            encoder = _transformer_encoder_train
+            encoder = transformer.TransformerEncoder(_hparams, mode=tf.estimator.ModeKeys.TRAIN)
         elif mode == tf.estimator.ModeKeys.PREDICT:
-            encoder = _transformer_encoder_predict
+            encoder = transformer.TransformerEncoder(_hparams, mode=tf.estimator.ModeKeys.PREDICT)
         else:
             raise Exception('invalid mode')
         output = encoder({"inputs": input, "targets": 0, "target_space_id": 0})
         return flatten4d3d(output[0])
 
 
-def _description_encoder(scope, word_embedding_t, description, mode):
+def _description_encoder(scope, word_embedding_t, description, mode, pos_encoding):
     with tf.variable_scope(scope):
         entity_type_emb = tf.nn.embedding_lookup(word_embedding_t, description)
         entity_type_emb = tf.layers.dense(entity_type_emb, _hparams.hidden_size, name='project', use_bias=True)
 
-        transformer_output = _self_attention('self_attention', entity_type_emb, mode)
+        transformer_output = _self_attention('self_attention', entity_type_emb, mode, pos_encoding)
 
         # attention
         entity_encoded = _attention('attention', transformer_output, feed_forward_dim_small)
@@ -82,10 +81,10 @@ def get_model(word_embedding, mode):
         label = tf.placeholder(dtype=tf.float32, name='label', shape=[None])
     # graph
     # encode entity type
-    entity_encoded = _description_encoder('entity_type_desc', word_embedding_t, entity_type_desc, mode)
+    entity_encoded = _description_encoder('entity_type_desc', word_embedding_t, entity_type_desc, mode, True)
 
     # encode quantity desc
-    quantity_encoded = _description_encoder('quantity_desc', word_embedding_t, quantity_desc, mode)
+    quantity_encoded = _description_encoder('quantity_desc', word_embedding_t, quantity_desc, mode, False)
 
     # fusion
     with tf.variable_scope('fusion'):
