@@ -1,9 +1,15 @@
+import argparse
+
 import math
 import tensorflow as tf
 
 import util.timer as timer
 from model.data import *
 from model.node import get_model
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-r", "--resume", help="resume training with previous saved model", action="store_true")
+args = parser.parse_args()
 
 print("GPU Available: ", tf.test.is_gpu_available())
 
@@ -25,7 +31,11 @@ saver = tf.train.Saver()
 
 print('start training')
 with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
-    sess.run(init_op)
+    if args.resume:
+        print('resume training')
+        saver.restore(sess, os.path.join(data_path, 'model.ckpt'))
+    else:
+        sess.run(init_op)
 
     best_lost = math.inf
     for epoch in range(max_num_epoches):

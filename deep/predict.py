@@ -1,6 +1,12 @@
+import argparse
 import os
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+parser = argparse.ArgumentParser()
+parser.add_argument("-g", "--gpu", help="force using gpu", action="store_true")
+args = parser.parse_args()
+
+if not args.gpu:
+    os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 import sys
 import tensorflow as tf
