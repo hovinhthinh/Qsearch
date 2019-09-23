@@ -3,10 +3,14 @@ import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-g", "--gpu", help="force using gpu", action="store_true")
+parser.add_argument("-d", "--device", help="gpu device index")
 args = parser.parse_args()
 
 if not args.gpu:
     os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+else:
+    if args.device:
+        os.environ["CUDA_VISIBLE_DEVICES"] = args.device
 
 import sys
 import tensorflow as tf
