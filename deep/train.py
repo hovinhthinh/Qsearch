@@ -1,4 +1,13 @@
 import argparse
+import os
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-r", "--resume", help="resume training with previous saved model", action="store_true")
+parser.add_argument("-d", "--device", help="gpu device index")
+args = parser.parse_args()
+
+if args.device:
+    os.environ["CUDA_VISIBLE_DEVICES"] = args.device
 
 import math
 import tensorflow as tf
@@ -6,10 +15,6 @@ import tensorflow as tf
 import util.timer as timer
 from model.data import *
 from model.node import get_model
-
-parser = argparse.ArgumentParser()
-parser.add_argument("-r", "--resume", help="resume training with previous saved model", action="store_true")
-args = parser.parse_args()
 
 print("GPU Available: ", tf.test.is_gpu_available())
 
