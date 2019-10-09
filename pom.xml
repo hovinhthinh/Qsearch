@@ -91,7 +91,7 @@
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-parser</artifactId>
-            <version>3.3.1</version>
+            <version>3.9.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/net.sf.trove4j/trove4j -->
         <dependency>
