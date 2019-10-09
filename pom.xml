@@ -46,6 +46,72 @@
     </repositories>
 
     <dependencies>
+        <!-- UnitTagger -->
+        <dependency>
+            <groupId>external</groupId>
+            <artifactId>unit-tagger-main</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/unit-tagger/UnitTagger.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>external</groupId>
+            <artifactId>unit-tagger-jaws</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/unit-tagger/jaws-bin.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>external</groupId>
+            <artifactId>unit-tagger-liblinear</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/unit-tagger/LibLINEAR.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>external</groupId>
+            <artifactId>unit-tagger-shared</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/unit-tagger/shared.jar</systemPath>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/edu.stanford.nlp/stanford-parser -->
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-parser</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/net.sf.trove4j/trove4j -->
+        <dependency>
+            <groupId>net.sf.trove4j</groupId>
+            <artifactId>trove4j</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-dev -->
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-dev</artifactId>
+            <version>3.7.10</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/de.bwaldvogel/liblinear -->
+        <dependency>
+            <groupId>de.bwaldvogel</groupId>
+            <artifactId>liblinear</artifactId>
+            <version>1.94</version>
+        </dependency>
+
         <!-- HeidelTime-->
         <dependency>
             <groupId>org.apache.uima</groupId>
