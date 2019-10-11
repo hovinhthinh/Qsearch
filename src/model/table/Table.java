@@ -158,4 +158,17 @@ public class Table {
         }
         return false;
     }
+
+    public boolean hasCellWith2Entities() {
+        for (Cell[][] part : new Cell[][][]{header, data}) {
+            for (int i = 0; i < part.length; ++i) {
+                for (int j = 0; j < part[i].length; ++j) {
+                    if (part[i][j].entityLinks.size() > 1) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
