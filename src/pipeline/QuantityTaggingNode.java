@@ -26,8 +26,8 @@ import java.util.List;
 // TODO: In 2013 , SBB Cargo had 3,061 employees and achieved consolidated sales of CHF 953 million .
 public class QuantityTaggingNode implements TaggingNode {
 
-    // returns: Unit, Multiplier, Span String, Preprocessed String (contains Span String)
-    private static Quadruple<Unit, Double, String, String> getHeaderUnit(String header) {
+    // returns: Unit (QuTree Basename), Multiplier, Span String, Preprocessed String (contains Span String)
+    private static Quadruple<String, Double, String, String> getHeaderUnit(String header) {
         try {
             ParseState[] state = new ParseState[1];
             List<EntryWithScore<Unit>> units = (List<EntryWithScore<Unit>>) Static.getTableHeaderParser().parseHeaderExplain(header, null, 0, state);
@@ -50,7 +50,7 @@ public class QuantityTaggingNode implements TaggingNode {
                 if (u.getParentQuantity().isUnitLess()) {
                     return new Quadruple(null, u.getMultiplier(), span, String.join(" ", state[0].tokens));
                 } else {
-                    return new Quadruple(u, 1, span, String.join(" ", state[0].tokens));
+                    return new Quadruple(u.getBaseName(), 1, span, String.join(" ", state[0].tokens));
                 }
             } else {
                 UnitPair up = (UnitPair) u;
@@ -65,7 +65,7 @@ public class QuantityTaggingNode implements TaggingNode {
                     return null;
                 }
                 Unit u2 = up.getUnit(1);
-                return new Quadruple(u1, u2.getMultiplier(), span, String.join(" ", state[0].tokens));
+                return new Quadruple(u1.getBaseName(), u2.getMultiplier(), span, String.join(" ", state[0].tokens));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,7 +87,6 @@ public class QuantityTaggingNode implements TaggingNode {
         System.out.println(getHeaderUnit("value ( billion usd )"));
         System.out.println(getHeaderUnit("speed ( km / h )"));
         System.out.println(getHeaderUnit("speed ( M km / h )"));
-        System.out.println(getHeaderUnit("value (million euro )").first.getConversionFactor());
     }
 
     // TODO:
