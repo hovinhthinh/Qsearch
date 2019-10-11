@@ -116,6 +116,11 @@ public class QuantityTaggingNode implements TaggingNode {
 
     @Override
     public boolean process(Table table) {
+        for (Cell[] row : table.header) {
+            for (Cell c : row) {
+                c.quantityLinks = new ArrayList<>();
+            }
+        }
         for (int col = 0; col < table.nColumn; ++col) {
             String header = table.getCombinedHeader(col);
             Quadruple<String, Double, String, String> unitInfoFromHeader = getHeaderUnit(header);
