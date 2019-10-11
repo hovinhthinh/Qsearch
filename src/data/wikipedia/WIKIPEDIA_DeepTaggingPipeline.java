@@ -20,6 +20,13 @@ public class WIKIPEDIA_DeepTaggingPipeline {
         );
     }
 
+    public static TaggingPipeline getAnnotationPipeline() {
+        return new TaggingPipeline(
+                new QuantityTaggingNode(),
+                new PostFilteringNode()
+        );
+    }
+
     // Args: <input> <output>
     public static void main(String[] args) {
 //        args = "/local/home/hvthinh/datasets/TabEL.json.shuf.gz /local/home/hvthinh/datasets/TabEL.json.shuf.out.gz".split("\\s++");
