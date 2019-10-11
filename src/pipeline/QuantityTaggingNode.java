@@ -103,6 +103,10 @@ public class QuantityTaggingNode implements TaggingNode {
     // - We also may need to add dumpy data: '$916k' - > 'This is $916k.' [DONE]
     private void tagBodyCell(Cell cell, String unit, double multiplier) {
         cell.quantityLinks = new ArrayList<>();
+        if (cell.entityLinks.size() > 0) {
+            // not tagging cells with entities
+            return;
+        }
         String dumpyText = "This is " + cell.text + " .";
         for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(dumpyText, true)) {
             if (span.object instanceof Quantity) {
