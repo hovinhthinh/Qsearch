@@ -11,6 +11,14 @@ import edu.knowitall.tool.parse.ClearParser;
 import edu.knowitall.tool.postag.ClearPostagger;
 import edu.knowitall.tool.srl.ClearSrl;
 import edu.knowitall.tool.tokenize.ClearTokenizer;
+import iitb.shared.XMLConfigs;
+import org.xml.sax.SAXException;
+import parser.CFGParser4Header;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Static {
     private static Quantifier ILLINOIS_QUANTIFIER = null;
@@ -31,6 +39,20 @@ public class Static {
     // For faster, but worse results; no TreeTagger required: "POSTagger.NO"
     private static HeidelTimeStandalone HEIDEL_TIME_NARRATIVES = null;
     private static HeidelTimeStandalone HEIDEL_TIME_NEWS = null;
+
+    private static CFGParser4Header TABLE_HEADER_PARSER = null;
+
+    public static CFGParser4Header getTableHeaderParser() {
+        if (TABLE_HEADER_PARSER == null) {
+            try {
+                TABLE_HEADER_PARSER = new CFGParser4Header(XMLConfigs.load(new FileReader("conf/unit-tagger-configs.xml")));
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        }
+        return TABLE_HEADER_PARSER;
+    }
 
     public static Quantifier getIllinoisQuantifier() {
         if (ILLINOIS_QUANTIFIER == null) {
