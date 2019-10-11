@@ -1,6 +1,7 @@
 package model.quantity;
 
 import catalog.QuantityCatalog;
+import catalog.Unit;
 import org.w3c.dom.Element;
 
 import java.util.Map;
@@ -164,6 +165,11 @@ public class QuantityDomain {
         if (VOLUME_DOMAIN.containsKey(quantity.unit)) {
             return VOLUME_DOMAIN.get(quantity.unit);
         }
+        // Now use QuTree.
+        Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
+        if (u != null && !u.getParentQuantity().isUnitLess()) {
+            return u.getMultiplier();
+        }
         return 1.0; // dimensionless.
     }
     // anything else is considered dimensionless
@@ -186,6 +192,11 @@ public class QuantityDomain {
         }
         if (VOLUME_DOMAIN.containsKey(quantity.unit)) {
             return Domain.VOLUME;
+        }
+        // Now use QuTree.
+        Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
+        if (u != null && !u.getParentQuantity().isUnitLess()) {
+            return u.getParentQuantity().getConcept();
         }
         return Domain.DIMENSIONLESS;
     }
