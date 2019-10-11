@@ -26,7 +26,7 @@ import java.util.List;
 // TODO: In 2013 , SBB Cargo had 3,061 employees and achieved consolidated sales of CHF 953 million .
 public class QuantityTaggingNode implements TaggingNode {
 
-    // returns: Unit (QuTree Basename), Multiplier, Span String, Preprocessed String (contains Span String)
+    // returns: Unit (QuTree Basename), Multiplier, Span String, Preprocessed String (removed Span String)
     private static Quadruple<String, Double, String, String> getHeaderUnit(String header) {
         try {
             ParseState[] state = new ParseState[1];
@@ -36,21 +36,30 @@ public class QuantityTaggingNode implements TaggingNode {
             }
             EntryWithScore<Unit> eu = units.get(0);
             String span = null;
+            String preprocessed = null;
+            int start, end;
             if (eu instanceof UnitFeatures) {
                 UnitFeatures uf = (UnitFeatures) eu;
-                span = String.join(" ", state[0].tokens.subList(uf.start(), uf.end() + 1));
+                start = uf.start();
+                end = uf.end();
             } else if (eu instanceof UnitSpan) {
                 UnitSpan us = (UnitSpan) eu;
-                span = String.join(" ", state[0].tokens.subList(us.start(), us.end() + 1));
+                start = us.start();
+                end = us.end();
             } else {
                 throw new Exception("Invalid entry unit");
             }
+            span = String.join(" ", state[0].tokens.subList(start, end + 1));
+            for (int i = end; i >= start; --i) {
+                state[0].tokens.remove(i);
+            }
+            preprocessed = String.join(" ", state[0].tokens);
             Unit u = eu.getKey();
             if (!(u instanceof UnitPair)) {
                 if (u.getParentQuantity().isUnitLess()) {
-                    return new Quadruple(null, u.getMultiplier(), span, String.join(" ", state[0].tokens));
+                    return new Quadruple(null, u.getMultiplier(), span, preprocessed);
                 } else {
-                    return new Quadruple(u.getBaseName(), 1, span, String.join(" ", state[0].tokens));
+                    return new Quadruple(u.getBaseName(), 1, span, preprocessed);
                 }
             } else {
                 UnitPair up = (UnitPair) u;
@@ -65,7 +74,7 @@ public class QuantityTaggingNode implements TaggingNode {
                     return null;
                 }
                 Unit u2 = up.getUnit(1);
-                return new Quadruple(u1.getBaseName(), u2.getMultiplier(), span, String.join(" ", state[0].tokens));
+                return new Quadruple(u1.getBaseName(), u2.getMultiplier(), span, preprocessed);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,22 +101,32 @@ public class QuantityTaggingNode implements TaggingNode {
     // TODO:
     // - We may need to extends units from the header.
     // - We also may need to add dumpy data: '$916k' - > 'This is $916k.' [DONE]
-    private void tagCell(Cell cell) {
+    private void tagBodyCell(Cell cell, String unit, double multiplier) {
         cell.quantityLinks = new ArrayList<>();
         String dumpyText = "This is " + cell.text + " .";
         for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(dumpyText, true)) {
             if (span.object instanceof Quantity) {
                 Quantity q = (Quantity) span.object;
-                cell.quantityLinks.add(new QuantityLink(dumpyText.substring(span.start, span.end), q.value, NLP.stripSentence(q.units), q.bound));
+                cell.quantityLinks.add(new QuantityLink(dumpyText.substring(span.start, span.end), q.value * multiplier,
+                        // prefer header unit if available
+                        NLP.stripSentence(unit != null ? unit : q.units), q.bound));
             }
         }
     }
 
     @Override
     public boolean process(Table table) {
-        for (Cell[] row : table.data) {
-            for (Cell c : row) {
-                tagCell(c);
+        for (int col = 0; col < table.nColumn; ++col) {
+            String header = table.getCombinedHeader(col);
+            Quadruple<String, Double, String, String> unitInfoFromHeader = getHeaderUnit(header);
+            if (unitInfoFromHeader != null) {
+                table.setHeaderUnitSpan(col, unitInfoFromHeader.third);
+                table.setCombinedHeader(col, unitInfoFromHeader.fourth);
+            }
+
+            for (Cell[] row : table.data) {
+                tagBodyCell(row[col], unitInfoFromHeader == null ? null : unitInfoFromHeader.first,
+                        unitInfoFromHeader == null ? 1 : unitInfoFromHeader.second);
             }
         }
         return true;
