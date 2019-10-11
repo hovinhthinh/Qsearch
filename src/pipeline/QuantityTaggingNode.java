@@ -59,7 +59,7 @@ public class QuantityTaggingNode implements TaggingNode {
                 if (u.getParentQuantity().isUnitLess()) {
                     return new Quadruple(null, u.getMultiplier(), span, preprocessed);
                 } else {
-                    return new Quadruple(u.getBaseName(), 1, span, preprocessed);
+                    return new Quadruple(u.getBaseName(), 1.0, span, preprocessed);
                 }
             } else {
                 UnitPair up = (UnitPair) u;
@@ -131,7 +131,7 @@ public class QuantityTaggingNode implements TaggingNode {
 
             for (Cell[] row : table.data) {
                 tagBodyCell(row[col], unitInfoFromHeader == null ? null : unitInfoFromHeader.first,
-                        unitInfoFromHeader == null ? 1 : unitInfoFromHeader.second);
+                        unitInfoFromHeader == null ? 1.0 : unitInfoFromHeader.second);
             }
         }
         return true;
