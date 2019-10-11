@@ -217,7 +217,7 @@ public class ElasticSearchQuery {
 
         StreamedIterable<JSONObject> instances = searchByType(queryType);
 
-        if (QuantityDomain.getDomain(constraint.quantity) == QuantityDomain.Domain.DIMENSIONLESS) {
+        if (QuantityDomain.getDomain(constraint.quantity).equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             queryContext += " " + constraint.quantity.unit;
         }
         ArrayList<String> queryContextTerms =
