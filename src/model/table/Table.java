@@ -8,6 +8,7 @@ public class Table {
 
     public Cell[][] header; // row -> column
     private String[] combinedHeader;
+    private String[] headerUnitSpan;
     public Cell[][] data; // row -> column
     public int nHeaderRow, nDataRow, nColumn;
 
@@ -130,4 +131,20 @@ public class Table {
         }
         combinedHeader[columnIndex] = newCombinedHeader;
     }
+
+    public void setHeaderUnitSpan(int columnIndex, String unitSpan) {
+        if (headerUnitSpan == null) {
+            headerUnitSpan = new String[nColumn];
+        }
+        headerUnitSpan[columnIndex] = unitSpan;
+    }
+
+    public String getHeaderUnitSpan(int columnIndex) {
+        if (headerUnitSpan == null) {
+            return null;
+        }
+        return headerUnitSpan[columnIndex];
+    }
+
+
 }
