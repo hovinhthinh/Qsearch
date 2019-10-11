@@ -1,10 +1,24 @@
 package model.quantity;
 
+import catalog.QuantityCatalog;
+import org.w3c.dom.Element;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class QuantityDomain {
+    public static final QuantityCatalog QUANTITY_CATALOG;
+
+    static {
+        try {
+            QUANTITY_CATALOG = new QuantityCatalog((Element) null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
     public static final Map<String, Double> LENGTH_DOMAIN = Stream.of(new Object[][]{
             {"miles", 1609.344},
             {"mile", 1609.344},
@@ -206,7 +220,26 @@ public class QuantityDomain {
     }
 
     public static void main(String[] args) {
-        System.out.println(getDomainFromString("MONEY"));
+        System.out.println(DomainStr.ANY);
+        System.out.println(DomainStr.LENGTH);
+        System.out.println(DomainStr.MONEY);
+        System.out.println(DomainStr.TIME);
+        System.out.println(DomainStr.PERCENTAGE);
+        System.out.println(DomainStr.AREA);
+        System.out.println(DomainStr.VOLUME);
+        System.out.println(DomainStr.DIMENSIONLESS);
+
+    }
+
+    public static class DomainStr {
+        public static final String ANY = "ANY";
+        public static final String LENGTH = QUANTITY_CATALOG.getUnitFromBaseName("metre").getParentQuantity().getConcept();
+        public static final String MONEY = QUANTITY_CATALOG.getUnitFromBaseName("United States dollar").getParentQuantity().getConcept();
+        public static final String TIME = QUANTITY_CATALOG.getUnitFromBaseName("second").getParentQuantity().getConcept();
+        public static final String PERCENTAGE = QUANTITY_CATALOG.getUnitFromBaseName("percent").getParentQuantity().getConcept();
+        public static final String AREA = QUANTITY_CATALOG.getUnitFromBaseName("square metre").getParentQuantity().getConcept();
+        public static final String VOLUME = QUANTITY_CATALOG.getUnitFromBaseName("cubic metre").getParentQuantity().getConcept();
+        public static final String DIMENSIONLESS = "DIMENSIONLESS";
     }
 
     public enum Domain {
