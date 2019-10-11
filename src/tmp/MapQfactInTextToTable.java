@@ -98,7 +98,7 @@ public class MapQfactInTextToTable {
                 qConstraint.domain = QuantityDomain.getDomain(qConstraint.quantity);
 
                 // check money domain.
-                if (qConstraint.domain != QuantityDomain.Domain.MONEY) {
+                if (!qConstraint.domain.equals(QuantityDomain.Domain.MONEY)) {
                     continue;
                 }
 

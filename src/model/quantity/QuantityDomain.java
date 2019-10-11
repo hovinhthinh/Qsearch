@@ -145,14 +145,6 @@ public class QuantityDomain {
             {"square yd", 0.764},
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
 
-    public static Domain getDomainFromString(String str) {
-        try {
-            return Domain.valueOf(str);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static double getScale(Quantity quantity) {
         if (LENGTH_DOMAIN.containsKey(quantity.unit)) {
             return LENGTH_DOMAIN.get(quantity.unit);
@@ -176,7 +168,7 @@ public class QuantityDomain {
     }
     // anything else is considered dimensionless
 
-    public static Domain getDomain(Quantity quantity) {
+    public static String getDomain(Quantity quantity) {
         if (LENGTH_DOMAIN.containsKey(quantity.unit)) {
             return Domain.LENGTH;
         }
@@ -199,39 +191,38 @@ public class QuantityDomain {
     }
 
     // quantityString: "(<value>;<unit>;<resolution>)"
-    public static Domain getDomain(String quantityString) {
+    public static String getDomain(String quantityString) {
         return getDomain(Quantity.fromQuantityString(quantityString));
     }
 
-    public static boolean quantityMatchesDomain(Quantity quantity, Domain domain) {
-        if (domain == Domain.ANY) {
+    public static boolean quantityMatchesDomain(Quantity quantity, String domain) {
+        if (domain.equals(Domain.ANY)) {
             return true;
         }
-        return getDomain(quantity) == domain;
+        return getDomain(quantity).equals(domain);
     }
 
     // quantityString: "(<value>;<unit>;<resolution>)"
-    public static boolean quantityMatchesDomain(String quantityString, Domain domain) {
+    public static boolean quantityMatchesDomain(String quantityString, String domain) {
         return quantityMatchesDomain(Quantity.fromQuantityString(quantityString), domain);
     }
 
-    public static boolean unitMatchesDomain(String unit, Domain domain) {
+    public static boolean unitMatchesDomain(String unit, String domain) {
         return quantityMatchesDomain(new Quantity(0, unit, "="), domain);
     }
 
     public static void main(String[] args) {
-        System.out.println(DomainStr.ANY);
-        System.out.println(DomainStr.LENGTH);
-        System.out.println(DomainStr.MONEY);
-        System.out.println(DomainStr.TIME);
-        System.out.println(DomainStr.PERCENTAGE);
-        System.out.println(DomainStr.AREA);
-        System.out.println(DomainStr.VOLUME);
-        System.out.println(DomainStr.DIMENSIONLESS);
-
+        System.out.println(Domain.ANY);
+        System.out.println(Domain.LENGTH);
+        System.out.println(Domain.MONEY);
+        System.out.println(Domain.TIME);
+        System.out.println(Domain.PERCENTAGE);
+        System.out.println(Domain.AREA);
+        System.out.println(Domain.VOLUME);
+        System.out.println(Domain.DIMENSIONLESS);
     }
 
-    public static class DomainStr {
+    public static class Domain {
         public static final String ANY = "ANY";
         public static final String LENGTH = QUANTITY_CATALOG.getUnitFromBaseName("metre").getParentQuantity().getConcept();
         public static final String MONEY = QUANTITY_CATALOG.getUnitFromBaseName("United States dollar").getParentQuantity().getConcept();
@@ -242,7 +233,4 @@ public class QuantityDomain {
         public static final String DIMENSIONLESS = "DIMENSIONLESS";
     }
 
-    public enum Domain {
-        ANY, LENGTH, MONEY, TIME, PERCENTAGE, AREA, VOLUME, DIMENSIONLESS
-    }
 }

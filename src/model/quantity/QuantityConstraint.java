@@ -13,7 +13,7 @@ public class QuantityConstraint {
     private static transient ThreadLocal<Quantifier> QUANTIFIER_LOCAL = ThreadLocal.withInitial(() -> new Quantifier());
     public Quantity quantity; // From Illinois Quantifier.
     public QuantityResolution.Value resolutionCode;
-    public QuantityDomain.Domain domain;
+    public String domain;
     public String phrase;
 
     public static QuantityConstraint parseFromString(String constraintString) {
@@ -42,7 +42,7 @@ public class QuantityConstraint {
     }
 
     public boolean match(Quantity q) {
-        if (domain != QuantityDomain.getDomain(q)) {
+        if (!domain.equals(QuantityDomain.getDomain(q))) {
             return false;
         }
         double qValue = q.value * QuantityDomain.getScale(q);
