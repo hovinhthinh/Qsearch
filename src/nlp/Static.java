@@ -45,7 +45,7 @@ public class Static {
     public static CFGParser4Header getTableHeaderParser() {
         if (TABLE_HEADER_PARSER == null) {
             try {
-                TABLE_HEADER_PARSER = new CFGParser4Header(XMLConfigs.load(new FileReader("conf/unit-tagger-configs.xml")));
+                TABLE_HEADER_PARSER = new CFGParser4Header(XMLConfigs.load(new FileReader("lib/unit-tagger/unit-tagger-configs.xml")));
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
