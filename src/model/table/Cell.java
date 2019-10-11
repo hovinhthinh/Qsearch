@@ -20,6 +20,9 @@ public class Cell {
         for (EntityLink l : entityLinks) {
             disambiguatedText = disambiguatedText.replace(l.text, "<" + l.target.substring(l.target.lastIndexOf(":") + 1) + ">");
         }
+        for (QuantityLink l : quantityLinks) {
+            disambiguatedText = disambiguatedText.replace(l.text, l.quantity.toString(1));
+        }
         return disambiguatedText;
     }
 
