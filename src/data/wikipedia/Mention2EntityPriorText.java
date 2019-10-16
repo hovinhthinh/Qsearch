@@ -40,13 +40,11 @@ public class Mention2EntityPriorText {
         monitor.start();
         for (String line : stream) {
             nLine.incrementAndGet();
-            JSONObject json = new JSONObject(line);
-            JSONObject arr = json.getJSONObject("entities");
-
-            for (String id : arr.keySet()) {
-                Object o = arr.get(id);
-                try {
-
+            try {
+                JSONObject json = new JSONObject(line);
+                JSONObject arr = json.getJSONObject("entities");
+                for (String id : arr.keySet()) {
+                    Object o = arr.get(id);
                     if (o instanceof String) {
                         String s = NLP.stripSentence((String) o);
                         add(s, id);
@@ -57,10 +55,10 @@ public class Mention2EntityPriorText {
                             add(s, id);
                         }
                     }
-                } catch (JSONException e) {
-                    System.out.println("Skip: " + (++skip));
-                    continue;
                 }
+            } catch (JSONException e) {
+                System.out.println("Skip: " + (++skip));
+                continue;
             }
         }
         monitor.forceShutdown();
