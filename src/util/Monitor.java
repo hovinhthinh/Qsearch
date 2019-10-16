@@ -67,7 +67,7 @@ public abstract class Monitor extends Thread {
                 : String.format("%d/%d", progress.current, progress.total);
         String percentString = progress.total == -1 ? "--" : String.format("%.2f%%", progress.percent);
         String speedString = String.format("%.2f/sec", progress.speed);
-        String etaString = progress.eta_d == -1 ? "--d --:--:--" :
+        String etaString = progress.total == -1 ? "--d --:--:--" :
                 String.format("%dd %02d:%02d:%02d", progress.eta_d, progress.eta_h, progress.eta_m, progress.eta_s);
 
         log(String.format("MONITOR [%s] : current: %s     percent: %s     speed: %s     eta: %s",
