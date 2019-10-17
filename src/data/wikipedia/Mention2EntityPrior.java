@@ -1,6 +1,10 @@
 package data.wikipedia;
 
+import model.table.Cell;
+import model.table.Table;
+import model.table.link.EntityLink;
 import nlp.NLP;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,10 +19,12 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Deprecated
-public class Mention2EntityPriorText {
+public class Mention2EntityPrior {
     public static HashMap<String, HashMap<String, Integer>> map = new HashMap<>();
 
     public static void add(String mention, String entity) {
+        entity = StringEscapeUtils.unescapeJava(entity);
+        mention = NLP.stripSentence(mention);
         if (!map.containsKey(mention)) {
             map.put(mention, new HashMap<>());
         }
@@ -26,19 +32,20 @@ public class Mention2EntityPriorText {
         entityMap.put(entity, entityMap.getOrDefault(entity, 0) + 1);
     }
 
-    // args: <wikipedia from Niko> <output>
+    // args: <wikipedia from Niko> <TabEL wikipedia tables> <output>
     public static void main(String[] args) {
-        FileUtils.LineStream stream = FileUtils.getLineStream(args[0], "UTF-8");
+        FileUtils.LineStream stream_1 = FileUtils.getLineStream(args[0], "UTF-8");
         int skip = 0;
         final AtomicInteger nLine = new AtomicInteger(0);
-        Monitor monitor = new Monitor("Mention2EntityPriorWikipediaText", -1, 10, null) {
+        Monitor monitor = new Monitor("Mention2EntityPrior", -1, 10, null) {
             @Override
             public int getCurrent() {
                 return nLine.get();
             }
         };
         monitor.start();
-        for (String line : stream) {
+        System.out.println("Processing: " + args[0]);
+        for (String line : stream_1) {
             nLine.incrementAndGet();
             try {
                 JSONObject json = new JSONObject(line);
@@ -46,13 +53,11 @@ public class Mention2EntityPriorText {
                 for (String id : arr.keySet()) {
                     Object o = arr.get(id);
                     if (o instanceof String) {
-                        String s = NLP.stripSentence((String) o);
-                        add(s, id);
+                        add((String) o, id);
                     } else {
                         JSONArray ao = (JSONArray) o;
                         for (int i = 0; i < ao.length(); ++i) {
-                            String s = NLP.stripSentence(ao.getString(i));
-                            add(s, id);
+                            add(ao.getString(i), id);
                         }
                     }
                 }
@@ -61,10 +66,33 @@ public class Mention2EntityPriorText {
                 continue;
             }
         }
+        System.out.println("Processing: " + args[1]);
+        FileUtils.LineStream stream_2 = FileUtils.getLineStream(args[1], "UTF-8");
+        for (String line : stream_2) {
+            nLine.incrementAndGet();
+            Table table = WIKIPEDIA.parseFromJSON(line);
+            if (table == null) {
+                System.out.println("Skip: " + (++skip));
+                continue;
+            }
+            for (Cell[][] part : new Cell[][][]{table.header, table.data}) {
+                for (int i = 0; i < part.length; ++i) {
+                    for (int j = 0; j < part[i].length; ++j) {
+                        for (EntityLink e : part[i][j].entityLinks) {
+                            if (!e.target.startsWith("WIKIPEDIA:INTERNAL:")) {
+                                continue;
+                            }
+                            add(e.text, "<" + e.target.substring(19) + ">");
+                        }
+                    }
+                }
+            }
+        }
+
         monitor.forceShutdown();
 
         System.out.println("Writing output.");
-        PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter(args[2], "UTF-8");
 
         for (Map.Entry<String, HashMap<String, Integer>> e : map.entrySet()) {
             ArrayList<Map.Entry<String, Integer>> list = new ArrayList<>(e.getValue().entrySet());
