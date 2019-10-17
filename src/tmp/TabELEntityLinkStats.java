@@ -15,7 +15,7 @@ public class TabELEntityLinkStats {
         int skip = 0;
         final AtomicInteger nLine = new AtomicInteger(0);
 
-        Monitor monitor = new Monitor("Mention2EntityPriorWikipediaText", -1, 10, null) {
+        Monitor monitor = new Monitor("TabELEntityLinkStats", -1, 10, null) {
             @Override
             public int getCurrent() {
                 return nLine.get();
@@ -35,7 +35,7 @@ public class TabELEntityLinkStats {
                 for (int i = 0; i < part.length; ++i) {
                     for (int j = 0; j < part[i].length; ++j) {
                         for (EntityLink e : part[i][j].entityLinks) {
-                            System.out.println(e.target);
+                            out.println(e.target);
                         }
                     }
                 }
