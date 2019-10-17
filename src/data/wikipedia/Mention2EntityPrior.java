@@ -6,7 +6,6 @@ import model.table.link.EntityLink;
 import nlp.NLP;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import util.FileUtils;
 import util.Monitor;
@@ -61,7 +60,8 @@ public class Mention2EntityPrior {
                         }
                     }
                 }
-            } catch (JSONException e) {
+            } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("Skip: " + (++skip));
                 continue;
             }
@@ -75,17 +75,23 @@ public class Mention2EntityPrior {
                 System.out.println("Skip: " + (++skip));
                 continue;
             }
-            for (Cell[][] part : new Cell[][][]{table.header, table.data}) {
-                for (int i = 0; i < part.length; ++i) {
-                    for (int j = 0; j < part[i].length; ++j) {
-                        for (EntityLink e : part[i][j].entityLinks) {
-                            if (!e.target.startsWith("WIKIPEDIA:INTERNAL:")) {
-                                continue;
+            try {
+                for (Cell[][] part : new Cell[][][]{table.header, table.data}) {
+                    for (int i = 0; i < part.length; ++i) {
+                        for (int j = 0; j < part[i].length; ++j) {
+                            for (EntityLink e : part[i][j].entityLinks) {
+                                if (!e.target.startsWith("WIKIPEDIA:INTERNAL:")) {
+                                    continue;
+                                }
+                                add(e.text, "<" + e.target.substring(19) + ">");
                             }
-                            add(e.text, "<" + e.target.substring(19) + ">");
                         }
                     }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Skip: " + (++skip));
+                continue;
             }
         }
 
