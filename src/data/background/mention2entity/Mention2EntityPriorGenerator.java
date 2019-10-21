@@ -15,7 +15,10 @@ import util.Pair;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -186,19 +189,23 @@ public class Mention2EntityPriorGenerator {
         System.out.println("Writing output.");
         PrintWriter out = FileUtils.getPrintWriter(args[3] + ".case-sensitive.gz", "UTF-8");
         for (Map.Entry<String, HashMap<String, Integer>> e : mention2EntityMapCaseSensitive.entrySet()) {
-            ArrayList<Pair<String, Integer>> list = e.getValue().entrySet().stream().map(o -> new Pair(o.getKey(), o.getValue())).collect(Collectors.toCollection(ArrayList::new));
-            Collections.sort(list, (o1, o2) -> o2.second.compareTo(o1.second));
-            Mention2EntityInfoLine m2e = new Mention2EntityInfoLine(e.getKey(), list);
-            out.println(m2e.toLine());
+            ArrayList<Pair<String, Integer>> list = e.getValue().entrySet().stream()
+                    .map(o -> new Pair<>(o.getKey(), o.getValue()))
+                    .sorted((o1, o2) -> o2.second.compareTo(o1.second))
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            out.println(new Mention2EntityInfoLine(e.getKey(), list).toLine());
         }
         out.close();
 
         out = FileUtils.getPrintWriter(args[3] + ".case-insensitive.gz", "UTF-8");
         for (Map.Entry<String, HashMap<String, Integer>> e : mention2EntityMapCaseInsensitive.entrySet()) {
-            ArrayList<Pair<String, Integer>> list = e.getValue().entrySet().stream().map(o -> new Pair(o.getKey(), o.getValue())).collect(Collectors.toCollection(ArrayList::new));
-            Collections.sort(list, (o1, o2) -> o2.second.compareTo(o1.second));
-            Mention2EntityInfoLine m2e = new Mention2EntityInfoLine(e.getKey(), list);
-            out.println(m2e.toLine());
+            ArrayList<Pair<String, Integer>> list = e.getValue().entrySet().stream()
+                    .map(o -> new Pair<>(o.getKey(), o.getValue()))
+                    .sorted((o1, o2) -> o2.second.compareTo(o1.second))
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            out.println(new Mention2EntityInfoLine(e.getKey(), list).toLine());
         }
         out.close();
     }
