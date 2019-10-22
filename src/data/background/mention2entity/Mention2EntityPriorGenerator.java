@@ -129,7 +129,6 @@ public class Mention2EntityPriorGenerator {
         HashSet<String> uniqueSetCaseSensitive = new HashSet<>();
         HashSet<String> uniqueSetCaseInsensitive = new HashSet<>();
         for (String line : stream) {
-            nLine.incrementAndGet();
             try {
                 if (line.startsWith("MENTION\t")) {
                     String[] arr = line.split("\t");
@@ -140,7 +139,6 @@ public class Mention2EntityPriorGenerator {
                     } else if (entity.startsWith(prefix_2)) {
                         entity = entity.substring(prefix_2.length());
                     } else {
-                        System.out.println("Ignore: " + line);
                         continue;
                     }
                     int p = entity.indexOf('#');
@@ -155,6 +153,9 @@ public class Mention2EntityPriorGenerator {
                         addCaseInsensitive(mention, entity);
                     }
                 } else if (line.isEmpty()) {
+                    if (uniqueSetCaseSensitive.isEmpty()) {
+                        nLine.incrementAndGet();
+                    }
                     uniqueSetCaseSensitive = new HashSet<>();
                     uniqueSetCaseInsensitive = new HashSet<>();
                 }
@@ -166,14 +167,13 @@ public class Mention2EntityPriorGenerator {
         }
     }
 
-    // args: /GW/D5data-11/hvthinh/WIKIPEDIA-niko/fixedWikipediaEntitiesJSON.gz /GW/D5data-11/hvthinh/TabEL/TabEL.json.shuf.gz /GW/D5data-11/hvthinh/wiki-links/data.gz <output>
+    // args: <output>
     // output 2 files: <output>.case-sensitive <output>.case-insensitive
     public static void main(String[] args) {
         for (int i = 0; i < 3; ++i) {
             Assert.assertTrue(new File(args[0]).exists());
         }
-
-        Monitor monitor = new Monitor("Mention2EntityPrior-ProcessedLines", -1, 10, null) {
+        Monitor monitor = new Monitor("Mention2EntityPrior-ProcessedDocs", -1, 10, null) {
             @Override
             public int getCurrent() {
                 return nLine.get();
@@ -181,13 +181,13 @@ public class Mention2EntityPriorGenerator {
         };
 
         monitor.start();
-        processWikipediaPages(args[0]);
-        processWikiLinksDataset(args[2]);
-        processWikipediaTables(args[1]);
+        processWikipediaPages("/GW/D5data-11/hvthinh/WIKIPEDIA-niko/fixedWikipediaEntitiesJSON.gz");
+        processWikiLinksDataset("/GW/D5data-11/hvthinh/wiki-links/data.gz");
+        processWikipediaTables("/GW/D5data-11/hvthinh/TabEL/TabEL.json.shuf.gz");
         monitor.forceShutdown();
 
         System.out.println("Writing output.");
-        PrintWriter out = FileUtils.getPrintWriter(args[3] + ".case-sensitive.gz", "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter(args[0] + ".case-sensitive.gz", "UTF-8");
         for (Map.Entry<String, HashMap<String, Integer>> e : mention2EntityMapCaseSensitive.entrySet()) {
             ArrayList<Pair<String, Integer>> list = e.getValue().entrySet().stream()
                     .map(o -> new Pair<>(o.getKey(), o.getValue()))
@@ -198,7 +198,7 @@ public class Mention2EntityPriorGenerator {
         }
         out.close();
 
-        out = FileUtils.getPrintWriter(args[3] + ".case-insensitive.gz", "UTF-8");
+        out = FileUtils.getPrintWriter(args[0] + ".case-insensitive.gz", "UTF-8");
         for (Map.Entry<String, HashMap<String, Integer>> e : mention2EntityMapCaseInsensitive.entrySet()) {
             ArrayList<Pair<String, Integer>> list = e.getValue().entrySet().stream()
                     .map(o -> new Pair<>(o.getKey(), o.getValue()))
