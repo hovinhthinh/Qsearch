@@ -179,11 +179,13 @@ public class Mention2EntityPriorGenerator {
                 return nLine.get();
             }
         };
-
         monitor.start();
         processWikipediaPages("/GW/D5data-11/hvthinh/WIKIPEDIA-niko/fixedWikipediaEntitiesJSON.gz");
+        nLine.set(0);
         processWikiLinksDataset("/GW/D5data-11/hvthinh/wiki-links/data.gz");
+        nLine.set(0);
         processWikipediaTables("/GW/D5data-11/hvthinh/TabEL/TabEL.json.shuf.gz");
+        nLine.set(0);
         monitor.forceShutdown();
 
         System.out.println("Writing output.");
