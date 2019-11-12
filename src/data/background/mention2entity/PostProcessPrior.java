@@ -104,7 +104,7 @@ public class PostProcessPrior {
         monitor.forceShutdown();
         PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
         entity2Freq.entrySet().stream().sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue())).forEach(o -> {
-            out.println(String.format("%s\t%s", o.getKey(), o.getValue()));
+            out.println(String.format("%s\t%d", o.getKey(), o.getValue()));
         });
 
         out.close();
