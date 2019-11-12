@@ -7,6 +7,7 @@ import util.Pair;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -80,8 +81,38 @@ public class PostProcessPrior {
         monitor.forceShutdown();
     }
 
+    // <input> <output>
+    public static void countEntity(String[] args) {
+        final AtomicInteger cnt = new AtomicInteger(0);
+        Monitor monitor = new Monitor("process_1", -1, 10) {
+            @Override
+            public int getCurrent() {
+                return cnt.get();
+            }
+        };
+        monitor.start();
+
+        Map<String, Integer> entity2Freq = new HashMap<>();
+
+        for (String line : FileUtils.getLineStream(args[0], "UTF-8")) {
+            Mention2EntityInfoLine infoLine = Mention2EntityInfoLine.fromLine(line);
+            for (Pair<String, Integer> o : infoLine.entityFreq) {
+                entity2Freq.put(o.first, entity2Freq.getOrDefault(o.first, 0) + o.second);
+            }
+            cnt.incrementAndGet();
+        }
+        monitor.forceShutdown();
+        PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
+        entity2Freq.entrySet().stream().sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue())).forEach(o -> {
+            out.println(String.format("%s\t%s", o.getKey(), o.getValue()));
+        });
+
+        out.close();
+    }
+
     public static void main(String[] args) {
 //        process_0(args);
-        process_1(args);
+//        process_1(args);
+        countEntity(args);
     }
 }
