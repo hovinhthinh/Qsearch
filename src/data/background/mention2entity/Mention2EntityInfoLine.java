@@ -27,7 +27,7 @@ public class Mention2EntityInfoLine {
         return (mention + "\t" + arr.toString());
     }
 
-    public Mention2EntityInfoLine fromLine(String line) {
+    public static Mention2EntityInfoLine fromLine(String line) {
         Mention2EntityInfoLine m2e = new Mention2EntityInfoLine();
         try {
             String[] arr = line.split("\t");
