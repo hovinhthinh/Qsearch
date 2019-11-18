@@ -1,5 +1,7 @@
 package model.table;
 
+import pipeline.ColumnTypeTaggingNode;
+
 import java.util.HashMap;
 
 public class Table {
@@ -13,6 +15,7 @@ public class Table {
     public int nHeaderRow, nDataRow, nColumn;
 
     public boolean[] isNumericColumn; // TODO: this needs to be checked again using external tool, instead of using internal signal from Wikipedia.
+    public ColumnTypeTaggingNode.ColumnType[] columnType;
 
     public int[] quantityToEntityColumn; // -1 means there is no connection.
 
