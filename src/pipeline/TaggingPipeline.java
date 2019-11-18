@@ -15,6 +15,7 @@ public class TaggingPipeline {
         return new TaggingPipeline(
                 new EntityTaggingNode(),
                 new QuantityTaggingNode(),
+                new ColumnTypeTaggingNode(),
                 new DeepColumnScoringNode(0),
                 new PostFilteringNode()
         );
