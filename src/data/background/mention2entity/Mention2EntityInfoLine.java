@@ -5,6 +5,7 @@ import util.Pair;
 
 import java.util.ArrayList;
 
+// Map a mention to a list of YAGO entities along with their frequency.
 public class Mention2EntityInfoLine {
     public String mention;
     public ArrayList<Pair<String, Integer>> entityFreq;

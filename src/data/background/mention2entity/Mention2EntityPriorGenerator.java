@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-
+@Deprecated
 public class Mention2EntityPriorGenerator {
     public static HashMap<String, HashMap<String, Integer>> mention2EntityMapCaseSensitive = new HashMap<>();
     public static HashMap<String, HashMap<String, Integer>> mention2EntityMapCaseInsensitive = new HashMap<>();
