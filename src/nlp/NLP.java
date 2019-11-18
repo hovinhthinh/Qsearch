@@ -277,10 +277,10 @@ public class NLP {
     }
 
 
-    public static final List<String> tokenize(String text) {
+    public static final ArrayList<String> tokenize(String text) {
         text = NLP.stripSentence(text);
         List<Token> tokens = JavaConversions.seqAsJavaList(Static.getOpenIe().tokenizer().tokenize(Static.getOpenIe().clean(text)));
-        return tokens.stream().map(o -> o.string()).collect(Collectors.toList());
+        return tokens.stream().map(o -> o.string()).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static void main(String[] args) {
