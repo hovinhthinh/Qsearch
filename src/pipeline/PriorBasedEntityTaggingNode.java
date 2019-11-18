@@ -49,29 +49,36 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
         int current = 0;
         while (current < arr.size()) {
             boolean found = false;
-            loop:
             for (int l = arr.size() - current; l >= 1; --l) {
+                int candidatePos = -1, candidateFreq = 0;
+                String candidateEntity = null;
                 for (int s = current; s < arr.size(); ++s) {
                     if (s + l > arr.size()) {
-                        continue;
+                        break;
                     }
-                    String mention = String.join(" ", arr.subList(s, l));
-                    List<Pair<String, Integer>> candidates = prior.getCanditateEntitiesForMention(mention);
+                    List<Pair<String, Integer>> candidates = prior.getCanditateEntitiesForMention(String.join(" ", arr.subList(s, s + l)));
                     if (candidates == null) {
                         continue;
                     }
 
                     // Make a candidate.
-                    String candidate = candidates.get(0).first;
+                    Pair<String, Integer> candidate = candidates.get(0);
+
+                    if (candidateEntity == null || candidate.second > candidateFreq) {
+                        candidateEntity = candidate.first;
+                        candidateFreq = candidate.second;
+                        candidatePos = s;
+                    }
+                }
+                if (candidateEntity != null) {
                     EntityLink el = new EntityLink();
-                    el.text = mention;
-                    el.target = "YAGO:" + candidate.substring(1, candidate.length() - 1);
+                    el.text = String.join(" ", arr.subList(candidatePos, candidatePos + l));
+                    el.target = "YAGO:" + candidateEntity.substring(1, candidateEntity.length() - 1);
                     cell.entityLinks.add(el);
 
-
-                    current = s + l;
+                    current = candidatePos + l;
                     found = true;
-                    break loop;
+                    break;
                 }
             }
             if (!found || !multipleEntitiesInCell) {
@@ -82,7 +89,7 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
 
     public static void main(String[] args) {
         Cell cell = new Cell();
-        cell.text = "Congo , Republic of the";
+        cell.text = "\" How Chelsea Got Her Groove Back \"";
         new PriorBasedEntityTaggingNode().tagCell(cell);
         cell.quantityLinks = new ArrayList<>();
         System.out.println(cell.getDisambiguatedText());
