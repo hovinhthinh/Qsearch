@@ -31,7 +31,7 @@ public class Mention2EntityPrior {
                 mention2Entity.put(infoLine.mention, infoLine.entityFreq);
             }
         }
-        LOGGER.info(String.format("Loaded: %d/%d", afterPruned, total));
+        LOGGER.info(String.format("MinFrequency: %d\tLoaded: %d/%d", minEntityFreq, afterPruned, total));
     }
 
     public List<Pair<String, Integer>> getCanditateEntitiesForMention(String mention) {
