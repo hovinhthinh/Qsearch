@@ -2,6 +2,7 @@ package nlp;
 
 import org.json.JSONArray;
 import util.FileUtils;
+import util.Pair;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -34,7 +35,7 @@ public class YagoType {
     ));
 
     private static final HashMap<String, int[]> entity2Types;
-    private static final ArrayList<String> index2Type;
+    private static final ArrayList<Pair<String, Double>> index2Type; // store type & itf (inverse type frequency)
 
     static {
         LOGGER.info(String.format("loading yago type compact from %s", YAGO_TYPE_COMPACT_PATH));
@@ -51,25 +52,34 @@ public class YagoType {
                 Integer index = type2Index.get(type);
                 if (index == null) {
                     type2Index.put(type, typesInt[i] = type2Index.size());
-                    index2Type.add(type);
+                    index2Type.add(new Pair(type, 1.0));
                 } else {
                     typesInt[i] = index;
+                    index2Type.get(index).second += 1.0;
                 }
             }
             entity2Types.put(arr[0], typesInt);
         }
         index2Type.trimToSize();
+        // Compute itf (Robertson version)
+        for (int i = 0; i < index2Type.size(); ++i) {
+            Pair<String, Double> typeAndFreq = index2Type.get(i);
+            typeAndFreq.second = Math.max(0.0001, Math.log10((entity2Types.size() - typeAndFreq.second + 0.5) / (typeAndFreq.second + 0.5)));
+        }
+        LOGGER.info(String.format("loaded total %d types", index2Type.size()));
+
     }
 
-    public static final List<String> getSpecificTypes(String entity) { // entity: <Cris_Ronaldo>
+    // return list of types and their ITF.
+    public static final List<Pair<String, Double>> getSpecificTypes(String entity) { // entity: <Cris_Ronaldo>
         int[] l = entity2Types.get(entity);
         if (l == null) {
             return null;
         }
-        List<String> types = new ArrayList<>(l.length);
+        List<Pair<String, Double>> types = new ArrayList<>(l.length);
         for (int i : l) {
-            String t = index2Type.get(i);
-            if (!BLOCKED_GENERAL_TYPES.contains(t)) {
+            Pair<String, Double> t = index2Type.get(i);
+            if (!BLOCKED_GENERAL_TYPES.contains(t.first)) {
                 types.add(t);
             }
         }
@@ -78,6 +88,8 @@ public class YagoType {
 
 
     public static void main(String[] args) {
-        System.out.println(getSpecificTypes("<Cristiano_Ronaldo>"));
+        System.out.println(getSpecificTypes("<Barack_Obama>"));
     }
+
+    // TODO: apply ITF
 }

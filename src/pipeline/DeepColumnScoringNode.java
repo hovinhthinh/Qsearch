@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class DeepColumnScoringNode implements TaggingNode {
     public static final Logger LOGGER = Logger.getLogger(DeepColumnScoringNode.class.getName());
@@ -52,7 +53,7 @@ public class DeepColumnScoringNode implements TaggingNode {
                     if (e == null) {
                         continue;
                     }
-                    List<String> types = YagoType.getSpecificTypes("<" + e.target.substring(e.target.lastIndexOf(":") + 1) + ">");
+                    List<String> types = YagoType.getSpecificTypes("<" + e.target.substring(e.target.lastIndexOf(":") + 1) + ">").stream().map(o -> o.first).collect(Collectors.toList());
                     if (types == null) {
                         continue;
                     }
