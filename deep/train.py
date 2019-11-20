@@ -1,3 +1,4 @@
+# nohup  python -u train.py --resume -d 1 >> train.out &
 import argparse
 import os
 
