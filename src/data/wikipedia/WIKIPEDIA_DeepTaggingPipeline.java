@@ -20,6 +20,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
         );
     }
 
+    // Just the annotations of entities and quantities, there is no linking.
     public static TaggingPipeline getAnnotationPipeline() {
         return new TaggingPipeline(
                 new QuantityTaggingNode(),
