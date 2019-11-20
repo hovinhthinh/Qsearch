@@ -24,10 +24,17 @@ public class DeepColumnScoringNode_MinMax implements TaggingNode {
         this.scoringClient = new DeepScoringClient();
     }
 
+    public DeepColumnScoringNode_MinMax() {
+        this(0);
+    }
+
     @Override
     public boolean process(Table table) {
         table.quantityToEntityColumn = new int[table.nColumn];
         Arrays.fill(table.quantityToEntityColumn, -1);
+
+        table.quantityToEntityColumnScore = new double[table.nColumn];
+        Arrays.fill(table.quantityToEntityColumnScore, -1.0);
 
         boolean result = false;
         // loop for quantity columns.
@@ -54,7 +61,7 @@ public class DeepColumnScoringNode_MinMax implements TaggingNode {
                     if (e == null) {
                         continue;
                     }
-                    List<String> types = YagoType.getSpecificTypes("<" + e.target.substring(e.target.lastIndexOf(":") + 1) + ">").stream().map(o->o.first).collect(Collectors.toList());
+                    List<String> types = YagoType.getSpecificTypes("<" + e.target.substring(e.target.lastIndexOf(":") + 1) + ">").stream().map(o -> o.first).collect(Collectors.toList());
                     if (types == null) {
                         continue;
                     }
@@ -78,6 +85,7 @@ public class DeepColumnScoringNode_MinMax implements TaggingNode {
             }
 
             table.quantityToEntityColumn[pivotCol] = targetCol;
+            table.quantityToEntityColumnScore[pivotCol] = linkingConf;
         }
         return result;
     }
