@@ -17,6 +17,7 @@ public class TaggingPipeline {
                 new QuantityTaggingNode(),
                 new ColumnTypeTaggingNode(),
                 new DeepColumnScoringNode(),
+                new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
         );
     }

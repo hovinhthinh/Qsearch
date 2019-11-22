@@ -3,10 +3,7 @@ package data.wikipedia;
 
 import com.google.gson.Gson;
 import model.table.Table;
-import pipeline.DeepColumnScoringNode;
-import pipeline.PostFilteringNode;
-import pipeline.QuantityTaggingNode;
-import pipeline.TaggingPipeline;
+import pipeline.*;
 import util.FileUtils;
 
 import java.io.PrintWriter;
@@ -16,6 +13,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
         return new TaggingPipeline(
                 new QuantityTaggingNode(),
                 new DeepColumnScoringNode(),
+                new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
         );
     }
@@ -39,7 +37,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
         Gson gson = new Gson();
 
         for (String line : stream) {
-            Table table = WIKIPEDIA.parseFromJSON(line);
+            Table table = WIKIPEDIA.parseFromJSON(line); // already contains Entity Tags & Column Types.
             if (table == null) {
                 continue;
             }

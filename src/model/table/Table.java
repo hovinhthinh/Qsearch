@@ -18,7 +18,7 @@ public class Table {
     public ColumnTypeTaggingNode.ColumnType[] columnType;
 
     public int[] quantityToEntityColumn; // -1 means there is no connection.
-    public double[] quantityToEntityColumnScore; // linking score.
+    public double[] quantityToEntityColumnScore; // linking score (default is -1 | unknown).
 
     public String surroundingText;
     public String caption;

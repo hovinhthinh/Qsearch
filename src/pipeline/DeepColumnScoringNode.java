@@ -17,18 +17,16 @@ public class DeepColumnScoringNode implements TaggingNode {
     public static final int MIN_MAX_INFERENCE = 0;
     public static final int TYPE_SET_INFERENCE = 1;
 
-    private double minConf;
     private int inferenceMode;
     private DeepScoringClient scoringClient;
 
-    public DeepColumnScoringNode(double minConf, int inferenceMode) {
-        this.minConf = minConf;
+    public DeepColumnScoringNode(int inferenceMode) {
         this.inferenceMode = inferenceMode;
         this.scoringClient = new DeepScoringClient();
     }
 
     public DeepColumnScoringNode() {
-        this(0, TYPE_SET_INFERENCE);
+        this(TYPE_SET_INFERENCE);
     }
 
     @Override
@@ -61,12 +59,10 @@ public class DeepColumnScoringNode implements TaggingNode {
                 } else {
                     throw new RuntimeException("Not implemented");
                 }
-                if (totalConf >= minConf) {
-                    if (targetCol == -1 || totalConf > linkingConf) {
-                        targetCol = col;
-                        linkingConf = totalConf;
-                        result = true;
-                    }
+                if (targetCol == -1 || totalConf > linkingConf) {
+                    targetCol = col;
+                    linkingConf = totalConf;
+                    result = true;
                 }
             }
 

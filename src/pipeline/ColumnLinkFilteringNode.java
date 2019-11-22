@@ -1,0 +1,24 @@
+package pipeline;
+
+import model.table.Table;
+
+// Remove quantity-entity links based on min conf.
+public class ColumnLinkFilteringNode implements TaggingNode {
+    private double minConf;
+
+    public ColumnLinkFilteringNode(double minLinkingConf) {
+        this.minConf = minLinkingConf;
+    }
+
+    @Override
+    public boolean process(Table table) {
+        for (int i = 0; i < table.nColumn; ++i) {
+            if (table.isNumericColumn[i] && table.quantityToEntityColumnScore[i] < minConf) {
+                table.quantityToEntityColumnScore[i] = -1.0;
+                table.quantityToEntityColumn[i] = -1;
+            }
+        }
+        return true;
+    }
+}
+
