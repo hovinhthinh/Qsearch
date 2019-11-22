@@ -71,7 +71,7 @@ public class YagoType {
     }
 
     // return list of types and their ITF.
-    public static final List<Pair<String, Double>> getSpecificTypes(String entity) { // entity: <Cris_Ronaldo>
+    public static final List<Pair<String, Double>> getTypes(String entity, boolean specificOnly) { // entity: <Cris_Ronaldo>
         int[] l = entity2Types.get(entity);
         if (l == null) {
             return null;
@@ -79,17 +79,24 @@ public class YagoType {
         List<Pair<String, Double>> types = new ArrayList<>(l.length);
         for (int i : l) {
             Pair<String, Double> t = index2Type.get(i);
-            if (!BLOCKED_GENERAL_TYPES.contains(t.first)) {
+            if (!specificOnly || !BLOCKED_GENERAL_TYPES.contains(t.first)) {
                 types.add(t);
             }
         }
         return types;
     }
 
-
-    public static void main(String[] args) {
-        System.out.println(getSpecificTypes("<Barack_Obama>"));
+    // return list of types and their ITF.
+    public static final List<Pair<String, Double>> getTypes(String entity) { // entity: <Cris_Ronaldo>
+        return getTypes(entity, false);
     }
 
-    // TODO: apply ITF
+    public static final boolean entityExists(String entity) { // entity: <Cris_Ronaldo>
+        return entity2Types.containsKey(entity);
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println(getTypes("<Barack_Obama>"));
+    }
 }

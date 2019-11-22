@@ -1,5 +1,7 @@
 package data.background.mention2entity;
 
+import nlp.NLP;
+import nlp.YagoType;
 import util.FileUtils;
 import util.Pair;
 
@@ -9,7 +11,7 @@ import java.util.logging.Logger;
 
 // Sensitive
 public class Mention2EntityPrior {
-    private static final String PRIOR_PATH = "./data/m2ePrior_wikipages+wikitables+wikilinks.case-sensitive.gz";
+    private static final String PRIOR_PATH = "./resources/m2ePrior_wikipages+wikitables+wikilinks.case-sensitive_tokenized.gz";
     private HashMap<String, List<Pair<String, Integer>>> mention2Entity;
     private static final Logger LOGGER = Logger.getLogger(Mention2EntityPrior.class.getName());
 
@@ -21,7 +23,8 @@ public class Mention2EntityPrior {
             Mention2EntityInfoLine infoLine = Mention2EntityInfoLine.fromLine(line);
             total += infoLine.entityFreq.size();
             for (int i = infoLine.entityFreq.size() - 1; i >= 0; --i) {
-                if (infoLine.entityFreq.get(i).second < minEntityFreq) {
+                // if the frequency is too low; or the entity does not exist in YAGO type system
+                if (infoLine.entityFreq.get(i).second < minEntityFreq || !YagoType.entityExists(infoLine.entityFreq.get(i).first)) {
                     infoLine.entityFreq.remove(i);
                 }
             }
@@ -34,8 +37,15 @@ public class Mention2EntityPrior {
         LOGGER.info(String.format("MinFrequency: %d\tLoaded: %d/%d", minEntityFreq, afterPruned, total));
     }
 
-    public List<Pair<String, Integer>> getCanditateEntitiesForMention(String mention) {
+    public List<Pair<String, Integer>> getCanditateEntitiesForMention(String mention, boolean doTokenizing) {
+        if (doTokenizing) {
+            mention = String.join(" ", NLP.tokenize(mention));
+        }
         return mention2Entity.get(mention);
+    }
+
+    public List<Pair<String, Integer>> getCanditateEntitiesForMention(String mention) {
+        return getCanditateEntitiesForMention(mention, false);
     }
 
     public static void main(String[] args) {
