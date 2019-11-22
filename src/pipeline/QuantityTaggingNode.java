@@ -98,9 +98,6 @@ public class QuantityTaggingNode implements TaggingNode {
         System.out.println(getHeaderUnit("speed ( M km / h )"));
     }
 
-    // TODO:
-    // - We may need to extends units from the header.
-    // - We also may need to add dumpy data: '$916k' - > 'This is $916k.' [DONE]
     private void tagBodyCell(Cell cell, String unit, double multiplier) {
         cell.quantityLinks = new ArrayList<>();
         if (cell.entityLinks.size() > 0) {
@@ -127,6 +124,7 @@ public class QuantityTaggingNode implements TaggingNode {
         }
         for (int col = 0; col < table.nColumn; ++col) {
             String header = table.getCombinedHeader(col);
+            // Extends units from the header.
             Quadruple<String, Double, String, String> unitInfoFromHeader = getHeaderUnit(header);
             if (unitInfoFromHeader != null) {
                 table.setHeaderUnitSpan(col, unitInfoFromHeader.third);
