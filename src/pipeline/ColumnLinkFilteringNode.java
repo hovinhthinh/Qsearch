@@ -12,13 +12,18 @@ public class ColumnLinkFilteringNode implements TaggingNode {
 
     @Override
     public boolean process(Table table) {
+        int nRemaningLinks = 0;
         for (int i = 0; i < table.nColumn; ++i) {
-            if (table.isNumericColumn[i] && table.quantityToEntityColumnScore[i] < minConf) {
-                table.quantityToEntityColumnScore[i] = -1.0;
-                table.quantityToEntityColumn[i] = -1;
+            if (table.isNumericColumn[i] && table.quantityToEntityColumn[i] != -1) {
+                ++nRemaningLinks;
+                if (table.quantityToEntityColumnScore[i] < minConf) {
+                    table.quantityToEntityColumnScore[i] = -1.0;
+                    table.quantityToEntityColumn[i] = -1;
+                    --nRemaningLinks;
+                }
             }
         }
-        return true;
+        return nRemaningLinks > 0;
     }
 }
 
