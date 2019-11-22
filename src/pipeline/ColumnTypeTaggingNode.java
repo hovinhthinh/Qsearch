@@ -28,9 +28,9 @@ public class ColumnTypeTaggingNode implements TaggingNode {
         for (int c = 0; c < table.nColumn; ++c) {
             int nEntity = 0, nQuantity = 0;
             for (int r = 0; r < table.nDataRow; ++r) {
-                if (table.data[r][c].entityLinks.size() > 0) {
+                if (table.data[r][c].getRepresentativeEntityLink() != null) {
                     ++nEntity;
-                } else if (table.data[r][c].quantityLinks.size() > 0) {
+                } else if (table.data[r][c].getRepresentativeQuantityLink() != null) {
                     ++nQuantity;
                 }
             }
