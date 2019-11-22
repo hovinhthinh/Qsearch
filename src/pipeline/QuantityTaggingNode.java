@@ -130,6 +130,7 @@ public class QuantityTaggingNode implements TaggingNode {
             Quadruple<String, Double, String, String> unitInfoFromHeader = getHeaderUnit(header);
             if (unitInfoFromHeader != null) {
                 table.setHeaderUnitSpan(col, unitInfoFromHeader.third);
+                // Remove unit span from combined header
                 table.setCombinedHeader(col, unitInfoFromHeader.fourth);
             }
 
