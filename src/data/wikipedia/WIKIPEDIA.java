@@ -1,9 +1,10 @@
 package data.wikipedia;
 
 import model.table.Cell;
-import model.table.link.EntityLink;
 import model.table.Table;
+import model.table.link.EntityLink;
 import nlp.NLP;
+import nlp.YagoType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +28,11 @@ public class WIKIPEDIA {
             JSONObject linkI = links.getJSONObject(i);
 
             el.text = String.join(" ", NLP.tokenize(linkI.getString("surface")));
-            el.target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + linkI.getJSONObject("target").getString("title");
+            String e = linkI.getJSONObject("target").getString("title");
+            if (!YagoType.entityExists("<" + e + ">")) {
+                continue;
+            }
+            el.target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + e;
             cell.entityLinks.add(el);
         }
 
