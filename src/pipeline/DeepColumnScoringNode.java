@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 // Link quantity columns to entity columns, return false if there is no quantity column.
-// TODO: currently link numeric columns to both entity columns and other columns, need to link to entity columns only.
 public class DeepColumnScoringNode implements TaggingNode {
     public static final Logger LOGGER = Logger.getLogger(DeepColumnScoringNode.class.getName());
     public static final int MIN_MAX_INFERENCE = 0;
