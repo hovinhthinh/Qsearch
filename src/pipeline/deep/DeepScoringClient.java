@@ -67,7 +67,7 @@ public class DeepScoringClient {
         }
         JSONObject o = new JSONObject().put("quantity_desc", quantityDesc.toLowerCase())
                 .put("type_desc", new JSONArray(entitiesDesc.stream().map(x -> x.toLowerCase()).collect(Collectors.toList())));
-//        out.println(o.toString());
+        out.println(o.toString());
         out.flush();
         try {
             return new JSONArray(in.readLine()).toList().stream().map(x -> ((Double) x)).collect(Collectors.toCollection(ArrayList::new));
