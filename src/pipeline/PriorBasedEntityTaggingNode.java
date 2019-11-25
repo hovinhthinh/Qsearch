@@ -26,18 +26,13 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
 
     @Override
     public boolean process(Table table) {
-        for (int col = 0; col < table.nColumn; ++col) {
-            for (Cell[] row : table.data) {
-                for (int c = 0; c < table.nColumn; ++c) {
-
-                    for (int r = 0; r < table.nHeaderRow; ++r) {
-                        // No entity tagging for header cells
-                        // tagCell(table.header[r][c]);
-                    }
-                    for (int r = 0; r < table.nDataRow; ++r) {
-                        tagCell(table.data[r][c]);
-                    }
-                }
+        for (int c = 0; c < table.nColumn; ++c) {
+            for (int r = 0; r < table.nHeaderRow; ++r) {
+                // No entity tagging for header cells
+                // tagCell(table.header[r][c]);
+            }
+            for (int r = 0; r < table.nDataRow; ++r) {
+                tagCell(table.data[r][c]);
             }
         }
         return true;

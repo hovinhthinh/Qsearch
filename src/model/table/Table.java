@@ -20,6 +20,7 @@ public class Table {
 
     public String surroundingText;
     public String caption;
+    public String pageTitle;
 
     public String source;
 
