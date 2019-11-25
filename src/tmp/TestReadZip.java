@@ -14,12 +14,12 @@ public class TestReadZip {
 
     public static void main(String[] args) throws Exception {
         ZipArchiveInputStream zipInput =
-                new ZipArchiveInputStream(new FileInputStream("/GW/D5data-10/hvthinh/BriQ-TableM/politics.zip"));
+                new ZipArchiveInputStream(new FileInputStream(args[0]));
 
         ZipArchiveEntry entry;
 
 
-        PrintWriter out = FileUtils.getPrintWriter("/GW/D5data-10/hvthinh/BriQ-TableM/politics_combined.gz", "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
         Gson gson = new Gson();
         while ((entry = zipInput.getNextZipEntry()) != null) {
             if (entry.isDirectory()) {
