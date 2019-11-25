@@ -47,7 +47,7 @@ public class DeepColumnScoringNode implements TaggingNode {
             double linkingConf = -1;
             // loop for entity columns.
             for (int col = 0; col < table.nColumn; ++col) {
-                if (table.isNumericColumn[col]) {
+                if (!table.isEntityColumn[col]) {
                     continue;
                 }
 
