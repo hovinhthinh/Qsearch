@@ -62,9 +62,8 @@ public class WIKIPEDIA {
                 }
             }
 
-            table.isNumericColumn = new boolean[table.nColumn];
-
 //            // TODO: need to check using another tool. [FIXED, using ColumnTypeTaggingNode]
+//            table.isNumericColumn = new boolean[table.nColumn];
 //            JSONArray numericColumns = json.getJSONArray("numericColumns");
 //            for (int i = 0; i < numericColumns.length(); ++i) {
 //                table.isNumericColumn[numericColumns.getInt(i)] = true;
