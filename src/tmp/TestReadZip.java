@@ -32,6 +32,5 @@ public class TestReadZip {
             }
         }
         out.close();
-        JSchUtils.stop();
     }
 }
