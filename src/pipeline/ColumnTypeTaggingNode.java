@@ -3,8 +3,8 @@ package pipeline;
 import model.table.Table;
 
 public class ColumnTypeTaggingNode implements TaggingNode {
-    public static final double DEFAULT_ENTITY_THRESHOLD = 0.7;
-    public static final double DEFAULT_QUANTITY_THRESHOLD = 0.7;
+    public static final double DEFAULT_ENTITY_THRESHOLD = 0.5;
+    public static final double DEFAULT_QUANTITY_THRESHOLD = 0.5;
 
     private double minEntityThreshold, minQuantityThreshold;
 

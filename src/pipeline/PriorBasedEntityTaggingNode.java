@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PriorBasedEntityTaggingNode implements TaggingNode {
+    public static final double REPRESENTATIVE_THRESHOLD = 0.7;
 
     private Mention2EntityPrior prior;
     private boolean multipleEntitiesInCell;
@@ -46,6 +47,9 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
         while (current < arr.size()) {
             boolean found = false;
             for (int l = arr.size() - current; l >= 1; --l) {
+                if (!multipleEntitiesInCell && l < arr.size() * REPRESENTATIVE_THRESHOLD) {
+                    break;
+                }
                 int candidatePos = -1, candidateFreq = 0;
                 String candidateEntity = null;
                 for (int s = current; s < arr.size(); ++s) {
