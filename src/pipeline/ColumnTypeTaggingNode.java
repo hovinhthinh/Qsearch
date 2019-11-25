@@ -21,6 +21,7 @@ public class ColumnTypeTaggingNode implements TaggingNode {
     public boolean process(Table table) {
         table.isNumericColumn = new boolean[table.nColumn];
         table.isEntityColumn = new boolean[table.nColumn];
+        boolean hasEntityColumn = false, hasQuantityColumn = false;
         for (int c = 0; c < table.nColumn; ++c) {
             int nEntity = 0, nQuantity = 0;
             for (int r = 0; r < table.nDataRow; ++r) {
@@ -32,10 +33,12 @@ public class ColumnTypeTaggingNode implements TaggingNode {
             }
             if (nEntity >= minEntityThreshold * table.nDataRow - 1e-6) {
                 table.isEntityColumn[c] = true;
+                hasEntityColumn = true;
             } else if (nQuantity >= minQuantityThreshold * table.nDataRow - 1e-6) {
                 table.isNumericColumn[c] = true;
+                hasQuantityColumn = true;
             }
         }
-        return true;
+        return hasEntityColumn && hasQuantityColumn;
     }
 }
