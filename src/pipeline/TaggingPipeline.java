@@ -10,10 +10,9 @@ public class TaggingPipeline {
         taggingNodes = nodes;
     }
 
-    @Deprecated
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
-                new EntityTaggingNode(),
+                new PriorBasedEntityTaggingNode(),
                 new QuantityTaggingNode(),
                 new ColumnTypeTaggingNode(),
                 new DeepColumnScoringNode(),
