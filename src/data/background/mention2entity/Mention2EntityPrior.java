@@ -22,14 +22,18 @@ public class Mention2EntityPrior {
         for (String line : FileUtils.getLineStream(PRIOR_PATH, "UTF-8")) {
             Mention2EntityInfoLine infoLine = Mention2EntityInfoLine.fromLine(line);
             total += infoLine.entityFreq.size();
+            if (infoLine.mention.length() <= 1) {
+                // ignore short mentions to reduce noise.
+                continue;
+            }
             for (int i = infoLine.entityFreq.size() - 1; i >= 0; --i) {
                 // if the frequency is too low; or the entity does not exist in YAGO type system
                 if (infoLine.entityFreq.get(i).second < minEntityFreq || !YagoType.entityExists(infoLine.entityFreq.get(i).first)) {
                     infoLine.entityFreq.remove(i);
                 }
             }
-            afterPruned += infoLine.entityFreq.size();
             if (infoLine.entityFreq.size() > 0) {
+                afterPruned += infoLine.entityFreq.size();
                 infoLine.entityFreq.trimToSize();
                 mention2Entity.put(infoLine.mention, infoLine.entityFreq);
             }
