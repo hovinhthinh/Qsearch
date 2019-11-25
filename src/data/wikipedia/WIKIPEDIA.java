@@ -64,11 +64,11 @@ public class WIKIPEDIA {
 
             table.isNumericColumn = new boolean[table.nColumn];
 
-            // TODO: need to check using another tool.
-            JSONArray numericColumns = json.getJSONArray("numericColumns");
-            for (int i = 0; i < numericColumns.length(); ++i) {
-                table.isNumericColumn[numericColumns.getInt(i)] = true;
-            }
+//            // TODO: need to check using another tool. [FIXED, using ColumnTypeTaggingNode]
+//            JSONArray numericColumns = json.getJSONArray("numericColumns");
+//            for (int i = 0; i < numericColumns.length(); ++i) {
+//                table.isNumericColumn[numericColumns.getInt(i)] = true;
+//            }
 
             table.source = "WIKIPEDIA:Link:" + "https://en.wikipedia.org/wiki/" + URLEncoder.encode(json.getString("pgTitle").replaceAll("\\s", "_"));
             table.caption = json.has("tableCaption") ? json.getString("tableCaption") : null;

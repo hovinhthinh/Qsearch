@@ -12,6 +12,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
                 new QuantityTaggingNode(),
+                new ColumnTypeTaggingNode(),
                 new DeepColumnScoringNode(),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
@@ -22,6 +23,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
     public static TaggingPipeline getAnnotationPipeline() {
         return new TaggingPipeline(
                 new QuantityTaggingNode(),
+                new ColumnTypeTaggingNode(),
                 new PostFilteringNode()
         );
     }

@@ -1,7 +1,5 @@
 package model.table;
 
-import pipeline.ColumnTypeTaggingNode;
-
 import java.util.HashMap;
 
 public class Table {
@@ -14,8 +12,8 @@ public class Table {
     public Cell[][] data; // row -> column
     public int nHeaderRow, nDataRow, nColumn;
 
-    public boolean[] isNumericColumn; // TODO: this needs to be checked again using external tool, instead of using internal signal from Wikipedia.
-    public ColumnTypeTaggingNode.ColumnType[] columnType;
+    public boolean[] isNumericColumn;
+    public boolean[] isEntityColumn;
 
     public int[] quantityToEntityColumn; // -1 means there is no connection.
     public double[] quantityToEntityColumnScore; // linking score (default is -1 | unknown).
@@ -29,22 +27,51 @@ public class Table {
         StringBuilder sb = new StringBuilder();
         int[] columnMaxWidth = new int[nColumn];
         boolean printHeader = true;
+
+        String[] linkingScoresStr = null;
+        if (quantityToEntityColumn != null) {
+            linkingScoresStr = new String[nColumn];
+            for (int i = 0; i < nColumn; ++i) {
+                linkingScoresStr[i] = !isNumericColumn[i] ? "" : (quantityToEntityColumnScore[i] == -1.0 ? "?" : String.format("%.3f", quantityToEntityColumnScore[i]));
+            }
+        }
+
         for (Cell[][] part : new Cell[][][]{header, data}) {
             for (int i = 0; i < part.length; ++i) {
                 for (int j = 0; j < part[i].length; ++j) {
-                    columnMaxWidth[j] = Math.max(columnMaxWidth[j], Math.min(MAX_COLUMN_WIDTH,
-                            (printHeader && isNumericColumn[j] && showAnnotations ? (quantityToEntityColumn == null || quantityToEntityColumn[j] == -1 ? 2 : String.valueOf(quantityToEntityColumn[j]).length() + 1) : 0)
-                                    + (showAnnotations ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length())));
+                    columnMaxWidth[j] = Math.max(columnMaxWidth[j], (printHeader && isNumericColumn[j] && showAnnotations ? (quantityToEntityColumn == null || quantityToEntityColumn[j] == -1 ? 2 : String.valueOf(quantityToEntityColumn[j]).length() + 1) : 0)
+                            + (showAnnotations ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length()));
+                    columnMaxWidth[j] = Math.max(columnMaxWidth[j], (printHeader && isEntityColumn[j] && showAnnotations ? 1 : 0)
+                            + (showAnnotations ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length()));
+
+                    if (printHeader && isNumericColumn[j] && showAnnotations && linkingScoresStr != null) {
+                        columnMaxWidth[j] = Math.max(columnMaxWidth[j], linkingScoresStr[j].length());
+                    }
+                    columnMaxWidth[j] = Math.min(columnMaxWidth[j], MAX_COLUMN_WIDTH);
                 }
             }
             printHeader = false;
         }
         printHeader = true;
         for (Cell[][] part : new Cell[][][]{header, data}) {
+            if (printHeader && showAnnotations && linkingScoresStr != null) {
+                // print scores
+                for (int i = 0; i < nColumn; ++i) {
+                    sb.append("⎡");
+                    sb.append(linkingScoresStr[i]);
+                    for (int k = 0; k < columnMaxWidth[i] - linkingScoresStr[i].length(); ++k) {
+                        sb.append(" ");
+                    }
+                    sb.append("⎦ ");
+                }
+                sb.append("\r\n");
+            }
+
             for (int i = 0; i < part.length; ++i) {
                 String[] strs = new String[part[i].length];
                 for (int j = 0; j < part[i].length; ++j) {
-                    strs[j] = (printHeader && isNumericColumn[j] && showAnnotations ? (quantityToEntityColumn == null || quantityToEntityColumn[j] == -1 ? "?@" : quantityToEntityColumn[j] + "@") : "")
+                    strs[j] = (printHeader && isEntityColumn[j] && showAnnotations ? "*" : "") +
+                            (printHeader && isNumericColumn[j] && showAnnotations ? (quantityToEntityColumn == null || quantityToEntityColumn[j] == -1 ? "?@" : quantityToEntityColumn[j] + "@") : "")
                             + (showAnnotations ? part[i][j].getDisambiguatedText() : part[i][j].text);
                 }
                 if (!multipleLine) {
