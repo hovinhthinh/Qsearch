@@ -30,6 +30,7 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
             for (int r = 0; r < table.nHeaderRow; ++r) {
                 // No entity tagging for header cells
                 // tagCell(table.header[r][c]);
+                table.header[r][c].entityLinks = new ArrayList<>();
             }
             for (int r = 0; r < table.nDataRow; ++r) {
                 tagCell(table.data[r][c]);
