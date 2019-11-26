@@ -16,6 +16,7 @@ public class ReadTableMInteractive {
     // args: /GW/D5data-10/hvthinh/BriQ-TableM/health_combined.gz
     public static void main(String[] args) throws Exception {
         TaggingPipeline pipeline = TABLEM_DeepTaggingPipeline.getAnnotationPipeline();
+        //TaggingPipeline pipeline = TABLEM_DeepTaggingPipeline.getDefaultTaggingPipeline();
 
         Scanner in = new Scanner(System.in);
         int n = 0;
