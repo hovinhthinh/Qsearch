@@ -61,10 +61,13 @@ public class YagoType {
             entity2Types.put(arr[0], typesInt);
         }
         index2Type.trimToSize();
-        // Compute itf (Robertson version)
+        // Compute itf
         for (int i = 0; i < index2Type.size(); ++i) {
             Pair<String, Double> typeAndFreq = index2Type.get(i);
-            typeAndFreq.second = Math.max(0.0001, Math.log10((entity2Types.size() - typeAndFreq.second + 0.5) / (typeAndFreq.second + 0.5)));
+            // (Robertson version)
+//            typeAndFreq.second = Math.max(0.0001, Math.log10((entity2Types.size() - typeAndFreq.second + 0.5) / (typeAndFreq.second + 0.5)));
+            // normal
+            typeAndFreq.second = Math.max(0.0001, Math.log(entity2Types.size() / (typeAndFreq.second + 1.0)));
         }
         LOGGER.info(String.format("loaded total %d types", index2Type.size()));
 
