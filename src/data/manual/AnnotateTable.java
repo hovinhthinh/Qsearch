@@ -50,7 +50,7 @@ public class AnnotateTable {
                     System.out.println("----------");
                     System.out.println("annotated/total: " + nAnnotated + " / " + (nAnnotated + nIgnored));
                     System.out.println("=== OPTIONS ===");
-                    System.out.println("          [q1,q2,... > e]: set annotation: link[q] = e");
+                    System.out.println("          [q1,q2,.. > e] or [all > e]: set annotation: link[q] = e");
                     System.out.println("          [i]: ignore table");
                     System.out.println("          [s]: save table annotation");
                 }
@@ -79,7 +79,16 @@ public class AnnotateTable {
                 try {
                     int p = cmd.indexOf(">");
                     int eCol = Integer.parseInt(cmd.substring(p + 1));
-                    List<Integer> qCols = Arrays.asList(cmd.substring(0, p).split(",")).stream().map(o -> Integer.parseInt(o)).collect(Collectors.toList());
+                    String qColsStr = cmd.substring(0, p);
+                    if (qColsStr.equals("all")) {
+                        for (int i = 0; i < t.nColumn; ++i) {
+                            if (t.isNumericColumn[i]) {
+                                t.quantityToEntityColumn[i] = eCol;
+                            }
+                        }
+                        continue;
+                    }
+                    List<Integer> qCols = Arrays.asList(qColsStr.split(",")).stream().map(o -> Integer.parseInt(o)).collect(Collectors.toList());
                     for (int qCol : qCols) {
                         if (qCol < 0 || qCol >= t.nColumn || eCol < -1 || eCol >= t.nColumn) {
                             invalidColumnIndex = true;
