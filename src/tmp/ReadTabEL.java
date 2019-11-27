@@ -72,7 +72,7 @@ public class ReadTabEL {
             }
 
             if (ok) {
-                System.out.println(t.getTableContentPrintable(true, true));
+                System.out.println(t.getTableContentPrintable(true, true, true));
                 --top;
                 if (top == 0) {
                     break;

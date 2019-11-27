@@ -24,7 +24,7 @@ public class Table {
 
     public String source;
 
-    public String getTableContentPrintable(boolean showAnnotations, boolean multipleLine) {
+    public String getTableContentPrintable(boolean showAnnotations, boolean multipleLine, boolean printColumnIndex) {
         StringBuilder sb = new StringBuilder();
         int[] columnMaxWidth = new int[nColumn];
         boolean printHeader = true;
@@ -34,6 +34,7 @@ public class Table {
             linkingScoresStr = new String[nColumn];
             for (int i = 0; i < nColumn; ++i) {
                 linkingScoresStr[i] = !isNumericColumn[i] ? "" : (quantityToEntityColumnScore[i] == -1.0 ? "?" : String.format("%.3f", quantityToEntityColumnScore[i]));
+                columnMaxWidth[i] = Math.max(columnMaxWidth[i], linkingScoresStr[i].length());
             }
         }
 
@@ -44,30 +45,40 @@ public class Table {
                             + (showAnnotations ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length()));
                     columnMaxWidth[j] = Math.max(columnMaxWidth[j], (printHeader && isEntityColumn[j] && showAnnotations ? 1 : 0)
                             + (showAnnotations ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length()));
-
-                    if (printHeader && isNumericColumn[j] && showAnnotations && linkingScoresStr != null) {
-                        columnMaxWidth[j] = Math.max(columnMaxWidth[j], linkingScoresStr[j].length());
-                    }
                     columnMaxWidth[j] = Math.min(columnMaxWidth[j], MAX_COLUMN_WIDTH);
                 }
             }
             printHeader = false;
         }
+
+        // print column index
+        if (printColumnIndex) {
+            for (int i = 0; i < nColumn; ++i) {
+                sb.append(" ");
+                sb.append(i);
+                for (int k = 0; k < columnMaxWidth[i] - String.valueOf(i).length(); ++k) {
+                    sb.append(" ");
+                }
+                sb.append("  ");
+            }
+            sb.append("\r\n");
+        }
+
+        // print linking scores
+        if (showAnnotations && linkingScoresStr != null) {
+            for (int i = 0; i < nColumn; ++i) {
+                sb.append("⎡");
+                sb.append(linkingScoresStr[i]);
+                for (int k = 0; k < columnMaxWidth[i] - linkingScoresStr[i].length(); ++k) {
+                    sb.append(" ");
+                }
+                sb.append("⎦ ");
+            }
+            sb.append("\r\n");
+        }
+
         printHeader = true;
         for (Cell[][] part : new Cell[][][]{header, data}) {
-            if (printHeader && showAnnotations && linkingScoresStr != null) {
-                // print scores
-                for (int i = 0; i < nColumn; ++i) {
-                    sb.append("⎡");
-                    sb.append(linkingScoresStr[i]);
-                    for (int k = 0; k < columnMaxWidth[i] - linkingScoresStr[i].length(); ++k) {
-                        sb.append(" ");
-                    }
-                    sb.append("⎦ ");
-                }
-                sb.append("\r\n");
-            }
-
             for (int i = 0; i < part.length; ++i) {
                 String[] strs = new String[part[i].length];
                 for (int j = 0; j < part[i].length; ++j) {

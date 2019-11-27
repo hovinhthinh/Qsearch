@@ -9,12 +9,13 @@ import pipeline.TaggingPipeline;
 import util.FileUtils;
 import util.JSchUtils;
 
+import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class ReadTabELInteractive {
     public static void main(String[] args) throws Exception {
-        TaggingPipeline pipeline = WIKIPEDIA_DeepTaggingPipeline.getAnnotationPipeline();
+        TaggingPipeline pipeline = WIKIPEDIA_DeepTaggingPipeline.getDefaultTaggingPipeline();
 
         Scanner in = new Scanner(System.in);
         int n = 0;
@@ -42,13 +43,12 @@ public class ReadTabELInteractive {
             System.out.println("#numericTables/#total: " + (++n) + "/" + passed);
             System.out.println("source: " + t.source);
             System.out.println("caption: " + t.caption);
-            System.out.println(t.getTableContentPrintable(false, true));
+            System.out.println(t.getTableContentPrintable(false, true, false));
             System.out.println("Annotated:");
-            System.out.println(t.getTableContentPrintable(true, true));
+            System.out.println(t.getTableContentPrintable(true, true, true));
             System.out.println("--------------------------------------------------------------------------------");
             System.out.flush();
             String wait = in.nextLine();
         }
     }
-
 }
