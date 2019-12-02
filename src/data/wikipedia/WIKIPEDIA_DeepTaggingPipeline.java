@@ -39,7 +39,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
         Gson gson = new Gson();
 
         for (String line : stream) {
-            Table table = WIKIPEDIA.parseFromJSON(line); // already contains Entity Tags & Column Types.
+            Table table = WIKIPEDIA.parseFromJSON(line); // already contains Entity Tags
             if (table == null) {
                 continue;
             }
