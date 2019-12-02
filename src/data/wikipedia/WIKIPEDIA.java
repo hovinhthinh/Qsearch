@@ -44,6 +44,7 @@ public class WIKIPEDIA {
             JSONObject json = new JSONObject(jsonText);
             Table table = new Table();
 
+            table._id = json.getString("_id");
             table.nColumn = json.getInt("numCols");
             table.nHeaderRow = json.getInt("numHeaderRows");
             table.nDataRow = json.getInt("numDataRows");

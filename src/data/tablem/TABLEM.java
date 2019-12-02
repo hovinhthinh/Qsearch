@@ -22,6 +22,7 @@ public class TABLEM {
             JSONArray tableData = json.getJSONArray("relation");
 
             Table table = new Table();
+            table._id = json.getString("_id");
 
             table.nColumn = tableData.length();
             if (table.nColumn <= 1) {
