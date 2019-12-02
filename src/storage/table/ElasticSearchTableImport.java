@@ -7,10 +7,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import util.FileUtils;
 import util.HTTPRequest;
-import util.Monitor;
+import util.SelfMonitor;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ElasticSearchTableImport {
     public static final String PROTOCOL = Configuration.get("storage.elasticsearch.protocol");
@@ -66,14 +65,7 @@ public class ElasticSearchTableImport {
     public static boolean importTables(String input) {
         System.out.println("Import tables from: " + input);
 
-        AtomicInteger processed = new AtomicInteger(0);
-
-        Monitor monitor = new Monitor("ImportTable", -1, 10) {
-            @Override
-            public int getCurrent() {
-                return processed.get();
-            }
-        };
+        SelfMonitor monitor = new SelfMonitor("ImportTable", -1, 10);
         monitor.start();
 
         Gson gson = new Gson();
@@ -87,7 +79,7 @@ public class ElasticSearchTableImport {
                 monitor.forceShutdown();
                 return false;
             }
-            processed.incrementAndGet();
+            monitor.incAndGet();
         }
         monitor.forceShutdown();
         if (bulks.size() > 0) {
