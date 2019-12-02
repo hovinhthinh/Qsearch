@@ -30,7 +30,7 @@ public class ElasticSearchDataImport {
     public static final String PROTOCOL = Configuration.get("storage.elasticsearch.protocol");
     public static final String ES_HOST = Configuration.get("storage.elasticsearch.address");
     public static final String INDEX = Configuration.get("storage.elasticsearch.index");
-    public static final String TYPE = Configuration.get("storage.elasticsearch.type");
+    public static final String ENTITY_TYPE = Configuration.get("storage.elasticsearch.entity_type");
     public static final int BATCH_SIZE = 1024 * 8;
     public static ArrayList<String> bulks = new ArrayList<>();
     static AtomicInteger updated = new AtomicInteger(0), threw = new AtomicInteger(0);
@@ -40,7 +40,7 @@ public class ElasticSearchDataImport {
     }
 
     public static String createIndex() {
-        String body = "{\"mappings\":{\"" + TYPE + "\":{\"properties\":{\"types\":{\"type\":\"nested\"," +
+        String body = "{\"mappings\":{\"" + ENTITY_TYPE + "\":{\"properties\":{\"types\":{\"type\":\"nested\"," +
                 "\"enabled\":true},\"facts\":{\"type\":\"object\",\"enabled\":false}}}}}";
         return HTTPRequest.PUT(PROTOCOL + "://" + ES_HOST + "/" + INDEX, body);
     }
@@ -51,7 +51,7 @@ public class ElasticSearchDataImport {
             sb.append(s).append("\n");
         }
 
-        String response = HTTPRequest.POST(PROTOCOL + "://" + ES_HOST + "/" + INDEX + "/" + TYPE + "/_bulk",
+        String response = HTTPRequest.POST(PROTOCOL + "://" + ES_HOST + "/" + INDEX + "/" + ENTITY_TYPE + "/_bulk",
                 sb.toString());
 
         if (response != null) {
@@ -123,7 +123,7 @@ public class ElasticSearchDataImport {
 
     private static void importEntityFacts(String entity, JSONArray entityFacts) throws Exception {
         String data =
-                HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + INDEX + "/" + TYPE + "/" + URLEncoder.encode(entity, "UTF-8"));
+                HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8"));
         if (data == null) {
             System.out.println("Threw: " + entity);
             threw.incrementAndGet();
@@ -140,7 +140,7 @@ public class ElasticSearchDataImport {
         newData.put("searchable", "yes");
 //        System.out.println(newData.toString());
         String response =
-                HTTPRequest.PUT(PROTOCOL + "://" + ES_HOST + "/" + INDEX + "/" + TYPE + "/" + URLEncoder.encode(entity, "UTF-8"), newData.toString());
+                HTTPRequest.PUT(PROTOCOL + "://" + ES_HOST + "/" + INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8"), newData.toString());
 //        System.out.println(response);
         if (response == null) {
             throw new Exception("Importing facts fail.");
@@ -253,8 +253,8 @@ public class ElasticSearchDataImport {
     public static void main(String[] args) throws Exception {
         System.out.println(deleteIndex());
         System.out.println(createIndex());
-        System.out.println("Importing YAGO:");
-        System.out.println(importYago("/home/hvthinh/datasets/yagoTransitiveType.tsv"));
+//        System.out.println("Importing YAGO:");
+//        System.out.println(importYago("/home/hvthinh/datasets/yagoTransitiveType.tsv"));
 //        System.out.println("Importing facts:");
 //        System.out.println(importFacts("./data/stics+nyt/full_all.gz", 0.8));
     }
