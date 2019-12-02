@@ -13,6 +13,7 @@ public class AddIdToTables {
 //        args = "".split(" ");
 
         SelfMonitor monitor = new SelfMonitor("AddIdToTables", -1, 10);
+        monitor.start();
         String prefix = args[1];
 
         PrintWriter out = FileUtils.getPrintWriter(args[2], "UTF-8");
