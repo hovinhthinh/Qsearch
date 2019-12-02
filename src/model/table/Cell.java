@@ -45,11 +45,15 @@ public class Cell {
     // returns null if either:
     // - has no or more than 1 quantity links
     // - the surface text of cell has extra words bot belonging to the entity
+    // - exception: +, - before the quantity (indicates inc/dec-rease); e.g. + 30 %
     public QuantityLink getRepresentativeQuantityLink() {
         if (quantityLinks.size() != 1) {
             return null;
         }
-        return text.equals(quantityLinks.get(0).text) ? quantityLinks.get(0) : null;
+        return (text.equals(quantityLinks.get(0).text)
+                || text.equals("- " + quantityLinks.get(0).text)
+                || text.equals("+ " + quantityLinks.get(0).text)
+        ) ? quantityLinks.get(0) : null;
     }
 
 }
