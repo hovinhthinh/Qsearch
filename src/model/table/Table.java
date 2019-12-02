@@ -6,6 +6,8 @@ public class Table {
     public transient static final int MAX_COLUMN_WIDTH = 30;
     public transient HashMap<String, Object> attributes = new HashMap<>(); // Used for any other purpose.
 
+    public String _id; // table id.
+
     public Cell[][] header; // row -> column
     private String[] combinedHeader;
     private String[] headerUnitSpan;

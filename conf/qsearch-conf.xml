@@ -4,9 +4,12 @@
 <properties>
     <entry key="storage.elasticsearch.protocol">http</entry>
     <entry key="storage.elasticsearch.address">localhost:9200</entry>
-    <entry key="storage.elasticsearch.index">yago_tabqs</entry>
-    <entry key="storage.elasticsearch.entity_type">entity</entry>
+
+    <entry key="storage.elasticsearch.table_index">tabqs_table</entry>
     <entry key="storage.elasticsearch.table_type">table</entry>
+
+    <entry key="storage.elasticsearch.index">tabqs_yago</entry>
+    <entry key="storage.elasticsearch.entity_type">entity</entry>
 
     <entry key="search.server.default-port">6993</entry>
 </properties>
