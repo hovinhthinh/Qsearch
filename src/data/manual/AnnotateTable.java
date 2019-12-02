@@ -18,7 +18,7 @@ public class AnnotateTable {
 
     // args: <input> <output> [ignore first n tables]
     public static void main(String[] args) throws Exception {
-        args = "/GW/D5data-11/hvthinh/TABLEM/finance.shuf.col-type-thr-0.5.out.gz ./manual/column_linking_ground_truth_table_0.5 0".split(" ");
+        args = "/GW/D5data-11/hvthinh/TABLEM/finance.shuf.col-type-thr-0.5.out.gz ./manual/column_linking_ground_truth_table 0".split(" ");
 
         PrintWriter out = FileUtils.getPrintWriter(args[1]);
         Scanner in = new Scanner(System.in);
