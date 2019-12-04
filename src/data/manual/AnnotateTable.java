@@ -35,6 +35,12 @@ public class AnnotateTable {
                 continue;
             }
             TruthTable t = TruthTable.fromTable(gson.fromJson(line, Table.class));
+            if (t.quantityToEntityColumn == null) {
+                t.quantityToEntityColumn = new int[t.nColumn];
+                Arrays.fill(t.quantityToEntityColumn, -1);
+                t.quantityToEntityColumnScore = new double[t.nColumn];
+                Arrays.fill(t.quantityToEntityColumnScore, -1.0);
+            }
             boolean invalidOption = false, invalidColumnIndex = false;
             loop:
             do {
