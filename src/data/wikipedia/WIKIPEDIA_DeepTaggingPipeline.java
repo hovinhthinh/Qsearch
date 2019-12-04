@@ -13,7 +13,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
                 new QuantityTaggingNode(),
-                new ColumnTypeTaggingNode(0.3, 0.3),
+                new ColumnTypeTaggingNode(),
                 new DeepColumnScoringNode(),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
@@ -25,7 +25,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
                 new QuantityTaggingNode(),
-                new ColumnTypeTaggingNode(0.3, 0.3),
+                new ColumnTypeTaggingNode(),
                 new PostFilteringNode()
         );
     }

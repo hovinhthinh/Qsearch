@@ -18,7 +18,7 @@ public class TABLEM_DeepTaggingPipeline {
                 new TablePrefilteringNode(),
                 new PriorBasedEntityTaggingNode(),
                 new QuantityTaggingNode(),
-                new ColumnTypeTaggingNode(0.3, 0.3),
+                new ColumnTypeTaggingNode(),
                 new PostFilteringNode()
         );
     }

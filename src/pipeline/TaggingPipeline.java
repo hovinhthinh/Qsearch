@@ -15,7 +15,7 @@ public class TaggingPipeline {
                 new TablePrefilteringNode(),
                 new PriorBasedEntityTaggingNode(),
                 new QuantityTaggingNode(),
-                new ColumnTypeTaggingNode(0.3, 0.3),
+                new ColumnTypeTaggingNode(),
                 new DeepColumnScoringNode(),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
