@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 public class WIKIPEDIA_DeepTaggingPipeline {
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
+                new TablePrefilteringNode(),
                 new QuantityTaggingNode(),
                 new ColumnTypeTaggingNode(0.3, 0.3),
                 new DeepColumnScoringNode(),
@@ -22,6 +23,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
     // Just the annotations of entities and quantities, there is no linking.
     public static TaggingPipeline getAnnotationPipeline() {
         return new TaggingPipeline(
+                new TablePrefilteringNode(),
                 new QuantityTaggingNode(),
                 new ColumnTypeTaggingNode(0.3, 0.3),
                 new PostFilteringNode()

@@ -15,6 +15,7 @@ public class TABLEM_DeepTaggingPipeline {
     // Just the annotations of entities and quantities, there is no linking.
     public static TaggingPipeline getAnnotationPipeline() {
         return new TaggingPipeline(
+                new TablePrefilteringNode(),
                 new PriorBasedEntityTaggingNode(),
                 new QuantityTaggingNode(),
                 new ColumnTypeTaggingNode(0.3, 0.3),
@@ -44,5 +45,4 @@ public class TABLEM_DeepTaggingPipeline {
         }
         out.close();
     }
-
 }
