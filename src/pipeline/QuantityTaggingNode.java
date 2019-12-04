@@ -108,6 +108,13 @@ public class QuantityTaggingNode implements TaggingNode {
         for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(dumpyText, true)) {
             if (span.object instanceof Quantity) {
                 Quantity q = (Quantity) span.object;
+
+                // In case the unit is extracted from header, the value from cell should be divided by 100.
+                // This is due to the reason that Illinois Quantifier return percentage between [0,1]
+                if (unit != null && unit.equals("percent")) {
+                    multiplier /= 100;
+                }
+
                 cell.quantityLinks.add(new QuantityLink(dumpyText.substring(span.start, span.end), q.value * multiplier,
                         // prefer header unit if available
                         NLP.stripSentence(unit != null ? unit : q.units), q.bound));
