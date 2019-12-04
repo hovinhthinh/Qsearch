@@ -24,6 +24,7 @@ public class AnnotateTable {
         Scanner in = new Scanner(System.in);
         Gson gson = new Gson();
         int toBeIgnored = args.length == 3 ? Integer.parseInt(args[2]) : 0;
+        nIgnored = toBeIgnored;
         if (toBeIgnored > 0) {
             System.out.println("=== Ignoring " + toBeIgnored + " tables ===");
         }
@@ -47,8 +48,8 @@ public class AnnotateTable {
                 if (!invalidOption && !invalidColumnIndex) {
                     System.out.println("--------------------------------------------------------------------------------");
                     System.out.println("source: " + t.source);
-                    System.out.println("caption: " + t.caption);
                     System.out.println("pageTitle: " + t.pageTitle);
+                    System.out.println("caption: " + t.caption);
                     System.out.println("=== Original ===");
                     System.out.println(t.getTableContentPrintable(false, true, false));
                     System.out.println("=== Annotated ===");
