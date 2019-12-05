@@ -11,6 +11,7 @@ public class TruthTable extends Table {
     private static final transient Gson GSON = new Gson();
 
     public int[] quantityToEntityColumnGroundTruth; // -1 means there is no connection.
+    public int keyColumnGroundTruth = -1;
 
     private TruthTable() {
     }
