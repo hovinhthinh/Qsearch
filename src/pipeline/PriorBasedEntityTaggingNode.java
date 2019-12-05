@@ -17,7 +17,7 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
     private boolean multipleEntitiesInCell;
 
     public PriorBasedEntityTaggingNode(int minMention2EntityFrequency, boolean multipleEntitiesInCell) {
-        this.prior = new Mention2EntityPrior(minMention2EntityFrequency);
+        this.prior = new Mention2EntityPrior(minMention2EntityFrequency, 1);
         this.multipleEntitiesInCell = multipleEntitiesInCell;
     }
 

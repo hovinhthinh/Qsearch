@@ -15,7 +15,8 @@ public class Mention2EntityPrior {
     private HashMap<String, List<Pair<String, Integer>>> mention2Entity;
     private static final Logger LOGGER = Logger.getLogger(Mention2EntityPrior.class.getName());
 
-    public Mention2EntityPrior(int minEntityFreq) {
+    // if nTopKeptEntities == -1, keep all entities for each mention.
+    public Mention2EntityPrior(int minEntityFreq, int nTopKeptEntities) {
         mention2Entity = new HashMap<>();
         int afterPruned = 0;
         int total = 0;
@@ -33,6 +34,10 @@ public class Mention2EntityPrior {
                 }
             }
             if (infoLine.entityFreq.size() > 0) {
+                if (nTopKeptEntities > 0 && infoLine.entityFreq.size() > nTopKeptEntities) {
+                    infoLine.entityFreq.subList(nTopKeptEntities, infoLine.entityFreq.size()).clear();
+                    infoLine.entityFreq.trimToSize();
+                }
                 afterPruned += infoLine.entityFreq.size();
                 infoLine.entityFreq.trimToSize();
                 mention2Entity.put(infoLine.mention, infoLine.entityFreq);
@@ -53,7 +58,7 @@ public class Mention2EntityPrior {
     }
 
     public static void main(String[] args) {
-        Mention2EntityPrior prior = new Mention2EntityPrior(2);
+        Mention2EntityPrior prior = new Mention2EntityPrior(2, 3);
         System.out.println(prior.getCanditateEntitiesForMention("Cristiano Ronaldo"));
     }
 }
