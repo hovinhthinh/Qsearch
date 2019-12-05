@@ -59,6 +59,6 @@ public class Mention2EntityPrior {
 
     public static void main(String[] args) {
         Mention2EntityPrior prior = new Mention2EntityPrior(2, 3);
-        System.out.println(prior.getCanditateEntitiesForMention("Cristiano Ronaldo"));
+        System.out.println(prior.getCanditateEntitiesForMention("Ronaldo"));
     }
 }
