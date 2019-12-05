@@ -38,10 +38,15 @@ public class DeepColumnScoringNode implements TaggingNode {
 
         boolean result = false;
         // loop for quantity columns.
+
+        double[] keyColumnScores = new double[table.nColumn];
+
+        int nNumericCols = 0;
         for (int pivotCol = 0; pivotCol < table.nColumn; ++pivotCol) {
             if (!table.isNumericColumn[pivotCol]) {
                 continue;
             }
+            ++nNumericCols;
             int targetCol = -1;
             double linkingConf = -1;
             // loop for entity columns.
@@ -63,10 +68,24 @@ public class DeepColumnScoringNode implements TaggingNode {
                     linkingConf = totalConf;
                     result = true;
                 }
+                keyColumnScores[col] += totalConf;
             }
 
             table.quantityToEntityColumn[pivotCol] = targetCol;
             table.quantityToEntityColumnScore[pivotCol] = linkingConf;
+        }
+
+        for (int col = 0; col < table.nColumn; ++col) {
+            if (!table.isEntityColumn[col]) {
+                continue;
+            }
+            if (nNumericCols > 0) {
+                keyColumnScores[col] /= nNumericCols;
+            }
+            if (table.keyColumn == -1 || keyColumnScores[col] > table.keyColumnScore) {
+                table.keyColumn = col;
+                table.keyColumnScore = keyColumnScores[col];
+            }
         }
         return result;
     }

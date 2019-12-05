@@ -19,8 +19,8 @@ public class Table {
 
     public int[] quantityToEntityColumn; // -1 means there is no connection.
     public double[] quantityToEntityColumnScore; // linking score (default is -1 | unknown).
-    public int keyColumn = -1;
-    public double keyColumnScore = -1;
+    public int keyColumn = -1; // computed based on the average linking scores from quantity columns
+    public double keyColumnScore = -1.0;
 
     public String surroundingText;
     public String caption;
