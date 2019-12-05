@@ -22,7 +22,7 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
     }
 
     public PriorBasedEntityTaggingNode() {
-        this(2, false);
+        this(1, false);
     }
 
     @Override

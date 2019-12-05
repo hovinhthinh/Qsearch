@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import util.Pair;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 // Map a mention to a list of YAGO entities along with their frequency.
 public class Mention2EntityInfoLine {
@@ -41,6 +42,7 @@ public class Mention2EntityInfoLine {
                 JSONArray o = json.getJSONArray(i);
                 m2e.entityFreq.add(new Pair<>(o.getString(0), o.getInt(1)));
             }
+            Collections.sort(m2e.entityFreq, (a, b) -> (b.second.compareTo(a.second)));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
