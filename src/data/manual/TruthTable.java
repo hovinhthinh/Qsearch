@@ -13,9 +13,6 @@ public class TruthTable extends Table {
     public int[] quantityToEntityColumnGroundTruth; // -1 means there is no connection.
     public int keyColumnGroundTruth = -1;
 
-    private TruthTable() {
-    }
-
     public static TruthTable fromTable(Table t) {
         TruthTable truth = GSON.fromJson(GSON.toJson(t), TruthTable.class);
         truth.quantityToEntityColumnGroundTruth = new int[truth.nColumn];

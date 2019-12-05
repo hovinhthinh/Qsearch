@@ -28,6 +28,8 @@ public class Table {
 
     public String source;
 
+    public HashMap<String, String> moreInfo = new HashMap<>(); // More info, for different datasets.
+
     public String getTableContentPrintable(boolean showAnnotations, boolean multipleLine, boolean printColumnIndex) {
         StringBuilder sb = new StringBuilder();
         int[] columnMaxWidth = new int[nColumn];
