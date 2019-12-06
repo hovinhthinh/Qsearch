@@ -2,6 +2,7 @@ package model.table;
 
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
+import nlp.NLP;
 import pipeline.PriorBasedEntityTaggingNode;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Cell {
             disambiguatedText = disambiguatedText.replace(l.text, "<" + l.target.substring(l.target.lastIndexOf(":") + 1) + ">");
         }
         for (QuantityLink l : quantityLinks) {
-            disambiguatedText = disambiguatedText.replace(l.text, l.quantity.toString(1));
+            disambiguatedText = disambiguatedText.replace(l.text, l.quantity.toString(2));
         }
         return disambiguatedText;
     }
@@ -50,10 +51,14 @@ public class Cell {
         if (quantityLinks.size() != 1) {
             return null;
         }
-        return (text.equals(quantityLinks.get(0).text)
-                || text.equals("- " + quantityLinks.get(0).text)
-                || text.equals("+ " + quantityLinks.get(0).text)
-        ) ? quantityLinks.get(0) : null;
+        ArrayList<String> replacedText = NLP.tokenize(text.replace(quantityLinks.get(0).text, ""));
+        if (replacedText.size() > 2) {
+            return null;
+        }
+        if (replacedText.size() == 0 || replacedText.get(0).equals("-") || replacedText.get(0).equals("+")) {
+            return quantityLinks.get(0);
+        }
+        return null;
     }
 
 }
