@@ -60,7 +60,7 @@ public class Cell {
         if (before.contains(" ") || after.contains(" ")) {
             return null;
         }
-        if (before.isEmpty() || before.equals("+") || before.equals("-")) {
+        if (before.isEmpty() || before.equals("+") || before.equals("-") || before.equals("≈")) {
             return quantityLinks.get(0);
         }
         return null;
