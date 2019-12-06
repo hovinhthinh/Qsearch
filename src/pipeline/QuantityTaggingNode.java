@@ -100,7 +100,7 @@ public class QuantityTaggingNode implements TaggingNode {
 
     private void tagBodyCell(Cell cell, String unit, double multiplier) {
         cell.quantityLinks = new ArrayList<>();
-        if (cell.entityLinks.size() > 0) {
+        if (cell.entityLinks != null && cell.entityLinks.size() > 0) {
             // not tagging cells with entities;
             // only in case of wikipedia, quantity tagging is run after entities tagging.
             //
