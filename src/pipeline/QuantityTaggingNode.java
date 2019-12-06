@@ -111,7 +111,7 @@ public class QuantityTaggingNode implements TaggingNode {
 
                 // In case the unit is extracted from header, the value from cell should be divided by 100.
                 // This is due to the reason that Illinois Quantifier return percentage between [0,1]
-                if (unit != null && unit.equals("percent")) {
+                if (unit != null && unit.equals("percent") && q.value > 1.0) {
                     multiplier /= 100;
                 }
 
