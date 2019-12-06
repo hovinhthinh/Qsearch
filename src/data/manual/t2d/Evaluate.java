@@ -19,8 +19,8 @@ public class Evaluate {
     public static TaggingPipeline getAnnotationPipeline() {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
-                new PriorBasedEntityTaggingNode(),
                 new QuantityTaggingNode(),
+                new PriorBasedEntityTaggingNode(),
                 new ColumnTypeTaggingNode(),
                 new PostFilteringNode()
         );

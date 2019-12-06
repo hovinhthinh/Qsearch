@@ -101,7 +101,10 @@ public class QuantityTaggingNode implements TaggingNode {
     private void tagBodyCell(Cell cell, String unit, double multiplier) {
         cell.quantityLinks = new ArrayList<>();
         if (cell.entityLinks.size() > 0) {
-            // not tagging cells with entities
+            // not tagging cells with entities;
+            // only in case of wikipedia, quantity tagging is run after entities tagging.
+            //
+            // for webtables, quantities tagging nodes should be done before entities tagging node.
             return;
         }
         String dumpyText = "This is " + cell.text + " .";

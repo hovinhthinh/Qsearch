@@ -13,8 +13,8 @@ public class TaggingPipeline {
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
-                new PriorBasedEntityTaggingNode(),
                 new QuantityTaggingNode(),
+                new PriorBasedEntityTaggingNode(),
                 new ColumnTypeTaggingNode(),
                 new DeepColumnScoringNode(),
                 new ColumnLinkFilteringNode(0),
