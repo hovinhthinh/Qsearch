@@ -32,7 +32,7 @@ public class Evaluate {
 
         TaggingPipeline pipeline = getAnnotationPipeline();
         PrintWriter out = FileUtils.getPrintWriter("./eval/T2D/ground_truth+annotation", "UTF-8");
-        FileUtils.LineStream stream = FileUtils.getLineStream("../eval/T2D/ground_truth", "UTF-8");
+        FileUtils.LineStream stream = FileUtils.getLineStream("./eval/T2D/ground_truth", "UTF-8");
 
         Gson gson = new Gson();
 
