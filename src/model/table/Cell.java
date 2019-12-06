@@ -51,11 +51,16 @@ public class Cell {
         if (quantityLinks.size() != 1) {
             return null;
         }
-        ArrayList<String> replacedText = NLP.tokenize(text.replace(quantityLinks.get(0).text, ""));
-        if (replacedText.size() > 2) {
+        int quantityPos = text.indexOf(quantityLinks.get(0).text);
+        if (quantityPos == -1) {
             return null;
         }
-        if (replacedText.size() == 0 || replacedText.get(0).equals("-") || replacedText.get(0).equals("+")) {
+        String before = text.substring(0, quantityPos).trim();
+        String after = text.substring(quantityPos + quantityLinks.get(0).text.length()).trim();
+        if (before.contains(" ") || after.contains(" ")) {
+            return null;
+        }
+        if (before.isEmpty() || before.equals("+") || before.equals("-")) {
             return quantityLinks.get(0);
         }
         return null;

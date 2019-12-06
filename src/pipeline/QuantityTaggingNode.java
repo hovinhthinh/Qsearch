@@ -107,7 +107,7 @@ public class QuantityTaggingNode implements TaggingNode {
             // for webtables, quantities tagging nodes should be done before entities tagging node.
             return;
         }
-        String dumpyText = "This is " + cell.text + " .";
+        String dumpyText = "This quantity is " + cell.text + " .";
         for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(dumpyText, true)) {
             if (span.object instanceof Quantity) {
                 Quantity q = (Quantity) span.object;
