@@ -76,7 +76,7 @@ public class T2DReader {
                 continue;
             }
             for (String line : FileUtils.getLineStream(f, StandardCharsets.UTF_8)) {
-                Table t = parseFromJSON(line);
+                TruthTable t = parseFromJSON(line);
                 if (t == null) {
                     continue;
                 }
