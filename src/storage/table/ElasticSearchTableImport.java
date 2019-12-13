@@ -18,7 +18,7 @@ public class ElasticSearchTableImport {
     public static final String ES_HOST = Configuration.get("storage.elasticsearch.address");
     public static final String TABLE_INDEX = Configuration.get("storage.elasticsearch.table_index");
     public static final String TABLE_TYPE = Configuration.get("storage.elasticsearch.table_type");
-    public static final int BATCH_SIZE = 1024;
+    public static final int BATCH_SIZE = 1024 * 8;
     public static ArrayList<String> bulks = new ArrayList<>();
 
     static class TableIndex {
@@ -122,10 +122,10 @@ public class ElasticSearchTableImport {
             }
             monitor.incAndGet();
         }
+        monitor.forceShutdown();
         if (bulks.size() > 0) {
             return callBulk();
         }
-        monitor.forceShutdown();
         return true;
     }
 
@@ -160,10 +160,10 @@ public class ElasticSearchTableImport {
     }
 
     public static void main(String[] args) throws Exception {
-        processTableData(args);
+//        processTableData(args);
 //        System.out.println(deleteIndex());
 //        System.out.println(createIndex());
 //        System.out.println("Importing tables for TABLEM:");
-//        System.out.println(importTables("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.gz"));
+//        System.out.println(importTables("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.to_be_indexed.gz"));
     }
 }
