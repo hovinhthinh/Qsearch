@@ -25,8 +25,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
                 new QuantityTaggingNode(),
-                new ColumnTypeTaggingNode(),
-                new PostFilteringNode()
+                new ColumnTypeTaggingNode()
         );
     }
 
