@@ -41,7 +41,15 @@ public class WIKIPEDIA {
 
     public static Table parseFromJSON(String jsonText) {
         try {
-            JSONObject json = new JSONObject(jsonText);
+            return parseFromJSON(new JSONObject(jsonText));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Table parseFromJSON(JSONObject json) {
+        try {
             Table table = new Table();
 
             table._id = json.getString("_id");

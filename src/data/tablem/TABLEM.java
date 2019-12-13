@@ -18,7 +18,15 @@ public class TABLEM {
 
     public static Table parseFromJSON(String jsonText) {
         try {
-            JSONObject json = new JSONObject(jsonText);
+            return parseFromJSON(new JSONObject(jsonText));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Table parseFromJSON(JSONObject json) {
+        try {
             // Only support relation tables. This check does not assure that the table is really relational,
             // however will remove definitely non-relational tables.
             if (!json.getString("tableType").equals("RELATION")) {
