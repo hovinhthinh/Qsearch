@@ -22,6 +22,25 @@ public class TaggingPipeline {
         );
     }
 
+    // Just the annotations of entities and quantities, there is no linking.
+    public static TaggingPipeline getAnnotationPipeline() {
+        return new TaggingPipeline(
+                new TablePrefilteringNode(),
+                new QuantityTaggingNode(),
+                new PriorBasedEntityTaggingNode(),
+                new ColumnTypeTaggingNode()
+        );
+    }
+
+    // Just the linking pipeline.
+    public static TaggingPipeline getColumnLinkingPipeline() {
+        return new TaggingPipeline(
+                new DeepColumnScoringNode(),
+                new ColumnLinkFilteringNode(0),
+                new PostFilteringNode()
+        );
+    }
+
     public boolean tag(Table table) {
         failNode = null;
         for (TaggingNode node : taggingNodes) {
