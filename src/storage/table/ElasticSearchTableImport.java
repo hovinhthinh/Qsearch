@@ -130,6 +130,7 @@ public class ElasticSearchTableImport {
     }
 
     // /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf_to_be_indexed.gz
+    // Output content of canonicalized TableM for indexing into Elasticsearch.
     public static void processTableData(String[] args) {
         PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
         FileUtils.LineStream stream = FileUtils.getLineStream(args[0], "UTF-8");
