@@ -17,16 +17,16 @@ Below, I would like to give a short summary about my current research project Qu
 \section{Current Progress}
 The objective of the project is to answer quantity-related queries such as: \textit{``cars with price less than \$100k"}. There are also more complex queries that we want to answer, however we could leave that for future work. 
 
-In this year, we got a full paper plus a demo paper on quantity search over text, and now we want to extend our work to a new data source: Web Tables, as we see that the amount of quantities on web tables is very huge. In this work, I will call the system as ``TabQs'' 
+In this year, we got a full paper plus a demo paper on quantity search over text, and now we want to extend our work to a new data source: Web Tables, as we see that the amount of quantities on web tables is very huge. In this work, I will call our system ``TabQs'' 
 
-The detail of our current progress for TabQs has been described in the write up. Now I will briefly describe the main idea of the work, as well as list some problems that I am facing on now.
+The detail of our current progress for TabQs has been described in the write up. Now I will briefly describe the main idea of the work, as well as list some problems that we are facing now.
 \subsection{Main Idea}
-Given a web table, to understand it completely, we may also need its surrounding context. Context might be: caption, page title, page content. Different parts of the context could be weighted differently.
+Given a web table, to understand it completely, we may also need its surrounding context. Table context might be: caption, page title, page content. Different parts of the context could be weighted differently.
 
-Now focus only on the table, to extract Qfacts, we do the following steps:
+Now to extract Qfacts from the table, we do the following steps:
 
 \begin{itemize}
-\item \textit{Quantity recognition}: There are many options and tools here. One could develop a rule-based parser, or an external tool. I know that we are working on a IR problem, so recall is important, building our own rule-based parser is totally not enough, and that is why I use a combination of two state of the art tools for detecting quantity: QEWT + Illinois Quantifier (as described in the write up).
+\item \textit{Quantity recognition}: There are many options and tools here. One could develop her own rule-based parser, or use an external tool. As we are working on a IR problem, recall is important, and building our own rule-based parser is totally not enough. Hence, we use a combination of two state of the art tools for detecting quantity: QEWT + Illinois Quantifier (as described in the write up).
 
 \item \textit{Entity recognition}: Previous works have been proposed for entity disambiguation in web tables, however reusing them is very difficult, I tried to reuse the code, but totally difficult, and we have to reimplement them. Anyway, previous works rely on co-occurence of textual cues of the tables on external sources (i.e. text, KB), and we hypothesize that in case we focus on quantitative tables, with very few texts, these techniques do not work well. So, in this entity recognition step, we only find candidate entities for each entity mention, using a prior model, built from hyperlinks from various sources. The disambiguation will be done jointly later on.
 
@@ -38,25 +38,25 @@ Now focus only on the table, to extract Qfacts, we do the following steps:
 \item \textit{Find context:} After the connection between entity and quantity columns are determined, we need to find their context. Of course, we know that the header of quantity column is vital (without it we cannot even understand the quantity column, as they are pure quantities). However what about other tokens in the table's context? Let's look at following ways:
 
 \begin{itemize}
-\item \textit{Map entity-quantity from table to text}: As I demonstrated a long time back, one strategy is to match entities and quantities from table to text, to find their context co-occured, however I observed that this is very diffcult (matching quantity must be approximated) and hence noisy, and not scalable (slow in performance and inefficient in space).
+\item \textit{Map entity-quantity from table to text}: As I demonstrated a long time back, one strategy is to match entities and quantities from table to text, to find their context co-occured, however I observed that this is very diffcult (matching quantities must be approximated) and hence noisy, and not scalable (slow in performance and inefficient in space).
 \item \textit{Using entire context}. Table context is divided into different parts: caption, page title, page content, and we have different strategies of choosing context that include them or not. This is not systematic, however might work well, hence we might end up using this way?
-\item \textit{Search on the fly}. If we start from the query, do searching on the fly, we can somehow take into account the context of the table without actually need to extract the full Qfacts's context and offline indexing like we did for Qsearch. This way is good because we can filter out bad tables by considering their context first (here we can even apply Boosting to weight the importance of each context part, e.g., title and caption are more important than page content), then we do Qfacts extraction on the table itself.
+\item \textit{Search on the fly}. If we start from the query, do searching on the fly, we can somehow take into account the surrounding context of the table without actually need to extract the full Qfacts's context and offline indexing like we did for Qsearch. This way is good because we can filter out bad tables by considering their surrounding context first (here we can even apply boosting to weight the importance of each context part, e.g., title and caption are more important than page content), then we do Qfacts extraction on the table itself.
 \end{itemize}
-\item \textit{Search}: We will basically use the ranking models used by Qsearch, plus some modifications to fit with our settings.
+\item \textit{Search}: We will basically use the ranking models from Qsearch, plus some modifications to fit with our settings.
 
 \end{itemize}
 \section{Future Plans}
 \subsection{Technical Plans}
 So far I have summarized what I have done. There are still many things to do here.
 \begin{itemize}
-\item First, I think I am not so good for pure theoretical research -- building an awesome methodology first, but then fail on evaluation. As experienced over the last year of PhD, I think the data is cruicial, so what we think might not be what the data thinks, and hence I like more when having a bad running system first, then improve over it (with theories and methodologies). So I think the first step to do is to complete the implementations I have been doing so far. I feel motivated when seeing something running, even it is bad.
+\item First, I think I am not so good for pure theoretical research -- building an awesome methodology first, but then fail on evaluation. I think the data is crucial, so what we think might not be what the data thinks, and hence I like more when having a bad running system first, then improve over it (with theories and methodologies). So in my opinion, the first step to do is to complete the implementations that I have been doing so far. I feel motivated when seeing something running, even it is bad.
 
-\item Second, another step is to define the concrete evaluations that we will do, along with baselines that we will compare to. There are 3 tasks here:
+\item Second, parallel with the first step is to define the concrete evaluations that we will do, along with baselines that we will compare to. There are 3 tasks here:
 \begin{itemize}
 \item \textit{Entity disambiguation}:  as you mentioned, this could be not our main focus, but we can show a few numbers here.
 \item \textit{Column linking:} we need to start by collecting datasets. I will have a look at other papers to find an appropriate datasets if available, otherwise we will collect our own test set. The former option should be preferred.
 \item \textit{End-to-end search}: most important, and most difficult to conduct experiments. Questions: 
-\\ -- what do we show to evaluators? entities (group/not-group by tables), tables, table context?;\\ -- how to we show to evaluators? (because we have a huge amount of information to show for each entity result here) -- which platforms?;\\ -- test queries? can we reuse the test queries from Qsearch, or do we have to collect more? This very relys on the data we have. 
+\\ -- what do we show to evaluators? entities (group/not-group by tables), tables, table context?;\\ -- how to we show to evaluators? (because we have a huge amount of information to show for each entity result here) -- which platforms?;\\ -- test queries? can we reuse the test queries from Qsearch, or do we have to collect more? This very relies on the data we have. 
 \end{itemize}
 
 \end{itemize}
