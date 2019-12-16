@@ -42,31 +42,34 @@ public class ElasticSearchTableImport {
     }
 
     public static String createIndex() {
-//        {
-//            "mappings": {
-//                "table": {
-//                    "properties": {
-//                        "json": { # this is in the model.table.Table format.
-//                            "index": false,
-//                            "type": "text"
-//                        },
-//                        "pageContent": {
-//                            "type": "text"
-//                        },
-//                        "caption": {
-//                            "type": "text"
-//                        },
-//                        "pageTitle": {
-//                            "type": "text"
-//                        },
-//                        "tableText": {
-//                            "type": "text"
-//                        }
-//                    }
-//                }
-//            }
-//        }
-        String body = "{\"mappings\":{\"" + TABLE_TYPE + "\":{\"properties\":{\"json\":{\"index\":false,\"type\":\"text\"},\"pageContent\":{\"type\":\"text\"},\"caption\":{\"type\":\"text\"},\"pageTitle\":{\"type\":\"text\"},\"tableText\":{\"type\":\"text\"}}}}}";
+        String body = "{\n" +
+                "  \"mappings\": {\n" +
+                "    \"" + TABLE_TYPE + "\": {\n" +
+                "      \"properties\": {\n" +
+                "        \"json\": {\n" + // this is in the model.table.Table format.
+                "          \"index\": false,\n" +
+                "          \"type\": \"text\"\n" +
+                "        },\n" +
+                "        \"pageContent\": {\n" +
+                "          \"type\": \"text\",\n" +
+                "          \"analyzer\": \"english\"\n" +
+                "        },\n" +
+                "        \"caption\": {\n" +
+                "          \"type\": \"text\",\n" +
+                "          \"analyzer\": \"english\"\n" +
+                "        },\n" +
+                "        \"pageTitle\": {\n" +
+                "          \"type\": \"text\",\n" +
+                "          \"analyzer\": \"english\"\n" +
+                "        },\n" +
+                "        \"tableText\": {\n" +
+                "          \"type\": \"text\",\n" +
+                "          \"analyzer\": \"english\"\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
         return HTTPRequest.PUT(PROTOCOL + "://" + ES_HOST + "/" + TABLE_INDEX, body);
     }
 
