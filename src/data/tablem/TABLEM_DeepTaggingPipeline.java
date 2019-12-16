@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import model.table.Table;
 import pipeline.*;
 import util.FileUtils;
+import util.SelfMonitor;
 
 import java.io.PrintWriter;
 
@@ -19,7 +20,10 @@ public class TABLEM_DeepTaggingPipeline {
 
         Gson gson = new Gson();
 
+        SelfMonitor m = new SelfMonitor(TABLEM_DeepTaggingPipeline.class.getName(), -1, 60);
+        m.start();
         for (String line : stream) {
+            m.incAndGet();
             Table table = TABLEM.parseFromJSON(line);
             if (table == null) {
                 continue;
@@ -29,6 +33,7 @@ public class TABLEM_DeepTaggingPipeline {
             }
             out.println(gson.toJson(table));
         }
+        m.forceShutdown();
         out.close();
     }
 }

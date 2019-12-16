@@ -17,7 +17,7 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
     private boolean multipleEntitiesInCell;
 
     public PriorBasedEntityTaggingNode(int minMention2EntityFrequency, boolean multipleEntitiesInCell) {
-        this.prior = new Mention2EntityPrior(minMention2EntityFrequency, 1);
+        this.prior = new Mention2EntityPrior(minMention2EntityFrequency, -1);
         this.multipleEntitiesInCell = multipleEntitiesInCell;
     }
 
@@ -57,6 +57,7 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
                 }
                 int candidatePos = -1, candidateFreq = 0;
                 String candidateEntity = null;
+                List<Pair<String, Integer>> rightCandidates = null;
                 for (int s = current; s < arr.size(); ++s) {
                     if (s + l > arr.size()) {
                         break;
@@ -73,12 +74,14 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
                         candidateEntity = candidate.first;
                         candidateFreq = candidate.second;
                         candidatePos = s;
+                        rightCandidates = candidates;
                     }
                 }
                 if (candidateEntity != null) {
                     EntityLink el = new EntityLink();
                     el.text = String.join(" ", arr.subList(candidatePos, candidatePos + l));
                     el.target = "YAGO:" + candidateEntity.substring(1, candidateEntity.length() - 1);
+                    el.candidates = rightCandidates;
                     cell.entityLinks.add(el);
 
                     current = candidatePos + l;
