@@ -162,10 +162,21 @@ public class ElasticSearchTableImport {
         out.close();
     }
 
+    public static String removeSearchable() {
+        String body = "{\n" +
+                "    \"script\" : \"ctx._source.remove('searchable')\",\n" +
+                "    \"query\" : {\n" +
+                "        \"exists\": { \"field\": \"searchable\" }\n" +
+                "    }\n" +
+                "}";
+        return HTTPRequest.POST(PROTOCOL + "://" + ES_HOST + "/" + TABLE_INDEX + "/_update_by_query?conflicts=proceed", body);
+    }
+
     public static void main(String[] args) throws Exception {
 //        processTableData(args);
 //        System.out.println(deleteIndex());
 //        System.out.println(createIndex());
+//        System.out.println(removeSearchable());
 //        System.out.println("Importing tables for TABLEM:");
 //        System.out.println(importTables("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.to_be_indexed.gz"));
     }
