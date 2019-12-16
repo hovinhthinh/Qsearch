@@ -1,0 +1,42 @@
+\begin{thebibliography}{1}
+
+\bibitem{he2017deep}
+L.~He, K.~Lee, M.~Lewis, and L.~Zettlemoyer.
+\newblock Deep semantic role labeling: What works and what’s next.
+\newblock In {\em Proceedings of the 55th Annual Meeting of the Association for
+  Computational Linguistics (Volume 1: Long Papers)}, volume~1, pages 473--483,
+  2017.
+
+\bibitem{ibrahim2016making}
+Y.~Ibrahim, M.~Riedewald, and G.~Weikum.
+\newblock Making sense of entities and quantities in web tables.
+\newblock In {\em Proceedings of the 25th ACM International on Conference on
+  Information and Knowledge Management}, pages 1703--1712. ACM, 2016.
+
+\bibitem{pimplikar2012answering}
+R.~Pimplikar and S.~Sarawagi.
+\newblock Answering table queries on the web using column keywords.
+\newblock {\em Proceedings of the VLDB Endowment}, 5(10):908--919, 2012.
+
+\bibitem{saha2017bootstrapping}
+S.~Saha, H.~Pal, et~al.
+\newblock Bootstrapping for numerical open ie.
+\newblock In {\em Proceedings of the 55th Annual Meeting of the Association for
+  Computational Linguistics (Volume 2: Short Papers)}, volume~2, pages
+  317--323, 2017.
+
+\bibitem{sarawagi2014open}
+S.~Sarawagi and S.~Chakrabarti.
+\newblock Open-domain quantity queries on web tables: annotation, response, and
+  consensus models.
+\newblock In {\em Proceedings of the 20th ACM SIGKDD international conference
+  on Knowledge discovery and data mining}, pages 711--720. ACM, 2014.
+
+\bibitem{zhang2013infogather+}
+M.~Zhang and K.~Chakrabarti.
+\newblock Infogather+: semantic matching and annotation of numeric and
+  time-varying attributes in web tables.
+\newblock In {\em Proceedings of the 2013 ACM SIGMOD International Conference
+  on Management of Data}, pages 145--156. ACM, 2013.
+
+\end{thebibliography}
