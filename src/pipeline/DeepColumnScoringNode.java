@@ -15,7 +15,10 @@ public class DeepColumnScoringNode implements TaggingNode {
     public static final Logger LOGGER = Logger.getLogger(DeepColumnScoringNode.class.getName());
     public static final int MIN_MAX_INFERENCE = 0;
     public static final int TYPE_SET_INFERENCE = 1;
+
     public static final int JOINT_INFERENCE = 2;
+    public static final double JOINT_WEIGHT = 0.5;
+    public static final int JOINT_MAX_NUM_ITERS = 1000;
 
     private int inferenceMode;
     private DeepScoringClient scoringClient;
@@ -46,8 +49,154 @@ public class DeepColumnScoringNode implements TaggingNode {
         }
     }
 
-    public boolean jointInference(Table table) {
-        throw new RuntimeException("Not implemented");
+    private static class BacktrackJointInferenceInfo {
+        int[] currentColumnLinking;
+        double[] currentColumnLinkingScore;
+        String[][] currentEntityAssignment;
+        double currentJointScore;
+        String[][] savedEntityAssignment; // For saving each best local assignment
+
+        int[] bestColumnLinking;
+        double[] bestColumnLinkingScore;
+        String[][] bestEntityAssignment;
+        double bestJointScore;
+
+        public BacktrackJointInferenceInfo(int nRows, int nCols) {
+            currentColumnLinking = new int[nCols];
+            currentColumnLinkingScore = new double[nCols];
+            savedEntityAssignment = new String[nRows][nCols];
+            currentEntityAssignment = new String[nRows][nCols];
+            currentJointScore = 0;
+
+            // for saving
+            bestColumnLinking = new int[nCols];
+            bestColumnLinkingScore = new double[nCols];
+            bestEntityAssignment = new String[nRows][nCols];
+            bestJointScore = Double.NEGATIVE_INFINITY;
+            Arrays.fill(bestColumnLinking, -1);
+            Arrays.fill(bestColumnLinkingScore, -1.0);
+        }
+
+        public void captureCurrentColumnLinking() {
+            for (int i = 0; i < bestColumnLinking.length; ++i) {
+                bestColumnLinking[i] = currentColumnLinking[i];
+                bestColumnLinkingScore[i] = currentColumnLinkingScore[i];
+            }
+            for (int i = 0; i < bestEntityAssignment.length; ++i) {
+                for (int j = 0; j < bestEntityAssignment[i].length; ++j) {
+                    bestEntityAssignment[i][j] = currentEntityAssignment[i][j];
+                }
+            }
+            bestJointScore = currentJointScore;
+        }
+
+        public void recomputeBasedOnCurrentAssignment() {
+            // TODO;
+            // Compute currentColumnLinkingScore, currentJointScore
+        }
+
+        public double newScoreOfLocalAssignment(int i, int j, String s) {
+            // TODO
+            return -1;
+        }
+
+    }
+
+    private void backtrackJointInference(Table table, BacktrackJointInferenceInfo info, int currentCol) {
+        if (currentCol < table.nColumn) {
+            if (!table.isNumericColumn[currentCol]) {
+                backtrackJointInference(table, info, currentCol + 1);
+            } else {
+                for (int i = 0; i < table.nColumn; ++i) {
+                    if (!table.isEntityColumn[i]) {
+                        continue;
+                    }
+                    info.currentColumnLinking[currentCol] = i;
+                    backtrackJointInference(table, info, currentCol + 1);
+                }
+            }
+            return;
+        }
+
+        // Now process the ICA algorithm;
+        // Init candidates
+        for (int j = 0; j < table.nColumn; ++j) {
+            if (!table.isEntityColumn[j]) {
+                continue;
+            }
+            for (int i = 0; i < table.nDataRow; ++i) {
+                EntityLink el = table.data[i][j].getRepresentativeEntityLink();
+                if (el != null) {
+                    info.currentEntityAssignment[i][j] = info.savedEntityAssignment[i][j] = el.candidates.get(0).first;
+                }
+            }
+        }
+        info.recomputeBasedOnCurrentAssignment();
+
+        // Iterative classifying
+        int nIterations = 0;
+        boolean hasChange;
+        do {
+            hasChange = false;
+            for (int i = 0; i < table.nDataRow; ++i) {
+                for (int j = 0; j < table.nColumn; ++j) {
+                    if (info.currentEntityAssignment[i][j] == null) {
+                        continue;
+                    }
+                    double currentLocalScore = info.currentJointScore;
+                    for (Pair<String, Integer> c : table.data[i][j].getRepresentativeEntityLink().candidates) {
+                        if (c.first.equals(info.currentEntityAssignment[i][j])) {
+                            continue;
+                        }
+                        double newLocalScore = info.newScoreOfLocalAssignment(i, j, c.first);
+                        if (newLocalScore > currentLocalScore) {
+                            currentLocalScore = newLocalScore;
+                            info.savedEntityAssignment[i][j] = c.first;
+                            hasChange = true;
+                        }
+                    }
+                }
+            }
+            if (hasChange) {
+                for (int i = 0; i < table.nDataRow; ++i) {
+                    for (int j = 0; j < table.nColumn; ++j) {
+                        info.currentEntityAssignment[i][j] = info.savedEntityAssignment[i][j];
+                    }
+                }
+                info.recomputeBasedOnCurrentAssignment();
+            }
+        } while (++nIterations < JOINT_MAX_NUM_ITERS && hasChange);
+        // Compare with best assignment
+        if (info.currentJointScore > info.bestJointScore) {
+            info.captureCurrentColumnLinking();
+        }
+    }
+
+    private boolean jointInference(Table table) {
+        BacktrackJointInferenceInfo info = new BacktrackJointInferenceInfo(table.nDataRow, table.nColumn);
+        backtrackJointInference(table, info, 0);
+        // set candidates back to tables
+        for (int i = 0; i < table.nDataRow; ++i) {
+            for (int j = 0; j < table.nColumn; ++j) {
+                // remove all candidates of entity links to reduce size
+                // (only in the body - because the header is not tagged).
+                for (EntityLink el : table.data[i][j].entityLinks) {
+                    el.candidates = null;
+                }
+                EntityLink el = table.data[i][j].getRepresentativeEntityLink();
+                if (el != null && info.bestEntityAssignment[i][j] != null) {
+                    el.target = "YAGO:" + info.bestEntityAssignment[i][j].substring(1, info.bestEntityAssignment[i][j].length() - 1);
+                }
+            }
+        }
+        // set column linking
+        for (int i = 0; i < table.nColumn; ++i) {
+            table.quantityToEntityColumn[i] = info.bestColumnLinking[i];
+            table.quantityToEntityColumnScore[i] = info.bestColumnLinkingScore[i];
+        }
+
+        // TODO: thresholding of links between E-Q columns
+        return false;
     }
 
     public boolean directInference(Table table) {
