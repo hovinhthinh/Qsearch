@@ -65,7 +65,7 @@ PUT /tabqs_table
   "mappings": {
     "table": {
       "properties": {
-        "rawJson": {
+        "json": {
           "index": false,
           "type": "text"
         },
@@ -90,7 +90,7 @@ PUT /tabqs_table
           "analyzer": "english"
         },
         "searchable": {
-          "type": "text",
+          "type": "text"
         }
       }
     }
