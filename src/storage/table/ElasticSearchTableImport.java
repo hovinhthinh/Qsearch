@@ -194,8 +194,6 @@ public class ElasticSearchTableImport {
     }
 
     public static boolean setSearchableDocuments(String input) {
-        System.out.println("Remove 'searchable' Field: " + removeField("searchable"));
-        System.out.println("Remove 'parsedJson' Field: " + removeField("parsedJson"));
         try {
             Concurrent.BoundedExecutor executor = new Concurrent.BoundedExecutor(96);
             SelfMonitor m = new SelfMonitor("SetSearchableDocs", -1, 10);
@@ -226,8 +224,9 @@ public class ElasticSearchTableImport {
 //        processTableData(args);
 //        System.out.println(deleteIndex());
 //        System.out.println(createIndex());
-//        System.out.println("Importing tables for TABLEM:");
 //        System.out.println(importTables("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.to_be_indexed.gz"));
+//        System.out.println("Remove 'searchable' Field: " + removeField("searchable"));
+//        System.out.println("Remove 'parsedJson' Field: " + removeField("parsedJson"));
 //        System.out.println(setSearchableDocuments("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz"));
     }
 }
