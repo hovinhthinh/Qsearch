@@ -1,0 +1,20 @@
+
+
+./run.sh 32G data.background.mention2entity.Mention2EntityPriorGenerator /GW/D5data-11/hvthinh/WIKIPEDIA-niko/fixedWikipediaEntitiesJSON.gz /GW/D5data-11/hvthinh/TabEL/TabEL.json.shuf.gz /GW/D5data-11/hvthinh/wiki-links/data.gz /GW/D5data-11/hvthinh/TabQs/m2ePrior_wikipages+wikitables+wikilinks
+./run.sh 32G data.background.mention2entity.PostProcessPrior /GW/D5data-11/hvthinh/TabQs/m2ePrior_wikipages+wikitables+wikilinks.case-sensitive_tokenized_sorted.gz /GW/D5data-11/hvthinh/TabQs/m2ePrior_wikipages+wikitables+wikilinks.case-sensitive_merged.gz
+
+./run.sh 12G tmp.ReadTabELInteractive
+./run.sh 12G tmp.ReadTableMInteractive /GW/D5data-10/hvthinh/BriQ-TableM/health_combined.gz
+
+./run_parallel.sh 50 data.tablem.TABLEM_DeepTaggingPipeline /GW/D5data-11/hvthinh/TABLEM/finance+id.shuf.gz /GW/D5data-11/hvthinh/TABLEM/finance+id.shuf.annotation.gz
+
+./run.sh 12G data.tablem.TABLEM_DeepTaggingPipeline /GW/D5data-11/hvthinh/TABLEM/sports+id.shuf.gz /GW/D5data-11/hvthinh/TABLEM/sports+id.shuf.annotation.gz.shuf1k_tmp
+
+
+./run.sh 8G data.AddIdToTables /GW/D5data-11/hvthinh/TABLEM/finance.shuf.gz TABLEM:FINANCE /GW/D5data-11/hvthinh/TABLEM/finance+id.shuf.gz
+
+
+./run_parallel.sh 32 data.tablem.TABLEM_DeepTaggingPipeline /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz
+
+./run_parallel.sh 50 storage.table.ElasticSearchTableImport /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.to_be_indexed.gz
+
