@@ -28,18 +28,18 @@ GET /tabqs_table/table/_search/
 
 GET /tabqs_table/table/_search/
 {
-  "_source": ["tableText", "caption", "pageTitle"],
+  "_source": ["tableText", "caption", "pageTitle", "json"],
   "size": 1000,
   "query": {
     "bool": {
       "must": [
         {
           "multi_match": {
-            "query": "Multan ",
+            "query": "mobile phones containing battery with capacity higher than 2000 mAh",
             "fields": [
-              "caption",
-              "pageTitle",
-              "tableText",
+              "caption^5",
+              "pageTitle^5",
+              "tableText^3",
               "pageContent"
             ],
             "type": "cross_fields",
@@ -65,7 +65,11 @@ PUT /tabqs_table
   "mappings": {
     "table": {
       "properties": {
-        "json": {
+        "rawJson": {
+          "index": false,
+          "type": "text"
+        },
+        "parsedJson": {
           "index": false,
           "type": "text"
         },
@@ -84,6 +88,9 @@ PUT /tabqs_table
         "tableText": {
           "type": "text",
           "analyzer": "english"
+        },
+        "searchable": {
+          "type": "text",
         }
       }
     }
