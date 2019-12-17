@@ -24,6 +24,7 @@ public class ElasticSearchTableImport {
     public static final int BATCH_SIZE = 1024 * 8;
     public static ArrayList<String> bulks = new ArrayList<>();
 
+    // For unparsed tables (without any annotation).
     static class TableIndex {
         private static final Gson GSON = new Gson();
         Table table;
@@ -49,7 +50,11 @@ public class ElasticSearchTableImport {
                 "  \"mappings\": {\n" +
                 "    \"" + TABLE_TYPE + "\": {\n" +
                 "      \"properties\": {\n" +
-                "        \"json\": {\n" + // this is in the model.table.Table format.
+                "        \"json\": {\n" +
+                "          \"index\": false,\n" +
+                "          \"type\": \"text\"\n" +
+                "        },\n" +
+                "        \"parsedJson\": {\n" +
                 "          \"index\": false,\n" +
                 "          \"type\": \"text\"\n" +
                 "        },\n" +
@@ -68,6 +73,9 @@ public class ElasticSearchTableImport {
                 "        \"tableText\": {\n" +
                 "          \"type\": \"text\",\n" +
                 "          \"analyzer\": \"english\"\n" +
+                "        },\n" +
+                "        \"searchable\": {\n" +
+                "          \"type\": \"text\"\n" +
                 "        }\n" +
                 "      }\n" +
                 "    }\n" +
@@ -165,18 +173,18 @@ public class ElasticSearchTableImport {
         out.close();
     }
 
-    private static String removeSearchable() {
+    private static String removeField(String field) {
         String body = "{\n" +
-                "    \"script\" : \"ctx._source.remove('searchable')\",\n" +
+                "    \"script\" : \"ctx._source.remove('" + field + "')\",\n" +
                 "    \"query\" : {\n" +
-                "        \"exists\": { \"field\": \"searchable\" }\n" +
+                "        \"exists\": { \"field\": \"" + field + "\" }\n" +
                 "    }\n" +
                 "}";
         return HTTPRequest.POST(PROTOCOL + "://" + ES_HOST + "/" + TABLE_INDEX + "/_update_by_query?conflicts=proceed", body);
     }
 
-    private static String setSearchable(String tableID) {
-        String body = "{\"doc\":{\"searchable\":\"yes\"}}";
+    private static String setSearchable(String tableID, String parsedJson) {
+        String body = new JSONObject().put("doc", new JSONObject().put("searchable", "yes").put("parsedJson", parsedJson)).toString();
         try {
             return HTTPRequest.POST(PROTOCOL + "://" + ES_HOST + "/" + TABLE_INDEX + "/" + TABLE_TYPE + "/" + URLEncoder.encode(tableID, "UTF-8") + "/_update", body);
         } catch (UnsupportedEncodingException e) {
@@ -186,6 +194,8 @@ public class ElasticSearchTableImport {
     }
 
     public static boolean setSearchableDocuments(String input) {
+        System.out.println("Remove 'searchable' Field: " + removeField("searchable"));
+        System.out.println("Remove 'parsedJson' Field: " + removeField("parsedJson"));
         try {
             Concurrent.BoundedExecutor executor = new Concurrent.BoundedExecutor(96);
             SelfMonitor m = new SelfMonitor("SetSearchableDocs", -1, 10);
@@ -195,7 +205,7 @@ public class ElasticSearchTableImport {
                 m.incAndGet();
                 Table table = gson.fromJson(line, Table.class);
                 executor.submit(() -> {
-                    String output = setSearchable(table._id);
+                    String output = setSearchable(table._id, line);
                     if (output == null) {
                         System.out.println("Err: " + table._id);
                     }
@@ -206,6 +216,7 @@ public class ElasticSearchTableImport {
             executor.joinAndShutdown(10);
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
         return true;
     }
@@ -217,7 +228,6 @@ public class ElasticSearchTableImport {
 //        System.out.println(createIndex());
 //        System.out.println("Importing tables for TABLEM:");
 //        System.out.println(importTables("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.to_be_indexed.gz"));
-        System.out.println(removeSearchable());
-        System.out.println(setSearchableDocuments("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz"));
+//        System.out.println(setSearchableDocuments("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz"));
     }
 }
