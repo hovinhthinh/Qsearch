@@ -6,11 +6,14 @@ import data.tablem.TABLEM;
 import model.table.Table;
 import org.json.JSONException;
 import org.json.JSONObject;
+import util.Concurrent;
 import util.FileUtils;
 import util.HTTPRequest;
 import util.SelfMonitor;
 
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class ElasticSearchTableImport {
@@ -162,7 +165,7 @@ public class ElasticSearchTableImport {
         out.close();
     }
 
-    public static String removeSearchable() {
+    private static String removeSearchable() {
         String body = "{\n" +
                 "    \"script\" : \"ctx._source.remove('searchable')\",\n" +
                 "    \"query\" : {\n" +
@@ -172,12 +175,49 @@ public class ElasticSearchTableImport {
         return HTTPRequest.POST(PROTOCOL + "://" + ES_HOST + "/" + TABLE_INDEX + "/_update_by_query?conflicts=proceed", body);
     }
 
+    private static String setSearchable(String tableID) {
+        String body = "{\"doc\":{\"searchable\":\"yes\"}}";
+        try {
+            return HTTPRequest.POST(PROTOCOL + "://" + ES_HOST + "/" + TABLE_INDEX + "/" + TABLE_TYPE + "/" + URLEncoder.encode(tableID, "UTF-8") + "/_update", body);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static boolean setSearchableDocuments(String input) {
+        try {
+            Concurrent.BoundedExecutor executor = new Concurrent.BoundedExecutor(64);
+            SelfMonitor m = new SelfMonitor("SetSearchableDocs", -1, 10);
+            m.start();
+            Gson gson = new Gson();
+            for (String line : FileUtils.getLineStream(input, "UTF-8")) {
+                m.incAndGet();
+                Table table = gson.fromJson(line, Table.class);
+                executor.submit(() -> {
+                    String output = setSearchable(table._id);
+                    if (output == null) {
+                        System.out.println("Err: " + table._id);
+                    }
+                    return null;
+                });
+            }
+            m.forceShutdown();
+            executor.joinAndShutdown(10);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+
     public static void main(String[] args) throws Exception {
 //        processTableData(args);
 //        System.out.println(deleteIndex());
 //        System.out.println(createIndex());
-//        System.out.println(removeSearchable());
 //        System.out.println("Importing tables for TABLEM:");
 //        System.out.println(importTables("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.to_be_indexed.gz"));
+//        System.out.println(removeSearchable());
+//        System.out.println(setSearchableDocuments("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz"));
     }
 }
