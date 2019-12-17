@@ -187,7 +187,7 @@ public class ElasticSearchTableImport {
 
     public static boolean setSearchableDocuments(String input) {
         try {
-            Concurrent.BoundedExecutor executor = new Concurrent.BoundedExecutor(64);
+            Concurrent.BoundedExecutor executor = new Concurrent.BoundedExecutor(96);
             SelfMonitor m = new SelfMonitor("SetSearchableDocs", -1, 10);
             m.start();
             Gson gson = new Gson();
@@ -217,7 +217,7 @@ public class ElasticSearchTableImport {
 //        System.out.println(createIndex());
 //        System.out.println("Importing tables for TABLEM:");
 //        System.out.println(importTables("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.to_be_indexed.gz"));
-//        System.out.println(removeSearchable());
-//        System.out.println(setSearchableDocuments("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz"));
+        System.out.println(removeSearchable());
+        System.out.println(setSearchableDocuments("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz"));
     }
 }
