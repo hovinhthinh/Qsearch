@@ -15,6 +15,7 @@ public class DeepColumnScoringNode implements TaggingNode {
     public static final Logger LOGGER = Logger.getLogger(DeepColumnScoringNode.class.getName());
     public static final int MIN_MAX_INFERENCE = 0;
     public static final int TYPE_SET_INFERENCE = 1;
+    public static final int JOINT_INFERENCE = 2;
 
     private int inferenceMode;
     private DeepScoringClient scoringClient;
@@ -25,7 +26,7 @@ public class DeepColumnScoringNode implements TaggingNode {
     }
 
     public DeepColumnScoringNode() {
-        this(TYPE_SET_INFERENCE);
+        this(JOINT_INFERENCE);
     }
 
     @Override
@@ -36,6 +37,20 @@ public class DeepColumnScoringNode implements TaggingNode {
         table.quantityToEntityColumnScore = new double[table.nColumn];
         Arrays.fill(table.quantityToEntityColumnScore, -1.0);
 
+        if (inferenceMode == MIN_MAX_INFERENCE || inferenceMode == TYPE_SET_INFERENCE) {
+            return directInference(table);
+        } else if (inferenceMode == JOINT_INFERENCE) {
+            return jointInference(table);
+        } else {
+            throw new RuntimeException("Not implemented");
+        }
+    }
+
+    public boolean jointInference(Table table) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    public boolean directInference(Table table) {
         boolean result = false;
         // loop for quantity columns.
 
@@ -89,6 +104,7 @@ public class DeepColumnScoringNode implements TaggingNode {
         }
         return result;
     }
+
 
     private double inferMinMax(Table table, int qCol, int eCol) {
         // header conf: max from combined and last cell only.
