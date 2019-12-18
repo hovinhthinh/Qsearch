@@ -16,17 +16,18 @@ import java.util.stream.Collectors;
 public class DeepScoringClient {
     private static final String SEPARATOR = "\t";
     private static final int CACHE_SIZE = 1000000;
-    private BufferedReader in = null;
+    private BufferedReader in = null, err = null;
     private PrintWriter out = null;
     private Process p = null;
 
     private LRUMap<String, Double> cache = null;
 
     public DeepScoringClient() {
-        this(true);
+        this(true, false);
     }
 
-    public DeepScoringClient(boolean useCache) {
+    // if logErrStream is true, need to explicitly call System.exit(0) at the end of the main thread.
+    public DeepScoringClient(boolean useCache, boolean logErrStream) {
         if (useCache) {
             cache = new LRUMap<>(CACHE_SIZE);
         }
@@ -39,6 +40,21 @@ public class DeepScoringClient {
             pb.directory(new File("./deep"));
             p = pb.start();
             in = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
+
+            if (logErrStream) {
+                err = new BufferedReader(new InputStreamReader(p.getErrorStream(), StandardCharsets.UTF_8));
+                new Thread(() -> {
+                    try {
+                        String str;
+                        while ((str = err.readLine()) != null) {
+                            System.err.println(str);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
+
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(p.getOutputStream(), StandardCharsets.UTF_8)));
             String str;
             while (!(str = in.readLine()).equals("__ready_to_predict__")) {
@@ -51,7 +67,7 @@ public class DeepScoringClient {
     }
 
     public static void benchmarking() {
-        DeepScoringClient client = new DeepScoringClient(true);
+        DeepScoringClient client = new DeepScoringClient();
         System.out.print("Single/Multiple (S/M) > ");
         String line = new Scanner(System.in).nextLine();
         SelfMonitor m = new SelfMonitor("DeepScoringClient_Performance", -1, 5);
@@ -76,12 +92,18 @@ public class DeepScoringClient {
 //        DeepScoringClient client = new DeepScoringClient();
 //        System.out.println(client.getScore("stadium in europe", "capacity"));
 //        System.out.println(client.getScores(Arrays.asList("team", "stadium", "dog"), "capacity"));
+
+        System.exit(0);
     }
 
     @Override
     protected void finalize() throws Throwable {
         try {
             in.close();
+        } catch (Exception e) {
+        }
+        try {
+            err.close();
         } catch (Exception e) {
         }
         try {
