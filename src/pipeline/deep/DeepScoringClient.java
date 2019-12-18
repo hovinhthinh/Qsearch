@@ -2,12 +2,14 @@ package pipeline.deep;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import util.SelfMonitor;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class DeepScoringClient {
@@ -37,10 +39,32 @@ public class DeepScoringClient {
         }
     }
 
-    public static void main(String[] args) {
+    public static void benchmarking() {
         DeepScoringClient client = new DeepScoringClient();
-        System.out.println(client.getScore("stadium in europe", "capacity"));
-        System.out.println(client.getScores(Arrays.asList("team", "stadium", "dog"), "capacity"));
+        System.out.print("Single/Multiple (S/M) > ");
+        String line = new Scanner(System.in).nextLine();
+        SelfMonitor m = new SelfMonitor("DeepScoringClient_Performance", -1, 5);
+        m.start();
+        if (line.trim().equalsIgnoreCase("S")) {
+            System.out.println("=== Test single call ===");
+            for (; ; ) {
+                client.getScore("stadium in europe", "spectator capacity");
+                m.incAndGet();
+            }
+        } else {
+            System.out.println("=== Test multiple calls ===");
+            for (; ; ) {
+                client.getScores(Arrays.asList("football team", "soccer stadium", "random entity description"), "spectator capacity");
+                m.incAndGet();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        benchmarking();
+//        DeepScoringClient client = new DeepScoringClient();
+//        System.out.println(client.getScore("stadium in europe", "capacity"));
+//        System.out.println(client.getScores(Arrays.asList("team", "stadium", "dog"), "capacity"));
     }
 
     @Override
