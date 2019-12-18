@@ -336,8 +336,7 @@ public class DeepColumnScoringNode implements TaggingNode {
             table.quantityToEntityColumnScore[i] = info.bestColumnLinkingScore[i];
         }
 
-        // TODO: thresholding of links between E-Q columns
-        return false;
+        return true;
     }
 
     public boolean directInference(Table table) {
