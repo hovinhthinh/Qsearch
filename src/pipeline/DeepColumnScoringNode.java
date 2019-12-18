@@ -17,7 +17,7 @@ public class DeepColumnScoringNode implements TaggingNode {
     public static final int TYPE_SET_INFERENCE = 1;
 
     public static final int JOINT_INFERENCE = 2;
-    public static final double JOINT_WEIGHT = 0.5;
+    public static final double JOINT_HOMOGENEITY_WEIGHT = 0.3;
     public static final int JOINT_MAX_NUM_ITERS = 1000;
 
     private int inferenceMode;
@@ -49,7 +49,21 @@ public class DeepColumnScoringNode implements TaggingNode {
         }
     }
 
-    private static class BacktrackJointInferenceInfo {
+    private class ColumnType {
+        HashMap<String, Double> type2Freq = new HashMap<>();
+        HashMap<String, Double> type2Itf = new HashMap<>();
+
+        private ArrayList<String> types = null;
+
+        public ArrayList<String> getTypes() {
+            if (types != null) {
+                return types;
+            }
+            return types = new ArrayList<>(type2Freq.keySet());
+        }
+    }
+
+    private class BacktrackJointInferenceInfo {
         int[] currentColumnLinking;
         double[] currentColumnLinkingScore;
         String[][] currentEntityAssignment;
@@ -61,17 +75,20 @@ public class DeepColumnScoringNode implements TaggingNode {
         String[][] bestEntityAssignment;
         double bestJointScore;
 
-        public BacktrackJointInferenceInfo(int nRows, int nCols) {
-            currentColumnLinking = new int[nCols];
-            currentColumnLinkingScore = new double[nCols];
-            savedEntityAssignment = new String[nRows][nCols];
-            currentEntityAssignment = new String[nRows][nCols];
+        Table table;
+
+        public BacktrackJointInferenceInfo(Table t) {
+            table = t;
+            currentColumnLinking = new int[table.nColumn];
+            currentColumnLinkingScore = new double[table.nColumn];
+            savedEntityAssignment = new String[table.nDataRow][table.nColumn];
+            currentEntityAssignment = new String[table.nDataRow][table.nColumn];
             currentJointScore = 0;
 
             // for saving
-            bestColumnLinking = new int[nCols];
-            bestColumnLinkingScore = new double[nCols];
-            bestEntityAssignment = new String[nRows][nCols];
+            bestColumnLinking = new int[table.nColumn];
+            bestColumnLinkingScore = new double[table.nColumn];
+            bestEntityAssignment = new String[table.nDataRow][table.nColumn];
             bestJointScore = Double.NEGATIVE_INFINITY;
             Arrays.fill(bestColumnLinking, -1);
             Arrays.fill(bestColumnLinkingScore, -1.0);
@@ -90,9 +107,81 @@ public class DeepColumnScoringNode implements TaggingNode {
             bestJointScore = currentJointScore;
         }
 
+
+        private ColumnType[] buildColumnTypeSetForCurrentAssignment() {
+            ColumnType[] columnTypeSet = new ColumnType[table.nColumn];
+            for (int eCol = 0; eCol < table.nColumn; ++eCol) {
+                if (!table.isEntityColumn[eCol]) {
+                    continue;
+                }
+                columnTypeSet[eCol] = new ColumnType();
+                for (int i = 0; i < table.nDataRow; ++i) {
+                    String e = currentEntityAssignment[i][eCol];
+                    if (e == null) {
+                        continue;
+                    }
+                    List<Pair<String, Double>> types = YagoType.getTypes(e, true);
+                    for (Pair<String, Double> p : types) {
+                        columnTypeSet[eCol].type2Itf.putIfAbsent(p.first, p.second);
+                        columnTypeSet[eCol].type2Freq.put(p.first, columnTypeSet[eCol].type2Freq.getOrDefault(p.first, 0.0) + 1.0 / types.size());
+                    }
+                }
+                // Normalize freq.
+                double totalFreq = columnTypeSet[eCol].type2Freq.values().stream().mapToDouble(o -> o.doubleValue()).sum();
+                for (String t : columnTypeSet[eCol].type2Itf.keySet()) {
+                    columnTypeSet[eCol].type2Freq.put(t, columnTypeSet[eCol].type2Freq.get(t) / totalFreq);
+                }
+            }
+            return columnTypeSet;
+        }
+
+
         public void recomputeBasedOnCurrentAssignment() {
-            // TODO;
             // Compute currentColumnLinkingScore, currentJointScore
+            ColumnType[] columnTypeSet = buildColumnTypeSetForCurrentAssignment();
+
+            double homogeneity = 0;
+            double connectivity = 0;
+            int nEntityColumns = 0, nQuantityColums = 0;
+            for (int i = 0; i < table.nColumn; ++i) {
+                if (table.isEntityColumn[i]) {
+                    // homogeneity
+                    ++nEntityColumns;
+                    ColumnType ct = columnTypeSet[i];
+                    double hScore = 0;
+                    for (Map.Entry<String, Double> e : ct.type2Freq.entrySet()) {
+                        hScore -= e.getValue() * Math.log(e.getValue());
+                    }
+                    homogeneity += hScore;
+                } else if (table.isNumericColumn[i]) {
+                    // connectivity
+                    ++nQuantityColums;
+                    ColumnType ct = columnTypeSet[currentColumnLinking[i]];
+                    ArrayList<String> types = ct.getTypes();
+                    // (1) combined quantity header
+                    ArrayList<Double> scores = scoringClient.getScores(types, table.getCombinedHeader(i));
+                    double lScore = 0;
+                    for (int j = 0; j < types.size(); ++j) {
+                        String t = types.get(j);
+                        lScore += scores.get(j) * ct.type2Itf.get(t) * ct.type2Freq.get(t);
+                    }
+                    // (2) last quantity header
+                    if (table.nHeaderRow > 1) {
+                        scores = scoringClient.getScores(types, table.header[table.nHeaderRow - 1][i].text);
+                        double lScoreLastHeader = 0;
+                        for (int j = 0; j < types.size(); ++j) {
+                            String t = types.get(j);
+                            lScoreLastHeader += scores.get(j) * ct.type2Itf.get(t) * ct.type2Freq.get(t);
+                        }
+                        lScore = Math.max(lScore, lScoreLastHeader);
+                    }
+                    connectivity += (currentColumnLinkingScore[i] = lScore);
+                }
+            }
+            homogeneity /= nEntityColumns;
+            connectivity /= nQuantityColums;
+            // joint score
+            currentJointScore = connectivity - JOINT_HOMOGENEITY_WEIGHT * homogeneity;
         }
 
         public double newScoreOfLocalAssignment(int i, int j, String s) {
@@ -173,7 +262,7 @@ public class DeepColumnScoringNode implements TaggingNode {
     }
 
     private boolean jointInference(Table table) {
-        BacktrackJointInferenceInfo info = new BacktrackJointInferenceInfo(table.nDataRow, table.nColumn);
+        BacktrackJointInferenceInfo info = new BacktrackJointInferenceInfo(table);
         backtrackJointInference(table, info, 0);
         // set candidates back to tables
         for (int i = 0; i < table.nDataRow; ++i) {
@@ -301,17 +390,17 @@ public class DeepColumnScoringNode implements TaggingNode {
             }
             List<Pair<String, Double>> types = YagoType.getTypes("<" + e.target.substring(e.target.lastIndexOf(":") + 1) + ">", true);
             for (Pair<String, Double> p : types) {
-                type2Itf.put(p.first, p.second);
+                type2Itf.putIfAbsent(p.first, p.second);
                 type2Freq.put(p.first, type2Freq.getOrDefault(p.first, 0.0) + 1.0 / types.size());
             }
         }
         // Normalize freq.
-        double totalFreq = type2Freq.entrySet().stream().collect(Collectors.summingDouble(o -> o.getValue()));
-        for (String t : type2Freq.keySet()) {
+        double totalFreq = type2Freq.values().stream().mapToDouble(o -> o.doubleValue()).sum();
+        for (String t : type2Itf.keySet()) {
             type2Freq.put(t, type2Freq.get(t) / totalFreq);
         }
 
-        ArrayList<String> types = type2Freq.entrySet().stream().map(o -> o.getKey()).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<String> types = new ArrayList<>(type2Freq.keySet());
 
         // combined quantity header
         ArrayList<Double> scrs = scoringClient.getScores(types, table.getCombinedHeader(qCol));
