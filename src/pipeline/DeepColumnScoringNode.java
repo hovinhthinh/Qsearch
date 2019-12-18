@@ -55,11 +55,25 @@ public class DeepColumnScoringNode implements TaggingNode {
 
         private ArrayList<String> types = null;
 
-        public ArrayList<String> getTypes() {
-            if (types != null) {
-                return types;
+        public double getHScore() {
+            double hScore = 0;
+            for (Map.Entry<String, Double> e : type2Freq.entrySet()) {
+                hScore -= e.getValue() * Math.log(e.getValue());
             }
-            return types = new ArrayList<>(type2Freq.keySet());
+            return hScore;
+        }
+
+        public double getLScore(String quantityDesc) {
+            if (types == null) {
+                types = new ArrayList<>(type2Freq.keySet());
+            }
+            ArrayList<Double> scores = scoringClient.getScores(types, quantityDesc);
+            double lScore = 0;
+            for (int j = 0; j < types.size(); ++j) {
+                String t = types.get(j);
+                lScore += scores.get(j) * type2Itf.get(t) * type2Freq.get(t);
+            }
+            return lScore;
         }
     }
 
@@ -67,6 +81,7 @@ public class DeepColumnScoringNode implements TaggingNode {
         int[] currentColumnLinking;
         double[] currentColumnLinkingScore;
         String[][] currentEntityAssignment;
+        double[] currentHomogeneityScore;
         double currentJointScore;
         String[][] savedEntityAssignment; // For saving each best local assignment
 
@@ -83,6 +98,7 @@ public class DeepColumnScoringNode implements TaggingNode {
             currentColumnLinkingScore = new double[table.nColumn];
             savedEntityAssignment = new String[table.nDataRow][table.nColumn];
             currentEntityAssignment = new String[table.nDataRow][table.nColumn];
+            currentHomogeneityScore = new double[table.nColumn];
             currentJointScore = 0;
 
             // for saving
@@ -152,33 +168,16 @@ public class DeepColumnScoringNode implements TaggingNode {
                 if (table.isEntityColumn[i]) {
                     // homogeneity
                     ++nEntityColumns;
-                    ColumnType ct = columnTypeSet[i];
-                    double hScore = 0;
-                    for (Map.Entry<String, Double> e : ct.type2Freq.entrySet()) {
-                        hScore -= e.getValue() * Math.log(e.getValue());
-                    }
-                    homogeneity += hScore;
+                    homogeneity += (currentHomogeneityScore[i] = columnTypeSet[i].getHScore());
                 } else if (table.isNumericColumn[i]) {
                     // connectivity
                     ++nQuantityColums;
                     ColumnType ct = columnTypeSet[currentColumnLinking[i]];
-                    ArrayList<String> types = ct.getTypes();
                     // (1) combined quantity header
-                    ArrayList<Double> scores = scoringClient.getScores(types, table.getCombinedHeader(i));
-                    double lScore = 0;
-                    for (int j = 0; j < types.size(); ++j) {
-                        String t = types.get(j);
-                        lScore += scores.get(j) * ct.type2Itf.get(t) * ct.type2Freq.get(t);
-                    }
+                    double lScore = ct.getLScore(table.getCombinedHeader(i));
                     // (2) last quantity header
                     if (table.nHeaderRow > 1) {
-                        scores = scoringClient.getScores(types, table.header[table.nHeaderRow - 1][i].text);
-                        double lScoreLastHeader = 0;
-                        for (int j = 0; j < types.size(); ++j) {
-                            String t = types.get(j);
-                            lScoreLastHeader += scores.get(j) * ct.type2Itf.get(t) * ct.type2Freq.get(t);
-                        }
-                        lScore = Math.max(lScore, lScoreLastHeader);
+                        lScore = Math.max(lScore, ct.getLScore(table.header[table.nHeaderRow - 1][i].text));
                     }
                     connectivity += (currentColumnLinkingScore[i] = lScore);
                 }
@@ -190,8 +189,57 @@ public class DeepColumnScoringNode implements TaggingNode {
         }
 
         public double newScoreOfLocalAssignment(int row, int col, String candidate) {
-            // TODO
-            return -1;
+            // try new candidate
+            String oldCandidate = currentEntityAssignment[row][col];
+            currentEntityAssignment[row][col] = candidate;
+            // now compute
+
+            // partial built column type set
+            ColumnType[] columnTypeSet = new ColumnType[table.nColumn];
+
+            double homogeneity = 0;
+            double connectivity = 0;
+            int nEntityColumns = 0, nQuantityColums = 0;
+            for (int i = 0; i < table.nColumn; ++i) {
+                if (table.isEntityColumn[i]) {
+                    // homogeneity
+                    ++nEntityColumns;
+                    if (i != col) {
+                        homogeneity += currentHomogeneityScore[i];
+                    } else {
+                        if (columnTypeSet[i] == null) {
+                            columnTypeSet[i] = buildColumnTypeForCurrentAssignment(i);
+                        }
+                        homogeneity += columnTypeSet[i].getHScore();
+                    }
+                } else if (table.isNumericColumn[i]) {
+                    // connectivity
+                    ++nQuantityColums;
+                    if (currentColumnLinking[i] != col) {
+                        connectivity += currentColumnLinkingScore[i];
+                    } else {
+                        if (columnTypeSet[currentColumnLinking[i]] == null) {
+                            columnTypeSet[currentColumnLinking[i]] = buildColumnTypeForCurrentAssignment(currentColumnLinking[i]);
+                        }
+                        ColumnType ct = columnTypeSet[currentColumnLinking[i]];
+                        // (1) combined quantity header
+                        double lScore = ct.getLScore(table.getCombinedHeader(i));
+                        // (2) last quantity header
+                        if (table.nHeaderRow > 1) {
+                            lScore = Math.max(lScore, ct.getLScore(table.header[table.nHeaderRow - 1][i].text));
+                        }
+                        connectivity += lScore;
+                    }
+                }
+            }
+            homogeneity /= nEntityColumns;
+            connectivity /= nQuantityColums;
+
+            // restore old candidate
+            currentEntityAssignment[row][col] = oldCandidate;
+
+            // joint score
+            return connectivity - JOINT_HOMOGENEITY_WEIGHT * homogeneity;
         }
     }
 
