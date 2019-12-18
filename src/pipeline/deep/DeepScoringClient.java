@@ -1,5 +1,6 @@
 package pipeline.deep;
 
+import org.apache.commons.collections4.map.LRUMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import util.SelfMonitor;
@@ -13,12 +14,22 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class DeepScoringClient {
-
+    private static final String SEPARATOR = "\t";
+    private static final int CACHE_SIZE = 1000000;
     private BufferedReader in = null;
     private PrintWriter out = null;
     private Process p = null;
 
+    private LRUMap<String, Double> cache = null;
+
     public DeepScoringClient() {
+        this(true);
+    }
+
+    public DeepScoringClient(boolean useCache) {
+        if (useCache) {
+            cache = new LRUMap<>(CACHE_SIZE);
+        }
         try {
             String[] cmd = new String[]{
                     "/bin/sh", "-c",
@@ -40,7 +51,7 @@ public class DeepScoringClient {
     }
 
     public static void benchmarking() {
-        DeepScoringClient client = new DeepScoringClient();
+        DeepScoringClient client = new DeepScoringClient(true);
         System.out.print("Single/Multiple (S/M) > ");
         String line = new Scanner(System.in).nextLine();
         SelfMonitor m = new SelfMonitor("DeepScoringClient_Performance", -1, 5);
@@ -89,12 +100,41 @@ public class DeepScoringClient {
         if (entitiesDesc.isEmpty()) {
             return new ArrayList<>();
         }
+
+        ArrayList<Double> results = new ArrayList<>();
+
+        List<String> newEntitiesDesc = new ArrayList<>();
+        for (int i = 0; i < entitiesDesc.size(); ++i) {
+            if (cache != null) {
+                String key = String.format("%s%s%s", entitiesDesc.get(i), SEPARATOR, quantityDesc);
+                if (cache.containsKey(key)) {
+                    results.add(cache.get(key));
+                    continue;
+                }
+            }
+            results.add(null);
+            newEntitiesDesc.add(entitiesDesc.get(i));
+        }
+        if (newEntitiesDesc.size() == 0) {
+            return results;
+        }
+
         JSONObject o = new JSONObject().put("quantity_desc", quantityDesc.toLowerCase())
-                .put("type_desc", new JSONArray(entitiesDesc.stream().map(x -> x.toLowerCase()).collect(Collectors.toList())));
+                .put("type_desc", new JSONArray(newEntitiesDesc.stream().map(x -> x.toLowerCase()).collect(Collectors.toList())));
         out.println(o.toString());
         out.flush();
         try {
-            return new JSONArray(in.readLine()).toList().stream().map(x -> ((Double) x)).collect(Collectors.toCollection(ArrayList::new));
+            ArrayList<Double> resultsFromPythonClient = new JSONArray(in.readLine()).toList().stream().map(x -> ((Double) x)).collect(Collectors.toCollection(ArrayList::new));
+            int cur = 0;
+            for (int i = 0; i < results.size(); ++i) {
+                if (results.get(i) == null) {
+                    results.set(i, resultsFromPythonClient.get(cur++));
+                    if (cache != null) {
+                        cache.put(String.format("%s%s%s", entitiesDesc.get(i), SEPARATOR, quantityDesc), results.get(i));
+                    }
+                }
+            }
+            return results;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -102,11 +142,22 @@ public class DeepScoringClient {
     }
 
     public synchronized double getScore(String typeDesc, String quantityDesc) {
+        String key = null;
+        if (cache != null) {
+            key = String.format("%s%s%s", typeDesc, SEPARATOR, quantityDesc);
+            if (cache.containsKey(key)) {
+                return cache.get(key);
+            }
+        }
         JSONObject o = new JSONObject().put("quantity_desc", quantityDesc.toLowerCase()).put("type_desc", new JSONArray().put(typeDesc.toLowerCase()));
         out.println(o.toString());
         out.flush();
         try {
-            return new JSONArray(in.readLine()).getDouble(0);
+            double value = new JSONArray(in.readLine()).getDouble(0);
+            if (cache != null) {
+                cache.put(key, value);
+            }
+            return value;
         } catch (IOException e) {
             e.printStackTrace();
             return -1;
