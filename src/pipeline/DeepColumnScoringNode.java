@@ -18,7 +18,8 @@ public class DeepColumnScoringNode implements TaggingNode {
 
     public static final int JOINT_INFERENCE = 2;
     public static final double JOINT_HOMOGENEITY_WEIGHT = 0.3;
-    public static final int JOINT_MAX_NUM_ITERS = 1000;
+    public static final int JOINT_MAX_NUM_ITERS = 100;
+    public static final int JOINT_MAX_LOCAL_CANDIDATES = 10; // set to -1 to disable this threshold. (-1 means INF)
 
     private int inferenceMode;
     private DeepScoringClient scoringClient;
@@ -45,7 +46,7 @@ public class DeepColumnScoringNode implements TaggingNode {
         } else if (inferenceMode == JOINT_INFERENCE) {
             return jointInference(table);
         } else {
-            throw new RuntimeException("Not implemented");
+            throw new RuntimeException("Invalid inference mode");
         }
     }
 
@@ -244,6 +245,7 @@ public class DeepColumnScoringNode implements TaggingNode {
     }
 
     private void backtrackJointInference(Table table, BacktrackJointInferenceInfo info, int currentCol) {
+        // backtracking all possible column linking
         if (currentCol < table.nColumn) {
             if (!table.isNumericColumn[currentCol]) {
                 backtrackJointInference(table, info, currentCol + 1);
@@ -285,7 +287,11 @@ public class DeepColumnScoringNode implements TaggingNode {
                         continue;
                     }
                     double currentLocalScore = info.currentJointScore;
+                    int nTried = 0;
                     for (Pair<String, Integer> c : table.data[i][j].getRepresentativeEntityLink().candidates) {
+                        if (JOINT_MAX_LOCAL_CANDIDATES >= 0 && ++nTried > JOINT_MAX_LOCAL_CANDIDATES) {
+                            break;
+                        }
                         if (c.first.equals(info.currentEntityAssignment[i][j])) {
                             continue;
                         }
@@ -339,6 +345,7 @@ public class DeepColumnScoringNode implements TaggingNode {
         return true;
     }
 
+    @Deprecated
     public boolean directInference(Table table) {
         boolean result = false;
         // loop for quantity columns.
@@ -394,7 +401,7 @@ public class DeepColumnScoringNode implements TaggingNode {
         return result;
     }
 
-
+    @Deprecated
     private double inferMinMax(Table table, int qCol, int eCol) {
         // header conf: max from combined and last cell only.
         double headerLinkingConf = scoringClient.getScore(table.getCombinedHeader(eCol), table.getCombinedHeader(qCol));
@@ -429,6 +436,7 @@ public class DeepColumnScoringNode implements TaggingNode {
         return Math.max(headerLinkingConf, entityLinkingConf);
     }
 
+    @Deprecated
     // sum(freq(t) * itf(t) * dist(t,q))
     private double inferTypeSet(Table table, int qCol, int eCol) {
         HashMap<String, Double> type2Freq = new HashMap<>();
