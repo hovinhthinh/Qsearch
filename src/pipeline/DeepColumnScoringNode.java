@@ -17,7 +17,7 @@ public class DeepColumnScoringNode implements TaggingNode {
     public static final int TYPE_SET_INFERENCE = 1;
 
     public static final int JOINT_INFERENCE = 2;
-    public static final double JOINT_HOMOGENEITY_WEIGHT = 1;
+    public static final double JOINT_HOMOGENEITY_WEIGHT = 3;
     public static final int JOINT_MAX_NUM_ITERS = 100;
     public static final int JOINT_MAX_LOCAL_CANDIDATES = 10; // set to -1 to disable this threshold. (-1 means INF)
 
@@ -59,7 +59,8 @@ public class DeepColumnScoringNode implements TaggingNode {
         public double getHScore() {
             double hScore = 0;
             for (Map.Entry<String, Double> e : type2Freq.entrySet()) {
-                hScore -= e.getValue() * Math.log(e.getValue());
+//                hScore += e.getValue() * Math.log(e.getValue()); // negated entropy (negative)
+                hScore += e.getValue() * e.getValue(); // 1 - gini (0 -> 1)
             }
             return hScore;
         }
@@ -186,7 +187,7 @@ public class DeepColumnScoringNode implements TaggingNode {
             homogeneity /= nEntityColumns;
             connectivity /= nQuantityColums;
             // joint score
-            currentJointScore = connectivity - JOINT_HOMOGENEITY_WEIGHT * homogeneity;
+            currentJointScore = connectivity + JOINT_HOMOGENEITY_WEIGHT * homogeneity;
         }
 
         public double newScoreOfLocalAssignment(int row, int col, String candidate) {
@@ -240,7 +241,7 @@ public class DeepColumnScoringNode implements TaggingNode {
             currentEntityAssignment[row][col] = oldCandidate;
 
             // joint score
-            return connectivity - JOINT_HOMOGENEITY_WEIGHT * homogeneity;
+            return connectivity + JOINT_HOMOGENEITY_WEIGHT * homogeneity;
         }
     }
 
