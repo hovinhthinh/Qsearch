@@ -110,29 +110,34 @@ public class DeepColumnScoringNode implements TaggingNode {
 
         private ColumnType[] buildColumnTypeSetForCurrentAssignment() {
             ColumnType[] columnTypeSet = new ColumnType[table.nColumn];
-            for (int eCol = 0; eCol < table.nColumn; ++eCol) {
-                if (!table.isEntityColumn[eCol]) {
-                    continue;
-                }
-                columnTypeSet[eCol] = new ColumnType();
-                for (int i = 0; i < table.nDataRow; ++i) {
-                    String e = currentEntityAssignment[i][eCol];
-                    if (e == null) {
-                        continue;
-                    }
-                    List<Pair<String, Double>> types = YagoType.getTypes(e, true);
-                    for (Pair<String, Double> p : types) {
-                        columnTypeSet[eCol].type2Itf.putIfAbsent(p.first, p.second);
-                        columnTypeSet[eCol].type2Freq.put(p.first, columnTypeSet[eCol].type2Freq.getOrDefault(p.first, 0.0) + 1.0 / types.size());
-                    }
-                }
-                // Normalize freq.
-                double totalFreq = columnTypeSet[eCol].type2Freq.values().stream().mapToDouble(o -> o.doubleValue()).sum();
-                for (String t : columnTypeSet[eCol].type2Itf.keySet()) {
-                    columnTypeSet[eCol].type2Freq.put(t, columnTypeSet[eCol].type2Freq.get(t) / totalFreq);
-                }
+            for (int i = 0; i < table.nColumn; ++i) {
+                columnTypeSet[i] = buildColumnTypeForCurrentAssignment(i);
             }
             return columnTypeSet;
+        }
+
+        private ColumnType buildColumnTypeForCurrentAssignment(int eCol) {
+            if (!table.isEntityColumn[eCol]) {
+                return null;
+            }
+            ColumnType ct = new ColumnType();
+            for (int i = 0; i < table.nDataRow; ++i) {
+                String e = currentEntityAssignment[i][eCol];
+                if (e == null) {
+                    continue;
+                }
+                List<Pair<String, Double>> types = YagoType.getTypes(e, true);
+                for (Pair<String, Double> p : types) {
+                    ct.type2Itf.putIfAbsent(p.first, p.second);
+                    ct.type2Freq.put(p.first, ct.type2Freq.getOrDefault(p.first, 0.0) + 1.0 / types.size());
+                }
+            }
+            // Normalize freq.
+            double totalFreq = ct.type2Freq.values().stream().mapToDouble(o -> o.doubleValue()).sum();
+            for (String t : ct.type2Itf.keySet()) {
+                ct.type2Freq.put(t, ct.type2Freq.get(t) / totalFreq);
+            }
+            return ct;
         }
 
 
@@ -184,11 +189,10 @@ public class DeepColumnScoringNode implements TaggingNode {
             currentJointScore = connectivity - JOINT_HOMOGENEITY_WEIGHT * homogeneity;
         }
 
-        public double newScoreOfLocalAssignment(int i, int j, String s) {
+        public double newScoreOfLocalAssignment(int row, int col, String candidate) {
             // TODO
             return -1;
         }
-
     }
 
     private void backtrackJointInference(Table table, BacktrackJointInferenceInfo info, int currentCol) {
