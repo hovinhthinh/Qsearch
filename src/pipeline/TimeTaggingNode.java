@@ -11,6 +11,7 @@ import model.table.link.TimeLink;
 import java.util.ArrayList;
 import java.util.Properties;
 
+// Use SUTime tagger (Stanford NLP)
 public class TimeTaggingNode implements TaggingNode {
     private AnnotationPipeline pipeline;
 
@@ -33,7 +34,15 @@ public class TimeTaggingNode implements TaggingNode {
                 table.header[r][c].timeLinks = new ArrayList<>();
             }
             for (int r = 0; r < table.nDataRow; ++r) {
-                table.data[r][c].timeLinks = getLinks(table.data[r][c].text);
+                if (table.data[r][c].entityLinks != null && table.data[r][c].entityLinks.size() > 0) {
+                    // not tagging cells with entities;
+                    // only in case of wikipedia, time tagging is run after entities tagging.
+                    //
+                    // for webtables, time tagging nodes should be done before entities tagging node.
+                    table.data[r][c].timeLinks = new ArrayList<>();
+                } else {
+                    table.data[r][c].timeLinks = getLinks(table.data[r][c].text);
+                }
             }
         }
         return true;

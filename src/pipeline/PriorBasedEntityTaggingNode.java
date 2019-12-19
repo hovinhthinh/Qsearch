@@ -43,7 +43,7 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
     public void tagCell(Cell cell) {
         cell.entityLinks = new ArrayList<>();
         // if cell's content is number then stop tagging.
-        if (cell.getRepresentativeQuantityLink() != null) {
+        if (cell.getRepresentativeQuantityLink() != null || cell.getRepresentativeTimeLink() != null) {
             return;
         }
 
