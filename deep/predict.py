@@ -28,7 +28,17 @@ data_path = './data'
 
 saver = tf.train.Saver()
 
-sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True))
+# NUM_PARALLEL_EXEC_UNITS = 10
+# os.environ["OMP_NUM_THREADS"] = "NUM_PARALLEL_EXEC_UNITS"
+# os.environ["KMP_BLOCKTIME"] = "30"
+# os.environ["KMP_SETTINGS"] = "1"
+# os.environ["KMP_AFFINITY"] = "granularity=fine,verbose,compact,1,0"
+# config = tf.ConfigProto(intra_op_parallelism_threads=NUM_PARALLEL_EXEC_UNITS, inter_op_parallelism_threads=2,
+#                         allow_soft_placement=True, device_count={'CPU': NUM_PARALLEL_EXEC_UNITS})
+
+config = tf.ConfigProto(allow_soft_placement=True)
+
+sess = tf.Session(config=config)
 saver.restore(sess, os.path.join(data_path, 'model.ckpt'))
 print('__ready_to_predict__')
 
