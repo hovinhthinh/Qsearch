@@ -18,8 +18,6 @@ import tensorflow as tf
 from model.data import *
 from model.node import get_model
 
-print("GPU Available: ", tf.test.is_gpu_available())
-
 word_dict, embedding = get_glove()  # if word not in dict then index should be len(embedding)
 
 data_path = './data'
@@ -36,9 +34,12 @@ saver = tf.train.Saver()
 # config = tf.ConfigProto(intra_op_parallelism_threads=NUM_PARALLEL_EXEC_UNITS, inter_op_parallelism_threads=2,
 #                         allow_soft_placement=True, device_count={'CPU': NUM_PARALLEL_EXEC_UNITS})
 
-config = tf.ConfigProto(allow_soft_placement=True)
+config = tf.ConfigProto(allow_soft_placement=True, gpu_options=tf.GPUOptions(allow_growth=True))
 
 sess = tf.Session(config=config)
+
+print("GPU Available: ", tf.test.is_gpu_available())
+
 saver.restore(sess, os.path.join(data_path, 'model.ckpt'))
 print('__ready_to_predict__')
 

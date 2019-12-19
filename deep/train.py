@@ -17,8 +17,6 @@ import util.timer as timer
 from model.data import *
 from model.node import get_model
 
-print("GPU Available: ", tf.test.is_gpu_available())
-
 word_dict, embedding = get_glove()  # if word not in dict then index should be len(embedding)
 
 data_path = './data'
@@ -37,6 +35,8 @@ saver = tf.train.Saver()
 
 print('start training')
 with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
+    print("GPU Available: ", tf.test.is_gpu_available())
+
     if args.resume:
         print('resume training')
         saver.restore(sess, os.path.join(data_path, 'model.ckpt'))
