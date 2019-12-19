@@ -15,8 +15,8 @@ public class Mention2EntityPrior {
     private HashMap<String, List<Pair<String, Integer>>> mention2Entity;
     private static final Logger LOGGER = Logger.getLogger(Mention2EntityPrior.class.getName());
 
-    // if nTopKeptEntities == -1, keep all entities for each mention.
-    public Mention2EntityPrior(int minEntityFreq, int nTopKeptEntities) {
+    // if nTopKeptCandidateEntities == -1, keep all entities for each mention.
+    public Mention2EntityPrior(int minMention2EntityFreq, int nTopKeptCandidateEntities) {
         mention2Entity = new HashMap<>();
         int afterPruned = 0;
         int total = 0;
@@ -29,13 +29,13 @@ public class Mention2EntityPrior {
             }
             for (int i = infoLine.entityFreq.size() - 1; i >= 0; --i) {
                 // if the frequency is too low; or the entity does not exist in YAGO type system
-                if (infoLine.entityFreq.get(i).second < minEntityFreq || !YagoType.entityExists(infoLine.entityFreq.get(i).first)) {
+                if (infoLine.entityFreq.get(i).second < minMention2EntityFreq || !YagoType.entityExists(infoLine.entityFreq.get(i).first)) {
                     infoLine.entityFreq.remove(i);
                 }
             }
             if (infoLine.entityFreq.size() > 0) {
-                if (nTopKeptEntities > 0 && infoLine.entityFreq.size() > nTopKeptEntities) {
-                    infoLine.entityFreq.subList(nTopKeptEntities, infoLine.entityFreq.size()).clear();
+                if (nTopKeptCandidateEntities > 0 && infoLine.entityFreq.size() > nTopKeptCandidateEntities) {
+                    infoLine.entityFreq.subList(nTopKeptCandidateEntities, infoLine.entityFreq.size()).clear();
                     infoLine.entityFreq.trimToSize();
                 }
                 afterPruned += infoLine.entityFreq.size();
@@ -43,7 +43,7 @@ public class Mention2EntityPrior {
                 mention2Entity.put(infoLine.mention, infoLine.entityFreq);
             }
         }
-        LOGGER.info(String.format("MinFrequency: %d\tLoaded: %d/%d", minEntityFreq, afterPruned, total));
+        LOGGER.info(String.format("MinFrequency: %d\tLoaded: %d/%d", minMention2EntityFreq, afterPruned, total));
     }
 
     public List<Pair<String, Integer>> getCanditateEntitiesForMention(String mention, boolean doTokenizing) {
