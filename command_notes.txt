@@ -15,6 +15,11 @@
 
 
 ./run_parallel.sh 32 data.tablem.TABLEM_DeepTaggingPipeline /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz
+./run_parallel.sh 8 data.tablem.TABLEM_DeepTaggingPipeline /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+scores.gz
 
 ./run_parallel.sh 50 storage.table.ElasticSearchTableImport /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.to_be_indexed.gz
 
+nohup ./run.sh 16G data.tablem.TABLEM_DeepTaggingPipeline /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz.part00.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+scores.gz.part00.gz > /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz.part00.log &
+
+
+./run.sh 100G /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+linking.gz 0,0,1,1,2,2,3,3 32
