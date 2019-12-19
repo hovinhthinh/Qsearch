@@ -60,6 +60,7 @@ public class Table {
         // print column index
         if (printColumnIndex) {
             for (int i = 0; i < nColumn; ++i) {
+                columnMaxWidth[i] = Math.max(columnMaxWidth[i], String.valueOf(i).length() + 1);
                 sb.append("> ");
                 sb.append(i);
                 for (int k = 0; k < columnMaxWidth[i] - String.valueOf(i).length() - 1; ++k) {
