@@ -9,6 +9,8 @@ import util.FileUtils;
 import java.io.PrintWriter;
 
 public class WIKIPEDIA_DeepTaggingPipeline {
+
+    @Deprecated
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
@@ -25,6 +27,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
     public static TaggingPipeline getAnnotationPipeline() {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
+                new TimeTaggingNode(),
                 new QuantityTaggingNode(),
                 new ColumnTypeTaggingNode()
         );
@@ -34,7 +37,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
     public static void main(String[] args) {
 //        args = "/local/home/hvthinh/datasets/TabEL.json.shuf.gz /local/home/hvthinh/datasets/TabEL.json.shuf.out.gz".split("\\s++");
 
-        TaggingPipeline pipeline = getDefaultTaggingPipeline();
+        TaggingPipeline pipeline = getAnnotationPipeline();
         PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
         FileUtils.LineStream stream = FileUtils.getLineStream(args[0], "UTF-8");
 

@@ -7,6 +7,7 @@ import util.SelfMonitor;
 
 import java.io.PrintWriter;
 
+@Deprecated
 public class AddIdToTables {
     // args: <table_file(json)> <prefix> <output_file>
     public static void main(String[] args) {

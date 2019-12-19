@@ -10,6 +10,7 @@ public class TaggingPipeline {
         taggingNodes = nodes;
     }
 
+    @Deprecated
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),

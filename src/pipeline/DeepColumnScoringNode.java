@@ -3,10 +3,12 @@ package pipeline;
 import model.table.Table;
 import model.table.link.EntityLink;
 import nlp.YagoType;
+import org.apache.commons.collections4.map.LRUMap;
 import pipeline.deep.DeepScoringClient;
 import util.Pair;
 
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -23,15 +25,18 @@ public class DeepColumnScoringNode implements TaggingNode {
     public static final int JOINT_MAX_NUM_COLUMN_LINKING = 100; // to prune too large tables. (-1 means INF)
 
     private int inferenceMode;
-    private DeepScoringClient scoringClient;
+    private ArrayBlockingQueue<DeepScoringClient> scoringClientPool;
+    private LRUMap<String, Double> cache = new LRUMap<>();
 
-    public DeepColumnScoringNode(int inferenceMode) {
+    public DeepColumnScoringNode(int inferenceMode, ArrayBlockingQueue<DeepScoringClient> scoringClientPool) {
         this.inferenceMode = inferenceMode;
-        this.scoringClient = new DeepScoringClient();
+        this.scoringClientPool = scoringClientPool;
     }
 
     public DeepColumnScoringNode() {
-        this(JOINT_INFERENCE);
+        this.inferenceMode = JOINT_INFERENCE;
+        this.scoringClientPool = new ArrayBlockingQueue<>(1);
+        this.scoringClientPool.add(new DeepScoringClient(false, false, -1));
     }
 
     @Override
@@ -67,16 +72,22 @@ public class DeepColumnScoringNode implements TaggingNode {
         }
 
         public double getLScore(String quantityDesc) {
-            if (types == null) {
-                types = new ArrayList<>(type2Freq.keySet());
+            try {
+                if (types == null) {
+                    types = new ArrayList<>(type2Freq.keySet());
+                }
+                DeepScoringClient scoringClient = scoringClientPool.take();
+                ArrayList<Double> scores = scoringClient.getScores(types, quantityDesc);
+                scoringClientPool.put(scoringClient);
+                double lScore = 0;
+                for (int j = 0; j < types.size(); ++j) {
+                    String t = types.get(j);
+                    lScore += scores.get(j) * type2Itf.get(t) * type2Freq.get(t);
+                }
+                return lScore;
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
-            ArrayList<Double> scores = scoringClient.getScores(types, quantityDesc);
-            double lScore = 0;
-            for (int j = 0; j < types.size(); ++j) {
-                String t = types.get(j);
-                lScore += scores.get(j) * type2Itf.get(t) * type2Freq.get(t);
-            }
-            return lScore;
         }
     }
 
@@ -419,37 +430,45 @@ public class DeepColumnScoringNode implements TaggingNode {
 
     @Deprecated
     private double inferMinMax(Table table, int qCol, int eCol) {
-        // header conf: max from combined and last cell only.
-        double headerLinkingConf = scoringClient.getScore(table.getCombinedHeader(eCol), table.getCombinedHeader(qCol));
-        if (table.nHeaderRow > 1) {
-            headerLinkingConf = Math.max(
-                    headerLinkingConf,
-                    scoringClient.getScore(table.header[table.nHeaderRow - 1][eCol].text, table.header[table.nHeaderRow - 1][qCol].text));
-        }
-        // entity conf: min from each detected entity.
-        double entityLinkingConf = -1;
-        for (int i = 0; i < table.nDataRow; ++i) {
-            EntityLink e = table.data[i][eCol].getRepresentativeEntityLink();
-            if (e == null) {
-                continue;
-            }
-            List<String> types = YagoType.getTypes("<" + e.target.substring(e.target.lastIndexOf(":") + 1) + ">", true)
-                    .stream().map(o -> o.first).collect(Collectors.toList());
-            if (types == null) {
-                continue;
-            }
-            ArrayList<Double> scrs = scoringClient.getScores(types, table.getCombinedHeader(qCol));
-            if (table.nHeaderRow > 1) {
-                scrs.addAll(scoringClient.getScores(types, table.header[table.nHeaderRow - 1][qCol].text));
-            }
-            if (scrs.isEmpty()) {
-                continue;
-            }
-            double score = Collections.max(scrs);
-            entityLinkingConf = (entityLinkingConf == -1 ? score : Math.min(entityLinkingConf, score));
-        }
+        try {
+            DeepScoringClient scoringClient = scoringClientPool.take();
 
-        return Math.max(headerLinkingConf, entityLinkingConf);
+            // header conf: max from combined and last cell only.
+            double headerLinkingConf = scoringClient.getScore(table.getCombinedHeader(eCol), table.getCombinedHeader(qCol), cache);
+            if (table.nHeaderRow > 1) {
+                headerLinkingConf = Math.max(
+                        headerLinkingConf,
+                        scoringClient.getScore(table.header[table.nHeaderRow - 1][eCol].text, table.header[table.nHeaderRow - 1][qCol].text, cache));
+            }
+            // entity conf: min from each detected entity.
+            double entityLinkingConf = -1;
+            for (int i = 0; i < table.nDataRow; ++i) {
+                EntityLink e = table.data[i][eCol].getRepresentativeEntityLink();
+                if (e == null) {
+                    continue;
+                }
+                List<String> types = YagoType.getTypes("<" + e.target.substring(e.target.lastIndexOf(":") + 1) + ">", true)
+                        .stream().map(o -> o.first).collect(Collectors.toList());
+                if (types == null) {
+                    continue;
+                }
+                ArrayList<Double> scrs = scoringClient.getScores(types, table.getCombinedHeader(qCol), cache);
+                if (table.nHeaderRow > 1) {
+                    scrs.addAll(scoringClient.getScores(types, table.header[table.nHeaderRow - 1][qCol].text, cache));
+                }
+                if (scrs.isEmpty()) {
+                    continue;
+                }
+                double score = Collections.max(scrs);
+                entityLinkingConf = (entityLinkingConf == -1 ? score : Math.min(entityLinkingConf, score));
+            }
+
+            scoringClientPool.put(scoringClient);
+
+            return Math.max(headerLinkingConf, entityLinkingConf);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Deprecated
@@ -477,23 +496,32 @@ public class DeepColumnScoringNode implements TaggingNode {
 
         ArrayList<String> types = new ArrayList<>(type2Freq.keySet());
 
-        // combined quantity header
-        ArrayList<Double> scrs = scoringClient.getScores(types, table.getCombinedHeader(qCol));
-        double entityLinkingConf = 0;
-        for (int i = 0; i < types.size(); ++i) {
-            String t = types.get(i);
-            entityLinkingConf += scrs.get(i) * type2Itf.get(t) * type2Freq.get(t);
-        }
-        // last quantity header
-        if (table.nHeaderRow > 1) {
-            scrs = scoringClient.getScores(types, table.header[table.nHeaderRow - 1][qCol].text);
-            double entityLinkingConfLastHeader = 0;
+        try {
+            DeepScoringClient scoringClient = scoringClientPool.take();
+
+            // combined quantity header
+            ArrayList<Double> scrs = scoringClient.getScores(types, table.getCombinedHeader(qCol), cache);
+            double entityLinkingConf = 0;
             for (int i = 0; i < types.size(); ++i) {
                 String t = types.get(i);
-                entityLinkingConfLastHeader += scrs.get(i) * type2Itf.get(t) * type2Freq.get(t);
+                entityLinkingConf += scrs.get(i) * type2Itf.get(t) * type2Freq.get(t);
             }
-            entityLinkingConf = Math.max(entityLinkingConf, entityLinkingConfLastHeader);
+            // last quantity header
+            if (table.nHeaderRow > 1) {
+                scrs = scoringClient.getScores(types, table.header[table.nHeaderRow - 1][qCol].text, cache);
+                double entityLinkingConfLastHeader = 0;
+                for (int i = 0; i < types.size(); ++i) {
+                    String t = types.get(i);
+                    entityLinkingConfLastHeader += scrs.get(i) * type2Itf.get(t) * type2Freq.get(t);
+                }
+                entityLinkingConf = Math.max(entityLinkingConf, entityLinkingConfLastHeader);
+            }
+
+            scoringClientPool.put(scoringClient);
+
+            return entityLinkingConf;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        return entityLinkingConf;
     }
 }
