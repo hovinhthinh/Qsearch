@@ -2,6 +2,7 @@ package model.table;
 
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
+import model.table.link.TimeLink;
 import pipeline.PriorBasedEntityTaggingNode;
 
 import java.util.ArrayList;
@@ -10,12 +11,16 @@ public class Cell {
     public String text; // surface text
     public ArrayList<EntityLink> entityLinks;
     public ArrayList<QuantityLink> quantityLinks;
+    public ArrayList<TimeLink> timeLinks;
 
     private transient boolean calledELink = false;
     private transient EntityLink repELink = null;
 
     private transient boolean calledQLink = false;
     private transient QuantityLink repQLink = null;
+
+    private transient boolean calledTLink = false;
+    private transient TimeLink repTLink = null;
 
     private transient String disambiguatedText = null;
 
@@ -29,6 +34,9 @@ public class Cell {
         }
         for (QuantityLink l : quantityLinks) {
             disambiguatedText = disambiguatedText.replace(l.text, l.quantity.toString(2));
+        }
+        for (TimeLink l : timeLinks) {
+            disambiguatedText = disambiguatedText.replace(l.text, "<" + l.temporalStr + ">");
         }
         return disambiguatedText;
     }
@@ -81,4 +89,19 @@ public class Cell {
         return null;
     }
 
+    // returns null if either:
+    // - has no or more than 1 time links
+    // - the surface text of cell has extra words bot belonging to the time
+    public TimeLink getRepresentativeTimeLink() {
+        if (calledTLink) {
+            return repTLink;
+        }
+        calledTLink = true;
+
+        if (timeLinks.size() == 1 && text.equals(timeLinks.get(0).text)) {
+            return repTLink = timeLinks.get(0);
+        } else {
+            return null;
+        }
+    }
 }
