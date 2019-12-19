@@ -47,7 +47,13 @@ public class ColumnLinkingExecutor {
                     if (line == null) {
                         return;
                     }
-                    Table table = gson.fromJson(line, Table.class);
+                    Table table = null;
+                    try {
+                        table = gson.fromJson(line, Table.class);
+                    } catch (Exception e) {
+                        System.err.println("ERROR: " + line);
+                        continue;
+                    }
                     if (node.process(table)) {
                         synchronized (out) {
                             out.println(gson.toJson(table));
