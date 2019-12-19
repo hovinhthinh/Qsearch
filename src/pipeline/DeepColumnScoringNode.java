@@ -20,6 +20,7 @@ public class DeepColumnScoringNode implements TaggingNode {
     public static final double JOINT_HOMOGENEITY_WEIGHT = 30; // 30 for gini, 1 for entropy
     public static final int JOINT_MAX_NUM_ITERS = 100;
     public static final int JOINT_MAX_LOCAL_CANDIDATES = 10; // set to -1 to disable this threshold. (-1 means INF)
+    public static final int JOINT_MAX_NUM_COLUMN_LINKING = 100; // to prune too large tables. (-1 means INF)
 
     private int inferenceMode;
     private DeepScoringClient scoringClient;
@@ -321,6 +322,20 @@ public class DeepColumnScoringNode implements TaggingNode {
     }
 
     private boolean jointInference(Table table) {
+        // prune too large tables
+        int nECols = 0, nQCols = 0;
+        for (int i = 0; i < table.nColumn; ++i) {
+            if (table.isEntityColumn[i]) {
+                ++nECols;
+            } else if (table.isNumericColumn[i]) {
+                ++nQCols;
+            }
+        }
+        if (JOINT_MAX_NUM_COLUMN_LINKING >= 0 && Math.pow(nECols, nQCols) > JOINT_MAX_NUM_COLUMN_LINKING) {
+            LOGGER.info("Prune large table: " + table._id);
+            return false;
+        }
+
         BacktrackJointInferenceInfo info = new BacktrackJointInferenceInfo(table);
         backtrackJointInference(table, info, 0);
         // set candidates back to tables
