@@ -67,7 +67,7 @@ public class DeepScoringClient {
     }
 
     public static void benchmarking() {
-        DeepScoringClient client = new DeepScoringClient();
+        DeepScoringClient client = new DeepScoringClient(false, true);
         System.out.print("Single/Multiple (S/M) > ");
         String line = new Scanner(System.in).nextLine();
         SelfMonitor m = new SelfMonitor("DeepScoringClient_Performance", -1, 5);
