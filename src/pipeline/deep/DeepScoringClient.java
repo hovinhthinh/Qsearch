@@ -20,21 +20,26 @@ public class DeepScoringClient {
     private PrintWriter out = null;
     private Process p = null;
 
-    private LRUMap<String, Double> cache = null;
+    private LRUMap<String, Double> internalCache = null;
 
     public DeepScoringClient() {
-        this(true, false);
+        this(true, false, -1);
     }
 
     // if logErrStream is true, need to explicitly call System.exit(0) at the end of the main thread.
-    public DeepScoringClient(boolean useCache, boolean logErrStream) {
+    // device: index of gpu device.
+    public DeepScoringClient(boolean useCache, boolean logErrStream, int device) {
         if (useCache) {
-            cache = new LRUMap<>(CACHE_SIZE);
+            internalCache = new LRUMap<>(CACHE_SIZE);
         }
         try {
+            String mainCmd = "python3 -u predict.py -g";
+            if (device >= 0) {
+                mainCmd += " -d " + device;
+            }
             String[] cmd = new String[]{
                     "/bin/sh", "-c",
-                    "python3 -u predict.py",
+                    mainCmd
             };
             ProcessBuilder pb = new ProcessBuilder(cmd);
             pb.directory(new File("./deep"));
@@ -67,7 +72,7 @@ public class DeepScoringClient {
     }
 
     public static void benchmarking() {
-        DeepScoringClient client = new DeepScoringClient(false, true);
+        DeepScoringClient client = new DeepScoringClient(false, true, -1);
         System.out.print("Single/Multiple (S/M) > ");
         String line = new Scanner(System.in).nextLine();
         SelfMonitor m = new SelfMonitor("DeepScoringClient_Performance", -1, 5);
@@ -117,8 +122,8 @@ public class DeepScoringClient {
         super.finalize();
     }
 
-    // return: <optimal position>\t<scores>
-    public synchronized ArrayList<Double> getScores(List<String> entitiesDesc, String quantityDesc) {
+    // external cache can be used
+    public ArrayList<Double> getScores(List<String> entitiesDesc, String quantityDesc, LRUMap<String, Double> externalCache) {
         if (entitiesDesc.isEmpty()) {
             return new ArrayList<>();
         }
@@ -127,10 +132,10 @@ public class DeepScoringClient {
 
         List<String> newEntitiesDesc = new ArrayList<>();
         for (int i = 0; i < entitiesDesc.size(); ++i) {
-            if (cache != null) {
+            if (externalCache != null) {
                 String key = String.format("%s%s%s", entitiesDesc.get(i), SEPARATOR, quantityDesc);
-                if (cache.containsKey(key)) {
-                    results.add(cache.get(key));
+                if (externalCache.containsKey(key)) {
+                    results.add(externalCache.get(key));
                     continue;
                 }
             }
@@ -151,8 +156,8 @@ public class DeepScoringClient {
             for (int i = 0; i < results.size(); ++i) {
                 if (results.get(i) == null) {
                     results.set(i, resultsFromPythonClient.get(cur++));
-                    if (cache != null) {
-                        cache.put(String.format("%s%s%s", entitiesDesc.get(i), SEPARATOR, quantityDesc), results.get(i));
+                    if (externalCache != null) {
+                        externalCache.put(String.format("%s%s%s", entitiesDesc.get(i), SEPARATOR, quantityDesc), results.get(i));
                     }
                 }
             }
@@ -163,12 +168,17 @@ public class DeepScoringClient {
         }
     }
 
-    public synchronized double getScore(String typeDesc, String quantityDesc) {
+    public ArrayList<Double> getScores(List<String> entitiesDesc, String quantityDesc) {
+        return getScores(entitiesDesc, quantityDesc, internalCache);
+    }
+
+    // external cache can be used
+    public double getScore(String typeDesc, String quantityDesc, LRUMap<String, Double> externalCache) {
         String key = null;
-        if (cache != null) {
+        if (externalCache != null) {
             key = String.format("%s%s%s", typeDesc, SEPARATOR, quantityDesc);
-            if (cache.containsKey(key)) {
-                return cache.get(key);
+            if (externalCache.containsKey(key)) {
+                return externalCache.get(key);
             }
         }
         JSONObject o = new JSONObject().put("quantity_desc", quantityDesc.toLowerCase()).put("type_desc", new JSONArray().put(typeDesc.toLowerCase()));
@@ -176,13 +186,17 @@ public class DeepScoringClient {
         out.flush();
         try {
             double value = new JSONArray(in.readLine()).getDouble(0);
-            if (cache != null) {
-                cache.put(key, value);
+            if (externalCache != null) {
+                externalCache.put(key, value);
             }
             return value;
         } catch (IOException e) {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    public double getScore(String typeDesc, String quantityDesc) {
+        return getScore(typeDesc, quantityDesc, internalCache);
     }
 }
