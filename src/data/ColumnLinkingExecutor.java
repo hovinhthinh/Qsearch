@@ -16,7 +16,7 @@ public class ColumnLinkingExecutor {
     // Args: <input> <output> <device> <n_thread>
     // input is the output of the annotation pipeline, before the column linking node.
     public static void main(String[] args) {
-        args = "/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+linking.gz 0,0,1,1,2,2,3,3 32".split("\\s++");
+//        args = "/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+linking.gz 0,0,1,1,2,2,3,3 32".split("\\s++");
 
         String[] devices = args[2].split(",");
 
