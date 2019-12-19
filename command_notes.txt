@@ -22,4 +22,4 @@
 nohup ./run.sh 16G data.tablem.TABLEM_DeepTaggingPipeline /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz.part00.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+scores.gz.part00.gz > /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz.part00.log &
 
 
-./run.sh 100G /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+linking.gz 0,0,1,1,2,2,3,3 32
+./run.sh 100G data.ColumnLinkingExecutor /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+linking.gz 0,0,1,1,2,2,3,3 32
