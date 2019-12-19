@@ -9,7 +9,8 @@ import util.FileUtils;
 import util.SelfMonitor;
 
 import java.io.PrintWriter;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.ArrayList;
+import java.util.concurrent.*;
 
 // Multithreaded neural-based column linking, designed for GPUs
 public class ColumnLinkingExecutor {
@@ -22,8 +23,19 @@ public class ColumnLinkingExecutor {
 
         System.out.println("Init clients");
         ArrayBlockingQueue<DeepScoringClient> clients = new ArrayBlockingQueue<>(devices.length);
+
+        ExecutorService service = Executors.newFixedThreadPool(devices.length);
+
+        ArrayList<Future<DeepScoringClient>> futureClients = new ArrayList<>();
         for (String d : devices) {
-            clients.add(new DeepScoringClient(false, false, Integer.parseInt(d)));
+            futureClients.add(service.submit(() -> new DeepScoringClient(false, true, Integer.parseInt(d))));
+        }
+        try {
+            for (Future<DeepScoringClient> f : futureClients) {
+                clients.add(f.get());
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
         }
 
         System.out.println("Now processing.");
@@ -67,5 +79,7 @@ public class ColumnLinkingExecutor {
 
         m.forceShutdown();
         out.close();
+
+        System.exit(0);
     }
 }
