@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class DeepScoringClient {
+public class DeepScoringClient implements ScoringClientInterface {
     private BufferedReader in = null, err = null;
     private PrintWriter out = null;
     private Process p = null;
@@ -114,6 +114,7 @@ public class DeepScoringClient {
         super.finalize();
     }
 
+    @Override
     public ArrayList<Double> getScores(List<String> entitiesDesc, String quantityDesc) {
         if (entitiesDesc.isEmpty()) {
             return new ArrayList<>();
@@ -131,6 +132,7 @@ public class DeepScoringClient {
         }
     }
 
+    @Override
     public double getScore(String typeDesc, String quantityDesc) {
         JSONObject o = new JSONObject().put("quantity_desc", quantityDesc.toLowerCase()).put("type_desc", new JSONArray().put(typeDesc.toLowerCase()));
         out.println(o.toString());

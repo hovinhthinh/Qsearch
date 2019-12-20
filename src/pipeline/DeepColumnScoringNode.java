@@ -5,10 +5,10 @@ import model.table.link.EntityLink;
 import nlp.YagoType;
 import org.apache.commons.collections4.map.LRUMap;
 import pipeline.deep.DeepScoringClient;
+import pipeline.deep.ScoringClientInterface;
 import util.Pair;
 
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -29,18 +29,17 @@ public class DeepColumnScoringNode implements TaggingNode {
     public static final int JOINT_MAX_NUM_COLUMN_LINKING = 100; // to prune too large tables. (-1 means INF)
 
     private int inferenceMode;
-    private ArrayBlockingQueue<DeepScoringClient> scoringClientPool;
+    private ScoringClientInterface scoringClient;
     private LRUMap<String, Double> cache = new LRUMap<>(CACHE_SIZE);
 
-    public DeepColumnScoringNode(int inferenceMode, ArrayBlockingQueue<DeepScoringClient> scoringClientPool) {
+    public DeepColumnScoringNode(int inferenceMode, ScoringClientInterface scoringClient) {
         this.inferenceMode = inferenceMode;
-        this.scoringClientPool = scoringClientPool;
+        this.scoringClient = scoringClient;
     }
 
     public DeepColumnScoringNode(int inferenceMode) {
         this.inferenceMode = inferenceMode;
-        this.scoringClientPool = new ArrayBlockingQueue<>(1);
-        this.scoringClientPool.add(new DeepScoringClient(false, -1));
+        this.scoringClient = new DeepScoringClient(false, -1);
     }
 
     private ArrayList<Double> getScores(List<String> entitiesDesc, String quantityDesc) {
@@ -64,21 +63,15 @@ public class DeepColumnScoringNode implements TaggingNode {
             return results;
         }
 
-        try {
-            DeepScoringClient scoringClient = scoringClientPool.take();
-            ArrayList<Double> resultsFromPythonClient = scoringClient.getScores(newEntitiesDesc, quantityDesc);
-            scoringClientPool.put(scoringClient);
-            int cur = 0;
-            for (int i = 0; i < results.size(); ++i) {
-                if (results.get(i) == null) {
-                    results.set(i, resultsFromPythonClient.get(cur++));
-                    cache.put(String.format("%s%s%s", entitiesDesc.get(i), SEPARATOR, quantityDesc), results.get(i));
-                }
+        ArrayList<Double> resultsFromPythonClient = scoringClient.getScores(newEntitiesDesc, quantityDesc);
+        int cur = 0;
+        for (int i = 0; i < results.size(); ++i) {
+            if (results.get(i) == null) {
+                results.set(i, resultsFromPythonClient.get(cur++));
+                cache.put(String.format("%s%s%s", entitiesDesc.get(i), SEPARATOR, quantityDesc), results.get(i));
             }
-            return results;
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
+        return results;
     }
 
     private double getScore(String typeDesc, String quantityDesc) {
@@ -87,15 +80,9 @@ public class DeepColumnScoringNode implements TaggingNode {
             return cache.get(key);
         }
 
-        try {
-            DeepScoringClient scoringClient = scoringClientPool.take();
-            double value = scoringClient.getScore(typeDesc, quantityDesc);
-            scoringClientPool.put(scoringClient);
-            cache.put(key, value);
-            return value;
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        double value = scoringClient.getScore(typeDesc, quantityDesc);
+        cache.put(key, value);
+        return value;
     }
 
     @Override

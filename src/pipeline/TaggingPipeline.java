@@ -1,9 +1,7 @@
 package pipeline;
 
 import model.table.Table;
-import pipeline.deep.DeepScoringClient;
-
-import java.util.concurrent.ArrayBlockingQueue;
+import pipeline.deep.ScoringClientInterface;
 
 public class TaggingPipeline {
     public String failNode;
@@ -39,9 +37,9 @@ public class TaggingPipeline {
     }
 
     // Just the linking pipeline.
-    public static TaggingPipeline getColumnLinkingPipeline(ArrayBlockingQueue<DeepScoringClient> clients) {
+    public static TaggingPipeline getColumnLinkingPipeline(ScoringClientInterface client) {
         return new TaggingPipeline(
-                new DeepColumnScoringNode(DeepColumnScoringNode.JOINT_INFERENCE, clients),
+                new DeepColumnScoringNode(DeepColumnScoringNode.JOINT_INFERENCE, client),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
         );
