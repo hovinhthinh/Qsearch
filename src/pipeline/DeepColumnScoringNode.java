@@ -77,7 +77,7 @@ public class DeepColumnScoringNode implements TaggingNode {
                     types = new ArrayList<>(type2Freq.keySet());
                 }
                 DeepScoringClient scoringClient = scoringClientPool.take();
-                ArrayList<Double> scores = scoringClient.getScores(types, quantityDesc);
+                ArrayList<Double> scores = scoringClient.getScores(types, quantityDesc, cache);
                 scoringClientPool.put(scoringClient);
                 double lScore = 0;
                 for (int j = 0; j < types.size(); ++j) {
