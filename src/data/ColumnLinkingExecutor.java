@@ -25,7 +25,6 @@ public class ColumnLinkingExecutor {
         ArrayBlockingQueue<DeepScoringClient> clients = new ArrayBlockingQueue<>(devices.length);
 
         ExecutorService service = Executors.newFixedThreadPool(devices.length);
-
         ArrayList<Future<DeepScoringClient>> futureClients = new ArrayList<>();
         for (String d : devices) {
             futureClients.add(service.submit(() -> new DeepScoringClient(true, Integer.parseInt(d))));
@@ -37,6 +36,7 @@ public class ColumnLinkingExecutor {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
+        service.shutdown();
 
         System.out.println("Now processing.");
         PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
