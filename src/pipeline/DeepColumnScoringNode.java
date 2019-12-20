@@ -392,7 +392,7 @@ public class DeepColumnScoringNode implements TaggingNode {
             if (table.isEntityColumn[i]) {
                 info.entityColumnIndexes[nECols++] = i;
             } else if (table.isNumericColumn[i]) {
-                info.entityColumnIndexes[nQCols++] = i;
+                info.numericColumnIndexes[nQCols++] = i;
             }
         }
 
