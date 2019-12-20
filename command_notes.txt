@@ -22,4 +22,8 @@
 nohup ./run.sh 16G data.tablem.TABLEM_DeepTaggingPipeline /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz.part00.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+scores.gz.part00.gz > /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz.part00.log &
 
 
-nohup ./run.sh 50G data.ColumnLinkingExecutor /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+linking.gz 0,0,0,1,2,2,2,3 32 &
+nohup ./run.sh 50G data.ColumnLinkingExecutor /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz.part00.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+linking_p0.gz 0,0,0,0,1,1,1,1 48 > nohup0 & (ceres)
+nohup ./run.sh 50G data.ColumnLinkingExecutor /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz.part01.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+linking_p1.gz 0,0,0,0,1,1,1,1 48 > nohup1 & (varuna)
+nohup ./run.sh 50G data.ColumnLinkingExecutor /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz.part02.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+linking_p2.gz 0,0,0,0,1,1,1,1 48 > nohup2 & (titan)
+
+./run.sh 8G pipeline.deep.DeepScoringClient
