@@ -28,7 +28,7 @@ public class ColumnLinkingExecutor {
 
         ArrayList<Future<DeepScoringClient>> futureClients = new ArrayList<>();
         for (String d : devices) {
-            futureClients.add(service.submit(() -> new DeepScoringClient(false, true, Integer.parseInt(d))));
+            futureClients.add(service.submit(() -> new DeepScoringClient(true, Integer.parseInt(d))));
         }
         try {
             for (Future<DeepScoringClient> f : futureClients) {

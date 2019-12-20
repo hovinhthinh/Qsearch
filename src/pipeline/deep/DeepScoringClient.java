@@ -1,6 +1,5 @@
 package pipeline.deep;
 
-import org.apache.commons.collections4.map.LRUMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import util.SelfMonitor;
@@ -14,24 +13,17 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class DeepScoringClient {
-    private static final String SEPARATOR = "\t";
-    public static final int CACHE_SIZE = 1000000;
     private BufferedReader in = null, err = null;
     private PrintWriter out = null;
     private Process p = null;
 
-    private LRUMap<String, Double> internalCache = null;
-
     public DeepScoringClient() {
-        this(true, false, -1);
+        this(false, -1);
     }
 
     // if logErrStream is true, need to explicitly call System.exit(0) at the end of the main thread.
     // device: index of gpu device.
-    public DeepScoringClient(boolean useCache, boolean logErrStream, int device) {
-        if (useCache) {
-            internalCache = new LRUMap<>(CACHE_SIZE);
-        }
+    public DeepScoringClient(boolean logErrStream, int device) {
         try {
             String mainCmd = "python3 -u predict.py -g";
             if (device >= 0) {
@@ -72,7 +64,7 @@ public class DeepScoringClient {
     }
 
     public static void benchmarking() {
-        DeepScoringClient client = new DeepScoringClient(false, true, -1);
+        DeepScoringClient client = new DeepScoringClient(true, -1);
         System.out.print("Single/Multiple (S/M) > ");
         String line = new Scanner(System.in).nextLine();
         SelfMonitor m = new SelfMonitor("DeepScoringClient_Performance", -1, 5);
@@ -122,81 +114,32 @@ public class DeepScoringClient {
         super.finalize();
     }
 
-    // external cache can be used
-    public ArrayList<Double> getScores(List<String> entitiesDesc, String quantityDesc, LRUMap<String, Double> externalCache) {
+    public ArrayList<Double> getScores(List<String> entitiesDesc, String quantityDesc) {
         if (entitiesDesc.isEmpty()) {
             return new ArrayList<>();
         }
 
-        ArrayList<Double> results = new ArrayList<>();
-
-        List<String> newEntitiesDesc = new ArrayList<>();
-        for (int i = 0; i < entitiesDesc.size(); ++i) {
-            if (externalCache != null) {
-                String key = String.format("%s%s%s", entitiesDesc.get(i), SEPARATOR, quantityDesc);
-                if (externalCache.containsKey(key)) {
-                    results.add(externalCache.get(key));
-                    continue;
-                }
-            }
-            results.add(null);
-            newEntitiesDesc.add(entitiesDesc.get(i));
-        }
-        if (newEntitiesDesc.size() == 0) {
-            return results;
-        }
-
         JSONObject o = new JSONObject().put("quantity_desc", quantityDesc.toLowerCase())
-                .put("type_desc", new JSONArray(newEntitiesDesc.stream().map(x -> x.toLowerCase()).collect(Collectors.toList())));
+                .put("type_desc", new JSONArray(entitiesDesc.stream().map(x -> x.toLowerCase()).collect(Collectors.toList())));
         out.println(o.toString());
         out.flush();
         try {
-            ArrayList<Double> resultsFromPythonClient = new JSONArray(in.readLine()).toList().stream().map(x -> ((Double) x)).collect(Collectors.toCollection(ArrayList::new));
-            int cur = 0;
-            for (int i = 0; i < results.size(); ++i) {
-                if (results.get(i) == null) {
-                    results.set(i, resultsFromPythonClient.get(cur++));
-                    if (externalCache != null) {
-                        externalCache.put(String.format("%s%s%s", entitiesDesc.get(i), SEPARATOR, quantityDesc), results.get(i));
-                    }
-                }
-            }
-            return results;
+            return new JSONArray(in.readLine()).toList().stream().map(x -> ((Double) x)).collect(Collectors.toCollection(ArrayList::new));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public ArrayList<Double> getScores(List<String> entitiesDesc, String quantityDesc) {
-        return getScores(entitiesDesc, quantityDesc, internalCache);
-    }
-
-    // external cache can be used
-    public double getScore(String typeDesc, String quantityDesc, LRUMap<String, Double> externalCache) {
-        String key = null;
-        if (externalCache != null) {
-            key = String.format("%s%s%s", typeDesc, SEPARATOR, quantityDesc);
-            if (externalCache.containsKey(key)) {
-                return externalCache.get(key);
-            }
-        }
+    public double getScore(String typeDesc, String quantityDesc) {
         JSONObject o = new JSONObject().put("quantity_desc", quantityDesc.toLowerCase()).put("type_desc", new JSONArray().put(typeDesc.toLowerCase()));
         out.println(o.toString());
         out.flush();
         try {
-            double value = new JSONArray(in.readLine()).getDouble(0);
-            if (externalCache != null) {
-                externalCache.put(key, value);
-            }
-            return value;
+            return new JSONArray(in.readLine()).getDouble(0);
         } catch (IOException e) {
             e.printStackTrace();
             return -1;
         }
-    }
-
-    public double getScore(String typeDesc, String quantityDesc) {
-        return getScore(typeDesc, quantityDesc, internalCache);
     }
 }
