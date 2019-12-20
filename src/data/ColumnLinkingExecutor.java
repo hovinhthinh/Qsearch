@@ -58,7 +58,5 @@ public class ColumnLinkingExecutor {
 
         m.forceShutdown();
         out.close();
-
-        System.exit(0);
     }
 }
