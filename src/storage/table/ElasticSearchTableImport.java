@@ -225,8 +225,11 @@ public class ElasticSearchTableImport {
 //        System.out.println(deleteIndex());
 //        System.out.println(createIndex());
 //        System.out.println(importTables("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.to_be_indexed.gz"));
+
+        // Optional
 //        System.out.println("Remove 'searchable' Field: " + removeField("searchable"));
 //        System.out.println("Remove 'parsedJson' Field: " + removeField("parsedJson"));
-//        System.out.println(setSearchableDocuments("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz"));
+
+//        System.out.println(setSearchableDocuments("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+linking"));
     }
 }
