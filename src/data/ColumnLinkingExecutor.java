@@ -2,7 +2,7 @@ package data;
 
 import com.google.gson.Gson;
 import model.table.Table;
-import pipeline.DeepColumnScoringNode;
+import pipeline.TaggingPipeline;
 import pipeline.deep.DeepScoringClient;
 import util.Concurrent;
 import util.FileUtils;
@@ -46,11 +46,12 @@ public class ColumnLinkingExecutor {
         m.start();
 
         Concurrent.runAndWait(new Runnable() {
-            Gson gson = new Gson();
-            DeepColumnScoringNode node = new DeepColumnScoringNode(DeepColumnScoringNode.JOINT_INFERENCE, clients);
 
             @Override
             public void run() {
+                Gson gson = new Gson();
+                TaggingPipeline pipeline = TaggingPipeline.getColumnLinkingPipeline(clients);
+
                 String line;
                 while (true) {
                     synchronized (stream) {
@@ -66,7 +67,7 @@ public class ColumnLinkingExecutor {
                         System.err.println("ERROR: " + line);
                         continue;
                     }
-                    if (node.process(table)) {
+                    if (pipeline.tag(table)) {
                         synchronized (out) {
                             out.println(gson.toJson(table));
                         }
