@@ -24,12 +24,7 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-abstract class StreamedIterable<T> implements Iterable<T> {
-    public boolean error = false;
-    public int total = -1;
-    public int streamed = 0;
-}
-
+@Deprecated
 public class ElasticSearchQuery {
     public static final Logger LOGGER = Logger.getLogger(ElasticSearchQuery.class.getName());
 
