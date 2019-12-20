@@ -17,7 +17,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
                 new TimeTaggingNode(),
                 new QuantityTaggingNode(),
                 new ColumnTypeTaggingNode(),
-                new DeepColumnScoringNode(),
+                new DeepColumnScoringNode(DeepColumnScoringNode.JOINT_INFERENCE),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
         );

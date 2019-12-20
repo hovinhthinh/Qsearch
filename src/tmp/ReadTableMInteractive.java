@@ -1,6 +1,7 @@
 package tmp;
 
 import com.google.gson.Gson;
+import data.manual.TruthTable;
 import data.tablem.TABLEM;
 import data.tablem.TABLEM_DeepTaggingPipeline;
 import model.table.Table;
@@ -16,43 +17,62 @@ import java.util.Scanner;
 public class ReadTableMInteractive {
     // args: /GW/D5data-10/hvthinh/BriQ-TableM/health_combined.gz
     public static void main(String[] args) throws Exception {
-        args = "/GW/D5data-10/hvthinh/BriQ-TableM/finance_out.shuf.gz".split(" ");
-//        TaggingPipeline pipeline = TABLEM_DeepTaggingPipeline.getAnnotationPipeline();
+        args = "/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation.gz".split(" ");
+        TaggingPipeline pipeline = TaggingPipeline.getColumnLinkingPipeline();
         //TaggingPipeline pipeline = TABLEM_DeepTaggingPipeline.getDefaultTaggingPipeline();
 
         Scanner in = new Scanner(System.in);
         int n = 0;
         int passed = 0;
         Gson gson = new Gson();
-        for (String line : new FileUtils.LineStream(new GzipCompressorInputStream(
-                JSchUtils.getFileInputStreamFromServer
-//                new FileInputStream
-                        (args[0])), StandardCharsets.UTF_8)) {
+        int k = 0;
+        for (String line : new FileUtils.LineStream(
+                new GzipCompressorInputStream(
+//                JSchUtils.getFileInputStreamFromServer
+                        new FileInputStream
+                                (args[0]))
+                , StandardCharsets.UTF_8)) {
             ++passed;
-            if (passed % 1000 == 0) {
-                System.out.println("#processed: " + passed);
-            }
+
             Table t;
             t = gson.fromJson(line, Table.class);
-//            t = TABLEM.parseFromJSON(line);
-            if (t == null) {
+            int x = 0, y= 0;
+            for (int i = 0; i < t.nColumn; ++i) {
+                if (t.isNumericColumn[i]) {
+                    ++x;
+                }
+                if (t.isEntityColumn[i]) {
+                    ++y;
+                }
+            }
+            if (Math.pow(y, x) > 100) {
+                ++k;
+            }
+            if (true) {
                 continue;
             }
-//            if (!pipeline.tag(t)) {
-//                continue;
-//            }
 
-//            System.out.println(line);
             System.out.println("#numericTables/#total: " + (++n) + "/" + passed);
+//            System.out.println("keyColumn: " + t.keyColumnGroundTruth);
             System.out.println("source: " + t.source);
-            System.out.println("caption: " + t.caption);
             System.out.println("pageTitle: " + t.pageTitle);
-            System.out.println(t.getTableContentPrintable(false, true, false));
+            System.out.println("caption: " + t.caption);
+            System.out.println(t.getTableContentPrintable(false, true, true));
+
+            long time = System.currentTimeMillis();
+            boolean ok = pipeline.tag(t);
+            time = System.currentTimeMillis() - time;
+            System.out.println("#processed: " + passed + " " + ok + " " + time);
+//            t = TABLEM.parseFromJSON(line);
+            if (!ok) {
+                continue;
+            }
+
             System.out.println("Annotated:");
             System.out.println(t.getTableContentPrintable(true, true, true));
             System.out.println("--------------------------------------------------------------------------------");
             System.out.flush();
-            String wait = in.nextLine();
         }
+        System.out.println(k);
     }
 }

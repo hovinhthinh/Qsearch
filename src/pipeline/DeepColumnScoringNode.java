@@ -37,8 +37,8 @@ public class DeepColumnScoringNode implements TaggingNode {
         this.scoringClientPool = scoringClientPool;
     }
 
-    public DeepColumnScoringNode() {
-        this.inferenceMode = JOINT_INFERENCE;
+    public DeepColumnScoringNode(int inferenceMode) {
+        this.inferenceMode = inferenceMode;
         this.scoringClientPool = new ArrayBlockingQueue<>(1);
         this.scoringClientPool.add(new DeepScoringClient(false, -1));
     }

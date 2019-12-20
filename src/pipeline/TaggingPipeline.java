@@ -21,7 +21,7 @@ public class TaggingPipeline {
                 new QuantityTaggingNode(),
                 new PriorBasedEntityTaggingNode(),
                 new ColumnTypeTaggingNode(),
-                new DeepColumnScoringNode(),
+                new DeepColumnScoringNode(DeepColumnScoringNode.JOINT_INFERENCE),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
         );
@@ -42,6 +42,15 @@ public class TaggingPipeline {
     public static TaggingPipeline getColumnLinkingPipeline(ArrayBlockingQueue<DeepScoringClient> clients) {
         return new TaggingPipeline(
                 new DeepColumnScoringNode(DeepColumnScoringNode.JOINT_INFERENCE, clients),
+                new ColumnLinkFilteringNode(0),
+                new PostFilteringNode()
+        );
+    }
+
+    // Just the linking pipeline.
+    public static TaggingPipeline getColumnLinkingPipeline() {
+        return new TaggingPipeline(
+                new DeepColumnScoringNode(DeepColumnScoringNode.JOINT_INFERENCE),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
         );
