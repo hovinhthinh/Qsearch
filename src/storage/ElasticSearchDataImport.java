@@ -29,20 +29,20 @@ import java.util.stream.Collectors;
 public class ElasticSearchDataImport {
     public static final String PROTOCOL = Configuration.get("storage.elasticsearch.protocol");
     public static final String ES_HOST = Configuration.get("storage.elasticsearch.address");
-    public static final String INDEX = Configuration.get("storage.elasticsearch.index");
+    public static final String ENTITY_INDEX = Configuration.get("storage.elasticsearch.entity_index");
     public static final String ENTITY_TYPE = Configuration.get("storage.elasticsearch.entity_type");
     public static final int BATCH_SIZE = 1024 * 8;
     public static ArrayList<String> bulks = new ArrayList<>();
     static AtomicInteger updated = new AtomicInteger(0), threw = new AtomicInteger(0);
 
     public static String deleteIndex() {
-        return HTTPRequest.DELETE(PROTOCOL + "://" + ES_HOST + "/" + INDEX, null);
+        return HTTPRequest.DELETE(PROTOCOL + "://" + ES_HOST + "/" + ENTITY_INDEX, null);
     }
 
     public static String createIndex() {
         String body = "{\"mappings\":{\"" + ENTITY_TYPE + "\":{\"properties\":{\"types\":{\"type\":\"nested\"," +
                 "\"enabled\":true},\"facts\":{\"type\":\"object\",\"enabled\":false}}}}}";
-        return HTTPRequest.PUT(PROTOCOL + "://" + ES_HOST + "/" + INDEX, body);
+        return HTTPRequest.PUT(PROTOCOL + "://" + ES_HOST + "/" + ENTITY_INDEX, body);
     }
 
     private static boolean callBulk() {
@@ -51,7 +51,7 @@ public class ElasticSearchDataImport {
             sb.append(s).append("\n");
         }
 
-        String response = HTTPRequest.POST(PROTOCOL + "://" + ES_HOST + "/" + INDEX + "/" + ENTITY_TYPE + "/_bulk",
+        String response = HTTPRequest.POST(PROTOCOL + "://" + ES_HOST + "/" + ENTITY_INDEX + "/" + ENTITY_TYPE + "/_bulk",
                 sb.toString());
 
         if (response != null) {
@@ -123,7 +123,7 @@ public class ElasticSearchDataImport {
 
     private static void importEntityFacts(String entity, JSONArray entityFacts) throws Exception {
         String data =
-                HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8"));
+                HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + ENTITY_INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8"));
         if (data == null) {
             System.out.println("Threw: " + entity);
             threw.incrementAndGet();
@@ -140,7 +140,7 @@ public class ElasticSearchDataImport {
         newData.put("searchable", "yes");
 //        System.out.println(newData.toString());
         String response =
-                HTTPRequest.PUT(PROTOCOL + "://" + ES_HOST + "/" + INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8"), newData.toString());
+                HTTPRequest.PUT(PROTOCOL + "://" + ES_HOST + "/" + ENTITY_INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8"), newData.toString());
 //        System.out.println(response);
         if (response == null) {
             throw new Exception("Importing facts fail.");

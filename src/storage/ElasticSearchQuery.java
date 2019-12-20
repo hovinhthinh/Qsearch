@@ -35,7 +35,7 @@ public class ElasticSearchQuery {
 
     public static final String PROTOCOL = Configuration.get("storage.elasticsearch.protocol");
     public static final String ES_HOST = Configuration.get("storage.elasticsearch.address");
-    public static final String INDEX = Configuration.get("storage.elasticsearch.index");
+    public static final String ENTITY_INDEX = Configuration.get("storage.elasticsearch.entity_index");
     public static final String ENTITY_TYPE = Configuration.get("storage.elasticsearch.entity_type");
 
     public static ContextMatcher DEFAULT_MATCHER = new ContextEmbeddingMatcher(3);
@@ -73,7 +73,7 @@ public class ElasticSearchQuery {
         return new StreamedIterable<JSONObject>() {
             private String scroll_id = null;
             private Queue<JSONObject> data = null;
-            private String url = PROTOCOL + "://" + ES_HOST + "/" + INDEX + "/" + ENTITY_TYPE + "/_search?scroll=5m";
+            private String url = PROTOCOL + "://" + ES_HOST + "/" + ENTITY_INDEX + "/" + ENTITY_TYPE + "/_search?scroll=5m";
             private String body =
                     "{\"size\":1000,\"query\":{\"bool\":{\"must\":[{\"nested\":{\"path\":\"types\"," +
                             "\"score_mode\":\"max\",\"query\":{\"match\":{\"types.value\":{\"query\":\"" + optimizedQueryType +

@@ -8,7 +8,7 @@
     <entry key="storage.elasticsearch.table_index">tabqs_table</entry>
     <entry key="storage.elasticsearch.table_type">table</entry>
 
-    <entry key="storage.elasticsearch.index">tabqs_yago</entry>
+    <entry key="storage.elasticsearch.entity_index">tabqs_yago</entry>
     <entry key="storage.elasticsearch.entity_type">entity</entry>
 
     <entry key="search.server.default-port">6993</entry>
