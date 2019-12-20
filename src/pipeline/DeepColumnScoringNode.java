@@ -26,7 +26,7 @@ public class DeepColumnScoringNode implements TaggingNode {
 
     private int inferenceMode;
     private ArrayBlockingQueue<DeepScoringClient> scoringClientPool;
-    private LRUMap<String, Double> cache = new LRUMap<>();
+    private LRUMap<String, Double> cache = new LRUMap<>(DeepScoringClient.CACHE_SIZE);
 
     public DeepColumnScoringNode(int inferenceMode, ArrayBlockingQueue<DeepScoringClient> scoringClientPool) {
         this.inferenceMode = inferenceMode;

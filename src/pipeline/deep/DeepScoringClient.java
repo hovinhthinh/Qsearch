@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class DeepScoringClient {
     private static final String SEPARATOR = "\t";
-    private static final int CACHE_SIZE = 1000000;
+    public static final int CACHE_SIZE = 1000000;
     private BufferedReader in = null, err = null;
     private PrintWriter out = null;
     private Process p = null;
