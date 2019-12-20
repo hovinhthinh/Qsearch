@@ -92,6 +92,9 @@ public class DeepColumnScoringNode implements TaggingNode {
     }
 
     private class BacktrackJointInferenceInfo {
+        int[] entityColumnIndexes;
+        int[] numericColumnIndexes;
+
         int[] currentColumnLinking;
         double[] currentColumnLinkingScore;
         String[][] currentEntityAssignment;
@@ -125,12 +128,12 @@ public class DeepColumnScoringNode implements TaggingNode {
         }
 
         public void captureCurrentColumnLinking() {
-            for (int i = 0; i < bestColumnLinking.length; ++i) {
+            for (int i : numericColumnIndexes) {
                 bestColumnLinking[i] = currentColumnLinking[i];
                 bestColumnLinkingScore[i] = currentColumnLinkingScore[i];
             }
             for (int i = 0; i < bestEntityAssignment.length; ++i) {
-                for (int j = 0; j < bestEntityAssignment[i].length; ++j) {
+                for (int j : entityColumnIndexes) {
                     bestEntityAssignment[i][j] = currentEntityAssignment[i][j];
                 }
             }
@@ -140,16 +143,18 @@ public class DeepColumnScoringNode implements TaggingNode {
 
         private ColumnType[] buildColumnTypeSetForCurrentAssignment() {
             ColumnType[] columnTypeSet = new ColumnType[table.nColumn];
-            for (int i = 0; i < table.nColumn; ++i) {
+            for (int i : entityColumnIndexes) {
                 columnTypeSet[i] = buildColumnTypeForCurrentAssignment(i);
             }
             return columnTypeSet;
         }
 
         private ColumnType buildColumnTypeForCurrentAssignment(int eCol) {
+            // double check if eCol is entity column
             if (!table.isEntityColumn[eCol]) {
                 return null;
             }
+
             ColumnType ct = new ColumnType();
             for (int i = 0; i < table.nDataRow; ++i) {
                 String e = currentEntityAssignment[i][eCol];
@@ -177,27 +182,23 @@ public class DeepColumnScoringNode implements TaggingNode {
 
             double homogeneity = 0;
             double connectivity = 0;
-            int nEntityColumns = 0, nQuantityColums = 0;
-            for (int i = 0; i < table.nColumn; ++i) {
-                if (table.isEntityColumn[i]) {
-                    // homogeneity
-                    ++nEntityColumns;
-                    homogeneity += (currentHomogeneityScore[i] = columnTypeSet[i].getHScore());
-                } else if (table.isNumericColumn[i]) {
-                    // connectivity
-                    ++nQuantityColums;
-                    ColumnType ct = columnTypeSet[currentColumnLinking[i]];
-                    // (1) combined quantity header
-                    double lScore = ct.getLScore(table.getCombinedHeader(i));
-                    // (2) last quantity header
-                    if (table.nHeaderRow > 1) {
-                        lScore = Math.max(lScore, ct.getLScore(table.header[table.nHeaderRow - 1][i].text));
-                    }
-                    connectivity += (currentColumnLinkingScore[i] = lScore);
-                }
+            for (int i : entityColumnIndexes) {
+                // homogeneity
+                homogeneity += (currentHomogeneityScore[i] = columnTypeSet[i].getHScore());
             }
-            homogeneity /= nEntityColumns;
-            connectivity /= nQuantityColums;
+            for (int i : numericColumnIndexes) {
+                // connectivity
+                ColumnType ct = columnTypeSet[currentColumnLinking[i]];
+                // (1) combined quantity header
+                double lScore = ct.getLScore(table.getCombinedHeader(i));
+                // (2) last quantity header
+                if (table.nHeaderRow > 1) {
+                    lScore = Math.max(lScore, ct.getLScore(table.header[table.nHeaderRow - 1][i].text));
+                }
+                connectivity += (currentColumnLinkingScore[i] = lScore);
+            }
+            homogeneity /= entityColumnIndexes.length;
+            connectivity /= numericColumnIndexes.length;
             // joint score
             currentJointScore = connectivity + JOINT_HOMOGENEITY_WEIGHT * homogeneity;
         }
@@ -213,41 +214,32 @@ public class DeepColumnScoringNode implements TaggingNode {
 
             double homogeneity = 0;
             double connectivity = 0;
-            int nEntityColumns = 0, nQuantityColums = 0;
-            for (int i = 0; i < table.nColumn; ++i) {
-                if (table.isEntityColumn[i]) {
-                    // homogeneity
-                    ++nEntityColumns;
-                    if (i != col) {
-                        homogeneity += currentHomogeneityScore[i];
-                    } else {
-                        if (columnTypeSet[i] == null) {
-                            columnTypeSet[i] = buildColumnTypeForCurrentAssignment(i);
-                        }
-                        homogeneity += columnTypeSet[i].getHScore();
-                    }
-                } else if (table.isNumericColumn[i]) {
-                    // connectivity
-                    ++nQuantityColums;
-                    if (currentColumnLinking[i] != col) {
-                        connectivity += currentColumnLinkingScore[i];
-                    } else {
-                        if (columnTypeSet[currentColumnLinking[i]] == null) {
-                            columnTypeSet[currentColumnLinking[i]] = buildColumnTypeForCurrentAssignment(currentColumnLinking[i]);
-                        }
-                        ColumnType ct = columnTypeSet[currentColumnLinking[i]];
-                        // (1) combined quantity header
-                        double lScore = ct.getLScore(table.getCombinedHeader(i));
-                        // (2) last quantity header
-                        if (table.nHeaderRow > 1) {
-                            lScore = Math.max(lScore, ct.getLScore(table.header[table.nHeaderRow - 1][i].text));
-                        }
-                        connectivity += lScore;
-                    }
+            for (int i : entityColumnIndexes) {
+                // homogeneity
+                if (i != col) {
+                    homogeneity += currentHomogeneityScore[i];
+                } else {
+                    columnTypeSet[i] = buildColumnTypeForCurrentAssignment(i);
+                    homogeneity += columnTypeSet[i].getHScore();
                 }
             }
-            homogeneity /= nEntityColumns;
-            connectivity /= nQuantityColums;
+            for (int i : numericColumnIndexes) {
+                // connectivity
+                if (currentColumnLinking[i] != col) {
+                    connectivity += currentColumnLinkingScore[i];
+                } else {
+                    ColumnType ct = columnTypeSet[currentColumnLinking[i]];
+                    // (1) combined quantity header
+                    double lScore = ct.getLScore(table.getCombinedHeader(i));
+                    // (2) last quantity header
+                    if (table.nHeaderRow > 1) {
+                        lScore = Math.max(lScore, ct.getLScore(table.header[table.nHeaderRow - 1][i].text));
+                    }
+                    connectivity += lScore;
+                }
+            }
+            homogeneity /= entityColumnIndexes.length;
+            connectivity /= numericColumnIndexes.length;
 
             // restore old candidate
             currentEntityAssignment[row][col] = oldCandidate;
@@ -259,27 +251,17 @@ public class DeepColumnScoringNode implements TaggingNode {
 
     private void backtrackJointInference(Table table, BacktrackJointInferenceInfo info, int currentCol) {
         // backtracking all possible column linking
-        if (currentCol < table.nColumn) {
-            if (!table.isNumericColumn[currentCol]) {
+        if (currentCol < info.numericColumnIndexes.length) {
+            for (int i : info.entityColumnIndexes) {
+                info.currentColumnLinking[info.numericColumnIndexes[currentCol]] = i;
                 backtrackJointInference(table, info, currentCol + 1);
-            } else {
-                for (int i = 0; i < table.nColumn; ++i) {
-                    if (!table.isEntityColumn[i]) {
-                        continue;
-                    }
-                    info.currentColumnLinking[currentCol] = i;
-                    backtrackJointInference(table, info, currentCol + 1);
-                }
             }
             return;
         }
 
         // Now process the ICA algorithm;
         // Init candidates
-        for (int j = 0; j < table.nColumn; ++j) {
-            if (!table.isEntityColumn[j]) {
-                continue;
-            }
+        for (int j : info.entityColumnIndexes) {
             for (int i = 0; i < table.nDataRow; ++i) {
                 EntityLink el = table.data[i][j].getRepresentativeEntityLink();
                 if (el != null) {
@@ -295,7 +277,7 @@ public class DeepColumnScoringNode implements TaggingNode {
         do {
             hasChange = false;
             for (int i = 0; i < table.nDataRow; ++i) {
-                for (int j = 0; j < table.nColumn; ++j) {
+                for (int j : info.entityColumnIndexes) {
                     if (info.currentEntityAssignment[i][j] == null) {
                         continue;
                     }
@@ -319,7 +301,7 @@ public class DeepColumnScoringNode implements TaggingNode {
             }
             if (hasChange) {
                 for (int i = 0; i < table.nDataRow; ++i) {
-                    for (int j = 0; j < table.nColumn; ++j) {
+                    for (int j : info.entityColumnIndexes) {
                         info.currentEntityAssignment[i][j] = info.savedEntityAssignment[i][j];
                     }
                 }
@@ -348,12 +330,28 @@ public class DeepColumnScoringNode implements TaggingNode {
         }
 
         BacktrackJointInferenceInfo info = new BacktrackJointInferenceInfo(table);
+        // fill entity & quantity column indexes
+        info.entityColumnIndexes = new int[nECols];
+        info.numericColumnIndexes = new int[nQCols];
+        nECols = 0;
+        nQCols = 0;
+        for (int i = 0; i < table.nColumn; ++i) {
+            if (table.isEntityColumn[i]) {
+                info.entityColumnIndexes[nECols++] = i;
+            } else if (table.isNumericColumn[i]) {
+                info.entityColumnIndexes[nQCols++] = i;
+            }
+        }
+
+        // backtracking
         backtrackJointInference(table, info, 0);
+
         // set candidates back to tables
         for (int i = 0; i < table.nDataRow; ++i) {
             for (int j = 0; j < table.nColumn; ++j) {
                 // remove all candidates of entity links to reduce size
                 // (only in the body - because the header is not tagged).
+                // this also include entity cells of non-entity columns (which uses prior-based result)
                 for (EntityLink el : table.data[i][j].entityLinks) {
                     el.candidates = null;
                 }
@@ -364,7 +362,7 @@ public class DeepColumnScoringNode implements TaggingNode {
             }
         }
         // set column linking
-        for (int i = 0; i < table.nColumn; ++i) {
+        for (int i : info.numericColumnIndexes) {
             table.quantityToEntityColumn[i] = info.bestColumnLinking[i];
             table.quantityToEntityColumnScore[i] = info.bestColumnLinkingScore[i];
         }
