@@ -28,36 +28,31 @@ public class ColumnLinkingExecutor {
         SelfMonitor m = new SelfMonitor(ColumnLinkingExecutor.class.getName(), -1, 60);
         m.start();
 
-        Concurrent.runAndWait(new Runnable() {
+        Concurrent.runAndWait(() -> {
+            Gson gson = new Gson();
+            TaggingPipeline pipeline = TaggingPipeline.getColumnLinkingPipeline(client);
 
-            @Override
-            public void run() {
-                Gson gson = new Gson();
-                TaggingPipeline pipeline = TaggingPipeline.getColumnLinkingPipeline(client);
-
-                String line;
-                while (true) {
-                    synchronized (stream) {
-                        line = stream.readLine();
-                    }
-                    if (line == null) {
-                        return;
-                    }
-                    Table table = null;
-                    try {
-                        table = gson.fromJson(line, Table.class);
-                    } catch (Exception e) {
-                        System.err.println("ERROR: " + line);
-                        continue;
-                    }
-                    if (pipeline.tag(table)) {
-                        synchronized (out) {
-                            out.println(gson.toJson(table));
-                        }
-                    }
-                    m.incAndGet();
+            String line;
+            while (true) {
+                synchronized (stream) {
+                    line = stream.readLine();
                 }
-
+                if (line == null) {
+                    return;
+                }
+                Table table = null;
+                try {
+                    table = gson.fromJson(line, Table.class);
+                } catch (Exception e) {
+                    System.err.println("ERROR: " + line);
+                    continue;
+                }
+                if (pipeline.tag(table)) {
+                    synchronized (out) {
+                        out.println(gson.toJson(table));
+                    }
+                }
+                m.incAndGet();
             }
         }, Integer.parseInt(args[3]));
 

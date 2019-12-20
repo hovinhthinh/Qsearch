@@ -2,6 +2,7 @@ package pipeline.deep;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import util.Concurrent;
 import util.SelfMonitor;
 
 import java.io.*;
@@ -70,16 +71,22 @@ public class DeepScoringClient implements ScoringClientInterface {
         m.start();
         if (line.trim().equalsIgnoreCase("S")) {
             System.out.println("=== Test single call ===");
-            for (; ; ) {
-                client.getScore("stadium in europe", "spectator capacity");
-                m.incAndGet();
-            }
+            Concurrent.runAndWait(() -> {
+                for (; ; ) {
+                    client.getScore("stadium in europe", "spectator capacity");
+                    m.incAndGet();
+                }
+            }, 16);
         } else {
             System.out.println("=== Test multiple calls ===");
-            for (; ; ) {
-                client.getScores(Arrays.asList("football team", "soccer stadium", "random entity description"), "spectator capacity");
-                m.incAndGet();
-            }
+            Concurrent.runAndWait(() -> {
+                for (; ; ) {
+                    client.getScores(Arrays.asList("football team", "soccer stadium", "random entity description"), "spectator capacity");
+                    m.incAndGet();
+                }
+
+            }, 16);
+
         }
     }
 
