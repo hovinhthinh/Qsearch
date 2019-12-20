@@ -63,8 +63,7 @@ public class DeepScoringClient implements ScoringClientInterface {
         }
     }
 
-    public static void benchmarking() {
-        DeepScoringClient client = new DeepScoringClient(true, -1);
+    public static void benchmarking(ScoringClientInterface client) {
         System.out.print("Single/Multiple (S/M) > ");
         String line = new Scanner(System.in).nextLine();
         SelfMonitor m = new SelfMonitor("DeepScoringClient_Performance", -1, 5);
@@ -85,7 +84,8 @@ public class DeepScoringClient implements ScoringClientInterface {
     }
 
     public static void main(String[] args) {
-        benchmarking();
+//        benchmarking(new DeepScoringClient(true, -1));
+        benchmarking(new MultiThreadedDeepScoringClient(false, "0,0,0,1,1,1"));
 //        DeepScoringClient client = new DeepScoringClient();
 //        System.out.println(client.getScore("stadium in europe", "capacity"));
 //        System.out.println(client.getScores(Arrays.asList("team", "stadium", "dog"), "capacity"));

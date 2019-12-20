@@ -1,11 +1,7 @@
 package pipeline.deep;
 
-import util.SelfMonitor;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.*;
 
 public class MultiThreadedDeepScoringClient implements ScoringClientInterface {
@@ -60,35 +56,5 @@ public class MultiThreadedDeepScoringClient implements ScoringClientInterface {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static void benchmarking(String device) {
-        MultiThreadedDeepScoringClient client = new MultiThreadedDeepScoringClient(true, device);
-        System.out.print("Single/Multiple (S/M) > ");
-        String line = new Scanner(System.in).nextLine();
-        SelfMonitor m = new SelfMonitor("MultiThreadedDeepScoringClient_Performance", -1, 5);
-        m.start();
-        if (line.trim().equalsIgnoreCase("S")) {
-            System.out.println("=== Test single call ===");
-            for (; ; ) {
-                client.getScore("stadium in europe", "spectator capacity");
-                m.incAndGet();
-            }
-        } else {
-            System.out.println("=== Test multiple calls ===");
-            for (; ; ) {
-                client.getScores(Arrays.asList("football team", "soccer stadium", "random entity description"), "spectator capacity");
-                m.incAndGet();
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        benchmarking("0,0,0,1,1,1");
-//        DeepScoringClient client = new DeepScoringClient();
-//        System.out.println(client.getScore("stadium in europe", "capacity"));
-//        System.out.println(client.getScores(Arrays.asList("team", "stadium", "dog"), "capacity"));
-
-        System.exit(0);
     }
 }
