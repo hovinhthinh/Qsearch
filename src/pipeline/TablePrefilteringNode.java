@@ -4,16 +4,18 @@ package pipeline;
 import model.table.Cell;
 import model.table.Table;
 
-// Remove empty lines, remove tables with less than <minNDataRow> data rows.
+// Remove empty lines, remove tables with less than <minNDataRow> or more than <maxNDataRow> data rows.
 public class TablePrefilteringNode implements TaggingNode {
     private int minNDataRow;
+    private int maxNDataRow;
 
-    public TablePrefilteringNode(int minNDataRow) {
+    public TablePrefilteringNode(int minNDataRow, int maxNDataRow) {
         this.minNDataRow = minNDataRow;
+        this.maxNDataRow = maxNDataRow;
     }
 
     public TablePrefilteringNode() {
-        this(4);
+        this(4, 400);
     }
 
     private Cell[][] pruneEmptyRows(Cell[][] data) {
@@ -51,7 +53,7 @@ public class TablePrefilteringNode implements TaggingNode {
         table.header = pruneEmptyRows(table.header);
         table.nHeaderRow = table.header.length;
 
-        if (table.nHeaderRow == 0 || table.nDataRow < minNDataRow) {
+        if (table.nHeaderRow == 0 || table.nDataRow < minNDataRow || table.nDataRow > maxNDataRow) {
             return false;
         }
 
