@@ -230,6 +230,6 @@ public class ElasticSearchTableImport {
 //        System.out.println("Remove 'searchable' Field: " + removeField("searchable"));
 //        System.out.println("Remove 'parsedJson' Field: " + removeField("parsedJson"));
 
-//        System.out.println(setSearchableDocuments("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+linking"));
+        System.out.println(setSearchableDocuments("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+linking.gz"));
     }
 }
