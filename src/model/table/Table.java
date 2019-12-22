@@ -157,6 +157,7 @@ public class Table {
         return false;
     }
 
+    // This call does cache combined header
     public String getCombinedHeader(int columnIndex) {
         if (combinedHeader == null) {
             combinedHeader = new String[nColumn];
@@ -173,6 +174,18 @@ public class Table {
         }
 
         return combinedHeader[columnIndex] = sb.toString();
+    }
+
+    // This call does not cache combined header
+    public String getOriginalCombinedHeader(int columnIndex) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < nHeaderRow; ++i) {
+            if (sb.length() > 0) {
+                sb.append(" ");
+            }
+            sb.append(header[i][columnIndex].text);
+        }
+        return sb.toString();
     }
 
     public void setCombinedHeader(int columnIndex, String newCombinedHeader) {
