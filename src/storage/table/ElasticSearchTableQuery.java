@@ -420,15 +420,13 @@ public class ElasticSearchTableQuery {
             ArrayList<Pair<JSONObject, Double>> scoredInstances = entity2Instance.values().stream()
                     .sorted((o1, o2) -> o1.second.compareTo(o2.second))
                     .collect(Collectors.toCollection(ArrayList::new));
-            if (scoredInstances.size() > nTopResults) {
-                scoredInstances.subList(nTopResults, scoredInstances.size()).clear();
-            }
+
             result.second = scoredInstances.stream().map(o -> o.first).collect(Collectors.toCollection(ArrayList::new));
 
-            // update more info for tables: data, header, pageContent
+            // update more info for tables: data, header, pageContent (only for nTopResults results)
             ArrayList<Future<Boolean>> futures = new ArrayList<>();
-            for (JSONObject o : result.second) {
-                futures.add(BOUNDED_EXECUTOR.submit(new UpdateInfoCallable(o)));
+            for (int i = 0; i < Math.min(nTopResults, result.second.size()); ++i) {
+                futures.add(BOUNDED_EXECUTOR.submit(new UpdateInfoCallable(result.second.get(i))));
             }
             for (Future<Boolean> f : futures) {
                 if (f.get() == false) {
