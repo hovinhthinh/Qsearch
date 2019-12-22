@@ -115,65 +115,18 @@ public class Crawler {
     }
 
     public static String getContentFromUrl(String url) {
-        return getContentFromUrl(url, null, "GET");
+        return getContentFromUrl(url, null, "GET", null, null);
     }
 
-    public static String getContentFromUrl(String url, String method) {
-        return getContentFromUrl(url, null, method);
+    public static String getContentFromUrl(String url, Proxy p) {
+        return getContentFromUrl(url, null, "GET", null, p);
     }
 
-    public static String getContentFromUrl(String url, Map<String, String> extendedHeader, String method) {
+    public static String getContentFromUrl(String url, Map<String, String> extendedHeader, String method, String body, Proxy proxy) {
         boolean useGZip = false;
         for (int i = 0; i < NUM_RETRY_CONNECTION; i++) {
             try {
-                HttpURLConnection hc = connect(new URL(url), extendedHeader, null, method);
-                int content_length = hc.getContentLength();
-                if ((content_length > MAX_CONTENT_LENGTH) || (content_length == -1)) {
-                    content_length = MAX_CONTENT_LENGTH;
-                }
-
-                String contentEncoding = null;
-                try {
-                    contentEncoding = hc.getContentEncoding();
-                } catch (Exception ex) {
-                }
-                if (contentEncoding != null && contentEncoding.equals("gzip")) useGZip = true;
-                StringBuilder sb = new StringBuilder();
-                int c = 0;
-                InputStream is = null;
-                if (useGZip) {
-                    is = new GZIPInputStream(hc.getInputStream());
-                    content_length = (MAX_CONTENT_LENGTH / 8) * 6;
-                } else {
-                    is = hc.getInputStream();
-                }
-                BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-                char[] ch = new char[BUFFER_SIZE];
-
-                while (c < content_length) {
-                    int t = br.read(ch, 0, ch.length);
-                    if (t >= 0) {
-                        sb.append(ch, 0, t);
-                        c = c + t;
-                    } else {
-                        break;
-                    }
-                }
-
-                br.close();
-                return sb.toString();
-            } catch (Exception ex) {
-//				ex.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    public static String getContentFromUrl(String url, Map<String, String> extendedHeader, String method, String body) {
-        boolean useGZip = false;
-        for (int i = 0; i < NUM_RETRY_CONNECTION; i++) {
-            try {
-                HttpURLConnection hc = connect(new URL(url), extendedHeader, null, method);
+                HttpURLConnection hc = connect(new URL(url), extendedHeader, proxy, method);
                 if (body != null) {
                     try (OutputStream os = hc.getOutputStream()) {
                         os.write(body.getBytes(StandardCharsets.UTF_8));
@@ -196,7 +149,7 @@ public class Crawler {
                 InputStream is = null;
                 if (useGZip) {
                     is = new GZIPInputStream(hc.getInputStream());
-                    content_length = (int) ((MAX_CONTENT_LENGTH / 8) * 4.25);
+                    content_length = (int) ((MAX_CONTENT_LENGTH / 8) * 6);
                 } else {
                     is = hc.getInputStream();
                 }
