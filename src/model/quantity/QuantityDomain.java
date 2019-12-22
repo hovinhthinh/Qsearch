@@ -166,9 +166,12 @@ public class QuantityDomain {
             return VOLUME_DOMAIN.get(quantity.unit);
         }
         // Now use QuTree.
-        Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
-        if (u != null && !u.getParentQuantity().isUnitLess()) {
-            return u.getMultiplier();
+        try {
+            Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
+            if (u != null && !u.getParentQuantity().isUnitLess()) {
+                return u.getMultiplier();
+            }
+        } catch (Exception e) {
         }
         return 1.0; // dimensionless.
     }
@@ -194,9 +197,12 @@ public class QuantityDomain {
             return Domain.VOLUME;
         }
         // Now use QuTree.
-        Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
-        if (u != null && !u.getParentQuantity().isUnitLess()) {
-            return u.getParentQuantity().getConcept();
+        try {
+            Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
+            if (u != null && !u.getParentQuantity().isUnitLess()) {
+                return u.getParentQuantity().getConcept();
+            }
+        } catch (Exception e) {
         }
         return Domain.DIMENSIONLESS;
     }
