@@ -371,7 +371,6 @@ public class ElasticSearchTableQuery {
                         JSONObject newBestQfact = new JSONObject();
                         newBestQfact.put("_id", entity);
                         newBestQfact.put("match_score", dist);
-                        newBestQfact.put("match_context", String.join(" ", X));
                         newBestQfact.put("match_quantity", qt.toString(1));
                         newBestQfact.put("match_quantity_standard_value", qt.value * QuantityDomain.getScale(qt));
                         newBestQfact.put("match_source", table.source);
