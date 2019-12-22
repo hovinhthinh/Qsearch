@@ -193,13 +193,13 @@ public class ElasticSearchTableImport {
         }
     }
 
-    public static boolean setSearchableDocuments(String input) {
+    public static boolean setSearchableDocuments(String inputFile) {
         try {
-            Concurrent.BoundedExecutor executor = new Concurrent.BoundedExecutor(96);
+            Concurrent.BoundedExecutor executor = new Concurrent.BoundedExecutor(64);
             SelfMonitor m = new SelfMonitor("SetSearchableDocs", -1, 10);
             m.start();
             Gson gson = new Gson();
-            for (String line : FileUtils.getLineStream(input, "UTF-8")) {
+            for (String line : FileUtils.getLineStream(inputFile, "UTF-8")) {
                 m.incAndGet();
                 Table table = gson.fromJson(line, Table.class);
                 executor.submit(() -> {
