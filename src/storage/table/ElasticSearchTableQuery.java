@@ -374,21 +374,11 @@ public class ElasticSearchTableQuery {
                         newBestQfact.put("match_context", String.join(" ", X));
                         newBestQfact.put("match_quantity", qt.toString(1));
                         newBestQfact.put("match_quantity_standard_value", qt.value * QuantityDomain.getScale(qt));
-
-                        newBestQfact.put("match_table", table._id);
                         newBestQfact.put("match_source", table.source);
-
-                        newBestQfact.put("match_caption", table.caption);
-                        newBestQfact.put("match_page_title", table.pageTitle);
-
-                        newBestQfact.put("match_row", row);
-                        newBestQfact.put("match_entity_column", table.quantityToEntityColumn[qCol]);
-                        newBestQfact.put("match_quantity_column", qCol);
 
                         newBestQfact.put("match_entity_str", el.text);
                         newBestQfact.put("match_quantity_str", ql.text);
-                        String headerUnitStr = table.getHeaderUnitSpan(qCol);
-                        newBestQfact.put("match_header_unit_str", headerUnitStr != null ? headerUnitStr : "null");
+
                         // Get quantity converted string.
                         String matchQuantityConvertedStr;
                         double scale = QuantityDomain.getScale(qt) / QuantityDomain.getScale(constraint.quantity);
@@ -409,6 +399,17 @@ public class ElasticSearchTableQuery {
                         }
                         newBestQfact.put("match_quantity_converted_str", matchQuantityConvertedStr);
 
+                        // Table-specific fields
+                        newBestQfact.put("match_table", table._id);
+                        newBestQfact.put("match_caption", table.caption);
+                        newBestQfact.put("match_page_title", table.pageTitle);
+                        newBestQfact.put("match_row", row);
+                        newBestQfact.put("match_entity_column", table.quantityToEntityColumn[qCol]);
+                        newBestQfact.put("match_quantity_column", qCol);
+                        String headerUnitStr = table.getHeaderUnitSpan(qCol);
+                        newBestQfact.put("match_header_unit_str", headerUnitStr != null ? headerUnitStr : "null");
+                        // End of table-specific fields
+
                         entity2Instance.put(entity, new Pair<>(newBestQfact, dist));
                     }
                 }
@@ -425,7 +426,7 @@ public class ElasticSearchTableQuery {
             }
             result.second = scoredInstances.stream().map(o -> o.first).collect(Collectors.toCollection(ArrayList::new));
 
-            // update more info.
+            // update more info for tables: data, header, pageContent
             ArrayList<Future<Boolean>> futures = new ArrayList<>();
             for (JSONObject o : result.second) {
                 futures.add(BOUNDED_EXECUTOR.submit(new UpdateInfoCallable(o)));
