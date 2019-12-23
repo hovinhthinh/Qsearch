@@ -57,7 +57,7 @@ public class SocketSearchAdapter extends WebSocketAdapter {
 
         int nResult = o.has("ntop") ? Integer.parseInt(o.getString("ntop")) : 20;
         
-        SearchResult response = SearchHandler.search(null, nResult, fullConstraint,
+        SearchResult response = SearchHandler.search(null, nResult, 1000, -1, fullConstraint,
                 null, null, null, additionalParams);
 
         String responseStr = null;
