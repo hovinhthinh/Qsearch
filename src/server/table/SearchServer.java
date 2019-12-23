@@ -9,10 +9,8 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import server.table.handler.search.SearchHandler;
-import server.table.handler.search.SocketSearchServlet;
 
 public class SearchServer {
     public static final String RESOURCE_BASE = "./web/";
