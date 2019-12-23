@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>QSearch</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+</head>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<body>
+DEV_MODE
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <!-- TODO: build saving component -->
+            <select disabled=disabled class="browser-default custom-select" id="eval-domain">
+                <option value="" disabled selected>Evaluation domain</option>
+                <option value="FINANCIAL">FINANCIAL</option>
+                <option value="SPORT">SPORT</option>
+                <option value="CAR">CAR</option>
+            </select>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <select class="browser-default custom-select" id="model">
+                <option value="" disabled selected>Ranking model</option>
+                <option value="EMBEDDING">EMBEDDING</option>
+                <option value="KL">KULLBACK_LEIBLER</option>
+            </select>
+        </div>
+        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+            <i class="glyphicon glyphicon-refresh"></i>
+            <div class="input-group">
+                <button id="change-mode" class="btn"><i class="fas fa-sync-alt"></i></button>
+                <input hidden type="text" class="form-control" placeholder="Type" id="type" value="electric cars">
+                <input hidden type="text" class="form-control" placeholder="Context" id="context" value="range">
+                <input hidden type="text" class="form-control" placeholder="Quantity" id="quantity"
+                       value="more than 50 km">
+                <input type="text" class="form-control" placeholder="Full" id="full"
+                       value="electric cars with range more than 50 km">
+                <span class="input-group-btn"><input class="btn btn-success" type="submit" value="Search"
+                                                     id="search"></span>
+                <div id="mode-full" value=1></div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="container col-xs-12 col-sm-12 col-md-11 col-lg-11">
+    <div id="parsed"></div>
+</div>
+<div class="container col-xs-12 col-sm-12 col-md-10 col-lg-10">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Score</th>
+            <th scope="col">Entity</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Sentence</th>
+            <th scope="col">Source</th>
+        </tr>
+        </thead>
+        <tbody id="data">
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $("#change-mode").click(function() {
+        var currentMode = $("#mode-full").attr("value");
+        if (currentMode == 0) {
+            $("#type").attr("hidden", "");
+            $("#context").attr("hidden", "");
+            $("#quantity").attr("hidden", "");
+            $("#full").removeAttr("hidden");
+        } else {
+            $("#type").removeAttr("hidden");
+            $("#context").removeAttr("hidden");
+            $("#quantity").removeAttr("hidden");
+            $("#full").attr("hidden", "");
+        }
+        $("#mode-full").attr("value", 1 - currentMode);
+    });
+
+    function escapeText(text) {
+        return $('<div>').text(text).html();
+    }
+    function cell(value) {
+        value = String(value);
+        if (value.startsWith("<")) {
+            value = '<a href="https://wikipedia.org/wiki/'
+            + escape(value.substring(1, value.length - 1)) + '">'
+            + escapeText(value)
+            + '</a>';
+        } else if (value.startsWith("STICS:Link:")) {
+            value = '<a href="' + value.substr(11) + '">Link</a>';
+        } else if (value.startsWith("NYT:docID:")) {
+            value = '<a href="' + value + '">DOCID</a>';
+        } else {
+            value = escapeText(value);
+        }
+        return "<td>" + value + "</td>";
+    }
+    function encode(id, score, entity, quantity, sentence, source) {
+        var line = "<tr>";
+        line += cell(id) + cell(score) + cell(entity) + cell(quantity) + cell(sentence) + cell(source);
+        line += "</tr>";
+        return line;
+    }
+    function search() {
+    alert($("#model").val());
+        if ($("#model").val() == "") {
+            alert("Please choose ranking model.");
+            return;
+        }
+        var params;
+        if ($("#mode-full").attr("value") == 1) {
+            params = {full: $("#full").val()};
+        } else {
+            params = {type: $("#type").val(), context: $("#context").val(), quantity: $("#quantity").val()};
+        }
+        params["model"] = $("#model").val();
+
+        $.ajax({
+            type: "GET",
+            url: "/search/",
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json",
+            beforeSend: function () {
+                $("#search").attr('disabled', 'disabled').attr("value", "Searching");
+                $("#parsed").html("");
+                $("#data").html("");
+            },
+            success: function (data) {
+                if (data["verdict"] != "OK") {
+                    $("#parsed").html("");
+                    $("#data").html(data["verdict"]);
+                    return;
+                }
+                var topResults = data["topResults"];
+                var parsed = {"Type": data["typeConstraint"], "Context": data["contextConstraint"], "Quantity": data["quantityConstraint"], "Model": data["matchingModel"]};
+                $("#parsed").html(JSON.stringify(parsed));
+                if (topResults.length == 0) {
+                    $("#data").html(encode("No data", "No data", "No data", "No data", "No data", "No data"));
+                } else {
+                    var str = "";
+                    for (var i = 0; i < topResults.length; ++i) {
+                        var instance = topResults[i];
+                        str += encode(i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["sentence"], instance["source"]);
+                    }
+                    if (data["numResults"] > topResults.length)
+                    str += encode("", "", "More " + (data["numResults"] - topResults.length) + " results", "", "", "");
+                    $("#data").html(str);
+                }
+            },
+            error: function () {
+                alert("An error occurred.");
+            },
+            complete: function () {
+                $("#search").removeAttr('disabled').attr("value", "Search");
+            }
+        });
+    }
+    $("#search").click(search);
+</script>
+</body>
+</html>
