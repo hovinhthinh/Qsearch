@@ -23,7 +23,7 @@
 DEV_MODE
 <div class="container">
     <div class="row">
-        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <!-- TODO: build saving component -->
             <select class="browser-default custom-select" id="eval-domain">
                 <option disabled selected>Evaluation domain</option>
@@ -34,20 +34,21 @@ DEV_MODE
                 <option value="TECHNOLOGY">TECHNOLOGY</option>
             </select>
         </div>
-        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-            <input type="text" class="form-control" placeholder="nTop" id="ntop"
-                   value="50">
-        </div>
-
+        nTable
         <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
             <input type="text" class="form-control" placeholder="nTable" id="ntable"
                    value="1000">
         </div>
+        nTop
+        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+            <input type="text" class="form-control" placeholder="nTop" id="ntop"
+                   value="50">
+        </div>
+        linkingThreshold
         <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
             <input type="text" class="form-control" placeholder="linkThreshold" id="link_threshold"
                    value="-1">
         </div>
-
         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <select class="browser-default custom-select" id="model">
                 <option disabled>Ranking model</option>
