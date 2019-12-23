@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Qsearch</title>
+    <title>TabQs</title>
     <link rel="stylesheet" href="fontawesome_5.10.1/css/all.css" crossorigin="anonymous">
 
 </head>
@@ -21,8 +21,8 @@
 
 <body>
 DEV_MODE
-<div class="container">
-    <div class="row">
+<div class="container col-xs-8 col-sm-8 col-md-8 col-lg-8">
+    <div class="row d-flex align-items-center justify-content-center">
         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <!-- TODO: build saving component -->
             <select class="browser-default custom-select" id="eval-domain">
@@ -34,17 +34,17 @@ DEV_MODE
                 <option value="TECHNOLOGY">TECHNOLOGY</option>
             </select>
         </div>
-        nTable
+        nTable:
         <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
             <input type="text" class="form-control" placeholder="nTable" id="ntable"
                    value="1000">
         </div>
-        nTop
+        nTop:
         <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
             <input type="text" class="form-control" placeholder="nTop" id="ntop"
                    value="50">
         </div>
-        linkingThreshold
+        linkingThreshold:
         <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
             <input type="text" class="form-control" placeholder="linkThreshold" id="link_threshold"
                    value="-1">
@@ -56,10 +56,11 @@ DEV_MODE
                 <option value="KL">KULLBACK_LEIBLER</option>
             </select>
         </div>
-        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+        <br/>
+        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 mt-2">
             <i class="glyphicon glyphicon-refresh"></i>
             <div class="input-group">
-                <button id="change-mode" class="btn"><i class="fas fa-sync-alt"></i></button>
+                <button hidden="" id="change-mode" class="btn"><i class="fas fa-sync-alt"></i></button>
                 <input hidden type="text" class="form-control" placeholder="type constraint" id="type"
                        value="electric cars">
                 <input hidden type="text" class="form-control" placeholder="context constraint" id="context"
@@ -87,7 +88,6 @@ DEV_MODE
             <th scope="col">Score</th>
             <th scope="col">Entity</th>
             <th scope="col">LScore</th>
-            <!--<th scope="col">Quantity</th>-->
             <th scope="col">Table</th>
             <th scope="col">Text</th>
             <th scope="col">Source</th>
@@ -100,7 +100,8 @@ DEV_MODE
             <td></td>
             <td></td>
             <td></td>
-            <!--<td></td>-->
+            <td></td>
+            <td></td>
             <td></td>
             <td id="submit-status"></td>
             <td><input hidden class="btn btn-normal" type="submit" value="Submit" id="submit"></td>
@@ -137,7 +138,7 @@ DEV_MODE
         return $('<div>').text(text).html();
     }
 
-    function cell(value, numTableSpan) {
+    function cell(value, numRowSpan) {
         value = String(value);
         if (value.startsWith("<")) {
             value = '<a href="https://wikipedia.org/wiki/'
@@ -149,23 +150,16 @@ DEV_MODE
         } else {
             value = escapeText(value);
         }
-        if (numTableSpan > 0) {
-            return "<td rowspan='" + numTableSpan + "'>" + value + "</td>";
-        } else {
-            return "";
-        }
-
+        return "<td rowspan='" + numRowSpan + "'>" + value + "</td>";
     }
 
-    function encodeTable(header, instance, numTableSpan, allInstances) {
-        if (header == null) {
-            return "<td>" + escapeText(instance) + "</td>";
-        }
-        var data = instance["data"]
-        var line = "<td rowspan='" + numTableSpan + "'><table class=\"table table-sm\">";
-        line += "Title: " + instance["pageTitle"] + "</br>";
-        line += "Caption: " + instance["caption"] + "</br>";
+    function encodeTable(allInstances, fromIndex, toIndex) {
+        var line = "<td rowspan='" + (toIndex - fromIndex + 1) + "'><table class=\"table table-sm\">";
+        // title + caption
+        line += "<b>Title:</b> " + escapeText(allInstances[fromIndex]["pageTitle"]) + "</br>";
+        line += "<b>Caption:</b> " + escapeText(allInstances[fromIndex]["caption"]) + "</br>";
         // header
+        var header = allInstances[fromIndex]["header"];
         line += "<tr>";
         for (var i = 0; i < header.length; ++i) {
             line += "<th>";
@@ -173,21 +167,23 @@ DEV_MODE
             line += "</th>";
         }
         line += "</tr>";
+
+        var data = allInstances[fromIndex]["data"]
         // data
         for (var k = 0; k < data.length; ++k) {
             var highlight = false;
-            for (var i = 0; i < allInstances.length; ++i) {
-                if (k == allInstances[i]["row"] && allInstances[i]["tableId"] == instance["tableId"]) {
+            for (var i = fromIndex; i <= toIndex; ++i) {
+                if (k == allInstances[i]["row"]) {
                     highlight = true;
                     break;
                 }
             }
             if (highlight) {
-                line += "<tr class='bg-success'>";
+                line += "<tr class='bg-success text-white'>";
             } else {
                 line += "<tr>";
             }
-            for (var i = 0; i < header.length; ++i) {
+            for (var i = 0; i < data[k].length; ++i) {
                 line += "<td>";
                 line += escapeText(data[k][i]);
                 line += "</td>";
@@ -198,28 +194,26 @@ DEV_MODE
         return line;
     }
 
-    function encode(allInstances, numTableSpan, id, score, entity, quantity, tableHeader, instance, text, source, verdictId) {
-        var line;
-        if (numTableSpan > 0) {
-            line = "<tr style='border-top:4px solid black'>";
-        } else {
-            line = "<tr>";
+    function encode(allInstances, fromIndex, toIndex) {
+        var line = "";
+        for (var i = fromIndex; i <= toIndex; ++i) {
+            if (i == fromIndex) {
+                line += "<tr style='border-top:3px solid black'>";
+            } else {
+                line += "<tr>";
+            }
+            line += cell(i, 1);
+            line += cell(allInstances[i]["score"].toFixed(3), 1);
+            line += cell(allInstances[i]["entity"], 1);
+            line += cell(allInstances[i]["QELinkingScore"].toFixed(3), 1);
+            if (i == fromIndex) {
+                line += encodeTable(allInstances, fromIndex, toIndex)
+                line += cell("Omitted", toIndex - fromIndex + 1);
+                line += cell(allInstances[i]["source"], toIndex - fromIndex + 1);
+            }
+            line += "<td>" + createCheckForm(i) + "</td>";
+            line += "</tr>";
         }
-
-        line += cell(id, 1) + cell(score, 1) + cell(entity, 1); // + cell(quantity)
-        if (tableHeader != null) {
-            line += cell(instance["QELinkingScore"].toFixed(3), 1);
-        } else {
-            line += cell("", 1);
-        }
-        if (numTableSpan > 0) {
-            line += encodeTable(tableHeader, instance, numTableSpan, allInstances)
-        }
-        line += cell("Omitted", numTableSpan);
-        // line += cell(text, numTableSpan);
-        line += cell(source, numTableSpan);
-        line += "<td>" + (verdictId == null ? "" : createCheckForm(verdictId)) + "</td>";
-        line += "</tr>";
         return line;
     }
 
@@ -274,7 +268,11 @@ DEV_MODE
                 $("#context").val(parsed["Context"]);
                 $("#quantity").val(parsed["Quantity"]["phrase"]);
                 if (topResults.length == 0) {
-                    $("#data").html(encode(null, 1, "No data", "No data", "No data", "No data", null, "No data", "No data", "No data"));
+                    var noData = ""
+                    for (var i = 0; i < 8; ++i) {
+                        noData += cell("No data");
+                    }
+                    $("#data").html(noData);
                 } else {
                     var str = "";
                     for (var i = 0; i < topResults.length; ++i) {
@@ -282,16 +280,16 @@ DEV_MODE
                         while (j < topResults.length - 1 && topResults[j]["tableId"] == topResults[j + 1]["tableId"]) {
                             ++j;
                         }
-                        var instance = topResults[i];
-                        str += encode(topResults, j - i + 1, i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance, instance["pageContent"], instance["source"], i);
-                        for (var k = i + 1; k <= j; ++k) {
-                            var instance = topResults[k];
-                            str += encode(topResults, 0, k + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance, instance["pageContent"], instance["source"], k);
-                        }
+                        str += encode(topResults, i, j);
                         i = j;
                     }
-                    if (data["numResults"] > topResults.length)
-                        str += encode(null, 1, "", "", "More " + (data["numResults"] - topResults.length) + " results", "", null, "", "", "");
+                    if (data["numResults"] > topResults.length) {
+                        str += cell("", 1) + cell("", 1)
+                            + cell("More " + (data["numResults"] - topResults.length) + " results", 1);
+                        for (var i = 0; i < 5; ++i) {
+                            str += cell("", 1);
+                        }
+                    }
                     $("#data").html(str);
                     $("#submit").removeAttr("hidden");
                 }
