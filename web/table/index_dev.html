@@ -64,7 +64,7 @@ DEV_MODE
 <div class="container col-xs-12 col-sm-12 col-md-11 col-lg-11">
     <div id="parsed"></div>
 </div>
-<div class="container col-xs-12 col-sm-12 col-md-10 col-lg-10">
+<div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <table class="table">
         <thead>
         <tr>
@@ -72,7 +72,7 @@ DEV_MODE
             <th scope="col">Score</th>
             <th scope="col">Entity</th>
             <!--<th scope="col">Quantity</th>-->
-            <th scope="col">Sentence</th>
+            <th scope="col">Table</th>
             <th scope="col">Source</th>
             <th scope="col">Verdict</th>
         </tr>
@@ -127,22 +127,46 @@ DEV_MODE
                 + escape(value.substring(1, value.length - 1)) + '" target="_blank">'
                 + escapeText(value)
                 + '</a>';
-        } else if (value.startsWith("STICS:Link:")) {
-            value = '<a href="' + value.substr(11) + '" target="_blank">Link</a>';
-        } else if (value.startsWith("NYT:Link:")) {
-            value = '<a href="' + value.substr(9) + '" target="_blank">Link</a>';
-        } else if (value.startsWith("NYT:docID:")) {
-            value = '<a href="' + value + '" target="_blank">DOCID</a>';
+        } else if (value.startsWith("TABLEM:Link:")) {
+            value = '<a href="' + value.substr(12) + '" target="_blank">Link</a>';
         } else {
             value = escapeText(value);
         }
         return "<td>" + value + "</td>";
     }
 
-    function encode(id, score, entity, quantity, sentence, source, verdictId) {
+    function encodeTable(header, data) {
+        if (header == null) {
+            return "<td>" + escapeText(data) + "</td>";
+        }
+        var line = "<td><table class=\"table table-sm\">";
+
+        // header
+        line += "<tr>";
+        for (var i = 0; i < header.length; ++i) {
+            line += "<th>";
+            line += escapeText(header[i]);
+            line += "</th>";
+        }
+        line += "</tr>";
+        // data
+        for (var k = 0; k < data.length; ++k) {
+            line += "<tr>";
+            for (var i = 0; i < header.length; ++i) {
+                line += "<td>";
+                line += escapeText(data[k][i]);
+                line += "</td>";
+            }
+            line += "</tr>";
+        }
+        line += "</table></td>";
+        return line;
+    }
+
+    function encode(id, score, entity, quantity, tableHeader, tableData, source, verdictId) {
         var line = "<tr>";
         line += cell(id) + cell(score) + cell(entity) // + cell(quantity)
-            + cell(sentence) + cell(source);
+            + encodeTable(tableHeader, tableData) + cell(source);
         line += "<td>" + (verdictId == null ? "" : createCheckForm(verdictId)) + "</td>";
         line += "</tr>";
         return line;
@@ -162,6 +186,7 @@ DEV_MODE
         params["model"] = $("#model").val();
         params["alpha"] = 3.0;
         params["lambda"] = 0.1;
+        params["ntop"] = 20;
 
         $.ajax({
             type: "GET",
@@ -196,15 +221,15 @@ DEV_MODE
                 $("#context").val(parsed["Context"]);
                 $("#quantity").val(parsed["Quantity"]["phrase"]);
                 if (topResults.length == 0) {
-                    $("#data").html(encode("No data", "No data", "No data", "No data", "No data", "No data"));
+                    $("#data").html(encode("No data", "No data", "No data", "No data", null, "No data", "No data"));
                 } else {
                     var str = "";
                     for (var i = 0; i < topResults.length; ++i) {
                         var instance = topResults[i];
-                        str += encode(i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["sentence"], instance["source"], i);
+                        str += encode(i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance["data"], instance["source"], i);
                     }
                     if (data["numResults"] > topResults.length)
-                        str += encode("", "", "More " + (data["numResults"] - topResults.length) + " results", "", "", "");
+                        str += encode("", "", "More " + (data["numResults"] - topResults.length) + " results", "", null, "", "");
                     $("#data").html(str);
                     $("#submit").removeAttr("hidden");
                 }
