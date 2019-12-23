@@ -65,9 +65,15 @@ public class SearchHandler extends AbstractHandler {
         String ntop = request.getParameter("ntop");
         int nResult = ntop != null ? Integer.parseInt(ntop) : nTopResult;
 
+        String ntable = request.getParameter("ntable");
+        int nTopTable = ntable != null ? Integer.parseInt(ntable) : 1000;
+
+        String linkingThreshold = request.getParameter("link_threshold");
+        double linkThreshold = linkingThreshold != null ? Double.parseDouble(linkingThreshold) : -1;
+
         httpServletResponse.setCharacterEncoding("utf-8");
 
-        SearchResult response = search(null, nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint, additionalParams);
+        SearchResult response = search(null, nResult, nTopTable, linkThreshold, fullConstraint, typeConstraint, contextConstraint, quantityConstraint, additionalParams);
 
         synchronized (GSON) {
             httpServletResponse.getWriter().print(GSON.toJson(response));
@@ -75,7 +81,7 @@ public class SearchHandler extends AbstractHandler {
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 
-    public static SearchResult search(String model, int nTopResult, String fullConstraint,
+    public static SearchResult search(String model, int nTopResult, int nTopTable, double linkingThreshold, String fullConstraint,
                                       String typeConstraint, String contextConstraint, String quantityConstraint, Map additionalParameters) {
         // Optimize
         if (typeConstraint != null) {
@@ -121,7 +127,7 @@ public class SearchHandler extends AbstractHandler {
             }
             if (response.verdict == null) {
                 Pair<QuantityConstraint, ArrayList<ResultInstance>> result =
-                        ElasticSearchTableQuery.search(fullConstraint, 1000, -1,
+                        ElasticSearchTableQuery.search(fullConstraint, nTopTable, linkingThreshold,
                                 typeConstraint, contextConstraint, quantityConstraint, nTopResult, matcher, additionalParameters);
                 if (result.first == null) {
                     response.verdict = "Cannot detect quantity constraint.";
