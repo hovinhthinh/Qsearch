@@ -395,7 +395,7 @@ public class ElasticSearchTableQuery {
                         // Table-specific fields
                         newBestQfact.elasticScore = elasticScore;
                         newBestQfact.QELinkingScore = table.quantityToEntityColumnScore[qCol];
-                        
+
                         newBestQfact.tableId = table._id;
                         newBestQfact.caption = table.caption;
                         newBestQfact.pageTitle = table.pageTitle;
@@ -420,7 +420,9 @@ public class ElasticSearchTableQuery {
                         if (compare != 0) return compare;
                         compare = Double.compare(o2.elasticScore, o1.elasticScore);
                         if (compare != 0) return compare;
-                        return o1.tableId.compareTo(o2.tableId);
+                        compare = o1.tableId.compareTo(o2.tableId);
+                        if (compare != 0) return compare;
+                        return Double.compare(o1.row, o2.row);
                     })
                     .collect(Collectors.toCollection(ArrayList::new));
 
