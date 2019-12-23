@@ -23,7 +23,7 @@
 DEV_MODE
 <div class="container">
     <div class="row">
-        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
             <!-- TODO: build saving component -->
             <select class="browser-default custom-select" id="eval-domain">
                 <option disabled selected>Evaluation domain</option>
@@ -34,6 +34,15 @@ DEV_MODE
                 <option value="TECHNOLOGY">TECHNOLOGY</option>
             </select>
         </div>
+        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+            <input type="text" class="form-control" placeholder="nTable" id="ntable"
+                   value="1000">
+        </div>
+        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+            <input type="text" class="form-control" placeholder="linkThreshold" id="link_threshold"
+                   value="-1">
+        </div>
+
         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <select class="browser-default custom-select" id="model">
                 <option disabled>Ranking model</option>
@@ -41,7 +50,7 @@ DEV_MODE
                 <option value="KL">KULLBACK_LEIBLER</option>
             </select>
         </div>
-        <div class="col-xs-8 col-sm-8 col-md-7 col-lg-7">
+        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
             <i class="glyphicon glyphicon-refresh"></i>
             <div class="input-group">
                 <button id="change-mode" class="btn"><i class="fas fa-sync-alt"></i></button>
@@ -73,6 +82,7 @@ DEV_MODE
             <th scope="col">Entity</th>
             <!--<th scope="col">Quantity</th>-->
             <th scope="col">Table</th>
+            <th scope="col">Text</th>
             <th scope="col">Source</th>
             <th scope="col">Verdict</th>
         </tr>
@@ -140,12 +150,14 @@ DEV_MODE
 
     }
 
-    function encodeTable(header, data, numTableSpan) {
+    function encodeTable(header, instance, numTableSpan) {
         if (header == null) {
-            return "<td>" + escapeText(data) + "</td>";
+            return "<td>" + escapeText(instance) + "</td>";
         }
+        var data = instance["data"]
         var line = "<td rowspan='" + numTableSpan + "'><table class=\"table table-sm\">";
-
+        line += "Title: " + instance["pageTitle"] + "</br>";
+        line += "Caption: " + instance["caption"] + "</br>";
         // header
         line += "<tr>";
         for (var i = 0; i < header.length; ++i) {
@@ -168,12 +180,14 @@ DEV_MODE
         return line;
     }
 
-    function encode(numTableSpan, id, score, entity, quantity, tableHeader, tableData, source, verdictId) {
+    function encode(numTableSpan, id, score, entity, quantity, tableHeader, instance, text, source, verdictId) {
         var line = "<tr style='height: fit-content'>";
         line += cell(id, 1) + cell(score, 1) + cell(entity, 1); // + cell(quantity)
         if (numTableSpan > 0) {
-            line += encodeTable(tableHeader, tableData, numTableSpan)
+            line += encodeTable(tableHeader, instance, numTableSpan)
         }
+        line += cell("Omitted", numTableSpan);
+        // line += cell(text, numTableSpan);
         line += cell(source, numTableSpan);
         line += "<td>" + (verdictId == null ? "" : createCheckForm(verdictId)) + "</td>";
         line += "</tr>";
@@ -195,6 +209,8 @@ DEV_MODE
         params["alpha"] = 3.0;
         params["lambda"] = 0.1;
         params["ntop"] = 20;
+        params["ntable"] = $("#ntable").val();
+        params["link_threshold"] = $("#link_threshold").val();
 
         $.ajax({
             type: "GET",
@@ -229,7 +245,7 @@ DEV_MODE
                 $("#context").val(parsed["Context"]);
                 $("#quantity").val(parsed["Quantity"]["phrase"]);
                 if (topResults.length == 0) {
-                    $("#data").html(encode(1, "No data", "No data", "No data", "No data", null, "No data", "No data"));
+                    $("#data").html(encode(1, "No data", "No data", "No data", "No data", null, "No data", "No data", "No data"));
                 } else {
                     var str = "";
                     for (var i = 0; i < topResults.length; ++i) {
@@ -238,15 +254,15 @@ DEV_MODE
                             ++j;
                         }
                         var instance = topResults[i];
-                        str += encode(j - i + 1, i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance["data"], instance["source"], i);
+                        str += encode(j - i + 1, i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance, instance["pageContent"], instance["source"], i);
                         for (var k = i + 1; k <= j; ++k) {
                             var instance = topResults[k];
-                            str += encode(0, k + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance["data"], instance["source"], k);
+                            str += encode(0, k + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance, instance["pageContent"], instance["source"], k);
                         }
                         i = j;
                     }
                     if (data["numResults"] > topResults.length)
-                        str += encode(1, "", "", "More " + (data["numResults"] - topResults.length) + " results", "", null, "", "");
+                        str += encode(1, "", "", "More " + (data["numResults"] - topResults.length) + " results", "", null, "", "", "");
                     $("#data").html(str);
                     $("#submit").removeAttr("hidden");
                 }
