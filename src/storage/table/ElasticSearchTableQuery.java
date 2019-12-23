@@ -108,7 +108,6 @@ public class ElasticSearchTableQuery {
                     if (scroll_id == null) {
                         String content = HTTPRequest.POST(url, body);
                         if (content == null) {
-                            System.out.println("ERR");
                             error = true;
                             return null;
                         }
@@ -191,33 +190,28 @@ public class ElasticSearchTableQuery {
     private static class UpdateInfoCallable implements Callable<Boolean> {
         private static final String URL_PREFIX = PROTOCOL + "://" + ES_HOST + "/" + TABLE_INDEX + "/" + TABLE_TYPE + "/";
         private static Gson GSON = new Gson();
-        private JSONObject result;
+        private ResultInstance result;
 
-        public UpdateInfoCallable(JSONObject result) {
+        public UpdateInfoCallable(ResultInstance result) {
             this.result = result;
         }
 
         @Override
         public Boolean call() throws Exception {
             try {
-                JSONObject o = new JSONObject(HTTPRequest.GET(URL_PREFIX + result.getString("match_table"))).getJSONObject("_source");
-                result.put("match_page_content", o.getString("pageContent"));
+                JSONObject o = new JSONObject(HTTPRequest.GET(URL_PREFIX + result.tableId)).getJSONObject("_source");
+                result.pageContent = o.getString("pageContent");
                 Table t;
                 synchronized (GSON) {
                     t = GSON.fromJson(o.getString("parsedJson"), Table.class);
-                    JSONArray header = new JSONArray();
-                    JSONArray content = new JSONArray();
+                }
+                result.header = new String[t.nColumn];
+                result.data = new String[t.nDataRow][t.nColumn];
+                for (int c = 0; c < t.nColumn; ++c) {
+                    result.header[c] = t.getOriginalCombinedHeader(c);
                     for (int r = 0; r < t.nDataRow; ++r) {
-                        content.put(new JSONArray());
+                        result.data[r][c] = t.data[r][c].text;
                     }
-                    for (int c = 0; c < t.nColumn; ++c) {
-                        header.put(t.getOriginalCombinedHeader(c));
-                        for (int r = 0; r < t.nDataRow; ++r) {
-                            content.getJSONArray(r).put(t.data[r][c].text);
-                        }
-                    }
-                    result.put("match_header", header);
-                    result.put("match_data", content);
                 }
                 return true;
             } catch (Exception e) {
@@ -226,12 +220,12 @@ public class ElasticSearchTableQuery {
         }
     }
 
-    public static Pair<QuantityConstraint, ArrayList<JSONObject>> search(String fullQuery, int nTopTables, double columnLinkingThreshold,
-                                                                         String queryType, String queryContext, String quantityConstraint,
-                                                                         int nTopResults, ContextMatcher matcher, Map additionalParameters) {
+    public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String fullQuery, int nTopTables, double columnLinkingThreshold,
+                                                                             String queryType, String queryContext, String quantityConstraint,
+                                                                             int nTopResults, ContextMatcher matcher, Map additionalParameters) {
         quantityConstraint = quantityConstraint.toLowerCase();
 
-        Pair<QuantityConstraint, ArrayList<JSONObject>> result = new Pair<>();
+        Pair<QuantityConstraint, ArrayList<ResultInstance>> result = new Pair<>();
 
         QuantityConstraint constraint = QuantityConstraint.parseFromString(quantityConstraint);
         result.first = constraint;
@@ -277,7 +271,7 @@ public class ElasticSearchTableQuery {
         Session session = additionalParameters == null ? null : (Session) additionalParameters.get("session");
         int lastPercent = 0;
 
-        HashMap<String, Pair<JSONObject, Double>> entity2Instance = new HashMap<>();
+        HashMap<String, Pair<ResultInstance, Double>> entity2Instance = new HashMap<>();
         try {
             // for each table.
             for (JSONObject o : instances) {
@@ -362,21 +356,21 @@ public class ElasticSearchTableQuery {
                         // TODO: combine with elasticScore
 
                         // Check with candidate
-                        Pair<JSONObject, Double> currentQfact = entity2Instance.get(entity);
+                        Pair<ResultInstance, Double> currentQfact = entity2Instance.get(entity);
                         if (currentQfact != null && currentQfact.second < dist) {
                             continue;
                         }
 
                         // update best qfact
-                        JSONObject newBestQfact = new JSONObject();
-                        newBestQfact.put("_id", entity);
-                        newBestQfact.put("match_score", dist);
-                        newBestQfact.put("match_quantity", qt.toString(1));
-                        newBestQfact.put("match_quantity_standard_value", qt.value * QuantityDomain.getScale(qt));
-                        newBestQfact.put("match_source", table.source);
+                        ResultInstance newBestQfact = new ResultInstance();
+                        newBestQfact.entity = entity;
+                        newBestQfact.score = dist;
+                        newBestQfact.quantity = qt.toString(1);
+                        newBestQfact.quantityStandardValue = qt.value * QuantityDomain.getScale(qt);
+                        newBestQfact.source = table.source;
 
-                        newBestQfact.put("match_entity_str", el.text);
-                        newBestQfact.put("match_quantity_str", ql.text);
+                        newBestQfact.entityStr = el.text;
+                        newBestQfact.quantityStr = ql.text;
 
                         // Get quantity converted string.
                         String matchQuantityConvertedStr;
@@ -396,17 +390,17 @@ public class ElasticSearchTableQuery {
                         } else {
                             matchQuantityConvertedStr = "null";
                         }
-                        newBestQfact.put("match_quantity_converted_str", matchQuantityConvertedStr);
+                        newBestQfact.quantityConvertedStr = matchQuantityConvertedStr;
 
                         // Table-specific fields
-                        newBestQfact.put("match_table", table._id);
-                        newBestQfact.put("match_caption", table.caption);
-                        newBestQfact.put("match_page_title", table.pageTitle);
-                        newBestQfact.put("match_row", row);
-                        newBestQfact.put("match_entity_column", table.quantityToEntityColumn[qCol]);
-                        newBestQfact.put("match_quantity_column", qCol);
+                        newBestQfact.tableId = table._id;
+                        newBestQfact.caption = table.caption;
+                        newBestQfact.pageTitle = table.pageTitle;
+                        newBestQfact.row = row;
+                        newBestQfact.entityColumn = table.quantityToEntityColumn[qCol];
+                        newBestQfact.quantityColumn = qCol;
                         String headerUnitStr = table.getHeaderUnitSpan(qCol);
-                        newBestQfact.put("match_header_unit_str", headerUnitStr != null ? headerUnitStr : "null");
+                        newBestQfact.headerUnitSpan = headerUnitStr != null ? headerUnitStr : "null";
                         // End of table-specific fields
 
                         entity2Instance.put(entity, new Pair<>(newBestQfact, dist));
@@ -417,7 +411,7 @@ public class ElasticSearchTableQuery {
                 result.second = null;
                 return result;
             }
-            ArrayList<Pair<JSONObject, Double>> scoredInstances = entity2Instance.values().stream()
+            ArrayList<Pair<ResultInstance, Double>> scoredInstances = entity2Instance.values().stream()
                     .sorted((o1, o2) -> o1.second.compareTo(o2.second))
                     .collect(Collectors.toCollection(ArrayList::new));
 
@@ -445,37 +439,37 @@ public class ElasticSearchTableQuery {
         }
     }
 
-    public static Pair<QuantityConstraint, ArrayList<JSONObject>> search(String fullQuery, int nTopTables, double columnLinkingThreshold,
-                                                                         String queryType, String queryContext, String quantityConstraint,
-                                                                         int nTopResults, ContextMatcher matcher) {
+    public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String fullQuery, int nTopTables, double columnLinkingThreshold,
+                                                                             String queryType, String queryContext, String quantityConstraint,
+                                                                             int nTopResults, ContextMatcher matcher) {
         return search(fullQuery, nTopTables, columnLinkingThreshold, queryType, queryContext, quantityConstraint, nTopResults, matcher, null);
     }
 
-    public static Pair<QuantityConstraint, ArrayList<JSONObject>> search(String fullQuery, int nTopTables, double columnLinkingThreshold,
-                                                                         String queryType, String queryContext, String quantityConstraint,
-                                                                         int nTopResults) {
+    public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String fullQuery, int nTopTables, double columnLinkingThreshold,
+                                                                             String queryType, String queryContext, String quantityConstraint,
+                                                                             int nTopResults) {
         return search(fullQuery, nTopTables, columnLinkingThreshold, queryType, queryContext, quantityConstraint, nTopResults, DEFAULT_MATCHER);
     }
 
     public static void main(String[] args) throws Exception {
-        ArrayList<JSONObject> result =
+        ArrayList<ResultInstance> result =
                 search("cars with fuel consumption more than 0 mpg", 1000, -1,
                         "car", "fuel consumption", "more than 0 mpg",
                         20
                 ).second;
-
+        Gson gson = new Gson();
         int nPrinted = 0;
-        for (JSONObject o : result) {
+        for (ResultInstance o : result) {
             try {
                 if (nPrinted++ < 1) {
-//                    System.out.println(String.format("%30s\t%10.3f\t%50s\t%20s\t%s",
-//                            o.getString("_id"),
-//                            o.getDouble("match_score"),
-//                            o.getString("match_context"),
-//                            o.getString("match_quantity"),
-//                            o.getString("match_table")
-//                    ));
-                    System.out.println(o.toString());
+                    System.out.println(String.format("%30s\t%10.3f\t%50s\t%20s\t%s",
+                            o.entity,
+                            o.score,
+                            o.contextStr,
+                            o.quantity,
+                            o.tableId)
+                    );
+                    System.out.println(gson.toJson(o));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
