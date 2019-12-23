@@ -357,7 +357,7 @@ public class ElasticSearchTableQuery {
 
                         // Check with candidate
                         ResultInstance currentQfact = entity2Instance.get(entity);
-                        if (currentQfact != null && currentQfact.score < dist) {
+                        if (currentQfact != null && currentQfact.score <= dist) {
                             continue;
                         }
 
@@ -454,8 +454,8 @@ public class ElasticSearchTableQuery {
 
     public static void main(String[] args) throws Exception {
         ArrayList<ResultInstance> result =
-                search("cars with fuel consumption more than 0 mpg", 1000, -1,
-                        "car", "fuel consumption", "more than 0 mpg",
+                search("technology companies having at least 1 billion usd annual profit", 1000, -1,
+                        "technology companies", "annual profit", "at least 1 billion usd",
                         20
                 ).second;
         Gson gson = new Gson();
