@@ -271,7 +271,7 @@ public class ElasticSearchTableQuery {
         Session session = additionalParameters == null ? null : (Session) additionalParameters.get("session");
         int lastPercent = 0;
 
-        HashMap<String, Pair<ResultInstance, Double>> entity2Instance = new HashMap<>();
+        HashMap<String, ResultInstance> entity2Instance = new HashMap<>();
         try {
             // for each table.
             for (JSONObject o : instances) {
@@ -356,8 +356,8 @@ public class ElasticSearchTableQuery {
                         // TODO: combine with elasticScore
 
                         // Check with candidate
-                        Pair<ResultInstance, Double> currentQfact = entity2Instance.get(entity);
-                        if (currentQfact != null && currentQfact.second < dist) {
+                        ResultInstance currentQfact = entity2Instance.get(entity);
+                        if (currentQfact != null && currentQfact.score < dist) {
                             continue;
                         }
 
@@ -403,7 +403,7 @@ public class ElasticSearchTableQuery {
                         newBestQfact.headerUnitSpan = headerUnitStr != null ? headerUnitStr : "null";
                         // End of table-specific fields
 
-                        entity2Instance.put(entity, new Pair<>(newBestQfact, dist));
+                        entity2Instance.put(entity, newBestQfact);
                     }
                 }
             }
@@ -411,11 +411,12 @@ public class ElasticSearchTableQuery {
                 result.second = null;
                 return result;
             }
-            ArrayList<Pair<ResultInstance, Double>> scoredInstances = entity2Instance.values().stream()
-                    .sorted((o1, o2) -> o1.second.compareTo(o2.second))
+            result.second = entity2Instance.values().stream()
+                    .sorted((o1, o2) -> {
+                        int compareScore = Double.compare(o1.score, o2.score);
+                        return compareScore != 0 ? compareScore : o1.tableId.compareTo(o2.tableId);
+                    })
                     .collect(Collectors.toCollection(ArrayList::new));
-
-            result.second = scoredInstances.stream().map(o -> o.first).collect(Collectors.toCollection(ArrayList::new));
 
             // update more info for tables: data, header, pageContent (only for nTopResults results)
             ArrayList<Future<Boolean>> futures = new ArrayList<>();
