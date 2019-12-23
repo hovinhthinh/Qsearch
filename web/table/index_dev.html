@@ -150,7 +150,7 @@ DEV_MODE
 
     }
 
-    function encodeTable(header, instance, numTableSpan) {
+    function encodeTable(header, instance, numTableSpan, allInstances) {
         if (header == null) {
             return "<td>" + escapeText(instance) + "</td>";
         }
@@ -168,7 +168,14 @@ DEV_MODE
         line += "</tr>";
         // data
         for (var k = 0; k < data.length; ++k) {
-            if (k == instance["row"]) {
+            var highlight = false;
+            for (var i = 0; i < allInstances.length; ++i) {
+                if (k == allInstances[i]["row"] && allInstances[i]["tableId"] == instance["tableId"]) {
+                    highlight = true;
+                    break;
+                }
+            }
+            if (highlight) {
                 line += "<tr class='bg-success'>";
             } else {
                 line += "<tr>";
@@ -184,11 +191,11 @@ DEV_MODE
         return line;
     }
 
-    function encode(numTableSpan, id, score, entity, quantity, tableHeader, instance, text, source, verdictId) {
+    function encode(allInstances, numTableSpan, id, score, entity, quantity, tableHeader, instance, text, source, verdictId) {
         var line = "<tr style='height: fit-content'>";
         line += cell(id, 1) + cell(score, 1) + cell(entity, 1); // + cell(quantity)
         if (numTableSpan > 0) {
-            line += encodeTable(tableHeader, instance, numTableSpan)
+            line += encodeTable(tableHeader, instance, numTableSpan, allInstances)
         }
         line += cell("Omitted", numTableSpan);
         // line += cell(text, numTableSpan);
@@ -249,7 +256,7 @@ DEV_MODE
                 $("#context").val(parsed["Context"]);
                 $("#quantity").val(parsed["Quantity"]["phrase"]);
                 if (topResults.length == 0) {
-                    $("#data").html(encode(1, "No data", "No data", "No data", "No data", null, "No data", "No data", "No data"));
+                    $("#data").html(encode(null, 1, "No data", "No data", "No data", "No data", null, "No data", "No data", "No data"));
                 } else {
                     var str = "";
                     for (var i = 0; i < topResults.length; ++i) {
@@ -258,15 +265,15 @@ DEV_MODE
                             ++j;
                         }
                         var instance = topResults[i];
-                        str += encode(j - i + 1, i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance, instance["pageContent"], instance["source"], i);
+                        str += encode(topResults, j - i + 1, i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance, instance["pageContent"], instance["source"], i);
                         for (var k = i + 1; k <= j; ++k) {
                             var instance = topResults[k];
-                            str += encode(0, k + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance, instance["pageContent"], instance["source"], k);
+                            str += encode(topResults, 0, k + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance, instance["pageContent"], instance["source"], k);
                         }
                         i = j;
                     }
                     if (data["numResults"] > topResults.length)
-                        str += encode(1, "", "", "More " + (data["numResults"] - topResults.length) + " results", "", null, "", "", "");
+                        str += encode(null, 1, "", "", "More " + (data["numResults"] - topResults.length) + " results", "", null, "", "", "");
                     $("#data").html(str);
                     $("#submit").removeAttr("hidden");
                 }
