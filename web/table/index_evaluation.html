@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Qsearch</title>
+    <link rel="stylesheet" href="fontawesome_5.10.1/css/all.css" crossorigin="anonymous">
+
+</head>
+<link href="css/bootstrap_4.0.0.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="js/bootstrap_4.0.0.min.js"></script>
+<script src="js/jquery_3.2.1.min.js"></script>
+
+<div id="template-check-form" hidden>
+    <label class="radio-inline text-success font-weight-bold">
+        <input type="radio" name="verdict-template" value="true">True
+    </label>
+    <label class="radio-inline text-danger font-weight-bold">
+        <input type="radio" name="verdict-template" value="false">False
+    </label>
+</div>
+
+<body>
+DEV_MODE &nbsp;|&nbsp; <label id="eval-domain"></label> &nbsp;|&nbsp; <label id="model"></label> &nbsp;|&nbsp; <label
+        id="evaluator"></label>
+<div class="container">
+    <div class="row">
+        <div class="col-10 offset-1">
+            <i class="glyphicon glyphicon-refresh"></i>
+            <div class="input-group">
+                <button id="change-mode" class="btn"><i class="fas fa-sync-alt"></i></button>
+                <input hidden type="text" class="form-control" placeholder="type constraint" id="type"
+                       value="electric cars">
+                <input hidden type="text" class="form-control" placeholder="context constraint" id="context"
+                       value="range">
+                <input hidden type="text" class="form-control" placeholder="quantity constraint" id="quantity"
+                       value="more than 50 km">
+                <input type="text" class="form-control" placeholder="what do you want to search for?" id="full"
+                       value="electric cars with range more than 50 km">
+                <span class="input-group-btn"><input class="btn btn-success" type="submit" value="Search"
+                                                     id="search"></span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="input-group-btn"><input class="btn btn-primary" type="submit" value="Next"
+                                                     id="next"></span>
+                <div id="mode-full" value=1></div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="container col-xs-12 col-sm-12 col-md-11 col-lg-11">
+    <div id="parsed"></div>
+</div>
+<div class="container col-xs-12 col-sm-12 col-md-10 col-lg-10">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Score</th>
+            <th scope="col">Entity</th>
+            <!--<th scope="col">Quantity</th>-->
+            <th scope="col">Sentence</th>
+            <th scope="col">Source</th>
+            <th scope="col">Verdict</th>
+        </tr>
+        </thead>
+        <tbody id="data">
+        </tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <!--<td></td>-->
+            <td></td>
+            <td id="submit-status"></td>
+            <td><input hidden class="btn btn-normal" type="submit" value="Submit" id="submit"></td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    var evaluation_data = null;
+    var done = 0;
+
+    function setDone() {
+        $("#next").attr("value", String(done) + "/" + String(evaluation_data.length) + " Next");
+    }
+
+    $.ajax({
+        type: "GET",
+        url: "/info/",
+        contentType: 'application/json; charset=utf-8',
+        dataType: "json",
+        success: function (data) {
+            evaluation_data = data["data"];
+            $("#eval-domain").html(data["domain"]);
+            $("#model").html(data["model"]);
+            $("#evaluator").html(data["evaluator"]);
+            setDone();
+        },
+        error: function () {
+            alert("An error occurred.");
+        }
+    });
+
+    var global_data = null;
+
+    function createCheckForm(id) {
+        var data = $("#template-check-form").html();
+        data = data.split("verdict-template").join("verdict-" + String(id));
+        return data;
+    }
+
+    var auto = 0;
+    $("#next").click(function () {
+        if (done == evaluation_data.length) {
+            alert("Done!");
+            return;
+        }
+        var current_data = evaluation_data[done];
+        ++done;
+
+        $("#type").attr("value", current_data["type"]);
+        $("#context").attr("value", current_data["context"]);
+        $("#quantity").attr("value", current_data["quantity"]);
+        $("#full").attr("value", current_data["full"]);
+
+        if ($("#mode-full").attr("value") == 1) {
+            $("#change-mode").click();
+        }
+        auto = 1;
+        $("#search").click();
+    });
+
+    $("#change-mode").click(function () {
+        var currentMode = $("#mode-full").attr("value");
+        if (currentMode == 0) {
+            $("#type").attr("hidden", "");
+            $("#context").attr("hidden", "");
+            $("#quantity").attr("hidden", "");
+            $("#full").removeAttr("hidden");
+        } else {
+            $("#type").removeAttr("hidden");
+            $("#context").removeAttr("hidden");
+            $("#quantity").removeAttr("hidden");
+            $("#full").attr("hidden", "");
+        }
+        $("#mode-full").attr("value", 1 - currentMode);
+    });
+
+    function escapeText(text) {
+        return $('<div>').text(text).html();
+    }
+
+    function cell(value) {
+        value = String(value);
+        if (value.startsWith("<")) {
+            value = '<a href="https://wikipedia.org/wiki/'
+                + escape(value.substring(1, value.length - 1)) + '" target="_blank">'
+                + escapeText(value)
+                + '</a>';
+        } else if (value.startsWith("STICS:Link:")) {
+            value = '<a href="' + value.substr(11) + '" target="_blank">Link</a>';
+        } else if (value.startsWith("NYT:Link:")) {
+            value = '<a href="' + value.substr(9) + '" target="_blank">Link</a>';
+        } else if (value.startsWith("NYT:docID:")) {
+            value = '<a href="' + value + '" target="_blank">DOCID</a>';
+        } else {
+            value = escapeText(value);
+        }
+        return "<td>" + value + "</td>";
+    }
+
+    function encode(id, score, entity, quantity, sentence, source, verdictId) {
+        var line = "<tr>";
+        line += cell(id) + cell(score) + cell(entity) // + cell(quantity)
+            + cell(sentence) + cell(source);
+        line += "<td>" + (verdictId == null ? "" : createCheckForm(verdictId)) + "</td>";
+        line += "</tr>";
+        return line;
+    }
+
+    function search() {
+        var params;
+        if ($("#mode-full").attr("value") == 1) {
+            params = {full: $("#full").val()};
+        } else {
+            params = {type: $("#type").val(), context: $("#context").val(), quantity: $("#quantity").val()};
+        }
+        params["model"] = $("#model").html();
+        params["alpha"] = 3.0;
+        params["lambda"] = 0.1;
+
+        $.ajax({
+            type: "GET",
+            url: "/search/",
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json",
+            beforeSend: function () {
+                $("#search").attr('disabled', 'disabled').attr("value", "Searching");
+                $("#parsed").html("");
+                $("#data").html("");
+                $("#submit").attr("hidden", "");
+                $("#submit-status").html("");
+                $("#next").attr('disabled', 'disabled');
+                global_data = null;
+            },
+            success: function (data) {
+                global_data = data;
+                if (data["verdict"] != "OK") {
+                    $("#parsed").html("");
+                    $("#data").html(data["verdict"]);
+                    return;
+                }
+                var topResults = data["topResults"];
+                var parsed = {
+                    "Type": data["typeConstraint"],
+                    "Context": data["contextConstraint"],
+                    "Quantity": data["quantityConstraint"],
+                    "Model": data["matchingModel"]
+                };
+                // $("#parsed").html(JSON.stringify(parsed));
+                $("#type").val(parsed["Type"]);
+                $("#context").val(parsed["Context"]);
+                $("#quantity").val(parsed["Quantity"]["phrase"]);
+                if (topResults.length == 0) {
+                    $("#data").html(encode("No data", "No data", "No data", "No data", "No data", "No data"));
+                } else {
+                    var str = "";
+                    for (var i = 0; i < topResults.length; ++i) {
+                        var instance = topResults[i];
+                        str += encode(i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["sentence"], instance["source"], i);
+                    }
+                    if (data["numResults"] > topResults.length)
+                        str += encode("", "", "More " + (data["numResults"] - topResults.length) + " results", "", "", "");
+                    $("#data").html(str);
+                    $("#submit").removeAttr("hidden");
+                }
+                setDone();
+            },
+            error: function () {
+                alert("An error occurred.");
+            },
+            complete: function () {
+                $("#search").removeAttr('disabled').attr("value", "Search");
+                $("#next").removeAttr('disabled');
+                if (auto == 1) {
+                    auto = 0;
+                    $("#change-mode").click();
+                }
+            }
+        });
+    }
+
+    function submit() {
+        if (global_data == null) {
+            alert("An error occured.");
+            return;
+        }
+        for (var i = 0; i < global_data["topResults"].length; ++i) {
+            var verdict = $("input[name=verdict-" + String(i) + "]:checked").val();
+            if (verdict == null) {
+                alert("Please evaluate all the results.");
+                return;
+            }
+            global_data["topResults"][i]["eval"] = verdict;
+        }
+        global_data["evalDomain"] = $("#eval-domain").html();
+
+        $.ajax({
+            type: "POST",
+            url: "/evaluate/",
+            data: JSON.stringify(global_data),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json",
+            beforeSend: function () {
+                $("#submit").attr('disabled', 'disabled').attr("value", "Submitting");
+                $("#search").attr('disabled', 'disabled');
+            },
+            success: function (data) {
+                if (data["verdict"] == "OK") {
+                    $("#submit-status").html('<p class="text-success font-weight-bold">SAVED</p>');
+                } else if (data["verdict"] == "OVERWRITE") {
+                    $("#submit-status").html('<p class="text-warning font-weight-bold">OVERWRITTEN</p>');
+                } else {
+                    $("#submit-status").html('<p class="text-danger font-weight-bold">ERROR</p>');
+                }
+            },
+            error: function () {
+                alert("An error occurred.");
+            },
+            complete: function () {
+                $("#submit").removeAttr('disabled').attr("value", "Submit");
+                $("#search").removeAttr('disabled');
+            }
+        });
+    }
+
+    $("#search").click(search);
+
+    $("#submit").click(submit);
+
+    //    $("#change-mode").click();
+</script>
+</body>
+</html>
