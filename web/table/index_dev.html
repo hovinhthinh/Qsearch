@@ -198,7 +198,13 @@ DEV_MODE
     }
 
     function encode(allInstances, numTableSpan, id, score, entity, quantity, tableHeader, instance, text, source, verdictId) {
-        var line = "<tr style='border-top:5px solid black'>";
+        var line;
+        if (numTableSpan > 0) {
+            line = "<tr style='border-top:4px solid black'>";
+        } else {
+            line = "<tr>";
+        }
+
         line += cell(id, 1) + cell(score, 1) + cell(entity, 1); // + cell(quantity)
         if (numTableSpan > 0) {
             line += encodeTable(tableHeader, instance, numTableSpan, allInstances)
