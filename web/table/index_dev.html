@@ -61,7 +61,7 @@ DEV_MODE
                 <input hidden type="text" class="form-control" placeholder="quantity constraint" id="quantity"
                        value="more than 50 km">
                 <input type="text" class="form-control" placeholder="what do you want to search for?" id="full"
-                       value="mobile phones containing battery with capacity higher than 2000 mAh">
+                       value="technology companies having at least 1 billion usd annual profit">
                 <span class="input-group-btn"><input class="btn btn-success" type="submit" value="Search"
                                                      id="search"></span>
                 <div id="mode-full" value=1></div>
@@ -168,7 +168,11 @@ DEV_MODE
         line += "</tr>";
         // data
         for (var k = 0; k < data.length; ++k) {
-            line += "<tr>";
+            if (k == instance["row"]) {
+                line += "<tr class='bg-success'>";
+            } else {
+                line += "<tr>";
+            }
             for (var i = 0; i < header.length; ++i) {
                 line += "<td>";
                 line += escapeText(data[k][i]);
