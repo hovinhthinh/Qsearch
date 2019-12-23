@@ -393,6 +393,9 @@ public class ElasticSearchTableQuery {
                         newBestQfact.quantityConvertedStr = matchQuantityConvertedStr;
 
                         // Table-specific fields
+                        newBestQfact.elasticScore = elasticScore;
+                        newBestQfact.QELinkingScore = table.quantityToEntityColumnScore[qCol];
+                        
                         newBestQfact.tableId = table._id;
                         newBestQfact.caption = table.caption;
                         newBestQfact.pageTitle = table.pageTitle;
@@ -413,8 +416,11 @@ public class ElasticSearchTableQuery {
             }
             result.second = entity2Instance.values().stream()
                     .sorted((o1, o2) -> {
-                        int compareScore = Double.compare(o1.score, o2.score);
-                        return compareScore != 0 ? compareScore : o1.tableId.compareTo(o2.tableId);
+                        int compare = Double.compare(o1.score, o2.score);
+                        if (compare != 0) return compare;
+                        compare = Double.compare(o2.elasticScore, o1.elasticScore);
+                        if (compare != 0) return compare;
+                        return o1.tableId.compareTo(o2.tableId);
                     })
                     .collect(Collectors.toCollection(ArrayList::new));
 

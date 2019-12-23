@@ -21,6 +21,8 @@ public class ResultInstance {
     public String eval;
 
     // For table
+    public double elasticScore;
+    public double QELinkingScore;
     public int row, entityColumn, quantityColumn;
     public String tableId;
     public String[] header;
