@@ -207,7 +207,11 @@ DEV_MODE
         }
 
         line += cell(id, 1) + cell(score, 1) + cell(entity, 1); // + cell(quantity)
-        line += cell(instance["QELinkingScore"].toFixed(3), 1);
+        if (tableHeader != null) {
+            line += cell(instance["QELinkingScore"].toFixed(3), 1);
+        } else {
+            line += cell("", 1);
+        }
         if (numTableSpan > 0) {
             line += encodeTable(tableHeader, instance, numTableSpan, allInstances)
         }
