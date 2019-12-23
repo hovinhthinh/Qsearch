@@ -76,7 +76,7 @@ DEV_MODE
     </div>
 </div>
 <br/>
-<div class="container col-xs-12 col-sm-12 col-md-11 col-lg-11">
+<div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div id="parsed"></div>
 </div>
 <div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -86,6 +86,7 @@ DEV_MODE
             <th scope="col">Id</th>
             <th scope="col">Score</th>
             <th scope="col">Entity</th>
+            <th scope="col">LScore</th>
             <!--<th scope="col">Quantity</th>-->
             <th scope="col">Table</th>
             <th scope="col">Text</th>
@@ -206,6 +207,7 @@ DEV_MODE
         }
 
         line += cell(id, 1) + cell(score, 1) + cell(entity, 1); // + cell(quantity)
+        line += cell(instance["QELinkingScore"], 1);
         if (numTableSpan > 0) {
             line += encodeTable(tableHeader, instance, numTableSpan, allInstances)
         }
