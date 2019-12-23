@@ -35,6 +35,11 @@ DEV_MODE
             </select>
         </div>
         <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+            <input type="text" class="form-control" placeholder="nTop" id="ntop"
+                   value="50">
+        </div>
+
+        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
             <input type="text" class="form-control" placeholder="nTable" id="ntable"
                    value="1000">
         </div>
@@ -219,7 +224,7 @@ DEV_MODE
         params["model"] = $("#model").val();
         params["alpha"] = 3.0;
         params["lambda"] = 0.1;
-        params["ntop"] = 20;
+        params["ntop"] = $("#ntop").val();
         params["ntable"] = $("#ntable").val();
         params["link_threshold"] = $("#link_threshold").val();
 
