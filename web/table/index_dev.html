@@ -36,8 +36,8 @@ DEV_MODE
         </div>
         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <select class="browser-default custom-select" id="model">
-                <option disabled selected>Ranking model</option>
-                <option value="EMBEDDING">EMBEDDING</option>
+                <option disabled>Ranking model</option>
+                <option value selected="EMBEDDING">EMBEDDING</option>
                 <option value="KL">KULLBACK_LEIBLER</option>
             </select>
         </div>
@@ -52,7 +52,7 @@ DEV_MODE
                 <input hidden type="text" class="form-control" placeholder="quantity constraint" id="quantity"
                        value="more than 50 km">
                 <input type="text" class="form-control" placeholder="what do you want to search for?" id="full"
-                       value="electric cars with range more than 50 km">
+                       value="mobile phones containing battery with capacity higher than 2000 mAh">
                 <span class="input-group-btn"><input class="btn btn-success" type="submit" value="Search"
                                                      id="search"></span>
                 <div id="mode-full" value=1></div>
@@ -120,7 +120,7 @@ DEV_MODE
         return $('<div>').text(text).html();
     }
 
-    function cell(value) {
+    function cell(value, numTableSpan) {
         value = String(value);
         if (value.startsWith("<")) {
             value = '<a href="https://wikipedia.org/wiki/'
@@ -132,14 +132,19 @@ DEV_MODE
         } else {
             value = escapeText(value);
         }
-        return "<td>" + value + "</td>";
+        if (numTableSpan > 0) {
+            return "<td rowspan='" + numTableSpan + "'>" + value + "</td>";
+        } else {
+            return "";
+        }
+
     }
 
-    function encodeTable(header, data) {
+    function encodeTable(header, data, numTableSpan) {
         if (header == null) {
             return "<td>" + escapeText(data) + "</td>";
         }
-        var line = "<td><table class=\"table table-sm\">";
+        var line = "<td rowspan='" + numTableSpan + "'><table class=\"table table-sm\">";
 
         // header
         line += "<tr>";
@@ -163,10 +168,13 @@ DEV_MODE
         return line;
     }
 
-    function encode(id, score, entity, quantity, tableHeader, tableData, source, verdictId) {
-        var line = "<tr>";
-        line += cell(id) + cell(score) + cell(entity) // + cell(quantity)
-            + encodeTable(tableHeader, tableData) + cell(source);
+    function encode(numTableSpan, id, score, entity, quantity, tableHeader, tableData, source, verdictId) {
+        var line = "<tr style='height: fit-content'>";
+        line += cell(id, 1) + cell(score, 1) + cell(entity, 1); // + cell(quantity)
+        if (numTableSpan > 0) {
+            line += encodeTable(tableHeader, tableData, numTableSpan)
+        }
+        line += cell(source, numTableSpan);
         line += "<td>" + (verdictId == null ? "" : createCheckForm(verdictId)) + "</td>";
         line += "</tr>";
         return line;
@@ -221,15 +229,24 @@ DEV_MODE
                 $("#context").val(parsed["Context"]);
                 $("#quantity").val(parsed["Quantity"]["phrase"]);
                 if (topResults.length == 0) {
-                    $("#data").html(encode("No data", "No data", "No data", "No data", null, "No data", "No data"));
+                    $("#data").html(encode(1, "No data", "No data", "No data", "No data", null, "No data", "No data"));
                 } else {
                     var str = "";
                     for (var i = 0; i < topResults.length; ++i) {
+                        var j = i;
+                        while (j < topResults.length - 1 && topResults[j]["tableId"] == topResults[j + 1]["tableId"]) {
+                            ++j;
+                        }
                         var instance = topResults[i];
-                        str += encode(i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance["data"], instance["source"], i);
+                        str += encode(j - i + 1, i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance["data"], instance["source"], i);
+                        for (var k = i + 1; k <= j; ++k) {
+                            var instance = topResults[k];
+                            str += encode(0, k + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"], instance["header"], instance["data"], instance["source"], k);
+                        }
+                        i = j;
                     }
                     if (data["numResults"] > topResults.length)
-                        str += encode("", "", "More " + (data["numResults"] - topResults.length) + " results", "", null, "", "");
+                        str += encode(1, "", "", "More " + (data["numResults"] - topResults.length) + " results", "", null, "", "");
                     $("#data").html(str);
                     $("#submit").removeAttr("hidden");
                 }
