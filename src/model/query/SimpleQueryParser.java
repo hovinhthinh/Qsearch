@@ -187,7 +187,7 @@ public class SimpleQueryParser {
     }
 
     public synchronized static Triple<String, String, String> parse(String rawQuery) {
-        return parse(rawQuery, false);
+        return parse(rawQuery, true);
     }
 
     public static void main(String[] args) {
