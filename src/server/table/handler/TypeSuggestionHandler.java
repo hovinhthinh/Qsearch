@@ -223,6 +223,6 @@ public class TypeSuggestionHandler extends AbstractHandler {
 
     public static void main(String[] args) {
 //        analyzeAndSaveToFile();
-//        System.out.println(new Gson().toJson(TypeSuggestionHandler.suggest("car ", 7)));
+        System.out.println(new Gson().toJson(TypeSuggestionHandler.suggest("car ", 7)));
     }
 }
