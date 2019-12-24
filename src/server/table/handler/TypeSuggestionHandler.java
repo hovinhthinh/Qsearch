@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class TypeSuggestionHandler extends AbstractHandler {
     public static final Logger LOGGER = Logger.getLogger(TypeSuggestionHandler.class.getName());
@@ -83,7 +84,7 @@ public class TypeSuggestionHandler extends AbstractHandler {
                     "  \"_source\": [\n" +
                     "    \"parsedJson\"\n" +
                     "  ],\n" +
-                    "  \"size\": 1000,\n" +
+                    "  \"size\": 8000,\n" +
                     "  \"query\": {\n" +
                     "    \"bool\": {\n" +
                     "      \"must\": [\n" +
@@ -141,17 +142,11 @@ public class TypeSuggestionHandler extends AbstractHandler {
             }
         }
 
-        ArrayList<Pair<String, Integer>> type2freq = new ArrayList<>();
-        for (Map.Entry<String, Integer> e : specificTypeStats.entrySet()) {
-            type2freq.add(new Pair(e.getKey(), e.getValue()));
-        }
-        Collections.sort(type2freq, (a, b) -> {
-            return a.first.compareTo(b.first);
-        });
-
         PrintWriter out = FileUtils.getPrintWriter("./data/type_stics+nyt.gz", "UTF-8");
-        for (Pair<String, Integer> p : type2freq) {
-            out.println(p.first + "\t" + p.second);
+        for (Map.Entry<String, Integer> p : specificTypeStats.entrySet().stream()
+                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
+                .collect(Collectors.toList())) {
+            out.println(p.getKey() + "\t" + p.getValue());
         }
         out.close();
     }
@@ -163,6 +158,7 @@ public class TypeSuggestionHandler extends AbstractHandler {
             if (freq >= nEntityThreshold) {
                 typeToFreq.add(new Pair(arr[0], freq));
             }
+            Collections.sort(typeToFreq, (a, b) -> a.first.compareTo(b.first));
         }
         LOGGER.info("loading type suggestion done. total " + typeToFreq.size() + " types.");
     }
@@ -227,6 +223,6 @@ public class TypeSuggestionHandler extends AbstractHandler {
 
     public static void main(String[] args) {
 //        analyzeAndSaveToFile();
-        System.out.println(new Gson().toJson(TypeSuggestionHandler.suggest("car ", 7)));
+//        System.out.println(new Gson().toJson(TypeSuggestionHandler.suggest("car ", 7)));
     }
 }
