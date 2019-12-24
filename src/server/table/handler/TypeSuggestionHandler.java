@@ -1,7 +1,11 @@
 package server.table.handler;
 
 import com.google.gson.Gson;
+import model.table.Table;
+import model.table.link.EntityLink;
+import model.table.link.QuantityLink;
 import nlp.NLP;
+import nlp.YagoType;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
@@ -11,6 +15,7 @@ import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 import util.HTTPRequest;
 import util.Pair;
+import util.SelfMonitor;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,10 +25,9 @@ import java.io.PrintWriter;
 import java.util.*;
 import java.util.logging.Logger;
 
-@Deprecated
 public class TypeSuggestionHandler extends AbstractHandler {
     public static final Logger LOGGER = Logger.getLogger(TypeSuggestionHandler.class.getName());
-    private Gson GSON = new Gson();
+    private static Gson GSON = new Gson();
 
 
     private static ArrayList<Pair<String, Integer>> typeToFreq = new ArrayList<>();
@@ -38,19 +42,30 @@ public class TypeSuggestionHandler extends AbstractHandler {
         load(10);
     }
 
-    // Use for analyzing.
-    private static void processObject(JSONObject o, HashMap<String, Integer> specificTypeStats) {
-        HashSet<String> specificTypeSet = new HashSet<>();
+
+    // Use for analyzing
+    private static void extractEntities(JSONObject o, HashSet<String> entities) {
         try {
-            System.out.println("Processing: " + o.getString("_id"));
-            JSONArray types = o.getJSONObject("_source").getJSONArray("types");
-            for (int i = 0; i < types.length(); ++i) {
-                String t = types.getJSONObject(i).getString("value");
-                t = NLP.fastStemming(t, Morpha.noun);
-                specificTypeSet.add(t);
-            }
-            for (String type : specificTypeSet) {
-                specificTypeStats.put(type, specificTypeStats.getOrDefault(type, 0) + 1);
+            Table table = GSON.fromJson(o.getJSONObject("_source").getString("parsedJson"), Table.class);
+            // for all Qfacts
+            for (int qCol = 0; qCol < table.nColumn; ++qCol) {
+                if (!table.isNumericColumn[qCol]) {
+                    continue;
+                }
+
+                for (int row = 0; row < table.nDataRow; ++row) {
+                    QuantityLink ql = table.data[row][qCol].getRepresentativeQuantityLink();
+                    if (ql == null) {
+                        continue;
+                    }
+                    EntityLink el = table.data[row][table.quantityToEntityColumn[qCol]].getRepresentativeEntityLink();
+                    if (el == null) {
+                        continue;
+                    }
+
+                    String entity = "<" + el.target.substring(el.target.lastIndexOf(":") + 1) + ">";
+                    entities.add(entity);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,11 +74,28 @@ public class TypeSuggestionHandler extends AbstractHandler {
 
     // Use for analyzing.
     private static void analyzeAndSaveToFile() {
-        HashMap<String, Integer> specificTypeStats = new HashMap<>();
-        ArrayList<Pair<String, Integer>> type2freq = new ArrayList<>();
+        HashSet<String> entities = new HashSet<>();
+        SelfMonitor monitor = new SelfMonitor(TypeSuggestionHandler.class.getName(), -1, 5);
+        monitor.start();
         try {
             String url = ElasticSearchTableImport.PROTOCOL + "://" + ElasticSearchTableImport.ES_HOST + "/" + ElasticSearchTableImport.TABLE_INDEX + "/" + ElasticSearchTableImport.TABLE_TYPE + "/_search?scroll=15m";
-            String body = "{\"size\":1000,\"query\":{\"bool\":{\"must\":[{\"exists\":{\"field\":\"searchable\"}}]}}}";
+            String body = "{\n" +
+                    "  \"_source\": [\n" +
+                    "    \"parsedJson\"\n" +
+                    "  ],\n" +
+                    "  \"size\": 1000,\n" +
+                    "  \"query\": {\n" +
+                    "    \"bool\": {\n" +
+                    "      \"must\": [\n" +
+                    "        {\n" +
+                    "          \"exists\": {\n" +
+                    "            \"field\": \"searchable\"\n" +
+                    "          }\n" +
+                    "        }\n" +
+                    "      ]\n" +
+                    "    }\n" +
+                    "  }\n" +
+                    "}";
             String data = HTTPRequest.POST(url, body);
             if (data == null) {
                 throw new RuntimeException("cannot load type suggestion module: null data.");
@@ -71,7 +103,8 @@ public class TypeSuggestionHandler extends AbstractHandler {
             JSONObject json = new JSONObject(data);
             JSONArray arr = json.getJSONObject("hits").getJSONArray("hits");
             for (int i = 0; i < arr.length(); ++i) {
-                processObject(arr.getJSONObject(i), specificTypeStats);
+                extractEntities(arr.getJSONObject(i), entities);
+                monitor.incAndGet();
             }
             String scroll_id = json.getString("_scroll_id");
             url = ElasticSearchTableImport.PROTOCOL + "://" + ElasticSearchTableImport.ES_HOST + "/_search/scroll";
@@ -84,14 +117,31 @@ public class TypeSuggestionHandler extends AbstractHandler {
                 json = new JSONObject(data);
                 arr = json.getJSONObject("hits").getJSONArray("hits");
                 for (int i = 0; i < arr.length(); ++i) {
-                    processObject(arr.getJSONObject(i), specificTypeStats);
+                    extractEntities(arr.getJSONObject(i), entities);
+                    monitor.incAndGet();
                 }
             } while (arr.length() > 0);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("cannot load type suggestion module: unknown exception.");
         }
+        monitor.forceShutdown();
 
+        // entities to types
+        HashMap<String, Integer> specificTypeStats = new HashMap<>();
+        for (String e : entities) {
+            HashSet<String> specificTypeSet = new HashSet<>();
+            for (Pair<String, Double> p : YagoType.getTypes(e, false)) {
+                String t = p.first;
+                t = NLP.fastStemming(t, Morpha.noun);
+                specificTypeSet.add(t);
+            }
+            for (String type : specificTypeSet) {
+                specificTypeStats.put(type, specificTypeStats.getOrDefault(type, 0) + 1);
+            }
+        }
+
+        ArrayList<Pair<String, Integer>> type2freq = new ArrayList<>();
         for (Map.Entry<String, Integer> e : specificTypeStats.entrySet()) {
             type2freq.add(new Pair(e.getKey(), e.getValue()));
         }
