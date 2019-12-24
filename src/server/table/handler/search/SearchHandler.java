@@ -52,15 +52,15 @@ public class SearchHandler extends AbstractHandler {
 //        if (request.getParameter("corpus") != null) {
 //            additionalParams.put("corpus", request.getParameter("corpus")); // ANY || STICS || NYT
 //        }
-//        if (request.getParameter("model") != null) {
-//            additionalParams.put("model", request.getParameter("model")); // EMBEDDING || KL
-//        }
-//        if (request.getParameter("alpha") != null) {
-//            additionalParams.put("alpha", Float.parseFloat(request.getParameter("alpha")));
-//        }
-//        if (request.getParameter("lambda") != null) {
-//            additionalParams.put("lambda", Float.parseFloat(request.getParameter("lambda")));
-//        }
+        if (request.getParameter("model") != null) {
+            additionalParams.put("model", request.getParameter("model")); // EMBEDDING || KL
+        }
+        if (request.getParameter("alpha") != null) {
+            additionalParams.put("alpha", Float.parseFloat(request.getParameter("alpha")));
+        }
+        if (request.getParameter("lambda") != null) {
+            additionalParams.put("lambda", Float.parseFloat(request.getParameter("lambda")));
+        }
 
         String ntop = request.getParameter("ntop");
         int nResult = ntop != null ? Integer.parseInt(ntop) : nTopResult;
