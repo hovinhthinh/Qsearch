@@ -158,8 +158,8 @@ public class TypeSuggestionHandler extends AbstractHandler {
             if (freq >= nEntityThreshold) {
                 typeToFreq.add(new Pair(arr[0], freq));
             }
-            Collections.sort(typeToFreq, (a, b) -> a.first.compareTo(b.first));
         }
+        Collections.sort(typeToFreq, (a, b) -> a.first.compareTo(b.first));
         LOGGER.info("loading type suggestion done. total " + typeToFreq.size() + " types.");
     }
 
