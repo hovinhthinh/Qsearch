@@ -10,6 +10,7 @@ import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import server.table.handler.TypeSuggestionHandler;
 import server.table.handler.search.SearchHandler;
 
 public class SearchServer {
@@ -41,9 +42,9 @@ public class SearchServer {
         searchHandler.setContextPath(SEARCH_PATH);
         searchHandler.setHandler(new SearchHandler(dev ? 10 : 20));
 
-//        ContextHandler typeSuggestionHandler = new ContextHandler();
-//        typeSuggestionHandler.setContextPath(TYPE_SUGGESTION_PATH);
-//        typeSuggestionHandler.setHandler(new TypeSuggestionHandler(10));
+        ContextHandler typeSuggestionHandler = new ContextHandler();
+        typeSuggestionHandler.setContextPath(TYPE_SUGGESTION_PATH);
+        typeSuggestionHandler.setHandler(new TypeSuggestionHandler(10));
 
         HandlerList handlers = new HandlerList();
         if (!dev) {
@@ -53,7 +54,7 @@ public class SearchServer {
 //            evaluateHandler.setContextPath(EVALUATE_PATH);
 //            evaluateHandler.setHandler(new EvaluateHandler("./exp_2/"));
 //            handlers.setHandlers(new Handler[]{resourceHandler, searchHandler, evaluateHandler, new DefaultHandler()});
-            handlers.setHandlers(new Handler[]{resourceHandler, searchHandler, new DefaultHandler()});
+            handlers.setHandlers(new Handler[]{resourceHandler, searchHandler, typeSuggestionHandler, new DefaultHandler()});
         }
 
         server.setHandler(handlers);
