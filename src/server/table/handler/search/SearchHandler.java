@@ -123,6 +123,8 @@ public class SearchHandler extends AbstractHandler {
                     typeConstraint = parsed.first;
                     contextConstraint = parsed.second;
                     quantityConstraint = parsed.third;
+                    LOGGER.info("Parsed query: {Type: \"" + typeConstraint + "\"; Context: \"" + contextConstraint +
+                            "\"; Quantity: \"" + quantityConstraint + "\"}");
                 }
             }
             if (response.verdict == null) {
