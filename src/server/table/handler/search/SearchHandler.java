@@ -105,6 +105,10 @@ public class SearchHandler extends AbstractHandler {
         }
         SearchResult response = new SearchResult();
         try {
+            String explicitMatchingModel = additionalParameters == null ? null : (String) additionalParameters.get("model");
+            if (explicitMatchingModel != null) {
+                model = explicitMatchingModel;
+            }
             ContextMatcher matcher;
             if (model != null && model.equals(KL_MODEL_STRING)) {
                 if (KULLBACK_LEIBLER_MATCHER == null) {
