@@ -31,14 +31,14 @@ public class TaggingPipeline {
                 new TablePrefilteringNode(),
                 new TimeTaggingNode(),
                 new QuantityTaggingNode(),
-                new PriorBasedEntityTaggingNode(),
-                new ColumnTypeTaggingNode()
+                new PriorBasedEntityTaggingNode()
         );
     }
 
     // Just the linking pipeline.
     public static TaggingPipeline getColumnLinkingPipeline(ScoringClientInterface client) {
         return new TaggingPipeline(
+                new ColumnTypeTaggingNode(),
                 new DeepColumnScoringNode(DeepColumnScoringNode.JOINT_INFERENCE, client),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
