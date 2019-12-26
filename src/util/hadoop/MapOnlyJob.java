@@ -64,7 +64,7 @@ public class MapOnlyJob extends Configured implements Tool {
         return 0;
     }
 
-    public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, NullWritable> {
+    public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, LongWritable, Text> {
         private String2StringMap mapper;
         private Text output = new Text();
 
@@ -79,20 +79,22 @@ public class MapOnlyJob extends Configured implements Tool {
         }
 
         @Override
-        public void map(LongWritable key, Text value, OutputCollector<Text, NullWritable> outputCollector, Reporter reporter) throws IOException {
+        public void map(LongWritable key, Text value, OutputCollector<LongWritable, Text> outputCollector, Reporter reporter) throws IOException {
             String outputContent = mapper.map(value.toString());
             if (outputContent != null) {
                 output.set(outputContent);
-                outputCollector.collect(output, NullWritable.get());
+                outputCollector.collect(key, output);
             }
         }
     }
 
-    public static class CombineReduce extends MapReduceBase implements Reducer<Text, NullWritable, Text, NullWritable> {
+    public static class CombineReduce extends MapReduceBase implements Reducer<LongWritable, Text, Text, NullWritable> {
 
         @Override
-        public void reduce(Text key, Iterator<NullWritable> values, OutputCollector<Text, NullWritable> outputCollector, Reporter reporter) throws IOException {
-            outputCollector.collect(key, NullWritable.get());
+        public void reduce(LongWritable key, Iterator<Text> values, OutputCollector<Text, NullWritable> outputCollector, Reporter reporter) throws IOException {
+            while (values.hasNext()) {
+                outputCollector.collect(values.next(), NullWritable.get());
+            }
         }
     }
 }
