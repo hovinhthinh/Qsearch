@@ -1,46 +1,18 @@
 package util.hadoop;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.compress.GzipCodec;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.mapred.*;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
 
 import java.io.IOException;
 
-
-public class MapOnlyJob {
-
-    public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
-        private String2StringMap mapper;
-        private Text output = new Text();
-
-        @Override
-        protected void setup(Context context) throws IOException, InterruptedException {
-            super.setup(context);
-            try {
-                this.mapper = (String2StringMap) Class.forName(context.getConfiguration().get("MapperClass")).newInstance();
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-
-        public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            String outputContent = mapper.map(value.toString());
-            if (output != null) {
-                output.set(outputContent);
-                context.write(output, null);
-            }
-        }
-    }
+public class MapOnlyJob extends Configured implements Tool {
 
     // args <MapperClass> <Input> <Output>
     // <Input> can be a folder/files in HDFS file system
@@ -52,40 +24,50 @@ public class MapOnlyJob {
             throw new RuntimeException(e);
         }
 
-        Configuration conf = new Configuration();
+        System.exit(ToolRunner.run(new Configuration(), new MapOnlyJob(), args));
+    }
+
+    public int run(String[] args) throws Exception {
+        JobConf conf = new JobConf(getConf(), MapOnlyJob.class);
         conf.set("MapperClass", args[0]);
 
-        Job job = new Job(conf);
+        conf.setOutputKeyClass(Text.class);
+        conf.setOutputValueClass(IntWritable.class);
 
-        job.setJarByClass(MapOnlyJob.class);
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
+        conf.setMapperClass(Map.class);
+        conf.setNumReduceTasks(0);
 
-        job.setMapperClass(Map.class);
-        job.setNumReduceTasks(0);
+        conf.setInputFormat(TextInputFormat.class);
+        conf.setOutputFormat(TextOutputFormat.class);
 
-        job.setInputFormatClass(TextInputFormat.class);
-        job.setOutputFormatClass(TextOutputFormat.class);
+        FileInputFormat.setInputPaths(conf, new Path(args[1]));
+        FileOutputFormat.setOutputPath(conf, new Path(args[2]));
 
-        FileInputFormat.setInputDirRecursive(job, true);
-        FileInputFormat.addInputPath(job, new Path(args[1]));
-        FileOutputFormat.setOutputPath(job, new Path(args[2]));
+        JobClient.runJob(conf);
+        return 0;
+    }
 
-        // Everything else.
-        int dot = args[2].lastIndexOf(".");
-        String extension = dot == -1 ? null : args[2].substring(dot + 1).toLowerCase();
-        if (extension != null) {
-            switch (extension) {
-                case "gz":
-                    FileOutputFormat.setCompressOutput(job, true);
-                    FileOutputFormat.setOutputCompressorClass(job, GzipCodec.class);
-                    break;
-                // More extensions here.
-                default:
+    public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
+        private String2StringMap mapper;
+        private Text output = new Text();
+
+        @Override
+        public void configure(JobConf job) {
+            super.configure(job);
+            try {
+                this.mapper = (String2StringMap) Class.forName(job.get("MapperClass")).newInstance();
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                throw new RuntimeException(e);
             }
         }
 
-        job.waitForCompletion(true);
+        @Override
+        public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> outputCollector, Reporter reporter) throws IOException {
+            String outputContent = mapper.map(value.toString());
+            if (output != null) {
+                output.set(outputContent);
+                outputCollector.collect(output, null);
+            }
+        }
     }
-
 }
