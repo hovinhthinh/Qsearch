@@ -17,6 +17,10 @@ public class MapOnlyJob extends Configured implements Tool {
     // args <MapperClass> <Input> <Output>
     // <Input> can be a folder/files in HDFS file system
     public static void main(String[] args) throws Exception {
+        System.exit(ToolRunner.run(new Configuration(), new MapOnlyJob(), args));
+    }
+
+    public int run(String[] args) throws Exception {
         // Test mapper.
         try {
             String2StringMap testMapper = (String2StringMap) Class.forName(args[0]).newInstance();
@@ -24,10 +28,6 @@ public class MapOnlyJob extends Configured implements Tool {
             throw new RuntimeException(e);
         }
 
-        System.exit(ToolRunner.run(new Configuration(), new MapOnlyJob(), args));
-    }
-
-    public int run(String[] args) throws Exception {
         JobConf conf = new JobConf(getConf(), MapOnlyJob.class);
         conf.set("MapperClass", args[0]);
 
