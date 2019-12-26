@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import model.table.Table;
 import pipeline.*;
 import util.FileUtils;
+import util.SelfMonitor;
 
 import java.io.PrintWriter;
 
@@ -42,7 +43,10 @@ public class WIKIPEDIA_DeepTaggingPipeline {
 
         Gson gson = new Gson();
 
+        SelfMonitor m = new SelfMonitor(WIKIPEDIA_DeepTaggingPipeline.class.getName(), -1, 60);
+        m.start();
         for (String line : stream) {
+            m.incAndGet();
             Table table = WIKIPEDIA.parseFromJSON(line); // already contains Entity Tags
             if (table == null) {
                 continue;
@@ -52,6 +56,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
             }
             out.println(gson.toJson(table));
         }
+        m.forceShutdown();
         out.close();
     }
 }
