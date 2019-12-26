@@ -33,6 +33,8 @@ public class MapOnlyJob extends Configured implements Tool {
         JobConf conf = new JobConf(getConf(), MapOnlyJob.class);
         conf.set("MapperClass", args[0]);
 
+        conf.setMapOutputKeyClass(LongWritable.class);
+        conf.setMapOutputValueClass(Text.class);
         conf.setOutputKeyClass(Text.class);
         conf.setOutputValueClass(NullWritable.class);
 
