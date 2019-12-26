@@ -3,7 +3,6 @@ package util.hadoop;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
@@ -35,7 +34,7 @@ public class MapOnlyJob extends Configured implements Tool {
         conf.set("MapperClass", args[0]);
 
         conf.setOutputKeyClass(Text.class);
-        conf.setOutputValueClass(IntWritable.class);
+        conf.setOutputValueClass(NullWritable.class);
 
         conf.setMapperClass(Map.class);
 
@@ -89,11 +88,11 @@ public class MapOnlyJob extends Configured implements Tool {
         }
     }
 
-    public static class CombineReduce extends MapReduceBase implements Reducer<Text, NullWritable, Text, IntWritable> {
+    public static class CombineReduce extends MapReduceBase implements Reducer<Text, NullWritable, Text, NullWritable> {
 
         @Override
-        public void reduce(Text key, Iterator<NullWritable> values, OutputCollector<Text, IntWritable> outputCollector, Reporter reporter) throws IOException {
-            outputCollector.collect(key, null);
+        public void reduce(Text key, Iterator<NullWritable> values, OutputCollector<Text, NullWritable> outputCollector, Reporter reporter) throws IOException {
+            outputCollector.collect(key, NullWritable.get());
         }
     }
 }
