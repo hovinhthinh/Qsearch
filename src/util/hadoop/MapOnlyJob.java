@@ -5,6 +5,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.compress.GzipCodec;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -44,6 +45,13 @@ public class MapOnlyJob {
     // args <MapperClass> <Input> <Output>
     // <Input> can be a folder/files in HDFS file system
     public static void main(String[] args) throws Exception {
+        // Test mapper.
+        try {
+            String2StringMap testMapper = (String2StringMap) Class.forName(args[0]).newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         Configuration conf = new Configuration();
         conf.set("MapperClass", args[0]);
 
@@ -62,6 +70,20 @@ public class MapOnlyJob {
         FileInputFormat.setInputDirRecursive(job, true);
         FileInputFormat.addInputPath(job, new Path(args[1]));
         FileOutputFormat.setOutputPath(job, new Path(args[2]));
+
+        // Everything else.
+        int dot = args[2].lastIndexOf(".");
+        String extension = dot == -1 ? null : args[2].substring(dot + 1).toLowerCase();
+        if (extension != null) {
+            switch (extension) {
+                case "gz":
+                    FileOutputFormat.setCompressOutput(job, true);
+                    FileOutputFormat.setOutputCompressorClass(job, GzipCodec.class);
+                    break;
+                // More extensions here.
+                default:
+            }
+        }
 
         job.waitForCompletion(true);
     }
