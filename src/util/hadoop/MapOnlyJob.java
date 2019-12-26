@@ -12,7 +12,6 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 public class MapOnlyJob extends Configured implements Tool {
 
@@ -33,15 +32,14 @@ public class MapOnlyJob extends Configured implements Tool {
         JobConf conf = new JobConf(getConf(), MapOnlyJob.class);
         conf.set("MapperClass", args[0]);
 
-        conf.setMapOutputKeyClass(LongWritable.class);
-        conf.setMapOutputValueClass(Text.class);
-        conf.setOutputKeyClass(Text.class);
-        conf.setOutputValueClass(NullWritable.class);
+//        conf.setMapOutputKeyClass(LongWritable.class);
+//        conf.setMapOutputValueClass(Text.class);
+//        conf.setOutputKeyClass(Text.class);
+//        conf.setOutputValueClass(NullWritable.class);
 
         conf.setMapperClass(Map.class);
 
-        conf.setReducerClass(CombineReduce.class);
-        conf.setNumReduceTasks(1);
+        conf.setNumReduceTasks(0);
 
         conf.setInputFormat(TextInputFormat.class);
         conf.setOutputFormat(TextOutputFormat.class);
@@ -66,7 +64,7 @@ public class MapOnlyJob extends Configured implements Tool {
         return 0;
     }
 
-    public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, LongWritable, Text> {
+    public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, NullWritable> {
         private String2StringMap mapper;
         private Text output = new Text();
 
@@ -81,21 +79,11 @@ public class MapOnlyJob extends Configured implements Tool {
         }
 
         @Override
-        public void map(LongWritable key, Text value, OutputCollector<LongWritable, Text> outputCollector, Reporter reporter) throws IOException {
+        public void map(LongWritable key, Text value, OutputCollector<Text, NullWritable> outputCollector, Reporter reporter) throws IOException {
             String outputContent = mapper.map(value.toString());
             if (outputContent != null) {
                 output.set(outputContent);
-                outputCollector.collect(key, output);
-            }
-        }
-    }
-
-    public static class CombineReduce extends MapReduceBase implements Reducer<LongWritable, Text, Text, NullWritable> {
-
-        @Override
-        public void reduce(LongWritable key, Iterator<Text> values, OutputCollector<Text, NullWritable> outputCollector, Reporter reporter) throws IOException {
-            while (values.hasNext()) {
-                outputCollector.collect(values.next(), NullWritable.get());
+                outputCollector.collect(output, NullWritable.get());
             }
         }
     }
