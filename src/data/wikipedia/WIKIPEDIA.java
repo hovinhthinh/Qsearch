@@ -8,9 +8,11 @@ import nlp.YagoType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import util.Pair;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 // Read from TabEL (entity links are from original wikipedia)
 // Entity Linking and Quantity Columns are already detected.
@@ -33,6 +35,8 @@ public class WIKIPEDIA {
                 continue;
             }
             el.target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + e;
+            el.candidates = new LinkedList<>();
+            el.candidates.add(new Pair<>("<" + e + ">", -1));
             cell.entityLinks.add(el);
         }
 
