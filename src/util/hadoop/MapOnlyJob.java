@@ -6,11 +6,13 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.compress.GzipCodec;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 public class MapOnlyJob extends Configured implements Tool {
 
@@ -35,13 +37,28 @@ public class MapOnlyJob extends Configured implements Tool {
         conf.setOutputValueClass(IntWritable.class);
 
         conf.setMapperClass(Map.class);
-        conf.setNumReduceTasks(0);
+
+        conf.setReducerClass(CombineReduce.class);
+        conf.setNumReduceTasks(1);
 
         conf.setInputFormat(TextInputFormat.class);
         conf.setOutputFormat(TextOutputFormat.class);
 
         FileInputFormat.setInputPaths(conf, new Path(args[1]));
         FileOutputFormat.setOutputPath(conf, new Path(args[2]));
+
+        int dot = args[2].lastIndexOf(".");
+        String extension = dot == -1 ? null : args[2].substring(dot + 1).toLowerCase();
+        if (extension != null) {
+            switch (extension) {
+                case "gz":
+                    FileOutputFormat.setCompressOutput(conf, true);
+                    FileOutputFormat.setOutputCompressorClass(conf, GzipCodec.class);
+                    break;
+                // More extensions here.
+                default:
+            }
+        }
 
         JobClient.runJob(conf);
         return 0;
@@ -68,6 +85,14 @@ public class MapOnlyJob extends Configured implements Tool {
                 output.set(outputContent);
                 outputCollector.collect(output, null);
             }
+        }
+    }
+
+    public static class CombineReduce extends MapReduceBase implements Reducer<Text, IntWritable, Text, IntWritable> {
+
+        @Override
+        public void reduce(Text key, Iterator<IntWritable> values, OutputCollector<Text, IntWritable> outputCollector, Reporter reporter) throws IOException {
+            outputCollector.collect(key, null);
         }
     }
 }
