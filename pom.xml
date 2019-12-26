@@ -231,5 +231,13 @@
             <artifactId>openie_2.10</artifactId>
             <version>4.2.1</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-client -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
     </dependencies>
 </project>
