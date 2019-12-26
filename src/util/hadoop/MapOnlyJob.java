@@ -5,6 +5,7 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.compress.GzipCodec;
 import org.apache.hadoop.mapred.*;
@@ -64,7 +65,7 @@ public class MapOnlyJob extends Configured implements Tool {
         return 0;
     }
 
-    public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
+    public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, NullWritable> {
         private String2StringMap mapper;
         private Text output = new Text();
 
@@ -79,19 +80,19 @@ public class MapOnlyJob extends Configured implements Tool {
         }
 
         @Override
-        public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> outputCollector, Reporter reporter) throws IOException {
+        public void map(LongWritable key, Text value, OutputCollector<Text, NullWritable> outputCollector, Reporter reporter) throws IOException {
             String outputContent = mapper.map(value.toString());
-            if (output != null) {
+            if (outputContent != null) {
                 output.set(outputContent);
-                outputCollector.collect(output, null);
+                outputCollector.collect(output, NullWritable.get());
             }
         }
     }
 
-    public static class CombineReduce extends MapReduceBase implements Reducer<Text, IntWritable, Text, IntWritable> {
+    public static class CombineReduce extends MapReduceBase implements Reducer<Text, NullWritable, Text, IntWritable> {
 
         @Override
-        public void reduce(Text key, Iterator<IntWritable> values, OutputCollector<Text, IntWritable> outputCollector, Reporter reporter) throws IOException {
+        public void reduce(Text key, Iterator<NullWritable> values, OutputCollector<Text, IntWritable> outputCollector, Reporter reporter) throws IOException {
             outputCollector.collect(key, null);
         }
     }
