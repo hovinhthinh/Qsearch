@@ -11,7 +11,7 @@ import java.util.Collections;
 public class FileSplitter {
     // Args: <input> <nParts>
     // nPart should be <= 100
-    // Output files: <input>.part00.gz, <input>.part01.gz,..., <input>.part<nPart>.gz; with GZIP compression.
+    // Output files: <input>.part00.bz2, <input>.part01.bz2,..., <input>.part<nPart>.bz2; with BZ2 compression.
     //
     // or:
     // <input> <output1> <ratio1> <output2> <ratio2> ... <outputn>
@@ -21,7 +21,7 @@ public class FileSplitter {
         if (args.length == 2) {
             PrintWriter[] outs = new PrintWriter[Integer.parseInt(args[1])];
             for (int i = 0; i < outs.length; ++i) {
-                outs[i] = FileUtils.getPrintWriter(String.format("%s.part%02d.gz", args[0], i), "UTF-8");
+                outs[i] = FileUtils.getPrintWriter(String.format("%s.part%02d.bz2", args[0], i), "UTF-8");
             }
 
             if (args[0].endsWith(".tar.bz2")) { // Each entry is a file now.
