@@ -38,11 +38,6 @@
                     <descriptors>
                         <descriptor>conf/hadoop-assembly.xml</descriptor>
                     </descriptors>
-                    <archive>
-                        <manifest>
-                            <mainClass>de.mafr.hadoop.Main</mainClass>
-                        </manifest>
-                    </archive>
                 </configuration>
                 <executions>
                     <execution>
