@@ -54,6 +54,9 @@ public class FileUtils {
             case "gz":
                 compressorName = CompressorStreamFactory.GZIP;
                 break;
+            case "bz2":
+                compressorName = CompressorStreamFactory.BZIP2;
+                break;
             // More extensions here.
             default:
                 compressorName = null;
@@ -72,6 +75,9 @@ public class FileUtils {
         switch (extension) {
             case "gz":
                 compressorName = CompressorStreamFactory.GZIP;
+                break;
+            case "bz2":
+                compressorName = CompressorStreamFactory.BZIP2;
                 break;
             // More extensions here.
             default:
