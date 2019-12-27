@@ -20,7 +20,6 @@ import org.json.JSONObject;
 import storage.StreamedIterable;
 import uk.ac.susx.informatics.Morpha;
 import util.Concurrent;
-import util.Constants;
 import util.HTTPRequest;
 import util.Pair;
 import util.headword.StringUtils;
@@ -354,11 +353,14 @@ public class ElasticSearchTableQuery {
 
                         // use explicit matcher if given.
                         double dist = explicitMatcher != null ? explicitMatcher.match(queryContextTerms, X) : matcher.match(queryContextTerms, X);
+                        if (Double.isNaN(dist)) {
+                            continue;
+                        }
                         // TODO: combine with elasticScore
 
                         // Check with candidate
                         ResultInstance currentQfact = entity2Instance.get(entity);
-                        if (dist > Constants.MAX_DOUBLE || (currentQfact != null && currentQfact.score <= dist)) {
+                        if (currentQfact != null && currentQfact.score <= dist) {
                             continue;
                         }
 
