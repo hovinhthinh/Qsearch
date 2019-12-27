@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import storage.StreamedIterable;
 import uk.ac.susx.informatics.Morpha;
 import util.Concurrent;
+import util.Constants;
 import util.HTTPRequest;
 import util.Pair;
 import util.headword.StringUtils;
@@ -357,7 +358,7 @@ public class ElasticSearchTableQuery {
 
                         // Check with candidate
                         ResultInstance currentQfact = entity2Instance.get(entity);
-                        if (currentQfact != null && currentQfact.score <= dist) {
+                        if (dist > Constants.MAX_DOUBLE || (currentQfact != null && currentQfact.score <= dist)) {
                             continue;
                         }
 
@@ -470,7 +471,7 @@ public class ElasticSearchTableQuery {
         int nPrinted = 0;
         for (ResultInstance o : result) {
             try {
-                if (nPrinted++ < 1) {
+                if (nPrinted++ < 20) {
                     System.out.println(String.format("%30s\t%10.3f\t%50s\t%20s\t%s",
                             o.entity,
                             o.score,
