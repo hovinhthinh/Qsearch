@@ -6,6 +6,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.compress.BZip2Codec;
 import org.apache.hadoop.io.compress.GzipCodec;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.Tool;
@@ -50,6 +51,10 @@ public class MapOnlyJob extends Configured implements Tool {
                 case "gz":
                     FileOutputFormat.setCompressOutput(conf, true);
                     FileOutputFormat.setOutputCompressorClass(conf, GzipCodec.class);
+                    break;
+                case "bz2":
+                    FileOutputFormat.setCompressOutput(conf, true);
+                    FileOutputFormat.setOutputCompressorClass(conf, BZip2Codec.class);
                     break;
                 // More extensions here.
                 default:
