@@ -12,6 +12,7 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MapOnlyJob extends Configured implements Tool {
 
@@ -30,7 +31,7 @@ public class MapOnlyJob extends Configured implements Tool {
         }
 
         JobConf conf = new JobConf(getConf(), MapOnlyJob.class);
-        
+
         conf.set("MapperClass", args[0]);
         conf.setMapperClass(Map.class);
 
@@ -75,10 +76,12 @@ public class MapOnlyJob extends Configured implements Tool {
 
         @Override
         public void map(LongWritable key, Text value, OutputCollector<Text, NullWritable> outputCollector, Reporter reporter) throws IOException {
-            String outputContent = mapper.map(value.toString());
+            List<String> outputContent = mapper.map(value.toString());
             if (outputContent != null) {
-                output.set(outputContent);
-                outputCollector.collect(output, NullWritable.get());
+                for (String content : outputContent) {
+                    output.set(content);
+                    outputCollector.collect(output, NullWritable.get());
+                }
             }
         }
     }

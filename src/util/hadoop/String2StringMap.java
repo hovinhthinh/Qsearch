@@ -1,6 +1,8 @@
 package util.hadoop;
 
+import java.util.List;
+
 public interface String2StringMap {
     // return null to discard output
-    String map(String input);
+    List<String> map(String input);
 }
