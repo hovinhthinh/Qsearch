@@ -32,19 +32,37 @@
             </plugin>
 
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.2.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
                 <configuration>
-                    <descriptors>
-                        <descriptor>conf/hadoop-assembly.xml</descriptor>
-                    </descriptors>
+                    <!-- remove security signature -->
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                    <!-- relocate classes for solving conflicts  -->
+                    <relocations>
+                        <relocation>
+                            <pattern>org.json</pattern>
+                            <shadedPattern>shaded.org.json</shadedPattern>
+                            <!-- <excludes>-->
+                            <!-- <exclude></exclude>-->
+                            <!-- </excludes>-->
+                        </relocation>
+                    </relocations>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>shade</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -258,6 +276,11 @@
             <version>2.6.0</version>
             <scope>provided</scope>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-core -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_2.10</artifactId>
+            <version>1.6.0</version>
+        </dependency>
     </dependencies>
 </project>
