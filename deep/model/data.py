@@ -48,7 +48,7 @@ def _load_yago_type():
             arr = line.strip().split('\t')
             types = json.loads(arr[1])
             yago_types_set.update(types)
-            filtered_types = [t for t in types if t not in _blocked_general_types]
+            filtered_types = [t for t in types]  # if t not in _blocked_general_types] # now not using blocked types
             if len(filtered_types) > 0:
                 _entity_to_types[arr[0]] = filtered_types
     for type in yago_types_set:
