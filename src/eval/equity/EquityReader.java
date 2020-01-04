@@ -69,6 +69,7 @@ public class EquityReader {
                         continue;
                     }
 
+                    ++nTotal;
                     if (row >= table.nDataRow) {
                         ++nErr;
 //                        System.out.println("ERROR");
@@ -76,9 +77,6 @@ public class EquityReader {
 //                        System.out.println(a.toString());
 //                        System.exit(1);
                     } // total 199 errs
-                    else {
-                        ++nTotal;
-                    }
                     // TODO
                 }
 
