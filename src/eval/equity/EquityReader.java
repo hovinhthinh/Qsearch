@@ -16,8 +16,10 @@ public class EquityReader {
 
         JSONObject o = new JSONObject(FileUtils.getContent("eval/equity/dataset/AnnotatedTables-19092016/dataset.json", "UTF-8"));
         int n = 0;
+        int nErr = 0;
         for (String k : o.keySet()) {
             JSONObject ts = o.getJSONObject(k);
+            System.out.println(ts.toString());
             JSONArray tables = ts.getJSONArray("tables");
             for (int i = 0; i < tables.length(); ++i) {
                 TruthTable table = new TruthTable();
@@ -52,10 +54,35 @@ public class EquityReader {
                     }
                 }
 
+                JSONArray annotations = t.getJSONArray("annotations");
+                for (int j = 0; j < annotations.length(); ++j) {
+                    JSONObject a = annotations.getJSONObject(j);
+                    String type = a.getString("type");
+                    if (!(type.equals("ENTITY") || type.equals("LOCATION") || type.equals("ORGANIZATION") || type.equals("PERSON"))) {
+                        continue;
+                    }
+                    int row = a.getInt("row") - 1;
+                    int col = a.getInt("col");
+
+                    if (row < 0) {
+                        continue;
+                    }
+
+                    if (row >= table.nDataRow || col >= table.nColumn) {
+                        ++nErr;
+//                        System.out.println("ERROR");
+//                        System.out.println(t.getString("content"));
+//                        System.out.println(a.toString());
+//                        System.exit(1);
+                    } // total 199 errs
+                    // TODO
+                }
+
                 out.println(table.toString());
             }
         }
 
         out.close();
+        System.out.println(nErr);
     }
 }
