@@ -17,6 +17,7 @@ public class EquityReader {
         JSONObject o = new JSONObject(FileUtils.getContent("eval/equity/dataset/AnnotatedTables-19092016/dataset.json", "UTF-8"));
         int n = 0;
         int nErr = 0;
+        int nTotal = 0;
         for (String k : o.keySet()) {
             JSONObject ts = o.getJSONObject(k);
             System.out.println(ts.toString());
@@ -68,13 +69,16 @@ public class EquityReader {
                         continue;
                     }
 
-                    if (row >= table.nDataRow || col >= table.nColumn) {
+                    if (row >= table.nDataRow) {
                         ++nErr;
 //                        System.out.println("ERROR");
 //                        System.out.println(t.getString("content"));
 //                        System.out.println(a.toString());
 //                        System.exit(1);
                     } // total 199 errs
+                    else {
+                        ++nTotal;
+                    }
                     // TODO
                 }
 
@@ -83,6 +87,6 @@ public class EquityReader {
         }
 
         out.close();
-        System.out.println(nErr);
+        System.out.println(nErr + "/" + nTotal);
     }
 }
