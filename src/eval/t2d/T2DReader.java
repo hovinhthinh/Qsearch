@@ -1,9 +1,8 @@
-package data.manual.t2d;
+package eval.t2d;
 
 import com.google.gson.Gson;
-import data.manual.TruthTable;
+import eval.TruthTable;
 import model.table.Cell;
-import model.table.Table;
 import nlp.NLP;
 import org.json.JSONArray;
 import org.json.JSONException;

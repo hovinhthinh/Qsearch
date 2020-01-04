@@ -1,4 +1,4 @@
-package data.manual;
+package eval;
 
 import com.google.gson.Gson;
 import util.FileUtils;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class TunePrecisionRecall {
     // args: <truth_tables> <from> <to> <step>
     public static void main(String[] args) {
-        args = "./manual/column_linking_ground_truth_table 0 5 0.5".split(" ");
+        args = "eval/column_linking_ground_truth_table 0 5 0.5".split(" ");
         double from = Double.parseDouble(args[1]);
         double to = Double.parseDouble(args[2]);
         double step = Double.parseDouble(args[3]);

@@ -1,9 +1,7 @@
-package data.manual.t2d;
+package eval.t2d;
 
 import com.google.gson.Gson;
-import data.manual.TruthTable;
-import data.tablem.TABLEM;
-import model.table.Table;
+import eval.TruthTable;
 import pipeline.*;
 import util.FileUtils;
 

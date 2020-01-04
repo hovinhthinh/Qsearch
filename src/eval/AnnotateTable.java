@@ -1,8 +1,7 @@
-package data.manual;
+package eval;
 
 import com.google.gson.Gson;
 import model.table.Table;
-import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import util.FileUtils;
 import util.JSchUtils;
 
@@ -18,7 +17,7 @@ public class AnnotateTable {
 
     // args: <input> <output> [ignore first n tables]
     public static void main(String[] args) throws Exception {
-        args = "/GW/D5data-11/hvthinh/TABLEM/finance.shuf.col-type-thr-0.5.out.gz ./manual/column_linking_ground_truth_table 0".split(" ");
+        args = "/GW/D5data-11/hvthinh/TABLEM/health+id.shuf.annotation.gz.shuf1k_tmp ./manual/health_column_linking_ground_truth_table 8".split(" ");
 
         PrintWriter out = FileUtils.getPrintWriter(args[1]);
         Scanner in = new Scanner(System.in);
@@ -28,14 +27,18 @@ public class AnnotateTable {
         if (toBeIgnored > 0) {
             System.out.println("=== Ignoring " + toBeIgnored + " tables ===");
         }
-        for (String line : new FileUtils.LineStream(new GzipCompressorInputStream(
+        for (String line : new FileUtils.LineStream(
+//                new GzipCompressorInputStream(
                 JSchUtils.getFileInputStreamFromServer
-                        (args[0])), StandardCharsets.UTF_8)) {
+                        (args[0])
+//        )
+                , StandardCharsets.UTF_8)) {
+            TruthTable t = TruthTable.fromTable(gson.fromJson(line, Table.class));
+
             if (toBeIgnored > 0) {
                 --toBeIgnored;
                 continue;
             }
-            TruthTable t = TruthTable.fromTable(gson.fromJson(line, Table.class));
             if (t.quantityToEntityColumn == null) {
                 t.quantityToEntityColumn = new int[t.nColumn];
                 Arrays.fill(t.quantityToEntityColumn, -1);
