@@ -10,6 +10,7 @@ import util.FileUtils;
 import java.io.PrintWriter;
 
 // TODO: Read ground truth file and run the deep model and
+@Deprecated
 public class Evaluate {
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return TaggingPipeline.getDefaultTaggingPipeline();
