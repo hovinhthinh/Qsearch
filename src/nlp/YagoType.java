@@ -10,7 +10,9 @@ import java.util.logging.Logger;
 public class YagoType {
     public static final Logger LOGGER = Logger.getLogger(YagoType.class.getName());
     private static final String YAGO_TYPE_COMPACT_PATH = "./resources/yagoTransitiveTypeCompact.tsv.gz";
+    private static final int MIN_N_ENTITY = 10;
 
+    // These types have more than 1M entities in YAGO, however some of them are good, so being excluded from the list.
     private static final HashSet<String> BLOCKED_GENERAL_TYPES = new HashSet<>(Arrays.asList(
             "owl thing",
             "physical entity",
@@ -19,19 +21,17 @@ public class YagoType {
             "yagolegalactorgeo",
             "yagolegalactor",
             "yagopermanentlylocatedentity",
-            "living thing",
-            "organism",
+//            "living thing",
+//            "organism",
             "causal agent",
-            "person",
-            "people",
-            "people associated with buildings and structures",
-            "people associated with places",
+//            "person",
+            "person associated with building and structure",
+            "person associated with place",
             "abstraction",
             "yagogeoentity",
-            "artifact",
-            "european people",
-            "objects",
-            "physical objects"
+//            "artifact",
+//            "european person",
+            "physical object"
     ));
 
     private static final HashMap<String, int[]> entity2Types;
@@ -62,15 +62,20 @@ public class YagoType {
         }
         index2Type.trimToSize();
         // Compute itf
+        int nLoadedTypes = 0;
         for (int i = 0; i < index2Type.size(); ++i) {
             Pair<String, Double> typeAndFreq = index2Type.get(i);
+            if (typeAndFreq.second < MIN_N_ENTITY) {
+                index2Type.set(i, null);
+                continue;
+            }
+            ++nLoadedTypes;
             // (Robertson version)
 //            typeAndFreq.second = Math.max(0.0001, Math.log10((entity2Types.size() - typeAndFreq.second + 0.5) / (typeAndFreq.second + 0.5)));
             // normal
             typeAndFreq.second = Math.max(0.0001, Math.log(entity2Types.size() / (typeAndFreq.second + 1.0)));
         }
-        LOGGER.info(String.format("loaded total %d types", index2Type.size()));
-
+        LOGGER.info(String.format("loaded total %d types", nLoadedTypes));
     }
 
     // return list of types and their ITF.
@@ -82,7 +87,7 @@ public class YagoType {
         List<Pair<String, Double>> types = new ArrayList<>(l.length);
         for (int i : l) {
             Pair<String, Double> t = index2Type.get(i);
-            if (!specificOnly || !BLOCKED_GENERAL_TYPES.contains(t.first)) {
+            if (t != null && (!specificOnly || !BLOCKED_GENERAL_TYPES.contains(t.first))) {
                 types.add(t);
             }
         }

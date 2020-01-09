@@ -19,15 +19,13 @@ _blocked_general_types = {
     'organism',
     'causal agent',
     'person',
-    'people',
-    'people associated with buildings and structures',
-    'people associated with places',
+    'person associated with building and structure',
+    'person associated with place',
     'abstraction',
     'yagogeoentity',
     'artifact',
-    'european people',
-    'objects',
-    'physical objects'
+    'european person',
+    'physical object'
 }
 
 # load entity types
