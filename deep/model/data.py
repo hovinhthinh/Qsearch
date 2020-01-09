@@ -15,16 +15,16 @@ _blocked_general_types = {
     'yagolegalactorgeo',
     'yagolegalactor',
     'yagopermanentlylocatedentity',
-    'living thing',
-    'organism',
+    # 'living thing',
+    # 'organism',
     'causal agent',
-    'person',
+    # 'person',
     'person associated with building and structure',
     'person associated with place',
     'abstraction',
     'yagogeoentity',
-    'artifact',
-    'european person',
+    # 'artifact',
+    # 'european person',
     'physical object'
 }
 
