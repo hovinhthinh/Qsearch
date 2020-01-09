@@ -1,7 +1,6 @@
 package tmp;
 
 import com.google.gson.Gson;
-import data.manual.TruthTable;
 import data.tablem.TABLEM;
 import data.tablem.TABLEM_DeepTaggingPipeline;
 import model.table.Table;
@@ -36,7 +35,7 @@ public class ReadTableMInteractive {
 
             Table t;
             t = gson.fromJson(line, Table.class);
-            int x = 0, y= 0;
+            int x = 0, y = 0;
             for (int i = 0; i < t.nColumn; ++i) {
                 if (t.isNumericColumn[i]) {
                     ++x;
