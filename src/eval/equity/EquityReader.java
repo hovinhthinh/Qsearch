@@ -49,11 +49,11 @@ public class EquityReader {
                 table.nDataRow = t.getInt("nrow") - 1;
 
                 String[] rows = contentMap.get(ts.getString("id")).split("\n");
-                Assert.assertTrue(rows.length >= table.nDataRow + 1);
+                Assert.assertTrue(rows.length == table.nDataRow + 1);
 
                 String[][] content = new String[rows.length][];
                 for (int j = 0; j < content.length; ++j) {
-                    content[j] = rows[j].split("\t");
+                    content[j] = rows[j].split("\t", -1);
                     Assert.assertTrue(content[j].length >= table.nColumn);
                 }
 
