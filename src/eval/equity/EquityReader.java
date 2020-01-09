@@ -54,7 +54,7 @@ public class EquityReader {
                 String[][] content = new String[rows.length][];
                 for (int j = 0; j < content.length; ++j) {
                     content[j] = rows[j].split("\t");
-                    Assert.assertTrue(content[i].length >= table.nColumn);
+                    Assert.assertTrue(content[j].length >= table.nColumn);
                 }
 
                 table.header = new Cell[table.nHeaderRow][table.nColumn];
