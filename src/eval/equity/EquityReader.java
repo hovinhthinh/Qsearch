@@ -5,22 +5,35 @@ import model.table.Cell;
 import nlp.NLP;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.Assert;
 import util.FileUtils;
+import util.db.Database;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 // read Equity and convert to TruthTable format.
 public class EquityReader {
+    public static HashMap<String, String> getContentMap() {
+        Database.openNewConnection("yibrahim");
+        ArrayList<ArrayList<String>> content = Database.select("SELECT * FROM evaluation.table_data");
+
+        HashMap<String, String> map = new HashMap<>();
+        for (ArrayList<String> a : content) {
+            map.put(a.get(3), a.get(4));
+        }
+        return map;
+    }
+
     public static void main(String[] args) {
         PrintWriter out = FileUtils.getPrintWriter("eval/equity/dataset/AnnotatedTables-19092016/dataset_ground.json", "UTF-8");
 
         JSONObject o = new JSONObject(FileUtils.getContent("eval/equity/dataset/AnnotatedTables-19092016/dataset.json", "UTF-8"));
-        int n = 0;
-        int nErr = 0;
-        int nTotal = 0;
+
+        HashMap<String, String> contentMap = getContentMap();
         for (String k : o.keySet()) {
             JSONObject ts = o.getJSONObject(k);
-            System.out.println(ts.toString());
             JSONArray tables = ts.getJSONArray("tables");
             for (int i = 0; i < tables.length(); ++i) {
                 TruthTable table = new TruthTable();
@@ -31,17 +44,18 @@ public class EquityReader {
 
                 JSONObject t = tables.getJSONObject(i);
 
+                table.nColumn = t.getInt("ncol");
+                table.nHeaderRow = 1;
+                table.nDataRow = t.getInt("nrow") - 1;
 
-                String[] rows = t.getString("content").split("\n");
+                String[] rows = contentMap.get(ts.getString("id")).split("\n");
+                Assert.assertTrue(rows.length >= table.nDataRow + 1);
+
                 String[][] content = new String[rows.length][];
                 for (int j = 0; j < content.length; ++j) {
                     content[j] = rows[j].split("\t");
-                    table.nColumn = Math.max(table.nColumn, content[j].length);
+                    Assert.assertTrue(content[i].length >= table.nColumn);
                 }
-
-                table.nHeaderRow = 1;
-                table.nDataRow = rows.length - 1;
-
 
                 table.header = new Cell[table.nHeaderRow][table.nColumn];
                 table.data = new Cell[table.nDataRow][table.nColumn];
@@ -65,18 +79,6 @@ public class EquityReader {
                     int row = a.getInt("row") - 1;
                     int col = a.getInt("col");
 
-                    if (row < 0) {
-                        continue;
-                    }
-
-                    ++nTotal;
-                    if (row >= table.nDataRow) {
-                        ++nErr;
-//                        System.out.println("ERROR");
-//                        System.out.println(t.getString("content"));
-//                        System.out.println(a.toString());
-//                        System.exit(1);
-                    } // total 199 errs
                     // TODO
                 }
 
@@ -85,6 +87,5 @@ public class EquityReader {
         }
 
         out.close();
-        System.out.println(nErr + "/" + nTotal);
     }
 }
