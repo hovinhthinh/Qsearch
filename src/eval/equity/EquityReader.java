@@ -90,6 +90,8 @@ public class EquityReader {
                     link.target = target;
                     link.text = String.join(" ", NLP.tokenize(span));
 
+                    Assert.assertTrue(cell.text.contains(link.text));
+
                     cell.entityLinks.add(link);
                 }
 
