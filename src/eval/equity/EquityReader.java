@@ -2,6 +2,7 @@ package eval.equity;
 
 import eval.TruthTable;
 import model.table.Cell;
+import model.table.link.EntityLink;
 import nlp.NLP;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -76,10 +77,20 @@ public class EquityReader {
                     if (!(type.equals("ENTITY") || type.equals("LOCATION") || type.equals("ORGANIZATION") || type.equals("PERSON"))) {
                         continue;
                     }
-                    int row = a.getInt("row") - 1;
+                    int row = a.getInt("row");
                     int col = a.getInt("col");
+                    String span = content[row][col].substring(a.getInt("start"), a.getInt("end"));
+                    String target = a.getString("sem_target");
 
-                    // TODO
+                    Cell cell = row == 0 ? table.header[row][col] : table.data[row - 1][col];
+                    if (cell.entityLinks == null) {
+                        cell.entityLinks = new ArrayList<>();
+                    }
+                    EntityLink link = new EntityLink();
+                    link.target = target;
+                    link.text = String.join(" ", NLP.tokenize(span));
+
+                    cell.entityLinks.add(link);
                 }
 
                 out.println(table.toString());
