@@ -1,9 +1,9 @@
-embedding_size = 300  # 50, 100, 200, 300
+embedding_size = 100  # 50, 100, 200, 300
 
 feed_forward_dim_medium = 128
 feed_forward_dim_small = 64
 
-batch_size = 64
+batch_size = 128
 learning_rate = 0.001
 
 max_num_epoches = 100
