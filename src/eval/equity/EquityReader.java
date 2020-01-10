@@ -9,11 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import util.FileUtils;
+import util.Pair;
 import util.db.Database;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 // read Equity and convert to TruthTable format.
 public class EquityReader {
@@ -89,7 +91,10 @@ public class EquityReader {
                         cell.entityLinks = new ArrayList<>();
                     }
                     EntityLink link = new EntityLink();
-                    link.target = target;
+                    link.target = "YAGO:" + target;
+                    link.candidates = new LinkedList<>();
+                    link.candidates.add(new Pair<>("<" + target + ">", -1));
+
                     link.text = String.join(" ", NLP.tokenize(span));
 
                     // fix
