@@ -3,6 +3,7 @@ package eval.equity;
 import com.google.gson.Gson;
 import eval.TruthTable;
 import model.table.Cell;
+import model.table.Table;
 import model.table.link.EntityLink;
 import nlp.NLP;
 import org.json.JSONArray;
@@ -41,7 +42,7 @@ public class EquityReader {
             JSONObject ts = o.getJSONObject(k);
             JSONArray tables = ts.getJSONArray("tables");
             for (int i = 0; i < tables.length(); ++i) {
-                TruthTable table = new TruthTable();
+                Table table = new Table();
                 table.surroundingText = ts.getString("content");
                 table.source = ts.getString("url");
                 table.pageTitle = ts.getString("title");
@@ -112,7 +113,16 @@ public class EquityReader {
                     cell.entityLinks.add(link);
                 }
 
-                out.println(gson.toJson(table));
+                TruthTable truthTable = TruthTable.fromTable(table);
+                for (int c = 0; c < table.nColumn; ++c) {
+                    for (int r = 0; r < table.nDataRow; ++r) {
+                        EntityLink el = truthTable.data[r][c].getRepresentativeEntityLink();
+                        if (el != null) {
+                            truthTable.bodyEntityTarget[r][c] = el.candidates.get(0).first;
+                        }
+                    }
+                }
+                out.println(gson.toJson(truthTable));
             }
         }
 
