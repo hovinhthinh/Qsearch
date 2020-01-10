@@ -102,6 +102,12 @@ public class EquityReader {
                         link.text = "AT&T";
                     }
                     Assert.assertTrue(cell.text.contains(link.text));
+                    int begin = cell.text.indexOf(link.text);
+                    int end = begin + link.text.length();
+                    while (end < cell.text.length() && cell.text.indexOf(end) != ' ') {
+                        ++end;
+                    }
+                    link.text = cell.text.substring(begin, end);
 
                     cell.entityLinks.add(link);
                 }
