@@ -67,9 +67,11 @@ public class EquityReader {
 
                 for (int c = 0; c < table.nColumn; ++c) {
                     table.header[0][c] = new Cell();
+                    table.header[0][c].entityLinks = new ArrayList<>();
                     table.header[0][c].text = content[0].length > c ? String.join(" ", NLP.tokenize(content[0][c])) : "";
                     for (int r = 0; r < table.nDataRow; ++r) {
                         table.data[r][c] = new Cell();
+                        table.data[r][c].entityLinks = new ArrayList<>();
                         table.data[r][c].text = content[r + 1].length > c ? String.join(" ", NLP.tokenize(content[r + 1][c])) : "";
                     }
                 }
@@ -87,9 +89,7 @@ public class EquityReader {
                     String target = a.getString("sem_target");
 
                     Cell cell = row == 0 ? table.header[row][col] : table.data[row - 1][col];
-                    if (cell.entityLinks == null) {
-                        cell.entityLinks = new ArrayList<>();
-                    }
+
                     EntityLink link = new EntityLink();
                     link.target = "YAGO:" + target;
                     link.candidates = new LinkedList<>();
