@@ -1,5 +1,6 @@
 package eval.equity;
 
+import com.google.gson.Gson;
 import eval.TruthTable;
 import model.table.Cell;
 import model.table.link.EntityLink;
@@ -29,8 +30,9 @@ public class EquityReader {
 
     public static void main(String[] args) {
         PrintWriter out = FileUtils.getPrintWriter("eval/equity/dataset/AnnotatedTables-19092016/dataset_ground.json", "UTF-8");
+        Gson gson = new Gson();
 
-        JSONObject o = new JSONObject(FileUtils.getContent("eval/equity/dataset/AnnotatedTables-19092016/dataset.json", "UTF-8"));
+        JSONObject o = new JSONObject(FileUtils.getContent("eval/equity/dataset/AnnotatedTables-19092016/dataset_original_yibrahim.json", "UTF-8"));
 
         HashMap<String, String> contentMap = getContentMap();
         for (String k : o.keySet()) {
@@ -99,7 +101,7 @@ public class EquityReader {
                     cell.entityLinks.add(link);
                 }
 
-                out.println(table.toString());
+                out.println(gson.toJson(table));
             }
         }
 
