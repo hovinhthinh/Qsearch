@@ -15,7 +15,7 @@ public class TruthTable extends Table {
 
     public int[] quantityToEntityColumnGroundTruth; // -1 means there is no connection.
 
-    public String[][] bodyEntityTarget;
+    public String[][] bodyEntityTarget; // e.g. <Cristiano_Ronaldo> (with < and > )
 
     public static TruthTable fromTable(Table t) {
         TruthTable truth = GSON.fromJson(GSON.toJson(t), TruthTable.class);
