@@ -32,9 +32,9 @@ public class EvaluateEquity {
             TruthTable table = gson.fromJson(line, TruthTable.class);
             System.out.println(table.getTableContentPrintable(false, true, false));
             System.out.println(table.getTableContentPrintable(true, true, false));
-            pipeline.tag(table);
 
             double precPrior = table.getPrecisionFromFirstCandidate();
+            pipeline.tag(table);
             double prec = table.getPrecisionFromTarget();
             if (prec == -1 || precPrior == -1) {
                 ++nBadTable;
