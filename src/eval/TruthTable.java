@@ -28,6 +28,7 @@ public class TruthTable extends Table {
         return truth;
     }
 
+    // return -1 means there is no mention.
     public double getPrecisionFromFirstCandidate() {
         int total = 0;
         int nTrue = 0;
@@ -51,6 +52,7 @@ public class TruthTable extends Table {
         return ((double) nTrue) / total;
     }
 
+    // return -1 means there is no mention.
     public double getPrecisionFromTarget() {
         int total = 0;
         int nTrue = 0;
@@ -68,6 +70,9 @@ public class TruthTable extends Table {
                     ++nTrue;
                 }
             }
+        }
+        if (total == 0) {
+            return -1;
         }
         return ((double) nTrue) / total;
     }
