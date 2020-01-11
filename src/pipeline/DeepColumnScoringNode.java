@@ -6,6 +6,7 @@ import nlp.YagoType;
 import org.apache.commons.collections4.map.LRUMap;
 import pipeline.deep.DeepScoringClient;
 import pipeline.deep.ScoringClientInterface;
+import util.Constants;
 import util.Pair;
 
 import java.util.*;
@@ -23,7 +24,7 @@ public class DeepColumnScoringNode implements TaggingNode {
     public static final int TYPE_SET_INFERENCE = 1;
 
     public static final int JOINT_INFERENCE = 2;
-    public static final double JOINT_HOMOGENEITY_WEIGHT = 30; // 30 for gini, 1 for entropy
+    public static final double DEFAULT_JOINT_HOMOGENEITY_WEIGHT = 30; // 30 for gini, 1 for entropy; Constants.MAX_DOUBLE (set the connectivity to 0)
     public static final int JOINT_MAX_NUM_ITERS = 100;
     public static final int JOINT_MAX_LOCAL_CANDIDATES = 10; // set to -1 to disable this threshold. (-1 means INF)
     public static final int JOINT_MAX_NUM_COLUMN_LINKING = 100; // to prune too large tables. (-1 means INF)
@@ -31,10 +32,16 @@ public class DeepColumnScoringNode implements TaggingNode {
     private int inferenceMode;
     private ScoringClientInterface scoringClient;
     private LRUMap<String, Double> cache = new LRUMap<>(CACHE_SIZE);
+    private double homogeneityWeight;
 
-    public DeepColumnScoringNode(int inferenceMode, ScoringClientInterface scoringClient) {
+    public DeepColumnScoringNode(int inferenceMode, ScoringClientInterface scoringClient, double homogeneityWeight) {
         this.inferenceMode = inferenceMode;
         this.scoringClient = scoringClient;
+        this.homogeneityWeight = homogeneityWeight;
+    }
+
+    public DeepColumnScoringNode(int inferenceMode, ScoringClientInterface scoringClient) {
+        this(inferenceMode, scoringClient, DEFAULT_JOINT_HOMOGENEITY_WEIGHT);
     }
 
     public DeepColumnScoringNode(int inferenceMode) {
@@ -226,21 +233,25 @@ public class DeepColumnScoringNode implements TaggingNode {
                 // homogeneity
                 homogeneity += (currentHomogeneityScore[i] = columnTypeSet[i].getHScore());
             }
-            for (int i : numericColumnIndexes) {
-                // connectivity
-                ColumnType ct = columnTypeSet[currentColumnLinking[i]];
-                // (1) combined quantity header
-                double lScore = ct.getLScore(table.getCombinedHeader(i));
-                // (2) last quantity header
-                if (table.nHeaderRow > 1) {
-                    lScore = Math.max(lScore, ct.getLScore(table.header[table.nHeaderRow - 1][i].text));
-                }
-                connectivity += (currentColumnLinkingScore[i] = lScore);
-            }
             homogeneity /= entityColumnIndexes.length;
-            connectivity /= numericColumnIndexes.length;
+
+            if (homogeneityWeight != Constants.MAX_DOUBLE) { // only compute if weight for connectivity != 0
+                for (int i : numericColumnIndexes) {
+                    // connectivity
+                    ColumnType ct = columnTypeSet[currentColumnLinking[i]];
+                    // (1) combined quantity header
+                    double lScore = ct.getLScore(table.getCombinedHeader(i));
+                    // (2) last quantity header
+                    if (table.nHeaderRow > 1) {
+                        lScore = Math.max(lScore, ct.getLScore(table.header[table.nHeaderRow - 1][i].text));
+                    }
+                    connectivity += (currentColumnLinkingScore[i] = lScore);
+                }
+                connectivity /= numericColumnIndexes.length;
+            }
+
             // joint score
-            currentJointScore = connectivity + JOINT_HOMOGENEITY_WEIGHT * homogeneity;
+            currentJointScore = homogeneityWeight != Constants.MAX_DOUBLE ? connectivity + homogeneityWeight * homogeneity : homogeneity;
         }
 
         public double newScoreOfLocalAssignment(int row, int col, String candidate) {
@@ -263,29 +274,32 @@ public class DeepColumnScoringNode implements TaggingNode {
                     homogeneity += columnTypeSet[i].getHScore();
                 }
             }
-            for (int i : numericColumnIndexes) {
-                // connectivity
-                if (currentColumnLinking[i] != col) {
-                    connectivity += currentColumnLinkingScore[i];
-                } else {
-                    ColumnType ct = columnTypeSet[currentColumnLinking[i]];
-                    // (1) combined quantity header
-                    double lScore = ct.getLScore(table.getCombinedHeader(i));
-                    // (2) last quantity header
-                    if (table.nHeaderRow > 1) {
-                        lScore = Math.max(lScore, ct.getLScore(table.header[table.nHeaderRow - 1][i].text));
-                    }
-                    connectivity += lScore;
-                }
-            }
             homogeneity /= entityColumnIndexes.length;
-            connectivity /= numericColumnIndexes.length;
+
+            if (homogeneityWeight != Constants.MAX_DOUBLE) { // only compute if weight for connectivity != 0
+                for (int i : numericColumnIndexes) {
+                    // connectivity
+                    if (currentColumnLinking[i] != col) {
+                        connectivity += currentColumnLinkingScore[i];
+                    } else {
+                        ColumnType ct = columnTypeSet[currentColumnLinking[i]];
+                        // (1) combined quantity header
+                        double lScore = ct.getLScore(table.getCombinedHeader(i));
+                        // (2) last quantity header
+                        if (table.nHeaderRow > 1) {
+                            lScore = Math.max(lScore, ct.getLScore(table.header[table.nHeaderRow - 1][i].text));
+                        }
+                        connectivity += lScore;
+                    }
+                }
+                connectivity /= numericColumnIndexes.length;
+            }
 
             // restore old candidate
             currentEntityAssignment[row][col] = oldCandidate;
 
             // joint score
-            return connectivity + JOINT_HOMOGENEITY_WEIGHT * homogeneity;
+            return homogeneityWeight != Constants.MAX_DOUBLE ? connectivity + homogeneityWeight * homogeneity : homogeneity;
         }
     }
 
