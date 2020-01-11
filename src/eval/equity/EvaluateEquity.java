@@ -34,11 +34,13 @@ public class EvaluateEquity {
             System.out.println(table.getTableContentPrintable(true, true, false));
             pipeline.tag(table);
 
+            double precPrior = table.getPrecisionFromFirstCandidate();
             double prec = table.getPrecisionFromTarget();
-            if (prec == -1) {
+            if (prec == -1 || precPrior == -1) {
                 ++nBadTable;
                 continue;
             }
+            System.out.println(String.format("precPrior/precHomogeneity: %.2f/%.2f", precPrior * 100, prec * 100));
             ++nGoodTable;
             microAvg += prec;
         }
