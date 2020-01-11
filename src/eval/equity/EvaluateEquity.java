@@ -41,6 +41,7 @@ public class EvaluateEquity {
                 continue;
             }
             System.out.println(String.format("precPrior/precHomogeneity: %.2f/%.2f", precPrior * 100, prec * 100));
+            System.out.println("====================================================================================================");
             ++nGoodTable;
             microAvg += prec;
         }
