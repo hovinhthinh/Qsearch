@@ -56,6 +56,7 @@ public class ProcessEquity {
                 }
             }
 
+            out.println(gson.toJson(t));
 //            System.out.println(line);
 //            System.out.println("source: " + t.source);
 //            System.out.println("caption: " + t.caption);
@@ -67,7 +68,6 @@ public class ProcessEquity {
 //            String wait = in.nextLine();
         }
         System.out.println("nGood Tables: " + nGood);
-
         out.close();
     }
 }
