@@ -35,7 +35,7 @@ public class TruthTable extends Table {
         for (int i = 0; i < bodyEntityTarget.length; ++i) {
             for (int j = 0; j < bodyEntityTarget[i].length; ++j) {
                 EntityLink el = data[i][j].getRepresentativeEntityLink();
-                if (el == null || el.candidates == null) {
+                if (el == null) {
                     continue;
                 }
                 ++total;
