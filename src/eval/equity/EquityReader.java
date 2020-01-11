@@ -114,8 +114,8 @@ public class EquityReader {
                 }
 
                 TruthTable truthTable = TruthTable.fromTable(table);
-                for (int c = 0; c < table.nColumn; ++c) {
-                    for (int r = 0; r < table.nDataRow; ++r) {
+                for (int r = 0; r < table.nDataRow; ++r) {
+                    for (int c = 0; c < table.nColumn; ++c) {
                         EntityLink el = truthTable.data[r][c].getRepresentativeEntityLink();
                         if (el != null) {
                             truthTable.bodyEntityTarget[r][c] = el.candidates.get(0).first;
