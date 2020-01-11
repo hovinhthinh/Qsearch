@@ -15,7 +15,8 @@ public class EvaluateEquity {
         return new TaggingPipeline(
                 new DeepColumnScoringNode(
                         DeepColumnScoringNode.JOINT_INFERENCE,
-                        new DeepScoringClient(true, -1),
+//                        new DeepScoringClient(true, -1),
+                        null,
                         Constants.MAX_DOUBLE),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
