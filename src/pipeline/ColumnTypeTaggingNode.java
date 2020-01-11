@@ -8,6 +8,7 @@ public class ColumnTypeTaggingNode implements TaggingNode {
 
     private double minEntityThreshold, minQuantityThreshold;
 
+    // set threshold to 0 to disable tagging.
     public ColumnTypeTaggingNode(double minEntityThreshold, double minQuantityThreshold) {
         this.minEntityThreshold = minEntityThreshold;
         this.minQuantityThreshold = minQuantityThreshold;
@@ -31,14 +32,14 @@ public class ColumnTypeTaggingNode implements TaggingNode {
                     ++nQuantity;
                 }
             }
-            if (nEntity >= minEntityThreshold * table.nDataRow - 1e-6) {
+            if (minEntityThreshold > 0 && nEntity >= minEntityThreshold * table.nDataRow - 1e-6) {
                 table.isEntityColumn[c] = true;
                 hasEntityColumn = true;
-            } else if (nQuantity >= minQuantityThreshold * table.nDataRow - 1e-6) {
+            } else if (minQuantityThreshold > 0 && nQuantity >= minQuantityThreshold * table.nDataRow - 1e-6) {
                 table.isNumericColumn[c] = true;
                 hasQuantityColumn = true;
             }
         }
-        return hasEntityColumn && hasQuantityColumn;
+        return (hasEntityColumn || minEntityThreshold == 0) && (hasQuantityColumn || minQuantityThreshold == 0);
     }
 }
