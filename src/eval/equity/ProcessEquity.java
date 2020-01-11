@@ -52,6 +52,9 @@ public class ProcessEquity {
                     EntityLink el = t.data[i][j].getRepresentativeEntityLink();
                     if (el != null) {
                         el.candidates = mention2EntityPrior.getCanditateEntitiesForMention(el.text);
+                        if (el.candidates == null) {
+                            t.data[i][j].entityLinks.clear();
+                        }
                     }
                 }
             }
