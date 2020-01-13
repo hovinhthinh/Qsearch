@@ -14,6 +14,8 @@ public class Table {
     public Cell[][] data; // row -> column
     public int nHeaderRow, nDataRow, nColumn;
 
+    public String[] majorUnitInColum; // null means dimensionless, or unavailable. (this is provided from QuantityTaggingNode)
+
     public boolean[] isNumericColumn;
     public boolean[] isEntityColumn;
 

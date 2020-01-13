@@ -15,8 +15,7 @@ import parser.UnitFeatures;
 import parser.UnitSpan;
 import util.Quadruple;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 // Now using IllinoisQuantifier.
 // TODO: Problem: "Google pays $ 17 million compensation over privacy breach .": compensation is detected in the
@@ -135,6 +134,8 @@ public class QuantityTaggingNode implements TaggingNode {
                 c.quantityLinks = new ArrayList<>();
             }
         }
+
+        table.majorUnitInColum = new String[table.nColumn];
         for (int col = 0; col < table.nColumn; ++col) {
             String header = table.getCombinedHeader(col);
             // Extends units from the header.
@@ -145,9 +146,18 @@ public class QuantityTaggingNode implements TaggingNode {
                 table.setCombinedHeader(col, unitInfoFromHeader.fourth);
             }
 
+            HashMap<String, Integer> unitToFreq = new HashMap<>();
             for (Cell[] row : table.data) {
                 tagBodyCell(row[col], unitInfoFromHeader == null ? null : unitInfoFromHeader.first,
                         unitInfoFromHeader == null ? 1.0 : unitInfoFromHeader.second);
+
+                QuantityLink q = row[col].getRepresentativeQuantityLink();
+                if (q != null) {
+                    unitToFreq.put(q.quantity.unit, unitToFreq.getOrDefault(q.quantity.unit, 0) + 1);
+                }
+            }
+            if (unitToFreq.size() > 0) {
+                table.majorUnitInColum[col] = unitToFreq.entrySet().stream().max((a, b) -> (a.getValue().compareTo(b.getValue()))).get().getKey();
             }
         }
         return true;
