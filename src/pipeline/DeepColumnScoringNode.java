@@ -240,10 +240,10 @@ public class DeepColumnScoringNode implements TaggingNode {
                     // connectivity
                     ColumnType ct = columnTypeSet[currentColumnLinking[i]];
                     // (1) combined quantity header
-                    double lScore = ct.getLScore(table.getCombinedHeader(i));
+                    double lScore = ct.getLScore(table.getQuantityDescriptionFromCombinedHeader(i));
                     // (2) last quantity header
                     if (table.nHeaderRow > 1) {
-                        lScore = Math.max(lScore, ct.getLScore(table.header[table.nHeaderRow - 1][i].text));
+                        lScore = Math.max(lScore, ct.getLScore(table.getQuantityDescriptionFromLastHeader(i)));
                     }
                     connectivity += (currentColumnLinkingScore[i] = lScore);
                 }
@@ -284,10 +284,10 @@ public class DeepColumnScoringNode implements TaggingNode {
                     } else {
                         ColumnType ct = columnTypeSet[currentColumnLinking[i]];
                         // (1) combined quantity header
-                        double lScore = ct.getLScore(table.getCombinedHeader(i));
+                        double lScore = ct.getLScore(table.getQuantityDescriptionFromCombinedHeader(i));
                         // (2) last quantity header
                         if (table.nHeaderRow > 1) {
-                            lScore = Math.max(lScore, ct.getLScore(table.header[table.nHeaderRow - 1][i].text));
+                            lScore = Math.max(lScore, ct.getLScore(table.getQuantityDescriptionFromLastHeader(i)));
                         }
                         connectivity += lScore;
                     }
@@ -483,11 +483,11 @@ public class DeepColumnScoringNode implements TaggingNode {
     @Deprecated
     private double inferMinMax(Table table, int qCol, int eCol) {
         // header conf: max from combined and last cell only.
-        double headerLinkingConf = getScore(table.getCombinedHeader(eCol), table.getCombinedHeader(qCol));
+        double headerLinkingConf = getScore(table.getCombinedHeader(eCol), table.getQuantityDescriptionFromCombinedHeader(qCol));
         if (table.nHeaderRow > 1) {
             headerLinkingConf = Math.max(
                     headerLinkingConf,
-                    getScore(table.header[table.nHeaderRow - 1][eCol].text, table.header[table.nHeaderRow - 1][qCol].text));
+                    getScore(table.header[table.nHeaderRow - 1][eCol].text, table.getQuantityDescriptionFromLastHeader(qCol)));
         }
         // entity conf: min from each detected entity.
         double entityLinkingConf = -1;
@@ -501,9 +501,9 @@ public class DeepColumnScoringNode implements TaggingNode {
             if (types == null) {
                 continue;
             }
-            ArrayList<Double> scrs = getScores(types, table.getCombinedHeader(qCol));
+            ArrayList<Double> scrs = getScores(types, table.getQuantityDescriptionFromCombinedHeader(qCol));
             if (table.nHeaderRow > 1) {
-                scrs.addAll(getScores(types, table.header[table.nHeaderRow - 1][qCol].text));
+                scrs.addAll(getScores(types, table.getQuantityDescriptionFromLastHeader(qCol)));
             }
             if (scrs.isEmpty()) {
                 continue;
@@ -541,7 +541,7 @@ public class DeepColumnScoringNode implements TaggingNode {
         ArrayList<String> types = new ArrayList<>(type2Freq.keySet());
 
         // combined quantity header
-        ArrayList<Double> scrs = getScores(types, table.getCombinedHeader(qCol));
+        ArrayList<Double> scrs = getScores(types, table.getQuantityDescriptionFromCombinedHeader(qCol));
         double entityLinkingConf = 0;
         for (int i = 0; i < types.size(); ++i) {
             String t = types.get(i);
@@ -549,7 +549,7 @@ public class DeepColumnScoringNode implements TaggingNode {
         }
         // last quantity header
         if (table.nHeaderRow > 1) {
-            scrs = getScores(types, table.header[table.nHeaderRow - 1][qCol].text);
+            scrs = getScores(types, table.getQuantityDescriptionFromLastHeader(qCol));
             double entityLinkingConfLastHeader = 0;
             for (int i = 0; i < types.size(); ++i) {
                 String t = types.get(i);
