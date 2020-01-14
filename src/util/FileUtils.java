@@ -65,6 +65,57 @@ public class FileUtils {
                 new CompressorStreamFactory().createCompressorInputStream(compressorName, new FileInputStream(file));
     }
 
+    private static InputStream getResourceDecodedStream(String file) throws IOException, CompressorException {
+        // Handle .zip, read only the first file entry of zip file.
+        if (file.toLowerCase().endsWith(".zip")) {
+            ZipArchiveInputStream zipInput =
+                    new ZipArchiveInputStream(FileUtils.class.getClassLoader().getResourceAsStream(file));
+            ZipArchiveEntry currentEntry;
+            while ((currentEntry = zipInput.getNextZipEntry()) != null) {
+                if (currentEntry.isDirectory()) {
+                    continue;
+                }
+                return zipInput;
+            }
+            return null;
+        }
+
+        // Handle .tar.gz, read only the first file entry of tar file.
+        if (file.toLowerCase().endsWith(".tar.gz")) {
+            TarArchiveInputStream tarInput =
+                    new TarArchiveInputStream(new GzipCompressorInputStream(FileUtils.class.getClassLoader().getResourceAsStream(file)));
+            TarArchiveEntry currentEntry;
+            while ((currentEntry = tarInput.getNextTarEntry()) != null) {
+                if (currentEntry.isDirectory()) {
+                    continue;
+                }
+                return tarInput;
+            }
+            return null;
+        }
+
+        // Everything else.
+        int dot = file.lastIndexOf(".");
+        String extension = dot == -1 ? null : file.substring(dot + 1).toLowerCase();
+        if (extension == null) {
+            return FileUtils.class.getClassLoader().getResourceAsStream(file);
+        }
+        String compressorName;
+        switch (extension) {
+            case "gz":
+                compressorName = CompressorStreamFactory.GZIP;
+                break;
+            case "bz2":
+                compressorName = CompressorStreamFactory.BZIP2;
+                break;
+            // More extensions here.
+            default:
+                compressorName = null;
+        }
+        return compressorName == null ? FileUtils.class.getClassLoader().getResourceAsStream(file) :
+                new CompressorStreamFactory().createCompressorInputStream(compressorName, FileUtils.class.getClassLoader().getResourceAsStream(file));
+    }
+
     private static OutputStream getFileEncodedStream(File file) throws IOException, CompressorException {
         int dot = file.getName().lastIndexOf(".");
         String extension = dot == -1 ? null : file.getName().substring(dot + 1).toLowerCase();
@@ -238,6 +289,15 @@ public class FileUtils {
                 // Do nothing.
             }
             super.finalize();
+        }
+    }
+
+    public static LineStream getResourceLineStream(String file, String charset) {
+        try {
+            return new LineStream(getResourceDecodedStream(file), Charset.forName(charset));
+        } catch (IOException | CompressorException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
