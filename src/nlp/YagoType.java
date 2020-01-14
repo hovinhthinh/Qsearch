@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 public class YagoType {
     public static final Logger LOGGER = Logger.getLogger(YagoType.class.getName());
-    private static final String YAGO_TYPE_COMPACT_PATH = "yagoTransitiveTypeCompact.tsv.gz";
+    private static final String YAGO_TYPE_COMPACT_PATH = "./resources/yagoTransitiveTypeCompact.tsv.gz";
     private static final int MIN_N_ENTITY = 10;
 
     // These types have more than 1M entities in YAGO, however some of them are good, so being excluded from the list.
@@ -43,7 +43,7 @@ public class YagoType {
         index2Type = new ArrayList<>();
         HashMap<String, Integer> type2Index = new HashMap<>();
 
-        for (String line : FileUtils.getResourceLineStream(YAGO_TYPE_COMPACT_PATH, "UTF-8")) {
+        for (String line : FileUtils.getLineStream(YAGO_TYPE_COMPACT_PATH, "UTF-8")) {
             String[] arr = line.split("\t");
             JSONArray types = new JSONArray(arr[1]);
             int[] typesInt = new int[types.length()];
