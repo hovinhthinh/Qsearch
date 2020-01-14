@@ -24,13 +24,6 @@ public class MapOnlyJob extends Configured implements Tool {
     }
 
     public int run(String[] args) throws Exception {
-        // Test mapper.
-        try {
-            String2StringMap testMapper = (String2StringMap) Class.forName(args[0]).newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
         JobConf conf = new JobConf(getConf(), MapOnlyJob.class);
 
         conf.set("MapperClass", args[0]);
