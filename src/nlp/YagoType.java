@@ -78,19 +78,20 @@ public class YagoType {
         LOGGER.info(String.format("loaded total %d types", nLoadedTypes));
     }
 
-    // return list of types and their ITF.
+    // return list of types and their ITF, in decreasing order of itf.
     public static final List<Pair<String, Double>> getTypes(String entity, boolean specificOnly) { // entity: <Cris_Ronaldo>
         int[] l = entity2Types.get(entity);
         if (l == null) {
             return null;
         }
-        List<Pair<String, Double>> types = new ArrayList<>(l.length);
+        ArrayList<Pair<String, Double>> types = new ArrayList<>(l.length);
         for (int i : l) {
             Pair<String, Double> t = index2Type.get(i);
             if (t != null && (!specificOnly || !BLOCKED_GENERAL_TYPES.contains(t.first))) {
                 types.add(t);
             }
         }
+        types.sort((a, b) -> b.second.compareTo(a.second));
         return types;
     }
 
