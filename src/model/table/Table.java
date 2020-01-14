@@ -194,6 +194,12 @@ public class Table {
             }
             sb.append(token);
         }
+        if (majorUnitInColum != null && majorUnitInColum[columnIndex] != null) {
+            if (sb.length() > 0) {
+                sb.append(" ");
+            }
+            sb.append(majorUnitInColum[columnIndex].toLowerCase());
+        }
         return sb.toString();
     }
 
@@ -207,6 +213,12 @@ public class Table {
                 sb.append(" ");
             }
             sb.append(token);
+        }
+        if (majorUnitInColum != null && majorUnitInColum[columnIndex] != null) {
+            if (sb.length() > 0) {
+                sb.append(" ");
+            }
+            sb.append(majorUnitInColum[columnIndex].toLowerCase());
         }
         return sb.toString();
     }
