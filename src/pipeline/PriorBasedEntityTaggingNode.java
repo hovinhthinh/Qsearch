@@ -98,6 +98,8 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
     public static void main(String[] args) {
         Cell cell = new Cell();
         cell.text = "\" How Chelsea Got Her Groove Back \"";
+        cell.quantityLinks = new ArrayList<>();
+        cell.timeLinks= new ArrayList<>();
         new PriorBasedEntityTaggingNode().tagCell(cell);
         cell.quantityLinks = new ArrayList<>();
         System.out.println(cell.getDisambiguatedText());
