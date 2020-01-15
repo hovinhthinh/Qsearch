@@ -159,16 +159,18 @@ DEV_MODE
         line += "<b>Title:</b> " + escapeText(allInstances[fromIndex]["pageTitle"]) + "</br>";
         line += "<b>Caption:</b> " + escapeText(allInstances[fromIndex]["caption"]) + "</br>";
         // header
+        var qCol = allInstances[fromIndex]["entityColumn"];
+        var eCol = allInstances[fromIndex]["quantityColumn"];
         var header = allInstances[fromIndex]["header"];
         line += "<tr>";
         for (var i = 0; i < header.length; ++i) {
-            line += "<th>";
+            line += (i == qCol || i == eCol) ? "<td style='background-color: #ffffcc;'>" : "<td>";
             line += escapeText(header[i]);
             line += "</th>";
         }
         line += "</tr>";
 
-        var data = allInstances[fromIndex]["data"]
+        var data = allInstances[fromIndex]["data"];
         // data
         for (var k = 0; k < data.length; ++k) {
             var highlight = false;
@@ -184,7 +186,9 @@ DEV_MODE
                 line += "<tr>";
             }
             for (var i = 0; i < data[k].length; ++i) {
-                line += "<td>";
+                line += (i == qCol || i == eCol)
+                    ? (highlight ? "<td style='background-color: #009933;'>" : "<td class='text-dark' style='background-color: #ffffcc;'>")
+                    : "<td>";
                 line += escapeText(data[k][i]);
                 line += "</td>";
             }
