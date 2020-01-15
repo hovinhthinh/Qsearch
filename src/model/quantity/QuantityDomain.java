@@ -169,7 +169,17 @@ public class QuantityDomain {
         try {
             Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
             if (u != null && !u.getParentQuantity().isUnitLess()) {
-                return u.getMultiplier();
+                String domain = u.getParentQuantity().getConcept();
+                // allows only these specific domains
+                if (domain.equals(Domain.LENGTH) ||
+                        domain.equals(Domain.MONEY) ||
+                        domain.equals(Domain.TIME) ||
+                        domain.equals(Domain.PERCENTAGE) ||
+                        domain.equals(Domain.AREA) ||
+                        domain.equals(Domain.VOLUME)
+                ) {
+                    return u.getMultiplier();
+                }
             }
         } catch (Exception e) {
         }
@@ -200,7 +210,17 @@ public class QuantityDomain {
         try {
             Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
             if (u != null && !u.getParentQuantity().isUnitLess()) {
-                return u.getParentQuantity().getConcept();
+                String domain = u.getParentQuantity().getConcept();
+                // allows only these specific domains
+                if (domain.equals(Domain.LENGTH) ||
+                        domain.equals(Domain.MONEY) ||
+                        domain.equals(Domain.TIME) ||
+                        domain.equals(Domain.PERCENTAGE) ||
+                        domain.equals(Domain.AREA) ||
+                        domain.equals(Domain.VOLUME)
+                ) {
+                    return domain;
+                }
             }
         } catch (Exception e) {
         }
