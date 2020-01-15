@@ -49,6 +49,7 @@ public class DeepColumnScoringNode implements TaggingNode {
         this.scoringClient = new DeepScoringClient(false, -1);
     }
 
+    // With cache
     private ArrayList<Double> getScores(List<String> entitiesDesc, String quantityDesc) {
         if (entitiesDesc.isEmpty()) {
             return new ArrayList<>();
@@ -81,6 +82,7 @@ public class DeepColumnScoringNode implements TaggingNode {
         return results;
     }
 
+    // With cache
     private double getScore(String typeDesc, String quantityDesc) {
         String key = String.format("%s%s%s", typeDesc, SEPARATOR, quantityDesc);
         if (cache.containsKey(key)) {
@@ -309,6 +311,10 @@ public class DeepColumnScoringNode implements TaggingNode {
             for (int i : info.entityColumnIndexes) {
                 info.currentColumnLinking[info.numericColumnIndexes[currentCol]] = i;
                 backtrackJointInference(table, info, currentCol + 1);
+                if (homogeneityWeight == Constants.MAX_DOUBLE) {
+                    // if connectivity weight = 0, then only check the first column alignment
+                    break;
+                }
             }
             return;
         }
