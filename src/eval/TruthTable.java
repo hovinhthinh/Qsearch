@@ -81,4 +81,27 @@ public class TruthTable extends Table {
         }
         return ((double) nTrue) / total;
     }
+
+    // return -1 means there is no mention.
+    public double getPrecisionFromYusra() {
+        int total = 0;
+        int nTrue = 0;
+        for (int i = 0; i < bodyEntityTarget.length; ++i) {
+            for (int j = 0; j < bodyEntityTarget[i].length; ++j) {
+                EntityLink el = data[i][j].getRepresentativeEntityLink();
+                if (el == null) {
+                    continue;
+                }
+                ++total;
+
+                if (yusraBodyEntityTarget[i][j] == 1) {
+                    ++nTrue;
+                }
+            }
+        }
+        if (total == 0) {
+            return -1;
+        }
+        return ((double) nTrue) / total;
+    }
 }
