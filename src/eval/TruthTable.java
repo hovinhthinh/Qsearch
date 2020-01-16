@@ -18,6 +18,9 @@ public class TruthTable extends Table {
 
     public String[][] bodyEntityTarget; // e.g. <Cristiano_Ronaldo> (with < and > )
 
+    // temporary for evaluation
+    public int[][] yusraBodyEntityTarget;
+
     public static TruthTable fromTable(Table t) {
         TruthTable truth = GSON.fromJson(GSON.toJson(t), TruthTable.class);
 
@@ -25,6 +28,8 @@ public class TruthTable extends Table {
         Arrays.fill(truth.quantityToEntityColumnGroundTruth, -1);
 
         truth.bodyEntityTarget = new String[truth.nDataRow][truth.nColumn];
+        truth.yusraBodyEntityTarget = new int[truth.nDataRow][truth.nColumn];
+
         return truth;
     }
 

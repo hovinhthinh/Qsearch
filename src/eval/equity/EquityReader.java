@@ -21,7 +21,6 @@ import java.util.LinkedList;
 // read Equity and convert to TruthTable format.
 public class EquityReader {
     public static HashMap<String, String> getContentMap() {
-        Database.openNewConnection("yibrahim");
         ArrayList<ArrayList<String>> content = Database.select("SELECT * FROM evaluation.table_data");
 
         HashMap<String, String> map = new HashMap<>();
@@ -32,12 +31,25 @@ public class EquityReader {
     }
 
     public static void main(String[] args) {
+        Database.openNewConnection("yibrahim");
+
+        // Yusra annotations!
+        ArrayList<ArrayList<String>> ground = Database.select("select * from evaluation.table_evaluation inner join evaluation.table_annotations \n" +
+                "on evaluation.table_evaluation.document_id = evaluation.table_annotations.document_id \n" +
+                "and evaluation.table_evaluation.annotation_id = evaluation.table_annotations.annotation_id \n");
+        HashMap<String, String> yusraValue = new HashMap<>();
+        for (ArrayList<String> r : ground) {
+            yusraValue.put(r.get(1) + "@" + r.get(9) + "@" + r.get(10) + "@" + r.get(11) + "@" + r.get(12), r.get(4));
+        }
+
         PrintWriter out = FileUtils.getPrintWriter("eval/equity/dataset/AnnotatedTables-19092016/dataset_ground.json", "UTF-8");
         Gson gson = new Gson();
 
         JSONObject o = new JSONObject(FileUtils.getContent("eval/equity/dataset/AnnotatedTables-19092016/dataset_original_yibrahim.json", "UTF-8"));
 
         HashMap<String, String> contentMap = getContentMap();
+
+
         for (String k : o.keySet()) {
             JSONObject ts = o.getJSONObject(k);
             JSONArray tables = ts.getJSONArray("tables");
@@ -65,6 +77,7 @@ public class EquityReader {
 
                 table.header = new Cell[table.nHeaderRow][table.nColumn];
                 table.data = new Cell[table.nDataRow][table.nColumn];
+                int[][] yusraBit = new int[table.nDataRow][table.nColumn];
 
                 for (int c = 0; c < table.nColumn; ++c) {
                     table.header[0][c] = new Cell();
@@ -87,9 +100,23 @@ public class EquityReader {
                     int row = a.getInt("row");
                     int col = a.getInt("col");
                     String span = content[row][col].substring(a.getInt("start"), a.getInt("end"));
+
+                    String key = ts.getString("id") + "@" + row + "@" + col + "@" + a.getInt("start") + "@" + a.getInt("end");
+
                     String target = a.getString("sem_target");
 
                     Cell cell = row == 0 ? table.header[row][col] : table.data[row - 1][col];
+
+                    if (row > 0) {
+                        try {
+                            yusraBit[row - 1][col] = Integer.parseInt(yusraValue.get(key));
+                        } catch (Exception e) {
+                            System.out.println(key);
+                            System.out.println(span);
+                            System.out.println(target);
+                        }
+
+                    }
 
                     EntityLink link = new EntityLink();
                     link.target = "YAGO:" + target;
@@ -119,6 +146,7 @@ public class EquityReader {
                         EntityLink el = truthTable.data[r][c].getRepresentativeEntityLink();
                         if (el != null) {
                             truthTable.bodyEntityTarget[r][c] = el.candidates.get(0).first;
+                            truthTable.yusraBodyEntityTarget[r][c] = yusraBit[r][c];
                         }
                     }
                 }
