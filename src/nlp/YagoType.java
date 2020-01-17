@@ -46,7 +46,8 @@ public class YagoType {
         for (String line : FileUtils.getLineStream(YAGO_TYPE_COMPACT_PATH, "UTF-8")) {
             String[] arr = line.split("\t");
             JSONArray types = new JSONArray(arr[1]);
-            int[] typesInt = new int[types.length()];
+            int[] typesInt = new int[types.length() + 1];
+            typesInt[typesInt.length - 1] = -1; // sorted indication bit (last element == -1 means not sorted, -2 means sorted).
             for (int i = 0; i < types.length(); ++i) {
                 String type = types.getString(i);
                 Integer index = type2Index.get(type);
@@ -84,14 +85,45 @@ public class YagoType {
         if (l == null) {
             return null;
         }
+        if (l[l.length - 1] == -1) {
+            // sort types in decreasing order of itf
+            int[] newL = Arrays.stream(l).boxed().sorted((a, b) -> {
+                if (a == -1) {
+                    return 1;
+                }
+                if (b == -1) {
+                    return -1;
+                }
+                Pair<String, Double> pa = index2Type.get(a);
+                Pair<String, Double> pb = index2Type.get(b);
+                if (pa == null && pb == null) {
+                    return 0;
+                }
+                if (pa == null) {
+                    return 1;
+                }
+                if (pb == null) {
+                    return -1;
+                }
+                return pb.second.compareTo(pa.second);
+            }).mapToInt(Integer::intValue).toArray();
+            System.arraycopy(newL, 0, l, 0, newL.length);
+            // set sorted indication bit.
+            l[l.length - 1] = -2;
+        }
         ArrayList<Pair<String, Double>> types = new ArrayList<>(l.length);
         for (int i : l) {
+            if (i < 0) {
+                break;
+            }
             Pair<String, Double> t = index2Type.get(i);
-            if (t != null && (!specificOnly || !BLOCKED_GENERAL_TYPES.contains(t.first))) {
+            if (t == null) {
+                break;
+            }
+            if (!specificOnly || !BLOCKED_GENERAL_TYPES.contains(t.first)) {
                 types.add(t);
             }
         }
-        types.sort((a, b) -> b.second.compareTo(a.second));
         return types;
     }
 
