@@ -59,7 +59,7 @@ public class EvaluateEquity {
         }
         System.out.println("nBadTable/nGoodTable: " + nBadTable + "/" + nGoodTable);
         System.out.println(String.format("Micro-Avg-PrecED: %.2f", microAvgED / nGoodTable * 100));
-        System.out.println(String.format("Micro-Avg-PrecED: %.2f", microAvgCA / nGoodTable * 100));
+        System.out.println(String.format("Micro-Avg-PrecCA: %.2f", microAvgCA / nGoodTable * 100));
 
         System.exit(0);
     }
