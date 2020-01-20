@@ -54,8 +54,8 @@ public class EvaluateEquity {
             ++nGoodTable;
             microAvgEDOurs += precEDOurs;
             microAvgCAOurs += precCAOurs;
+            microAvgEDPrior += precEDPrior;
             microAvgCAFirstColumn += precCAFirstColumn;
-            microAvgCAOurs += precCAOurs;
         }
         System.out.println("nBadTable/nGoodTable: " + nBadTable + "/" + nGoodTable);
         System.out.println(String.format("Micro-Avg-PrecED: Prior/Ours: %.2f/%.2f", microAvgEDPrior / nGoodTable * 100, microAvgEDOurs / nGoodTable * 100));
