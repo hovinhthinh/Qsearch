@@ -34,7 +34,7 @@ public class TruthTable extends Table {
     }
 
     // return -1 means there is no mention.
-    public double getPrecisionFromFirstCandidate() {
+    public double getEntityDisambiguationPrecisionFromFirstCandidate() {
         int total = 0;
         int nTrue = 0;
         for (int i = 0; i < bodyEntityTarget.length; ++i) {
@@ -58,7 +58,7 @@ public class TruthTable extends Table {
     }
 
     // return -1 means there is no mention.
-    public double getPrecisionFromTarget() {
+    public double getEntityDisambiguationPrecisionFromTarget() {
         int total = 0;
         int nTrue = 0;
         for (int i = 0; i < bodyEntityTarget.length; ++i) {
@@ -83,7 +83,7 @@ public class TruthTable extends Table {
     }
 
     // return -1 means there is no mention.
-    public double getPrecisionFromYusra() {
+    public double getEntityDisambiguationPrecisionFromYusra() {
         int total = 0;
         int nTrue = 0;
         for (int i = 0; i < bodyEntityTarget.length; ++i) {

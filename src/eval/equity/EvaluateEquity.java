@@ -15,9 +15,10 @@ public class EvaluateEquity {
         return new TaggingPipeline(
                 new DeepColumnScoringNode(
                         DeepColumnScoringNode.JOINT_INFERENCE,
-//                        new DeepScoringClient(true, -1),
-                        null,
-                        Constants.MAX_DOUBLE),
+                        new DeepScoringClient(true, -1),
+//                        null,
+                        1.5
+                ),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
         );
@@ -29,28 +30,28 @@ public class EvaluateEquity {
         double microAvg = 0;
         int nGoodTable = 0;
         int nBadTable = 0;
-        for (String line : FileUtils.getLineStream("eval/equity/dataset/AnnotatedTables-19092016/dataset_processed.json", "UTF-8")) {
+        for (String line : FileUtils.getLineStream("eval/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation_linking_done.json", "UTF-8")) {
             TruthTable table = gson.fromJson(line, TruthTable.class);
+            System.out.println("Original:");
             System.out.println(table.getTableContentPrintable(false, true, false));
-            System.out.println(table.getTableContentPrintable(true, true, false));
+            System.out.println("Ground Truth:");
+            System.out.println(table.getTableContentPrintable(true, true, true));
+            double precPrior = table.getEntityDisambiguationPrecisionFromFirstCandidate();
 
-            double precPrior = table.getPrecisionFromFirstCandidate();
             pipeline.tag(table);
-            double prec = table.getPrecisionFromTarget();
+
+            double prec = table.getEntityDisambiguationPrecisionFromTarget();
             if (prec == -1 || precPrior == -1) {
                 ++nBadTable;
                 continue;
             }
-            System.out.println(String.format("precPrior/precHomogeneity: %.2f/%.2f", precPrior * 100, prec * 100));
+            System.out.println(String.format("precEntityDisambiguation: Prior/Ours: %.2f/%.2f", precPrior * 100, prec * 100));
             System.out.println("====================================================================================================");
             ++nGoodTable;
             microAvg += prec;
         }
-        System.out.println("nBadTable: " + nBadTable);
-        System.out.println("nGoodTable: " + nGoodTable);
+        System.out.println("nBadTable/nGoodTable: " + nBadTable + "/" + nGoodTable);
         System.out.println(String.format("Micro-Avg-Prec: %.2f", microAvg / nGoodTable * 100));
-
-        // TODO: write evaluate code for getPrecisionFromTarget.
 
         System.exit(0);
     }
