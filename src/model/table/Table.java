@@ -275,6 +275,26 @@ public class Table {
         return headerUnitSpan[columnIndex];
     }
 
+    // Check if first column is index column
+    public boolean hasIndexColumn() {
+        boolean startWith0 = false, startWith1 = false;
+        for (int i = 0; i < nDataRow; ++i) {
+            try {
+                int rank = Integer.parseInt(data[i][0].text);
+                if (rank == i) {
+                    startWith0 = true;
+                } else if (rank == i + 1) {
+                    startWith1 = true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return startWith0 ^ startWith1;
+    }
+
     public boolean hasCellWith2EntitiesOrQuantities() {
         for (Cell[][] part : new Cell[][][]{header, data}) {
             for (int i = 0; i < part.length; ++i) {
