@@ -44,7 +44,7 @@ public class EvaluateEquity {
                 ++nBadTable;
                 continue;
             }
-            double precCA = table.getEntityDisambiguationPrecisionFromTarget();
+            double precCA = table.getAlignmentPrecisionFromTarget();
             if (precCA == -1) {
                 ++nBadTable;
                 continue;

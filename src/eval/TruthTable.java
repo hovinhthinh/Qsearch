@@ -86,7 +86,12 @@ public class TruthTable extends Table {
     public double getAlignmentPrecisionFromTarget() {
         int total = 0;
         int nTrue = 0;
+        boolean hasIndexColumn = hasIndexColumn();
         for (int i = 0; i < nColumn; ++i) {
+            // ignore evaluating index column.
+            if (hasIndexColumn && i == 0) {
+                continue;
+            }
             if (quantityToEntityColumnGroundTruth[i] != -1) {
                 ++total;
                 if (quantityToEntityColumnGroundTruth[i] == quantityToEntityColumn[i]) {
