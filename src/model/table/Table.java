@@ -282,7 +282,7 @@ public class Table {
             try {
                 String indexStr = data[i][0].text;
                 if (indexStr.endsWith(".")) {
-                    indexStr = indexStr.substring(0, indexStr.length() - 1);
+                    indexStr = indexStr.substring(0, indexStr.length() - 1).trim();
                 }
                 int rank = Integer.parseInt(indexStr);
                 if (rank == i) {
