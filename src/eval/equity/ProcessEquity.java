@@ -30,7 +30,7 @@ public class ProcessEquity {
 
         Mention2EntityPrior mention2EntityPrior = new Mention2EntityPrior(1, 10);
 
-        PrintWriter out = FileUtils.getPrintWriter("eval/equity/dataset/AnnotatedTables-19092016/dataset_processed.json", "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter("eval/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation.json", "UTF-8");
         int nGood = 0;
         Gson gson = new Gson();
         for (String line : new FileUtils.LineStream(
