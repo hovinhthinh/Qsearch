@@ -280,7 +280,11 @@ public class Table {
         boolean startWith0 = false, startWith1 = false;
         for (int i = 0; i < nDataRow; ++i) {
             try {
-                int rank = Integer.parseInt(data[i][0].text);
+                String indexStr = data[i][0].text;
+                if (indexStr.endsWith(".")) {
+                    indexStr = indexStr.substring(0, indexStr.length() - 1);
+                }
+                int rank = Integer.parseInt(indexStr);
                 if (rank == i) {
                     startWith0 = true;
                 } else if (rank == i + 1) {
