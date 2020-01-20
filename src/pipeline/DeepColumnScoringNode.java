@@ -20,9 +20,7 @@ public class DeepColumnScoringNode implements TaggingNode {
     private static final String SEPARATOR = "\t";
     private static final int CACHE_SIZE = 1000000;
 
-    public static final int MIN_MAX_INFERENCE = 0;
-    public static final int TYPE_SET_INFERENCE = 1;
-
+    public static final int PRIOR_INFERENCE = 1;
     public static final int JOINT_INFERENCE = 2;
     public static final double DEFAULT_JOINT_HOMOGENEITY_WEIGHT = 30; // 30 for gini, 1 for entropy; Constants.MAX_DOUBLE (set the connectivity to 0)
     public static final int JOINT_MAX_NUM_ITERS = 100;
@@ -102,9 +100,7 @@ public class DeepColumnScoringNode implements TaggingNode {
         table.quantityToEntityColumnScore = new double[table.nColumn];
         Arrays.fill(table.quantityToEntityColumnScore, -1.0);
 
-        if (inferenceMode == MIN_MAX_INFERENCE || inferenceMode == TYPE_SET_INFERENCE) {
-            return directInference(table);
-        } else if (inferenceMode == JOINT_INFERENCE) {
+        if (inferenceMode == PRIOR_INFERENCE || inferenceMode == JOINT_INFERENCE) {
             return jointInference(table);
         } else {
             throw new RuntimeException("Invalid inference mode");
@@ -346,42 +342,44 @@ public class DeepColumnScoringNode implements TaggingNode {
         info.recomputeBasedOnCurrentAssignment();
 
         // Iterative classifying
-        int nIterations = 0;
-        boolean hasChange;
-        do {
-            hasChange = false;
-            for (int i = 0; i < table.nDataRow; ++i) {
-                for (int j : info.entityColumnIndexes) {
-                    if (info.currentEntityAssignment[i][j] == null) {
-                        continue;
-                    }
-                    double currentLocalScore = info.currentJointScore;
-                    int nTried = 0;
-                    for (Pair<String, Integer> c : table.data[i][j].getRepresentativeEntityLink().candidates) {
-                        if (JOINT_MAX_LOCAL_CANDIDATES >= 0 && ++nTried > JOINT_MAX_LOCAL_CANDIDATES) {
-                            break;
-                        }
-                        if (c.first.equals(info.currentEntityAssignment[i][j])) {
-                            continue;
-                        }
-                        double newLocalScore = info.newScoreOfLocalAssignment(i, j, c.first);
-                        if (newLocalScore > currentLocalScore) {
-                            currentLocalScore = newLocalScore;
-                            info.savedEntityAssignment[i][j] = c.first;
-                            hasChange = true;
-                        }
-                    }
-                }
-            }
-            if (hasChange) {
+        if (inferenceMode == JOINT_INFERENCE) {
+            int nIterations = 0;
+            boolean hasChange;
+            do {
+                hasChange = false;
                 for (int i = 0; i < table.nDataRow; ++i) {
                     for (int j : info.entityColumnIndexes) {
-                        info.currentEntityAssignment[i][j] = info.savedEntityAssignment[i][j];
+                        if (info.currentEntityAssignment[i][j] == null) {
+                            continue;
+                        }
+                        double currentLocalScore = info.currentJointScore;
+                        int nTried = 0;
+                        for (Pair<String, Integer> c : table.data[i][j].getRepresentativeEntityLink().candidates) {
+                            if (JOINT_MAX_LOCAL_CANDIDATES >= 0 && ++nTried > JOINT_MAX_LOCAL_CANDIDATES) {
+                                break;
+                            }
+                            if (c.first.equals(info.currentEntityAssignment[i][j])) {
+                                continue;
+                            }
+                            double newLocalScore = info.newScoreOfLocalAssignment(i, j, c.first);
+                            if (newLocalScore > currentLocalScore) {
+                                currentLocalScore = newLocalScore;
+                                info.savedEntityAssignment[i][j] = c.first;
+                                hasChange = true;
+                            }
+                        }
                     }
                 }
-                info.recomputeBasedOnCurrentAssignment();
-            }
-        } while (++nIterations < JOINT_MAX_NUM_ITERS && hasChange);
+                if (hasChange) {
+                    for (int i = 0; i < table.nDataRow; ++i) {
+                        for (int j : info.entityColumnIndexes) {
+                            info.currentEntityAssignment[i][j] = info.savedEntityAssignment[i][j];
+                        }
+                    }
+                    info.recomputeBasedOnCurrentAssignment();
+                }
+            } while (++nIterations < JOINT_MAX_NUM_ITERS && hasChange);
+        }
         // Compare with best assignment
         if (info.currentJointScore > info.bestJointScore) {
             info.captureCurrentColumnLinking();
@@ -442,142 +440,5 @@ public class DeepColumnScoringNode implements TaggingNode {
         }
 
         return true;
-    }
-
-    @Deprecated
-    public boolean directInference(Table table) {
-        boolean result = false;
-        // loop for quantity columns.
-
-        double[] keyColumnScores = new double[table.nColumn];
-
-        int nNumericCols = 0;
-        for (int pivotCol = 0; pivotCol < table.nColumn; ++pivotCol) {
-            if (!table.isNumericColumn[pivotCol]) {
-                continue;
-            }
-            ++nNumericCols;
-            int targetCol = -1;
-            double linkingConf = -1;
-            // loop for entity columns.
-            for (int col = 0; col < table.nColumn; ++col) {
-                if (!table.isEntityColumn[col]) {
-                    continue;
-                }
-
-                double totalConf = -1;
-                if (inferenceMode == MIN_MAX_INFERENCE) {
-                    totalConf = inferMinMax(table, pivotCol, col);
-                } else if (inferenceMode == TYPE_SET_INFERENCE) {
-                    totalConf = inferTypeSet(table, pivotCol, col);
-                } else {
-                    throw new RuntimeException("Not implemented");
-                }
-                if (targetCol == -1 || totalConf > linkingConf) {
-                    targetCol = col;
-                    linkingConf = totalConf;
-                    result = true;
-                }
-                keyColumnScores[col] += totalConf;
-            }
-
-            table.quantityToEntityColumn[pivotCol] = targetCol;
-            table.quantityToEntityColumnScore[pivotCol] = linkingConf;
-        }
-
-        for (int col = 0; col < table.nColumn; ++col) {
-            if (!table.isEntityColumn[col]) {
-                continue;
-            }
-            if (nNumericCols > 0) {
-                keyColumnScores[col] /= nNumericCols;
-            }
-            if (table.keyColumn == -1 || keyColumnScores[col] > table.keyColumnScore) {
-                table.keyColumn = col;
-                table.keyColumnScore = keyColumnScores[col];
-            }
-        }
-        return result;
-    }
-
-    @Deprecated
-    private double inferMinMax(Table table, int qCol, int eCol) {
-        // header conf: max from combined and last cell only.
-        double headerLinkingConf = getScore(table.getCombinedHeader(eCol), table.getQuantityDescriptionFromCombinedHeader(qCol));
-        if (table.nHeaderRow > 1) {
-            headerLinkingConf = Math.max(
-                    headerLinkingConf,
-                    getScore(table.header[table.nHeaderRow - 1][eCol].text, table.getQuantityDescriptionFromLastHeader(qCol)));
-        }
-        // entity conf: min from each detected entity.
-        double entityLinkingConf = -1;
-        for (int i = 0; i < table.nDataRow; ++i) {
-            EntityLink e = table.data[i][eCol].getRepresentativeEntityLink();
-            if (e == null) {
-                continue;
-            }
-            List<String> types = YagoType.getTypes("<" + e.target.substring(e.target.lastIndexOf(":") + 1) + ">", true)
-                    .stream().map(o -> o.first).collect(Collectors.toList());
-            if (types == null) {
-                continue;
-            }
-            ArrayList<Double> scrs = getScores(types, table.getQuantityDescriptionFromCombinedHeader(qCol));
-            if (table.nHeaderRow > 1) {
-                scrs.addAll(getScores(types, table.getQuantityDescriptionFromLastHeader(qCol)));
-            }
-            if (scrs.isEmpty()) {
-                continue;
-            }
-            double score = Collections.max(scrs);
-            entityLinkingConf = (entityLinkingConf == -1 ? score : Math.min(entityLinkingConf, score));
-        }
-
-        return Math.max(headerLinkingConf, entityLinkingConf);
-    }
-
-    @Deprecated
-    // sum(freq(t) * itf(t) * dist(t,q))
-    private double inferTypeSet(Table table, int qCol, int eCol) {
-        HashMap<String, Double> type2Freq = new HashMap<>();
-        HashMap<String, Double> type2Itf = new HashMap<>();
-
-        for (int i = 0; i < table.nDataRow; ++i) {
-            EntityLink e = table.data[i][eCol].getRepresentativeEntityLink();
-            if (e == null) {
-                continue;
-            }
-            List<Pair<String, Double>> types = YagoType.getTypes("<" + e.target.substring(e.target.lastIndexOf(":") + 1) + ">", true);
-            for (Pair<String, Double> p : types) {
-                type2Itf.putIfAbsent(p.first, p.second);
-                type2Freq.put(p.first, type2Freq.getOrDefault(p.first, 0.0) + 1.0 / types.size());
-            }
-        }
-        // Normalize freq.
-        double totalFreq = type2Freq.values().stream().mapToDouble(o -> o.doubleValue()).sum();
-        for (String t : type2Itf.keySet()) {
-            type2Freq.put(t, type2Freq.get(t) / totalFreq);
-        }
-
-        ArrayList<String> types = new ArrayList<>(type2Freq.keySet());
-
-        // combined quantity header
-        ArrayList<Double> scrs = getScores(types, table.getQuantityDescriptionFromCombinedHeader(qCol));
-        double entityLinkingConf = 0;
-        for (int i = 0; i < types.size(); ++i) {
-            String t = types.get(i);
-            entityLinkingConf += scrs.get(i) * type2Itf.get(t) * type2Freq.get(t);
-        }
-        // last quantity header
-        if (table.nHeaderRow > 1) {
-            scrs = getScores(types, table.getQuantityDescriptionFromLastHeader(qCol));
-            double entityLinkingConfLastHeader = 0;
-            for (int i = 0; i < types.size(); ++i) {
-                String t = types.get(i);
-                entityLinkingConfLastHeader += scrs.get(i) * type2Itf.get(t) * type2Freq.get(t);
-            }
-            entityLinkingConf = Math.max(entityLinkingConf, entityLinkingConfLastHeader);
-        }
-
-        return entityLinkingConf;
     }
 }
