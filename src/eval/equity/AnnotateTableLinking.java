@@ -1,23 +1,21 @@
-package eval;
+package eval.equity;
 
 import com.google.gson.Gson;
-import model.table.Table;
+import eval.TruthTable;
 import util.FileUtils;
-import util.JSchUtils;
 
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class AnnotateTable {
+public class AnnotateTableLinking {
     static int nIgnored, nAnnotated;
 
     // args: <input> <output> [ignore first n tables]
     public static void main(String[] args) throws Exception {
-        args = "/GW/D5data-11/hvthinh/TABLEM/health+id.shuf.annotation.gz.shuf1k_tmp ./manual/health_column_linking_ground_truth_table 8".split(" ");
+        args = "eval/equity/dataset/AnnotatedTables-19092016/dataset_processed.json eval/equity/dataset/AnnotatedTables-19092016/dataset_processed_linking.json 0".split(" ");
 
         PrintWriter out = FileUtils.getPrintWriter(args[1]);
         Scanner in = new Scanner(System.in);
@@ -27,13 +25,8 @@ public class AnnotateTable {
         if (toBeIgnored > 0) {
             System.out.println("=== Ignoring " + toBeIgnored + " tables ===");
         }
-        for (String line : new FileUtils.LineStream(
-//                new GzipCompressorInputStream(
-                JSchUtils.getFileInputStreamFromServer
-                        (args[0])
-//        )
-                , StandardCharsets.UTF_8)) {
-            TruthTable t = TruthTable.fromTable(gson.fromJson(line, Table.class));
+        for (String line : FileUtils.getLineStream(args[0], "UTF-8")) {
+            TruthTable t = gson.fromJson(line, TruthTable.class);
 
             if (toBeIgnored > 0) {
                 --toBeIgnored;
