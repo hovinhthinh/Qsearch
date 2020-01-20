@@ -25,8 +25,8 @@ public class EvaluateEquity {
     public static void main(String[] args) {
         TaggingPipeline pipeline = getPipeline();
         Gson gson = new Gson();
-        double microAvgED = 0;
-        double microAvgCA = 0;
+        double microAvgEDOurs = 0, microAvgCAOurs = 0;
+        double microAvgEDPrior = 0, microAvgCAFirstColumn = 0;
         int nGoodTable = 0;
         int nBadTable = 0;
         for (String line : FileUtils.getLineStream("eval/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation_linking.json", "UTF-8")) {
@@ -35,31 +35,31 @@ public class EvaluateEquity {
             System.out.println(table.getTableContentPrintable(false, true, false));
             System.out.println("Ground Truth:");
             System.out.println(table.getTableContentPrintable(true, true, true));
-            double precEDPrior = table.getEntityDisambiguationPrecisionFromFirstCandidate();
+            double precEDPrior = table.getEntityDisambiguationPrecisionFromPrior();
+            double precCAFirstColumn = table.getAlignmentPrecisionFromFirstColumn();
 
             pipeline.tag(table);
 
-            double precED = table.getEntityDisambiguationPrecisionFromTarget();
-            if (precED == -1 || precEDPrior == -1) {
-                ++nBadTable;
-                continue;
-            }
-            double precCA = table.getAlignmentPrecisionFromTarget();
-            if (precCA == -1) {
+            double precEDOurs = table.getEntityDisambiguationPrecisionFromTarget();
+            double precCAOurs = table.getAlignmentPrecisionFromTarget();
+
+            if (precEDOurs == -1 || precEDPrior == -1 || precCAOurs == -1 || precCAFirstColumn == -1) {
                 ++nBadTable;
                 continue;
             }
 
-            System.out.println(String.format("precEntityDisambiguation: Prior/Ours: %.2f/%.2f", precEDPrior * 100, precED * 100));
-            System.out.println(String.format("precColumnAlignment: Ours: %.2f", precCA * 100));
+            System.out.println(String.format("precEntityDisambiguation: Prior/Ours: %.2f/%.2f", precEDPrior * 100, precEDOurs * 100));
+            System.out.println(String.format("precColumnAlignment: FirstColumn/Ours: %.2f/%.2f", precCAFirstColumn * 100, precCAOurs * 100));
             System.out.println("====================================================================================================");
             ++nGoodTable;
-            microAvgED += precED;
-            microAvgCA += precCA;
+            microAvgEDOurs += precEDOurs;
+            microAvgCAOurs += precCAOurs;
+            microAvgCAFirstColumn += precCAFirstColumn;
+            microAvgCAOurs += precCAOurs;
         }
         System.out.println("nBadTable/nGoodTable: " + nBadTable + "/" + nGoodTable);
-        System.out.println(String.format("Micro-Avg-PrecED: %.2f", microAvgED / nGoodTable * 100));
-        System.out.println(String.format("Micro-Avg-PrecCA: %.2f", microAvgCA / nGoodTable * 100));
+        System.out.println(String.format("Micro-Avg-PrecED: Prior/Ours: %.2f/%.2f", microAvgEDPrior / nGoodTable * 100, microAvgEDOurs / nGoodTable * 100));
+        System.out.println(String.format("Micro-Avg-PrecCA: FirstColumn/Ours: %.2f/%.2f", microAvgCAFirstColumn / nGoodTable * 100, microAvgCAOurs / nGoodTable * 100));
 
         System.exit(0);
     }

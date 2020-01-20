@@ -34,7 +34,7 @@ public class TruthTable extends Table {
     }
 
     // return -1 means there is no mention.
-    public double getEntityDisambiguationPrecisionFromFirstCandidate() {
+    public double getEntityDisambiguationPrecisionFromPrior() {
         int total = 0;
         int nTrue = 0;
         for (int i = 0; i < bodyEntityTarget.length; ++i) {
@@ -95,6 +95,30 @@ public class TruthTable extends Table {
             if (quantityToEntityColumnGroundTruth[i] != -1) {
                 ++total;
                 if (quantityToEntityColumnGroundTruth[i] == quantityToEntityColumn[i]) {
+                    ++nTrue;
+                }
+            }
+        }
+        if (total == 0) {
+            return -1;
+        }
+        return ((double) nTrue) / total;
+    }
+
+    // return -1 means there is no alignment.
+    public double getAlignmentPrecisionFromFirstColumn() {
+        int total = 0;
+        int nTrue = 0;
+        boolean hasIndexColumn = hasIndexColumn();
+        int eColumn = hasIndexColumn ? 1 : 0;
+        for (int i = 0; i < nColumn; ++i) {
+            // ignore evaluating index column.
+            if (hasIndexColumn && i == 0) {
+                continue;
+            }
+            if (quantityToEntityColumnGroundTruth[i] != -1) {
+                ++total;
+                if (quantityToEntityColumnGroundTruth[i] == eColumn) {
                     ++nTrue;
                 }
             }
