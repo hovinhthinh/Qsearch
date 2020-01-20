@@ -112,31 +112,48 @@ public class DeepColumnScoringNode implements TaggingNode {
     }
 
     private class ColumnType {
-        HashMap<String, Double> type2Freq = new HashMap<>();
         HashMap<String, Double> type2Itf = new HashMap<>();
+        ArrayList<LinkedHashSet<String>> typeSets = new ArrayList<>();
 
         private ArrayList<String> types = null;
 
         public double getHScore() {
             double hScore = 0;
-            for (Map.Entry<String, Double> e : type2Freq.entrySet()) {
-//                hScore += e.getValue() * Math.log(e.getValue()); // negated entropy (negative)
-                hScore += e.getValue() * e.getValue(); // 1 - gini (0 -> 1)
+            for (int i = 0; i < typeSets.size(); ++i) {
+                LinkedHashSet<String> typeI = typeSets.get(i);
+                loop:
+                for (int j = i + 1; j < typeSets.size(); ++j) {
+                    for (String t : typeSets.get(j)) {
+                        if (typeI.contains(t)) {
+                            hScore += type2Itf.get(t);
+                            continue loop;
+                        }
+                    }
+                }
             }
-            return hScore;
+            return hScore / (typeSets.size() * (typeSets.size() - 1) / 2);
         }
 
         public double getLScore(String quantityDesc) {
             if (types == null) {
-                types = new ArrayList<>(type2Freq.keySet());
+                types = new ArrayList<>();
+                for (LinkedHashSet<String> ts : typeSets) {
+                    for (String t : ts) {
+                        types.add(t);
+                    }
+                }
             }
             ArrayList<Double> scores = getScores(types, quantityDesc);
             double lScore = 0;
-            for (int j = 0; j < types.size(); ++j) {
-                String t = types.get(j);
-                lScore += scores.get(j) * type2Itf.get(t) * type2Freq.get(t);
+            int index = 0;
+            for (LinkedHashSet<String> ts : typeSets) {
+                double currentMax = 0;
+                for (String t : ts) {
+                    currentMax = Math.max(currentMax, scores.get(index++) * type2Itf.get(t));
+                }
+                lScore += currentMax;
             }
-            return lScore;
+            return lScore / typeSets.size();
         }
     }
 
@@ -211,15 +228,12 @@ public class DeepColumnScoringNode implements TaggingNode {
                     continue;
                 }
                 List<Pair<String, Double>> types = YagoType.getTypes(e, true);
+                LinkedHashSet<String> typeSet = new LinkedHashSet<>();
                 for (Pair<String, Double> p : types) {
                     ct.type2Itf.putIfAbsent(p.first, p.second);
-                    ct.type2Freq.put(p.first, ct.type2Freq.getOrDefault(p.first, 0.0) + 1.0 / types.size());
+                    typeSet.add(p.first);
                 }
-            }
-            // Normalize freq.
-            double totalFreq = ct.type2Freq.values().stream().mapToDouble(o -> o.doubleValue()).sum();
-            for (String t : ct.type2Itf.keySet()) {
-                ct.type2Freq.put(t, ct.type2Freq.get(t) / totalFreq);
+                ct.typeSets.add(typeSet);
             }
             return ct;
         }
