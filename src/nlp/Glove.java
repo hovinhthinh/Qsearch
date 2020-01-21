@@ -91,7 +91,7 @@ public class Glove {
         return 0.5 - cosine / 2;
     }
 
-    public double[] getEmbedding(String w) {
+    public static double[] getEmbedding(String w) {
         return EMBEDDING.get(w);
     }
 
