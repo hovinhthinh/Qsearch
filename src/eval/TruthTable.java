@@ -2,8 +2,12 @@ package eval;
 
 
 import com.google.gson.Gson;
+import model.context.IDF;
 import model.table.Table;
 import model.table.link.EntityLink;
+import nlp.Glove;
+import util.Constants;
+import util.Vectors;
 
 import java.util.Arrays;
 
@@ -142,6 +146,73 @@ public class TruthTable extends Table {
                 ++total;
 
                 if (yusraBodyEntityTarget[i][j] == 1) {
+                    ++nTrue;
+                }
+            }
+        }
+        if (total == 0) {
+            return -1;
+        }
+        return ((double) nTrue) / total;
+    }
+
+    @Deprecated
+    public double getAlignmentPrecisionFromHeaderEmbedding() {
+        int total = 0;
+        int nTrue = 0;
+        boolean hasIndexColumn = hasIndexColumn();
+        for (int i = 0; i < nColumn; ++i) {
+            // ignore evaluating index column.
+            if (hasIndexColumn && i == 0) {
+                continue;
+            }
+            if (quantityToEntityColumnGroundTruth[i] != -1) {
+                ++total;
+
+                // Compute embedding from quantity header
+                double[] qEmb = new double[Glove.DIM];
+                double sumIdf = 0;
+                for (String s : getQuantityDescriptionFromCombinedHeader(i).split(" ")) {
+                    double[] e = Glove.getEmbedding(s);
+                    if (e == null) {
+                        continue;
+                    }
+                    double idf = IDF.getDefaultIdf(s);
+                    sumIdf += idf;
+                    qEmb = Vectors.sum(qEmb, Vectors.multiply(e, idf));
+                }
+                qEmb = Vectors.multiply(qEmb, 1 / sumIdf);
+
+
+                int linkedColumn = -1;
+                double linkedScore = Constants.MAX_DOUBLE;
+                for (int j = 0; j < nColumn; ++j) {
+                    // loop all other columns other than pivot quantity column.
+                    if (j == i) {
+                        continue;
+                    }
+                    // Compute score from entity header
+                    double[] eEmb = new double[Glove.DIM];
+                    sumIdf = 0;
+                    for (String s : getOriginalCombinedHeader(j).toLowerCase().split(" ")) {
+                        double[] e = Glove.getEmbedding(s);
+                        if (e == null) {
+                            continue;
+                        }
+                        double idf = IDF.getDefaultIdf(s);
+                        sumIdf += idf;
+                        eEmb = Vectors.sum(eEmb, Vectors.multiply(e, idf));
+                    }
+                    eEmb = Vectors.multiply(eEmb, 1 / sumIdf);
+
+                    double score = Vectors.cosineD(qEmb, eEmb);
+                    if (score < linkedScore) {
+                        linkedScore = score;
+                        linkedColumn = j;
+                    }
+                }
+                System.out.println(i + " " + linkedColumn);
+                if (quantityToEntityColumnGroundTruth[i] == linkedColumn) {
                     ++nTrue;
                 }
             }
