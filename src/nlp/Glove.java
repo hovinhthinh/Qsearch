@@ -92,6 +92,9 @@ public class Glove {
     }
 
     public static double[] getEmbedding(String w) {
+        if (EMBEDDING == null) {
+            init();
+        }
         return EMBEDDING.get(w);
     }
 
