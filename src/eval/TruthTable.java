@@ -211,7 +211,6 @@ public class TruthTable extends Table {
                         linkedColumn = j;
                     }
                 }
-                System.out.println(i + " " + linkedColumn);
                 if (quantityToEntityColumnGroundTruth[i] == linkedColumn) {
                     ++nTrue;
                 }
