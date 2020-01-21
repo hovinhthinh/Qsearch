@@ -54,7 +54,7 @@ public class Vectors {
     public static double normD(double[] a, double[] b, double L) {
         double d = 0;
         for (int i = 0; i < a.length; ++i) {
-            d += Math.pow(a[i] - b[i], L);
+            d += Math.pow(Math.abs(a[i] - b[i]), L);
         }
         return Math.pow(d, 1 / L);
     }
