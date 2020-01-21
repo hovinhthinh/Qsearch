@@ -39,6 +39,10 @@ public class EquityReader {
                 "and evaluation.table_evaluation.annotation_id = evaluation.table_annotations.annotation_id \n");
         HashMap<String, String> yusraValue = new HashMap<>();
         for (ArrayList<String> r : ground) {
+            String key = r.get(1) + "@" + r.get(9) + "@" + r.get(10) + "@" + r.get(11) + "@" + r.get(12);
+            if (yusraValue.containsKey(key)) {
+                System.out.println("Duplicated key: " + key);
+            }
             yusraValue.put(r.get(1) + "@" + r.get(9) + "@" + r.get(10) + "@" + r.get(11) + "@" + r.get(12), r.get(4));
         }
 
@@ -111,11 +115,12 @@ public class EquityReader {
                         try {
                             yusraBit[row - 1][col] = Integer.parseInt(yusraValue.get(key));
                         } catch (Exception e) {
-                            System.out.println(key);
-                            System.out.println(span);
-                            System.out.println(target);
+                            System.out.println("--- Key not found: ---");
+                            System.out.println("Key " + key);
+                            System.out.println("Span: " + span);
+                            System.out.println("Target: " + target);
+                            System.out.println("==================================================");
                         }
-
                     }
 
                     EntityLink link = new EntityLink();
@@ -137,7 +142,14 @@ public class EquityReader {
                     }
                     link.text = cell.text.substring(begin, end);
 
-                    cell.entityLinks.add(link);
+                    if (cell.entityLinks.size() == 0) {
+                        cell.entityLinks.add(link);
+                    } else {
+                        if (cell.entityLinks.get(0).text.split(" ").length < link.text.split(" ").length) {
+                            cell.entityLinks.clear();
+                            cell.entityLinks.add(link);
+                        }
+                    }
                 }
 
                 TruthTable truthTable = TruthTable.fromTable(table);

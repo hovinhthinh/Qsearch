@@ -19,7 +19,7 @@ public class ProcessEquity {
                 new TablePrefilteringNode(),
                 new TimeTaggingNode(),
                 new QuantityTaggingNode(),
-                new ColumnTypeTaggingNode(0.5, 0.5)
+                new ColumnTypeTaggingNode(0.3, 0.3)
         );
     }
 
