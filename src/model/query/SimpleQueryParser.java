@@ -8,7 +8,6 @@ import nlp.NLP;
 import nlp.Static;
 import scala.collection.JavaConversions;
 import server.table.handler.TypeSuggestionHandler;
-import storage.table.ElasticSearchTableQuery;
 import uk.ac.susx.informatics.Morpha;
 import util.Triple;
 
@@ -172,7 +171,7 @@ public class SimpleQueryParser {
                     rawTokenized.replace(result.first, "").replace(preModifiedQuantity, ""));
             StringBuilder cSb = new StringBuilder();
             for (String s : context) {
-                if (ElasticSearchTableQuery.BLOCKED_STOPWORDS.contains(s)) {
+                if (NLP.BLOCKED_STOPWORDS.contains(s)) {
                     continue;
                 }
                 cSb.append(" ").append(s);
