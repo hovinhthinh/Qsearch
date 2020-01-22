@@ -5,7 +5,13 @@ import com.google.gson.Gson;
 import model.context.IDF;
 import model.table.Table;
 import model.table.link.EntityLink;
+import model.table.link.QuantityLink;
+import model.text.Paragraph;
+import model.text.Sentence;
+import model.text.tag.QuantityTag;
 import nlp.Glove;
+import pipeline.text.QuantityTaggingNode;
+import pipeline.text.TaggingPipeline;
 import util.Constants;
 import util.Vectors;
 
@@ -220,5 +226,51 @@ public class TruthTable extends Table {
             return -1;
         }
         return ((double) nTrue) / total;
+    }
+
+    @Deprecated
+    public Paragraph surroundingTextAsParagraph;
+
+    @Deprecated
+    static TaggingPipeline quantityTaggingPipelineForText = new TaggingPipeline(new QuantityTaggingNode());
+
+    @Deprecated
+    public void linkQuantitiesInTableAndText() {
+        surroundingTextAsParagraph = Paragraph.fromText(surroundingText, null);
+        quantityTaggingPipelineForText.tag(surroundingTextAsParagraph);
+    }
+
+    @Deprecated
+    public double getRateOfTableQuantitiesFoundInText() {
+        int total = 0;
+        int nFound = 0;
+        boolean hasIndexColumn = hasIndexColumn();
+        for (int i = 0; i < nDataRow; ++i) {
+            for (int j = 0; j < nColumn; ++j) {
+                if (hasIndexColumn && j == 0) {
+                    continue;
+                }
+                QuantityLink ql = data[i][j].getRepresentativeQuantityLink();
+                if (ql == null) {
+                    continue;
+                }
+                ++total;
+                boolean quantityInText = false;
+                loop:
+                for (Sentence sent : surroundingTextAsParagraph.sentences) {
+                    for (QuantityTag qt : sent.quantityTags) {
+                        if (qt.quantity.compareTo(ql.quantity) == 0) {
+                            quantityInText = true;
+                            break loop;
+                        }
+                    }
+                }
+                if (quantityInText) {
+                    ++nFound;
+                    data[i][j].text = "^" + data[i][j].text;
+                }
+            }
+        }
+        return total == 0 ? -1 : ((double) nFound) / total;
     }
 }
