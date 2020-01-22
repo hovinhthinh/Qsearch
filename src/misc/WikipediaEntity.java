@@ -59,8 +59,7 @@ public class WikipediaEntity {
     private static boolean bulk(JSONObject o) {
         try {
             String content = o.getString("content");
-            String entity = "<" + content.substring(0, content.indexOf("\n")).trim() + ">";
-
+            String entity = "<" + content.substring(0, content.indexOf("\n")).trim().replaceAll(" ", "_") + ">";
             JSONObject index = new JSONObject().put("index", new JSONObject().put("_id", entity));
             String body = new JSONObject().put("pageContent", content).toString();
             bulks.add(index.toString());
@@ -82,7 +81,6 @@ public class WikipediaEntity {
         SelfMonitor monitor = new SelfMonitor("ImportTable", -1, 10);
         monitor.start();
 
-        Gson gson = new Gson();
         for (String line : FileUtils.getLineStream(input)) {
             JSONObject o = new JSONObject(line);
             if (!bulk(o)) {
@@ -103,6 +101,5 @@ public class WikipediaEntity {
         System.out.println(deleteIndex());
         System.out.println(createIndex());
         System.out.println(importTables("/GW/D5data-11/hvthinh/WIKIPEDIA-niko/fixedWikipediaEntitiesJSON.gz"));
-
     }
 }
