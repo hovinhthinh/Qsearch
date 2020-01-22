@@ -41,7 +41,7 @@ public class WordSet {
         double sumTfIdf = 0;
         for (Map.Entry<String, Integer> e : word2freq.entrySet()) {
             double[] emb = Glove.getEmbedding(e.getKey());
-            if (e == null) {
+            if (emb == null) {
                 continue;
             }
             double tfIdf = IDF.getDefaultIdf(e.getKey()) * e.getValue();
@@ -57,7 +57,7 @@ public class WordSet {
         double sumTfIdf = 0;
         for (Map.Entry<String, Integer> e : word2freq.entrySet()) {
             double[] emb = Glove.getEmbedding(e.getKey());
-            if (e == null) {
+            if (emb == null) {
                 continue;
             }
             double idf = IDF.getDefaultIdf(e.getKey());
