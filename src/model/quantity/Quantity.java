@@ -49,4 +49,14 @@ public class Quantity {
                 .append(resolution).append(")");
         return sb.toString();
     }
+
+    // 1% diff is considered equals
+    public int compareTo(Quantity o) {
+        double thisConvertedValue = value * QuantityDomain.getScale(this);
+        double otherConvertedValue = o.value * QuantityDomain.getScale(o);
+
+        double maxDiff = Math.max(Math.abs(thisConvertedValue), Math.abs(otherConvertedValue)) * 0.01;
+        double diff = Math.abs(thisConvertedValue - otherConvertedValue);
+        return diff <= maxDiff ? 0 : (thisConvertedValue < otherConvertedValue ? -1 : 1);
+    }
 }
