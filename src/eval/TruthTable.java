@@ -177,7 +177,7 @@ public class TruthTable extends Table {
                 // Compute embedding from quantity header
                 WordSet set = new WordSet();
                 set.addAll(getQuantityDescriptionFromCombinedHeader(i));
-                double[] qEmb = set.getTfIdfEmbedding();
+                double[] qEmb = set.getTfIdfWeightedEmbedding();
 
                 int linkedColumn = -1;
                 double linkedScore = Constants.MAX_DOUBLE;
@@ -189,7 +189,7 @@ public class TruthTable extends Table {
                     // Compute score from entity header
                     set = new WordSet();
                     set.addAll(getOriginalCombinedHeader(j));
-                    double[] eEmb = set.getTfIdfEmbedding();
+                    double[] eEmb = set.getTfIdfWeightedEmbedding();
 
                     double score = Vectors.cosineD(qEmb, eEmb);
                     if (score < linkedScore) {

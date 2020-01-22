@@ -36,7 +36,7 @@ public class WordSet {
         }
     }
 
-    public double[] getTfIdfEmbedding() {
+    public double[] getTfIdfWeightedEmbedding() {
         double[] r = new double[Glove.DIM];
         double sumTfIdf = 0;
         for (Map.Entry<String, Integer> e : word2freq.entrySet()) {
@@ -47,6 +47,22 @@ public class WordSet {
             double tfIdf = IDF.getDefaultIdf(e.getKey()) * e.getValue();
             sumTfIdf += tfIdf;
             r = Vectors.sum(r, Vectors.multiply(emb, tfIdf));
+        }
+        r = Vectors.multiply(r, 1 / sumTfIdf);
+        return r;
+    }
+
+    public double[] getIdfWeightedEmbedding() {
+        double[] r = new double[Glove.DIM];
+        double sumTfIdf = 0;
+        for (Map.Entry<String, Integer> e : word2freq.entrySet()) {
+            double[] emb = Glove.getEmbedding(e.getKey());
+            if (e == null) {
+                continue;
+            }
+            double idf = IDF.getDefaultIdf(e.getKey());
+            sumTfIdf += idf;
+            r = Vectors.sum(r, Vectors.multiply(emb, idf));
         }
         r = Vectors.multiply(r, 1 / sumTfIdf);
         return r;
