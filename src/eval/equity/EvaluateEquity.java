@@ -63,11 +63,11 @@ public class EvaluateEquity {
             System.out.println("========================================================================================================================================================================================================");
             ++nGoodTable;
 
-            reporter.recordAverage("microAvgEDOurs", precEDOurs);
-            reporter.recordAverage("microAvgCAOurs", precCAOurs);
-            reporter.recordAverage("microAvgEDPrior", precEDPrior);
-            reporter.recordAverage("microAvgCAFirstColumn", precCAFirstColumn);
-            reporter.recordAverage("microAvgQtFoundRateInText", qtFoundRate);
+            reporter.recordAverage("microPrecEDOurs", precEDOurs);
+            reporter.recordAverage("microPrecCAOurs", precCAOurs);
+            reporter.recordAverage("microPrecEDPrior", precEDPrior);
+            reporter.recordAverage("microPrecCAFirstColumn", precCAFirstColumn);
+            reporter.recordAverage("microPrecQtFoundRateInText", qtFoundRate);
         }
         System.out.println("nBadTable/nGoodTable: " + nBadTable + "/" + nGoodTable);
         System.out.println(reporter.getReportString());
