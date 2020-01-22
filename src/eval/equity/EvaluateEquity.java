@@ -34,7 +34,6 @@ public class EvaluateEquity {
             TruthTable table = gson.fromJson(line, TruthTable.class);
             table.linkQuantitiesInTableAndText();
             double qtFoundRate = table.getRateOfTableQuantitiesFoundInText();
-            System.out.println(qtFoundRate);
 
             System.out.println("=== Original ===");
             System.out.println("- URL: " + table.source);
@@ -59,6 +58,7 @@ public class EvaluateEquity {
 
             System.out.println(String.format("precEntityDisambiguation: Prior/Ours: %.2f/%.2f", precEDPrior * 100, precEDOurs * 100));
             System.out.println(String.format("precColumnAlignment: FirstColumn/Ours: %.2f/%.2f", precCAFirstColumn * 100, precCAOurs * 100));
+            System.out.println(String.format("qtFoundRateInText: %.2f", qtFoundRate));
             System.out.println("========================================================================================================================================================================================================");
             ++nGoodTable;
             microAvgEDOurs += precEDOurs;
