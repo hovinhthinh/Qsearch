@@ -1,14 +1,14 @@
 package util;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class MetricReporter {
 
     private String name;
 
     // avg
-    private HashMap<String, Integer> avg_key2freq = new HashMap<>();
-    private HashMap<String, Double> avg_key2precSum = new HashMap<>();
+    private LinkedHashMap<String, Integer> avg_key2freq = new LinkedHashMap<>();
+    private LinkedHashMap<String, Double> avg_key2precSum = new LinkedHashMap<>();
 
 
     public MetricReporter(String name) {
@@ -29,7 +29,7 @@ public class MetricReporter {
         sb.append("========== ").append("METRIC_REPORTER [").append(name).append("]").append(" ==========\r\n");
         // avg micro precision
         if (avg_key2freq.size() > 0) {
-            sb.append("=== Average ===\r\n");
+            sb.append("--- Average ---\r\n");
             for (String k : avg_key2freq.keySet()) {
                 sb.append(String.format("    %s: %.2f\r\n", k, avg_key2precSum.get(k) / avg_key2freq.get(k) * 100));
             }
