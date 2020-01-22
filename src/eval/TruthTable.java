@@ -3,6 +3,7 @@ package eval;
 
 import com.google.gson.Gson;
 import eval.baseline.WordSet;
+import model.quantity.Quantity;
 import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
@@ -252,5 +253,18 @@ public class TruthTable extends Table {
             }
         }
         return total == 0 ? -1 : ((double) nFound) / total;
+    }
+
+    // returns only 1 sentence
+    @Deprecated
+    public Sentence getSentenceContainingQuantity(Quantity q) {
+        for (Sentence sent : surroundingTextAsParagraph.sentences) {
+            for (QuantityTag qt : sent.quantityTags) {
+                if (qt.quantity.compareTo(q) == 0) {
+                    return sent;
+                }
+            }
+        }
+        return null;
     }
 }
