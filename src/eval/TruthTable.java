@@ -2,14 +2,13 @@ package eval;
 
 
 import com.google.gson.Gson;
-import model.context.IDF;
+import eval.baseline.WordSet;
 import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
 import model.text.Paragraph;
 import model.text.Sentence;
 import model.text.tag.QuantityTag;
-import nlp.Glove;
 import pipeline.text.QuantityTaggingNode;
 import pipeline.text.TaggingPipeline;
 import util.Constants;
@@ -176,19 +175,9 @@ public class TruthTable extends Table {
                 ++total;
 
                 // Compute embedding from quantity header
-                double[] qEmb = new double[Glove.DIM];
-                double sumIdf = 0;
-                for (String s : getQuantityDescriptionFromCombinedHeader(i).split(" ")) {
-                    double[] e = Glove.getEmbedding(s);
-                    if (e == null) {
-                        continue;
-                    }
-                    double idf = IDF.getDefaultIdf(s);
-                    sumIdf += idf;
-                    qEmb = Vectors.sum(qEmb, Vectors.multiply(e, idf));
-                }
-                qEmb = Vectors.multiply(qEmb, 1 / sumIdf);
-
+                WordSet set = new WordSet();
+                set.addAll(getQuantityDescriptionFromCombinedHeader(i));
+                double[] qEmb = set.getTfIdfEmbedding();
 
                 int linkedColumn = -1;
                 double linkedScore = Constants.MAX_DOUBLE;
@@ -198,18 +187,9 @@ public class TruthTable extends Table {
                         continue;
                     }
                     // Compute score from entity header
-                    double[] eEmb = new double[Glove.DIM];
-                    sumIdf = 0;
-                    for (String s : getOriginalCombinedHeader(j).toLowerCase().split(" ")) {
-                        double[] e = Glove.getEmbedding(s);
-                        if (e == null) {
-                            continue;
-                        }
-                        double idf = IDF.getDefaultIdf(s);
-                        sumIdf += idf;
-                        eEmb = Vectors.sum(eEmb, Vectors.multiply(e, idf));
-                    }
-                    eEmb = Vectors.multiply(eEmb, 1 / sumIdf);
+                    set = new WordSet();
+                    set.addAll(getOriginalCombinedHeader(j));
+                    double[] eEmb = set.getTfIdfEmbedding();
 
                     double score = Vectors.cosineD(qEmb, eEmb);
                     if (score < linkedScore) {
