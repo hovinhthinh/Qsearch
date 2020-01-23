@@ -44,7 +44,7 @@ public class WordSet {
             if (emb == null) {
                 continue;
             }
-            double tfIdf = IDF.getDefaultIdf(e.getKey()) * e.getValue();
+            double tfIdf = IDF.getDefaultIdf(e.getKey(), false) * e.getValue();
             sumTfIdf += tfIdf;
             r = Vectors.sum(r, Vectors.multiply(emb, tfIdf));
         }
@@ -60,7 +60,7 @@ public class WordSet {
             if (emb == null) {
                 continue;
             }
-            double idf = IDF.getDefaultIdf(e.getKey());
+            double idf = IDF.getDefaultIdf(e.getKey(), false);
             sumTfIdf += idf;
             r = Vectors.sum(r, Vectors.multiply(emb, idf));
         }
