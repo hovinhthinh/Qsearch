@@ -275,7 +275,7 @@ public class TruthTable extends Table {
     }
 
     @Deprecated
-    // for quantity column: column header + all sentences from table surrounding text containing quantities
+    // for quantity column: column header + cells content + all sentences from table surrounding text containing quantities
     // for entity column: column header + cells content + wikipage from entities in cells (if available)
     public double getAlignmentPrecisionFromColumnEmbedding() {
         int total = 0;
@@ -293,6 +293,7 @@ public class TruthTable extends Table {
                 WordSet set = new WordSet();
                 set.addAll(getQuantityDescriptionFromCombinedHeader(i));
                 for (int r = 0; r < nDataRow; ++r) {
+                    set.addAll(data[r][i].text);
                     QuantityLink ql = data[r][i].getRepresentativeQuantityLink();
                     if (ql == null) {
                         continue;
@@ -348,7 +349,7 @@ public class TruthTable extends Table {
     }
 
     @Deprecated
-    // for quantity column: column header + all sentences from table surrounding text containing quantities
+    // for quantity column: column header + cells content + all sentences from table surrounding text containing quantities
     // for entity column: column header + cells content + wikipage from entities in cells (if available)
     public double getAlignmentPrecisionFromColumnJaccardIndex() {
         int total = 0;
@@ -366,6 +367,7 @@ public class TruthTable extends Table {
                 WordSet qset = new WordSet();
                 qset.addAll(getQuantityDescriptionFromCombinedHeader(i));
                 for (int r = 0; r < nDataRow; ++r) {
+                    qset.addAll(data[r][i].text);
                     QuantityLink ql = data[r][i].getRepresentativeQuantityLink();
                     if (ql == null) {
                         continue;
