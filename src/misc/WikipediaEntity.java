@@ -9,6 +9,8 @@ import util.FileUtils;
 import util.HTTPRequest;
 import util.SelfMonitor;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class WikipediaEntity {
@@ -107,9 +109,21 @@ public class WikipediaEntity {
     }
 
 
+    // e.g., entity: <Ronaldo>
+    public static String getContentOfEntity(String entity) {
+        try {
+            return new JSONObject(HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8")))
+                    .getJSONObject("_source").getString("pageContent");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static void main(String[] args) throws Exception {
-        System.out.println(deleteIndex());
-        System.out.println(createIndex());
-        System.out.println(importTables("/GW/D5data-11/hvthinh/WIKIPEDIA-niko/fixedWikipediaEntitiesJSON.gz"));
+//        System.out.println(deleteIndex());
+//        System.out.println(createIndex());
+//        System.out.println(importTables("/GW/D5data-11/hvthinh/WIKIPEDIA-niko/fixedWikipediaEntitiesJSON.gz"));
+        System.out.println(getContentOfEntity("<Cristiano_Ronaldo>"));
     }
 }
