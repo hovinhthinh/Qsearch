@@ -63,7 +63,7 @@ public class KullBackLeiblerMatcher implements ContextMatcher {
         List<PostaggedToken> tokens = null;
         OpenIE openIE = Static.getOpenIe();
         synchronized (openIE) {
-            tokens = JavaConversions.seqAsJavaList(openIE.postagger().postag(NLP.join(" ", context)));
+            tokens = JavaConversions.seqAsJavaList(openIE.postagger().postag(String.join(" ", context)));
         }
         StringBuilder result = new StringBuilder();
         for (PostaggedToken token : tokens) {
