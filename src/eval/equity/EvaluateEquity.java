@@ -69,6 +69,8 @@ public class EvaluateEquity {
             reporter.recordAverage("microPrecCAOurs", precCAOurs);
             reporter.recordAverage("rateQtFoundRateInText", qtFoundRate);
             reporter.recordAverage("microPrecCAHeaderEmbedding", table.getAlignmentPrecisionFromHeaderEmbedding());
+            reporter.recordAverage("microPrecCAColumnEmbedding", table.getAlignmentPrecisionFromColumnEmbedding());
+            reporter.recordAverage("microPrecCAColumnJaccardIndex", table.getAlignmentPrecisionFromColumnJaccardIndex());
         }
         System.out.println("nBadTable/nGoodTable: " + nBadTable + "/" + nGoodTable);
         System.out.println(reporter.getReportString());
