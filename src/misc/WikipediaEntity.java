@@ -1,8 +1,8 @@
 package misc;
 
-import com.google.gson.Gson;
 import config.Configuration;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import util.FileUtils;
@@ -41,13 +41,15 @@ public class WikipediaEntity {
 
     private static boolean callBulk() {
         StringBuilder sb = new StringBuilder();
+        int size = 0;
         for (String s : bulks) {
             sb.append(s).append("\n");
+            size += s.length() + 1;
         }
 
         String response = HTTPRequest.POST(PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/_bulk",
                 sb.toString());
-
+        System.out.println("CallBulk_Size: " + size + "B");
         if (response != null) {
             bulks.clear();
             return true;
@@ -59,7 +61,11 @@ public class WikipediaEntity {
     private static boolean bulk(JSONObject o) {
         try {
             String content = o.getString("content");
-            String entity = "<" + content.substring(0, content.indexOf("\n")).trim().replaceAll(" ", "_") + ">";
+            String entity = StringEscapeUtils.unescapeJava("<" + content.substring(0, content.indexOf("\n")).trim().replaceAll(" ", "_") + ">");
+            if (entity.length() > 64) {
+                System.out.println("Ignore invalid entity: " + entity);
+                return true;
+            }
             JSONObject index = new JSONObject().put("index", new JSONObject().put("_id", entity));
             String body = new JSONObject().put("pageContent", content).toString();
             bulks.add(index.toString());
