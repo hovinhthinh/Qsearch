@@ -112,8 +112,11 @@ public class WikipediaEntity {
     // e.g., entity: <Ronaldo>
     public static String getContentOfEntity(String entity) {
         try {
-            return new JSONObject(HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8")))
-                    .getJSONObject("_source").getString("pageContent");
+            String content = HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8"));
+            if (content == null) {
+                return null;
+            }
+            return new JSONObject(content).getJSONObject("_source").getString("pageContent");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return null;
