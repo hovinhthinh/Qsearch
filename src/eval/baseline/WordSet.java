@@ -13,7 +13,7 @@ import java.util.Map;
 public class WordSet {
     public HashMap<String, Integer> word2freq = new HashMap<>();
 
-    public void allAll(Collection<String> words) {
+    public void addAll(Collection<String> words) {
         for (String w : words) {
             addSingle(w);
         }
