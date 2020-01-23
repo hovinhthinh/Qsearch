@@ -26,15 +26,34 @@ public class IDF {
         }
     }
 
-    // word should be lowercase
+
     public static double getDefaultIdf(String word) {
-        double df = DF.getOrDefault(word, 0.0);
-        return Math.max(MIN_IDF, Math.log(N_DOC / (df + 1)));
+        return getDefaultIdf(word, true);
     }
 
     // word should be lowercase
-    public static double getRobertsonIdf(String word) {
+    // if allowOOV = false, OOV will get MIN_IDF
+    public static double getDefaultIdf(String word, boolean allowOOV) {
         double df = DF.getOrDefault(word, 0.0);
+        if (df == 0 && !allowOOV) {
+            return MIN_IDF;
+        }
+        return Math.max(MIN_IDF, Math.log(N_DOC / (df + 1)));
+    }
+
+
+    public static double getRobertsonIdf(String word) {
+        return getRobertsonIdf(word, true);
+    }
+
+    // word should be lowercase
+    // if allowOOV = false, OOV will get MIN_IDF
+    public static double getRobertsonIdf(String word, boolean allowOOV) {
+        double df = DF.getOrDefault(word, 0.0);
+        if (df == 0 && !allowOOV) {
+            return MIN_IDF;
+        }
         return Math.max(MIN_IDF, Math.log10((N_DOC - df + 0.5) / (df + 0.5)));
     }
+
 }
