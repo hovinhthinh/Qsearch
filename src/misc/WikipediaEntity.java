@@ -16,7 +16,7 @@ public class WikipediaEntity {
     public static final String ES_HOST = Configuration.get("storage.elasticsearch.address");
     public static final String WIKIPEDIA_INDEX = "wikipedia";
     public static final String ENTITY_TYPE = Configuration.get("storage.elasticsearch.entity_type");
-    public static final int BATCH_SIZE = 1024 * 8;
+    public static final int BATCH_SIZE = 1024 * 4;
     public static ArrayList<String> bulks = new ArrayList<>();
 
     public static String deleteIndex() {
@@ -58,12 +58,15 @@ public class WikipediaEntity {
         }
     }
 
+    private static int nIgnoredDocs = 0;
+
     private static boolean bulk(JSONObject o) {
         try {
             String content = o.getString("content");
             String entity = StringEscapeUtils.unescapeJava("<" + content.substring(0, content.indexOf("\n")).trim().replaceAll(" ", "_") + ">");
-            if (entity.length() > 64) {
+            if (entity.length() > 80) {
                 System.out.println("Ignore invalid entity: " + entity);
+                ++nIgnoredDocs;
                 return true;
             }
             JSONObject index = new JSONObject().put("index", new JSONObject().put("_id", entity));
@@ -99,6 +102,7 @@ public class WikipediaEntity {
         if (bulks.size() > 0) {
             return callBulk();
         }
+        System.out.println("#IgnoredDocs: " + nIgnoredDocs);
         return true;
     }
 
