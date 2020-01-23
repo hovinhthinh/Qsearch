@@ -306,4 +306,13 @@ public class Table {
         }
         return false;
     }
+
+    public int getFirstNonNumericColumn() {
+        for (int i = 0; i < nColumn; ++i) {
+            if (!isNumericColumn[i]) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
