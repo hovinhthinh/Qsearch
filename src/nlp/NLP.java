@@ -133,17 +133,6 @@ public class NLP {
         return sb.toString();
     }
 
-    public static String join(String seperator, List<String> list) {
-        StringBuilder sb = new StringBuilder();
-        for (String s : list) {
-            if (sb.length() > 0) {
-                sb.append(seperator);
-            }
-            sb.append(s);
-        }
-        return sb.toString();
-    }
-
     // Use the published service:
     // $ curl --data text="Dylan was born in Duluth." https://gate.d5.mpi-inf.mpg.de/aida/service/disambiguate
     // Input sentence should already be tokenized.
