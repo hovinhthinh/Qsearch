@@ -3,6 +3,7 @@ package eval.baseline;
 import model.context.IDF;
 import nlp.Glove;
 import nlp.NLP;
+import uk.ac.susx.informatics.Morpha;
 import util.Vectors;
 
 import java.util.Collection;
@@ -34,6 +35,15 @@ public class WordSet {
         for (String w : NLP.BLOCKED_STOPWORDS) {
             word2freq.remove(w);
         }
+    }
+
+    public void stemming() {
+        HashMap<String, Integer> newWord2freq = new HashMap<>();
+        for (Map.Entry<String, Integer> e : word2freq.entrySet()) {
+            String k = NLP.fastStemming(e.getKey(), Morpha.any);
+            newWord2freq.put(k, newWord2freq.getOrDefault(k, 0) + e.getValue());
+        }
+        word2freq = newWord2freq;
     }
 
     public double[] getTfIdfWeightedEmbedding() {
