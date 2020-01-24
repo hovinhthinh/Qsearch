@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PriorBasedEntityTaggingNode implements TaggingNode {
-    public static final double REPRESENTATIVE_THRESHOLD = 0.7;
+    public static double REPRESENTATIVE_THRESHOLD = 0.7;
 
     private Mention2EntityPrior prior;
     private boolean multipleEntitiesInCell;
