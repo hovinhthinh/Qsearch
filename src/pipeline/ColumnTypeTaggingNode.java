@@ -24,6 +24,12 @@ public class ColumnTypeTaggingNode implements TaggingNode {
         table.isEntityColumn = new boolean[table.nColumn];
         boolean hasEntityColumn = false, hasQuantityColumn = false;
         for (int c = 0; c < table.nColumn; ++c) {
+
+            if (c == 0 && table.hasIndexColumn()) {
+                // ignore index column
+                continue;
+            }
+            
             int nEntity = 0, nQuantity = 0;
             for (int r = 0; r < table.nDataRow; ++r) {
                 if (table.data[r][c].getRepresentativeEntityLink() != null) {
