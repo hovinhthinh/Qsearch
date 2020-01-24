@@ -114,6 +114,11 @@ public class DeepColumnScoringNode implements TaggingNode {
         private ArrayList<String> types = null;
 
         public double getHScore() {
+            // there is only 1 entity in the entity column; check <= 1 for safety
+            if (typeSets.size() <= 1) {
+                return 0;
+            }
+
             double hScore = 0;
             for (int i = 0; i < typeSets.size(); ++i) {
                 LinkedHashSet<String> typeI = typeSets.get(i);
