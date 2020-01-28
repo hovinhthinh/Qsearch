@@ -135,7 +135,7 @@ public class QuantityTaggingNode implements TaggingNode {
             }
         }
 
-        table.majorUnitInColum = new String[table.nColumn];
+        table.majorUnitInColumn = new String[table.nColumn];
         for (int col = 0; col < table.nColumn; ++col) {
             String header = table.getCombinedHeader(col);
             // Extends units from the header.
@@ -157,7 +157,7 @@ public class QuantityTaggingNode implements TaggingNode {
                 }
             }
             if (unitToFreq.size() > 0) {
-                table.majorUnitInColum[col] = unitToFreq.entrySet().stream().max((a, b) -> (a.getValue().compareTo(b.getValue()))).get().getKey();
+                table.majorUnitInColumn[col] = unitToFreq.entrySet().stream().max((a, b) -> (a.getValue().compareTo(b.getValue()))).get().getKey();
             }
         }
         return true;

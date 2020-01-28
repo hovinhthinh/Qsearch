@@ -16,7 +16,7 @@ public class Table {
     public Cell[][] data; // row -> column
     public int nHeaderRow, nDataRow, nColumn;
 
-    public String[] majorUnitInColum; // null means dimensionless, or unavailable. (this is provided from QuantityTaggingNode)
+    public String[] majorUnitInColumn; // null means dimensionless, or unavailable. (this is provided from QuantityTaggingNode)
 
     public boolean[] isNumericColumn;
     public boolean[] isEntityColumn;
@@ -195,11 +195,11 @@ public class Table {
             }
             sb.append(token);
         }
-        if (majorUnitInColum != null && majorUnitInColum[columnIndex] != null) {
+        if (majorUnitInColumn != null && majorUnitInColumn[columnIndex] != null) {
             if (sb.length() > 0) {
                 sb.append(" ");
             }
-            sb.append(majorUnitInColum[columnIndex].toLowerCase());
+            sb.append(majorUnitInColumn[columnIndex].toLowerCase());
         }
         return sb.toString();
     }
@@ -218,11 +218,11 @@ public class Table {
             }
             sb.append(token);
         }
-        if (majorUnitInColum != null && majorUnitInColum[columnIndex] != null) {
+        if (majorUnitInColumn != null && majorUnitInColumn[columnIndex] != null) {
             if (sb.length() > 0) {
                 sb.append(" ");
             }
-            sb.append(majorUnitInColum[columnIndex].toLowerCase());
+            sb.append(majorUnitInColumn[columnIndex].toLowerCase());
         }
         return sb.toString();
     }
