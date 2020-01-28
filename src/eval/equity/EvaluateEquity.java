@@ -35,9 +35,9 @@ public class EvaluateEquity {
             table.linkQuantitiesInTableAndText();
             double qtFoundRate = table.getRateOfTableQuantitiesFoundInText();
             reporter.recordAverage("rateQtFoundRateInText", qtFoundRate);
-            reporter.recordAverage("microPrecCAHeaderEmbedding", table.getAlignmentPrecisionFromHeaderEmbedding());
-            reporter.recordAverage("microPrecCAColumnEmbedding", table.getAlignmentPrecisionFromColumnEmbedding());
-            reporter.recordAverage("microPrecCAColumnJaccardIndex", table.getAlignmentPrecisionFromColumnJaccardIndex());
+            reporter.recordAverage("macroPrecCAHeaderEmbedding", table.getAlignmentPrecisionFromHeaderEmbedding());
+            reporter.recordAverage("macroPrecCAColumnEmbedding", table.getAlignmentPrecisionFromColumnEmbedding());
+            reporter.recordAverage("macroPrecCAColumnJaccardIndex", table.getAlignmentPrecisionFromColumnJaccardIndex());
 
             System.out.println("--- Original ---");
             System.out.println("- URL: " + table.source);
@@ -71,10 +71,10 @@ public class EvaluateEquity {
             System.out.println("========================================================================================================================================================================================================");
             ++nGoodTable;
 
-            reporter.recordAverage("microPrecEDPrior", precEDPrior);
-            reporter.recordAverage("microPrecEDOurs", precEDOurs);
-            reporter.recordAverage("microPrecCAFirstColumn", precCAFirstColumn);
-            reporter.recordAverage("microPrecCAOurs", precCAOurs);
+            reporter.recordAverage("macroPrecEDPrior", precEDPrior);
+            reporter.recordAverage("macroPrecEDOurs", precEDOurs);
+            reporter.recordAverage("macroPrecCAFirstColumn", precCAFirstColumn);
+            reporter.recordAverage("macroPrecCAOurs", precCAOurs);
         }
         System.out.println("nBadTable/nGoodTable: " + nBadTable + "/" + nGoodTable);
         System.out.println(reporter.getReportString());
