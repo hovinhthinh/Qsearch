@@ -169,10 +169,22 @@ public class Table {
         return false;
     }
 
+    private boolean isSpecialTokenToBeIgnored(String token) {
+        if (token.equals("$")) {
+            return false;
+        }
+        for (int i = 0; i < token.length(); ++i) {
+            if (Character.isLetterOrDigit(token.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public String getQuantityDescriptionFromCombinedHeader(int columnIndex) {
         StringBuilder sb = new StringBuilder();
         for (String token : getCombinedHeader(columnIndex).toLowerCase().split(" ")) {
-            if (NLP.BLOCKED_STOPWORDS.contains(token)) {
+            if (NLP.BLOCKED_STOPWORDS.contains(token) || isSpecialTokenToBeIgnored(token)) {
                 continue;
             }
             if (sb.length() > 0) {
@@ -192,7 +204,7 @@ public class Table {
     public String getQuantityDescriptionFromLastHeader(int columnIndex) {
         StringBuilder sb = new StringBuilder();
         for (String token : header[nHeaderRow - 1][columnIndex].text.toLowerCase().split(" ")) {
-            if (NLP.BLOCKED_STOPWORDS.contains(token)) {
+            if (NLP.BLOCKED_STOPWORDS.contains(token) || isSpecialTokenToBeIgnored(token)) {
                 continue;
             }
             if (sb.length() > 0) {
