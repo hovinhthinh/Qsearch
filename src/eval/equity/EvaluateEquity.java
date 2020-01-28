@@ -25,8 +25,6 @@ public class EvaluateEquity {
     }
 
     public static void main(String[] args) {
-        PriorBasedEntityTaggingNode.REPRESENTATIVE_THRESHOLD = 0;
-
         TaggingPipeline pipeline = getPipeline();
         Gson gson = new Gson();
         int nGoodTable = 0, nBadTable = 0;
