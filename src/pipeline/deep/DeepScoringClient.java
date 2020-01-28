@@ -90,9 +90,10 @@ public class DeepScoringClient implements ScoringClientInterface {
         }
     }
 
+    // example: run.sh 4G pipeline.deep.DeepScoringClient 0,0,0,1,1,1
     public static void main(String[] args) {
 //        benchmarking(new DeepScoringClient(true, -1));
-        benchmarking(new MultiThreadedDeepScoringClient(false, "0,0,0,1,1,1"));
+        benchmarking(new MultiThreadedDeepScoringClient(false, args[0]));
 //        DeepScoringClient client = new DeepScoringClient();
 //        System.out.println(client.getScore("stadium in europe", "capacity"));
 //        System.out.println(client.getScores(Arrays.asList("team", "stadium", "dog"), "capacity"));
