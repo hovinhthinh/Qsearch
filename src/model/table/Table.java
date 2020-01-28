@@ -39,6 +39,10 @@ public class Table {
     public HashMap<String, String> moreInfo = new HashMap<>(); // More info, for different datasets.
 
     public String getTableContentPrintable(boolean showAnnotations, boolean multipleLine, boolean printColumnIndex) {
+        return getTableContentPrintable(showAnnotations, multipleLine, printColumnIndex, false);
+    }
+
+    public String getTableContentPrintable(boolean showAnnotations, boolean multipleLine, boolean printColumnIndex, boolean singleLinkForCell) {
         StringBuilder sb = new StringBuilder();
         int[] columnMaxWidth = new int[nColumn];
         boolean printHeader = true;
@@ -56,9 +60,9 @@ public class Table {
             for (int i = 0; i < part.length; ++i) {
                 for (int j = 0; j < part[i].length; ++j) {
                     columnMaxWidth[j] = Math.max(columnMaxWidth[j], (printHeader && showAnnotations && isNumericColumn[j] ? (quantityToEntityColumn == null || quantityToEntityColumn[j] == -1 ? 2 : String.valueOf(quantityToEntityColumn[j]).length() + 1) : 0)
-                            + (showAnnotations ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length()));
+                            + (showAnnotations ? part[i][j].getDisambiguatedText(singleLinkForCell).length() : part[i][j].text.length()));
                     columnMaxWidth[j] = Math.max(columnMaxWidth[j], (printHeader && showAnnotations && isEntityColumn[j] ? 1 : 0)
-                            + (showAnnotations ? part[i][j].getDisambiguatedText().length() : part[i][j].text.length()));
+                            + (showAnnotations ? part[i][j].getDisambiguatedText(singleLinkForCell).length() : part[i][j].text.length()));
                     columnMaxWidth[j] = Math.min(columnMaxWidth[j], MAX_COLUMN_WIDTH);
                 }
             }
@@ -99,7 +103,7 @@ public class Table {
                 for (int j = 0; j < part[i].length; ++j) {
                     strs[j] = (printHeader && showAnnotations && isEntityColumn[j] ? "*" : "") +
                             (printHeader && showAnnotations && isNumericColumn[j] ? (quantityToEntityColumn == null || quantityToEntityColumn[j] == -1 ? "?@" : quantityToEntityColumn[j] + "@") : "")
-                            + (showAnnotations ? part[i][j].getDisambiguatedText() : part[i][j].text);
+                            + (showAnnotations ? part[i][j].getDisambiguatedText(singleLinkForCell) : part[i][j].text);
                 }
                 if (!multipleLine) {
                     for (int j = 0; j < part[i].length; ++j) {

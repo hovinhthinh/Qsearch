@@ -25,18 +25,31 @@ public class Cell {
     private transient String disambiguatedText = null;
 
     public String getDisambiguatedText() {
+        return getDisambiguatedText(false);
+    }
+
+    public String getDisambiguatedText(boolean disambiguateSingleLink) {
 //        if (disambiguatedText != null) {
 //            return disambiguatedText;
 //        }
         disambiguatedText = this.text;
         for (EntityLink l : entityLinks) {
             disambiguatedText = disambiguatedText.replace(l.text, "<" + l.target.substring(l.target.lastIndexOf(":") + 1) + ">");
-        }
-        for (QuantityLink l : quantityLinks) {
-            disambiguatedText = disambiguatedText.replace(l.text, l.quantity.toString(2));
+            if (disambiguateSingleLink) {
+                return disambiguatedText;
+            }
         }
         for (TimeLink l : timeLinks) {
             disambiguatedText = disambiguatedText.replace(l.text, "<" + l.temporalStr + ">");
+            if (disambiguateSingleLink) {
+                return disambiguatedText;
+            }
+        }
+        for (QuantityLink l : quantityLinks) {
+            disambiguatedText = disambiguatedText.replace(l.text, l.quantity.toString(2));
+            if (disambiguateSingleLink) {
+                return disambiguatedText;
+            }
         }
         return disambiguatedText;
     }
