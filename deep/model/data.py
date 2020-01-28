@@ -2,6 +2,7 @@ import gzip
 import json
 import os
 import random
+from collections import defaultdict
 
 import numpy as np
 
@@ -28,29 +29,43 @@ _blocked_general_types = {
     'physical object'
 }
 
+MIN_N_ENTITY = 10
+
 # load entity types
 _yago_type = None
 _entity_to_types = None
 
 
 def _load_yago_type():
-    global _yago_type
-    _yago_type = []
     global _entity_to_types
     _entity_to_types = {}
 
-    yago_types_set = set()
+    yago_types_dict = defaultdict(int)
     print('loading Yago entity types from %s' % yago_type_path)
     with gzip.open(yago_type_path, 'rt', encoding='utf-8') as f:
         for line in f:
             arr = line.strip().split('\t')
             types = json.loads(arr[1])
-            yago_types_set.update(types)
-            filtered_types = [t for t in types]  # if t not in _blocked_general_types] # now not using blocked types
+            filtered_types = [t for t in types if t not in _blocked_general_types] # using blocked types
             if len(filtered_types) > 0:
                 _entity_to_types[arr[0]] = filtered_types
-    for type in yago_types_set:
-        _yago_type.append(type)
+                for t in filtered_types:
+                    yago_types_dict[t] += 1
+
+    global _yago_type
+    _yago_type = []
+
+    yago_type_to_remove = set()
+    for t in yago_types_dict:
+        if yago_types_dict[t] < MIN_N_ENTITY:
+            yago_type_to_remove.add(t)
+        else:
+            _yago_type.append(t)
+
+    # remove types with less than MIN_N_ENTITY
+    for e in _entity_to_types:
+        types = _entity_to_types[e]
+        _entity_to_types[e] = [t for t in types if t not in yago_type_to_remove]
 
 
 # first index is 'padding' token, len(word_dict) + 1 is 'unknown'
