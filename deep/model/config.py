@@ -6,6 +6,8 @@ feed_forward_dim_small = 64
 batch_size = 128
 learning_rate = 0.001
 
+transformer_num_hidden_layers = 1
+
 max_num_epoches = 100
 save_model_frequency = 1
 

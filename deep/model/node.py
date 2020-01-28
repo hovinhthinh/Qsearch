@@ -12,7 +12,7 @@ except:
     _n_GPUs = 0
 
 _hparams = transformer.transformer_base()
-_hparams.num_hidden_layers = 2
+_hparams.num_hidden_layers = transformer_num_hidden_layers
 
 
 def _attention(scope, input, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
