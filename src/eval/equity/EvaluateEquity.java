@@ -7,7 +7,6 @@ import pipeline.DeepColumnScoringNode;
 import pipeline.PostFilteringNode;
 import pipeline.TaggingPipeline;
 import pipeline.deep.DeepScoringClient;
-import util.Constants;
 import util.FileUtils;
 import util.MetricReporter;
 
@@ -45,9 +44,9 @@ public class EvaluateEquity {
             System.out.println("- Title: " + table.pageTitle);
             System.out.println("- Content: \r\n" + table.surroundingTextAsParagraph.toStringWithNewlineAfterSentences());
             System.out.println("- Caption: " + table.caption);
-            System.out.println(table.getTableContentPrintable(false, true, false));
+            System.out.println(table.getTableContentPrintable(false, true, false, false));
             System.out.println("--- Ground Truth ---");
-            System.out.println(table.getTableContentPrintable(true, true, true));
+            System.out.println(table.getTableContentPrintable(true, true, true, true));
             double precEDPrior = table.getEntityDisambiguationPrecisionFromPrior();
             double precCAFirstColumn = table.getAlignmentPrecisionFromFirstColumn();
 
@@ -64,7 +63,7 @@ public class EvaluateEquity {
             }
 
             System.out.println("--- Ours ---");
-            System.out.println(table.getTableContentPrintable(true, true, true));
+            System.out.println(table.getTableContentPrintable(true, true, true, true));
 
             System.out.println(String.format("precEntityDisambiguation: Prior/Ours: %.2f/%.2f", precEDPrior * 100, precEDOurs * 100));
             System.out.println(String.format("precColumnAlignment: FirstColumn/Ours: %.2f/%.2f", precCAFirstColumn * 100, precCAOurs * 100));
