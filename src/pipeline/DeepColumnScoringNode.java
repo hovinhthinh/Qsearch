@@ -11,7 +11,6 @@ import util.Pair;
 
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 // Link quantity columns to entity columns, return false if there is no quantity column.
 public class DeepColumnScoringNode implements TaggingNode {
@@ -22,10 +21,16 @@ public class DeepColumnScoringNode implements TaggingNode {
 
     public static final int PRIOR_INFERENCE = 1;
     public static final int JOINT_INFERENCE = 2;
+
+    // TODO: fix this weight
     public static final double DEFAULT_JOINT_HOMOGENEITY_WEIGHT = 30; // 30 for gini, 1 for entropy; Constants.MAX_DOUBLE (set the connectivity to 0)
+
     public static final int JOINT_MAX_NUM_ITERS = 100;
     public static final int JOINT_MAX_LOCAL_CANDIDATES = 10; // set to -1 to disable this threshold. (-1 means INF)
-    public static final int JOINT_MAX_NUM_COLUMN_LINKING = 100; // to prune too large tables. (-1 means INF)
+    public static final int JOINT_MAX_NUM_COLUMN_LINKING = 10000; // to prune too large tables. (-1 means INF)
+
+    // TODO: fix this weight
+    public static final double FIRST_COLUMN_WEIGHT = 0;
 
     private int inferenceMode;
     private ScoringClientInterface scoringClient;
@@ -246,6 +251,8 @@ public class DeepColumnScoringNode implements TaggingNode {
 
             double homogeneity = 0;
             double connectivity = 0;
+
+            int firstColumn = table.getFirstNonNumericColumn();
             for (int i : entityColumnIndexes) {
                 // homogeneity
                 homogeneity += (currentHomogeneityScore[i] = columnTypeSet[i].getHScore());
@@ -262,6 +269,7 @@ public class DeepColumnScoringNode implements TaggingNode {
                     if (table.nHeaderRow > 1) {
                         lScore = Math.max(lScore, ct.getLScore(table.getQuantityDescriptionFromLastHeader(i)));
                     }
+                    lScore = (1 - FIRST_COLUMN_WEIGHT) * lScore + FIRST_COLUMN_WEIGHT * (currentColumnLinking[i] == firstColumn ? 1 : 0);
                     connectivity += (currentColumnLinkingScore[i] = lScore);
                 }
                 connectivity /= numericColumnIndexes.length;
@@ -282,6 +290,8 @@ public class DeepColumnScoringNode implements TaggingNode {
 
             double homogeneity = 0;
             double connectivity = 0;
+
+            int firstColumn = table.getFirstNonNumericColumn();
             for (int i : entityColumnIndexes) {
                 // homogeneity
                 if (i != col) {
@@ -306,6 +316,7 @@ public class DeepColumnScoringNode implements TaggingNode {
                         if (table.nHeaderRow > 1) {
                             lScore = Math.max(lScore, ct.getLScore(table.getQuantityDescriptionFromLastHeader(i)));
                         }
+                        lScore = (1 - FIRST_COLUMN_WEIGHT) * lScore + FIRST_COLUMN_WEIGHT * (currentColumnLinking[i] == firstColumn ? 1 : 0);
                         connectivity += lScore;
                     }
                 }
