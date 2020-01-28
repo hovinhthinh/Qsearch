@@ -184,9 +184,6 @@ public class Table {
     public String getQuantityDescriptionFromCombinedHeader(int columnIndex) {
         StringBuilder sb = new StringBuilder();
         for (String token : getCombinedHeader(columnIndex).toLowerCase().split(" ")) {
-            if (token.equals("us$")) {
-                token = "$";
-            }
             if (NLP.BLOCKED_STOPWORDS.contains(token) || isSpecialTokenToBeIgnored(token)) {
                 continue;
             }
@@ -199,7 +196,11 @@ public class Table {
             if (sb.length() > 0) {
                 sb.append(" ");
             }
-            sb.append(majorUnitInColumn[columnIndex].toLowerCase());
+            String unit = majorUnitInColumn[columnIndex].toLowerCase();
+            if (unit.equals("us$")) {
+                unit = "$";
+            }
+            sb.append(unit);
         }
         return sb.toString();
     }
@@ -207,9 +208,6 @@ public class Table {
     public String getQuantityDescriptionFromLastHeader(int columnIndex) {
         StringBuilder sb = new StringBuilder();
         for (String token : header[nHeaderRow - 1][columnIndex].text.toLowerCase().split(" ")) {
-            if (token.equals("us$")) {
-                token = "$";
-            }
             if (NLP.BLOCKED_STOPWORDS.contains(token) || isSpecialTokenToBeIgnored(token)) {
                 continue;
             }
@@ -222,7 +220,11 @@ public class Table {
             if (sb.length() > 0) {
                 sb.append(" ");
             }
-            sb.append(majorUnitInColumn[columnIndex].toLowerCase());
+            String unit = majorUnitInColumn[columnIndex].toLowerCase();
+            if (unit.equals("us$")) {
+                unit = "$";
+            }
+            sb.append(unit);
         }
         return sb.toString();
     }
