@@ -47,9 +47,9 @@ public class AnnotateTableLinking {
                     System.out.println("pageTitle: " + t.pageTitle);
                     System.out.println("caption: " + t.caption);
                     System.out.println("=== Original ===");
-                    System.out.println(t.getTableContentPrintable(false, true, false));
+                    System.out.println(t.getTableContentPrintable(false, true, false, true));
                     System.out.println("=== Annotated ===");
-                    System.out.println(t.getTableContentPrintable(true, true, true));
+                    System.out.println(t.getTableContentPrintable(true, true, true, true));
                     System.out.println("----------");
                     System.out.println("annotated/total: " + nAnnotated + " / " + (nAnnotated + nIgnored));
                     System.out.println("=== OPTIONS ===");
