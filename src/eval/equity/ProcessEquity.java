@@ -41,11 +41,6 @@ public class ProcessEquity {
 
             TruthTable t;
             t = gson.fromJson(line, TruthTable.class);
-            if (!pipeline.tag(t)) {
-                System.out.println("Ignored: " + t._id);
-                continue;
-            }
-            ++nGood;
 
             for (int i = 0; i < t.nDataRow; ++i) {
                 for (int j = 0; j < t.nColumn; ++j) {
@@ -54,10 +49,19 @@ public class ProcessEquity {
                         el.candidates = mention2EntityPrior.getCanditateEntitiesForMention(el.text);
                         if (el.candidates == null) {
                             t.data[i][j].entityLinks.clear();
+                            t.yusraBodyEntityTarget[i][j] = 0;
+                            t.bodyEntityTarget[i][j] = null;
+                            t.data[i][j].resetCachedRepresentativeLink();
                         }
                     }
                 }
             }
+
+            if (!pipeline.tag(t)) {
+                System.out.println("Ignored: " + t._id);
+                continue;
+            }
+            ++nGood;
 
             out.println(gson.toJson(t));
 //            System.out.println(line);

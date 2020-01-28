@@ -108,6 +108,9 @@ public class EquityReader {
                     String key = ts.getString("id") + "@" + row + "@" + col + "@" + a.getInt("start") + "@" + a.getInt("end");
 
                     String target = a.getString("sem_target");
+                    if (target.equals("Monetary(Currency,Euro)")) {
+                        continue;
+                    }
 
                     Cell cell = row == 0 ? table.header[row][col] : table.data[row - 1][col];
 
@@ -137,7 +140,7 @@ public class EquityReader {
                     Assert.assertTrue(cell.text.contains(link.text));
                     int begin = cell.text.indexOf(link.text);
                     int end = begin + link.text.length();
-                    while (end < cell.text.length() && cell.text.indexOf(end) != ' ') {
+                    while (end < cell.text.length() && cell.text.indexOf(end) != ' ' ) {
                         ++end;
                     }
                     link.text = cell.text.substring(begin, end);
@@ -159,6 +162,9 @@ public class EquityReader {
                         if (el != null) {
                             truthTable.bodyEntityTarget[r][c] = el.candidates.get(0).first;
                             truthTable.yusraBodyEntityTarget[r][c] = yusraBit[r][c];
+                        } else {
+                            truthTable.data[r][c].entityLinks.clear();
+                            truthTable.data[r][c].resetCachedRepresentativeLink();
                         }
                     }
                 }
