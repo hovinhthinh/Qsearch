@@ -184,6 +184,9 @@ public class Table {
     public String getQuantityDescriptionFromCombinedHeader(int columnIndex) {
         StringBuilder sb = new StringBuilder();
         for (String token : getCombinedHeader(columnIndex).toLowerCase().split(" ")) {
+            if (token.equals("us$")) {
+                token = "$";
+            }
             if (NLP.BLOCKED_STOPWORDS.contains(token) || isSpecialTokenToBeIgnored(token)) {
                 continue;
             }
@@ -204,6 +207,9 @@ public class Table {
     public String getQuantityDescriptionFromLastHeader(int columnIndex) {
         StringBuilder sb = new StringBuilder();
         for (String token : header[nHeaderRow - 1][columnIndex].text.toLowerCase().split(" ")) {
+            if (token.equals("us$")) {
+                token = "$";
+            }
             if (NLP.BLOCKED_STOPWORDS.contains(token) || isSpecialTokenToBeIgnored(token)) {
                 continue;
             }
