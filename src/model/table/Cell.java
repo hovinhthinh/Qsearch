@@ -117,4 +117,8 @@ public class Cell {
             return null;
         }
     }
+
+    public void resetCachedRepresentativeLink() {
+        calledELink = calledQLink = calledTLink = false;
+    }
 }
