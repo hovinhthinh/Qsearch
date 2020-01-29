@@ -1,8 +1,9 @@
-# nohup  python -u train.py --resume -d 1 >> train.out &
+# nohup  python -u train.py -w ./data --resume -d 1 >> train.out &
 import argparse
 import os
 
 parser = argparse.ArgumentParser()
+parser.add_argument("-w", "--workspace", help="workspace folder")
 parser.add_argument("-r", "--resume", help="resume training with previous saved model", action="store_true")
 parser.add_argument("-d", "--device", help="gpu device index")
 args = parser.parse_args()
@@ -19,7 +20,7 @@ from model.node import get_model
 
 word_dict, embedding = get_glove()  # if word not in dict then index should be len(embedding)
 
-data_path = './data'
+data_path = args.workspace
 training_data = get_training_data(os.path.join(data_path, 'train.gz'))
 # training_data = []
 
