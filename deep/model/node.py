@@ -13,6 +13,9 @@ except:
 
 _hparams = transformer.transformer_base()
 _hparams.num_hidden_layers = transformer_num_hidden_layers
+_hparams.hidden_size = transformer_hidden_size
+_hparams.filter_size = transformer_filter_size
+_hparams.num_heads = transformer_num_heads
 
 
 def _attention(scope, input, attention_hidden_dim):  # input: [batch_size, n_word, embedding_size]
