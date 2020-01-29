@@ -70,13 +70,13 @@ def _load_yago_type():
 
 # first index is 'padding' token, len(word_dict) + 1 is 'unknown'
 def get_glove():
-    _glove_path = os.path.join(glove_path, 'glove.6B.' + str(embedding_size) + 'd.txt')
+    _glove_path = os.path.join(glove_path, 'glove.6B.' + str(embedding_size) + 'd.txt.gz')
 
     word_dict = {}
     embedding = []
 
     print('loading Glove from %s' % _glove_path)
-    with open(_glove_path) as f:
+    with gzip.open(_glove_path, 'rt', encoding='utf-8') as f:
         for line in f:
             arr = line.strip().split()
             word_dict[arr[0]] = len(word_dict) + 1
