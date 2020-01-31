@@ -48,6 +48,8 @@ public class EvaluateEquity {
             System.out.println("--- Ground Truth ---");
             System.out.println(table.getTableContentPrintable(true, true, true, true));
             double precEDPrior = table.getEntityDisambiguationPrecisionFromPrior();
+            System.out.println("--- Prior ---");
+            System.out.println(table.getTableContentPrintable(true, true, true, true));
             double precCAFirstColumn = table.getAlignmentPrecisionFromFirstColumn();
 
             pipeline.tag(table);
