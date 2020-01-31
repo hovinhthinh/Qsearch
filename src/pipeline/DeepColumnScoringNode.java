@@ -6,7 +6,6 @@ import nlp.YagoType;
 import org.apache.commons.collections4.map.LRUMap;
 import pipeline.deep.DeepScoringClient;
 import pipeline.deep.ScoringClientInterface;
-import util.Constants;
 import util.Pair;
 
 import java.util.*;
@@ -23,7 +22,7 @@ public class DeepColumnScoringNode implements TaggingNode {
     public static final int JOINT_INFERENCE = 2;
 
     // TODO: fix this weight
-    public static final double DEFAULT_JOINT_HOMOGENEITY_WEIGHT = 30; // 30 for gini, 1 for entropy; Constants.MAX_DOUBLE (set the connectivity to 0)
+    public static final double DEFAULT_JOINT_HOMOGENEITY_WEIGHT = 0.7;
 
     public static final int JOINT_MAX_NUM_ITERS = 100;
     public static final int JOINT_MAX_LOCAL_CANDIDATES = 10; // set to -1 to disable this threshold. (-1 means INF)
@@ -259,7 +258,7 @@ public class DeepColumnScoringNode implements TaggingNode {
             }
             homogeneity /= entityColumnIndexes.length;
 
-            if (homogeneityWeight != Constants.MAX_DOUBLE) { // only compute if weight for connectivity != 0
+            if (homogeneityWeight < 1) { // only compute if weight for connectivity != 0
                 for (int i : numericColumnIndexes) {
                     // connectivity
                     ColumnType ct = columnTypeSet[currentColumnLinking[i]];
@@ -276,7 +275,7 @@ public class DeepColumnScoringNode implements TaggingNode {
             }
 
             // joint score
-            currentJointScore = homogeneityWeight != Constants.MAX_DOUBLE ? connectivity + homogeneityWeight * homogeneity : homogeneity;
+            currentJointScore = (1 - homogeneityWeight) * connectivity + homogeneityWeight * homogeneity;
         }
 
         public double newScoreOfLocalAssignment(int row, int col, String candidate) {
@@ -303,7 +302,7 @@ public class DeepColumnScoringNode implements TaggingNode {
             }
             homogeneity /= entityColumnIndexes.length;
 
-            if (homogeneityWeight != Constants.MAX_DOUBLE) { // only compute if weight for connectivity != 0
+            if (homogeneityWeight < 1) { // only compute if weight for connectivity != 0
                 for (int i : numericColumnIndexes) {
                     // connectivity
                     if (currentColumnLinking[i] != col) {
@@ -327,7 +326,7 @@ public class DeepColumnScoringNode implements TaggingNode {
             currentEntityAssignment[row][col] = oldCandidate;
 
             // joint score
-            return homogeneityWeight != Constants.MAX_DOUBLE ? connectivity + homogeneityWeight * homogeneity : homogeneity;
+            return (1 - homogeneityWeight) * connectivity + homogeneityWeight * homogeneity;
         }
     }
 
@@ -337,7 +336,7 @@ public class DeepColumnScoringNode implements TaggingNode {
             for (int i : info.entityColumnIndexes) {
                 info.currentColumnLinking[info.numericColumnIndexes[currentCol]] = i;
                 backtrackJointInference(table, info, currentCol + 1);
-                if (homogeneityWeight == Constants.MAX_DOUBLE) {
+                if (homogeneityWeight == 1) {
                     // if connectivity weight = 0, then only check the first column alignment
                     break;
                 }
