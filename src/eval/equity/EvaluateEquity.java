@@ -16,7 +16,7 @@ public class EvaluateEquity {
                 new DeepColumnScoringNode(
                         DeepColumnScoringNode.JOINT_INFERENCE,
                         new DeepScoringClient(true, -1),
-                        1.5
+                        0.7
                 ),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
