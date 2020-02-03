@@ -12,7 +12,7 @@ public class ContextEmbeddingMatcher implements ContextMatcher {
         this.alpha = alpha;
     }
 
-    private double directedEmbeddingIdfDistance(ArrayList<String> queryX, ArrayList<String> factX) {
+    public double directedEmbeddingIdfDistance(ArrayList<String> queryX, ArrayList<String> factX) {
         // TODO: Currently not supporting TIME (TIME is computed like normal terms).
         double score = 0;
         double totalIdf = 0;
