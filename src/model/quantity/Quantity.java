@@ -51,6 +51,7 @@ public class Quantity {
     }
 
     // 1% diff is considered equals
+    // only works for quantities of the same concept.
     public int compareTo(Quantity o) {
         double thisConvertedValue = value * QuantityDomain.getScale(this);
         double otherConvertedValue = o.value * QuantityDomain.getScale(o);
