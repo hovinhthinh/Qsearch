@@ -83,11 +83,11 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     // returns Pair<entityId, distance>, sorted by distance
     public ArrayList<Pair<Integer, Integer>> getSimilarEntityIdsWithQfact(String entity, int distanceLimit) {
         // Go up to get type list.
-        HashMap<Integer, Integer> typeId2Distance = new HashMap<>();
         Integer entityId = entity2Id.get(entity);
         if (entityId == null) {
             return null;
         }
+        HashMap<Integer, Integer> typeId2Distance = new HashMap<>();
         for (int v : entityTypeLists.get(entityId)) {
             exploreTypeIds(v, 1, distanceLimit - 1, typeId2Distance);
         }
@@ -132,6 +132,5 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         System.out.println(graph.getSimilarEntitiesWithQfact("<Barack_Obama>", 4).size());
         System.out.println(graph.getSimilarEntitiesWithQfact("<Barack_Obama>", 5).size());
         System.out.println(graph.getSimilarEntitiesWithQfact("<Barack_Obama>", 10).size());
-
     }
 }
