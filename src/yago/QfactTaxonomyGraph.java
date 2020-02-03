@@ -1,6 +1,10 @@
 package yago;
 
+import model.context.ContextEmbeddingMatcher;
 import model.quantity.Quantity;
+import model.quantity.QuantityDomain;
+import nlp.NLP;
+import util.Constants;
 import util.FileUtils;
 import util.Pair;
 
@@ -17,6 +21,8 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
 
     private ArrayList<ArrayList<Pair<String, Quantity>>> entityQfactLists;
     private ArrayList<ArrayList<Pair<Integer, Integer>>> taxonomyEntityWithQfactLists; // Pair<entityId, distance>
+
+    private ContextEmbeddingMatcher matcher = new ContextEmbeddingMatcher(-1); // alpha not used
 
     private void exploreTypeIds(int id, int currentDist, int distLimit, HashMap<Integer, Integer> typeId2Dist) {
         if (currentDist > distLimit || typeId2Dist.containsKey(id)) {
@@ -132,5 +138,45 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         System.out.println(graph.getSimilarEntitiesWithQfact("<Barack_Obama>", 4).size());
         System.out.println(graph.getSimilarEntitiesWithQfact("<Barack_Obama>", 5).size());
         System.out.println(graph.getSimilarEntitiesWithQfact("<Barack_Obama>", 10).size());
+    }
+
+
+    // returns Pair<score, matchedQfactStr>
+    // returns null of cannot match.
+    public Pair<Double, String> getExactMatchDistance(String entity, String context, Quantity quantity) {
+        Integer entityId = entity2Id.get(entity);
+        if (entityId == null) {
+            return null;
+        }
+        ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists.get(entityId);
+        if (qfacts == null) {
+            return null;
+        }
+        String thisDomain = QuantityDomain.getDomain(quantity);
+        if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+            context = context + " " + quantity.unit;
+        }
+        double score = Constants.MAX_DOUBLE;
+        String matchStr = null;
+        for (Pair<String, Quantity> o : qfacts) {
+            // different concept should be ignored
+            if (!thisDomain.equals(QuantityDomain.getDomain(o.second))) {
+                continue;
+            }
+            String oContext = o.first;
+            if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+                oContext += " " + o.second.unit;
+            }
+
+            double matchScr = matcher.directedEmbeddingIdfDistance(NLP.splitSentence(context.toLowerCase()), NLP.splitSentence(oContext.toLowerCase()));
+            if (matchScr < score) {
+                score = matchScr;
+                matchStr = entity + "\t" + o.first + "\t" + o.second.toString();
+            }
+        }
+        if (matchStr == null) {
+            return null;
+        }
+        return new Pair<>(score, matchStr);
     }
 }
