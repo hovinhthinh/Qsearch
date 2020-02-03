@@ -24,16 +24,6 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
 
     private ContextEmbeddingMatcher matcher = new ContextEmbeddingMatcher(-1); // alpha not used
 
-    private void exploreTypeIds(int id, int currentDist, int distLimit, HashMap<Integer, Integer> typeId2Dist) {
-        if (currentDist > distLimit || typeId2Dist.containsKey(id)) {
-            return;
-        }
-        typeId2Dist.put(id, currentDist);
-        for (int v : typeDadLists.get(id)) {
-            exploreTypeIds(v, currentDist + 1, distLimit, typeId2Dist);
-        }
-    }
-
     public QfactTaxonomyGraph(String qfactFile) {
         LOGGER.info("Loading YAGO Qfact taxonomy graph");
         entityQfactLists = new ArrayList<>(nEntities);
@@ -65,7 +55,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             // populate for a single entity
             HashMap<Integer, Integer> typeId2Dist = new HashMap<>();
             for (int v : entityTypeLists.get(i)) {
-                exploreTypeIds(v, 1, Integer.MAX_VALUE, typeId2Dist);
+                exploreParentTypeIds(v, 1, Integer.MAX_VALUE, typeId2Dist);
             }
             for (Map.Entry<Integer, Integer> e : typeId2Dist.entrySet()) {
                 taxonomyEntityWithQfactLists.get(e.getKey()).add(new Pair<>(i, e.getValue()));
@@ -95,7 +85,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         }
         HashMap<Integer, Integer> typeId2Distance = new HashMap<>();
         for (int v : entityTypeLists.get(entityId)) {
-            exploreTypeIds(v, 1, distanceLimit - 1, typeId2Distance);
+            exploreParentTypeIds(v, 1, distanceLimit - 1, typeId2Distance);
         }
         HashMap<Integer, Integer> entityId2Distance = new HashMap<>();
         for (Map.Entry<Integer, Integer> e : typeId2Distance.entrySet()) {
