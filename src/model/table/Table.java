@@ -24,6 +24,9 @@ public class Table {
     public int[] quantityToEntityColumn; // -1 means there is no connection.
     public double[] quantityToEntityColumnScore; // linking score (default is -1 | unknown).
 
+    public transient String[] cachedQuantityDescriptionFromCombinedHeader = null;
+    public transient String[] cachedQuantityDescriptionFromLastHeader = null;
+
     @Deprecated
     public int keyColumn = -1; // computed based on the average linking scores from quantity columns
 
@@ -181,7 +184,14 @@ public class Table {
         return true;
     }
 
-    public String getQuantityDescriptionFromCombinedHeader(int columnIndex) {
+    public String getQuantityDescriptionFromCombinedHeader(int columnIndex, boolean includeUnit) {
+        if (cachedQuantityDescriptionFromCombinedHeader == null) {
+            cachedQuantityDescriptionFromCombinedHeader = new String[nColumn];
+        }
+        if (cachedQuantityDescriptionFromCombinedHeader[columnIndex] != null) {
+            return cachedQuantityDescriptionFromCombinedHeader[columnIndex];
+        }
+
         StringBuilder sb = new StringBuilder();
         for (String token : getCombinedHeader(columnIndex).toLowerCase().split(" ")) {
             if (NLP.BLOCKED_STOPWORDS.contains(token) || isSpecialTokenToBeIgnored(token)) {
@@ -192,7 +202,7 @@ public class Table {
             }
             sb.append(token);
         }
-        if (majorUnitInColumn != null && majorUnitInColumn[columnIndex] != null) {
+        if (includeUnit && majorUnitInColumn != null && majorUnitInColumn[columnIndex] != null) {
             if (sb.length() > 0) {
                 sb.append(" ");
             }
@@ -202,10 +212,21 @@ public class Table {
             }
             sb.append(unit);
         }
-        return sb.toString();
+        return cachedQuantityDescriptionFromCombinedHeader[columnIndex] = sb.toString();
     }
 
-    public String getQuantityDescriptionFromLastHeader(int columnIndex) {
+    public String getQuantityDescriptionFromCombinedHeader(int columnIndex) {
+        return getQuantityDescriptionFromCombinedHeader(columnIndex, true);
+    }
+
+    public String getQuantityDescriptionFromLastHeader(int columnIndex, boolean includeUnit) {
+        if (cachedQuantityDescriptionFromLastHeader == null) {
+            cachedQuantityDescriptionFromLastHeader = new String[nColumn];
+        }
+        if (cachedQuantityDescriptionFromLastHeader[columnIndex] != null) {
+            return cachedQuantityDescriptionFromLastHeader[columnIndex];
+        }
+
         StringBuilder sb = new StringBuilder();
         for (String token : header[nHeaderRow - 1][columnIndex].text.toLowerCase().split(" ")) {
             if (NLP.BLOCKED_STOPWORDS.contains(token) || isSpecialTokenToBeIgnored(token)) {
@@ -216,7 +237,7 @@ public class Table {
             }
             sb.append(token);
         }
-        if (majorUnitInColumn != null && majorUnitInColumn[columnIndex] != null) {
+        if (includeUnit && majorUnitInColumn != null && majorUnitInColumn[columnIndex] != null) {
             if (sb.length() > 0) {
                 sb.append(" ");
             }
@@ -226,7 +247,11 @@ public class Table {
             }
             sb.append(unit);
         }
-        return sb.toString();
+        return cachedQuantityDescriptionFromLastHeader[columnIndex] = sb.toString();
+    }
+
+    public String getQuantityDescriptionFromLastHeader(int columnIndex) {
+        return getQuantityDescriptionFromLastHeader(columnIndex, true);
     }
 
     // This call does cache combined header
