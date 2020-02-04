@@ -130,10 +130,9 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         System.out.println(graph.getSimilarEntitiesWithQfact("<Barack_Obama>", 10).size());
     }
 
-
     // returns Pair<score, matchedQfactStr>
     // returns null of cannot match.
-    public Pair<Double, String> getExactMatchDistance(String entity, String context, Quantity quantity) {
+    public Pair<Double, String> getMatchDistance(String entity, String context, Quantity quantity) {
         Integer entityId = entity2Id.get(entity);
         if (entityId == null) {
             return null;

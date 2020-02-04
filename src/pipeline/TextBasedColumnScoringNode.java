@@ -25,7 +25,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
     public static final int JOINT_MAX_NUM_ITERS = 100;
     public static final int JOINT_MAX_LOCAL_CANDIDATES = 10; // set to -1 to disable this threshold. (-1 means INF)
-    public static final int JOINT_MAX_NUM_COLUMN_LINKING = 1000; // to prune too large tables. (-1 means INF)
+    public static final int JOINT_MAX_NUM_COLUMN_LINKING = 100; // to prune too large tables. (-1 means INF)
 
     private int inferenceMode;
     private double homogeneityWeight;
@@ -122,13 +122,13 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
                     // (1) combined quantity header
                     double matchScr;
-                    Pair<Double, String> matchResult = qfactGraph.getExactMatchDistance(e, combinedContext, ql.quantity);
+                    Pair<Double, String> matchResult = qfactGraph.getMatchDistance(e, combinedContext, ql.quantity);
                     if (matchResult != null) {
                         // we need score, instead of distance
                         matchScr = -matchResult.first;
                         if (table.nHeaderRow > 1) {
                             // (2) last quantity header
-                            matchScr = Math.max(matchScr, -qfactGraph.getExactMatchDistance(e, lastHeaderContext, ql.quantity).first);
+                            matchScr = Math.max(matchScr, -qfactGraph.getMatchDistance(e, lastHeaderContext, ql.quantity).first);
                         }
                     } else {
                         matchScr = Constants.MIN_DOUBLE;
@@ -285,13 +285,13 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                                 }
                                 // (1) combined quantity header
                                 double matchScr;
-                                Pair<Double, String> matchResult = qfactGraph.getExactMatchDistance(candidate, table.getQuantityDescriptionFromCombinedHeader(i, false), ql.quantity);
+                                Pair<Double, String> matchResult = qfactGraph.getMatchDistance(candidate, table.getQuantityDescriptionFromCombinedHeader(i, false), ql.quantity);
                                 if (matchResult != null) {
                                     // we need score, instead of distance
                                     matchScr = -matchResult.first;
                                     if (table.nHeaderRow > 1) {
                                         // (2) last quantity header
-                                        matchScr = Math.max(matchScr, -qfactGraph.getExactMatchDistance(candidate, table.getQuantityDescriptionFromLastHeader(i, false), ql.quantity).first);
+                                        matchScr = Math.max(matchScr, -qfactGraph.getMatchDistance(candidate, table.getQuantityDescriptionFromLastHeader(i, false), ql.quantity).first);
                                     }
                                 } else {
                                     matchScr = Constants.MIN_DOUBLE;
