@@ -147,22 +147,31 @@ public class QuantityDomain {
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
 
     public static double getScale(Quantity quantity) {
+        if (quantity.scale != null) {
+            return quantity.scale;
+        }
         if (LENGTH_DOMAIN.containsKey(quantity.unit)) {
+            quantity.scale = LENGTH_DOMAIN.get(quantity.unit);
             return LENGTH_DOMAIN.get(quantity.unit);
         }
         if (MONEY_DOMAIN.containsKey(quantity.unit)) {
+            quantity.scale = MONEY_DOMAIN.get(quantity.unit);
             return MONEY_DOMAIN.get(quantity.unit);
         }
         if (TIME_DOMAIN.containsKey(quantity.unit)) {
+            quantity.scale = TIME_DOMAIN.get(quantity.unit);
             return TIME_DOMAIN.get(quantity.unit);
         }
         if (PERCENTAGE_DOMAIN.containsKey(quantity.unit)) {
+            quantity.scale = PERCENTAGE_DOMAIN.get(quantity.unit);
             return PERCENTAGE_DOMAIN.get(quantity.unit);
         }
         if (AREA_DOMAIN.containsKey(quantity.unit)) {
+            quantity.scale = AREA_DOMAIN.get(quantity.unit);
             return AREA_DOMAIN.get(quantity.unit);
         }
         if (VOLUME_DOMAIN.containsKey(quantity.unit)) {
+            quantity.scale = VOLUME_DOMAIN.get(quantity.unit);
             return VOLUME_DOMAIN.get(quantity.unit);
         }
         // Now use QuTree.
@@ -178,32 +187,43 @@ public class QuantityDomain {
                         domain.equals(Domain.AREA) ||
                         domain.equals(Domain.VOLUME)
                 ) {
+                    quantity.scale = u.getMultiplier();
                     return u.getMultiplier();
                 }
             }
         } catch (Exception e) {
         }
+        quantity.scale = 1.0;
         return 1.0; // dimensionless.
     }
     // anything else is considered dimensionless
 
     public static String getDomain(Quantity quantity) {
+        if (quantity.domain != null) {
+            return quantity.domain;
+        }
         if (LENGTH_DOMAIN.containsKey(quantity.unit)) {
+            quantity.domain = Domain.LENGTH;
             return Domain.LENGTH;
         }
         if (MONEY_DOMAIN.containsKey(quantity.unit)) {
+            quantity.domain = Domain.MONEY;
             return Domain.MONEY;
         }
         if (TIME_DOMAIN.containsKey(quantity.unit)) {
+            quantity.domain = Domain.TIME;
             return Domain.TIME;
         }
         if (PERCENTAGE_DOMAIN.containsKey(quantity.unit)) {
+            quantity.domain = Domain.PERCENTAGE;
             return Domain.PERCENTAGE;
         }
         if (AREA_DOMAIN.containsKey(quantity.unit)) {
+            quantity.domain = Domain.AREA;
             return Domain.AREA;
         }
         if (VOLUME_DOMAIN.containsKey(quantity.unit)) {
+            quantity.domain = Domain.VOLUME;
             return Domain.VOLUME;
         }
         // Now use QuTree.
@@ -219,11 +239,13 @@ public class QuantityDomain {
                         domain.equals(Domain.AREA) ||
                         domain.equals(Domain.VOLUME)
                 ) {
+                    quantity.domain = domain;
                     return domain;
                 }
             }
         } catch (Exception e) {
         }
+        quantity.domain = Domain.DIMENSIONLESS;
         return Domain.DIMENSIONLESS;
     }
 

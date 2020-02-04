@@ -7,6 +7,10 @@ public class Quantity {
     public String unit;
     public String resolution;
 
+    // these two properties is for cached calls
+    public transient String domain;
+    public transient Double scale;
+
     public Quantity(double value, String unit, String resolution) {
         this.value = value;
         this.unit = unit;
