@@ -18,13 +18,21 @@ import java.util.stream.Collectors;
 public class QfactTaxonomyGraph extends TaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(QfactTaxonomyGraph.class.getName());
     public static final String DEFAULT_QFACT_FILE = "./non-deep/qfact_text.gz";
-
+    public static final int DEFAULT_RELATED_ENTITY_DIST_LIM = 4;
     private ArrayList<ArrayList<Pair<String, Quantity>>> entityQfactLists;
     private ArrayList<ArrayList<Pair<Integer, Integer>>> taxonomyEntityWithQfactLists; // Pair<entityId, distance>
 
     private ContextEmbeddingMatcher matcher = new ContextEmbeddingMatcher(-1); // alpha not used
+    private int relatedEntityDistanceLimit;
 
-    public QfactTaxonomyGraph(String qfactFile) {
+    private HashMap<Long, Pair<Double, String>> cache = new HashMap<>(10000000);
+
+    public void resetCache() {
+        cache.clear();
+    }
+
+    public QfactTaxonomyGraph(String qfactFile, int relatedEntityDistanceLimit) {
+        this.relatedEntityDistanceLimit = relatedEntityDistanceLimit;
         LOGGER.info("Loading YAGO Qfact taxonomy graph");
         entityQfactLists = new ArrayList<>(nEntities);
         for (int i = 0; i < nEntities; ++i) {
@@ -73,11 +81,11 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     }
 
     public QfactTaxonomyGraph() {
-        this(DEFAULT_QFACT_FILE);
+        this(DEFAULT_QFACT_FILE, DEFAULT_RELATED_ENTITY_DIST_LIM);
     }
 
     // returns Pair<entityId, distance>, sorted by distance
-    public ArrayList<Pair<Integer, Integer>> getSimilarEntityIdsWithQfact(String entity, int distanceLimit) {
+    public ArrayList<Pair<Integer, Integer>> getSimilarEntityIdsWithQfact(String entity) {
         // Go up to get type list.
         Integer entityId = entity2Id.get(entity);
         if (entityId == null) {
@@ -85,7 +93,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         }
         HashMap<Integer, Integer> typeId2Distance = new HashMap<>();
         for (int v : entityTypeLists.get(entityId)) {
-            exploreParentTypeIds(v, 1, distanceLimit - 1, typeId2Distance);
+            exploreParentTypeIds(v, 1, relatedEntityDistanceLimit - 1, typeId2Distance);
         }
         HashMap<Integer, Integer> entityId2Distance = new HashMap<>();
         for (Map.Entry<Integer, Integer> e : typeId2Distance.entrySet()) {
@@ -94,7 +102,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 continue;
             }
             for (Pair<Integer, Integer> p : entitiesWithQfact) {
-                if (p.second > distanceLimit - e.getValue()) {
+                if (p.second > relatedEntityDistanceLimit - e.getValue()) {
                     break;
                 }
                 int currentDist = entityId2Distance.getOrDefault(p.first, Integer.MAX_VALUE);
@@ -109,31 +117,16 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     }
 
     // returns Pair<entity, distance>, sorted by distance
-    public ArrayList<Pair<String, Integer>> getSimilarEntitiesWithQfact(String entity, int distanceLimit) {
-        return getSimilarEntityIdsWithQfact(entity, distanceLimit).stream().map(o -> {
+    public ArrayList<Pair<String, Integer>> getSimilarEntitiesWithQfact(String entity) {
+        return getSimilarEntityIdsWithQfact(entity).stream().map(o -> {
             return new Pair<>(id2Entity.get(o.first), o.second);
         }).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static void main(String[] args) {
-        QfactTaxonomyGraph graph = new QfactTaxonomyGraph();
-        System.out.println(graph.getSimilarEntitiesWithQfact("<Cristiano_Ronaldo>", 2).size());
-        System.out.println(graph.getSimilarEntitiesWithQfact("<Cristiano_Ronaldo>", 3).size());
-        System.out.println(graph.getSimilarEntitiesWithQfact("<Cristiano_Ronaldo>", 4).size());
-        System.out.println(graph.getSimilarEntitiesWithQfact("<Cristiano_Ronaldo>", 5).size());
-        System.out.println(graph.getSimilarEntitiesWithQfact("<Cristiano_Ronaldo>", 10).size());
-
-        System.out.println(graph.getSimilarEntitiesWithQfact("<Barack_Obama>", 2).size());
-        System.out.println(graph.getSimilarEntitiesWithQfact("<Barack_Obama>", 3).size());
-        System.out.println(graph.getSimilarEntitiesWithQfact("<Barack_Obama>", 4).size());
-        System.out.println(graph.getSimilarEntitiesWithQfact("<Barack_Obama>", 5).size());
-        System.out.println(graph.getSimilarEntitiesWithQfact("<Barack_Obama>", 10).size());
-    }
-
     // returns Pair<score, matchedQfactStr>
     // returns null of cannot match.
-    public Pair<Double, String> getMatchDistance(String entity, String context, Quantity quantity) {
-        return getTypeMatchDistance(entity, context, quantity, 4);
+    public Pair<Double, String> getMatchDistance(String entity, String context, Quantity quantity, int key) {
+        return getTypeMatchDistance(entity, context, quantity, key);
     }
 
     // returns Pair<score, matchedQfactStr>
@@ -177,8 +170,17 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
 
     // returns Pair<score, matchedQfactStr>
     // returns null of cannot match.
-    public Pair<Double, String> getTypeMatchDistance(String entity, String context, Quantity quantity, int distanceLimit) {
-        ArrayList<Pair<Integer, Integer>> relatedEntities = getSimilarEntityIdsWithQfact(entity, distanceLimit);
+    public Pair<Double, String> getTypeMatchDistance(String entity, String context, Quantity quantity, int key) {
+        Integer entityId = entity2Id.get(entity);
+        if (entityId == null) {
+            return null;
+        }
+        long globalKey = 1000000000L * entityId + key;
+        if (cache.containsKey(globalKey)) {
+            return cache.get(globalKey);
+        }
+
+        ArrayList<Pair<Integer, Integer>> relatedEntities = getSimilarEntityIdsWithQfact(entity);
         if (relatedEntities == null) {
             return null;
         }
@@ -193,30 +195,52 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         for (Pair<Integer, Integer> p : relatedEntities) { // contains eId & distance
             ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists.get(p.first);
             if (qfacts == null) {
-                return null;
+                continue;
             }
+            long localKey = -(1000000000L * (p.first + 1) + key);
+            Pair<Double, String> singleEntityResult;
+            if (cache.containsKey(localKey)) {
+                singleEntityResult = cache.get(localKey);
+            } else {
+                singleEntityResult = new Pair<>(Constants.MAX_DOUBLE, null);
+                for (Pair<String, Quantity> o : qfacts) {
+                    // different concept should be ignored
+                    if (!thisDomain.equals(QuantityDomain.getDomain(o.second))) {
+                        continue;
+                    }
+                    String oContext = o.first;
+                    if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+                        oContext += " " + o.second.unit;
+                    }
 
-            for (Pair<String, Quantity> o : qfacts) {
-                // different concept should be ignored
-                if (!thisDomain.equals(QuantityDomain.getDomain(o.second))) {
-                    continue;
+                    double matchScr = matcher.directedEmbeddingIdfDistance(NLP.splitSentence(context.toLowerCase()), NLP.splitSentence(oContext.toLowerCase()));
+                    if (matchScr < singleEntityResult.first) {
+                        singleEntityResult.first = matchScr;
+                        singleEntityResult.second = entity + "\t" + o.first + "\t" + o.second.toString();
+                    }
                 }
-                String oContext = o.first;
-                if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
-                    oContext += " " + o.second.unit;
-                }
-
-                double matchScr = matcher.directedEmbeddingIdfDistance(NLP.splitSentence(context.toLowerCase()), NLP.splitSentence(oContext.toLowerCase()));
-                if (matchScr < score) {
-                    score = matchScr;
-                    matchStr = entity + "\t" + o.first + "\t" + o.second.toString();
+                if (key >= 0) {
+                    cache.put(localKey, singleEntityResult);
                 }
             }
+            if (singleEntityResult.first < score) {
+                score = singleEntityResult.first;
+                matchStr = singleEntityResult.second;
+            }
+        }
+
+        Pair<Double, String> result = new Pair<>(score, matchStr);
+        if (key >= 0) {
+            cache.put(globalKey, result);
         }
 
         if (matchStr == null) {
             return null;
         }
-        return new Pair<>(score, matchStr);
+        return result;
+    }
+
+    public static void main(String[] args) {
+        QfactTaxonomyGraph graph = new QfactTaxonomyGraph();
     }
 }
