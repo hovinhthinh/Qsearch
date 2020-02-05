@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 // Return a non-negative value. A value of 0 means that the 2 strings are the same.
 // A value of -1 means that similarity cannot be computed (embedding is unavailable).
+@SuppressWarnings("The caching mechanism is not thread safe")
 public class Glove {
     public static final String DATA_DIR = "./resources/glove/";
     public static final int DIM = 100; // 50, 100, 200 or 300.
