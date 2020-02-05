@@ -24,7 +24,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
     public static final int JOINT_MAX_NUM_ITERS = 100;
     public static final int JOINT_MAX_LOCAL_CANDIDATES = 10; // set to -1 to disable this threshold. (-1 means INF)
-    public static final int JOINT_MAX_NUM_COLUMN_LINKING = -1; // to prune too large tables. (-1 means INF)
+    public static final int JOINT_MAX_NUM_COLUMN_LINKING = 100; // to prune too large tables. (-1 means INF)
 
     private int inferenceMode;
     private double homogeneityWeight;
