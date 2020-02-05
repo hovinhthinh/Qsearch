@@ -4,7 +4,6 @@ import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
 import nlp.YagoType;
-import util.Constants;
 import util.Pair;
 import yago.QfactTaxonomyGraph;
 
@@ -25,7 +24,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
     public static final int JOINT_MAX_NUM_ITERS = 100;
     public static final int JOINT_MAX_LOCAL_CANDIDATES = 10; // set to -1 to disable this threshold. (-1 means INF)
-    public static final int JOINT_MAX_NUM_COLUMN_LINKING = 100; // to prune too large tables. (-1 means INF)
+    public static final int JOINT_MAX_NUM_COLUMN_LINKING = -1; // to prune too large tables. (-1 means INF)
 
     private int inferenceMode;
     private double homogeneityWeight;
@@ -104,7 +103,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         Table table;
 
         // null means there is no entity | quantity disambiguated
-        // Constants.MIN_DOUBLE means cannot connect to text.
+        // 0 means cannot connect to text.
         public void computeCurrentQfactMatchingScores() {
             for (int qCol : numericColumnIndexes) {
                 int eCol = currentColumnLinking[qCol];
@@ -123,16 +122,16 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
                     // (1) combined quantity header
                     double matchScr;
-                    Pair<Double, String> matchResult = qfactGraph.getMatchDistance(e, combinedContext, ql.quantity, (r * table.nColumn + qCol) * 2);
+                    Pair<Double, String> matchResult = qfactGraph.getMatchScore(e, combinedContext, ql.quantity, (r * table.nColumn + qCol) * 2);
                     if (matchResult != null) {
                         // we need score, instead of distance
-                        matchScr = -matchResult.first;
+                        matchScr = matchResult.first;
                         if (table.nHeaderRow > 1) {
                             // (2) last quantity header
-                            matchScr = Math.max(matchScr, -qfactGraph.getMatchDistance(e, lastHeaderContext, ql.quantity, (r * table.nColumn + qCol) * 2 + 1).first);
+                            matchScr = Math.max(matchScr, qfactGraph.getMatchScore(e, lastHeaderContext, ql.quantity, (r * table.nColumn + qCol) * 2 + 1).first);
                         }
                     } else {
-                        matchScr = Constants.MIN_DOUBLE;
+                        matchScr = 0;
                     }
                     currentQfactMatchingScore[r][qCol] = matchScr;
                 }
@@ -211,7 +210,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             double homogeneity = 0;
             double connectivity = 0;
 
-            int firstColumn = table.getFirstNonNumericColumn();
+//            int firstColumn = table.getFirstNonNumericColumn();
             for (int i : entityColumnIndexes) {
                 // homogeneity
                 homogeneity += (currentHomogeneityScore[i] = columnTypeSet[i].getHScore());
@@ -229,7 +228,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                             ++nConnect;
                         }
                     }
-                    lScore = nConnect > 0 ? lScore / nConnect : Constants.MIN_DOUBLE;
+                    lScore = nConnect > 0 ? lScore / nConnect : 0;
 
                     connectivity += (currentColumnLinkingScore[i] = lScore);
                 }
@@ -252,7 +251,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             double homogeneity = 0;
             double connectivity = 0;
 
-            int firstColumn = table.getFirstNonNumericColumn();
+//            int firstColumn = table.getFirstNonNumericColumn();
             for (int i : entityColumnIndexes) {
                 // homogeneity
                 if (i != col) {
@@ -286,22 +285,22 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                                 }
                                 // (1) combined quantity header
                                 double matchScr;
-                                Pair<Double, String> matchResult = qfactGraph.getMatchDistance(candidate, table.getQuantityDescriptionFromCombinedHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2);
+                                Pair<Double, String> matchResult = qfactGraph.getMatchScore(candidate, table.getQuantityDescriptionFromCombinedHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2);
                                 if (matchResult != null) {
                                     // we need score, instead of distance
-                                    matchScr = -matchResult.first;
+                                    matchScr = matchResult.first;
                                     if (table.nHeaderRow > 1) {
                                         // (2) last quantity header
-                                        matchScr = Math.max(matchScr, -qfactGraph.getMatchDistance(candidate, table.getQuantityDescriptionFromLastHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2 + 1).first);
+                                        matchScr = Math.max(matchScr, qfactGraph.getMatchScore(candidate, table.getQuantityDescriptionFromLastHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2 + 1).first);
                                     }
                                 } else {
-                                    matchScr = Constants.MIN_DOUBLE;
+                                    matchScr = 0;
                                 }
                                 lScore += matchScr;
                                 ++nConnect;
                             }
                         }
-                        lScore = nConnect > 0 ? lScore / nConnect : Constants.MIN_DOUBLE;
+                        lScore = nConnect > 0 ? lScore / nConnect : 0;
 
                         connectivity += lScore;
                     }
@@ -440,7 +439,6 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             table.quantityToEntityColumn[i] = info.bestColumnLinking[i];
             table.quantityToEntityColumnScore[i] = info.bestColumnLinkingScore[i];
         }
-
         return true;
     }
 }

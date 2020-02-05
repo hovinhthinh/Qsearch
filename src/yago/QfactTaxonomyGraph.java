@@ -5,7 +5,6 @@ import model.context.ContextEmbeddingMatcher;
 import model.quantity.Quantity;
 import model.quantity.QuantityDomain;
 import nlp.NLP;
-import util.Constants;
 import util.FileUtils;
 import util.Pair;
 
@@ -121,13 +120,13 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
 
     // returns Pair<score, matchedQfactStr>
     // returns null of cannot match.
-    public Pair<Double, String> getMatchDistance(String entity, String context, Quantity quantity, int key) {
-        return getTypeMatchDistance(entity, context, quantity, key);
+    public Pair<Double, String> getMatchScore(String entity, String context, Quantity quantity, int key) {
+        return getTypeMatchScore(entity, context, quantity, key);
     }
 
     // returns Pair<score, matchedQfactStr>
     // returns null of cannot match.
-    public Pair<Double, String> getEntityMatchDistance(String entity, String context, Quantity quantity) {
+    public Pair<Double, String> getEntityMatchScore(String entity, String context, Quantity quantity) {
         Integer entityId = entity2Id.get(entity);
         if (entityId == null) {
             return null;
@@ -140,7 +139,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             context = context + " " + quantity.unit;
         }
-        double score = Constants.MAX_DOUBLE;
+        double score = 0;
         String matchStr = null;
         for (Pair<String, Quantity> o : qfacts) {
             // different concept should be ignored
@@ -152,8 +151,8 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 oContext += " " + o.second.unit;
             }
 
-            double matchScr = matcher.directedEmbeddingIdfDistance(NLP.splitSentence(context.toLowerCase()), NLP.splitSentence(oContext.toLowerCase()));
-            if (matchScr < score) {
+            double matchScr = matcher.directedEmbeddingIdfSimilarity(NLP.splitSentence(context.toLowerCase()), NLP.splitSentence(oContext.toLowerCase()));
+            if (matchScr > score) {
                 score = matchScr;
                 matchStr = entity + "\t" + o.first + "\t" + o.second.toString();
             }
@@ -166,7 +165,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
 
     // returns Pair<score, matchedQfactStr>
     // returns null of cannot match.
-    public Pair<Double, String> getTypeMatchDistance(String entity, String context, Quantity quantity, int key) {
+    public Pair<Double, String> getTypeMatchScore(String entity, String context, Quantity quantity, int key) {
         Integer entityId = entity2Id.get(entity);
         if (entityId == null) {
             return null;
@@ -186,7 +185,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             context = context + " " + quantity.unit;
         }
-        double score = Constants.MAX_DOUBLE;
+        double score = 0;
         String matchStr = null;
 
         for (Pair<Integer, Integer> p : relatedEntities) { // contains eId & distance
@@ -199,7 +198,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             if (cache.containsKey(localKey)) {
                 singleEntityResult = cache.get(localKey);
             } else {
-                singleEntityResult = new Pair<>(Constants.MAX_DOUBLE, null);
+                singleEntityResult = new Pair<>(0.0, null);
                 for (Pair<String, Quantity> o : qfacts) {
                     // different concept should be ignored
                     if (!thisDomain.equals(QuantityDomain.getDomain(o.second))) {
@@ -210,8 +209,8 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                         oContext += " " + o.second.unit;
                     }
 
-                    double matchScr = matcher.directedEmbeddingIdfDistance(NLP.splitSentence(context.toLowerCase()), NLP.splitSentence(oContext.toLowerCase()));
-                    if (matchScr < singleEntityResult.first) {
+                    double matchScr = matcher.directedEmbeddingIdfSimilarity(NLP.splitSentence(context.toLowerCase()), NLP.splitSentence(oContext.toLowerCase()));
+                    if (matchScr > singleEntityResult.first) {
                         singleEntityResult.first = matchScr;
                         singleEntityResult.second = entity + "\t" + o.first + "\t" + o.second.toString();
                     }
@@ -220,7 +219,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                     cache.put(localKey, singleEntityResult);
                 }
             }
-            if (singleEntityResult.first < score) {
+            if (singleEntityResult.first > score) {
                 score = singleEntityResult.first;
                 matchStr = singleEntityResult.second;
             }
