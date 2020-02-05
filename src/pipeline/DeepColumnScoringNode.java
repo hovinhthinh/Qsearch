@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 // Link quantity columns to entity columns, return false if there is no quantity column.
+// This class uses YagoType class, using transitive type system.
 public class DeepColumnScoringNode implements TaggingNode {
     public static final Logger LOGGER = Logger.getLogger(DeepColumnScoringNode.class.getName());
 

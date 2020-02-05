@@ -7,6 +7,7 @@ import util.Pair;
 import java.util.*;
 import java.util.logging.Logger;
 
+// This class uses transitive type system
 public class YagoType {
     public static final Logger LOGGER = Logger.getLogger(YagoType.class.getName());
     private static final String YAGO_TYPE_COMPACT_PATH = "./resources/yagoTransitiveTypeCompact.tsv.gz";
