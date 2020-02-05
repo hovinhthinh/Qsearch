@@ -4,6 +4,7 @@ import util.FileUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -14,6 +15,8 @@ public class TaxonomyGraph {
 
     public HashMap<String, Integer> type2Id;
     public ArrayList<String> id2Type;
+    public int[] type2nEntities;
+    public double[] type2Itf;
     public ArrayList<ArrayList<Integer>> typeDadLists;
 
     public HashMap<String, Integer> entity2Id;
@@ -72,6 +75,8 @@ public class TaxonomyGraph {
             l.trimToSize();
         }
         nTypes = id2Type.size();
+        type2nEntities = new int[nTypes];
+        type2Itf = new double[nTypes];
 
         // Load entity types
         entity2Id = new HashMap<>();
@@ -99,20 +104,50 @@ public class TaxonomyGraph {
         }
         id2Entity.trimToSize();
         entityTypeLists.trimToSize();
-        for (ArrayList<Integer> l : entityTypeLists) {
-            l.trimToSize();
-        }
         nEntities = id2Entity.size();
+
+        for (int i = 0; i < nEntities; ++i) {
+            entityTypeLists.get(i).trimToSize();
+            // populate nEntities for types
+            for (int t : getType2DistanceMapForEntity(i, Integer.MAX_VALUE).keySet()) {
+                ++type2nEntities[t];
+            }
+        }
+        // calculate itf for types
+        for (int i = 0; i < nTypes; ++i) {
+            // (Robertson version)
+//            type2Itf[i] = Math.max(0.0001, Math.log10((nEntities - type2nEntities[i] + 0.5) / (type2nEntities[i] + 0.5)));
+            // normal
+            type2Itf[i] = Math.max(0.0001, Math.log(nEntities / (type2nEntities[i] + 1.0)));
+        }
     }
 
-    protected void exploreParentTypeIds(int currentTypeid, int currentDist, int distLimit, HashMap<Integer, Integer> typeId2Dist) {
-        if (currentDist > distLimit || typeId2Dist.containsKey(currentTypeid)) {
-            return;
+    protected HashMap<Integer, Integer> getType2DistanceMapForEntity(int entityId, int distLimit) {
+        HashMap<Integer, Integer> typeId2Dist = new HashMap<>();
+        if (distLimit < 1) {
+            return typeId2Dist;
         }
-        typeId2Dist.put(currentTypeid, currentDist);
-        for (int v : typeDadLists.get(currentTypeid)) {
-            exploreParentTypeIds(v, currentDist + 1, distLimit, typeId2Dist);
+        LinkedList<Integer> queue = new LinkedList<>();
+        for (int v : entityTypeLists.get(entityId)) {
+            typeId2Dist.put(v, 1);
+            if (distLimit > 1) {
+                queue.addLast(v);
+            }
         }
+        while (!queue.isEmpty()) {
+            int t = queue.removeFirst();
+            int tDist = typeId2Dist.get(t);
+            for (int v : typeDadLists.get(t)) {
+                if (typeId2Dist.containsKey(v)) {
+                    continue;
+                }
+                typeId2Dist.put(v, tDist + 1);
+                if (tDist + 1 < distLimit) {
+                    queue.addLast(v);
+                }
+            }
+        }
+        return typeId2Dist;
     }
 
     public int getEntityDistance(String entity1, String entity2) {
@@ -124,14 +159,8 @@ public class TaxonomyGraph {
         if (entity1.equals(entity2)) {
             return 0;
         }
-        HashMap<Integer, Integer> typeId2Dist1 = new HashMap<>();
-        for (int v : entityTypeLists.get(eId1)) {
-            exploreParentTypeIds(v, 1, Integer.MAX_VALUE, typeId2Dist1);
-        }
-        HashMap<Integer, Integer> typeId2Dist2 = new HashMap<>();
-        for (int v : entityTypeLists.get(eId2)) {
-            exploreParentTypeIds(v, 1, Integer.MAX_VALUE, typeId2Dist2);
-        }
+        HashMap<Integer, Integer> typeId2Dist1 = getType2DistanceMapForEntity(eId1, Integer.MAX_VALUE);
+        HashMap<Integer, Integer> typeId2Dist2 = getType2DistanceMapForEntity(eId2, Integer.MAX_VALUE);
         int minDist = Integer.MAX_VALUE;
         for (Map.Entry<Integer, Integer> e : typeId2Dist1.entrySet()) {
             Integer distToE2 = typeId2Dist2.get(e.getKey());

@@ -62,10 +62,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             qfacts.trimToSize();
 
             // populate for a single entity
-            HashMap<Integer, Integer> typeId2Dist = new HashMap<>();
-            for (int v : entityTypeLists.get(i)) {
-                exploreParentTypeIds(v, 1, Integer.MAX_VALUE, typeId2Dist);
-            }
+            HashMap<Integer, Integer> typeId2Dist = getType2DistanceMapForEntity(i, Integer.MAX_VALUE);
             for (Map.Entry<Integer, Integer> e : typeId2Dist.entrySet()) {
                 taxonomyEntityWithQfactLists.get(e.getKey()).add(new Pair<>(i, e.getValue()));
             }
@@ -92,10 +89,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         if (entityId == null) {
             return null;
         }
-        HashMap<Integer, Integer> typeId2Distance = new HashMap<>();
-        for (int v : entityTypeLists.get(entityId)) {
-            exploreParentTypeIds(v, 1, relatedEntityDistanceLimit - 1, typeId2Distance);
-        }
+        HashMap<Integer, Integer> typeId2Distance = getType2DistanceMapForEntity(entityId, relatedEntityDistanceLimit - 1);
         HashMap<Integer, Integer> entityId2Distance = new HashMap<>();
         for (Map.Entry<Integer, Integer> e : typeId2Distance.entrySet()) {
             ArrayList<Pair<Integer, Integer>> entitiesWithQfact = taxonomyEntityWithQfactLists.get(e.getKey());
@@ -106,6 +100,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 if (p.second > relatedEntityDistanceLimit - e.getValue()) {
                     break;
                 }
+                // Update distance
                 int currentDist = entityId2Distance.getOrDefault(p.first, Integer.MAX_VALUE);
                 if (currentDist > e.getValue() + p.second) {
                     entityId2Distance.put(p.first, e.getValue() + p.second);
