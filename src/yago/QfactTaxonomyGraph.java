@@ -1,5 +1,6 @@
 package yago;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import model.context.ContextEmbeddingMatcher;
 import model.quantity.Quantity;
 import model.quantity.QuantityDomain;
@@ -25,7 +26,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     private ContextEmbeddingMatcher matcher = new ContextEmbeddingMatcher(-1); // alpha not used
     private int relatedEntityDistanceLimit;
 
-    private HashMap<Long, Pair<Double, String>> cache = new HashMap<>(10000000);
+    private Long2ObjectOpenHashMap<Pair<Double, String>> cache = new Long2ObjectOpenHashMap<>(10000000);
 
     public void resetCache() {
         cache.clear();
@@ -176,8 +177,9 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             return null;
         }
         long globalKey = 1000000000L * entityId + key;
-        if (cache.containsKey(globalKey)) {
-            return cache.get(globalKey);
+        Pair<Double, String> result = cache.get(globalKey);
+        if (result != null) {
+            return result;
         }
 
         ArrayList<Pair<Integer, Integer>> relatedEntities = getSimilarEntityIdsWithQfact(entity);
@@ -229,7 +231,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             }
         }
 
-        Pair<Double, String> result = new Pair<>(score, matchStr);
+        result = new Pair<>(score, matchStr);
         if (key >= 0) {
             cache.put(globalKey, result);
         }
