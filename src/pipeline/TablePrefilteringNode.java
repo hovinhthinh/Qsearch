@@ -15,7 +15,7 @@ public class TablePrefilteringNode implements TaggingNode {
     }
 
     public TablePrefilteringNode() {
-        this(4, 400);
+        this(4, 100);
     }
 
     private Cell[][] pruneEmptyRows(Cell[][] data) {
