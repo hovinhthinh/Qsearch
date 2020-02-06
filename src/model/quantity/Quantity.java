@@ -10,6 +10,7 @@ public class Quantity {
     // these two properties is for cached calls
     public transient String domain;
     public transient Double scale;
+    public transient String string;
 
     public Quantity(double value, String unit, String resolution) {
         this.value = value;
@@ -39,11 +40,14 @@ public class Quantity {
     // quantityString: "(<value>;<unit>;<resolution>)"
     @Override
     public String toString() {
+        if (string != null) {
+            return string;
+        }
         StringBuilder sb = new StringBuilder();
         sb.append("(").append(String.format("%.3f", value)).append(";")
                 .append(unit).append(";")
                 .append(resolution).append(")");
-        return sb.toString();
+        return (string = sb.toString());
     }
 
     public String toString(int nFixed) {
