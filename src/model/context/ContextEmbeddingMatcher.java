@@ -40,9 +40,9 @@ public class ContextEmbeddingMatcher implements ContextMatcher {
         for (String qX : queryX) {
             double max = 0;
             for (String fX : factX) {
-                double sim = 1 - Glove.cosineDistance(qX, fX);
+                double sim = Glove.cosineDistance(qX, fX);
                 if (sim != -1) {
-                    max = Math.max(max, sim);
+                    max = Math.max(max, 1 - sim);
                 }
             }
             double idf = IDF.getRobertsonIdf(qX);
