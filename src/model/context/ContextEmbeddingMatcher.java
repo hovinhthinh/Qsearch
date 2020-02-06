@@ -49,7 +49,7 @@ public class ContextEmbeddingMatcher implements ContextMatcher {
             score += max * idf;
             totalIdf += idf;
         }
-        return score / totalIdf + 1;
+        return score / totalIdf;
     }
 
     @Override
