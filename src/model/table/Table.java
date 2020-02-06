@@ -24,6 +24,7 @@ public class Table {
     public int[] quantityToEntityColumn; // -1 means there is no connection.
     public double[] quantityToEntityColumnScore; // linking score (default is -1 | unknown).
 
+    @SuppressWarnings("These cached values do not check includeUnit or not")
     public transient String[] cachedQuantityDescriptionFromCombinedHeader = null;
     public transient String[] cachedQuantityDescriptionFromLastHeader = null;
 
