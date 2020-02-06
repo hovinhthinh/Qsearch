@@ -3,16 +3,16 @@ package pipeline;
 import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
-import nlp.YagoType;
 import util.Pair;
 import yago.QfactTaxonomyGraph;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.logging.Logger;
 
 // Link quantity columns to entity columns, return false if there is no quantity column.
-// TODO
-@Deprecated
+// This class uses TaxonomyGraph class, using non-transitive type system.
 public class TextBasedColumnScoringNode implements TaggingNode {
     public static final Logger LOGGER = Logger.getLogger(TextBasedColumnScoringNode.class.getName());
 
@@ -56,9 +56,8 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         }
     }
 
-    private class ColumnType {
-        HashMap<String, Double> type2Itf = new HashMap<>();
-        ArrayList<LinkedHashSet<String>> typeSets = new ArrayList<>();
+    private class ColumnHomogeneityInfo {
+        ArrayList<LinkedHashSet<Integer>> typeSets = new ArrayList<>();
 
         public double getHScore() {
             // there is only 1 entity in the entity column; check <= 1 for safety
@@ -68,12 +67,12 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
             double hScore = 0;
             for (int i = 0; i < typeSets.size(); ++i) {
-                LinkedHashSet<String> typeI = typeSets.get(i);
+                LinkedHashSet<Integer> typeI = typeSets.get(i);
                 loop:
                 for (int j = i + 1; j < typeSets.size(); ++j) {
-                    for (String t : typeSets.get(j)) {
+                    for (Integer t : typeSets.get(j)) {
                         if (typeI.contains(t)) {
-                            hScore += type2Itf.get(t);
+                            hScore += qfactGraph.type2Itf[t];
                             continue loop;
                         }
                     }
@@ -171,33 +170,30 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         }
 
 
-        private ColumnType[] buildColumnTypeSetForCurrentAssignment() {
-            ColumnType[] columnTypeSet = new ColumnType[table.nColumn];
+        private ColumnHomogeneityInfo[] buildColumnTypeSetForCurrentAssignment() {
+            ColumnHomogeneityInfo[] columnTypeSet = new ColumnHomogeneityInfo[table.nColumn];
             for (int i : entityColumnIndexes) {
                 columnTypeSet[i] = buildColumnTypeForCurrentAssignment(i);
             }
             return columnTypeSet;
         }
 
-        private ColumnType buildColumnTypeForCurrentAssignment(int eCol) {
+        private ColumnHomogeneityInfo buildColumnTypeForCurrentAssignment(int eCol) {
             // double check if eCol is entity column
             if (!table.isEntityColumn[eCol]) {
                 return null;
             }
 
-            ColumnType ct = new ColumnType();
+            ColumnHomogeneityInfo ct = new ColumnHomogeneityInfo();
             for (int i = 0; i < table.nDataRow; ++i) {
                 String e = currentEntityAssignment[i][eCol];
                 if (e == null) {
                     continue;
                 }
-                List<Pair<String, Double>> types = YagoType.getTypes(e, true);
-                LinkedHashSet<String> typeSet = new LinkedHashSet<>();
-                for (Pair<String, Double> p : types) {
-                    ct.type2Itf.putIfAbsent(p.first, p.second);
-                    typeSet.add(p.first);
-                }
-                ct.typeSets.add(typeSet);
+                Integer eId = qfactGraph.entity2Id.get(e);
+                // Here we ignore checking eId != null, because it should be in the KB.
+
+                ct.typeSets.add(qfactGraph.getEntityTransitiveTypesOrderedByNEntities(eId));
             }
             return ct;
         }
@@ -205,7 +201,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
         public void recomputeBasedOnCurrentAssignment() {
             // Compute currentColumnLinkingScore, currentJointScore
-            ColumnType[] columnTypeSet = buildColumnTypeSetForCurrentAssignment();
+            ColumnHomogeneityInfo[] columnTypeSet = buildColumnTypeSetForCurrentAssignment();
 
             double homogeneity = 0;
             double connectivity = 0;
@@ -246,7 +242,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             // now compute
 
             // partial built column type set
-            ColumnType[] columnTypeSet = new ColumnType[table.nColumn];
+            ColumnHomogeneityInfo[] columnTypeSet = new ColumnHomogeneityInfo[table.nColumn];
 
             double homogeneity = 0;
             double connectivity = 0;

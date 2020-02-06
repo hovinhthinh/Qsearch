@@ -2,11 +2,9 @@ package yago;
 
 import util.FileUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class TaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(TaxonomyGraph.class.getName());
@@ -24,6 +22,8 @@ public class TaxonomyGraph {
     public ArrayList<ArrayList<Integer>> entityTypeLists;
     public int nEntities;
     public int nTypes;
+
+    public transient LinkedHashSet<Integer>[] cachedEntityTransitiveTypes;
 
     public int getTypeId(String type, boolean addIfAbsent) {
         Integer id = type2Id.get(type);
@@ -105,6 +105,7 @@ public class TaxonomyGraph {
         id2Entity.trimToSize();
         entityTypeLists.trimToSize();
         nEntities = id2Entity.size();
+        cachedEntityTransitiveTypes = new LinkedHashSet[nEntities];
 
         for (int i = 0; i < nEntities; ++i) {
             entityTypeLists.get(i).trimToSize();
@@ -122,7 +123,7 @@ public class TaxonomyGraph {
         }
     }
 
-    protected HashMap<Integer, Integer> getType2DistanceMapForEntity(int entityId, int distLimit) {
+    public HashMap<Integer, Integer> getType2DistanceMapForEntity(int entityId, int distLimit) {
         HashMap<Integer, Integer> typeId2Dist = new HashMap<>();
         if (distLimit < 1) {
             return typeId2Dist;
@@ -148,6 +149,20 @@ public class TaxonomyGraph {
             }
         }
         return typeId2Dist;
+    }
+
+    // cached call, to get transitive types, ordered by increasing nEntities
+    public LinkedHashSet<Integer> getEntityTransitiveTypesOrderedByNEntities(int entityId) {
+        if (cachedEntityTransitiveTypes[entityId] != null) {
+            return cachedEntityTransitiveTypes[entityId];
+        }
+
+        LinkedHashSet<Integer> types =
+                getType2DistanceMapForEntity(entityId, Integer.MAX_VALUE).keySet().stream()
+                        .sorted(Comparator.comparingInt(t -> type2nEntities[t]))
+                        .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        return (cachedEntityTransitiveTypes[entityId] = types);
     }
 
     public int getEntityDistance(String entity1, String entity2) {
