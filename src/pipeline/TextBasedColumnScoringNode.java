@@ -170,21 +170,21 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         }
 
 
-        private ColumnHomogeneityInfo[] buildColumnTypeSetForCurrentAssignment() {
-            ColumnHomogeneityInfo[] columnTypeSet = new ColumnHomogeneityInfo[table.nColumn];
+        private ColumnHomogeneityInfo[] buildColumnHomogeneityInfoSetForCurrentAssignment() {
+            ColumnHomogeneityInfo[] chiSet = new ColumnHomogeneityInfo[table.nColumn];
             for (int i : entityColumnIndexes) {
-                columnTypeSet[i] = buildColumnTypeForCurrentAssignment(i);
+                chiSet[i] = buildColumnHomogeneityInfoSetForCurrentAssignment(i);
             }
-            return columnTypeSet;
+            return chiSet;
         }
 
-        private ColumnHomogeneityInfo buildColumnTypeForCurrentAssignment(int eCol) {
+        private ColumnHomogeneityInfo buildColumnHomogeneityInfoSetForCurrentAssignment(int eCol) {
             // double check if eCol is entity column
             if (!table.isEntityColumn[eCol]) {
                 return null;
             }
 
-            ColumnHomogeneityInfo ct = new ColumnHomogeneityInfo();
+            ColumnHomogeneityInfo chi = new ColumnHomogeneityInfo();
             for (int i = 0; i < table.nDataRow; ++i) {
                 String e = currentEntityAssignment[i][eCol];
                 if (e == null) {
@@ -193,15 +193,15 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                 Integer eId = qfactGraph.entity2Id.get(e);
                 // Here we ignore checking eId != null, because it should be in the KB.
 
-                ct.typeSets.add(qfactGraph.getEntityTransitiveTypesOrderedByNEntities(eId));
+                chi.typeSets.add(qfactGraph.getEntityTransitiveTypesOrderedByNEntities(eId));
             }
-            return ct;
+            return chi;
         }
 
 
         public void recomputeBasedOnCurrentAssignment() {
             // Compute currentColumnLinkingScore, currentJointScore
-            ColumnHomogeneityInfo[] columnTypeSet = buildColumnTypeSetForCurrentAssignment();
+            ColumnHomogeneityInfo[] chiSet = buildColumnHomogeneityInfoSetForCurrentAssignment();
 
             double homogeneity = 0;
             double connectivity = 0;
@@ -209,7 +209,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 //            int firstColumn = table.getFirstNonNumericColumn();
             for (int i : entityColumnIndexes) {
                 // homogeneity
-                homogeneity += (currentHomogeneityScore[i] = columnTypeSet[i].getHScore());
+                homogeneity += (currentHomogeneityScore[i] = chiSet[i].getHScore());
             }
             homogeneity /= entityColumnIndexes.length;
 
@@ -242,7 +242,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             // now compute
 
             // partial built column type set
-            ColumnHomogeneityInfo[] columnTypeSet = new ColumnHomogeneityInfo[table.nColumn];
+            ColumnHomogeneityInfo[] chiSet = new ColumnHomogeneityInfo[table.nColumn];
 
             double homogeneity = 0;
             double connectivity = 0;
@@ -253,8 +253,8 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                 if (i != col) {
                     homogeneity += currentHomogeneityScore[i];
                 } else {
-                    columnTypeSet[i] = buildColumnTypeForCurrentAssignment(i);
-                    homogeneity += columnTypeSet[i].getHScore();
+                    chiSet[i] = buildColumnHomogeneityInfoSetForCurrentAssignment(i);
+                    homogeneity += chiSet[i].getHScore();
                 }
             }
             homogeneity /= entityColumnIndexes.length;
