@@ -1,10 +1,12 @@
 package yago;
 
+import it.unimi.dsi.fastutil.ints.*;
 import util.FileUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class TaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(TaxonomyGraph.class.getName());
@@ -15,16 +17,16 @@ public class TaxonomyGraph {
     public ArrayList<String> id2Type;
     public int[] type2nEntities;
     public double[] type2Itf;
-    public ArrayList<ArrayList<Integer>> typeDadLists;
+    public ArrayList<IntArrayList> typeDadLists;
 
     public HashMap<String, Integer> entity2Id;
     public ArrayList<String> id2Entity;
-    public ArrayList<ArrayList<Integer>> entityTypeLists;
+    public ArrayList<IntArrayList> entityTypeLists;
     public int nEntities;
     public int nTypes;
 
-    // ordered by increasing nEntities
-    private transient LinkedHashSet<Integer>[] cachedEntityTransitiveTypes;
+    private static transient final int CACHE_ENTITY_TRANSITIVE_TYPE_2_DISTANCE_SIZE = 100000;
+    private transient Int2ObjectLinkedOpenHashMap<Int2IntLinkedOpenHashMap> cachedEntityTransitiveType2Distance;
 
     public int getTypeId(String type, boolean addIfAbsent) {
         Integer id = type2Id.get(type);
@@ -36,7 +38,7 @@ public class TaxonomyGraph {
         }
         type2Id.put(type, type2Id.size());
         id2Type.add(type);
-        typeDadLists.add(new ArrayList<>());
+        typeDadLists.add(new IntArrayList());
         return id2Type.size() - 1;
     }
 
@@ -51,7 +53,7 @@ public class TaxonomyGraph {
         }
         entity2Id.put(entity, entity2Id.size());
         id2Entity.add(entity);
-        entityTypeLists.add(new ArrayList<>());
+        entityTypeLists.add(new IntArrayList());
         return id2Entity.size() - 1;
     }
 
@@ -72,8 +74,8 @@ public class TaxonomyGraph {
         }
         id2Type.trimToSize();
         typeDadLists.trimToSize();
-        for (ArrayList<Integer> l : typeDadLists) {
-            l.trimToSize();
+        for (IntArrayList l : typeDadLists) {
+            l.trim();
         }
         nTypes = id2Type.size();
         type2nEntities = new int[nTypes];
@@ -106,13 +108,13 @@ public class TaxonomyGraph {
         id2Entity.trimToSize();
         entityTypeLists.trimToSize();
         nEntities = id2Entity.size();
-        cachedEntityTransitiveTypes = new LinkedHashSet[nEntities];
+        cachedEntityTransitiveType2Distance = new Int2ObjectLinkedOpenHashMap<>();
 
         for (int i = 0; i < nEntities; ++i) {
-            entityTypeLists.get(i).trimToSize();
+            entityTypeLists.get(i).trim();
             // populate nEntities for types
-            for (int t : getType2DistanceMapForEntity(i, Integer.MAX_VALUE).keySet()) {
-                ++type2nEntities[t];
+            for (Int2IntMap.Entry e : Int2IntMaps.fastIterable(getType2DistanceMapForEntity(i))) {
+                ++type2nEntities[e.getIntKey()];
             }
         }
         // calculate itf for types
@@ -124,17 +126,19 @@ public class TaxonomyGraph {
         }
     }
 
-    public HashMap<Integer, Integer> getType2DistanceMapForEntity(int entityId, int distLimit) {
-        HashMap<Integer, Integer> typeId2Dist = new HashMap<>();
-        if (distLimit < 1) {
+    // ordered by increasing distance
+    public Int2IntLinkedOpenHashMap getType2DistanceMapForEntity(int entityId) {
+        Int2IntLinkedOpenHashMap typeId2Dist = cachedEntityTransitiveType2Distance.getAndMoveToFirst(entityId);
+        if (typeId2Dist != null) {
             return typeId2Dist;
         }
+
+        typeId2Dist = new Int2IntLinkedOpenHashMap();
+        typeId2Dist.defaultReturnValue(-1);
         LinkedList<Integer> queue = new LinkedList<>();
         for (int v : entityTypeLists.get(entityId)) {
             typeId2Dist.put(v, 1);
-            if (distLimit > 1) {
-                queue.addLast(v);
-            }
+            queue.addLast(v);
         }
         while (!queue.isEmpty()) {
             int t = queue.removeFirst();
@@ -144,27 +148,29 @@ public class TaxonomyGraph {
                     continue;
                 }
                 typeId2Dist.put(v, tDist + 1);
-                if (tDist + 1 < distLimit) {
-                    queue.addLast(v);
-                }
+                queue.addLast(v);
             }
+        }
+        cachedEntityTransitiveType2Distance.putAndMoveToFirst(entityId, typeId2Dist);
+        if (cachedEntityTransitiveType2Distance.size() > CACHE_ENTITY_TRANSITIVE_TYPE_2_DISTANCE_SIZE) {
+            cachedEntityTransitiveType2Distance.removeLast();
         }
         return typeId2Dist;
     }
 
     // cached call, to get transitive types, ordered by increasing nEntities
-    public LinkedHashSet<Integer> getEntityTransitiveTypesOrderedByNEntities(int entityId) {
-        if (cachedEntityTransitiveTypes[entityId] != null) {
-            return cachedEntityTransitiveTypes[entityId];
-        }
-
-        LinkedHashSet<Integer> types =
-                getType2DistanceMapForEntity(entityId, Integer.MAX_VALUE).keySet().stream()
-                        .sorted(Comparator.comparingInt(t -> type2nEntities[t]))
-                        .collect(Collectors.toCollection(LinkedHashSet::new));
-
-        return (cachedEntityTransitiveTypes[entityId] = types);
-    }
+//    public LinkedHashSet<Integer> getEntityTransitiveTypesOrderedByNEntities(int entityId) {
+//        if (cachedEntityTransitiveType2Distance[entityId] != null) {
+//            return cachedEntityTransitiveType2Distance[entityId];
+//        }
+//
+//        LinkedHashSet<Integer> types =
+//                getType2DistanceMapForEntity(entityId, Integer.MAX_VALUE).keySet().stream()
+//                        .sorted(Comparator.comparingInt(t -> type2nEntities[t]))
+//                        .collect(Collectors.toCollection(LinkedHashSet::new));
+//
+//        return (cachedEntityTransitiveType2Distance[entityId] = types);
+//    }
 
     public int getEntityDistance(String entity1, String entity2) {
         Integer eId1 = entity2Id.get(entity1);
@@ -175,13 +181,16 @@ public class TaxonomyGraph {
         if (entity1.equals(entity2)) {
             return 0;
         }
-        HashMap<Integer, Integer> typeId2Dist1 = getType2DistanceMapForEntity(eId1, Integer.MAX_VALUE);
-        HashMap<Integer, Integer> typeId2Dist2 = getType2DistanceMapForEntity(eId2, Integer.MAX_VALUE);
+        Int2IntLinkedOpenHashMap typeId2Dist1 = getType2DistanceMapForEntity(eId1);
+        Int2IntLinkedOpenHashMap typeId2Dist2 = getType2DistanceMapForEntity(eId2);
         int minDist = Integer.MAX_VALUE;
-        for (Map.Entry<Integer, Integer> e : typeId2Dist1.entrySet()) {
-            Integer distToE2 = typeId2Dist2.get(e.getKey());
-            if (distToE2 != null) {
-                minDist = Math.min(minDist, e.getValue() + distToE2);
+        for (Int2IntMap.Entry t : Int2IntMaps.fastIterable(typeId2Dist1)) {
+            if (t.getIntValue() >= minDist) {
+                break;
+            }
+            int distToE2 = typeId2Dist2.get(t.getIntKey());
+            if (distToE2 != -1) {
+                minDist = Math.min(minDist, t.getIntValue() + distToE2);
             }
         }
         return minDist == Integer.MAX_VALUE ? -1 : minDist;

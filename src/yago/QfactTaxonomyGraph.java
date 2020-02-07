@@ -1,5 +1,8 @@
 package yago;
 
+import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import model.context.ContextEmbeddingMatcher;
 import model.quantity.Quantity;
@@ -8,10 +11,7 @@ import nlp.NLP;
 import util.FileUtils;
 import util.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -19,8 +19,8 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(QfactTaxonomyGraph.class.getName());
     public static final String DEFAULT_QFACT_FILE = "./non-deep/qfact_text.gz";
     public static final int DEFAULT_RELATED_ENTITY_DIST_LIM = 4;
-    private ArrayList<ArrayList<Pair<String, Quantity>>> entityQfactLists;
-    private ArrayList<ArrayList<Pair<Integer, Integer>>> taxonomyEntityWithQfactLists; // Pair<entityId, distance>
+    private ArrayList<Pair<String, Quantity>>[] entityQfactLists;
+    private ArrayList<Pair<Integer, Integer>>[] taxonomyEntityWithQfactLists; // Pair<entityId, distance>, order by distance
 
     private ContextEmbeddingMatcher matcher = new ContextEmbeddingMatcher(-1); // alpha not used
     private int relatedEntityDistanceLimit;
@@ -34,9 +34,9 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     public QfactTaxonomyGraph(String qfactFile, int relatedEntityDistanceLimit) {
         this.relatedEntityDistanceLimit = relatedEntityDistanceLimit;
         LOGGER.info("Loading YAGO Qfact taxonomy graph");
-        entityQfactLists = new ArrayList<>(nEntities);
+        entityQfactLists = new ArrayList[nEntities];
         for (int i = 0; i < nEntities; ++i) {
-            entityQfactLists.add(new ArrayList<>());
+            entityQfactLists[i] = new ArrayList<>();
         }
         for (String line : FileUtils.getLineStream(qfactFile, "UTF-8")) {
             String[] arr = line.split("\t");
@@ -44,36 +44,37 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             if (entityId == null) {
                 continue;
             }
-            entityQfactLists.get(entityId).add(new Pair<>(arr[1], Quantity.fromQuantityString(arr[2])));
+            entityQfactLists[entityId].add(new Pair<>(arr[1], Quantity.fromQuantityString(arr[2])));
         }
 
         LOGGER.info("Populating entities with Qfact to taxonomy.");
-        taxonomyEntityWithQfactLists = new ArrayList<>(nTypes);
+        taxonomyEntityWithQfactLists = new ArrayList[nTypes];
         for (int i = 0; i < nTypes; ++i) {
-            taxonomyEntityWithQfactLists.add(new ArrayList<>());
+            taxonomyEntityWithQfactLists[i] = new ArrayList<>();
         }
         for (int i = 0; i < nEntities; ++i) {
-            ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists.get(i);
+            ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists[i];
             if (qfacts.size() == 0) {
-                entityQfactLists.set(i, null);
+                entityQfactLists[i] = null;
                 continue;
             }
             qfacts.trimToSize();
 
             // populate for a single entity
-            HashMap<Integer, Integer> typeId2Dist = getType2DistanceMapForEntity(i, Integer.MAX_VALUE);
-            for (Map.Entry<Integer, Integer> e : typeId2Dist.entrySet()) {
-                taxonomyEntityWithQfactLists.get(e.getKey()).add(new Pair<>(i, e.getValue()));
+            Int2IntLinkedOpenHashMap typeId2Dist = getType2DistanceMapForEntity(i);
+            for (Int2IntMap.Entry t : Int2IntMaps.fastIterable(typeId2Dist)) {
+                taxonomyEntityWithQfactLists[t.getIntKey()].add(new Pair<>(i, t.getIntValue()));
             }
         }
         for (int i = 0; i < nTypes; ++i) {
-            ArrayList<Pair<Integer, Integer>> entitiesWithQfact = taxonomyEntityWithQfactLists.get(i);
+            ArrayList<Pair<Integer, Integer>> entitiesWithQfact = taxonomyEntityWithQfactLists[i];
             if (entitiesWithQfact.size() == 0) {
-                taxonomyEntityWithQfactLists.set(i, null);
+                taxonomyEntityWithQfactLists[i] = null;
                 continue;
             }
+            entitiesWithQfact.trimToSize();
             // sort by distance
-            Collections.sort(entitiesWithQfact, (a, b) -> a.second.compareTo(b.second));
+            Collections.sort(entitiesWithQfact, Comparator.comparing(o -> o.second));
         }
     }
 
@@ -88,20 +89,23 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         if (entityId == null) {
             return null;
         }
-        HashMap<Integer, Integer> typeId2Distance = getType2DistanceMapForEntity(entityId, relatedEntityDistanceLimit - 1);
+        Int2IntLinkedOpenHashMap typeId2Distance = getType2DistanceMapForEntity(entityId);
         HashMap<Integer, Double> entityId2Itf = new HashMap<>();
-        for (Map.Entry<Integer, Integer> e : typeId2Distance.entrySet()) {
-            ArrayList<Pair<Integer, Integer>> entitiesWithQfact = taxonomyEntityWithQfactLists.get(e.getKey());
+        for (Int2IntMap.Entry e : typeId2Distance.int2IntEntrySet()) {
+            if (e.getIntValue() >= relatedEntityDistanceLimit) {
+                break;
+            }
+            ArrayList<Pair<Integer, Integer>> entitiesWithQfact = taxonomyEntityWithQfactLists[e.getIntKey()];
             if (entitiesWithQfact == null) {
                 continue;
             }
             for (Pair<Integer, Integer> p : entitiesWithQfact) {
-                if (p.second > relatedEntityDistanceLimit - e.getValue()) {
+                if (p.second > relatedEntityDistanceLimit - e.getIntValue()) {
                     break;
                 }
                 // Update itf
-                if (entityId2Itf.getOrDefault(p.first, 0.0) < type2Itf[e.getKey()]) {
-                    entityId2Itf.put(p.first, type2Itf[e.getKey()]);
+                if (entityId2Itf.getOrDefault(p.first, 0.0) < type2Itf[e.getIntKey()]) {
+                    entityId2Itf.put(p.first, type2Itf[e.getIntKey()]);
                 }
             }
         }
@@ -128,7 +132,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         if (entityId == null) {
             return null;
         }
-        ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists.get(entityId);
+        ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists[entityId];
         if (qfacts == null) {
             return null;
         }
@@ -186,15 +190,13 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         String matchStr = null;
 
         for (Map.Entry<Integer, Double> p : relatedEntities.entrySet()) { // contains eId & itf
-            ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists.get(p.getKey());
+            ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists[p.getKey()];
             if (qfacts == null) {
                 continue;
             }
             long localKey = -(1000000000L * (p.getKey() + 1) + key);
-            Pair<Double, String> singleEntityResult;
-            if (cache.containsKey(localKey)) {
-                singleEntityResult = cache.get(localKey);
-            } else {
+            Pair<Double, String> singleEntityResult = cache.get(localKey);
+            if (singleEntityResult == null) {
                 singleEntityResult = new Pair<>(0.0, null);
                 for (Pair<String, Quantity> o : qfacts) {
                     // different concept should be ignored

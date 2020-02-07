@@ -1,5 +1,8 @@
 package pipeline;
 
+import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntMaps;
 import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
@@ -8,7 +11,6 @@ import yago.QfactTaxonomyGraph;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.logging.Logger;
 
 // Link quantity columns to entity columns, return false if there is no quantity column.
@@ -57,7 +59,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     }
 
     private class ColumnHomogeneityInfo {
-        ArrayList<LinkedHashSet<Integer>> typeSets = new ArrayList<>();
+        ArrayList<Int2IntLinkedOpenHashMap> typeSets = new ArrayList<>();
 
         public double getHScore() {
             // there is only 1 entity in the entity column; check <= 1 for safety
@@ -67,15 +69,16 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
             double hScore = 0;
             for (int i = 0; i < typeSets.size(); ++i) {
-                LinkedHashSet<Integer> typeI = typeSets.get(i);
-                loop:
+                Int2IntLinkedOpenHashMap typeI = typeSets.get(i);
+
                 for (int j = i + 1; j < typeSets.size(); ++j) {
-                    for (Integer t : typeSets.get(j)) {
-                        if (typeI.contains(t)) {
-                            hScore += qfactGraph.type2Itf[t];
-                            continue loop;
+                    double pairItf = 0;
+                    for (Int2IntMap.Entry t : Int2IntMaps.fastIterable(typeSets.get(j))) {
+                        if (typeI.containsKey(t.getIntKey())) {
+                            pairItf = Math.max(pairItf, qfactGraph.type2Itf[t.getIntKey()]);
                         }
                     }
+                    hScore += pairItf;
                 }
             }
             return hScore / (typeSets.size() * (typeSets.size() - 1) / 2);
@@ -193,7 +196,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                 Integer eId = qfactGraph.entity2Id.get(e);
                 // Here we ignore checking eId != null, because it should be in the KB.
 
-                chi.typeSets.add(qfactGraph.getEntityTransitiveTypesOrderedByNEntities(eId));
+                chi.typeSets.add(qfactGraph.getType2DistanceMapForEntity(eId));
             }
             return chi;
         }
