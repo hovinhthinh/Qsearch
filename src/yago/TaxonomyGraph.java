@@ -23,7 +23,8 @@ public class TaxonomyGraph {
     public int nEntities;
     public int nTypes;
 
-    public transient LinkedHashSet<Integer>[] cachedEntityTransitiveTypes;
+    // ordered by increasing nEntities
+    private transient LinkedHashSet<Integer>[] cachedEntityTransitiveTypes;
 
     public int getTypeId(String type, boolean addIfAbsent) {
         Integer id = type2Id.get(type);

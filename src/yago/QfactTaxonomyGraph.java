@@ -81,15 +81,15 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         this(DEFAULT_QFACT_FILE, DEFAULT_RELATED_ENTITY_DIST_LIM);
     }
 
-    // returns Pair<entityId, distance>, sorted by distance
-    public ArrayList<Pair<Integer, Integer>> getSimilarEntityIdsWithQfact(String entity) {
+    // returns Pair<entityId, itf>
+    public HashMap<Integer, Double> getSimilarEntityIdsWithQfact(String entity) {
         // Go up to get type list.
         Integer entityId = entity2Id.get(entity);
         if (entityId == null) {
             return null;
         }
         HashMap<Integer, Integer> typeId2Distance = getType2DistanceMapForEntity(entityId, relatedEntityDistanceLimit - 1);
-        HashMap<Integer, Integer> entityId2Distance = new HashMap<>();
+        HashMap<Integer, Double> entityId2Itf = new HashMap<>();
         for (Map.Entry<Integer, Integer> e : typeId2Distance.entrySet()) {
             ArrayList<Pair<Integer, Integer>> entitiesWithQfact = taxonomyEntityWithQfactLists.get(e.getKey());
             if (entitiesWithQfact == null) {
@@ -99,23 +99,20 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 if (p.second > relatedEntityDistanceLimit - e.getValue()) {
                     break;
                 }
-                // Update distance
-                int currentDist = entityId2Distance.getOrDefault(p.first, Integer.MAX_VALUE);
-                if (currentDist > e.getValue() + p.second) {
-                    entityId2Distance.put(p.first, e.getValue() + p.second);
+                // Update itf
+                if (entityId2Itf.getOrDefault(p.first, 0.0) < type2Itf[e.getKey()]) {
+                    entityId2Itf.put(p.first, type2Itf[e.getKey()]);
                 }
             }
         }
-        return entityId2Distance.entrySet().stream().sorted((a, b) -> a.getValue().compareTo(b.getValue())).map(o -> {
-            return new Pair<>(o.getKey(), o.getValue());
-        }).collect(Collectors.toCollection(ArrayList::new));
+        return entityId2Itf;
     }
 
-    // returns Pair<entity, distance>, sorted by distance
-    public ArrayList<Pair<String, Integer>> getSimilarEntitiesWithQfact(String entity) {
-        return getSimilarEntityIdsWithQfact(entity).stream().map(o -> {
-            return new Pair<>(id2Entity.get(o.first), o.second);
-        }).collect(Collectors.toCollection(ArrayList::new));
+    // returns Pair<entity, itf>
+    public ArrayList<Pair<String, Double>> getSimilarEntitiesWithQfact(String entity) {
+        return getSimilarEntityIdsWithQfact(entity).entrySet().stream().map(
+                o -> new Pair<>(id2Entity.get(o.getKey()), o.getValue())
+        ).collect(Collectors.toCollection(ArrayList::new));
     }
 
     // returns Pair<score, matchedQfactStr>
@@ -176,7 +173,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             return result;
         }
 
-        ArrayList<Pair<Integer, Integer>> relatedEntities = getSimilarEntityIdsWithQfact(entity);
+        HashMap<Integer, Double> relatedEntities = getSimilarEntityIdsWithQfact(entity);
         if (relatedEntities == null) {
             return null;
         }
@@ -188,12 +185,12 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         double score = 0;
         String matchStr = null;
 
-        for (Pair<Integer, Integer> p : relatedEntities) { // contains eId & distance
-            ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists.get(p.first);
+        for (Map.Entry<Integer, Double> p : relatedEntities.entrySet()) { // contains eId & itf
+            ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists.get(p.getKey());
             if (qfacts == null) {
                 continue;
             }
-            long localKey = -(1000000000L * (p.first + 1) + key);
+            long localKey = -(1000000000L * (p.getKey() + 1) + key);
             Pair<Double, String> singleEntityResult;
             if (cache.containsKey(localKey)) {
                 singleEntityResult = cache.get(localKey);
@@ -215,6 +212,8 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                         singleEntityResult.second = entity + "\t" + o.first + "\t" + o.second.toString();
                     }
                 }
+                // scaling with itf
+//                singleEntityResult.first *= p.getValue();
                 if (key >= 0) {
                     cache.put(localKey, singleEntityResult);
                 }
