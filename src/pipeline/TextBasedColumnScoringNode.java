@@ -1,8 +1,5 @@
 package pipeline;
 
-import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.ints.Int2IntMap;
-import it.unimi.dsi.fastutil.ints.Int2IntMaps;
 import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
@@ -59,29 +56,24 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     }
 
     private class ColumnHomogeneityInfo {
-        ArrayList<Int2IntLinkedOpenHashMap> typeSets = new ArrayList<>();
+        public ArrayList<Integer> entityIds = new ArrayList<>();
 
         public double getHScore() {
             // there is only 1 entity in the entity column; check <= 1 for safety
-            if (typeSets.size() <= 1) {
+            if (entityIds.size() <= 1) {
                 return 0;
             }
 
             double hScore = 0;
-            for (int i = 0; i < typeSets.size(); ++i) {
-                Int2IntLinkedOpenHashMap typeI = typeSets.get(i);
-
-                for (int j = i + 1; j < typeSets.size(); ++j) {
-                    double pairItf = 0;
-                    for (Int2IntMap.Entry t : Int2IntMaps.fastIterable(typeSets.get(j))) {
-                        if (typeI.containsKey(t.getIntKey())) {
-                            pairItf = Math.max(pairItf, qfactGraph.type2Itf[t.getIntKey()]);
-                        }
+            for (int i = 0; i < entityIds.size(); ++i) {
+                for (int j = i + 1; j < entityIds.size(); ++j) {
+                    int commonTypeId = qfactGraph.getMostSpecificCommonType(entityIds.get(i), entityIds.get(j));
+                    if (commonTypeId != -1) {
+                        hScore += qfactGraph.type2Itf[commonTypeId];
                     }
-                    hScore += pairItf;
                 }
             }
-            return hScore / (typeSets.size() * (typeSets.size() - 1) / 2);
+            return hScore / (entityIds.size() * (entityIds.size() - 1) / 2);
         }
     }
 
@@ -196,7 +188,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                 Integer eId = qfactGraph.entity2Id.get(e);
                 // Here we ignore checking eId != null, because it should be in the KB.
 
-                chi.typeSets.add(qfactGraph.getType2DistanceMapForEntity(eId));
+                chi.entityIds.add(eId);
             }
             return chi;
         }
