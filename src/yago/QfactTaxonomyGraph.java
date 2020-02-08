@@ -214,12 +214,12 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                         singleEntityResult.second = entity + "\t" + o.first + "\t" + o.second.toString();
                     }
                 }
-                // scaling with itf
-//                singleEntityResult.first *= p.getValue();
                 if (key >= 0) {
                     cache.put(localKey, singleEntityResult);
                 }
             }
+            // scaling with itf
+//            singleEntityResult.first *= Math.pow(p.getValue() + 1, 0);
             if (singleEntityResult.first > score) {
                 score = singleEntityResult.first;
                 matchStr = singleEntityResult.second;
