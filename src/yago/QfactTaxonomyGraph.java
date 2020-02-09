@@ -83,7 +83,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         this(DEFAULT_QFACT_FILE, DEFAULT_RELATED_ENTITY_DIST_LIM);
     }
 
-    // returns Pair<entityId, itf>
+    // returns Pair<entityId, agreement with key entity>
     public HashMap<Integer, Double> getSimilarEntityIdsWithQfact(int entityId) {
         // Go up to get type list.
         Int2IntLinkedOpenHashMap typeId2Distance = getType2DistanceMapForEntity(entityId);
@@ -100,7 +100,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 if (p.second > relatedEntityDistanceLimit - e.getIntValue()) {
                     break;
                 }
-                // Update itf
+                // Update agreement (now using Itf)
                 if (entityId2Itf.getOrDefault(p.first, 0.0) < type2Itf[e.getIntKey()]) {
                     entityId2Itf.put(p.first, type2Itf[e.getIntKey()]);
                 }
