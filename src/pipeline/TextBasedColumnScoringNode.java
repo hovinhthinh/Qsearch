@@ -67,10 +67,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             double hScore = 0;
             for (int i = 0; i < entityIds.size(); ++i) {
                 for (int j = i + 1; j < entityIds.size(); ++j) {
-                    int commonTypeId = qfactGraph.getMostSpecificCommonType(entityIds.get(i), entityIds.get(j));
-                    if (commonTypeId != -1) {
-                        hScore += qfactGraph.type2Itf[commonTypeId];
-                    }
+                    hScore += qfactGraph.getTypeAgreement(entityIds.get(i), entityIds.get(j));
                 }
             }
             return hScore / (entityIds.size() * (entityIds.size() - 1) / 2);

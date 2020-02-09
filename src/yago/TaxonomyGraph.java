@@ -1,7 +1,7 @@
 package yago;
 
 import it.unimi.dsi.fastutil.ints.*;
-import it.unimi.dsi.fastutil.longs.Long2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2DoubleLinkedOpenHashMap;
 import util.FileUtils;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class TaxonomyGraph {
     private transient Int2ObjectLinkedOpenHashMap<Int2IntLinkedOpenHashMap> cachedEntityTransitiveType2Distance;
 
     private static transient final int CACHE_MOST_SPEC_COMMON_TYPE_SIZE = 1000000;
-    private transient Long2IntLinkedOpenHashMap cachedEntityMostSpecificCommonType;
+    private transient Long2DoubleLinkedOpenHashMap cachedEntityTypeAgreement;
 
     public int getTypeId(String type, boolean addIfAbsent) {
         Integer id = type2Id.get(type);
@@ -159,8 +159,8 @@ public class TaxonomyGraph {
         }
 
         // common type cache
-        cachedEntityMostSpecificCommonType = new Long2IntLinkedOpenHashMap();
-        cachedEntityMostSpecificCommonType.defaultReturnValue(-2);
+        cachedEntityTypeAgreement = new Long2DoubleLinkedOpenHashMap();
+        cachedEntityTypeAgreement.defaultReturnValue(-1);
     }
 
     // ordered by increasing distance
@@ -219,33 +219,36 @@ public class TaxonomyGraph {
         return minDist == Integer.MAX_VALUE ? -1 : minDist;
     }
 
-    // return -1 if cannot find.
-    public int getMostSpecificCommonType(int entityId1, int entityId2) {
+    public double getTypeAgreement(int entityId1, int entityId2) {
         if (entityId1 > entityId2) {
             int tmp = entityId1;
             entityId1 = entityId2;
             entityId2 = tmp;
         }
         long key = 1000000000L * entityId1 + entityId2;
-        int result = cachedEntityMostSpecificCommonType.getAndMoveToFirst(key);
-        if (result != -2) {
+        double result = cachedEntityTypeAgreement.getAndMoveToFirst(key);
+        if (result != -1) {
             return result;
         }
 
         Int2IntLinkedOpenHashMap typeId2Dist1 = getType2DistanceMapForEntity(entityId1);
         Int2IntLinkedOpenHashMap typeId2Dist2 = getType2DistanceMapForEntity(entityId2);
-        result = -1;
+
+        int lca = -1;
         for (Int2IntMap.Entry t : Int2IntMaps.fastIterable(typeId2Dist1)) {
             if (!typeId2Dist2.containsKey(t.getIntKey())) {
                 continue;
             }
-            if (result == -1 || type2nEntities[t.getIntKey()] < type2nEntities[result]) {
-                result = t.getIntKey();
+            if (lca == -1 || type2nEntities[t.getIntKey()] < type2nEntities[lca]) {
+                lca = t.getIntKey();
             }
         }
-        cachedEntityMostSpecificCommonType.putAndMoveToFirst(key, result);
-        if (cachedEntityMostSpecificCommonType.size() > CACHE_MOST_SPEC_COMMON_TYPE_SIZE) {
-            cachedEntityMostSpecificCommonType.removeLastInt();
+
+        result = (lca == -1 ? 0 : type2Itf[lca]);
+
+        cachedEntityTypeAgreement.putAndMoveToFirst(key, result);
+        if (cachedEntityTypeAgreement.size() > CACHE_MOST_SPEC_COMMON_TYPE_SIZE) {
+            cachedEntityTypeAgreement.removeLastDouble();
         }
         return result;
     }
