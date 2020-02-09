@@ -4,7 +4,7 @@ import data.background.mention2entity.Mention2EntityPrior;
 import model.table.Cell;
 import model.table.Table;
 import model.table.link.EntityLink;
-import util.Pair;
+import util.Triple;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,18 +57,18 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
                 }
                 int candidatePos = -1, candidateFreq = 0;
                 String candidateEntity = null;
-                List<Pair<String, Integer>> rightCandidates = null;
+                List<Triple<String, Integer, Double>> rightCandidates = null;
                 for (int s = current; s < arr.size(); ++s) {
                     if (s + l > arr.size()) {
                         break;
                     }
-                    List<Pair<String, Integer>> candidates = prior.getCanditateEntitiesForMention(String.join(" ", arr.subList(s, s + l)));
+                    List<Triple<String, Integer, Double>> candidates = prior.getCanditateEntitiesForMention(String.join(" ", arr.subList(s, s + l)));
                     if (candidates == null) {
                         continue;
                     }
 
                     // Make a candidate.
-                    Pair<String, Integer> candidate = candidates.get(0);
+                    Triple<String, Integer, Double> candidate = candidates.get(0);
 
                     if (candidateEntity == null || candidate.second > candidateFreq) {
                         candidateEntity = candidate.first;
@@ -99,7 +99,7 @@ public class PriorBasedEntityTaggingNode implements TaggingNode {
         Cell cell = new Cell();
         cell.text = "\" How Chelsea Got Her Groove Back \"";
         cell.quantityLinks = new ArrayList<>();
-        cell.timeLinks= new ArrayList<>();
+        cell.timeLinks = new ArrayList<>();
         new PriorBasedEntityTaggingNode().tagCell(cell);
         cell.quantityLinks = new ArrayList<>();
         System.out.println(cell.getDisambiguatedText());

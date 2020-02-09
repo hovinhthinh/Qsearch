@@ -10,7 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import util.FileUtils;
-import util.Pair;
+import util.Triple;
 import util.db.Database;
 
 import java.io.PrintWriter;
@@ -129,7 +129,7 @@ public class EquityReader {
                     EntityLink link = new EntityLink();
                     link.target = "YAGO:" + target;
                     link.candidates = new LinkedList<>();
-                    link.candidates.add(new Pair<>("<" + target + ">", -1));
+                    link.candidates.add(new Triple<>("<" + target + ">", -1, null));
 
                     link.text = String.join(" ", NLP.tokenize(span));
 
@@ -140,7 +140,7 @@ public class EquityReader {
                     Assert.assertTrue(cell.text.contains(link.text));
                     int begin = cell.text.indexOf(link.text);
                     int end = begin + link.text.length();
-                    while (end < cell.text.length() && cell.text.indexOf(end) != ' ' ) {
+                    while (end < cell.text.length() && cell.text.indexOf(end) != ' ') {
                         ++end;
                     }
                     link.text = cell.text.substring(begin, end);

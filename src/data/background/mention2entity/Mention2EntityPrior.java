@@ -3,7 +3,7 @@ package data.background.mention2entity;
 import nlp.NLP;
 import nlp.YagoType;
 import util.FileUtils;
-import util.Pair;
+import util.Triple;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 // Sensitive
 public class Mention2EntityPrior {
     private static final String PRIOR_PATH = "./resources/m2ePrior_wikipages+wikitables+wikilinks.case-sensitive_tokenized.gz";
-    private HashMap<String, List<Pair<String, Integer>>> mention2Entity;
+    private HashMap<String, List<Triple<String, Integer, Double>>> mention2Entity;
     private static final Logger LOGGER = Logger.getLogger(Mention2EntityPrior.class.getName());
 
     // if nTopKeptCandidateEntities == -1, keep all entities for each mention.
@@ -46,14 +46,14 @@ public class Mention2EntityPrior {
         LOGGER.info(String.format("MinFrequency: %d\tLoaded: %d/%d", minMention2EntityFreq, afterPruned, total));
     }
 
-    public List<Pair<String, Integer>> getCanditateEntitiesForMention(String mention, boolean doTokenizing) {
+    public List<Triple<String, Integer, Double>> getCanditateEntitiesForMention(String mention, boolean doTokenizing) {
         if (doTokenizing) {
             mention = String.join(" ", NLP.tokenize(mention));
         }
         return mention2Entity.get(mention);
     }
 
-    public List<Pair<String, Integer>> getCanditateEntitiesForMention(String mention) {
+    public List<Triple<String, Integer, Double>> getCanditateEntitiesForMention(String mention) {
         return getCanditateEntitiesForMention(mention, false);
     }
 

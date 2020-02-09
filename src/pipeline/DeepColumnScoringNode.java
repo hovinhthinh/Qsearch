@@ -7,6 +7,7 @@ import org.apache.commons.collections4.map.LRUMap;
 import pipeline.deep.DeepScoringClient;
 import pipeline.deep.ScoringClientInterface;
 import util.Pair;
+import util.Triple;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -371,7 +372,7 @@ public class DeepColumnScoringNode implements TaggingNode {
                         }
                         double currentLocalScore = info.currentJointScore;
                         int nTried = 0;
-                        for (Pair<String, Integer> c : table.data[i][j].getRepresentativeEntityLink().candidates) {
+                        for (Triple<String, Integer, Double> c : table.data[i][j].getRepresentativeEntityLink().candidates) {
                             if (JOINT_MAX_LOCAL_CANDIDATES >= 0 && ++nTried > JOINT_MAX_LOCAL_CANDIDATES) {
                                 break;
                             }

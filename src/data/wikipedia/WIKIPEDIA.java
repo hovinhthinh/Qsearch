@@ -8,7 +8,7 @@ import nlp.YagoType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import util.Pair;
+import util.Triple;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class WIKIPEDIA {
             }
             el.target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + e;
             el.candidates = new LinkedList<>();
-            el.candidates.add(new Pair<>("<" + e + ">", -1));
+            el.candidates.add(new Triple<>("<" + e + ">", -1, null));
             cell.entityLinks.add(el);
         }
 

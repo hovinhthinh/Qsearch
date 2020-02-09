@@ -4,6 +4,7 @@ import nlp.NLP;
 import util.FileUtils;
 import util.Monitor;
 import util.Pair;
+import util.Triple;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class PostProcessPrior {
                     lastMention = infoLine.mention;
                     entity2Freq = infoLine.entityFreq.stream().collect(Collectors.toMap(o -> o.first, o -> o.second));
                 } else {
-                    for (Pair<String, Integer> o : infoLine.entityFreq) {
+                    for (Triple<String, Integer, Double> o : infoLine.entityFreq) {
                         entity2Freq.put(o.first, entity2Freq.getOrDefault(o.first, 0) + o.second);
                     }
                 }
@@ -96,7 +97,7 @@ public class PostProcessPrior {
 
         for (String line : FileUtils.getLineStream(args[0], "UTF-8")) {
             Mention2EntityInfoLine infoLine = Mention2EntityInfoLine.fromLine(line);
-            for (Pair<String, Integer> o : infoLine.entityFreq) {
+            for (Triple<String, Integer, Double> o : infoLine.entityFreq) {
                 entity2Freq.put(o.first, entity2Freq.getOrDefault(o.first, 0) + o.second);
             }
             cnt.incrementAndGet();
