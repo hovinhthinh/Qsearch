@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectHeapPriorityQueue;
 import model.context.ContextEmbeddingMatcher;
 import model.quantity.Quantity;
 import model.quantity.QuantityDomain;
@@ -83,12 +84,8 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     }
 
     // returns Pair<entityId, itf>
-    public HashMap<Integer, Double> getSimilarEntityIdsWithQfact(String entity) {
+    public HashMap<Integer, Double> getSimilarEntityIdsWithQfact(int entityId) {
         // Go up to get type list.
-        Integer entityId = entity2Id.get(entity);
-        if (entityId == null) {
-            return null;
-        }
         Int2IntLinkedOpenHashMap typeId2Distance = getType2DistanceMapForEntity(entityId);
         HashMap<Integer, Double> entityId2Itf = new HashMap<>();
         for (Int2IntMap.Entry e : typeId2Distance.int2IntEntrySet()) {
@@ -113,8 +110,8 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     }
 
     // returns Pair<entity, itf>
-    public ArrayList<Pair<String, Double>> getSimilarEntitiesWithQfact(String entity) {
-        return getSimilarEntityIdsWithQfact(entity).entrySet().stream().map(
+    public ArrayList<Pair<String, Double>> getSimilarEntitiesWithQfact(int entityId) {
+        return getSimilarEntityIdsWithQfact(entityId).entrySet().stream().map(
                 o -> new Pair<>(id2Entity.get(o.getKey()), o.getValue())
         ).collect(Collectors.toCollection(ArrayList::new));
     }
@@ -177,7 +174,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             return result;
         }
 
-        HashMap<Integer, Double> relatedEntities = getSimilarEntityIdsWithQfact(entity);
+        HashMap<Integer, Double> relatedEntities = getSimilarEntityIdsWithQfact(entityId);
         if (relatedEntities == null) {
             return null;
         }
@@ -186,14 +183,12 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             context = context + " " + quantity.unit;
         }
-        double score = 0;
-        String matchStr = null;
+
+        ObjectHeapPriorityQueue<Pair<Double, String>> queue = new ObjectHeapPriorityQueue<>(Comparator.comparing(o -> o.first));
 
         for (Map.Entry<Integer, Double> p : relatedEntities.entrySet()) { // contains eId & itf
             ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists[p.getKey()];
-            if (qfacts == null) {
-                continue;
-            }
+
             long localKey = -(1000000000L * (p.getKey() + 1) + key);
             Pair<Double, String> singleEntityResult = cache.get(localKey);
             if (singleEntityResult == null) {
@@ -220,18 +215,28 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             }
             // scaling with itf
 //            singleEntityResult.first *= Math.pow(p.getValue() + 1, 0);
-            if (singleEntityResult.first > score) {
-                score = singleEntityResult.first;
-                matchStr = singleEntityResult.second;
+            queue.enqueue(singleEntityResult);
+            // sum of top 5 related entities
+            if (queue.size() > 5) {
+                queue.dequeue();
             }
         }
 
-        result = new Pair<>(score, matchStr);
+        result = new Pair<>(0.0, null);
+        int queueSize = queue.size();
+        while (!queue.isEmpty()) {
+            Pair<Double, String> top = queue.dequeue();
+            result.first += top.first / queueSize;
+            if (queue.isEmpty()) {
+                result.second = top.second;
+            }
+        }
+
         if (key >= 0) {
             cache.put(globalKey, result);
         }
 
-        if (matchStr == null) {
+        if (result.second == null) {
             return null;
         }
         return result;
