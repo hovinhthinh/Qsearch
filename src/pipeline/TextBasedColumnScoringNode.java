@@ -61,7 +61,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         public ArrayList<Double> entityPrior = new ArrayList<>();
 
         // TODO: fix this weight
-        public static final double PRIOR_WEIGHT = 0;
+        public static final double PRIOR_WEIGHT = 0.9;
 
         public double getHScore() {
             double agreeScore = 0;
