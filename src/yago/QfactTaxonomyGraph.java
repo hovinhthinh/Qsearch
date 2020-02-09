@@ -217,6 +217,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
 //            singleEntityResult.first *= Math.pow(p.getValue() + 1, 0);
             queue.enqueue(singleEntityResult);
             // sum of top 5 related entities
+            // TODO: fix this consst
             if (queue.size() > 5) {
                 queue.dequeue();
             }
