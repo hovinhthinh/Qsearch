@@ -19,6 +19,8 @@ public class TaxonomyGraph {
     public int[] type2nEntities;
     public double[] type2Itf;
     public ArrayList<IntArrayList> typeDadLists;
+    public ArrayList<IntArrayList> typeChildLists;
+    public int[] type2DistanceToRoot; // always >= 1
 
     public HashMap<String, Integer> entity2Id;
     public ArrayList<String> id2Entity;
@@ -43,6 +45,7 @@ public class TaxonomyGraph {
         type2Id.put(type, type2Id.size());
         id2Type.add(type);
         typeDadLists.add(new IntArrayList());
+        typeChildLists.add(new IntArrayList());
         return id2Type.size() - 1;
     }
 
@@ -67,6 +70,7 @@ public class TaxonomyGraph {
         type2Id = new HashMap<>();
         id2Type = new ArrayList<>();
         typeDadLists = new ArrayList<>();
+        typeChildLists = new ArrayList<>();
         for (String line : FileUtils.getLineStream(yagoTaxonomyFile, "UTF-8")) {
             String[] arr = line.split("\t");
             if (arr.length != 4 || !arr[2].equals("rdfs:subClassOf")) {
@@ -75,12 +79,18 @@ public class TaxonomyGraph {
             String childType = arr[1], parentType = arr[3];
             int childId = getTypeId(childType, true), dadId = getTypeId(parentType, true);
             typeDadLists.get(childId).add(dadId);
+            typeChildLists.get(dadId).add(childId);
         }
         id2Type.trimToSize();
         typeDadLists.trimToSize();
         for (IntArrayList l : typeDadLists) {
             l.trim();
         }
+        typeChildLists.trimToSize();
+        for (IntArrayList l : typeChildLists) {
+            l.trim();
+        }
+
         nTypes = id2Type.size();
         type2nEntities = new int[nTypes];
         type2Itf = new double[nTypes];
@@ -127,6 +137,25 @@ public class TaxonomyGraph {
 //            type2Itf[i] = Math.max(0.0001, Math.log10((nEntities - type2nEntities[i] + 0.5) / (type2nEntities[i] + 0.5)));
             // normal
             type2Itf[i] = Math.max(0.0001, Math.log(nEntities / (type2nEntities[i] + 1.0)));
+        }
+
+        // compute type 2 distance to root
+        type2DistanceToRoot = new int[nTypes];
+        LinkedList<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < nTypes; ++i) {
+            if (typeDadLists.get(i).size() == 0) {
+                type2DistanceToRoot[i] = 1;
+                queue.addLast(i);
+            }
+        }
+        while (!queue.isEmpty()) {
+            int t = queue.removeFirst();
+            for (int v : typeChildLists.get(t)) {
+                if (type2DistanceToRoot[v] == 0) {
+                    type2DistanceToRoot[v] = type2DistanceToRoot[t] + 1;
+                    queue.addLast(v);
+                }
+            }
         }
 
         // common type cache
