@@ -58,20 +58,29 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
     private class ColumnHomogeneityInfo {
         public ArrayList<Integer> entityIds = new ArrayList<>();
+        public ArrayList<Double> entityPrior = new ArrayList<>();
+
+        // TODO: fix this weight
+        public static final double PRIOR_WEIGHT = 0;
 
         public double getHScore() {
-            // there is only 1 entity in the entity column; check <= 1 for safety
-            if (entityIds.size() <= 1) {
-                return 0;
+            double agreeScore = 0;
+            if (entityIds.size() > 1) {
+                for (int i = 0; i < entityIds.size(); ++i) {
+                    for (int j = i + 1; j < entityIds.size(); ++j) {
+                        agreeScore += qfactGraph.getTypeAgreement(entityIds.get(i), entityIds.get(j));
+                    }
+                }
+                agreeScore /= (entityIds.size() * (entityIds.size() - 1) / 2);
             }
 
-            double hScore = 0;
-            for (int i = 0; i < entityIds.size(); ++i) {
-                for (int j = i + 1; j < entityIds.size(); ++j) {
-                    hScore += qfactGraph.getTypeAgreement(entityIds.get(i), entityIds.get(j));
-                }
+            double priorScore = 0;
+            for (int i = 0; i < entityPrior.size(); ++i) {
+                priorScore += entityPrior.get(i);
             }
-            return hScore / (entityIds.size() * (entityIds.size() - 1) / 2);
+            priorScore /= entityPrior.size();
+
+            return priorScore * PRIOR_WEIGHT + agreeScore * (1 - PRIOR_WEIGHT);
         }
     }
 
@@ -82,10 +91,10 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         int[] currentColumnLinking;
         Double[][] currentQfactMatchingScore;
         double[] currentColumnLinkingScore;
-        String[][] currentEntityAssignment;
+        Triple<String, Integer, Double>[][] currentEntityAssignment;
         double[] currentHomogeneityScore;
         double currentJointScore;
-        String[][] savedEntityAssignment; // For saving each best local assignment
+        Triple<String, Integer, Double>[][] savedEntityAssignment; // For saving each best local assignment
 
         int[] bestColumnLinking;
         double[] bestColumnLinkingScore;
@@ -103,7 +112,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                 String lastHeaderContext = table.getQuantityDescriptionFromLastHeader(qCol, false);
                 for (int r = 0; r < table.nDataRow; ++r) {
                     currentQfactMatchingScore[r][qCol] = null;
-                    String e = currentEntityAssignment[r][eCol];
+                    Triple<String, Integer, Double> e = currentEntityAssignment[r][eCol];
                     if (e == null) {
                         continue;
                     }
@@ -114,13 +123,13 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
                     // (1) combined quantity header
                     double matchScr;
-                    Pair<Double, String> matchResult = qfactGraph.getMatchScore(e, combinedContext, ql.quantity, (r * table.nColumn + qCol) * 2);
+                    Pair<Double, String> matchResult = qfactGraph.getMatchScore(e.first, combinedContext, ql.quantity, (r * table.nColumn + qCol) * 2);
                     if (matchResult != null) {
                         // we need score, instead of distance
                         matchScr = matchResult.first;
                         if (table.nHeaderRow > 1) {
                             // (2) last quantity header
-                            matchScr = Math.max(matchScr, qfactGraph.getMatchScore(e, lastHeaderContext, ql.quantity, (r * table.nColumn + qCol) * 2 + 1).first);
+                            matchScr = Math.max(matchScr, qfactGraph.getMatchScore(e.first, lastHeaderContext, ql.quantity, (r * table.nColumn + qCol) * 2 + 1).first);
                         }
                     } else {
                         matchScr = 0;
@@ -135,8 +144,8 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             currentColumnLinking = new int[table.nColumn];
             currentQfactMatchingScore = new Double[table.nDataRow][table.nColumn];
             currentColumnLinkingScore = new double[table.nColumn];
-            savedEntityAssignment = new String[table.nDataRow][table.nColumn];
-            currentEntityAssignment = new String[table.nDataRow][table.nColumn];
+            savedEntityAssignment = new Triple[table.nDataRow][table.nColumn];
+            currentEntityAssignment = new Triple[table.nDataRow][table.nColumn];
             currentHomogeneityScore = new double[table.nColumn];
             currentJointScore = 0;
 
@@ -156,7 +165,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             }
             for (int i = 0; i < bestEntityAssignment.length; ++i) {
                 for (int j : entityColumnIndexes) {
-                    bestEntityAssignment[i][j] = currentEntityAssignment[i][j];
+                    bestEntityAssignment[i][j] = currentEntityAssignment[i][j] != null ? currentEntityAssignment[i][j].first : null;
                 }
             }
             bestJointScore = currentJointScore;
@@ -179,14 +188,15 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
             ColumnHomogeneityInfo chi = new ColumnHomogeneityInfo();
             for (int i = 0; i < table.nDataRow; ++i) {
-                String e = currentEntityAssignment[i][eCol];
+                Triple<String, Integer, Double> e = currentEntityAssignment[i][eCol];
                 if (e == null) {
                     continue;
                 }
-                Integer eId = qfactGraph.entity2Id.get(e);
+                Integer eId = qfactGraph.entity2Id.get(e.first);
                 // Here we ignore checking eId != null, because it should be in the KB.
 
                 chi.entityIds.add(eId);
+                chi.entityPrior.add(e.third);
             }
             return chi;
         }
@@ -228,9 +238,9 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             currentJointScore = (1 - homogeneityWeight) * connectivity + homogeneityWeight * homogeneity;
         }
 
-        public double newScoreOfLocalAssignment(int row, int col, String candidate) {
+        public double newScoreOfLocalAssignment(int row, int col, Triple<String, Integer, Double> candidate) {
             // try new candidate
-            String oldCandidate = currentEntityAssignment[row][col];
+            Triple<String, Integer, Double> oldCandidate = currentEntityAssignment[row][col];
             currentEntityAssignment[row][col] = candidate;
             // now compute
 
@@ -274,13 +284,13 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                                 }
                                 // (1) combined quantity header
                                 double matchScr;
-                                Pair<Double, String> matchResult = qfactGraph.getMatchScore(candidate, table.getQuantityDescriptionFromCombinedHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2);
+                                Pair<Double, String> matchResult = qfactGraph.getMatchScore(candidate.first, table.getQuantityDescriptionFromCombinedHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2);
                                 if (matchResult != null) {
                                     // we need score, instead of distance
                                     matchScr = matchResult.first;
                                     if (table.nHeaderRow > 1) {
                                         // (2) last quantity header
-                                        matchScr = Math.max(matchScr, qfactGraph.getMatchScore(candidate, table.getQuantityDescriptionFromLastHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2 + 1).first);
+                                        matchScr = Math.max(matchScr, qfactGraph.getMatchScore(candidate.first, table.getQuantityDescriptionFromLastHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2 + 1).first);
                                     }
                                 } else {
                                     matchScr = 0;
@@ -325,7 +335,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             for (int i = 0; i < table.nDataRow; ++i) {
                 EntityLink el = table.data[i][j].getRepresentativeEntityLink();
                 if (el != null) {
-                    info.currentEntityAssignment[i][j] = info.savedEntityAssignment[i][j] = el.candidates.get(0).first;
+                    info.currentEntityAssignment[i][j] = info.savedEntityAssignment[i][j] = el.candidates.get(0);
                 }
             }
         }
@@ -351,10 +361,10 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                             if (c.first.equals(info.currentEntityAssignment[i][j])) {
                                 continue;
                             }
-                            double newLocalScore = info.newScoreOfLocalAssignment(i, j, c.first);
+                            double newLocalScore = info.newScoreOfLocalAssignment(i, j, c);
                             if (newLocalScore > currentLocalScore) {
                                 currentLocalScore = newLocalScore;
-                                info.savedEntityAssignment[i][j] = c.first;
+                                info.savedEntityAssignment[i][j] = c;
                                 hasChange = true;
                             }
                         }
