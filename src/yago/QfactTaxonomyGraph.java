@@ -19,7 +19,11 @@ import java.util.stream.Collectors;
 public class QfactTaxonomyGraph extends TaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(QfactTaxonomyGraph.class.getName());
     public static final String DEFAULT_QFACT_FILE = "./non-deep/qfact_text.gz";
+
     public static final int DEFAULT_RELATED_ENTITY_DIST_LIM = 4;
+    public static final int NTOP_RELATED_ENTITY = 3;
+    public static final double QFACT_CONTEXT_MATCH_WEIGHT = 0.9; // quantity match weight = 1 - this weight.
+
     private ArrayList<Pair<String, Quantity>>[] entityQfactLists;
     private ArrayList<Pair<Integer, Integer>>[] taxonomyEntityWithQfactLists; // Pair<entityId, distance>, order by distance
 
@@ -119,51 +123,6 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     // returns Pair<score, matchedQfactStr>
     // returns null of cannot match.
     public Pair<Double, String> getMatchScore(String entity, String context, Quantity quantity, int key) {
-        return getTypeMatchScore(entity, context, quantity, key);
-    }
-
-    // returns Pair<score, matchedQfactStr>
-    // returns null of cannot match.
-    public Pair<Double, String> getEntityMatchScore(String entity, String context, Quantity quantity) {
-        Integer entityId = entity2Id.get(entity);
-        if (entityId == null) {
-            return null;
-        }
-        ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists[entityId];
-        if (qfacts == null) {
-            return null;
-        }
-        String thisDomain = QuantityDomain.getDomain(quantity);
-        if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
-            context = context + " " + quantity.unit;
-        }
-        double score = 0;
-        String matchStr = null;
-        for (Pair<String, Quantity> o : qfacts) {
-            // different concept should be ignored
-            if (!thisDomain.equals(QuantityDomain.getDomain(o.second))) {
-                continue;
-            }
-            String oContext = o.first;
-            if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
-                oContext += " " + o.second.unit;
-            }
-
-            double matchScr = matcher.directedEmbeddingIdfSimilarity(NLP.splitSentence(context.toLowerCase()), NLP.splitSentence(oContext.toLowerCase()));
-            if (matchScr > score) {
-                score = matchScr;
-                matchStr = entity + "\t" + o.first + "\t" + o.second.toString();
-            }
-        }
-        if (matchStr == null) {
-            return null;
-        }
-        return new Pair<>(score, matchStr);
-    }
-
-    // returns Pair<score, matchedQfactStr>
-    // returns null of cannot match.
-    public Pair<Double, String> getTypeMatchScore(String entity, String context, Quantity quantity, int key) {
         Integer entityId = entity2Id.get(entity);
         if (entityId == null) {
             return null;
@@ -174,52 +133,79 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             return result;
         }
 
-        HashMap<Integer, Double> relatedEntities = getSimilarEntityIdsWithQfact(entityId);
-        if (relatedEntities == null) {
-            return null;
-        }
-
         String thisDomain = QuantityDomain.getDomain(quantity);
         if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             context = context + " " + quantity.unit;
         }
+        ArrayList<String> thisContext = NLP.splitSentence(context.toLowerCase());
 
         ObjectHeapPriorityQueue<Pair<Double, String>> queue = new ObjectHeapPriorityQueue<>(Comparator.comparing(o -> o.first));
 
-        for (Map.Entry<Integer, Double> p : relatedEntities.entrySet()) { // contains eId & itf
-            ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists[p.getKey()];
-
-            long localKey = -(1000000000L * (p.getKey() + 1) + key);
-            Pair<Double, String> singleEntityResult = cache.get(localKey);
-            if (singleEntityResult == null) {
-                singleEntityResult = new Pair<>(0.0, null);
-                for (Pair<String, Quantity> o : qfacts) {
-                    // different concept should be ignored
-                    if (!thisDomain.equals(QuantityDomain.getDomain(o.second))) {
-                        continue;
-                    }
-                    String oContext = o.first;
-                    if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
-                        oContext += " " + o.second.unit;
-                    }
-
-                    double matchScr = matcher.directedEmbeddingIdfSimilarity(NLP.splitSentence(context.toLowerCase()), NLP.splitSentence(oContext.toLowerCase()));
-                    if (matchScr > singleEntityResult.first) {
-                        singleEntityResult.first = matchScr;
-                        singleEntityResult.second = entity + "\t" + o.first + "\t" + o.second.toString();
-                    }
+        // match exact entitiy
+        ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists[entityId];
+        if (qfacts != null) {
+            Pair<Double, String> singleEntityResult = new Pair<>(0.0, null);
+            for (Pair<String, Quantity> o : qfacts) {
+                // different concept should be ignored
+                if (!thisDomain.equals(QuantityDomain.getDomain(o.second))) {
+                    continue;
                 }
-                if (key >= 0) {
-                    cache.put(localKey, singleEntityResult);
+                String oContext = o.first;
+                if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+                    oContext += " " + o.second.unit;
+                }
+
+                double contextMatchScr = matcher.directedEmbeddingIdfSimilarity(thisContext, NLP.splitSentence(oContext.toLowerCase()));
+                double quantityMatchScr = quantity.compareTo(o.second) == 0 ? 1 : 0;
+
+                double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT + quantityMatchScr * (1 - QFACT_CONTEXT_MATCH_WEIGHT);
+                if (matchScr > singleEntityResult.first) {
+                    singleEntityResult.first = matchScr;
+                    singleEntityResult.second = entity + "\t" + o.first + "\t" + o.second.toString();
                 }
             }
-            // scaling with itf
-//            singleEntityResult.first *= Math.pow(p.getValue() + 1, 0);
             queue.enqueue(singleEntityResult);
-            // sum of top 5 related entities
-            // TODO: fix this const
-            if (queue.size() > 3) {
-                queue.dequeue();
+        }
+        // match related entities
+        HashMap<Integer, Double> relatedEntities = getSimilarEntityIdsWithQfact(entityId);
+        if (relatedEntities != null) {
+            for (Map.Entry<Integer, Double> p : relatedEntities.entrySet()) { // contains eId & itf
+                qfacts = entityQfactLists[p.getKey()];
+
+                long localKey = -(1000000000L * (p.getKey() + 1) + key);
+                Pair<Double, String> singleEntityResult = cache.get(localKey);
+                if (singleEntityResult == null) {
+                    singleEntityResult = new Pair<>(0.0, null);
+                    for (Pair<String, Quantity> o : qfacts) {
+                        // different concept should be ignored
+                        if (!thisDomain.equals(QuantityDomain.getDomain(o.second))) {
+                            continue;
+                        }
+                        String oContext = o.first;
+                        if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+                            oContext += " " + o.second.unit;
+                        }
+
+                        double contextMatchScr = matcher.directedEmbeddingIdfSimilarity(thisContext, NLP.splitSentence(oContext.toLowerCase()));
+
+                        double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT;
+                        if (matchScr > singleEntityResult.first) {
+                            singleEntityResult.first = matchScr;
+                            singleEntityResult.second = entity + "\t" + o.first + "\t" + o.second.toString();
+                        }
+                    }
+                    if (key >= 0) {
+                        cache.put(localKey, singleEntityResult);
+                    }
+                }
+                // scaling with itf
+//            singleEntityResult.first *= Math.pow(p.getValue() + 1, 0);
+                queue.enqueue(singleEntityResult);
+                // sum of top 5 related entities
+                // TODO: fix this const
+                if (queue.size() > NTOP_RELATED_ENTITY) {
+                    queue.dequeue();
+                }
             }
         }
 
