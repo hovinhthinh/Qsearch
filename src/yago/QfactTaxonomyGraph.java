@@ -198,7 +198,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                         cache.put(localKey, singleEntityResult);
                     }
                 }
-                // scaling with itf
+                // TODO: scaling for type-related matching
 //            singleEntityResult.first *= Math.pow(p.getValue() + 1, 0);
                 queue.enqueue(singleEntityResult);
                 // sum of top 5 related entities
