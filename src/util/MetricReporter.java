@@ -9,7 +9,7 @@ public class MetricReporter {
     // avg
     private LinkedHashMap<String, Integer> avg_key2freq = new LinkedHashMap<>();
     private LinkedHashMap<String, Double> avg_key2Sum = new LinkedHashMap<>();
-
+    // micro avg
     private LinkedHashMap<String, Integer> microAvg_key2True = new LinkedHashMap<>();
     private LinkedHashMap<String, Integer> microAvg_key2Total = new LinkedHashMap<>();
 
