@@ -18,6 +18,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
     public static final int PRIOR_INFERENCE = 1;
     public static final int JOINT_INFERENCE = 2;
+    public static final int INDEPENDENT_INFERENCE = 3;
 
     // TODO: fix this weight
     public static final double DEFAULT_JOINT_HOMOGENEITY_WEIGHT = 0.7;
@@ -49,7 +50,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         table.quantityToEntityColumnScore = new double[table.nColumn];
         Arrays.fill(table.quantityToEntityColumnScore, -1.0);
 
-        if (inferenceMode == PRIOR_INFERENCE || inferenceMode == JOINT_INFERENCE) {
+        if (inferenceMode == PRIOR_INFERENCE || inferenceMode == JOINT_INFERENCE || inferenceMode == INDEPENDENT_INFERENCE) {
             return jointInference(table);
         } else {
             throw new RuntimeException("Invalid inference mode");
@@ -85,6 +86,28 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     }
 
     private class BacktrackJointInferenceInfo {
+        public class JointScore {
+            double first;
+            double second; // only use in case we do ED & CA independently.
+
+            public JointScore() {
+                first = second = 0;
+            }
+
+            public JointScore(double first, double second) {
+                this.first = first;
+                this.second = second;
+            }
+
+            public int compareTo(JointScore other) {
+                if (first != other.first) {
+                    return first < other.first ? -1 : 1;
+                } else {
+                    return second == other.second ? 0 : (second < other.second ? -1 : 1);
+                }
+            }
+        }
+
         int[] entityColumnIndexes;
         int[] numericColumnIndexes;
 
@@ -93,13 +116,13 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         double[] currentColumnLinkingScore;
         Triple<String, Integer, Double>[][] currentEntityAssignment;
         double[] currentHomogeneityScore;
-        double currentJointScore;
+        JointScore currentJointScore;
         Triple<String, Integer, Double>[][] savedEntityAssignment; // For saving each best local assignment
 
         int[] bestColumnLinking;
         double[] bestColumnLinkingScore;
         String[][] bestEntityAssignment;
-        double bestJointScore;
+        JointScore bestJointScore;
 
         Table table;
 
@@ -147,13 +170,13 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             savedEntityAssignment = new Triple[table.nDataRow][table.nColumn];
             currentEntityAssignment = new Triple[table.nDataRow][table.nColumn];
             currentHomogeneityScore = new double[table.nColumn];
-            currentJointScore = 0;
+            currentJointScore = new JointScore();
 
             // for saving
             bestColumnLinking = new int[table.nColumn];
             bestColumnLinkingScore = new double[table.nColumn];
             bestEntityAssignment = new String[table.nDataRow][table.nColumn];
-            bestJointScore = Double.NEGATIVE_INFINITY;
+            bestJointScore = new JointScore(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
             Arrays.fill(bestColumnLinking, -1);
             Arrays.fill(bestColumnLinkingScore, -1.0);
         }
@@ -216,7 +239,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             }
             homogeneity /= entityColumnIndexes.length;
 
-            if (homogeneityWeight < 1) { // only compute if weight for connectivity != 0
+            if (homogeneityWeight < 1 || inferenceMode != JOINT_INFERENCE) { // on JOINT, only compute if weight for connectivity != 0
                 computeCurrentQfactMatchingScores();
                 for (int i : numericColumnIndexes) {
                     double lScore = 0;
@@ -235,10 +258,14 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             }
 
             // joint score
-            currentJointScore = (1 - homogeneityWeight) * connectivity + homogeneityWeight * homogeneity;
+            if (inferenceMode == JOINT_INFERENCE) {
+                currentJointScore = new JointScore(homogeneityWeight * homogeneity + (1 - homogeneityWeight) * connectivity, 0);
+            } else {
+                currentJointScore = new JointScore(homogeneity, connectivity);
+            }
         }
 
-        public double newScoreOfLocalAssignment(int row, int col, Triple<String, Integer, Double> candidate) {
+        public JointScore newScoreOfLocalAssignment(int row, int col, Triple<String, Integer, Double> candidate) {
             // try new candidate
             Triple<String, Integer, Double> oldCandidate = currentEntityAssignment[row][col];
             currentEntityAssignment[row][col] = candidate;
@@ -262,7 +289,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             }
             homogeneity /= entityColumnIndexes.length;
 
-            if (homogeneityWeight < 1) { // only compute if weight for connectivity != 0
+            if (homogeneityWeight < 1 || inferenceMode != JOINT_INFERENCE) { // on JOINT, only compute if weight for connectivity != 0
                 for (int i : numericColumnIndexes) {
                     // connectivity
                     if (currentColumnLinking[i] != col) {
@@ -311,7 +338,11 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             currentEntityAssignment[row][col] = oldCandidate;
 
             // joint score
-            return (1 - homogeneityWeight) * connectivity + homogeneityWeight * homogeneity;
+            if (inferenceMode == JOINT_INFERENCE) {
+                return new JointScore(homogeneityWeight * homogeneity + (1 - homogeneityWeight) * connectivity, 0);
+            } else {
+                return new JointScore(homogeneity, connectivity);
+            }
         }
     }
 
@@ -342,7 +373,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         info.recomputeBasedOnCurrentAssignment();
 
         // Iterative classifying
-        if (inferenceMode == JOINT_INFERENCE) {
+        if (inferenceMode == JOINT_INFERENCE || inferenceMode == INDEPENDENT_INFERENCE) {
             int nIterations = 0;
             boolean hasChange;
             do {
@@ -352,7 +383,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                         if (info.currentEntityAssignment[i][j] == null) {
                             continue;
                         }
-                        double currentLocalScore = info.currentJointScore;
+                        BacktrackJointInferenceInfo.JointScore currentLocalScore = info.currentJointScore;
                         int nTried = 0;
                         for (Triple<String, Integer, Double> c : table.data[i][j].getRepresentativeEntityLink().candidates) {
                             if (JOINT_MAX_LOCAL_CANDIDATES >= 0 && ++nTried > JOINT_MAX_LOCAL_CANDIDATES) {
@@ -361,8 +392,8 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                             if (c.first.equals(info.currentEntityAssignment[i][j])) {
                                 continue;
                             }
-                            double newLocalScore = info.newScoreOfLocalAssignment(i, j, c);
-                            if (newLocalScore > currentLocalScore) {
+                            BacktrackJointInferenceInfo.JointScore newLocalScore = info.newScoreOfLocalAssignment(i, j, c);
+                            if (newLocalScore.compareTo(currentLocalScore) > 0) {
                                 currentLocalScore = newLocalScore;
                                 info.savedEntityAssignment[i][j] = c;
                                 hasChange = true;
@@ -381,7 +412,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             } while (++nIterations < JOINT_MAX_NUM_ITERS && hasChange);
         }
         // Compare with best assignment
-        if (info.currentJointScore > info.bestJointScore) {
+        if (info.currentJointScore.compareTo(info.bestJointScore) > 0) {
             info.captureCurrentColumnLinking();
         }
     }
