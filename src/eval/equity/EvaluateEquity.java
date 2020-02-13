@@ -68,7 +68,20 @@ public class EvaluateEquity {
             System.out.println("--- Ours ---");
             System.out.println(table.getTableContentPrintable(true, true, true, true));
 
-            System.out.println(String.format("precEntityDisambiguation: Prior/Ours: %.2f/%.2f", precEDPrior * 100, precEDOurs * 100));
+            System.out.println("Linked Qfacts:");
+            for (int i = 0; i < table.nColumn; ++i) {
+                if (table.isNumericColumn[i]) {
+                    System.out.println("+ Column " + i + " --> " + table.quantityToEntityColumn[i] + ":");
+                    for (int r = 0; r < table.nDataRow; ++r) {
+                        if (table.QfactMatchingStr[r][i] != null) {
+                            System.out.println("   " + table.QfactMatchingStr[r][i]);
+                        } else {
+                            System.out.println("   null");
+                        }
+                    }
+                }
+            }
+            System.out.println(String.format("precEntit                                matchStr = lastHeaderResult.second;yDisambiguation: Prior/Ours: %.2f/%.2f", precEDPrior * 100, precEDOurs * 100));
             System.out.println(String.format("precColumnAlignment: FirstColumn/Ours: %.2f/%.2f", precCAFirstColumn * 100, precCAOurs * 100));
 //            System.out.println(String.format("qtFoundRateInText: %.2f", qtFoundRate));
             System.out.println("========================================================================================================================================================================================================");

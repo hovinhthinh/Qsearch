@@ -113,6 +113,8 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
         int[] currentColumnLinking;
         Double[][] currentQfactMatchingScore;
+        String[][] currentQfactMatchingStr;
+
         double[] currentColumnLinkingScore;
         Triple<String, Integer, Double>[][] currentEntityAssignment;
         double[] currentHomogeneityScore;
@@ -122,6 +124,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         int[] bestColumnLinking;
         double[] bestColumnLinkingScore;
         String[][] bestEntityAssignment;
+        String[][] bestQfactMatchingStr;
         JointScore bestJointScore;
 
         Table table;
@@ -135,6 +138,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                 String lastHeaderContext = table.getQuantityDescriptionFromLastHeader(qCol, false);
                 for (int r = 0; r < table.nDataRow; ++r) {
                     currentQfactMatchingScore[r][qCol] = null;
+                    currentQfactMatchingStr[r][qCol] = null;
                     Triple<String, Integer, Double> e = currentEntityAssignment[r][eCol];
                     if (e == null) {
                         continue;
@@ -145,19 +149,21 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                     }
 
                     // (1) combined quantity header
-                    double matchScr;
                     Pair<Double, String> matchResult = qfactGraph.getMatchScore(e.first, combinedContext, ql.quantity, (r * table.nColumn + qCol) * 2);
                     if (matchResult != null) {
                         // we need score, instead of distance
-                        matchScr = matchResult.first;
                         if (table.nHeaderRow > 1) {
                             // (2) last quantity header
-                            matchScr = Math.max(matchScr, qfactGraph.getMatchScore(e.first, lastHeaderContext, ql.quantity, (r * table.nColumn + qCol) * 2 + 1).first);
+                            Pair<Double, String> lastHeaderResult = qfactGraph.getMatchScore(e.first, lastHeaderContext, ql.quantity, (r * table.nColumn + qCol) * 2 + 1);
+                            if (lastHeaderResult.first > matchResult.first) {
+                                matchResult = lastHeaderResult;
+                            }
                         }
                     } else {
-                        matchScr = 0;
+                        matchResult = new Pair<>(0.0, null);
                     }
-                    currentQfactMatchingScore[r][qCol] = matchScr;
+                    currentQfactMatchingScore[r][qCol] = matchResult.first;
+                    currentQfactMatchingStr[r][qCol] = matchResult.second;
                 }
             }
         }
@@ -166,6 +172,8 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             table = t;
             currentColumnLinking = new int[table.nColumn];
             currentQfactMatchingScore = new Double[table.nDataRow][table.nColumn];
+            currentQfactMatchingStr = new String[table.nDataRow][table.nColumn];
+
             currentColumnLinkingScore = new double[table.nColumn];
             savedEntityAssignment = new Triple[table.nDataRow][table.nColumn];
             currentEntityAssignment = new Triple[table.nDataRow][table.nColumn];
@@ -192,6 +200,14 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                 }
             }
             bestJointScore = currentJointScore;
+
+            // capture MatchingStr
+            bestQfactMatchingStr = new String[table.nDataRow][table.nColumn];
+            for (int i = 0; i < table.nDataRow; ++i) {
+                for (int j = 0; j < table.nColumn; ++j) {
+                    bestQfactMatchingStr[i][j] = currentQfactMatchingStr[i][j];
+                }
+            }
         }
 
 
@@ -449,9 +465,11 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         // backtracking
         backtrackJointInference(table, info, 0);
 
+        table.QfactMatchingStr = new String[table.nDataRow][table.nColumn];
         // set candidates back to tables
         for (int i = 0; i < table.nDataRow; ++i) {
             for (int j = 0; j < table.nColumn; ++j) {
+                table.QfactMatchingStr[i][j] = info.bestQfactMatchingStr[i][j];
                 // remove all candidates of entity links to reduce size
                 // (only in the body - because the header is not tagged).
                 // this also include entity cells of non-entity columns (which uses prior-based result)

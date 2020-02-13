@@ -46,6 +46,9 @@ public class Table {
         return getTableContentPrintable(showAnnotations, multipleLine, printColumnIndex, false);
     }
 
+    // for debugging TextBasedColumnScoringNode.
+    public transient String[][] QfactMatchingStr;
+
     public String getTableContentPrintable(boolean showAnnotations, boolean multipleLine, boolean printColumnIndex, boolean singleLinkForCell) {
         StringBuilder sb = new StringBuilder();
         int[] columnMaxWidth = new int[nColumn];
