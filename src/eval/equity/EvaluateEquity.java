@@ -74,7 +74,9 @@ public class EvaluateEquity {
                     System.out.println("+ Column " + i + " --> " + table.quantityToEntityColumn[i] + ":");
                     for (int r = 0; r < table.nDataRow; ++r) {
                         if (table.QfactMatchingStr[r][i] != null) {
-                            System.out.println("   " + table.QfactMatchingStr[r][i]);
+                            String e = table.data[r][table.quantityToEntityColumn[i]].getRepresentativeEntityLink().target;
+                            e = "<" + e.substring(e.lastIndexOf(":") + 1) + ">";
+                            System.out.println("   " + e + " --> " + table.QfactMatchingStr[r][i]);
                         } else {
                             System.out.println("   null");
                         }

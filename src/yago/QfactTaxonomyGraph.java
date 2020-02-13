@@ -24,7 +24,14 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     public static final int NTOP_RELATED_ENTITY = 3;
     public static final double QFACT_CONTEXT_MATCH_WEIGHT = 0.9; // quantity match weight = 1 - this weight.
 
-    private ArrayList<Pair<String, Quantity>>[] entityQfactLists;
+    public class EntityTextQfact {
+        ArrayList<String> context;
+        Quantity quantity;
+        String sentence;
+        String source;
+    }
+
+    private ArrayList<EntityTextQfact>[] entityQfactLists;
     private ArrayList<Pair<Integer, Integer>>[] taxonomyEntityWithQfactLists; // Pair<entityId, distance>, order by distance
 
     private ContextEmbeddingMatcher matcher = new ContextEmbeddingMatcher(-1); // alpha not used
@@ -49,7 +56,18 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             if (entityId == null) {
                 continue;
             }
-            entityQfactLists[entityId].add(new Pair<>(arr[1], Quantity.fromQuantityString(arr[2])));
+            EntityTextQfact qfact = new EntityTextQfact();
+            qfact.quantity = Quantity.fromQuantityString(arr[2]);
+            if (QuantityDomain.getDomain(qfact.quantity).equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+                arr[1] += " " + qfact.quantity.unit;
+            }
+            qfact.context = NLP.splitSentence(arr[1].toLowerCase());
+            qfact.context.trimToSize();
+
+            qfact.sentence = arr[3];
+            qfact.source = arr[4];
+
+            entityQfactLists[entityId].add(qfact);
         }
 
         LOGGER.info("Populating entities with Qfact to taxonomy.");
@@ -58,7 +76,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             taxonomyEntityWithQfactLists[i] = new ArrayList<>();
         }
         for (int i = 0; i < nEntities; ++i) {
-            ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists[i];
+            ArrayList<EntityTextQfact> qfacts = entityQfactLists[i];
             if (qfacts.size() == 0) {
                 entityQfactLists[i] = null;
                 continue;
@@ -142,26 +160,22 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         ObjectHeapPriorityQueue<Pair<Double, String>> queue = new ObjectHeapPriorityQueue<>(Comparator.comparing(o -> o.first));
 
         // match exact entitiy
-        ArrayList<Pair<String, Quantity>> qfacts = entityQfactLists[entityId];
+        ArrayList<EntityTextQfact> qfacts = entityQfactLists[entityId];
         if (qfacts != null) {
             Pair<Double, String> singleEntityResult = new Pair<>(0.0, null);
-            for (Pair<String, Quantity> o : qfacts) {
+            for (EntityTextQfact o : qfacts) {
                 // different concept should be ignored
-                if (!thisDomain.equals(QuantityDomain.getDomain(o.second))) {
+                if (!thisDomain.equals(QuantityDomain.getDomain(o.quantity))) {
                     continue;
                 }
-                String oContext = o.first;
-                if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
-                    oContext += " " + o.second.unit;
-                }
 
-                double contextMatchScr = matcher.directedEmbeddingIdfSimilarity(thisContext, NLP.splitSentence(oContext.toLowerCase()));
-                double quantityMatchScr = quantity.compareTo(o.second) == 0 ? 1 : 0;
+                double contextMatchScr = matcher.directedEmbeddingIdfSimilarity(thisContext, o.context);
+                double quantityMatchScr = quantity.compareTo(o.quantity) == 0 ? 1 : 0;
 
                 double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT + quantityMatchScr * (1 - QFACT_CONTEXT_MATCH_WEIGHT);
                 if (matchScr > singleEntityResult.first) {
                     singleEntityResult.first = matchScr;
-                    singleEntityResult.second = entity + "\t" + o.first + "\t" + o.second.toString();
+                    singleEntityResult.second = entity + "\t" + o.sentence + "\t" + o.source;
                 }
             }
             queue.enqueue(singleEntityResult);
@@ -176,22 +190,17 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 Pair<Double, String> singleEntityResult = cache.get(localKey);
                 if (singleEntityResult == null) {
                     singleEntityResult = new Pair<>(0.0, null);
-                    for (Pair<String, Quantity> o : qfacts) {
+                    for (EntityTextQfact o : qfacts) {
                         // different concept should be ignored
-                        if (!thisDomain.equals(QuantityDomain.getDomain(o.second))) {
+                        if (!thisDomain.equals(QuantityDomain.getDomain(o.quantity))) {
                             continue;
                         }
-                        String oContext = o.first;
-                        if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
-                            oContext += " " + o.second.unit;
-                        }
-
-                        double contextMatchScr = matcher.directedEmbeddingIdfSimilarity(thisContext, NLP.splitSentence(oContext.toLowerCase()));
+                        double contextMatchScr = matcher.directedEmbeddingIdfSimilarity(thisContext, o.context);
 
                         double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT;
                         if (matchScr > singleEntityResult.first) {
                             singleEntityResult.first = matchScr;
-                            singleEntityResult.second = entity + "\t" + o.first + "\t" + o.second.toString();
+                            singleEntityResult.second = id2Entity.get(p.getKey()) + "\t" + o.sentence + "\t" + o.source;
                         }
                     }
                     if (key >= 0) {
@@ -201,8 +210,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 // TODO: scaling for type-related matching
 //            singleEntityResult.first *= Math.pow(p.getValue() + 1, 0);
                 queue.enqueue(singleEntityResult);
-                // sum of top 5 related entities
-                // TODO: fix this const
+                // sum of top 3 related entities
                 if (queue.size() > NTOP_RELATED_ENTITY) {
                     queue.dequeue();
                 }
