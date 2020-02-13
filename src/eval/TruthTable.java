@@ -15,6 +15,7 @@ import nlp.NLP;
 import pipeline.text.QuantityTaggingNode;
 import pipeline.text.TaggingPipeline;
 import util.Constants;
+import util.Pair;
 import util.Vectors;
 
 import java.util.Arrays;
@@ -47,6 +48,12 @@ public class TruthTable extends Table {
 
     // return -1 means there is no mention.
     public double getEntityDisambiguationPrecisionFromPrior() {
+        Pair<Integer, Integer> result = getEntityDisambiguationMicroPrecisionInfoFromPrior();
+        return result == null ? -1 : ((double) result.first) / result.second;
+    }
+
+    // return null means there is no mention.
+    public Pair<Integer, Integer> getEntityDisambiguationMicroPrecisionInfoFromPrior() {
         int total = 0;
         int nTrue = 0;
         for (int i = 0; i < bodyEntityTarget.length; ++i) {
@@ -65,13 +72,19 @@ public class TruthTable extends Table {
             }
         }
         if (total == 0) {
-            return -1;
+            return null;
         }
-        return ((double) nTrue) / total;
+        return new Pair<>(nTrue, total);
     }
 
     // return -1 means there is no mention.
     public double getEntityDisambiguationPrecisionFromTarget() {
+        Pair<Integer, Integer> result = getEntityDisambiguationMicroPrecisionInfoFromTarget();
+        return result == null ? -1 : ((double) result.first) / result.second;
+    }
+
+    // return null means there is no mention.
+    public Pair<Integer, Integer> getEntityDisambiguationMicroPrecisionInfoFromTarget() {
         int total = 0;
         int nTrue = 0;
         for (int i = 0; i < bodyEntityTarget.length; ++i) {
@@ -90,9 +103,9 @@ public class TruthTable extends Table {
             }
         }
         if (total == 0) {
-            return -1;
+            return null;
         }
-        return ((double) nTrue) / total;
+        return new Pair<>(nTrue, total);
     }
 
     // return -1 means there is no alignment.
@@ -144,6 +157,12 @@ public class TruthTable extends Table {
 
     // return -1 means there is no mention.
     public double getEntityDisambiguationPrecisionFromYusra() {
+        Pair<Integer, Integer> result = getEntityDisambiguationMicroPrecisionInfoFromYusra();
+        return result == null ? -1 : ((double) result.first) / result.second;
+    }
+
+    // return null means there is no mention.
+    public Pair<Integer, Integer> getEntityDisambiguationMicroPrecisionInfoFromYusra() {
         int total = 0;
         int nTrue = 0;
         for (int i = 0; i < bodyEntityTarget.length; ++i) {
@@ -160,9 +179,9 @@ public class TruthTable extends Table {
             }
         }
         if (total == 0) {
-            return -1;
+            return null;
         }
-        return ((double) nTrue) / total;
+        return new Pair<>(nTrue, total);
     }
 
     @Deprecated

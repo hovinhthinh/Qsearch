@@ -31,6 +31,11 @@ public class MetricReporter {
         microAvg_key2Total.put(key, microAvg_key2Total.getOrDefault(key, 0) + localTotal);
     }
 
+    public void recordMicroAverage(String key, Pair<Integer, Integer> localTrueAndTotal) {
+        microAvg_key2True.put(key, microAvg_key2True.getOrDefault(key, 0) + localTrueAndTotal.first);
+        microAvg_key2Total.put(key, microAvg_key2Total.getOrDefault(key, 0) + localTrueAndTotal.second);
+    }
+
     public String getReportString() {
         StringBuilder sb = new StringBuilder();
         sb.append("========== ").append("METRIC_REPORTER [").append(name).append("]").append(" ==========\r\n");
