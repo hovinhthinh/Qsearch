@@ -24,6 +24,9 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     public static final int NTOP_RELATED_ENTITY = 3;
     public static final double QFACT_CONTEXT_MATCH_WEIGHT = 0.9; // quantity match weight = 1 - this weight.
 
+    // TODO: Fix this weight
+    public static final double TYPE_RELATED_PENALTY_WEIGHT = 0.95;
+
     public class EntityTextQfact {
         ArrayList<String> context;
         Quantity quantity;
@@ -208,7 +211,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                     }
                 }
                 // TODO: scaling for type-related matching
-//            singleEntityResult.first *= Math.pow(p.getValue() + 1, 0);
+                singleEntityResult.first *= TYPE_RELATED_PENALTY_WEIGHT;
                 queue.enqueue(singleEntityResult);
                 // sum of top 3 related entities
                 if (queue.size() > NTOP_RELATED_ENTITY) {
