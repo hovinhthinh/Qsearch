@@ -25,7 +25,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     public static final double QFACT_CONTEXT_MATCH_WEIGHT = 0.9; // quantity match weight = 1 - this weight.
 
     // TODO: Fix this weight
-    public static final double TYPE_RELATED_PENALTY_WEIGHT = 0.95;
+    public static final double TYPE_RELATED_PENALTY_WEIGHT = 0.99;
 
     public class EntityTextQfact {
         ArrayList<String> context;
