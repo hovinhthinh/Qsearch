@@ -2,6 +2,7 @@ package yago;
 
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.longs.Long2DoubleLinkedOpenHashMap;
+import org.apache.commons.lang.StringEscapeUtils;
 import util.FileUtils;
 
 import java.util.ArrayList;
@@ -104,7 +105,7 @@ public class TaxonomyGraph {
             if (arr.length != 4 || !arr[2].equals("rdf:type")) {
                 continue;
             }
-            String entity = arr[1], type = arr[3];
+            String entity = StringEscapeUtils.unescapeJava(arr[1]), type = arr[3];
 //            String type = NLP.fastStemming(NLP.stripSentence(arr[3].replaceAll("[^A-Za-z0-9]", " ")).toLowerCase(), Morpha.noun);
 //            if (type.startsWith("wikicat ")) {
 //                type = type.substring(8);
