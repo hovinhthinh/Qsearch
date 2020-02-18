@@ -1,6 +1,7 @@
 package pipeline;
 
 
+import eval.TruthTable;
 import model.table.Cell;
 import model.table.Table;
 
@@ -18,8 +19,10 @@ public class TablePrefilteringNode implements TaggingNode {
         this(4, 100);
     }
 
+    private boolean[] rowTobePruned;
+
     private Cell[][] pruneEmptyRows(Cell[][] data) {
-        boolean[] rowTobePruned = new boolean[data.length];
+        rowTobePruned = new boolean[data.length];
         int newNRow = 0;
 
         for (int i = 0; i < data.length; ++i) {
@@ -50,6 +53,22 @@ public class TablePrefilteringNode implements TaggingNode {
         table.data = pruneEmptyRows(table.data);
         table.nDataRow = table.data.length;
 
+
+        // For Evaluation, adjust number of rows for body entity ground truth
+        if (table instanceof TruthTable) {
+            String[][] newBodyEntityTarget = new String[table.nDataRow][];
+            int currentRow = 0;
+            for (int i = 0; i < ((TruthTable) table).bodyEntityTarget.length; ++i) {
+                if (rowTobePruned[i]) {
+                    continue;
+                }
+                newBodyEntityTarget[currentRow++] = ((TruthTable) table).bodyEntityTarget[i];
+            }
+            ((TruthTable) table).bodyEntityTarget = newBodyEntityTarget;
+        }
+        // DONE
+
+        // Remove empty header rows
         table.header = pruneEmptyRows(table.header);
         table.nHeaderRow = table.header.length;
 
