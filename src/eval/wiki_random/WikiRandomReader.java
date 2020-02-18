@@ -7,6 +7,7 @@ import model.table.Table;
 import model.table.link.EntityLink;
 import nlp.NLP;
 import nlp.YagoType;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +33,7 @@ public class WikiRandomReader {
             JSONObject linkI = links.getJSONObject(i);
 
             el.text = String.join(" ", NLP.tokenize(linkI.getString("surface")));
-            String e = linkI.getJSONObject("target").getString("title");
+            String e = StringEscapeUtils.unescapeJava(linkI.getJSONObject("target").getString("title"));
             if (!YagoType.entityExists("<" + e + ">")) {
                 continue;
             }
