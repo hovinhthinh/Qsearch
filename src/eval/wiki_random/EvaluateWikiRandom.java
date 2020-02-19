@@ -15,7 +15,7 @@ public class EvaluateWikiRandom {
         return new TaggingPipeline(
                 new TextBasedColumnScoringNode(
                         TextBasedColumnScoringNode.JOINT_INFERENCE,
-                        1
+                        0.5
                 ),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
@@ -29,7 +29,7 @@ public class EvaluateWikiRandom {
 
         MetricReporter reporter = new MetricReporter(EvaluateWikiRandom.class.getName());
 
-        for (String line : FileUtils.getLineStream("eval/wiki_random/wiki_random_annotation.gz", "UTF-8")) {
+        for (String line : FileUtils.getLineStream("eval/wiki_random/wiki_random_annotation_linking_000.json", "UTF-8")) {
             TruthTable table = gson.fromJson(line, TruthTable.class);
 //            table.linkQuantitiesInTableAndText();
 //            double qtFoundRate = table.getRateOfTableQuantitiesFoundInText();
@@ -58,7 +58,7 @@ public class EvaluateWikiRandom {
             double precEDOurs = table.getEntityDisambiguationPrecisionFromTarget();
             Pair<Integer, Integer> precEDOursInfo = table.getEntityDisambiguationMicroPrecisionInfoFromTarget();
 
-//            double precCAOurs = table.getAlignmentPrecisionFromTarget();
+            double precCAOurs = table.getAlignmentPrecisionFromTarget();
 
 //            if (precEDOurs == -1 || precEDPrior == -1 || precCAOurs == -1 || precCAFirstColumn == -1 || qtFoundRate == -1) {
 //                ++nBadTable;
@@ -84,7 +84,7 @@ public class EvaluateWikiRandom {
 //                }
 //            }
             System.out.println(String.format("precEntityDisambiguation: Prior/Ours: %.2f/%.2f", precEDPrior * 100, precEDOurs * 100));
-//            System.out.println(String.format("precColumnAlignment: FirstColumn/Ours: %.2f/%.2f", precCAFirstColumn * 100, precCAOurs * 100));
+            System.out.println(String.format("precColumnAlignment: FirstColumn/Ours: %.2f/%.2f", precCAFirstColumn * 100, precCAOurs * 100));
 //            System.out.println(String.format("qtFoundRateInText: %.2f", qtFoundRate));
             System.out.println("========================================================================================================================================================================================================");
             ++nGoodTable;
@@ -92,7 +92,7 @@ public class EvaluateWikiRandom {
             reporter.recordAverage("macroPrecEDPrior", precEDPrior);
             reporter.recordAverage("macroPrecEDOurs", precEDOurs);
             reporter.recordAverage("macroPrecCAFirstColumn", precCAFirstColumn);
-//            reporter.recordAverage("macroPrecCAOurs", precCAOurs);
+            reporter.recordAverage("macroPrecCAOurs", precCAOurs);
 
             reporter.recordMicroAverage("microPrecEDPrior", precEDPriorInfo);
             reporter.recordMicroAverage("microPrecEDOurs", precEDOursInfo);
