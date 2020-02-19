@@ -151,7 +151,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         long globalKey = 1000000000L * entityId + key;
         Pair<Double, String> result = cache.get(globalKey);
         if (result != null) {
-            return result;
+            return result.second == null ? null : result;
         }
 
         String thisDomain = QuantityDomain.getDomain(quantity);
@@ -176,7 +176,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 double quantityMatchScr = quantity.compareTo(o.quantity) == 0 ? 1 : 0;
 
                 double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT + quantityMatchScr * (1 - QFACT_CONTEXT_MATCH_WEIGHT);
-                if (matchScr > singleEntityResult.first) {
+                if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
                     singleEntityResult.first = matchScr;
                     singleEntityResult.second = entity + "\t" + o.sentence + "\t" + o.source;
                 }
@@ -201,7 +201,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                         double contextMatchScr = matcher.directedEmbeddingIdfSimilarity(thisContext, o.context);
 
                         double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT;
-                        if (matchScr > singleEntityResult.first) {
+                        if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
                             singleEntityResult.first = matchScr;
                             singleEntityResult.second = id2Entity.get(p.getKey()) + " --> " + o.sentence + " --> " + o.source;
                         }
