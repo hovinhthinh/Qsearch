@@ -136,7 +136,7 @@ public class TruthTable extends Table {
         int total = 0;
         int nTrue = 0;
         boolean hasIndexColumn = hasIndexColumn();
-        int eColumn = hasIndexColumn ? 1 : 0;
+        int eColumn = (hasIndexColumn || isNumericColumn[0]) ? 1 : 0;
         for (int i = 0; i < nColumn; ++i) {
             // ignore evaluating index column.
             if (hasIndexColumn && i == 0) {
