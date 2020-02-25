@@ -16,6 +16,9 @@ public class ContextEmbeddingMatcher implements ContextMatcher {
     // range from 1 -> 2
     public double directedEmbeddingIdfDistance(ArrayList<String> queryX, ArrayList<String> factX) {
         // TODO: Currently not supporting TIME (TIME is computed like normal terms).
+        if (queryX.isEmpty() || factX.isEmpty()) {
+            return queryX.isEmpty() && factX.isEmpty() ? 1 : 2;
+        }
         double score = 0;
         double totalIdf = 0;
         for (String qX : queryX) {
