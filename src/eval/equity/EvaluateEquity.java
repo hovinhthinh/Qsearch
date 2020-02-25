@@ -12,6 +12,7 @@ import util.Pair;
 
 public class EvaluateEquity {
     public static TaggingPipeline getPipeline() {
+        TextBasedColumnScoringNode.JOINT_MAX_NUM_COLUMN_LINKING = -1;
         return new TaggingPipeline(
                 new TextBasedColumnScoringNode(
                         TextBasedColumnScoringNode.JOINT_INFERENCE,
