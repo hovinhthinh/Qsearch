@@ -37,6 +37,9 @@ public class ContextEmbeddingMatcher implements ContextMatcher {
     // range from 0 -> 1
     public double directedEmbeddingIdfSimilarity(ArrayList<String> queryX, ArrayList<String> factX) {
         // TODO: Currently not supporting TIME (TIME is computed like normal terms).
+        if (queryX.isEmpty() || factX.isEmpty()) {
+            return queryX.isEmpty() && factX.isEmpty() ? 1 : 0;
+        }
         double score = 0;
         double totalIdf = 0;
         for (String qX : queryX) {
