@@ -31,14 +31,26 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     private double homogeneityWeight;
     private QfactTaxonomyGraph qfactGraph;
 
-    public TextBasedColumnScoringNode(int inferenceMode, double homogeneityWeight) {
+    private TextBasedColumnScoringNode(int inferenceMode, double homogeneityWeight) {
         this.inferenceMode = inferenceMode;
         this.qfactGraph = new QfactTaxonomyGraph();
         this.homogeneityWeight = homogeneityWeight;
     }
 
-    public TextBasedColumnScoringNode(int inferenceMode) {
-        this(inferenceMode, DEFAULT_JOINT_HOMOGENEITY_WEIGHT);
+    public static TextBasedColumnScoringNode getIndependentInferenceInstance() {
+        return new TextBasedColumnScoringNode(INDEPENDENT_INFERENCE, 1);
+    }
+
+    public static TextBasedColumnScoringNode getJointInferenceInstance(double homogeneityWeight) {
+        return new TextBasedColumnScoringNode(JOINT_INFERENCE, homogeneityWeight);
+    }
+
+    public static TextBasedColumnScoringNode getJointInferenceInstance() {
+        return getJointInferenceInstance(DEFAULT_JOINT_HOMOGENEITY_WEIGHT);
+    }
+
+    public static TextBasedColumnScoringNode getPriorInferenceInstance() {
+        return new TextBasedColumnScoringNode(PRIOR_INFERENCE, 1);
     }
 
     @Override
@@ -51,7 +63,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         Arrays.fill(table.quantityToEntityColumnScore, -1.0);
 
         if (inferenceMode == PRIOR_INFERENCE || inferenceMode == JOINT_INFERENCE || inferenceMode == INDEPENDENT_INFERENCE) {
-            return jointInference(table);
+            return inference(table);
         } else {
             throw new RuntimeException("Invalid inference mode");
         }
@@ -255,7 +267,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             }
             homogeneity /= entityColumnIndexes.length;
 
-            if (homogeneityWeight < 1 || inferenceMode != JOINT_INFERENCE) { // on JOINT, only compute if weight for connectivity != 0
+            if (homogeneityWeight < 1) { // compute on JOINT only (INDEPENDENT_INFERENCE has homogeneityWeight = 1)
                 computeCurrentQfactMatchingScores();
                 for (int i : numericColumnIndexes) {
                     double lScore = 0;
@@ -274,11 +286,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             }
 
             // joint score
-            if (inferenceMode == JOINT_INFERENCE) {
-                currentJointScore = new JointScore(homogeneityWeight * homogeneity + (1 - homogeneityWeight) * connectivity, 0);
-            } else {
-                currentJointScore = new JointScore(homogeneity, connectivity);
-            }
+            currentJointScore = new JointScore(homogeneityWeight * homogeneity + (1 - homogeneityWeight) * connectivity, 0);
         }
 
         public JointScore newScoreOfLocalAssignment(int row, int col, Triple<String, Integer, Double> candidate) {
@@ -305,7 +313,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             }
             homogeneity /= entityColumnIndexes.length;
 
-            if (homogeneityWeight < 1 || inferenceMode != JOINT_INFERENCE) { // on JOINT, only compute if weight for connectivity != 0
+            if (homogeneityWeight < 1) { // compute on JOINT only (INDEPENDENT_INFERENCE has homogeneityWeight = 1)
                 for (int i : numericColumnIndexes) {
                     // connectivity
                     if (currentColumnLinking[i] != col) {
@@ -354,11 +362,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             currentEntityAssignment[row][col] = oldCandidate;
 
             // joint score
-            if (inferenceMode == JOINT_INFERENCE) {
-                return new JointScore(homogeneityWeight * homogeneity + (1 - homogeneityWeight) * connectivity, 0);
-            } else {
-                return new JointScore(homogeneity, connectivity);
-            }
+            return new JointScore(homogeneityWeight * homogeneity + (1 - homogeneityWeight) * connectivity, 0);
         }
     }
 
@@ -370,6 +374,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                 backtrackJointInference(table, info, currentCol + 1);
                 if (homogeneityWeight == 1) {
                     // if connectivity weight = 0, then only check the first column alignment
+                    // This is also the case of INDEPENDENT_INFERENCE & PRIOR_INFERENCE
                     break;
                 }
             }
@@ -433,7 +438,72 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         }
     }
 
-    private boolean jointInference(Table table) {
+    private void independentColumnAlignmentInference(Table table, BacktrackJointInferenceInfo info) {
+        // capture MatchingStr
+        info.bestQfactMatchingStr = new String[table.nDataRow][table.nColumn];
+        // for each qCol
+        for (int qCol : info.numericColumnIndexes) {
+            // find best eCol for qCol
+            int bestECol = -1;
+            double bestEColScore = 0;
+            for (int eCol : info.entityColumnIndexes) {
+                String combinedContext = table.getQuantityDescriptionFromCombinedHeader(qCol, false);
+                String lastHeaderContext = table.getQuantityDescriptionFromLastHeader(qCol, false);
+                for (int r = 0; r < table.nDataRow; ++r) {
+                    info.currentQfactMatchingScore[r][qCol] = null;
+                    info.currentQfactMatchingStr[r][qCol] = null;
+                    String e = info.bestEntityAssignment[r][eCol];
+                    if (e == null) {
+                        continue;
+                    }
+                    QuantityLink ql = table.data[r][qCol].getRepresentativeQuantityLink();
+                    if (ql == null) {
+                        continue;
+                    }
+
+                    // (1) combined quantity header
+                    Pair<Double, String> matchResult = qfactGraph.getMatchScore(e, combinedContext, ql.quantity, (r * table.nColumn + qCol) * 2);
+                    if (matchResult != null) {
+                        // we need score, instead of distance
+                        if (table.nHeaderRow > 1) {
+                            // (2) last quantity header
+                            Pair<Double, String> lastHeaderResult = qfactGraph.getMatchScore(e, lastHeaderContext, ql.quantity, (r * table.nColumn + qCol) * 2 + 1);
+                            if (lastHeaderResult.first > matchResult.first) {
+                                matchResult = lastHeaderResult;
+                            }
+                        }
+                    } else {
+                        matchResult = new Pair<>(0.0, null);
+                    }
+                    info.currentQfactMatchingScore[r][qCol] = matchResult.first;
+                    info.currentQfactMatchingStr[r][qCol] = matchResult.second;
+                }
+
+                double lScore = 0;
+                double nConnect = 0;
+                for (int r = 0; r < table.nDataRow; ++r) {
+                    if (info.currentQfactMatchingScore[r][qCol] != null) {
+                        lScore += info.currentQfactMatchingScore[r][qCol];
+                        ++nConnect;
+                    }
+                }
+                lScore = nConnect > 0 ? lScore / nConnect : 0;
+
+                if (bestECol == -1 || lScore > bestEColScore) {
+                    bestECol = eCol;
+                    bestEColScore = lScore;
+                    for (int r = 0; r < table.nDataRow; ++r) {
+                        info.bestQfactMatchingStr[r][qCol] = info.currentQfactMatchingStr[r][qCol];
+                    }
+                }
+            }
+            info.bestColumnLinking[qCol] = bestECol;
+            info.bestColumnLinkingScore[qCol] = bestEColScore;
+            info.bestJointScore.second += bestEColScore / info.numericColumnIndexes.length;
+        }
+    }
+
+    private boolean inference(Table table) {
         // prune too large tables
         int nECols = 0, nQCols = 0;
         for (int i = 0; i < table.nColumn; ++i) {
@@ -463,7 +533,13 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         }
 
         // backtracking
+        // for INDEPENDENT_INFERENCE & PRIOR_INFERENCE, this call only does entity disambiguation
         backtrackJointInference(table, info, 0);
+
+        // for INDEPENDENT_INFERENCE & PRIOR_INFERENCE, column alignment needs to be computed separately here
+        if (inferenceMode == INDEPENDENT_INFERENCE || inferenceMode == PRIOR_INFERENCE) {
+            independentColumnAlignmentInference(table, info);
+        }
 
         table.QfactMatchingStr = new String[table.nDataRow][table.nColumn];
         // set candidates back to tables
