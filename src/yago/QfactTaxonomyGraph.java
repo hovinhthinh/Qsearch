@@ -210,6 +210,10 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                         cache.put(localKey, singleEntityResult);
                     }
                 }
+
+                // clone
+                singleEntityResult = new Pair<>(singleEntityResult.first, singleEntityResult.second);
+
                 // TODO: scaling for type-related matching
                 singleEntityResult.first *= TYPE_RELATED_PENALTY_WEIGHT;
                 queue.enqueue(singleEntityResult);
