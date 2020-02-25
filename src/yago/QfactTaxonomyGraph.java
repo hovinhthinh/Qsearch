@@ -211,7 +211,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                     }
                 }
 
-                // clone
+                // clone IMPORTANT!
                 singleEntityResult = new Pair<>(singleEntityResult.first, singleEntityResult.second);
 
                 // TODO: scaling for type-related matching
