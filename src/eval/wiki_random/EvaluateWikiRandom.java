@@ -9,25 +9,44 @@ import pipeline.TextBasedColumnScoringNode;
 import util.FileUtils;
 import util.MetricReporter;
 import util.Pair;
+import yago.QfactTaxonomyGraph;
 
 public class EvaluateWikiRandom {
-    public static TaggingPipeline getPipeline() {
+    public static TaggingPipeline getPipeline(double jointWeight) {
         TextBasedColumnScoringNode.JOINT_MAX_NUM_COLUMN_LINKING = -1;
         return new TaggingPipeline(
-                TextBasedColumnScoringNode.getIndependentInferenceInstance(),
+                jointWeight == 1
+                        ? TextBasedColumnScoringNode.getIndependentInferenceInstance()
+                        : TextBasedColumnScoringNode.getJointInferenceInstance(jointWeight),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
         );
     }
 
+    // args: "Joint_Weight",
+    //                "H_Prior_Weight",
+    //                "L_nTop_Related",
+    //                "L_Context_Weight",
+    //                "L_Type_Penalty",
     public static void main(String[] args) {
-        TaggingPipeline pipeline = getPipeline();
+        double jointWeight = 1;
+        // use batch
+        if (args.length > 0) {
+            jointWeight = Double.parseDouble(args[0]);
+            TextBasedColumnScoringNode.PRIOR_WEIGHT = Double.parseDouble(args[1]);
+            QfactTaxonomyGraph.NTOP_RELATED_ENTITY = Integer.parseInt(args[2]);
+            QfactTaxonomyGraph.QFACT_CONTEXT_MATCH_WEIGHT = Double.parseDouble(args[3]);
+            QfactTaxonomyGraph.TYPE_RELATED_PENALTY_WEIGHT = Double.parseDouble(args[4]);
+        }
+
+        TaggingPipeline pipeline = getPipeline(jointWeight);
+
         Gson gson = new Gson();
         int nGoodTable = 0, nBadTable = 0;
 
         MetricReporter reporter = new MetricReporter(EvaluateWikiRandom.class.getName());
 
-        for (String line : FileUtils.getLineStream("eval/wiki_random/wiki_random_annotation_linking_000.json", "UTF-8")) {
+        for (String line : FileUtils.getLineStream("eval/wiki_random/wiki_random_annotation_linking.json", "UTF-8")) {
             TruthTable table = gson.fromJson(line, TruthTable.class);
 //            table.linkQuantitiesInTableAndText();
 //            double qtFoundRate = table.getRateOfTableQuantitiesFoundInText();
@@ -66,21 +85,21 @@ public class EvaluateWikiRandom {
             System.out.println("--- Ours ---");
             System.out.println(table.getTableContentPrintable(true, true, true, true));
 
-//            System.out.println("Linked Qfacts:");
-//            for (int i = 0; i < table.nColumn; ++i) {
-//                if (table.isNumericColumn[i]) {
-//                    System.out.println("+ Column " + i + " --> " + table.quantityToEntityColumn[i] + ":");
-//                    for (int r = 0; r < table.nDataRow; ++r) {
-//                        if (table.QfactMatchingStr[r][i] != null) {
-//                            String e = table.data[r][table.quantityToEntityColumn[i]].getRepresentativeEntityLink().target;
-//                            e = "<" + e.substring(e.lastIndexOf(":") + 1) + ">";
-//                            System.out.println("   " + e + " --> " + table.QfactMatchingStr[r][i]);
-//                        } else {
-//                            System.out.println("   null");
-//                        }
-//                    }
-//                }
-//            }
+            System.out.println("Linked Qfacts:");
+            for (int i = 0; i < table.nColumn; ++i) {
+                if (table.isNumericColumn[i]) {
+                    System.out.println("+ Column " + i + " --> " + table.quantityToEntityColumn[i] + ":");
+                    for (int r = 0; r < table.nDataRow; ++r) {
+                        if (table.QfactMatchingStr[r][i] != null) {
+                            String e = table.data[r][table.quantityToEntityColumn[i]].getRepresentativeEntityLink().target;
+                            e = "<" + e.substring(e.lastIndexOf(":") + 1) + ">";
+                            System.out.println("   " + e + " --> " + table.QfactMatchingStr[r][i]);
+                        } else {
+                            System.out.println("   null");
+                        }
+                    }
+                }
+            }
             System.out.println(String.format("precEntityDisambiguation: Prior/Ours: %.2f/%.2f", precEDPrior * 100, precEDOurs * 100));
             System.out.println(String.format("precColumnAlignment: FirstColumn/Ours: %.2f/%.2f", precCAFirstColumn * 100, precCAOurs * 100));
 //            System.out.println(String.format("qtFoundRateInText: %.2f", qtFoundRate));

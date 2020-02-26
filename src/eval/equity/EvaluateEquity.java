@@ -9,19 +9,38 @@ import pipeline.TextBasedColumnScoringNode;
 import util.FileUtils;
 import util.MetricReporter;
 import util.Pair;
+import yago.QfactTaxonomyGraph;
 
 public class EvaluateEquity {
-    public static TaggingPipeline getPipeline() {
+    public static TaggingPipeline getPipeline(double jointWeight) {
         TextBasedColumnScoringNode.JOINT_MAX_NUM_COLUMN_LINKING = -1;
         return new TaggingPipeline(
-                TextBasedColumnScoringNode.getIndependentInferenceInstance(),
+                jointWeight == 1
+                        ? TextBasedColumnScoringNode.getIndependentInferenceInstance()
+                        : TextBasedColumnScoringNode.getJointInferenceInstance(jointWeight),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
         );
     }
 
+    // args: "Joint_Weight",
+    //                "H_Prior_Weight",
+    //                "L_nTop_Related",
+    //                "L_Context_Weight",
+    //                "L_Type_Penalty",
     public static void main(String[] args) {
-        TaggingPipeline pipeline = getPipeline();
+        double jointWeight = 1;
+        // use batch
+        if (args.length > 0) {
+            jointWeight = Double.parseDouble(args[0]);
+            TextBasedColumnScoringNode.PRIOR_WEIGHT = Double.parseDouble(args[1]);
+            QfactTaxonomyGraph.NTOP_RELATED_ENTITY = Integer.parseInt(args[2]);
+            QfactTaxonomyGraph.QFACT_CONTEXT_MATCH_WEIGHT = Double.parseDouble(args[3]);
+            QfactTaxonomyGraph.TYPE_RELATED_PENALTY_WEIGHT = Double.parseDouble(args[4]);
+        }
+
+        TaggingPipeline pipeline = getPipeline(jointWeight);
+
         Gson gson = new Gson();
         int nGoodTable = 0, nBadTable = 0;
 
