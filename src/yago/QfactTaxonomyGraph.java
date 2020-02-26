@@ -20,12 +20,12 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(QfactTaxonomyGraph.class.getName());
     public static final String DEFAULT_QFACT_FILE = "./non-deep/qfact_text_no-min-conf.gz";
 
-    public static final int DEFAULT_RELATED_ENTITY_DIST_LIM = 4;
-    public static final int NTOP_RELATED_ENTITY = 5;
-    public static final double QFACT_CONTEXT_MATCH_WEIGHT = 0.9; // quantity match weight = 1 - this weight.
+    public static int DEFAULT_RELATED_ENTITY_DIST_LIM = 4;
+    public static int NTOP_RELATED_ENTITY = 5;
+    public static double QFACT_CONTEXT_MATCH_WEIGHT = 0.9; // quantity match weight = 1 - this weight.
 
     // TODO: Fix this weight
-    public static final double TYPE_RELATED_PENALTY_WEIGHT = 0.99;
+    public static double TYPE_RELATED_PENALTY_WEIGHT = 0.99;
 
     public class EntityTextQfact {
         ArrayList<String> context;

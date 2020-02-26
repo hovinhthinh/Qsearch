@@ -21,6 +21,9 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     public static final int INDEPENDENT_INFERENCE = 3;
 
     // TODO: fix this weight
+    public static double PRIOR_WEIGHT = 0.9;
+
+    // TODO: fix this weight
     public static final double DEFAULT_JOINT_HOMOGENEITY_WEIGHT = 0.7;
 
     public static final int JOINT_MAX_NUM_ITERS = 100;
@@ -72,9 +75,6 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     private class ColumnHomogeneityInfo {
         public ArrayList<Integer> entityIds = new ArrayList<>();
         public ArrayList<Double> entityPrior = new ArrayList<>();
-
-        // TODO: fix this weight
-        public static final double PRIOR_WEIGHT = 0.9;
 
         public double getHScore() {
             double agreeScore = 0;
