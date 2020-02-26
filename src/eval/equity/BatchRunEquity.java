@@ -21,7 +21,7 @@ public class BatchRunEquity {
 
 
     public static void main(String[] args) throws Exception {
-        ExecutorService executorService = Executors.newFixedThreadPool(60);
+        ExecutorService executorService = Executors.newFixedThreadPool(50);
         PrintWriter out = new PrintWriter("eval/equity/dataset/AnnotatedTables-19092016/tune_results_0.tsv", "UTF-8");
         out.println(header);
         ArrayList<Future> futures = new ArrayList<>();
@@ -38,7 +38,7 @@ public class BatchRunEquity {
                             double final_l_type_penalty = l_type_penalty;
                             futures.add(executorService.submit(() -> {
                                 String output = ShellCommand.execute(
-                                        String.format("./run.sh 16G eval.equity.EvaluateEquity %.1f %.1f %d %.1f %.1f",
+                                        String.format("./run.sh 20G eval.equity.EvaluateEquity %.1f %.1f %d %.1f %.1f",
                                                 final_joint_weight,
                                                 final_h_prior_weight,
                                                 final_l_ntop_related,
@@ -70,12 +70,10 @@ public class BatchRunEquity {
                                 }
                             }));
                         }
-
-        out.close();
         for (Future f : futures) {
             f.get();
-            System.out.printf("DONE");
         }
+        out.close();
         executorService.shutdown();
     }
 }
