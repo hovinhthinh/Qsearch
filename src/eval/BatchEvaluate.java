@@ -132,30 +132,32 @@ public class BatchEvaluate {
                             int final_l_ntop_related = l_ntop_related;
                             double final_l_context_weight = l_context_weight;
                             double final_l_type_penalty = l_type_penalty;
-
-                            String configStr = String.format("%.1f %.1f %d %.1f %.1f",
-                                    final_joint_weight,
-                                    final_h_prior_weight,
-                                    final_l_ntop_related,
-                                    final_l_context_weight,
-                                    final_l_type_penalty);
-
-                            JSONObject output = client.getResult(configStr);
-                            double ED = output.getJSONObject("microAverage").getDouble("microPrecEDOurs");
-                            double CA = output.getJSONObject("average").getDouble("macroPrecCAOurs");
-
-                            synchronized (out) {
-                                out.println(String.format("%.1f\t%.1f\t%d\t%.1f\t%.1f\t%.2f\t%.2f",
+                            futures.add(executorService.submit(() -> {
+                                String configStr = String.format("%.1f %.1f %d %.1f %.1f",
                                         final_joint_weight,
                                         final_h_prior_weight,
                                         final_l_ntop_related,
                                         final_l_context_weight,
-                                        final_l_type_penalty,
-                                        ED,
-                                        CA
-                                ));
-                                out.flush();
-                            }
+                                        final_l_type_penalty);
+
+                                JSONObject output = client.getResult(configStr);
+                                double ED = output.getJSONObject("microAverage").getDouble("microPrecEDOurs");
+                                double CA = output.getJSONObject("average").getDouble("macroPrecCAOurs");
+
+                                synchronized (out) {
+                                    out.println(String.format("%.1f\t%.1f\t%d\t%.1f\t%.1f\t%.2f\t%.2f",
+                                            final_joint_weight,
+                                            final_h_prior_weight,
+                                            final_l_ntop_related,
+                                            final_l_context_weight,
+                                            final_l_type_penalty,
+                                            ED,
+                                            CA
+                                    ));
+                                    out.flush();
+                                }
+
+                            }));
                         }
 
         for (Future f : futures) {
