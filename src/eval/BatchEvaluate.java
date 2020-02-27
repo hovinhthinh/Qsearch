@@ -141,6 +141,7 @@ public class BatchEvaluate {
                                         final_l_type_penalty);
 
                                 JSONObject output = client.getResult(configStr);
+                                System.out.println(configStr + "\t" + output.toString());
                                 double ED = output.getJSONObject("microAverage").getDouble("microPrecEDOurs");
                                 double CA = output.getJSONObject("average").getDouble("macroPrecCAOurs");
 
