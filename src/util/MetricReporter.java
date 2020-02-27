@@ -1,5 +1,7 @@
 package util;
 
+import org.json.JSONObject;
+
 import java.util.LinkedHashMap;
 
 public class MetricReporter {
@@ -54,5 +56,23 @@ public class MetricReporter {
             }
         }
         return sb.toString();
+    }
+
+    public String getReportJsonString() {
+        JSONObject obj = new JSONObject();
+
+        JSONObject average = new JSONObject();
+        for (String k : avg_key2freq.keySet()) {
+            average.put(k, avg_key2Sum.get(k) / avg_key2freq.get(k) * 100);
+        }
+        obj.put("average", average);
+
+        JSONObject microAverage = new JSONObject();
+        for (String k : microAvg_key2True.keySet()) {
+            microAverage.put(k, 1.0 * microAvg_key2True.get(k) / microAvg_key2Total.get(k) * 100);
+        }
+        obj.put("microAverage", microAverage);
+
+        return obj.toString();
     }
 }
