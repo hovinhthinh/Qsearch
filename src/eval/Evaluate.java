@@ -10,42 +10,79 @@ import util.MetricReporter;
 import util.Pair;
 import yago.QfactTaxonomyGraph;
 
+import java.util.Scanner;
+
 public class Evaluate {
-    public static TaggingPipeline getPipeline(double jointWeight) {
+
+    public static TaggingPipeline globalPipeline;
+    public static TextBasedColumnScoringNode columnScoringNode;
+
+    static {
         TextBasedColumnScoringNode.JOINT_MAX_NUM_COLUMN_LINKING = -1;
-        return new TaggingPipeline(
-                jointWeight == 1
-                        ? TextBasedColumnScoringNode.getIndependentInferenceInstance()
-                        : TextBasedColumnScoringNode.getJointInferenceInstance(jointWeight),
+        columnScoringNode = TextBasedColumnScoringNode.getJointInferenceInstance();
+        globalPipeline = new TaggingPipeline(
+                columnScoringNode,
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
         );
     }
 
-    // args: "Joint_Weight",
-    //                "H_Prior_Weight",
-    //                "L_nTop_Related",
-    //                "L_Context_Weight",
-    //                "L_Type_Penalty",
+    public static TaggingPipeline getPipeline(double jointWeight) {
+        columnScoringNode.homogeneityWeight = jointWeight;
+        columnScoringNode.inferenceMode = jointWeight == 1
+                ? TextBasedColumnScoringNode.INDEPENDENT_INFERENCE
+                : TextBasedColumnScoringNode.JOINT_INFERENCE;
+        return globalPipeline;
+    }
+
+
+    // args: INTERACTIVE <inputFile>
     public static void main(String[] args) {
-        double jointWeight = 1;
-        // use batch
-        if (args.length > 0) {
-            jointWeight = Double.parseDouble(args[0]);
+        if (args.length == 2 && args[0].equals("INTERACTIVE")) {
+            Scanner in = new Scanner(System.in);
+            String configStr;
+            System.out.println("__ready_to_evaluate__");
+            while ((configStr = in.nextLine()) != null) {
+                String resultJson = evaluateWithConfig(args[1], configStr);
+                System.out.println(String.format("__interactive_result__\t%s", resultJson));
+                System.out.flush();
+            }
+            in.close();
+        } else {
+            String inputFile = "eval/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation_linking.json";
+            columnScoringNode.inferenceMode = TextBasedColumnScoringNode.JOINT_INFERENCE;
+            columnScoringNode.homogeneityWeight = 1;
+            evaluateWithConfig(inputFile, null);
+        }
+    }
+
+    // configStr: "Joint_Weight",
+    //       "H_Prior_Weight",
+    //       "L_nTop_Related",
+    //       "L_Context_Weight",
+    //       "L_Type_Penalty",
+    // space separated
+    public static String evaluateWithConfig(String inputFile, String configStr) {
+        TaggingPipeline pipeline = globalPipeline;
+
+        // USE BATCH
+        if (configStr != null) {
+            System.out.println("Config: " + configStr);
+            String[] args = configStr.trim().split("\\s++");
+            double jointWeight = Double.parseDouble(args[0]);
             TextBasedColumnScoringNode.PRIOR_WEIGHT = Double.parseDouble(args[1]);
             QfactTaxonomyGraph.NTOP_RELATED_ENTITY = Integer.parseInt(args[2]);
             QfactTaxonomyGraph.QFACT_CONTEXT_MATCH_WEIGHT = Double.parseDouble(args[3]);
             QfactTaxonomyGraph.TYPE_RELATED_PENALTY_WEIGHT = Double.parseDouble(args[4]);
+            pipeline = getPipeline(jointWeight);
         }
-
-        TaggingPipeline pipeline = getPipeline(jointWeight);
 
         Gson gson = new Gson();
         int nGoodTable = 0, nBadTable = 0;
 
         MetricReporter reporter = new MetricReporter(Evaluate.class.getName());
 
-        for (String line : FileUtils.getLineStream("eval/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation_linking.json", "UTF-8")) {
+        for (String line : FileUtils.getLineStream(inputFile, "UTF-8")) {
             TruthTable table = gson.fromJson(line, TruthTable.class);
 //            table.linkQuantitiesInTableAndText();
 //            double qtFoundRate = table.getRateOfTableQuantitiesFoundInText();
@@ -115,7 +152,6 @@ public class Evaluate {
         }
         System.out.println("nBadTable/nGoodTable: " + nBadTable + "/" + nGoodTable);
         System.out.println(reporter.getReportString());
-
-        System.exit(0);
+        return reporter.getReportJsonString();
     }
 }
