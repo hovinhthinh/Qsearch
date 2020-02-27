@@ -267,7 +267,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             }
             homogeneity /= entityColumnIndexes.length;
 
-            if (homogeneityWeight < 1) { // compute on JOINT only (INDEPENDENT_INFERENCE has homogeneityWeight = 1)
+            if (homogeneityWeight < 1 && inferenceMode == JOINT_INFERENCE) { // compute on JOINT only (INDEPENDENT_INFERENCE has homogeneityWeight = 1)
                 computeCurrentQfactMatchingScores();
                 for (int i : numericColumnIndexes) {
                     double lScore = 0;
@@ -313,7 +313,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             }
             homogeneity /= entityColumnIndexes.length;
 
-            if (homogeneityWeight < 1) { // compute on JOINT only (INDEPENDENT_INFERENCE has homogeneityWeight = 1)
+            if (homogeneityWeight < 1 && inferenceMode == JOINT_INFERENCE) { // compute on JOINT only (INDEPENDENT_INFERENCE has homogeneityWeight = 1)
                 for (int i : numericColumnIndexes) {
                     // connectivity
                     if (currentColumnLinking[i] != col) {
@@ -372,7 +372,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             for (int i : info.entityColumnIndexes) {
                 info.currentColumnLinking[info.numericColumnIndexes[currentCol]] = i;
                 backtrackJointInference(table, info, currentCol + 1);
-                if (homogeneityWeight == 1) {
+                if (homogeneityWeight == 1 || inferenceMode == INDEPENDENT_INFERENCE || inferenceMode == PRIOR_INFERENCE) {
                     // if connectivity weight = 0, then only check the first column alignment
                     // This is also the case of INDEPENDENT_INFERENCE & PRIOR_INFERENCE
                     break;
