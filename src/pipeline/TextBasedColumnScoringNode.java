@@ -30,8 +30,8 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     public static final int JOINT_MAX_LOCAL_CANDIDATES = 10; // set to -1 to disable this threshold. (-1 means INF)
     public static int JOINT_MAX_NUM_COLUMN_LINKING = 100; // to prune too large tables. (-1 means INF)
 
-    private int inferenceMode;
-    private double homogeneityWeight;
+    public int inferenceMode;
+    public double homogeneityWeight;
     private QfactTaxonomyGraph qfactGraph;
 
     private TextBasedColumnScoringNode(int inferenceMode, double homogeneityWeight) {
