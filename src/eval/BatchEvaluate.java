@@ -1,4 +1,4 @@
-package eval.equity;
+package eval;
 
 import util.ShellCommand;
 
@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class BatchRunEquity {
+public class BatchEvaluate {
     static String header = String.join("\t",
             "Joint_Weight",
             "H_Prior_Weight",
@@ -38,7 +38,7 @@ public class BatchRunEquity {
                             double final_l_type_penalty = l_type_penalty;
                             futures.add(executorService.submit(() -> {
                                 String output = ShellCommand.execute(
-                                        String.format("./run.sh 20G eval.equity.EvaluateEquity %.1f %.1f %d %.1f %.1f",
+                                        String.format("./run.sh 20G eval.Evaluate %.1f %.1f %d %.1f %.1f",
                                                 final_joint_weight,
                                                 final_h_prior_weight,
                                                 final_l_ntop_related,

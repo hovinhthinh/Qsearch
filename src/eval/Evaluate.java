@@ -1,7 +1,6 @@
-package eval.equity;
+package eval;
 
 import com.google.gson.Gson;
-import eval.TruthTable;
 import pipeline.ColumnLinkFilteringNode;
 import pipeline.PostFilteringNode;
 import pipeline.TaggingPipeline;
@@ -11,7 +10,7 @@ import util.MetricReporter;
 import util.Pair;
 import yago.QfactTaxonomyGraph;
 
-public class EvaluateEquity {
+public class Evaluate {
     public static TaggingPipeline getPipeline(double jointWeight) {
         TextBasedColumnScoringNode.JOINT_MAX_NUM_COLUMN_LINKING = -1;
         return new TaggingPipeline(
@@ -44,7 +43,7 @@ public class EvaluateEquity {
         Gson gson = new Gson();
         int nGoodTable = 0, nBadTable = 0;
 
-        MetricReporter reporter = new MetricReporter(EvaluateEquity.class.getName());
+        MetricReporter reporter = new MetricReporter(Evaluate.class.getName());
 
         for (String line : FileUtils.getLineStream("eval/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation_linking.json", "UTF-8")) {
             TruthTable table = gson.fromJson(line, TruthTable.class);

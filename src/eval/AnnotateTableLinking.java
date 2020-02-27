@@ -1,7 +1,6 @@
-package eval.wiki_random;
+package eval;
 
 import com.google.gson.Gson;
-import eval.TruthTable;
 import util.FileUtils;
 
 import java.io.PrintWriter;
@@ -15,7 +14,7 @@ public class AnnotateTableLinking {
 
     // args: <input> <output> [ignore first n tables]
     public static void main(String[] args) throws Exception {
-        args = "eval/wiki_random/wiki_random_annotation.gz eval/wiki_random/wiki_random_annotation_linking.gz 0".split(" ");
+        args = "eval/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation.json eval/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation_linking.json 0".split(" ");
 
         PrintWriter out = FileUtils.getPrintWriter(args[1]);
         Scanner in = new Scanner(System.in);

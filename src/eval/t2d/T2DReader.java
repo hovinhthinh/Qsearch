@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 // read T2D and convert to TruthTable format.
+@Deprecated
 public class T2DReader {
     private static Cell parseCellFromJSONObject(String surfaceText) {
         Cell cell = new Cell();
