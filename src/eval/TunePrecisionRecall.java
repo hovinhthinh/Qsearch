@@ -5,6 +5,7 @@ import util.FileUtils;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class TunePrecisionRecall {
     // args: <truth_tables> <from> <to> <step>
     public static void main(String[] args) {
