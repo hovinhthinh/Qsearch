@@ -133,7 +133,7 @@ public class BatchEvaluate {
                             double final_l_context_weight = l_context_weight;
                             double final_l_type_penalty = l_type_penalty;
                             futures.add(executorService.submit(() -> {
-                                String configStr = String.format("%.1f %.1f %d %.1f %.1f",
+                                String configStr = String.format("%.2f %.2f %d %.2f %.2f",
                                         final_joint_weight,
                                         final_h_prior_weight,
                                         final_l_ntop_related,
@@ -146,7 +146,7 @@ public class BatchEvaluate {
                                 double CA = output.getJSONObject("average").getDouble("macroPrecCAOurs");
 
                                 synchronized (out) {
-                                    out.println(String.format("%.1f\t%.1f\t%d\t%.1f\t%.1f\t%.2f\t%.2f",
+                                    out.println(String.format("%.2f\t%.2f\t%d\t%.2f\t%.2f\t%.2f\t%.2f",
                                             final_joint_weight,
                                             final_h_prior_weight,
                                             final_l_ntop_related,
