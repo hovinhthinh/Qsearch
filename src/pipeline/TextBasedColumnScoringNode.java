@@ -1,5 +1,6 @@
 package pipeline;
 
+import misc.WikipediaEntity;
 import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
@@ -19,8 +20,14 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     public static final int JOINT_INFERENCE = 2;
     public static final int INDEPENDENT_INFERENCE = 3;
 
+    // Homogeneity weights
     // TODO: fix this weight
     public static double PRIOR_WEIGHT = 0.9;
+    public static double COOCCUR_WEIGHT = 0;
+    public static double AGREE_WEIGHT = -1; // UNUSED this should be derived from above two
+
+    public static double COOCCUR_NORMALIZED_VALUE = 35;
+
 
     // TODO: fix this weight
     public static final double DEFAULT_JOINT_HOMOGENEITY_WEIGHT = 0.7;
@@ -200,7 +207,6 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
             for (int i = 0; i < entityColumnIndexes.length; ++i) {
                 int eCol = entityColumnIndexes[i];
-//                ColumnHomogeneityInfo chi = new ColumnHomogeneityInfo();
                 for (int r = 0; r < table.nDataRow; ++r) {
                     Triple<String, Integer, Double> e = currentEntityAssignment[r][eCol];
                     if (e == null) {
@@ -245,7 +251,32 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                 priorScore /= nPriorNodes;
             }
 
-            return priorScore * PRIOR_WEIGHT + agreeScore * (1 - PRIOR_WEIGHT);
+            // entity-row coocurrence
+            int nEntityCooccurEdges = 0;
+            double cooccurScore = 0;
+
+            for (int r = 0; r < table.nDataRow; ++r) {
+                for (int i = 0; i < entityColumnIndexes.length; ++i) {
+                    for (int j = i + 1; j < entityColumnIndexes.length; ++j) {
+                        Triple<String, Integer, Double> e1 = currentEntityAssignment[r][entityColumnIndexes[i]];
+                        Triple<String, Integer, Double> e2 = currentEntityAssignment[r][entityColumnIndexes[j]];
+                        if (e1 == null || e2 == null) {
+                            continue;
+                        }
+                        ++nEntityCooccurEdges;
+                        // this normalized value covers at least 99.9 %
+                        if (COOCCUR_WEIGHT > 0) {
+                            cooccurScore += WikipediaEntity.getCoocurrencePageCountOfEntities(e1.first, e2.first) / COOCCUR_NORMALIZED_VALUE;
+                        }
+                    }
+                }
+            }
+
+            if (nEntityCooccurEdges > 0) {
+                cooccurScore /= nEntityCooccurEdges;
+            }
+
+            return priorScore * PRIOR_WEIGHT + cooccurScore * COOCCUR_WEIGHT + agreeScore * (1 - PRIOR_WEIGHT - COOCCUR_WEIGHT);
         }
 
         public void recomputeBasedOnCurrentAssignment() {

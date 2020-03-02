@@ -105,6 +105,7 @@ public class BatchEvaluate {
     static String header = String.join("\t",
             "Joint_Weight",
             "H_Prior_Weight",
+            "H_Cooccur_Weight",
             "L_nTop_Related",
             "L_Context_Weight",
             "L_Type_Penalty",
@@ -114,7 +115,7 @@ public class BatchEvaluate {
 
     public static void main(String[] args) throws Exception {
         String inputFile = "eval/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation_linking.json";
-        int nClients = 40;
+        int nClients = 24;
 
         MultiThreadedEvaluateClient client = new MultiThreadedEvaluateClient(inputFile, nClients);
         ExecutorService executorService = Executors.newFixedThreadPool(nClients);
@@ -124,42 +125,46 @@ public class BatchEvaluate {
 
         for (double joint_weight = 0; joint_weight <= 1; joint_weight += 0.1)
             for (double h_prior_weight = 0; h_prior_weight <= 1; h_prior_weight += 0.1)
-                for (int l_ntop_related : Arrays.asList(1, 3, 5, 7, 10))
-                    for (double l_context_weight : Arrays.asList(0.8, 0.9, 0.95, 1.0))
-                        for (double l_type_penalty : Arrays.asList(0.8, 0.9, 1.0)) {
-                            double final_joint_weight = joint_weight;
-                            double final_h_prior_weight = h_prior_weight;
-                            int final_l_ntop_related = l_ntop_related;
-                            double final_l_context_weight = l_context_weight;
-                            double final_l_type_penalty = l_type_penalty;
-                            futures.add(executorService.submit(() -> {
-                                String configStr = String.format("%.2f %.2f %d %.2f %.2f",
-                                        final_joint_weight,
-                                        final_h_prior_weight,
-                                        final_l_ntop_related,
-                                        final_l_context_weight,
-                                        final_l_type_penalty);
-
-                                JSONObject output = client.getResult(configStr);
-                                System.out.println(configStr + "\t" + output.toString());
-                                double ED = output.getJSONObject("microAverage").getDouble("microPrecEDOurs");
-                                double CA = output.getJSONObject("average").getDouble("macroPrecCAOurs");
-
-                                synchronized (out) {
-                                    out.println(String.format("%.2f\t%.2f\t%d\t%.2f\t%.2f\t%.2f\t%.2f",
+                for (double h_cooccur_weight = 0; h_cooccur_weight <= 1 - h_prior_weight; h_cooccur_weight += 0.1)
+                    for (int l_ntop_related : Arrays.asList(1))
+                        for (double l_context_weight : Arrays.asList(0.9))
+                            for (double l_type_penalty : Arrays.asList(1.0)) {
+                                double final_joint_weight = joint_weight;
+                                double final_h_prior_weight = h_prior_weight;
+                                double final_h_cooccur_weight = h_cooccur_weight;
+                                int final_l_ntop_related = l_ntop_related;
+                                double final_l_context_weight = l_context_weight;
+                                double final_l_type_penalty = l_type_penalty;
+                                futures.add(executorService.submit(() -> {
+                                    String configStr = String.format("%.2f %.2f %.2f %d %.2f %.2f",
                                             final_joint_weight,
                                             final_h_prior_weight,
+                                            final_h_cooccur_weight,
                                             final_l_ntop_related,
                                             final_l_context_weight,
-                                            final_l_type_penalty,
-                                            ED,
-                                            CA
-                                    ));
-                                    out.flush();
-                                }
+                                            final_l_type_penalty);
 
-                            }));
-                        }
+                                    JSONObject output = client.getResult(configStr);
+                                    System.out.println(configStr + "\t" + output.toString());
+                                    double ED = output.getJSONObject("microAverage").getDouble("microPrecEDOurs");
+                                    double CA = output.getJSONObject("average").getDouble("macroPrecCAOurs");
+
+                                    synchronized (out) {
+                                        out.println(String.format("%.2f\t%.2f\t%.2f\t%d\t%.2f\t%.2f\t%.2f\t%.2f",
+                                                final_joint_weight,
+                                                final_h_prior_weight,
+                                                final_h_cooccur_weight,
+                                                final_l_ntop_related,
+                                                final_l_context_weight,
+                                                final_l_type_penalty,
+                                                ED,
+                                                CA
+                                        ));
+                                        out.flush();
+                                    }
+
+                                }));
+                            }
 
         for (Future f : futures) {
             f.get();
