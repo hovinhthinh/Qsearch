@@ -343,7 +343,7 @@ public class TruthTable extends Table {
                         if (el == null) {
                             continue;
                         }
-                        String content = WikipediaEntity.getContentOfEntity("<" + el.target.substring(el.target.lastIndexOf(":") + 1) + ">");
+                        String content = WikipediaEntity.getContentOfEntityPage("<" + el.target.substring(el.target.lastIndexOf(":") + 1) + ">");
                         if (content != null) {
                             set.addAll(NLP.tokenize(content));
                         }
@@ -416,7 +416,7 @@ public class TruthTable extends Table {
                         if (el == null) {
                             continue;
                         }
-                        String content = WikipediaEntity.getContentOfEntity("<" + el.target.substring(el.target.lastIndexOf(":") + 1) + ">");
+                        String content = WikipediaEntity.getContentOfEntityPage("<" + el.target.substring(el.target.lastIndexOf(":") + 1) + ">");
                         if (content != null) {
                             set.addAll(NLP.tokenize(content));
                         }

@@ -1,6 +1,7 @@
 package misc;
 
 import config.Configuration;
+import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -131,7 +132,7 @@ public class WikipediaEntity {
 
 
     // e.g., entity: <Ronaldo>
-    public static String getContentOfEntity(String entity) {
+    public static String getContentOfEntityPage(String entity) {
         try {
             String content = HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8"));
             if (content == null) {
@@ -144,7 +145,20 @@ public class WikipediaEntity {
         }
     }
 
+    private static final Object2IntLinkedOpenHashMap<String> COOCCURENCE_CACHE = new Object2IntLinkedOpenHashMap<>();
+    private static final int COOCCURENCE_CACHE_SIZE = 100000;
+
+    static {
+        COOCCURENCE_CACHE.defaultReturnValue(-1);
+    }
+
     public static Integer getCoocurrencePageCountOfEntities(String entityA, String entityB) {
+        String key = entityA.compareTo(entityB) < 0 ? String.format("%s\t%s", entityA, entityB) : String.format("%s\t%s", entityB, entityA);
+        int result = COOCCURENCE_CACHE.getAndMoveToFirst(key);
+        if (result != -1) {
+            return result;
+        }
+
         try {
             String body = new JSONObject().put("query", new JSONObject().put("bool", new JSONObject().put("must", new JSONArray()
                     .put(new JSONObject().put("match", new JSONObject().put("entityList", entityA)))
@@ -158,7 +172,12 @@ public class WikipediaEntity {
                 return null;
             }
 
-            return new JSONObject(content).getJSONObject("hits").getInt("total");
+            result = new JSONObject(content).getJSONObject("hits").getInt("total");
+            COOCCURENCE_CACHE.putAndMoveToFirst(key, result);
+            if (COOCCURENCE_CACHE.size() > COOCCURENCE_CACHE_SIZE) {
+                COOCCURENCE_CACHE.removeLastInt();
+            }
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
