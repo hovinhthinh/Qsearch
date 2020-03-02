@@ -131,7 +131,7 @@ public class WikipediaEntity {
 
 
     // e.g., entity: <Ronaldo>
-    public static String getContentOfEntityPage(String entity) {
+    public static String getContentOfEntity(String entity) {
         try {
             String content = HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8"));
             if (content == null) {
@@ -144,10 +144,32 @@ public class WikipediaEntity {
         }
     }
 
+    public static Integer getCoocurrencePageCountOfEntities(String entityA, String entityB) {
+        try {
+            String body = new JSONObject().put("query", new JSONObject().put("bool", new JSONObject().put("must", new JSONArray()
+                    .put(new JSONObject().put("match", new JSONObject().put("entityList", entityA)))
+                    .put(new JSONObject().put("match", new JSONObject().put("entityList", entityB)))
+            ))).toString();
+
+            String content = HTTPRequest.POST(
+                    PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/_search/?filter_path=hits.total",
+                    body);
+            if (content == null) {
+                return null;
+            }
+
+            return new JSONObject(content).getJSONObject("hits").getInt("total");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static void main(String[] args) throws Exception {
 //        System.out.println(deleteIndex());
 //        System.out.println(createIndex());
 //        System.out.println(importTables("/GW/D5data-11/hvthinh/WIKIPEDIA-niko/fixedWikipediaEntitiesJSON.gz"));
-        System.out.println(getContentOfEntityPage("<Cristiano_Ronaldo>"));
+//        System.out.println(getContentOfEntityPage("<Cristiano_Ronaldo>"));
+        System.out.println(getCoocurrencePageCountOfEntities("<Cristiano_Ronaldo>", "<Portugal>"));
     }
 }
