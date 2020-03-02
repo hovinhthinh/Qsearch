@@ -126,9 +126,9 @@ public class BatchEvaluate {
         for (double joint_weight = 0; joint_weight <= 1; joint_weight += 0.1)
             for (double h_prior_weight = 0; h_prior_weight <= 1; h_prior_weight += 0.1)
                 for (double h_cooccur_weight = 0; h_cooccur_weight <= 1 - h_prior_weight; h_cooccur_weight += 0.1)
-                    for (int l_ntop_related : Arrays.asList(1))
-                        for (double l_context_weight : Arrays.asList(0.9))
-                            for (double l_type_penalty : Arrays.asList(1.0)) {
+                    for (int l_ntop_related : Arrays.asList(1, 3, 5, 7, 10))
+                        for (double l_context_weight : Arrays.asList(0.8, 0.9, 1.0))
+                            for (double l_type_penalty : Arrays.asList(0.9, 0.95, 1.0)) {
                                 double final_joint_weight = joint_weight;
                                 double final_h_prior_weight = h_prior_weight;
                                 double final_h_cooccur_weight = h_cooccur_weight;
