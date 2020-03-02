@@ -7,7 +7,6 @@ import util.Pair;
 import util.Triple;
 import yago.QfactTaxonomyGraph;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -72,31 +71,6 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         }
     }
 
-    private class ColumnHomogeneityInfo {
-        public ArrayList<Integer> entityIds = new ArrayList<>();
-        public ArrayList<Double> entityPrior = new ArrayList<>();
-
-        public double getHScore() {
-            double agreeScore = 0;
-            if (entityIds.size() > 1) {
-                for (int i = 0; i < entityIds.size(); ++i) {
-                    for (int j = i + 1; j < entityIds.size(); ++j) {
-                        agreeScore += qfactGraph.getTypeAgreement(entityIds.get(i), entityIds.get(j));
-                    }
-                }
-                agreeScore /= (entityIds.size() * (entityIds.size() - 1) / 2);
-            }
-
-            double priorScore = 0;
-            for (int i = 0; i < entityPrior.size(); ++i) {
-                priorScore += entityPrior.get(i);
-            }
-            priorScore /= entityPrior.size();
-
-            return priorScore * PRIOR_WEIGHT + agreeScore * (1 - PRIOR_WEIGHT);
-        }
-    }
-
     private class BacktrackJointInferenceInfo {
         public class JointScore {
             double first;
@@ -129,7 +103,6 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
         double[] currentColumnLinkingScore;
         Triple<String, Integer, Double>[][] currentEntityAssignment;
-        double[] currentHomogeneityScore;
         JointScore currentJointScore;
         Triple<String, Integer, Double>[][] savedEntityAssignment; // For saving each best local assignment
 
@@ -189,7 +162,6 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             currentColumnLinkingScore = new double[table.nColumn];
             savedEntityAssignment = new Triple[table.nDataRow][table.nColumn];
             currentEntityAssignment = new Triple[table.nDataRow][table.nColumn];
-            currentHomogeneityScore = new double[table.nColumn];
             currentJointScore = new JointScore();
 
             // for saving
@@ -222,50 +194,64 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             }
         }
 
+        public double getHomogeneityScoreFromCurrentEntityAssignment() {
+            Integer[][] entityIds = new Integer[table.nDataRow][entityColumnIndexes.length];
+            double[][] entityPrior = new double[table.nDataRow][entityColumnIndexes.length];
 
-        private ColumnHomogeneityInfo[] buildColumnHomogeneityInfoSetForCurrentAssignment() {
-            ColumnHomogeneityInfo[] chiSet = new ColumnHomogeneityInfo[table.nColumn];
-            for (int i : entityColumnIndexes) {
-                chiSet[i] = buildColumnHomogeneityInfoSetForCurrentAssignment(i);
-            }
-            return chiSet;
-        }
+            for (int i = 0; i < entityColumnIndexes.length; ++i) {
+                int eCol = entityColumnIndexes[i];
+//                ColumnHomogeneityInfo chi = new ColumnHomogeneityInfo();
+                for (int r = 0; r < table.nDataRow; ++r) {
+                    Triple<String, Integer, Double> e = currentEntityAssignment[r][eCol];
+                    if (e == null) {
+                        continue;
+                    }
+                    // Here we ignore checking eId != null, because it should be in the KB.
+                    entityIds[r][i] = qfactGraph.entity2Id.get(e.first);
 
-        private ColumnHomogeneityInfo buildColumnHomogeneityInfoSetForCurrentAssignment(int eCol) {
-            // double check if eCol is entity column
-            if (!table.isEntityColumn[eCol]) {
-                return null;
-            }
-
-            ColumnHomogeneityInfo chi = new ColumnHomogeneityInfo();
-            for (int i = 0; i < table.nDataRow; ++i) {
-                Triple<String, Integer, Double> e = currentEntityAssignment[i][eCol];
-                if (e == null) {
-                    continue;
+                    entityPrior[r][i] = e.third;
                 }
-                Integer eId = qfactGraph.entity2Id.get(e.first);
-                // Here we ignore checking eId != null, because it should be in the KB.
-
-                chi.entityIds.add(eId);
-                chi.entityPrior.add(e.third);
             }
-            return chi;
-        }
 
+
+            // type agreement
+            int nAgreeEdges = 0;
+            double agreeScore = 0;
+
+            // entity prior
+            int nPriorNodes = 0;
+            double priorScore = 0;
+
+            for (int i = 0; i < entityColumnIndexes.length; ++i) {
+                for (int r1 = 0; r1 < table.nDataRow; ++r1) {
+                    if (entityIds[r1][i] == null) {
+                        continue;
+                    }
+                    ++nPriorNodes;
+                    priorScore += entityPrior[r1][i];
+                    for (int r2 = r1 + 1; r2 < table.nDataRow; ++r2) {
+                        if (entityIds[r2][i] == null) {
+                            continue;
+                        }
+                        agreeScore += qfactGraph.getTypeAgreement(entityIds[r1][i], entityIds[r2][i]);
+                        ++nAgreeEdges;
+                    }
+                }
+            }
+            if (nAgreeEdges > 0) {
+                agreeScore /= nAgreeEdges;
+            }
+            if (nPriorNodes > 0) {
+                priorScore /= nPriorNodes;
+            }
+
+            return priorScore * PRIOR_WEIGHT + agreeScore * (1 - PRIOR_WEIGHT);
+        }
 
         public void recomputeBasedOnCurrentAssignment() {
             // Compute currentColumnLinkingScore, currentJointScore
-            ColumnHomogeneityInfo[] chiSet = buildColumnHomogeneityInfoSetForCurrentAssignment();
-
-            double homogeneity = 0;
+            double homogeneity = getHomogeneityScoreFromCurrentEntityAssignment();
             double connectivity = 0;
-
-//            int firstColumn = table.getFirstNonNumericColumn();
-            for (int i : entityColumnIndexes) {
-                // homogeneity
-                homogeneity += (currentHomogeneityScore[i] = chiSet[i].getHScore());
-            }
-            homogeneity /= entityColumnIndexes.length;
 
             if (homogeneityWeight < 1 && inferenceMode == JOINT_INFERENCE) { // compute on JOINT only (INDEPENDENT_INFERENCE has homogeneityWeight = 1)
                 computeCurrentQfactMatchingScores();
@@ -294,24 +280,8 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             Triple<String, Integer, Double> oldCandidate = currentEntityAssignment[row][col];
             currentEntityAssignment[row][col] = candidate;
             // now compute
-
-            // partial built column type set
-            ColumnHomogeneityInfo[] chiSet = new ColumnHomogeneityInfo[table.nColumn];
-
-            double homogeneity = 0;
+            double homogeneity = getHomogeneityScoreFromCurrentEntityAssignment();
             double connectivity = 0;
-
-//            int firstColumn = table.getFirstNonNumericColumn();
-            for (int i : entityColumnIndexes) {
-                // homogeneity
-                if (i != col) {
-                    homogeneity += currentHomogeneityScore[i];
-                } else {
-                    chiSet[i] = buildColumnHomogeneityInfoSetForCurrentAssignment(i);
-                    homogeneity += chiSet[i].getHScore();
-                }
-            }
-            homogeneity /= entityColumnIndexes.length;
 
             if (homogeneityWeight < 1 && inferenceMode == JOINT_INFERENCE) { // compute on JOINT only (INDEPENDENT_INFERENCE has homogeneityWeight = 1)
                 for (int i : numericColumnIndexes) {
