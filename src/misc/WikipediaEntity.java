@@ -1,8 +1,8 @@
 package misc;
 
 import config.Configuration;
-
 import org.apache.commons.lang.StringEscapeUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import util.FileUtils;
@@ -12,6 +12,7 @@ import util.SelfMonitor;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class WikipediaEntity {
     public static final String PROTOCOL = Configuration.get("storage.elasticsearch.protocol");
@@ -33,6 +34,10 @@ public class WikipediaEntity {
                 "        \"pageContent\": {\n" +
                 "          \"index\": false,\n" +
                 "          \"type\": \"text\"\n" +
+                "        },\n" +
+                "        \"entityList\": {\n" +
+                "          \"index\": true,\n" +
+                "          \"type\": \"keyword\"\n" +
                 "        }\n" +
                 "      }\n" +
                 "    }\n" +
@@ -60,19 +65,35 @@ public class WikipediaEntity {
         }
     }
 
-    private static int nIgnoredDocs = 0;
+    private static int nNonEntityPages = 0;
 
     private static boolean bulk(JSONObject o) {
         try {
             String content = o.getString("content");
             String entity = StringEscapeUtils.unescapeJava("<" + content.substring(0, content.indexOf("\n")).trim().replaceAll(" ", "_") + ">");
+
+            HashSet<String> entitySet = new HashSet<>();
             if (entity.length() > 80) {
-                System.out.println("Ignore invalid entity: " + entity);
-                ++nIgnoredDocs;
-                return true;
+                ++nNonEntityPages;
+                // This is not an entity page, we use the id of page.
+                String url = o.getString("source");
+                entity = "__curid_" + url.substring(url.lastIndexOf("=") + 1);
+                System.out.println("Non-EntityPage: " + entity);
+            } else {
+                entitySet.add(entity);
             }
+
+            for (String id : o.getJSONObject("entities").keySet()) {
+                entitySet.add(id);
+            }
+
+            JSONArray entities = new JSONArray();
+            for (String e : entitySet) {
+                entities.put(e);
+            }
+
             JSONObject index = new JSONObject().put("index", new JSONObject().put("_id", entity));
-            String body = new JSONObject().put("pageContent", content).toString();
+            String body = new JSONObject().put("pageContent", content).put("entityList", entities).toString();
             bulks.add(index.toString());
             bulks.add(body);
         } catch (JSONException e) {
@@ -104,13 +125,13 @@ public class WikipediaEntity {
         if (bulks.size() > 0) {
             return callBulk();
         }
-        System.out.println("#IgnoredDocs: " + nIgnoredDocs);
+        System.out.println("#Non-EntityPages: " + nNonEntityPages);
         return true;
     }
 
 
     // e.g., entity: <Ronaldo>
-    public static String getContentOfEntity(String entity) {
+    public static String getContentOfEntityPage(String entity) {
         try {
             String content = HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8"));
             if (content == null) {
@@ -127,6 +148,6 @@ public class WikipediaEntity {
 //        System.out.println(deleteIndex());
 //        System.out.println(createIndex());
 //        System.out.println(importTables("/GW/D5data-11/hvthinh/WIKIPEDIA-niko/fixedWikipediaEntitiesJSON.gz"));
-        System.out.println(getContentOfEntity("<Cristiano_Ronaldo>"));
+        System.out.println(getContentOfEntityPage("<Cristiano_Ronaldo>"));
     }
 }
