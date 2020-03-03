@@ -275,6 +275,9 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
         // all terms should be stemmed and lowercased.
         private double getContextScore(HashSet<String> entityTableContext, HashSet<String> entityPageContext) {
+            if (entityPageContext == null) {
+                return 0;
+            }
             int nCommon = 0;
             int nTotal = 0;
             for (String t : entityTableContext) {
