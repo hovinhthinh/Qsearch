@@ -27,7 +27,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     public static double AGREE_WEIGHT = -1; // UNUSED this should be derived from above two
 
     // this normalized value covers at least 99 %
-    public static double COOCCUR_NORMALIZED_VALUE = 10;
+    public static double COOCCUR_NORMALIZED_VALUE = 8;
 
 
     // TODO: fix this weight
