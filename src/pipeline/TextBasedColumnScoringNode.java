@@ -386,7 +386,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             return priorScore * PRIOR_WEIGHT
                     + cooccurScore * COOCCUR_WEIGHT
                     + contextScore * CONTEXT_WEIGHT
-                    + agreeScore * (1 - PRIOR_WEIGHT - COOCCUR_WEIGHT);
+                    + agreeScore * (1 - PRIOR_WEIGHT - COOCCUR_WEIGHT - CONTEXT_WEIGHT);
         }
 
         public void recomputeBasedOnCurrentAssignment() {
