@@ -258,10 +258,13 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
             for (int r = 0; r < table.nDataRow; ++r) {
                 for (int i = 0; i < entityColumnIndexes.length; ++i) {
+                    Triple<String, Integer, Double> e1 = currentEntityAssignment[r][entityColumnIndexes[i]];
+                    if (e1 == null) {
+                        continue;
+                    }
                     for (int j = i + 1; j < entityColumnIndexes.length; ++j) {
-                        Triple<String, Integer, Double> e1 = currentEntityAssignment[r][entityColumnIndexes[i]];
                         Triple<String, Integer, Double> e2 = currentEntityAssignment[r][entityColumnIndexes[j]];
-                        if (e1 == null || e2 == null) {
+                        if(e2 == null) {
                             continue;
                         }
                         ++nEntityCooccurEdges;
