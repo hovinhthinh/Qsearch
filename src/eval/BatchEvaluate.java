@@ -58,9 +58,13 @@ class EvaluateClient {
 //                System.out.println(str);
             }
             return new JSONObject(str.substring(str.indexOf("\t") + 1));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
             return null;
+        } catch (NullPointerException e2) {
+            e2.printStackTrace();
+            System.out.println("Error on configStr: " + configStr);
+            throw e2;
         }
     }
 
