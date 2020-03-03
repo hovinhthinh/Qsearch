@@ -123,6 +123,10 @@ public class Crawler {
     }
 
     public static String getContentFromUrl(String url, Map<String, String> extendedHeader, String method, String body, Proxy proxy) {
+        return getContentFromUrl(url, extendedHeader, method, body, proxy, false);
+    }
+
+    public static String getContentFromUrl(String url, Map<String, String> extendedHeader, String method, String body, Proxy proxy, boolean forceOnBadResponseCode) {
         boolean useGZip = false;
         for (int i = 0; i < NUM_RETRY_CONNECTION; i++) {
             try {
@@ -147,11 +151,17 @@ public class Crawler {
                 StringBuilder sb = new StringBuilder();
                 int c = 0;
                 InputStream is = null;
-                if (useGZip) {
-                    is = new GZIPInputStream(hc.getInputStream());
-                    content_length = (int) ((MAX_CONTENT_LENGTH / 8) * 6);
-                } else {
+                int responseCode = hc.getResponseCode();
+
+                if (!forceOnBadResponseCode || (responseCode != -1 && hc.getResponseCode() < 400)) {
                     is = hc.getInputStream();
+                } else {
+                    is = hc.getErrorStream();
+                }
+
+                if (useGZip) {
+                    is = new GZIPInputStream(is);
+                    content_length = (MAX_CONTENT_LENGTH / 8) * 6;
                 }
                 BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
                 char[] ch = new char[BUFFER_SIZE];
@@ -174,10 +184,12 @@ public class Crawler {
         return null;
     }
 
+    @Deprecated
     public static List<Proxy> getProxiesFromFreeProxyNet() {
         return getProxiesFromFreeProxyNet(-1);
     }
 
+    @Deprecated
     public static List<Proxy> getProxiesFromFreeProxyNet(int limit) {
         String content = getContentFromUrl("http://www.us-proxy.org/");
         List<Proxy> res = new ArrayList<Proxy>();
