@@ -2,6 +2,7 @@ package misc;
 
 import config.Configuration;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -130,23 +131,36 @@ public class WikipediaEntity {
         return true;
     }
 
+    private static final int CACHE_SIZE = 100000;
+    private static final Object2ObjectLinkedOpenHashMap<String, String> CONTENT_CACHE = new Object2ObjectLinkedOpenHashMap<>(CACHE_SIZE);
 
     // e.g., entity: <Ronaldo>
-    public static String getContentOfEntityPage(String entity) {
+    public static String getContentOfEntityPage(String entity, boolean stemming) {
+        String key = String.format("%s\t%d", entity, stemming ? 1 : 0);
+        String result = CONTENT_CACHE.getAndMoveToFirst(key);
+        if (result != null) {
+            return result;
+        }
+
         try {
             String content = HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8"));
             if (content == null) {
                 return null;
             }
-            return new JSONObject(content).getJSONObject("_source").getString("pageContent");
+            result = new JSONObject(content).getJSONObject("_source").getString("pageContent");
+
+            CONTENT_CACHE.putAndMoveToFirst(key, result);
+            if (CONTENT_CACHE.size() > CACHE_SIZE) {
+                CONTENT_CACHE.removeLast();
+            }
+            return result;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    private static final Object2IntLinkedOpenHashMap<String> COOCCURENCE_CACHE = new Object2IntLinkedOpenHashMap<>();
-    private static final int COOCCURENCE_CACHE_SIZE = 100000;
+    private static final Object2IntLinkedOpenHashMap<String> COOCCURENCE_CACHE = new Object2IntLinkedOpenHashMap<>(CACHE_SIZE);
 
     static {
         COOCCURENCE_CACHE.defaultReturnValue(-1);
@@ -174,7 +188,7 @@ public class WikipediaEntity {
 
             result = new JSONObject(content).getJSONObject("hits").getInt("total");
             COOCCURENCE_CACHE.putAndMoveToFirst(key, result);
-            if (COOCCURENCE_CACHE.size() > COOCCURENCE_CACHE_SIZE) {
+            if (COOCCURENCE_CACHE.size() > CACHE_SIZE) {
                 COOCCURENCE_CACHE.removeLastInt();
             }
             return result;
