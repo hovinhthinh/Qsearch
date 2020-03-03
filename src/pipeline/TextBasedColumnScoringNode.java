@@ -28,8 +28,8 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     // Homogeneity weights
     // TODO: fix this weight
     public static double PRIOR_WEIGHT = 0.9;
-    public static double CONTEXT_WEIGHT = 0;
     public static double COOCCUR_WEIGHT = 0;
+    public static double CONTEXT_WEIGHT = 0;
     public static double AGREE_WEIGHT = -1; // UNUSED this should be derived from above two
 
     // this normalized value covers at least 99 %
