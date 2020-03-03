@@ -1,14 +1,19 @@
 package pipeline;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import misc.WikipediaEntity;
 import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
+import nlp.NLP;
+import uk.ac.susx.informatics.Morpha;
 import util.Pair;
 import util.Triple;
 import yago.QfactTaxonomyGraph;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.logging.Logger;
 
 // Link quantity columns to entity columns, return false if there is no quantity column.
@@ -23,6 +28,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     // Homogeneity weights
     // TODO: fix this weight
     public static double PRIOR_WEIGHT = 0.9;
+    public static double CONTEXT_WEIGHT = 0;
     public static double COOCCUR_WEIGHT = 0;
     public static double AGREE_WEIGHT = -1; // UNUSED this should be derived from above two
 
@@ -40,6 +46,11 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     public int inferenceMode;
     public double homogeneityWeight;
     private QfactTaxonomyGraph qfactGraph;
+
+
+    private static final int ENTITY_PAGE_CONTENT_CACHE_SIZE = 100000;
+    private Object2ObjectLinkedOpenHashMap<String, HashSet<String>> entityPageContentCache = new Object2ObjectLinkedOpenHashMap<>(ENTITY_PAGE_CONTENT_CACHE_SIZE);
+
 
     private TextBasedColumnScoringNode(int inferenceMode, double homogeneityWeight) {
         this.inferenceMode = inferenceMode;
@@ -61,6 +72,24 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
     public static TextBasedColumnScoringNode getPriorInferenceInstance() {
         return new TextBasedColumnScoringNode(PRIOR_INFERENCE, 1);
+    }
+
+    private HashSet<String> getEntityPageContentUniqueTerms(String entity) {
+        HashSet<String> result = entityPageContentCache.getAndMoveToFirst(entity);
+        if (result != null) {
+            return result;
+        }
+
+        String content = WikipediaEntity.getContentOfEntityPage(entity);
+        if (content == null) {
+            return null;
+        }
+        result = new HashSet<>(NLP.splitSentence(NLP.fastStemming(content.toLowerCase(), Morpha.any)));
+        entityPageContentCache.putAndMoveToFirst(entity, result);
+        if (entityPageContentCache.size() > ENTITY_PAGE_CONTENT_CACHE_SIZE) {
+            entityPageContentCache.removeLast();
+        }
+        return result;
     }
 
     @Override
@@ -121,6 +150,47 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         JointScore bestJointScore;
 
         Table table;
+
+        // below is precomputed information of table
+        HashSet<String>[][] cellContext;
+
+        void buildCellContext() {
+            HashSet<String> headerContext = new HashSet<>();
+            HashSet<String>[] rowContext = new HashSet[table.nDataRow];
+            HashSet<String>[] columnContext = new HashSet[table.nColumn];
+            for (int i = 0; i < table.nDataRow; ++i) {
+                rowContext[i] = new HashSet<>();
+            }
+            for (int i = 0; i < table.nColumn; ++i) {
+                columnContext[i] = new HashSet<>();
+            }
+
+            // header context
+            for (int i = 0; i < table.nHeaderRow; ++i) {
+                for (int j = 0; j < table.nColumn; ++j) {
+                    headerContext.addAll(NLP.splitSentence(NLP.fastStemming(table.header[i][j].text.toLowerCase(), Morpha.any)));
+                }
+            }
+            // row & column context
+            for (int i = 0; i < table.nDataRow; ++i) {
+                for (int j = 0; j < table.nColumn; ++j) {
+                    ArrayList<String> terms = NLP.splitSentence(NLP.fastStemming(table.data[i][j].text.toLowerCase(), Morpha.any));
+                    rowContext[i].addAll(terms);
+                    columnContext[j].addAll(terms);
+                }
+            }
+
+            // cell context
+            cellContext = new HashSet[table.nDataRow][table.nColumn];
+            for (int i = 0; i < table.nDataRow; ++i) {
+                for (int j = 0; j < table.nColumn; ++j) {
+                    cellContext[i][j] = new HashSet<>();
+                    cellContext[i][j].addAll(headerContext);
+                    cellContext[i][j].addAll(rowContext[i]);
+                    cellContext[i][j].addAll(columnContext[j]);
+                }
+            }
+        }
 
         // null means there is no entity | quantity disambiguated
         // 0 means cannot connect to text.
@@ -202,6 +272,23 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             }
         }
 
+
+        // all terms should be stemmed and lowercased.
+        private double getContextScore(HashSet<String> entityTableContext, HashSet<String> entityPageContext) {
+            int nCommon = 0;
+            int nTotal = 0;
+            for (String t : entityTableContext) {
+                if (NLP.BLOCKED_STOPWORDS.contains(t)) {
+                    continue;
+                }
+                ++nTotal;
+                if (entityPageContext.contains(t)) {
+                    ++nCommon;
+                }
+            }
+            return nTotal == 0 ? 0 : 1.0 * nCommon / nTotal;
+        }
+
         public double getHomogeneityScoreFromCurrentEntityAssignment() {
             Integer[][] entityIds = new Integer[table.nDataRow][entityColumnIndexes.length];
             double[][] entityPrior = new double[table.nDataRow][entityColumnIndexes.length];
@@ -229,13 +316,27 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             int nPriorNodes = 0;
             double priorScore = 0;
 
+            // entity context
+            int nContextNodes = 0;
+            double contextScore = 0;
+            if (cellContext == null) {
+                buildCellContext();
+            }
+
             for (int i = 0; i < entityColumnIndexes.length; ++i) {
                 for (int r1 = 0; r1 < table.nDataRow; ++r1) {
-                    if (entityIds[r1][i] == null) {
+                    Triple<String, Integer, Double> e = currentEntityAssignment[r1][entityColumnIndexes[i]];
+                    if (e == null) {
                         continue;
                     }
                     ++nPriorNodes;
                     priorScore += entityPrior[r1][i];
+
+                    ++nContextNodes;
+                    if (CONTEXT_WEIGHT > 0) {
+                        contextScore += getContextScore(cellContext[r1][entityColumnIndexes[i]], getEntityPageContentUniqueTerms(e.first));
+                    }
+
                     for (int r2 = r1 + 1; r2 < table.nDataRow; ++r2) {
                         if (entityIds[r2][i] == null) {
                             continue;
@@ -251,6 +352,9 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             if (nPriorNodes > 0) {
                 priorScore /= nPriorNodes;
             }
+            if (nContextNodes > 0) {
+                contextScore /= nContextNodes;
+            }
 
             // entity-row coocurrence
             int nEntityCooccurEdges = 0;
@@ -264,7 +368,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                     }
                     for (int j = i + 1; j < entityColumnIndexes.length; ++j) {
                         Triple<String, Integer, Double> e2 = currentEntityAssignment[r][entityColumnIndexes[j]];
-                        if(e2 == null) {
+                        if (e2 == null) {
                             continue;
                         }
                         ++nEntityCooccurEdges;
@@ -279,7 +383,10 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                 cooccurScore /= nEntityCooccurEdges;
             }
 
-            return priorScore * PRIOR_WEIGHT + cooccurScore * COOCCUR_WEIGHT + agreeScore * (1 - PRIOR_WEIGHT - COOCCUR_WEIGHT);
+            return priorScore * PRIOR_WEIGHT
+                    + cooccurScore * COOCCUR_WEIGHT
+                    + contextScore * CONTEXT_WEIGHT
+                    + agreeScore * (1 - PRIOR_WEIGHT - COOCCUR_WEIGHT);
         }
 
         public void recomputeBasedOnCurrentAssignment() {
