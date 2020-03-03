@@ -26,7 +26,8 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     public static double COOCCUR_WEIGHT = 0;
     public static double AGREE_WEIGHT = -1; // UNUSED this should be derived from above two
 
-    public static double COOCCUR_NORMALIZED_VALUE = 35;
+    // this normalized value covers at least 99 %
+    public static double COOCCUR_NORMALIZED_VALUE = 10;
 
 
     // TODO: fix this weight
@@ -264,7 +265,6 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                             continue;
                         }
                         ++nEntityCooccurEdges;
-                        // this normalized value covers at least 99.9 %
                         if (COOCCUR_WEIGHT > 0) {
                             cooccurScore += WikipediaEntity.getCoocurrencePageCountOfEntities(e1.first, e2.first) / COOCCUR_NORMALIZED_VALUE;
                         }
