@@ -81,9 +81,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         }
 
         String content = WikipediaEntity.getContentOfEntityPage(entity);
-        if (content == null) {
-            return null;
-        }
+
         result = new HashSet<>(NLP.splitSentence(NLP.fastStemming(content.toLowerCase(), Morpha.any)));
         entityPageContentCache.putAndMoveToFirst(entity, result);
         if (entityPageContentCache.size() > ENTITY_PAGE_CONTENT_CACHE_SIZE) {

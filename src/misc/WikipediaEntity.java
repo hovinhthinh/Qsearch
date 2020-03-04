@@ -132,15 +132,25 @@ public class WikipediaEntity {
 
 
     // e.g., entity: <Ronaldo>
+    // return empty if not found, null on error
     public static String getContentOfEntityPage(String entity) {
+        String content = null;
         try {
-            String content = HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/" + URLEncoder.encode(entity, "UTF-8"));
+            content = HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/"
+                            + URLEncoder.encode(entity, "UTF-8"),
+                    true);
             if (content == null) {
                 return null;
             }
-            return new JSONObject(content).getJSONObject("_source").getString("pageContent");
+            JSONObject obj = new JSONObject(content);
+
+            return obj.has("_source") ? obj.getJSONObject("_source").getString("pageContent") : "";
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+            return null;
+        } catch (JSONException e) {
+            System.err.println("Elasticsearch error [getContentOfEntityPage]: " + entity + "\t" + content);
+            System.err.flush();
             return null;
         }
     }
@@ -152,6 +162,7 @@ public class WikipediaEntity {
         COOCCURENCE_CACHE.defaultReturnValue(-1);
     }
 
+    // return null on error
     public static Integer getCoocurrencePageCountOfEntities(String entityA, String entityB) {
         String key = entityA.compareTo(entityB) < 0 ? String.format("%s\t%s", entityA, entityB) : String.format("%s\t%s", entityB, entityA);
         int result = COOCCURENCE_CACHE.getAndMoveToFirst(key);
@@ -159,15 +170,16 @@ public class WikipediaEntity {
             return result;
         }
 
+        String content = null;
         try {
             String body = new JSONObject().put("query", new JSONObject().put("bool", new JSONObject().put("must", new JSONArray()
                     .put(new JSONObject().put("match", new JSONObject().put("entityList", entityA)))
                     .put(new JSONObject().put("match", new JSONObject().put("entityList", entityB)))
             ))).toString();
 
-            String content = HTTPRequest.POST(
+            content = HTTPRequest.POST(
                     PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/_search/?filter_path=hits.total",
-                    body);
+                    body, true);
             if (content == null) {
                 return null;
             }
@@ -178,8 +190,9 @@ public class WikipediaEntity {
                 COOCCURENCE_CACHE.removeLastInt();
             }
             return result;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (JSONException e) {
+            System.err.println("Elasticsearch error [getCoocurrencePageCountOfEntities]: " + key + "\t" + content);
+            System.err.flush();
             return null;
         }
     }
