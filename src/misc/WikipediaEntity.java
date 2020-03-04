@@ -143,8 +143,13 @@ public class WikipediaEntity {
                 return null;
             }
             JSONObject obj = new JSONObject(content);
-
-            return obj.has("_source") ? obj.getJSONObject("_source").getString("pageContent") : "";
+            if (obj.has("found")) {
+                return obj.getBoolean("found")
+                        ? obj.getJSONObject("_source").getString("pageContent")
+                        : "";
+            } else {
+                return null;
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return null;
