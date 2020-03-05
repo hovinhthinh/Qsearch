@@ -135,9 +135,9 @@ public class TaxonomyGraph {
         // calculate itf for types
         for (int i = 0; i < nTypes; ++i) {
             // (Robertson version)
-//            type2Itf[i] = Math.max(0.0001, Math.log10((nEntities - type2nEntities[i] + 0.5) / (type2nEntities[i] + 0.5)));
+            type2Itf[i] = Math.max(0.0001, Math.log10((nEntities - type2nEntities[i] + 0.5) / (type2nEntities[i] + 0.5)));
             // normal
-            type2Itf[i] = Math.max(0.0001, Math.log(nEntities / (type2nEntities[i] + 1.0)));
+//            type2Itf[i] = Math.max(0.0001, Math.log(nEntities / (type2nEntities[i] + 1.0)));
         }
 
         // compute type 2 distance to root
