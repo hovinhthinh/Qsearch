@@ -16,6 +16,7 @@ import util.headword.StringUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class WikipediaEntity {
@@ -168,6 +169,33 @@ public class WikipediaEntity {
             return null;
         } catch (JSONException e) {
             System.err.println("Elasticsearch error [getContentOfEntityPage]: " + entity + "\t" + content);
+            System.err.flush();
+            return null;
+        }
+    }
+
+    public static HashSet<String> getTermSetOfEntityPage(String entity) {
+        String content = null;
+        try {
+            content = HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/"
+                            + URLEncoder.encode(entity, "UTF-8"),
+                    true);
+            if (content == null) {
+                return null;
+            }
+            JSONObject obj = new JSONObject(content);
+            if (obj.has("found")) {
+                return obj.getBoolean("found")
+                        ? new HashSet<>(Arrays.asList(obj.getJSONObject("_source").getString("termSet").split(" ")))
+                        : new HashSet<>();
+            } else {
+                return null;
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        } catch (JSONException e) {
+            System.err.println("Elasticsearch error [getTermSetOfEntityPage]: " + entity + "\t" + content);
             System.err.flush();
             return null;
         }
