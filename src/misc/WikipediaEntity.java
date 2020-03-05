@@ -13,6 +13,7 @@ import util.HTTPRequest;
 import util.SelfMonitor;
 import util.headword.StringUtils;
 
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -74,43 +75,10 @@ public class WikipediaEntity {
 
     private static boolean bulk(JSONObject o) {
         try {
-            String content = o.getString("content");
-            String entity = StringEscapeUtils.unescapeJava("<" + content.substring(0, content.indexOf("\n")).trim().replaceAll(" ", "_") + ">");
-
-            HashSet<String> entitySet = new HashSet<>();
-            if (entity.length() > 80) {
-                ++nNonEntityPages;
-                // This is not an entity page, we use the id of page.
-                String url = o.getString("source");
-                entity = "__curid_" + url.substring(url.lastIndexOf("=") + 1);
-                System.out.println("Non-EntityPage: " + entity);
-            } else {
-                entitySet.add(entity);
-            }
-
-            for (String id : o.getJSONObject("entities").keySet()) {
-                entitySet.add(id);
-            }
-
-            JSONArray entities = new JSONArray();
-            for (String e : entitySet) {
-                entities.put(e);
-            }
-
-            // term set
-            HashSet<String> termSet = new HashSet<>();
-            for (String t : NLP.tokenize(content)) {
-                termSet.add(StringUtils.stem(t.toLowerCase(), Morpha.any));
-            }
-
-            JSONObject index = new JSONObject().put("index", new JSONObject().put("_id", entity));
-            String body = new JSONObject()
-                    .put("pageContent", content)
-                    .put("entityList", entities)
-                    .put("termSet", String.join(" ", termSet))
-                    .toString();
+            JSONObject index = new JSONObject().put("index", new JSONObject().put("_id", o.getString("_id")));
+            o.remove("_id");
             bulks.add(index.toString());
-            bulks.add(body);
+            bulks.add(o.toString());
         } catch (JSONException e) {
             e.printStackTrace();
             return false;
@@ -243,11 +211,66 @@ public class WikipediaEntity {
         }
     }
 
+
+    public static void preprocess(String[] args) {
+        // PROCESS PARALLEL
+        // args: /GW/D5data-11/hvthinh/WIKIPEDIA-niko/fixedWikipediaEntitiesJSON.gz /GW/D5data-11/hvthinh/WIKIPEDIA-niko/fixedWikipediaEntitiesJSON_withTermSet.gz
+        PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
+        for (String line : FileUtils.getLineStream(args[0], "UTF-8")) {
+            try {
+                JSONObject o = new JSONObject(line);
+                String content = o.getString("content");
+                String entity = StringEscapeUtils.unescapeJava("<" + content.substring(0, content.indexOf("\n")).trim().replaceAll(" ", "_") + ">");
+
+                HashSet<String> entitySet = new HashSet<>();
+                if (entity.length() > 80) {
+                    ++nNonEntityPages;
+                    // This is not an entity page, we use the id of page.
+                    String url = o.getString("source");
+                    entity = "__curid_" + url.substring(url.lastIndexOf("=") + 1);
+                    System.out.println("Non-EntityPage: " + entity);
+                } else {
+                    entitySet.add(entity);
+                }
+
+                for (String id : o.getJSONObject("entities").keySet()) {
+                    entitySet.add(id);
+                }
+
+                JSONArray entities = new JSONArray();
+                for (String e : entitySet) {
+                    entities.put(e);
+                }
+
+                // term set
+                HashSet<String> termSet = new HashSet<>();
+                for (String t : NLP.tokenize(content)) {
+                    termSet.add(StringUtils.stem(t.toLowerCase(), Morpha.any));
+                }
+
+                JSONObject data = new JSONObject()
+                        .put("_id", entity)
+                        .put("pageContent", content)
+                        .put("entityList", entities)
+                        .put("termSet", String.join(" ", termSet));
+
+                out.println(data.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+        out.close();
+        // END PARALLEL PART
+    }
+
     public static void main(String[] args) throws Exception {
+//        preprocess(args);
+
 //        System.out.println(deleteIndex());
 //        System.out.println(createIndex());
-//        System.out.println(importTables("/GW/D5data-11/hvthinh/WIKIPEDIA-niko/fixedWikipediaEntitiesJSON.gz"));
+//        System.out.println(importTables("/GW/D5data-11/hvthinh/WIKIPEDIA-niko/fixedWikipediaEntitiesJSON_withTermSet.gz"));
 //        System.out.println(getContentOfEntityPage("<Cristiano_Ronaldo>"));
-        System.out.println(getCoocurrencePageCountOfEntities("<Cristiano_Ronaldo>", "<Portugal>"));
+//        System.out.println(getCoocurrencePageCountOfEntities("<Cristiano_Ronaldo>", "<Portugal>"));
     }
 }
