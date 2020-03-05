@@ -2,13 +2,16 @@ package misc;
 
 import config.Configuration;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import nlp.NLP;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 import util.HTTPRequest;
 import util.SelfMonitor;
+import util.headword.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -93,8 +96,18 @@ public class WikipediaEntity {
                 entities.put(e);
             }
 
+            // term set
+            HashSet<String> termSet = new HashSet<>();
+            for (String t : NLP.tokenize(content)) {
+                termSet.add(StringUtils.stem(t.toLowerCase(), Morpha.any));
+            }
+
             JSONObject index = new JSONObject().put("index", new JSONObject().put("_id", entity));
-            String body = new JSONObject().put("pageContent", content).put("entityList", entities).toString();
+            String body = new JSONObject()
+                    .put("pageContent", content)
+                    .put("entityList", entities)
+                    .put("termSet", String.join(" ", termSet))
+                    .toString();
             bulks.add(index.toString());
             bulks.add(body);
         } catch (JSONException e) {
