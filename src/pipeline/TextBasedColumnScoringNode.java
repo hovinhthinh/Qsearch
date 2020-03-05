@@ -47,6 +47,10 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     public double homogeneityWeight;
     private QfactTaxonomyGraph qfactGraph;
 
+    private static HashSet<String> BLOCKED_OVERLAP_CONTEXT_TOKENS = new HashSet<>(Arrays.asList(
+            "~", "`", "!", "@", "#", "^", "&", "*", "(", ")", "_", "=", "{", "}", "-", "+",
+            "[", "]", "\\", "|", ":", ";", "\"", "'", ",", ".", "/", "?", "<", ">"
+    ));
 
     private static final int ENTITY_PAGE_CONTENT_CACHE_SIZE = 1000;
     private Object2ObjectLinkedOpenHashMap<String, HashSet<String>> entityPageContentCache = new Object2ObjectLinkedOpenHashMap<>(ENTITY_PAGE_CONTENT_CACHE_SIZE);
@@ -82,7 +86,9 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
         String content = WikipediaEntity.getContentOfEntityPage(entity);
 
-        result = new HashSet<>(NLP.splitSentence(NLP.fastStemming(content.toLowerCase(), Morpha.any)));
+        // this call already lowercases content
+        result = new HashSet<>(NLP.splitSentence(NLP.fastStemming(content, Morpha.any)));
+
         entityPageContentCache.putAndMoveToFirst(entity, result);
         if (entityPageContentCache.size() > ENTITY_PAGE_CONTENT_CACHE_SIZE) {
             entityPageContentCache.removeLast();
@@ -279,7 +285,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             int nCommon = 0;
             int nTotal = 0;
             for (String t : entityTableContext) {
-                if (NLP.BLOCKED_STOPWORDS.contains(t)) {
+                if (NLP.BLOCKED_STOPWORDS.contains(t) || BLOCKED_OVERLAP_CONTEXT_TOKENS.contains(t)) {
                     continue;
                 }
                 ++nTotal;
@@ -674,6 +680,21 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         for (int i : info.numericColumnIndexes) {
             table.quantityToEntityColumn[i] = info.bestColumnLinking[i];
             table.quantityToEntityColumnScore[i] = info.bestColumnLinkingScore[i];
+        }
+
+        // consolidate column linking
+        for (int i : info.numericColumnIndexes) {
+            int currentECol = table.quantityToEntityColumn[i];
+            String currentEColHeader = table.getOriginalCombinedHeader(currentECol);
+            if (currentEColHeader.isEmpty()) {
+                continue;
+            }
+            for (int j = currentECol - 1; j >= 0; --j) {
+                if (table.isEntityColumn[j] && table.getOriginalCombinedHeader(j).equals(currentEColHeader)) {
+                    table.quantityToEntityColumn[i] = j;
+                    break;
+                }
+            }
         }
         return true;
     }
