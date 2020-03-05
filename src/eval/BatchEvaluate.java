@@ -128,12 +128,12 @@ public class BatchEvaluate {
         out.println(header);
         ArrayList<Future> futures = new ArrayList<>();
 
-        for (double joint_weight = 0; joint_weight <= 1; joint_weight += 0.1)
+        for (double joint_weight = 0.1; joint_weight <= 1; joint_weight += 0.1)
             for (double h_prior_weight = 0.35; h_prior_weight <= 0.85; h_prior_weight += 0.05)
                 for (double h_cooccur_weight = 0; h_cooccur_weight <= 0; h_cooccur_weight += 0.05)
                     for (double h_context_weight = 0.1; h_context_weight <= Math.min(0.65, 1 - h_prior_weight - h_cooccur_weight); h_context_weight += 0.05)
-                        for (int l_ntop_related : Arrays.asList(1, 3, 5, 7, 10))
-                            for (double l_context_weight : Arrays.asList(0.8, 0.9, 1.0))
+                        for (int l_ntop_related : Arrays.asList(1, 3, 5, 7))
+                            for (double l_context_weight : Arrays.asList(0.9))
                                 for (double l_type_penalty : Arrays.asList(0.9, 0.95, 1.0)) {
                                     double final_joint_weight = joint_weight;
                                     double final_h_prior_weight = h_prior_weight;
