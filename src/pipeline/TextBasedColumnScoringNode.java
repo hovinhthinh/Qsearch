@@ -84,10 +84,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             return result;
         }
 
-        String content = WikipediaEntity.getContentOfEntityPage(entity);
-
-        // this call already lowercases content
-        result = new HashSet<>(NLP.splitSentence(NLP.fastStemming(content, Morpha.any)));
+        result = WikipediaEntity.getTermSetOfEntityPage(entity);
 
         entityPageContentCache.putAndMoveToFirst(entity, result);
         if (entityPageContentCache.size() > ENTITY_PAGE_CONTENT_CACHE_SIZE) {
