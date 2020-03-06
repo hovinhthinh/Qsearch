@@ -111,6 +111,7 @@ public class BatchEvaluate {
             "H_Prior_Weight",
             "H_Cooccur_Weight",
             "H_Context_Weight",
+            "H_Agree_Weight",
             "L_nTop_Related",
             "L_Context_Weight",
             "L_Type_Penalty",
@@ -143,11 +144,12 @@ public class BatchEvaluate {
                                     double final_l_context_weight = l_context_weight;
                                     double final_l_type_penalty = l_type_penalty;
                                     futures.add(executorService.submit(() -> {
-                                        String configStr = String.format("%.2f %.2f %.2f %.2f %d %.2f %.2f",
+                                        String configStr = String.format("%.2f %.2f %.2f %.2f %.2f %d %.2f %.2f",
                                                 final_joint_weight,
                                                 final_h_prior_weight,
                                                 final_h_cooccur_weight,
                                                 final_h_context_weight,
+                                                1 - final_h_prior_weight - final_h_cooccur_weight - final_h_context_weight,
                                                 final_l_ntop_related,
                                                 final_l_context_weight,
                                                 final_l_type_penalty);

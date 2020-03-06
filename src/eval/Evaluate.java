@@ -60,6 +60,7 @@ public class Evaluate {
     //       "H_Prior_Weight",
     //       "H_Cooccur_Weight",
     //       "H_Context_Weight",
+    //       "H_Agree_Weight",
     //       "L_nTop_Related",
     //       "L_Context_Weight",
     //       "L_Type_Penalty",
@@ -75,9 +76,11 @@ public class Evaluate {
             TextBasedColumnScoringNode.PRIOR_WEIGHT = Double.parseDouble(args[1]);
             TextBasedColumnScoringNode.COOCCUR_WEIGHT = Double.parseDouble(args[2]);
             TextBasedColumnScoringNode.CONTEXT_WEIGHT = Double.parseDouble(args[3]);
-            QfactTaxonomyGraph.NTOP_RELATED_ENTITY = Integer.parseInt(args[4]);
-            QfactTaxonomyGraph.QFACT_CONTEXT_MATCH_WEIGHT = Double.parseDouble(args[5]);
-            QfactTaxonomyGraph.TYPE_RELATED_PENALTY_WEIGHT = Double.parseDouble(args[6]);
+            /* TextBasedColumnScoringNode.AGREE_WEIGHT = Double.parseDouble(args[4]); // but not used */
+
+            QfactTaxonomyGraph.NTOP_RELATED_ENTITY = Integer.parseInt(args[5]);
+            QfactTaxonomyGraph.QFACT_CONTEXT_MATCH_WEIGHT = Double.parseDouble(args[6]);
+            QfactTaxonomyGraph.TYPE_RELATED_PENALTY_WEIGHT = Double.parseDouble(args[7]);
             pipeline = getPipeline(jointWeight);
         }
 
