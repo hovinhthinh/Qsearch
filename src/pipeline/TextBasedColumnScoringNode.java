@@ -583,7 +583,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                         if (table.nHeaderRow > 1) {
                             // (2) last quantity header
                             Pair<Double, String> lastHeaderResult = qfactGraph.getMatchScore(e, lastHeaderContext, ql.quantity, (r * table.nColumn + qCol) * 2 + 1);
-                            if (lastHeaderResult.first > matchResult.first) {
+                            if (lastHeaderResult != null && lastHeaderResult.first > matchResult.first) {
                                 matchResult = lastHeaderResult;
                             }
                         }
