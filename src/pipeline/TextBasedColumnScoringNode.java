@@ -27,9 +27,9 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
     // Homogeneity weights
     // TODO: fix this weight
-    public static double PRIOR_WEIGHT = 0.9;
+    public static double PRIOR_WEIGHT = 0.5;
     public static double COOCCUR_WEIGHT = 0;
-    public static double CONTEXT_WEIGHT = 0;
+    public static double CONTEXT_WEIGHT = 0.5;
     public static double AGREE_WEIGHT = -1; // UNUSED this should be derived from above two
 
     // this normalized value covers at least 99 %
@@ -37,7 +37,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
 
     // TODO: fix this weight
-    public static final double DEFAULT_JOINT_HOMOGENEITY_WEIGHT = 0.7;
+    public static final double DEFAULT_JOINT_HOMOGENEITY_WEIGHT = 1.0;
 
     public static final int JOINT_MAX_NUM_ITERS = 100;
     public static final int JOINT_MAX_LOCAL_CANDIDATES = 10; // set to -1 to disable this threshold. (-1 means INF)

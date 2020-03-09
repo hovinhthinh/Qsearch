@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 
 public class QfactTaxonomyGraph extends TaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(QfactTaxonomyGraph.class.getName());
-    public static final String DEFAULT_QFACT_FILE = "./non-deep/qfact_text_no-min-conf.gz";
+    public static final String DEFAULT_QFACT_FILE = "non-deep/qfact_text.gz";
 
     public static int DEFAULT_RELATED_ENTITY_DIST_LIM = 4;
     public static int NTOP_RELATED_ENTITY = 5;
     public static double QFACT_CONTEXT_MATCH_WEIGHT = 0.9; // quantity match weight = 1 - this weight.
 
     // TODO: Fix this weight
-    public static double TYPE_RELATED_PENALTY_WEIGHT = 0.99;
+    public static double TYPE_RELATED_PENALTY_WEIGHT = 0.5;
 
     public class EntityTextQfact {
         ArrayList<String> context;
@@ -215,7 +215,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 singleEntityResult = new Pair<>(singleEntityResult.first, singleEntityResult.second);
 
                 // TODO: scaling for type-related matching
-                singleEntityResult.first *= TYPE_RELATED_PENALTY_WEIGHT;
+                singleEntityResult.first *= Math.pow(1 - 1 / p.getValue(), TYPE_RELATED_PENALTY_WEIGHT);
                 queue.enqueue(singleEntityResult);
                 // sum of top 3 related entities
                 if (queue.size() > NTOP_RELATED_ENTITY) {
