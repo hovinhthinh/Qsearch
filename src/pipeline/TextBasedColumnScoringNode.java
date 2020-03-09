@@ -219,7 +219,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                         if (table.nHeaderRow > 1) {
                             // (2) last quantity header
                             Pair<Double, String> lastHeaderResult = qfactGraph.getMatchScore(e.first, lastHeaderContext, ql.quantity, (r * table.nColumn + qCol) * 2 + 1);
-                            if (lastHeaderResult.first > matchResult.first) {
+                            if (lastHeaderResult != null && lastHeaderResult.first > matchResult.first) {
                                 matchResult = lastHeaderResult;
                             }
                         }
@@ -456,7 +456,10 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                                     matchScr = matchResult.first;
                                     if (table.nHeaderRow > 1) {
                                         // (2) last quantity header
-                                        matchScr = Math.max(matchScr, qfactGraph.getMatchScore(candidate.first, table.getQuantityDescriptionFromLastHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2 + 1).first);
+                                        Pair<Double, String> lastHeaderResult = qfactGraph.getMatchScore(candidate.first, table.getQuantityDescriptionFromLastHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2 + 1);
+                                        if (lastHeaderResult != null && lastHeaderResult.first > matchScr) {
+                                            matchScr = lastHeaderResult.first;
+                                        }
                                     }
                                 } else {
                                     matchScr = 0;
