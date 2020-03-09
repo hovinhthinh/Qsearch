@@ -188,7 +188,8 @@ public class TypeSuggestionHandler extends AbstractHandler {
         }
     }
 
-    public static boolean contain(String type) {
+    // return -1 on not found
+    public static int getTypeFreq(String type) {
         int l = -1, r = typeToFreq.size();
         while (l + 1 < r) {
             int mid = (l + r) >> 1;
@@ -198,8 +199,11 @@ public class TypeSuggestionHandler extends AbstractHandler {
                 l = mid;
             }
         }
-
-        return r < typeToFreq.size() && typeToFreq.get(r).first.equals(type);
+        if (r >= typeToFreq.size()) {
+            return -1;
+        }
+        Pair<String, Integer> t2f = typeToFreq.get(r);
+        return t2f.first.equals(type) ? t2f.second : -1;
     }
 
     @Override

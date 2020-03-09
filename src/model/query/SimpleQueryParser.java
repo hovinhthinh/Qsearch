@@ -93,8 +93,8 @@ public class SimpleQueryParser {
                 }
                 rawTokenizedSb.append(w.string());
                 String rawTokenizedSbStr = rawTokenizedSb.toString();
-                if (useTypeSuggestion && (TypeSuggestionHandler.contain(rawTokenizedSbStr)
-                        || TypeSuggestionHandler.contain(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun)))) {
+                if (useTypeSuggestion && (TypeSuggestionHandler.getTypeFreq(rawTokenizedSbStr) >= 100
+                        || TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun)) >= 100)) {
                     typeFromTypeSuggestionSystem = rawTokenizedSbStr;
                 }
             }
