@@ -86,7 +86,9 @@ public class WikiRandomReader {
 //            }
 
             table.source = "WIKIPEDIA:Link:" + "https://en.wikipedia.org/wiki/" + URLEncoder.encode(json.getString("pgTitle").replaceAll("\\s", "_"));
-            table.caption = json.has("tableCaption") ? json.getString("tableCaption") : null;
+            table.caption = json.has("tableCaption")
+                    ? String.join(" ", NLP.tokenize(json.getString("tableCaption")))
+                    : null;
 
             // Conservative filters.
             if (table.nHeaderRow == 0) {
