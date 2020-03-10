@@ -62,6 +62,10 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         this.homogeneityWeight = homogeneityWeight;
     }
 
+    public static TextBasedColumnScoringNode getDefaultInferenceInstance() {
+        return getIndependentInferenceInstance();
+    }
+
     public static TextBasedColumnScoringNode getIndependentInferenceInstance() {
         return new TextBasedColumnScoringNode(INDEPENDENT_INFERENCE, 1);
     }
