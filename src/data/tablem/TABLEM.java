@@ -93,7 +93,9 @@ public class TABLEM {
 
             table.source = "TABLEM:Link:" + json.getString("url");
             table.pageTitle = json.has("pageTitle") ? json.getString("pageTitle") : null;
-            table.caption = json.has("title") ? json.getString("title") : null;
+            table.caption = json.has("title")
+                    ? String.join(" ", NLP.tokenize(json.getString("title")))
+                    : null;
 
             return table;
         } catch (JSONException e) {

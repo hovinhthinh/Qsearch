@@ -156,6 +156,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         HashSet<String>[][] cellContext;
 
         void buildCellContext() {
+            HashSet<String> captionContext = new HashSet<>();
             HashSet<String> headerContext = new HashSet<>();
             HashSet<String>[] rowContext = new HashSet[table.nDataRow];
             HashSet<String>[] columnContext = new HashSet[table.nColumn];
@@ -164,6 +165,11 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             }
             for (int i = 0; i < table.nColumn; ++i) {
                 columnContext[i] = new HashSet<>();
+            }
+
+            // caption context
+            if (table.caption != null) {
+                captionContext.addAll(NLP.splitSentence(NLP.fastStemming(table.caption.toLowerCase(), Morpha.any)));
             }
 
             // header context
@@ -186,6 +192,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             for (int i = 0; i < table.nDataRow; ++i) {
                 for (int j = 0; j < table.nColumn; ++j) {
                     cellContext[i][j] = new HashSet<>();
+                    cellContext[i][j].addAll(captionContext);
                     cellContext[i][j].addAll(headerContext);
                     cellContext[i][j].addAll(rowContext[i]);
                     cellContext[i][j].addAll(columnContext[j]);
