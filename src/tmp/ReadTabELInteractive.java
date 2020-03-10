@@ -2,7 +2,7 @@ package tmp;
 
 import com.google.gson.Gson;
 import data.wikipedia.WIKIPEDIA;
-import data.wikipedia.WIKIPEDIA_DeepTaggingPipeline;
+import data.wikipedia.WIKIPEDIA_TaggingPipeline;
 import model.table.Table;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import pipeline.TaggingPipeline;
@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 public class ReadTabELInteractive {
     public static void main(String[] args) throws Exception {
-        TaggingPipeline pipeline = WIKIPEDIA_DeepTaggingPipeline.getDefaultTaggingPipeline();
+        TaggingPipeline pipeline = WIKIPEDIA_TaggingPipeline.getDefaultTaggingPipeline();
 
         Scanner in = new Scanner(System.in);
         int n = 0;

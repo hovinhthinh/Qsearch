@@ -12,6 +12,7 @@ import util.SelfMonitor;
 import java.io.PrintWriter;
 
 // Multithreaded neural-based column linking, designed for GPUs
+@Deprecated
 public class ColumnLinkingExecutor {
     // Args: <input> <output> <device> <n_thread>
     // input is the output of the annotation pipeline, before the column linking node.
@@ -30,7 +31,8 @@ public class ColumnLinkingExecutor {
 
         Concurrent.runAndWait(() -> {
             Gson gson = new Gson();
-            TaggingPipeline pipeline = TaggingPipeline.getColumnLinkingPipeline(client);
+//            TaggingPipeline pipeline = TaggingPipeline.getColumnLinkingPipeline(client);
+            TaggingPipeline pipeline = TaggingPipeline.getColumnLinkingPipeline();
 
             String line;
             while (true) {

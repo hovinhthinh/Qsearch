@@ -8,7 +8,7 @@ import util.SelfMonitor;
 
 import java.io.PrintWriter;
 
-public class TABLEM_DeepTaggingPipeline {
+public class TABLEM_TaggingPipeline {
 
     // Args: <input> <output>
     public static void main(String[] args) {
@@ -20,7 +20,7 @@ public class TABLEM_DeepTaggingPipeline {
 
         Gson gson = new Gson();
 
-        SelfMonitor m = new SelfMonitor(TABLEM_DeepTaggingPipeline.class.getName(), -1, 60);
+        SelfMonitor m = new SelfMonitor(TABLEM_TaggingPipeline.class.getName(), -1, 60);
         m.start();
         for (String line : stream) {
             m.incAndGet();

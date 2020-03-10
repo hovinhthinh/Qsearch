@@ -3,6 +3,7 @@ package pipeline.deep;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public interface ScoringClientInterface {
     ArrayList<Double> getScores(List<String> entitiesDesc, String quantityDesc);
 

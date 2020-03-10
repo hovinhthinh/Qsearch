@@ -9,7 +9,7 @@ import util.SelfMonitor;
 
 import java.io.PrintWriter;
 
-public class WIKIPEDIA_DeepTaggingPipeline {
+public class WIKIPEDIA_TaggingPipeline {
 
     @Deprecated
     public static TaggingPipeline getDefaultTaggingPipeline() {
@@ -18,7 +18,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
                 new TimeTaggingNode(),
                 new QuantityTaggingNode(),
                 new ColumnTypeTaggingNode(),
-                new DeepColumnScoringNode(DeepColumnScoringNode.JOINT_INFERENCE),
+                TextBasedColumnScoringNode.getDefaultInferenceInstance(),
                 new ColumnLinkFilteringNode(0),
                 new PostFilteringNode()
         );
@@ -43,7 +43,7 @@ public class WIKIPEDIA_DeepTaggingPipeline {
 
         Gson gson = new Gson();
 
-        SelfMonitor m = new SelfMonitor(WIKIPEDIA_DeepTaggingPipeline.class.getName(), -1, 60);
+        SelfMonitor m = new SelfMonitor(WIKIPEDIA_TaggingPipeline.class.getName(), -1, 60);
         m.start();
         for (String line : stream) {
             m.incAndGet();

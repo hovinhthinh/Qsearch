@@ -1,8 +1,6 @@
 package tmp;
 
 import com.google.gson.Gson;
-import data.tablem.TABLEM;
-import data.tablem.TABLEM_DeepTaggingPipeline;
 import model.table.Table;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import pipeline.TaggingPipeline;

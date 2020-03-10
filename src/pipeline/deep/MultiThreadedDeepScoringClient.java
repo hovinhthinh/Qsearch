@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
+@Deprecated
 public class MultiThreadedDeepScoringClient implements ScoringClientInterface {
 
     private ArrayBlockingQueue<DeepScoringClient> clients;

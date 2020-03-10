@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class DeepScoringClient implements ScoringClientInterface {
     private BufferedReader in = null, err = null;
     private PrintWriter out = null;
