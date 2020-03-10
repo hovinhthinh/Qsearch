@@ -116,6 +116,12 @@ public class Evaluate {
             double precCAMostUniqueColumn = table.getAlignmentPrecisionFromMostUniqueColumnFromTheLeft();
 
             pipeline.tag(table);
+            int nECols = 0;
+            for (int i = 0; i < table.nColumn; ++i) {
+                if (table.isEntityColumn[i]) {
+                    ++nECols;
+                }
+            }
 
             double precEDOurs = table.getEntityDisambiguationPrecisionFromTarget();
             Pair<Integer, Integer> precEDOursInfo = table.getEntityDisambiguationMicroPrecisionInfoFromTarget();
@@ -151,6 +157,7 @@ public class Evaluate {
             System.out.println("========================================================================================================================================================================================================");
             ++nGoodTable;
 
+            reporter.recordAverage("%TablesWithOneEntityColumn", nECols == 1 ? 1 : 0);
             reporter.recordAverage("macroPrecEDPrior", precEDPrior);
             reporter.recordAverage("macroPrecEDOurs", precEDOurs);
             reporter.recordAverage("macroPrecCAFirstColumn", precCAFirstColumn);
