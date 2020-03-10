@@ -113,7 +113,9 @@ public class Evaluate {
             System.out.println("--- Prior ---");
             System.out.println(table.getTableContentPrintable(true, true, true, true));
             double precCAFirstColumn = table.getAlignmentPrecisionFromFirstColumn();
+            double precCAFirstEntityColumn = table.getAlignmentPrecisionFromFirstEntityColumn();
             double precCAMostUniqueColumn = table.getAlignmentPrecisionFromMostUniqueColumnFromTheLeft();
+            double precCAMostUniqueEntityColumn = table.getAlignmentPrecisionFromMostUniqueEntityColumnFromTheLeft();
 
             pipeline.tag(table);
             int nECols = 0;
@@ -152,7 +154,7 @@ public class Evaluate {
                 }
             }
             System.out.println(String.format("precEntityDisambiguation: Prior/Ours: %.2f/%.2f", precEDPrior * 100, precEDOurs * 100));
-            System.out.println(String.format("precColumnAlignment: FirstColumn/Ours: %.2f/%.2f", precCAFirstColumn * 100, precCAOurs * 100));
+            System.out.println(String.format("precColumnAlignment: FirstColumn/FirstEntityColumn/Ours: %.2f/%.2f/%.2f", precCAFirstColumn * 100, precCAFirstEntityColumn * 100, precCAOurs * 100));
 //            System.out.println(String.format("qtFoundRateInText: %.2f", qtFoundRate));
             System.out.println("========================================================================================================================================================================================================");
             ++nGoodTable;
@@ -161,7 +163,9 @@ public class Evaluate {
             reporter.recordAverage("macroPrecEDPrior", precEDPrior);
             reporter.recordAverage("macroPrecEDOurs", precEDOurs);
             reporter.recordAverage("macroPrecCAFirstColumn", precCAFirstColumn);
+            reporter.recordAverage("macroPrecCAFirstEntityColumn", precCAFirstEntityColumn);
             reporter.recordAverage("macroPrecCAMostUniqueColumn", precCAMostUniqueColumn);
+            reporter.recordAverage("macroPrecCAMostUniqueEntityColumn", precCAMostUniqueEntityColumn);
             reporter.recordAverage("macroPrecCAOurs", precCAOurs);
 
             reporter.recordMicroAverage("microPrecEDPrior", precEDPriorInfo);

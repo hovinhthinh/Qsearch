@@ -157,6 +157,72 @@ public class TruthTable extends Table {
     }
 
     // return -1 means there is no alignment.
+    public double getAlignmentPrecisionFromFirstEntityColumn() {
+        int total = 0;
+        int nTrue = 0;
+        boolean hasIndexColumn = hasIndexColumn();
+        int eColumn = -1;
+        for (int i = 0; i < nColumn; ++i) {
+            if (isEntityColumn[i]) {
+                eColumn = i;
+                break;
+            }
+        }
+        for (int i = 0; i < nColumn; ++i) {
+            // ignore evaluating index column.
+            if (hasIndexColumn && i == 0) {
+                continue;
+            }
+            if (quantityToEntityColumnGroundTruth[i] != -1) {
+                ++total;
+                if (quantityToEntityColumnGroundTruth[i] == eColumn) {
+                    ++nTrue;
+                }
+            }
+        }
+        if (total == 0) {
+            return -1;
+        }
+        return ((double) nTrue) / total;
+    }
+
+    // return -1 means there is no alignment.
+    public double getAlignmentPrecisionFromMostUniqueEntityColumnFromTheLeft() {
+        int total = 0;
+        int nTrue = 0;
+        boolean hasIndexColumn = hasIndexColumn();
+        int eColumn = -1, nUnique = 0;
+        for (int i = 0; i < nColumn; ++i) {
+            if (isEntityColumn[i]) {
+                HashSet<String> set = new HashSet<>();
+                for (int r = 0; r < nDataRow; ++r) {
+                    set.add(data[r][i].text);
+                }
+                if (set.size() > nUnique) {
+                    nUnique = set.size();
+                    eColumn = i;
+                }
+            }
+        }
+        for (int i = 0; i < nColumn; ++i) {
+            // ignore evaluating index column.
+            if (hasIndexColumn && i == 0) {
+                continue;
+            }
+            if (quantityToEntityColumnGroundTruth[i] != -1) {
+                ++total;
+                if (quantityToEntityColumnGroundTruth[i] == eColumn) {
+                    ++nTrue;
+                }
+            }
+        }
+        if (total == 0) {
+            return -1;
+        }
+        return ((double) nTrue) / total;
+    }
+
+    // return -1 means there is no alignment.
     public double getAlignmentPrecisionFromMostUniqueColumnFromTheLeft() {
         int total = 0;
         int nTrue = 0;
