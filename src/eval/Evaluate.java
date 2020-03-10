@@ -49,6 +49,7 @@ public class Evaluate {
             }
             in.close();
         } else {
+            TextBasedColumnScoringNode.JOINT_MAX_NUM_COLUMN_LINKING = -1;
             String inputFile = "eval/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation_linking.json";
             columnScoringNode.inferenceMode = TextBasedColumnScoringNode.INDEPENDENT_INFERENCE;
             columnScoringNode.homogeneityWeight = 1;
