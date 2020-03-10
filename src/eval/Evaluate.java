@@ -113,6 +113,7 @@ public class Evaluate {
             System.out.println("--- Prior ---");
             System.out.println(table.getTableContentPrintable(true, true, true, true));
             double precCAFirstColumn = table.getAlignmentPrecisionFromFirstColumn();
+            double precCAMostUniqueColumn = table.getAlignmentPrecisionFromMostUniqueColumnFromTheLeft();
 
             pipeline.tag(table);
 
@@ -153,6 +154,7 @@ public class Evaluate {
             reporter.recordAverage("macroPrecEDPrior", precEDPrior);
             reporter.recordAverage("macroPrecEDOurs", precEDOurs);
             reporter.recordAverage("macroPrecCAFirstColumn", precCAFirstColumn);
+            reporter.recordAverage("macroPrecCAMostUniqueColumn", precCAMostUniqueColumn);
             reporter.recordAverage("macroPrecCAOurs", precCAOurs);
 
             reporter.recordMicroAverage("microPrecEDPrior", precEDPriorInfo);

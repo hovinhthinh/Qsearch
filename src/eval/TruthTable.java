@@ -19,6 +19,7 @@ import util.Pair;
 import util.Vectors;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 // For ground truth of column linkings.
 public class TruthTable extends Table {
@@ -145,6 +146,43 @@ public class TruthTable extends Table {
             if (quantityToEntityColumnGroundTruth[i] != -1) {
                 ++total;
                 if (quantityToEntityColumnGroundTruth[i] == eColumn) {
+                    ++nTrue;
+                }
+            }
+        }
+        if (total == 0) {
+            return -1;
+        }
+        return ((double) nTrue) / total;
+    }
+
+    // return -1 means there is no alignment.
+    public double getAlignmentPrecisionFromMostUniqueColumnFromTheLeft() {
+        int total = 0;
+        int nTrue = 0;
+        boolean hasIndexColumn = hasIndexColumn();
+        for (int i = 0; i < nColumn; ++i) {
+            // ignore evaluating index column.
+            if (hasIndexColumn && i == 0) {
+                continue;
+            }
+            int eCol = -1, nUnique = 0;
+            for (int k = 0; k < nColumn; ++k) {
+                if ((k == 0 && (hasIndexColumn || isNumericColumn[0])) || k == i) {
+                    continue;
+                }
+                HashSet<String> set = new HashSet<>();
+                for (int r = 0; r < nDataRow; ++r) {
+                    set.add(data[r][k].text);
+                }
+                if (set.size() > nUnique) {
+                    nUnique = set.size();
+                    eCol = k;
+                }
+            }
+            if (quantityToEntityColumnGroundTruth[i] != -1) {
+                ++total;
+                if (quantityToEntityColumnGroundTruth[i] == eCol) {
                     ++nTrue;
                 }
             }
