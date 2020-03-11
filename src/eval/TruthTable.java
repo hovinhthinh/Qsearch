@@ -69,7 +69,8 @@ public class TruthTable extends Table {
                 if (bodyEntityTarget[i][j].equals(target)) {
                     ++nTrue;
                 }
-                el.target = "YAGO:" + target.substring(1, target.length() - 1);
+
+//                el.target = "YAGO:" + target.substring(1, target.length() - 1);
             }
         }
         if (total == 0) {

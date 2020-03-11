@@ -110,8 +110,6 @@ public class Evaluate {
 
             double precEDPrior = table.getEntityDisambiguationPrecisionFromPrior();
             Pair<Integer, Integer> precEDPriorInfo = table.getEntityDisambiguationMicroPrecisionInfoFromPrior();
-//            System.out.println("--- Prior ---");
-//            System.out.println(table.getTableContentPrintable(true, true, true, true));
             double precCAFirstColumn = table.getAlignmentPrecisionFromFirstColumn();
             double precCAFirstEntityColumn = table.getAlignmentPrecisionFromFirstEntityColumn();
             double precCAMostUniqueColumn = table.getAlignmentPrecisionFromMostUniqueColumnFromTheLeft();

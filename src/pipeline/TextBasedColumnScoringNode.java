@@ -1,5 +1,6 @@
 package pipeline;
 
+import eval.TruthTable;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import misc.WikipediaEntity;
 import model.table.Table;
@@ -21,6 +22,7 @@ import java.util.logging.Logger;
 public class TextBasedColumnScoringNode implements TaggingNode {
     public static final Logger LOGGER = Logger.getLogger(TextBasedColumnScoringNode.class.getName());
 
+    public static final int GROUNDTRUTH_INFERENCE = 0;
     public static final int PRIOR_INFERENCE = 1;
     public static final int JOINT_INFERENCE = 2;
     public static final int INDEPENDENT_INFERENCE = 3;
@@ -82,6 +84,10 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         return new TextBasedColumnScoringNode(PRIOR_INFERENCE, 1);
     }
 
+    public static TextBasedColumnScoringNode getGroundTruthInferenceInstance() {
+        return new TextBasedColumnScoringNode(GROUNDTRUTH_INFERENCE, 1);
+    }
+
     private HashSet<String> getEntityPageContentUniqueTerms(String entity) {
         HashSet<String> result = entityPageContentCache.getAndMoveToFirst(entity);
         if (result != null) {
@@ -106,7 +112,13 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         table.quantityToEntityColumnScore = new double[table.nColumn];
         Arrays.fill(table.quantityToEntityColumnScore, -1.0);
 
-        if (inferenceMode == PRIOR_INFERENCE || inferenceMode == JOINT_INFERENCE || inferenceMode == INDEPENDENT_INFERENCE) {
+        if ((inferenceMode == GROUNDTRUTH_INFERENCE) && !(table instanceof TruthTable)) {
+            throw new RuntimeException("Ground truth required but not found");
+        }
+        if (inferenceMode == GROUNDTRUTH_INFERENCE
+                || inferenceMode == PRIOR_INFERENCE
+                || inferenceMode == JOINT_INFERENCE
+                || inferenceMode == INDEPENDENT_INFERENCE) {
             return inference(table);
         } else {
             throw new RuntimeException("Invalid inference mode");
@@ -316,7 +328,9 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                         continue;
                     }
                     // Here we ignore checking eId != null, because it should be in the KB.
-                    entityIds[r][i] = qfactGraph.entity2Id.get(e.first);
+                    Integer eId = qfactGraph.entity2Id.get(e.first);
+
+                    entityIds[r][i] = eId == null ? -1 : eId; // -1 means there is no type info for this entity.
 
                     entityPrior[r][i] = e.third;
                 }
@@ -356,7 +370,10 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                         if (entityIds[r2][i] == null) {
                             continue;
                         }
-                        agreeScore += qfactGraph.getTypeAgreement(entityIds[r1][i], entityIds[r2][i]);
+
+                        agreeScore += (entityIds[r1][i] == -1 || entityIds[r2][i] == -1)
+                                ? 0
+                                : qfactGraph.getTypeAgreement(entityIds[r1][i], entityIds[r2][i]);
                         ++nAgreeEdges;
                     }
                 }
@@ -435,10 +452,11 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             // try new candidate
             Triple<String, Integer, Double> oldCandidate = currentEntityAssignment[row][col];
             currentEntityAssignment[row][col] = candidate;
-            // now compute
+            // now compute homogeneity
             double homogeneity = getHomogeneityScoreFromCurrentEntityAssignment();
-            double connectivity = 0;
 
+            // connectivity
+            double connectivity = 0;
             if (homogeneityWeight < 1 && inferenceMode == JOINT_INFERENCE) { // compute on JOINT only (INDEPENDENT_INFERENCE has homogeneityWeight = 1)
                 for (int i : numericColumnIndexes) {
                     // connectivity
@@ -501,7 +519,10 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             for (int i : info.entityColumnIndexes) {
                 info.currentColumnLinking[info.numericColumnIndexes[currentCol]] = i;
                 backtrackJointInference(table, info, currentCol + 1);
-                if (homogeneityWeight == 1 || inferenceMode == INDEPENDENT_INFERENCE || inferenceMode == PRIOR_INFERENCE) {
+                if (homogeneityWeight == 1
+                        || inferenceMode == INDEPENDENT_INFERENCE
+                        || inferenceMode == PRIOR_INFERENCE
+                        || inferenceMode == GROUNDTRUTH_INFERENCE) {
                     // if connectivity weight = 0, then only check the first column alignment
                     // This is also the case of INDEPENDENT_INFERENCE & PRIOR_INFERENCE
                     break;
@@ -516,7 +537,10 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             for (int i = 0; i < table.nDataRow; ++i) {
                 EntityLink el = table.data[i][j].getRepresentativeEntityLink();
                 if (el != null) {
-                    info.currentEntityAssignment[i][j] = info.savedEntityAssignment[i][j] = el.candidates.get(0);
+                    Triple<String, Integer, Double> candidate = inferenceMode == GROUNDTRUTH_INFERENCE
+                            ? new Triple(((TruthTable) table).bodyEntityTarget[i][j], -1, -1.0)
+                            : el.candidates.get(0);
+                    info.currentEntityAssignment[i][j] = info.savedEntityAssignment[i][j] = candidate;
                 }
             }
         }
@@ -662,11 +686,11 @@ public class TextBasedColumnScoringNode implements TaggingNode {
         }
 
         // backtracking
-        // for INDEPENDENT_INFERENCE & PRIOR_INFERENCE, this call only does entity disambiguation
+        // for INDEPENDENT_INFERENCE & PRIOR_INFERENCE & GROUNDTRUTH_INFERENCE, this call only does entity disambiguation
         backtrackJointInference(table, info, 0);
 
-        // for INDEPENDENT_INFERENCE & PRIOR_INFERENCE, column alignment needs to be computed separately here
-        if (inferenceMode == INDEPENDENT_INFERENCE || inferenceMode == PRIOR_INFERENCE) {
+        // for INDEPENDENT_INFERENCE & PRIOR_INFERENCE & GROUNDTRUTH_INFERENCE, column alignment needs to be computed separately here
+        if (inferenceMode == INDEPENDENT_INFERENCE || inferenceMode == PRIOR_INFERENCE || inferenceMode == GROUNDTRUTH_INFERENCE) {
             independentColumnAlignmentInference(table, info);
         }
 
