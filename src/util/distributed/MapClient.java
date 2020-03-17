@@ -81,14 +81,6 @@ class MapClient {
     @Override
     protected void finalize() throws Throwable {
         try {
-            outStream.close();
-        } catch (Exception e) {
-        }
-        try {
-            errStream.close();
-        } catch (Exception e) {
-        }
-        try {
             in.close();
         } catch (Exception e) {
         }
@@ -108,4 +100,14 @@ class MapClient {
 
     }
 
+    public void closeOutAndErrStreams() {
+        try {
+            outStream.close();
+        } catch (Exception e) {
+        }
+        try {
+            errStream.close();
+        } catch (Exception e) {
+        }
+    }
 }

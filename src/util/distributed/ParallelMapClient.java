@@ -39,7 +39,6 @@ class MultiThreadedMapClient {
         }
     }
 
-
     public List<String> map(String input) {
         try {
             MapClient client = clients.take();
@@ -48,6 +47,12 @@ class MultiThreadedMapClient {
             return result;
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void closeOutAndErrStreams() {
+        for (MapClient client : clients) {
+            client.closeOutAndErrStreams();
         }
     }
 }
@@ -87,6 +92,7 @@ public class ParallelMapClient {
         }, nClients);
 
         out.close();
+        client.closeOutAndErrStreams();
         System.exit(0);
     }
 }
