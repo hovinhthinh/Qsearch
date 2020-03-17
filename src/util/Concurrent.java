@@ -19,8 +19,9 @@ public class Concurrent {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             result = false;
+        } finally {
+            service.shutdown();
         }
-        service.shutdown();
         return result;
     }
 
