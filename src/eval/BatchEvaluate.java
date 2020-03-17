@@ -15,7 +15,7 @@ class EvaluateClient {
 
     public EvaluateClient(String inputFile) {
         try {
-            String mainCmd = "./run.sh 32G eval.Evaluate INTERACTIVE " + inputFile;
+            String mainCmd = "./run_no_notification.sh 32G eval.Evaluate INTERACTIVE " + inputFile;
             String[] cmd = new String[]{
                     "/bin/sh", "-c",
                     mainCmd
