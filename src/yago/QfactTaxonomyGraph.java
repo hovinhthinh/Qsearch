@@ -203,7 +203,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                         double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT;
                         if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
                             singleEntityResult.first = matchScr;
-                            singleEntityResult.second = id2Entity.get(p.getKey()) + " --> " + o.sentence + " --> " + o.source;
+                            singleEntityResult.second = id2Entity.get(p.getKey()) + "\t" + o.sentence + "\t" + o.source;
                         }
                     }
                     if (key >= 0) {
