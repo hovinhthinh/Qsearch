@@ -225,10 +225,9 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         }
 
         result = new Pair<>(0.0, null);
-        int queueSize = queue.size();
         while (!queue.isEmpty()) {
             Pair<Double, String> top = queue.dequeue();
-            result.first += top.first / queueSize;
+            result.first += top.first / NTOP_RELATED_ENTITY;
             if (queue.isEmpty()) {
                 result.second = top.second;
             }
