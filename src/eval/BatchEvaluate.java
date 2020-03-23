@@ -120,22 +120,22 @@ public class BatchEvaluate {
 
 
     public static void main(String[] args) throws Exception {
-        String inputFile = "eval/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation_linking.json";
-        int nClients = 24;
+        String inputFile = "eval/wiki_random/wiki_random_annotation_linking.json";
+        int nClients = 32;
 
         MultiThreadedEvaluateClient client = new MultiThreadedEvaluateClient(inputFile, nClients);
         ExecutorService executorService = Executors.newFixedThreadPool(nClients);
-        PrintWriter out = new PrintWriter("eval/equity/dataset/AnnotatedTables-19092016/tune_results_0_new.tsv", "UTF-8");
+        PrintWriter out = new PrintWriter("eval/wiki_random/tmp_tune_results_ED+CA_indep_fixing_dynamic_type_penalty_qfact_coref.tsv", "UTF-8");
         out.println(header);
         ArrayList<Future> futures = new ArrayList<>();
 
-        for (double joint_weight = 0.1; joint_weight <= 1; joint_weight += 0.1)
-            for (double h_prior_weight = 0.35; h_prior_weight <= 0.85; h_prior_weight += 0.05)
-                for (double h_cooccur_weight = 0; h_cooccur_weight <= 0; h_cooccur_weight += 0.05)
-                    for (double h_context_weight = 0.1; h_context_weight <= Math.min(0.65, 1 - h_prior_weight - h_cooccur_weight); h_context_weight += 0.05)
-                        for (int l_ntop_related : Arrays.asList(1, 3, 5, 7))
-                            for (double l_context_weight : Arrays.asList(0.9))
-                                for (double l_type_penalty : Arrays.asList(0.9, 0.95, 1.0)) {
+        for (double l_type_penalty = 0; l_type_penalty <= 0.25; l_type_penalty += 0.05)
+            for (int l_ntop_related : Arrays.asList(5, 10, 15, 20))
+                for (double l_context_weight : Arrays.asList(0.9))
+                    for (double joint_weight = 0.9; joint_weight <= 1; joint_weight += 0.1)
+                        for (double h_prior_weight = 0.35; h_prior_weight <= 0.5; h_prior_weight += 0.05)
+                            for (double h_cooccur_weight = 0; h_cooccur_weight <= 0; h_cooccur_weight += 0.05)
+                                for (double h_context_weight = 0.5; h_context_weight <= 1 - h_prior_weight - h_cooccur_weight; h_context_weight += 0.05) {
                                     double final_joint_weight = joint_weight;
                                     double final_h_prior_weight = h_prior_weight;
                                     double final_h_cooccur_weight = h_cooccur_weight;

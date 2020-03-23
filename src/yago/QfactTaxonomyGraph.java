@@ -18,20 +18,23 @@ import java.util.stream.Collectors;
 
 public class QfactTaxonomyGraph extends TaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(QfactTaxonomyGraph.class.getName());
-    public static final String DEFAULT_QFACT_FILE = "non-deep/qfact_text.gz";
+    public static final boolean DEBUG = true;
+    public static final String DEFAULT_QFACT_FILE = "non-deep/qfact_text_coref.gz";
 
     public static int DEFAULT_RELATED_ENTITY_DIST_LIM = 4;
+    // TODO: Fix this weight
     public static int NTOP_RELATED_ENTITY = 5;
     public static double QFACT_CONTEXT_MATCH_WEIGHT = 0.9; // quantity match weight = 1 - this weight.
 
     // TODO: Fix this weight
-    public static double TYPE_RELATED_PENALTY_WEIGHT = 0.9;
+    public static double TYPE_RELATED_PENALTY_WEIGHT = 0;
 
     public class EntityTextQfact {
         ArrayList<String> context;
         Quantity quantity;
         String sentence;
         String source;
+        String referSentence;
     }
 
     private ArrayList<EntityTextQfact>[] entityQfactLists;
@@ -67,8 +70,11 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             qfact.context = NLP.splitSentence(arr[1].toLowerCase());
             qfact.context.trimToSize();
 
-            qfact.sentence = arr[3];
-            qfact.source = arr[4];
+            if (DEBUG) {
+                qfact.sentence = arr[3];
+                qfact.source = arr[4];
+                qfact.referSentence = arr[5];
+            }
 
             entityQfactLists[entityId].add(qfact);
         }
@@ -178,7 +184,8 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT + quantityMatchScr * (1 - QFACT_CONTEXT_MATCH_WEIGHT);
                 if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
                     singleEntityResult.first = matchScr;
-                    singleEntityResult.second = entity + "\t" + o.sentence + "\t" + o.source;
+                    singleEntityResult.second =
+                            String.format("%s\t%s\t%s\t%s", entity, o.sentence, o.source, o.referSentence);
                 }
             }
             queue.enqueue(singleEntityResult);
@@ -186,6 +193,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         // match related entities
         HashMap<Integer, Double> relatedEntities = getSimilarEntityIdsWithQfact(entityId);
         if (relatedEntities != null) {
+            double itfScalingFactor = Math.log10((nEntities - 0.5) / 1.5);
             for (Map.Entry<Integer, Double> p : relatedEntities.entrySet()) { // contains eId & itf
                 qfacts = entityQfactLists[p.getKey()];
 
@@ -203,7 +211,8 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                         double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT;
                         if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
                             singleEntityResult.first = matchScr;
-                            singleEntityResult.second = id2Entity.get(p.getKey()) + "\t" + o.sentence + "\t" + o.source;
+                            singleEntityResult.second =
+                                    String.format("%s\t%s\t%s\t%s", id2Entity.get(p.getKey()), o.sentence, o.source, o.referSentence);
                         }
                     }
                     if (key >= 0) {
@@ -214,8 +223,8 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 // clone IMPORTANT!
                 singleEntityResult = new Pair<>(singleEntityResult.first, singleEntityResult.second);
 
-                // TODO: scaling for type-related matching
-                singleEntityResult.first *= Math.pow(1 - 1 / p.getValue(), TYPE_RELATED_PENALTY_WEIGHT);
+                // penalty for type-related matching
+                singleEntityResult.first *= Math.pow(p.getValue() / itfScalingFactor, TYPE_RELATED_PENALTY_WEIGHT);
                 queue.enqueue(singleEntityResult);
                 // sum of top 3 related entities
                 if (queue.size() > NTOP_RELATED_ENTITY) {
