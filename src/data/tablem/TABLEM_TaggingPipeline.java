@@ -2,38 +2,48 @@ package data.tablem;
 
 import com.google.gson.Gson;
 import model.table.Table;
-import pipeline.*;
+import pipeline.TaggingPipeline;
 import util.FileUtils;
 import util.SelfMonitor;
+import util.hadoop.String2StringMap;
 
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.List;
 
-public class TABLEM_TaggingPipeline {
+public class TABLEM_TaggingPipeline implements String2StringMap {
+    TaggingPipeline pipeline = TaggingPipeline.getAnnotationPipeline();
+    Gson gson = new Gson();
 
     // Args: <input> <output>
     public static void main(String[] args) {
-//        args = "/GW/D5data-10/hvthinh/BriQ-TableM/health_combined.gz /GW/D5data-11/hvthinh/TABLEM/health_combined.out.gz".split("\\s++");
-
-        TaggingPipeline pipeline = TaggingPipeline.getAnnotationPipeline();
         PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
         FileUtils.LineStream stream = FileUtils.getLineStream(args[0], "UTF-8");
 
-        Gson gson = new Gson();
+        TABLEM_TaggingPipeline p = new TABLEM_TaggingPipeline();
 
         SelfMonitor m = new SelfMonitor(TABLEM_TaggingPipeline.class.getName(), -1, 60);
         m.start();
         for (String line : stream) {
             m.incAndGet();
-            Table table = TABLEM.parseFromJSON(line);
-            if (table == null) {
+            List<String> result = p.map(line);
+            if (result == null) {
                 continue;
             }
-            if (!pipeline.tag(table)) {
-                continue;
+            for (String r : result) {
+                out.println(r);
             }
-            out.println(gson.toJson(table));
         }
         m.forceShutdown();
         out.close();
+    }
+
+    @Override
+    public List<String> map(String input) {
+        Table table = TABLEM.parseFromJSON(input);
+        if (table == null || !pipeline.tag(table)) {
+            return null;
+        }
+        return Arrays.asList(gson.toJson(table));
     }
 }
