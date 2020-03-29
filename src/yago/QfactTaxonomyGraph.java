@@ -182,7 +182,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT + quantityMatchScr * (1 - QFACT_CONTEXT_MATCH_WEIGHT);
                 if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
                     singleEntityResult.first = matchScr;
-                    singleEntityResult.second = DEBUG == false ? null :
+                    singleEntityResult.second = DEBUG == false ? "<OMITTED>" :
                             String.format("%s\t%s\t%s\t%s", entity, o.sentence, o.source, o.referSentence);
                 }
             }
@@ -209,7 +209,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                         double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT;
                         if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
                             singleEntityResult.first = matchScr;
-                            singleEntityResult.second = DEBUG == false ? null :
+                            singleEntityResult.second = DEBUG == false ? "<OMITTED>" :
                                     String.format("%s\t%s\t%s\t%s", id2Entity.get(p.getKey()), o.sentence, o.source, o.referSentence);
                         }
                     }
