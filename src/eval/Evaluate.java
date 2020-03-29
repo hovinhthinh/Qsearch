@@ -92,17 +92,10 @@ public class Evaluate {
 
         for (String line : FileUtils.getLineStream(inputFile, "UTF-8")) {
             TruthTable table = gson.fromJson(line, TruthTable.class);
-//            table.linkQuantitiesInTableAndText();
-//            double qtFoundRate = table.getRateOfTableQuantitiesFoundInText();
-//            reporter.recordAverage("rateQtFoundRateInText", qtFoundRate);
-//            reporter.recordAverage("macroPrecCAHeaderEmbedding", table.getAlignmentPrecisionFromHeaderEmbedding());
-//            reporter.recordAverage("macroPrecCAColumnEmbedding", table.getAlignmentPrecisionFromColumnEmbedding());
-//            reporter.recordAverage("macroPrecCAColumnJaccardIndex", table.getAlignmentPrecisionFromColumnJaccardIndex());
 
             System.out.println("--- Original ---");
             System.out.println("- URL: " + table.source);
             System.out.println("- Title: " + table.pageTitle);
-//            System.out.println("- Content: \r\n" + table.surroundingTextAsParagraph.toStringWithNewlineAfterSentences());
             System.out.println("- Caption: " + table.caption);
             System.out.println(table.getTableContentPrintable(false, true, false, false));
             System.out.println("--- Ground Truth ---");
@@ -153,7 +146,6 @@ public class Evaluate {
             }
             System.out.println(String.format("precEntityDisambiguation: Prior/Ours: %.2f/%.2f", precEDPrior * 100, precEDOurs * 100));
             System.out.println(String.format("precColumnAlignment: FirstColumn/FirstEntityColumn/Ours: %.2f/%.2f/%.2f", precCAFirstColumn * 100, precCAFirstEntityColumn * 100, precCAOurs * 100));
-//            System.out.println(String.format("qtFoundRateInText: %.2f", qtFoundRate));
             System.out.println("========================================================================================================================================================================================================");
             ++nGoodTable;
 
