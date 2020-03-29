@@ -72,7 +72,7 @@ public class ParallelMapClient {
                 PART_OUTPUT_STREAM ? args[4] : null, PART_ERROR_STREAM ? args[4] : null);
 
         FileUtils.LineStream in = FileUtils.getLineStream(args[3], "UTF-8");
-        PrintWriter out = new PrintWriter(args[4], "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter(args[4], "UTF-8");
 
         SelfMonitor m = new SelfMonitor(ParallelMapClient.class.getName() + ":" + args[2], -1, 60);
         m.start();
