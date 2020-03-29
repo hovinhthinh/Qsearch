@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class QfactTaxonomyGraph extends TaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(QfactTaxonomyGraph.class.getName());
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     public static final String DEFAULT_QFACT_FILE = "non-deep/qfact_text_coref.gz";
 
     public static int DEFAULT_RELATED_ENTITY_DIST_LIM = 4;
@@ -182,7 +182,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT + quantityMatchScr * (1 - QFACT_CONTEXT_MATCH_WEIGHT);
                 if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
                     singleEntityResult.first = matchScr;
-                    singleEntityResult.second =
+                    singleEntityResult.second = DEBUG == false ? null :
                             String.format("%s\t%s\t%s\t%s", entity, o.sentence, o.source, o.referSentence);
                 }
             }
@@ -209,7 +209,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                         double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT;
                         if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
                             singleEntityResult.first = matchScr;
-                            singleEntityResult.second =
+                            singleEntityResult.second = DEBUG == false ? null :
                                     String.format("%s\t%s\t%s\t%s", id2Entity.get(p.getKey()), o.sentence, o.source, o.referSentence);
                         }
                     }
