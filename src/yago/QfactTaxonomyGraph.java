@@ -224,7 +224,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 // penalty for type-related matching
                 singleEntityResult.first *= Math.pow(p.getValue() / itfScalingFactor, TYPE_RELATED_PENALTY_WEIGHT);
                 queue.enqueue(singleEntityResult);
-                // sum of top 3 related entities
+                // keep only top related entities
                 if (queue.size() > NTOP_RELATED_ENTITY) {
                     queue.dequeue();
                 }
