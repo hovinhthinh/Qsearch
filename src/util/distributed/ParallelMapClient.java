@@ -2,6 +2,7 @@ package util.distributed;
 
 import util.Concurrent;
 import util.FileUtils;
+import util.SelfMonitor;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -73,6 +74,8 @@ public class ParallelMapClient {
         FileUtils.LineStream in = FileUtils.getLineStream(args[3], "UTF-8");
         PrintWriter out = new PrintWriter(args[4], "UTF-8");
 
+        SelfMonitor m = new SelfMonitor(ParallelMapClient.class.getName() + ":" + args[2], -1, 60);
+        m.start();
         Concurrent.runAndWait(() -> {
             while (true) {
                 String input;
@@ -88,9 +91,10 @@ public class ParallelMapClient {
                         out.println(o);
                     }
                 }
+                m.incAndGet();
             }
         }, nClients);
-
+        m.forceShutdown();
         out.close();
         client.closeOutAndErrStreams();
         System.exit(0);
