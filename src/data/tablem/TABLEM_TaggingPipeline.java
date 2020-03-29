@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TABLEM_TaggingPipeline implements String2StringMap {
-    TaggingPipeline pipeline = TaggingPipeline.getAnnotationPipeline();
+    TaggingPipeline pipeline = TaggingPipeline.getDefaultTaggingPipeline();
     Gson gson = new Gson();
 
     // Args: <input> <output>
