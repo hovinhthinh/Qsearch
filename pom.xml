@@ -309,5 +309,26 @@
             <version>8.3.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.sweble.wikitext/swc-engine -->
+        <dependency>
+            <groupId>org.sweble.wikitext</groupId>
+            <artifactId>swc-engine</artifactId>
+            <version>3.1.9</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.sweble.wikitext/swc-dumpreader -->
+        <dependency>
+            <groupId>org.sweble.wikitext</groupId>
+            <artifactId>swc-dumpreader</artifactId>
+            <version>3.1.9</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.sweble.wikitext/swc-example-dumpcruncher -->
+        <dependency>
+            <groupId>org.sweble.wikitext</groupId>
+            <artifactId>swc-example-dumpcruncher</artifactId>
+            <version>3.1.9</version>
+        </dependency>
+
     </dependencies>
 </project>
