@@ -18,6 +18,7 @@
 package data.wikipedia.sweble;
 
 import de.fau.cs.osr.utils.WrappedException;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.sweble.wikitext.articlecruncher.Job;
 import org.sweble.wikitext.articlecruncher.Processor;
 import org.sweble.wikitext.engine.PageId;
@@ -31,13 +32,10 @@ import java.io.PrintWriter;
 public class RevisionProcessor implements Processor {
     private final DumpCruncher dumpCruncher;
     private final PrintWriter out;
-    private final Renderer renderer;
-
 
     public RevisionProcessor(DumpCruncher dumpCruncher, PrintWriter out) {
         this.dumpCruncher = dumpCruncher;
         this.out = out;
-        this.renderer = new Renderer();
     }
 
     @Override
@@ -65,10 +63,11 @@ public class RevisionProcessor implements Processor {
             EngProcessedPage cp = engine.postprocess(pageId, wikitext, null);
 
             // write to output
-            String str = (String) renderer.go(cp.getPage());
+            String output = String.format("%s\t%s",
+                    StringEscapeUtils.escapeJava(revJob.getPageTitle()),
+                    StringEscapeUtils.escapeJava(wikitext));
             synchronized (out) {
-                out.println(str);
-                out.flush();
+                out.println(output);
             }
 
             gui.processingFinished();
