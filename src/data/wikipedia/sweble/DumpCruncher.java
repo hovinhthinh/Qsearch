@@ -59,7 +59,6 @@ public class DumpCruncher {
     // =========================================================================
 
     private void run(String[] args) throws Throwable {
-        args = "--processing-workers 8 -d /local/home/hvthinh/datasets/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2 ".split(" ");
         if (!options(args))
             return;
 
@@ -82,7 +81,7 @@ public class DumpCruncher {
         nexus = new Nexus();
 
         final File dumpFile = new File(options.value("dump"));
-        final PrintWriter out = FileUtils.getPrintWriter(options.value("dump") + ".out.gz", "UTF-8");
+        final PrintWriter out = FileUtils.getPrintWriter(options.value("dump") + ".wikitext.gz", "UTF-8");
 
         nexus.setUp(
                 options.value("Nexus.InTrayCapacity", int.class),
