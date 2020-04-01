@@ -1,7 +1,6 @@
 package util.distributed;
 
 import org.json.JSONArray;
-import util.hadoop.String2StringMap;
 
 import java.util.List;
 import java.util.Scanner;

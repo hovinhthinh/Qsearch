@@ -5,7 +5,7 @@ import model.table.Table;
 import pipeline.TaggingPipeline;
 import util.FileUtils;
 import util.SelfMonitor;
-import util.hadoop.String2StringMap;
+import util.distributed.String2StringMap;
 
 import java.io.PrintWriter;
 import java.util.Arrays;

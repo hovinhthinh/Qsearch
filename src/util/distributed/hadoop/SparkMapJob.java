@@ -1,4 +1,4 @@
-package util.hadoop;
+package util.distributed.hadoop;
 
 import org.apache.hadoop.io.compress.BZip2Codec;
 import org.apache.hadoop.io.compress.GzipCodec;
@@ -6,6 +6,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
+import util.distributed.String2StringMap;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package util.hadoop;
+package util.distributed;
 
 import java.util.List;
 

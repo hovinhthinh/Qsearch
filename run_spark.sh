@@ -4,7 +4,7 @@
 mvn clean package
 
 spark-submit \
-    --class util.hadoop.SparkMapJob \
+    --class util.distributed.hadoop.SparkMapJob \
     --master yarn-cluster \
     --driver-memory 4G \
     --executor-memory 8G \
