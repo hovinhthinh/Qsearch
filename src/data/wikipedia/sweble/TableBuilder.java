@@ -62,18 +62,24 @@ public class TableBuilder {
         return res;
     }
 
+    public String getSimplePrint() {
+        StringBuilder sb = new StringBuilder();
+        Object[][] table = getTable();
+        for (Object[] r : table) {
+            for (Object c : r) {
+                sb.append(c.toString()).append("\t");
+            }
+            sb.append("\r\n");
+        }
+        return sb.toString();
+    }
+
     public static void main(String[] args) {
         TableBuilder builder = new TableBuilder();
         builder.addHtmlCell(0, 0, 2, 2, "SPAN_1");
         builder.addHtmlCell(0, 1, "SPAN_2");
         builder.addHtmlCell(1, 0, 2, 1, "SPAN_3");
         builder.addHtmlCell(2, 0, 1, 2, "SPAN_4");
-        Object[][] table = builder.getTable();
-        for (Object[] r : table) {
-            for (Object c : r) {
-                System.out.print(c + "\t");
-            }
-            System.out.println();
-        }
+        System.out.println(builder.getSimplePrint());
     }
 }
