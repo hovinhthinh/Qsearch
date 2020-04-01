@@ -1,6 +1,7 @@
-package util.hadoop;
+package util.distributed;
 
 import org.json.JSONObject;
+import util.distributed.String2StringMap;
 
 import java.util.Arrays;
 import java.util.List;

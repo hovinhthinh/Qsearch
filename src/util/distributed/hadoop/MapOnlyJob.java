@@ -1,4 +1,4 @@
-package util.hadoop;
+package util.distributed.hadoop;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -11,6 +11,7 @@ import org.apache.hadoop.io.compress.GzipCodec;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+import util.distributed.String2StringMap;
 
 import java.io.IOException;
 import java.util.List;
