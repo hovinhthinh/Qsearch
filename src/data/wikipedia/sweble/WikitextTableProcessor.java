@@ -187,18 +187,23 @@ public class WikitextTableProcessor implements String2StringMap {
         }
         // sectionTitles
         StringBuilder sTitles = new StringBuilder();
+        WtSection lastSectionNode = null;
         for (WtNode node : XPathNodes) {
             if (node.getNodeName().equals("WtSection")) {
+                lastSectionNode = (WtSection) node;
                 if (sTitles.length() > 0) {
                     sTitles.append("\r\n");
                 }
                 sTitles.append(getAstText(((WtSection) node).getHeading()));
             }
         }
+        // sectionText
+        String sectionText = getPageText(lastSectionNode == null ? n : lastSectionNode.getBody());
 
         tables.add(new JSONObject()
                 .put("tableCaption", caption)
                 .put("sectionTitles", sTitles.toString())
+                .put("sectionText", sectionText)
                 .put("numHeaderRows", nHeaderRows)
                 .put("numDataRows", table.length - nHeaderRows)
                 .put("numCols", table[0].length)
@@ -324,7 +329,7 @@ public class WikitextTableProcessor implements String2StringMap {
         ArrayList<WtNode> textNodes = new ArrayList<>();
         WtNodeDeepVisitor.deepVisit(page, n -> {
             String nn = n.getNodeName();
-            if (nn.equals("WtParagraph")) {
+            if (nn.equals("WtParagraph") || nn.equals("WtHeading")) {
                 textNodes.add(n);
                 return false;
             }
@@ -334,8 +339,11 @@ public class WikitextTableProcessor implements String2StringMap {
 
         StringBuilder content = new StringBuilder();
         for (WtNode n : textNodes) {
-            content.append(getDisplayText(n).getString("text")).append("\r\n\r\n");
+            if (content.length() > 0) {
+                content.append("\r\n");
+            }
+            content.append(getDisplayText(n).getString("text"));
         }
-        return content.toString().replaceAll("(\\r\\n)++", "\r\n").trim();
+        return content.toString();
     }
 }
