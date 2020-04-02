@@ -58,7 +58,9 @@ class MultiThreadedMapClient {
     }
 }
 
-
+// TODO: create monitor for each individual thread.
+// TODO: handle error on each client.
+// TODO: write err directly to file in the client.
 public class ParallelMapClient {
     public static final boolean PART_OUTPUT_STREAM = false;
     public static final boolean PART_ERROR_STREAM = true;
