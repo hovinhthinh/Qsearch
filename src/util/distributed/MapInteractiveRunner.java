@@ -17,6 +17,7 @@ public class MapInteractiveRunner {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+        System.out.println();
         System.out.println(ON_READY);
         System.out.flush();
         Scanner in = new Scanner(System.in, "UTF-8");
@@ -30,6 +31,7 @@ public class MapInteractiveRunner {
                     arr.put(o);
                 }
             }
+            System.out.println();
             System.out.println(String.format("%s\t%s", ON_OUTPUT, arr.toString()));
             System.out.flush();
         }
