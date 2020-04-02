@@ -36,10 +36,13 @@ interface WtNodeDeepVisitor {
 }
 
 public class WikitextTableProcessor implements String2StringMap {
-    WikiConfig config = DefaultConfigEnWp.generate();
-    WtEngineImpl engine = new WtEngineImpl(config);
+    private WikiConfig config = DefaultConfigEnWp.generate();
+    private WtEngineImpl engine = new WtEngineImpl(config);
+
+    private ArrayList<JSONObject> tables = new ArrayList<>();
 
     public void beforeMap() {
+        tables.clear();
     }
 
     @Override
@@ -56,19 +59,22 @@ public class WikitextTableProcessor implements String2StringMap {
 
             EngProcessedPage cp = engine.postprocess(new PageId(PageTitle.make(config, pageTitle), -1), wikitext, null);
 
-            if (
-                    pageTitle.equals("List of governors of Alabama")
-            ) {
+            visitTables(cp, new Stack<>());
+
+            // TODO: populate page title & page content
+
+            if (pageTitle.equals("List of governors of Alabama")) {
 //                Wikitext2Html.renderToFile(pageTitle, wikitext, "Simple_Page.html");
-//                System.out.println(pageTitle);
 //                StringBuilder sb = new StringBuilder();
 //                debugNode(cp, sb, 0);
 //                System.out.println(sb);
 
-                visit(cp, new Stack<WtNode>());
-
+                for (JSONObject o : tables) {
+                    System.out.println(o);
+                }
                 System.exit(0);
             }
+
             return null;
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,7 +140,6 @@ public class WikitextTableProcessor implements String2StringMap {
                     }
                 }
 
-                // TODO: build cell content
                 JSONObject cellContent = getTablePartText(body);
 
                 builder.addHtmlCell(i, j, rowspan, colspan, cellContent);
@@ -150,12 +155,37 @@ public class WikitextTableProcessor implements String2StringMap {
             return;
         }
 
-        System.out.println(nHeaderRows);
-        System.out.println(caption);
-        System.out.println(builder.getSimplePrint());
+        Object[][] table = builder.getTable();
+        if (table.length == 0 || table[0].length == 0) {
+            return;
+        }
+
+        // populate header & body
+        JSONArray header = new JSONArray();
+        JSONArray body = new JSONArray();
+        for (int i = 0; i < table.length; ++i) {
+            JSONArray row = new JSONArray();
+            for (Object c : table[i]) {
+                row.put((JSONObject) c);
+            }
+            if (i < nHeaderRows) {
+                header.put(row);
+            } else {
+                body.put(row);
+            }
+        }
+
+
+        tables.add(new JSONObject()
+                .put("tableCaption", caption)
+                .put("numHeaderRows", nHeaderRows)
+                .put("numDataRows", table.length - nHeaderRows)
+                .put("numCols", table[0].length)
+                .put("tableHeaders", header)
+                .put("tableData", body));
     }
 
-    public void visit(WtNode n, Stack<WtNode> nodeStack) {
+    public void visitTables(WtNode n, Stack<WtNode> nodeStack) {
         String nn = n.getNodeName();
         if (nn.equals("WtTable")) {
             processWtTable(n);
@@ -164,7 +194,7 @@ public class WikitextTableProcessor implements String2StringMap {
         // Visit childs
         nodeStack.push(n);
         for (WtNode c : n) {
-            visit(c, nodeStack);
+            visitTables(c, nodeStack);
         }
         nodeStack.pop();
     }
