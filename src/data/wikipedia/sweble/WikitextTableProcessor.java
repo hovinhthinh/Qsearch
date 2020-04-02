@@ -64,11 +64,12 @@ public class WikitextTableProcessor implements String2StringMap {
                 return null;
             }
 
-            // title
+            String pageText = getPageText(cp);
+            // title & page text
             for (JSONObject o : tables) {
                 o.put("pgTitle", pageTitle);
+                o.put("pgText", pageText);
             }
-            // page content
 
             // TODO: populate page title & page content
 
@@ -91,7 +92,7 @@ public class WikitextTableProcessor implements String2StringMap {
         }
     }
 
-    public void processWtTable(WtNode n) {
+    public void processWtTable(WtNode n, Stack<WtNode> XPathNodes) {
         WtXmlAttributes tableAttrs = ((WtTable) n).getXmlAttributes();
         if (!tableAttrs.toString().contains("wikitable")) {
             return;
@@ -175,7 +176,7 @@ public class WikitextTableProcessor implements String2StringMap {
         for (int i = 0; i < table.length; ++i) {
             JSONArray row = new JSONArray();
             for (Object c : table[i]) {
-                row.put((JSONObject) c);
+                row.put(c);
             }
             if (i < nHeaderRows) {
                 header.put(row);
@@ -183,10 +184,20 @@ public class WikitextTableProcessor implements String2StringMap {
                 body.put(row);
             }
         }
-
+        // sectionTitles
+        StringBuilder sTitles = new StringBuilder();
+        for (WtNode node : XPathNodes) {
+            if (node.getNodeName().equals("WtSection")) {
+                if (sTitles.length() > 0) {
+                    sTitles.append("\r\n");
+                }
+                sTitles.append(getAstText(((WtSection)node).getHeading()));
+            }
+        }
 
         tables.add(new JSONObject()
                 .put("tableCaption", caption)
+                .put("sectionTitles", sTitles.toString())
                 .put("numHeaderRows", nHeaderRows)
                 .put("numDataRows", table.length - nHeaderRows)
                 .put("numCols", table[0].length)
@@ -197,7 +208,7 @@ public class WikitextTableProcessor implements String2StringMap {
     public void visitTables(WtNode n, Stack<WtNode> nodeStack) {
         String nn = n.getNodeName();
         if (nn.equals("WtTable")) {
-            processWtTable(n);
+            processWtTable(n, nodeStack);
             return;
         }
         // Visit childs
@@ -309,6 +320,25 @@ public class WikitextTableProcessor implements String2StringMap {
             surface = target;
         }
         return new Pair<>(target, surface);
+    }
+
+    public String getPageText(WtNode page) {
+        ArrayList<WtNode> textNodes = new ArrayList<>();
+        WtNodeDeepVisitor.deepVisit(page, (n) -> {
+            String nn = n.getNodeName();
+            if (nn.equals("WtParagraph")) {
+                textNodes.add(n);
+                return false;
+            }
+
+            return !nn.equals("WtTable") && !nn.equals("WtImageLink") && !n.equals("WtTemplate");
+        });
+
+        StringBuilder content = new StringBuilder();
+        for (WtNode n : textNodes) {
+            content.append(getDisplayText(n).getString("text")).append("\r\n\r\n");
+        }
+        return content.toString().replaceAll("(\\r\\n)++", "\r\n").trim();
     }
 
     public static void main(String[] args) {
