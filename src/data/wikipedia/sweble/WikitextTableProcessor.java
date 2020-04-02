@@ -156,8 +156,13 @@ public class WikitextTableProcessor implements String2StringMap {
                 builder.addHtmlCell(i, j, rowspan, colspan, cellContent);
             }
 
-            if (nHeaderCells == cols.size() && !bodyReached) {
-                ++nHeaderRows;
+            if (nHeaderCells == cols.size()) {
+                if (!bodyReached) {
+                    ++nHeaderRows;
+                } else {
+                    // Malformed table
+                    return;
+                }
             } else {
                 bodyReached = true;
             }
