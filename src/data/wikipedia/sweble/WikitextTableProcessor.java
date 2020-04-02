@@ -64,7 +64,7 @@ public class WikitextTableProcessor implements String2StringMap {
     public List<String> map(String input) {
         try {
             beforeMap();
-            String[] content = input.split("\t");
+            String[] content = input.split("\t", -1);
             String pageTitle = StringEscapeUtils.unescapeJava(content[0]),
                     wikitext = StringEscapeUtils.unescapeJava(content[1]);
             if (wikitext.startsWith("#REDIRECT") || !wikitext.contains("wikitable")) {
