@@ -23,9 +23,6 @@ import java.util.List;
 import java.util.Stack;
 
 interface WtNodeDeepVisitor {
-    // process node n, return true to continue to visit its children
-    boolean visit(WtNode n);
-
     static void deepVisit(WtNode n, WtNodeDeepVisitor callback) {
         if (callback.visit(n)) {
             for (WtNode c : n) {
@@ -33,6 +30,9 @@ interface WtNodeDeepVisitor {
             }
         }
     }
+
+    // process node n, return true to continue to visit its children
+    boolean visit(WtNode n);
 }
 
 public class WikitextTableProcessor implements String2StringMap {
@@ -40,6 +40,15 @@ public class WikitextTableProcessor implements String2StringMap {
     private WtEngineImpl engine = new WtEngineImpl(config);
 
     private ArrayList<JSONObject> tables = new ArrayList<>();
+
+    public static void main(String[] args) {
+        WikitextTableProcessor processor = new WikitextTableProcessor();
+        args = "/local/home/hvthinh/datasets/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.wikitext.gz".split(" ");
+
+        for (String line : FileUtils.getLineStream(args[0], "UTF-8")) {
+            processor.map(line);
+        }
+    }
 
     public void beforeMap() {
         tables.clear();
@@ -191,7 +200,7 @@ public class WikitextTableProcessor implements String2StringMap {
                 if (sTitles.length() > 0) {
                     sTitles.append("\r\n");
                 }
-                sTitles.append(getAstText(((WtSection)node).getHeading()));
+                sTitles.append(getAstText(((WtSection) node).getHeading()));
             }
         }
 
@@ -301,10 +310,7 @@ public class WikitextTableProcessor implements String2StringMap {
                 content.append(((WtXmlEntityRef) node).getResolved()).append(" ");
                 return false;
             }
-            if (nn.equals("WtImageLink") || nn.equals("WtTemplate") || nn.equals("WtXmlAttributes")) {
-                return false;
-            }
-            return true;
+            return !nn.equals("WtImageLink") && !nn.equals("WtTemplate") && !nn.equals("WtXmlAttributes");
         });
 
         return new JSONObject()
@@ -339,14 +345,5 @@ public class WikitextTableProcessor implements String2StringMap {
             content.append(getDisplayText(n).getString("text")).append("\r\n\r\n");
         }
         return content.toString().replaceAll("(\\r\\n)++", "\r\n").trim();
-    }
-
-    public static void main(String[] args) {
-        WikitextTableProcessor processor = new WikitextTableProcessor();
-        args = "/local/home/hvthinh/datasets/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.wikitext.gz".split(" ");
-
-        for (String line : FileUtils.getLineStream(args[0], "UTF-8")) {
-            processor.map(line);
-        }
     }
 }
