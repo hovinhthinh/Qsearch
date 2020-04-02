@@ -1,7 +1,6 @@
 package util.distributed;
 
 import org.json.JSONObject;
-import util.distributed.String2StringMap;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,6 +8,9 @@ import java.util.List;
 public class TestMap implements String2StringMap {
     @Override
     public List<String> map(String input) {
-        return Arrays.asList(new JSONObject().put("input", input).toString());
+        String o1 = new JSONObject().put("input", input).toString();
+        String o2 = new JSONObject().put("input_repeated", input).toString();
+        System.err.println(o1);
+        return Arrays.asList(o1, o2);
     }
 }
