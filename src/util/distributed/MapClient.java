@@ -11,14 +11,18 @@ class MapClient {
     private BufferedReader in = null, err = null;
     private PrintWriter out = null;
     private Process p = null;
-    private PrintWriter outStream = null, errStream = null;
+    private PrintWriter outStream = null;
 
     // String2StringMap
-    public MapClient(String String2StringMapClass, String memorySpecs, PrintWriter outStream, PrintWriter errStream) {
+    public MapClient(String String2StringMapClass, String memorySpecs, PrintWriter outStream, String errPath) {
         this.outStream = outStream;
-        this.errStream = errStream;
         try {
-            String mainCmd = String.format("./run_no_notification.sh %s util.distributed.MapInteractiveRunner %s", memorySpecs, String2StringMapClass);
+            String mainCmd =
+                    String.format("./run_no_notification.sh %s util.distributed.MapInteractiveRunner %s 2>%s",
+                            memorySpecs,
+                            String2StringMapClass,
+                            errPath == null ? "/dev/null" : errPath
+                    );
             String[] cmd = new String[]{
                     "/bin/sh", "-c",
                     mainCmd
@@ -28,20 +32,6 @@ class MapClient {
             p = pb.start();
             in = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(p.getOutputStream(), StandardCharsets.UTF_8)));
-
-            err = new BufferedReader(new InputStreamReader(p.getErrorStream(), StandardCharsets.UTF_8));
-            new Thread(() -> {
-                try {
-                    String str;
-                    while ((str = err.readLine()) != null) {
-                        if (errStream != null) {
-                            errStream.println(str);
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
 
             String str;
             do {
@@ -103,10 +93,6 @@ class MapClient {
     public void closeOutAndErrStreams() {
         try {
             outStream.close();
-        } catch (Exception e) {
-        }
-        try {
-            errStream.close();
         } catch (Exception e) {
         }
     }
