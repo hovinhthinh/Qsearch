@@ -24,9 +24,8 @@ class MultiThreadedMapClient {
             futureClients.add(service.submit(() -> {
                 PrintWriter outStream = outStreamPrefix == null ? null : FileUtils.getPrintWriter(
                         String.format("%s.part%03d.out", outStreamPrefix, finalI), "UTF-8");
-                PrintWriter errStream = errStreamPrefix == null ? null : FileUtils.getPrintWriter(
-                        String.format("%s.part%03d.err", errStreamPrefix, finalI), "UTF-8");
-                return new MapClient(String2StringMapClass, memorySpecs, outStream, errStream);
+                String errPath = errStreamPrefix == null ? null : String.format("%s.part%03d.err", errStreamPrefix, finalI);
+                return new MapClient(String2StringMapClass, memorySpecs, outStream, errPath);
             }));
         }
         try {
@@ -60,7 +59,6 @@ class MultiThreadedMapClient {
 
 // TODO: create monitor for each individual thread.
 // TODO: handle error on each client.
-// TODO: write err directly to file in the client.
 public class ParallelMapClient {
     public static final boolean PART_OUTPUT_STREAM = false;
     public static final boolean PART_ERROR_STREAM = true;
