@@ -56,10 +56,19 @@ public class WikitextTableProcessor implements String2StringMap {
                 return null;
             }
 
-
             EngProcessedPage cp = engine.postprocess(new PageId(PageTitle.make(config, pageTitle), -1), wikitext, null);
 
             visitTables(cp, new Stack<>());
+
+            if (tables.size() == 0) {
+                return null;
+            }
+
+            // title
+            for (JSONObject o : tables) {
+                o.put("pgTitle", pageTitle);
+            }
+            // page content
 
             // TODO: populate page title & page content
 
@@ -97,7 +106,7 @@ public class WikitextTableProcessor implements String2StringMap {
         List<WtNode> captionNode = getSubNodeList(n, false, "WtTableCaption");
         if (captionNode.size() > 0) {
             WtTableCaption cn = (WtTableCaption) captionNode.get(0);
-            caption = getTablePartText(cn.getBody()).getString("text");
+            caption = getDisplayText(cn.getBody()).getString("text");
         }
         // table
         ArrayList<WtNode> rows = getSubNodeList(n, false, "WtTableRow");
@@ -140,7 +149,7 @@ public class WikitextTableProcessor implements String2StringMap {
                     }
                 }
 
-                JSONObject cellContent = getTablePartText(body);
+                JSONObject cellContent = getDisplayText(body);
 
                 builder.addHtmlCell(i, j, rowspan, colspan, cellContent);
             }
@@ -256,8 +265,8 @@ public class WikitextTableProcessor implements String2StringMap {
         return NLP.stripSentence(text.toString());
     }
 
-    // content of table part (text + entity links), apply for WtTableHeader & WtTableCell & WtTableCaption
-    public JSONObject getTablePartText(WtNode n) {
+    // content of display text (text + entity links), apply for WtTableHeader & WtTableCell & WtTableCaption, ...
+    public JSONObject getDisplayText(WtNode n) {
         JSONArray entityLinks = new JSONArray();
         StringBuilder content = new StringBuilder();
 
