@@ -83,13 +83,20 @@ public class WikitextTableProcessor implements String2StringMap {
         // Content of table
         TableBuilder builder = new TableBuilder();
         int nHeaderRows = 0;
-        StringBuilder caption = new StringBuilder();
+        String caption = "";
 
-        ArrayList<WtNode> rows = getListSubNode(n, false, "WtTableRow");
+        // caption
+        List<WtNode> captionNode = getSubNodeList(n, false, "WtTableCaption");
+        if (captionNode.size() > 0) {
+            WtTableCaption cn = (WtTableCaption) captionNode.get(0);
+            caption = getTablePartText(cn.getBody());
+        }
+        // table
+        ArrayList<WtNode> rows = getSubNodeList(n, false, "WtTableRow");
         boolean bodyReached = false;
         for (int i = 0; i < rows.size(); ++i) {
             WtNode r = rows.get(i);
-            ArrayList<WtNode> cols = getListSubNode(r, false, "WtTableHeader", "WtTableCell");
+            ArrayList<WtNode> cols = getSubNodeList(r, false, "WtTableHeader", "WtTableCell");
             int nHeaderCells = 0;
             for (int j = 0; j < cols.size(); ++j) {
                 WtNode c = cols.get(j);
@@ -125,10 +132,10 @@ public class WikitextTableProcessor implements String2StringMap {
                     }
                 }
 
-                // TODO: build content
-                String content = getCellText(body);
+                // TODO: build cell content
+                String cellContent = getTablePartText(body);
 
-                builder.addHtmlCell(i, j, rowspan, colspan, content);
+                builder.addHtmlCell(i, j, rowspan, colspan, cellContent);
             }
 
             if (nHeaderCells == cols.size() && !bodyReached) {
@@ -140,8 +147,10 @@ public class WikitextTableProcessor implements String2StringMap {
         if (builder.hasDuplicatedNode() || builder.hasBlankNode()) {
             return;
         }
+
+
         System.out.println(nHeaderRows);
-        System.out.println(caption.toString());
+        System.out.println(caption);
         System.out.println(builder.getSimplePrint());
     }
 
@@ -186,7 +195,7 @@ public class WikitextTableProcessor implements String2StringMap {
         }
     }
 
-    public ArrayList<WtNode> getListSubNode(WtNode n, boolean visitOnMatch, String... subNodeNames) {
+    public ArrayList<WtNode> getSubNodeList(WtNode n, boolean visitOnMatch, String... subNodeNames) {
         ArrayList<WtNode> subNodes = new ArrayList<>();
         WtNodeDeepVisitor.deepVisit(n, (node) -> {
             for (String snn : subNodeNames) {
@@ -216,8 +225,8 @@ public class WikitextTableProcessor implements String2StringMap {
         return NLP.stripSentence(text.toString());
     }
 
-    // content of table cell
-    public String getCellText(WtNode n) {
+    // content of table cell, apply for WtTableHeader & WtTableCell & WtTableCaption
+    public String getTablePartText(WtNode n) {
         StringBuilder content = new StringBuilder();
 
         WtNodeDeepVisitor.deepVisit(n, (node) -> {
@@ -234,7 +243,7 @@ public class WikitextTableProcessor implements String2StringMap {
                 content.append(((WtXmlEntityRef) node).getResolved()).append(" ");
                 return false;
             }
-            if (nn.equals("WtImageLink") || nn.equals("WtTemplate")) {
+            if (nn.equals("WtImageLink") || nn.equals("WtTemplate") || nn.equals("WtXmlAttributes")) {
                 return false;
             }
             return true;
