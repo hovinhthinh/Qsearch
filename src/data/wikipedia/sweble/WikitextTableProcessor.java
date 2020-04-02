@@ -3,6 +3,8 @@ package data.wikipedia.sweble;
 import de.fau.cs.osr.utils.StringTools;
 import nlp.NLP;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.sweble.wikitext.engine.PageId;
 import org.sweble.wikitext.engine.PageTitle;
 import org.sweble.wikitext.engine.WtEngineImpl;
@@ -89,7 +91,7 @@ public class WikitextTableProcessor implements String2StringMap {
         List<WtNode> captionNode = getSubNodeList(n, false, "WtTableCaption");
         if (captionNode.size() > 0) {
             WtTableCaption cn = (WtTableCaption) captionNode.get(0);
-            caption = getTablePartText(cn.getBody());
+            caption = getTablePartText(cn.getBody()).getString("text");
         }
         // table
         ArrayList<WtNode> rows = getSubNodeList(n, false, "WtTableRow");
@@ -133,7 +135,7 @@ public class WikitextTableProcessor implements String2StringMap {
                 }
 
                 // TODO: build cell content
-                String cellContent = getTablePartText(body);
+                JSONObject cellContent = getTablePartText(body);
 
                 builder.addHtmlCell(i, j, rowspan, colspan, cellContent);
             }
@@ -147,7 +149,6 @@ public class WikitextTableProcessor implements String2StringMap {
         if (builder.hasDuplicatedNode() || builder.hasBlankNode()) {
             return;
         }
-
 
         System.out.println(nHeaderRows);
         System.out.println(caption);
@@ -225,8 +226,9 @@ public class WikitextTableProcessor implements String2StringMap {
         return NLP.stripSentence(text.toString());
     }
 
-    // content of table cell, apply for WtTableHeader & WtTableCell & WtTableCaption
-    public String getTablePartText(WtNode n) {
+    // content of table part (text + entity links), apply for WtTableHeader & WtTableCell & WtTableCaption
+    public JSONObject getTablePartText(WtNode n) {
+        JSONArray entityLinks = new JSONArray();
         StringBuilder content = new StringBuilder();
 
         WtNodeDeepVisitor.deepVisit(n, (node) -> {
@@ -236,7 +238,13 @@ public class WikitextTableProcessor implements String2StringMap {
                 return false;
             }
             if (nn.equals("WtInternalLink")) {
-                content.append(getInternalLinkContent((WtInternalLink) node).second).append(" ");
+                Pair<String, String> link = getInternalLinkContent((WtInternalLink) node);
+                content.append(link.second).append(" ");
+                entityLinks.put(new JSONObject()
+                        .put("linkType", "INTERNAL")
+                        .put("surface", NLP.stripSentence(link.second))
+                        .put("target", new JSONObject().put("title", link.first.replace(' ', '_')))
+                );
                 return false;
             }
             if (nn.equals("WtXmlEntityRef")) {
@@ -249,7 +257,9 @@ public class WikitextTableProcessor implements String2StringMap {
             return true;
         });
 
-        return NLP.stripSentence(content.toString());
+        return new JSONObject()
+                .put("text", NLP.stripSentence(content.toString()))
+                .put("surfaceLinks", entityLinks);
     }
 
     // return Pair <target, surface>
