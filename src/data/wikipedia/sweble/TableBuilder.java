@@ -7,11 +7,36 @@ public class TableBuilder {
 
     private HashMap<String, Object> contentMap;
 
-    public boolean duplicated;
+    private boolean duplicated;
 
     public TableBuilder() {
         contentMap = new HashMap<>();
         duplicated = false;
+    }
+
+    public static void main(String[] args) {
+        TableBuilder builder = new TableBuilder();
+        builder.addHtmlCell(0, 0, 2, 2, "SPAN_1");
+        builder.addHtmlCell(0, 1, "SPAN_2");
+        builder.addHtmlCell(1, 0, 2, 1, "SPAN_3");
+        builder.addHtmlCell(2, 0, 1, 2, "SPAN_4");
+        System.out.println(builder.getSimplePrint());
+    }
+
+    public boolean hasDuplicatedNode() {
+        return duplicated;
+    }
+
+    public boolean hasBlankNode() {
+        Object[][] table = getTable();
+        for (Object[] r : table) {
+            for (Object c : r) {
+                if (c == null) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void addHtmlCell(int htmlRowIndex, int htmlColIndex, int rowSpan, int colSpan, Object value) {
@@ -72,14 +97,5 @@ public class TableBuilder {
             sb.append("\r\n");
         }
         return sb.toString();
-    }
-
-    public static void main(String[] args) {
-        TableBuilder builder = new TableBuilder();
-        builder.addHtmlCell(0, 0, 2, 2, "SPAN_1");
-        builder.addHtmlCell(0, 1, "SPAN_2");
-        builder.addHtmlCell(1, 0, 2, 1, "SPAN_3");
-        builder.addHtmlCell(2, 0, 1, 2, "SPAN_4");
-        System.out.println(builder.getSimplePrint());
     }
 }
