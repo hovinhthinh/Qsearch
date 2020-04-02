@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 interface WtNodeDeepVisitor {
     static void deepVisit(WtNode n, WtNodeDeepVisitor callback) {
@@ -46,7 +47,12 @@ public class WikitextTableProcessor implements String2StringMap {
         args = "/local/home/hvthinh/datasets/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.wikitext.gz".split(" ");
 
         for (String line : FileUtils.getLineStream(args[0], "UTF-8")) {
-            processor.map(line);
+            List<String> tables = processor.map(line);
+            if (tables != null) {
+                for (String t : tables) {
+                    System.out.println(t);
+                }
+            }
         }
     }
 
@@ -80,21 +86,7 @@ public class WikitextTableProcessor implements String2StringMap {
                 o.put("pgText", pageText);
             }
 
-            // TODO: populate page title & page content
-
-            if (pageTitle.equals("List of governors of Alabama")) {
-//                Wikitext2Html.renderToFile(pageTitle, wikitext, "Simple_Page.html");
-//                StringBuilder sb = new StringBuilder();
-//                debugNode(cp, sb, 0);
-//                System.out.println(sb);
-
-                for (JSONObject o : tables) {
-                    System.out.println(o);
-                }
-                System.exit(0);
-            }
-
-            return null;
+            return tables.stream().map(t -> t.toString()).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -257,7 +249,7 @@ public class WikitextTableProcessor implements String2StringMap {
 
     public ArrayList<WtNode> getSubNodeList(WtNode n, boolean visitOnMatch, String... subNodeNames) {
         ArrayList<WtNode> subNodes = new ArrayList<>();
-        WtNodeDeepVisitor.deepVisit(n, (node) -> {
+        WtNodeDeepVisitor.deepVisit(n, node -> {
             for (String snn : subNodeNames) {
                 if (node.getNodeName().equals(snn)) {
                     subNodes.add(node);
@@ -273,7 +265,7 @@ public class WikitextTableProcessor implements String2StringMap {
     public String getAstText(WtNode n) {
         StringBuilder text = new StringBuilder();
 
-        WtNodeDeepVisitor.deepVisit(n, (node) -> {
+        WtNodeDeepVisitor.deepVisit(n, node -> {
             String nn = node.getNodeName();
             if (nn.equals("WtText")) {
                 text.append(((WtText) node).getContent()).append(" ");
@@ -290,7 +282,7 @@ public class WikitextTableProcessor implements String2StringMap {
         JSONArray entityLinks = new JSONArray();
         StringBuilder content = new StringBuilder();
 
-        WtNodeDeepVisitor.deepVisit(n, (node) -> {
+        WtNodeDeepVisitor.deepVisit(n, node -> {
             String nn = node.getNodeName();
             if (nn.equals("WtText")) {
                 content.append(((WtText) node).getContent()).append(" ");
@@ -330,7 +322,7 @@ public class WikitextTableProcessor implements String2StringMap {
 
     public String getPageText(WtNode page) {
         ArrayList<WtNode> textNodes = new ArrayList<>();
-        WtNodeDeepVisitor.deepVisit(page, (n) -> {
+        WtNodeDeepVisitor.deepVisit(page, n -> {
             String nn = n.getNodeName();
             if (nn.equals("WtParagraph")) {
                 textNodes.add(n);
