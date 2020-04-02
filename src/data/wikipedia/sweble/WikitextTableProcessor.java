@@ -1,6 +1,7 @@
 package data.wikipedia.sweble;
 
 import de.fau.cs.osr.utils.StringTools;
+import nlp.NLP;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.sweble.wikitext.engine.PageId;
 import org.sweble.wikitext.engine.PageTitle;
@@ -11,9 +12,11 @@ import org.sweble.wikitext.engine.utils.DefaultConfigEnWp;
 import org.sweble.wikitext.parser.nodes.*;
 import org.sweble.wikitext.parser.utils.StringConversionException;
 import util.FileUtils;
+import util.Pair;
 import util.distributed.String2StringMap;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -76,19 +79,29 @@ public class WikitextTableProcessor implements String2StringMap {
         if (!tableAttrs.toString().contains("wikitable")) {
             return;
         }
-        
+
+        // Content of table
         TableBuilder builder = new TableBuilder();
+        int nHeaderRows = 0;
+        StringBuilder caption = new StringBuilder();
+
         ArrayList<WtNode> rows = getListSubNode(n, false, "WtTableRow");
+        boolean bodyReached = false;
         for (int i = 0; i < rows.size(); ++i) {
             WtNode r = rows.get(i);
             ArrayList<WtNode> cols = getListSubNode(r, false, "WtTableHeader", "WtTableCell");
+            int nHeaderCells = 0;
             for (int j = 0; j < cols.size(); ++j) {
                 WtNode c = cols.get(j);
                 WtXmlAttributes attrs;
+                WtBody body;
                 if (c.getNodeName().equals("WtTableHeader")) {
+                    ++nHeaderCells;
                     attrs = ((WtTableHeader) c).getXmlAttributes();
+                    body = ((WtTableHeader) c).getBody();
                 } else {
                     attrs = ((WtTableCell) c).getXmlAttributes();
+                    body = ((WtTableCell) c).getBody();
                 }
 
                 int rowspan = 1, colspan = 1;
@@ -113,20 +126,23 @@ public class WikitextTableProcessor implements String2StringMap {
                 }
 
                 // TODO: build content
-                String content = "CELL";
-//                try {
-//                    content = config.getAstTextUtils().astToText();
-//                } catch (StringConversionException var3) {
-//                }
+                String content = getCellText(body);
 
                 builder.addHtmlCell(i, j, rowspan, colspan, content);
+            }
+
+            if (nHeaderCells == cols.size() && !bodyReached) {
+                ++nHeaderRows;
+            } else {
+                bodyReached = true;
             }
         }
         if (builder.hasDuplicatedNode() || builder.hasBlankNode()) {
             return;
         }
+        System.out.println(nHeaderRows);
+        System.out.println(caption.toString());
         System.out.println(builder.getSimplePrint());
-
     }
 
     public void visit(WtNode n, Stack<WtNode> nodeStack) {
@@ -148,10 +164,12 @@ public class WikitextTableProcessor implements String2StringMap {
             sb.append("\t");
         }
         sb.append(n.getNodeName());
-        if (n.getNodeName().equals("WtXmlAttributes")) {
-            sb.append(" : ").append(n.toString());
-            sb.append("\r\n");
-        } else if (n.getNodeName().equals("WtInternalLink")) {
+        List<String> fullPrintNodes = Arrays.asList(
+                "WtXmlAttributes",
+                "WtInternalLink",
+                "WtXmlElement",
+                "WtXmlEntityRef");
+        if (fullPrintNodes.contains(n.getNodeName())) {
             sb.append(" : ").append(n.toString());
             sb.append("\r\n");
         } else if (n.getNodeName().equals("WtUrl")) {
@@ -180,6 +198,59 @@ public class WikitextTableProcessor implements String2StringMap {
             return true;
         });
         return subNodes;
+    }
+
+    // concat content of all WtText sub nodes
+    public String getAstText(WtNode n) {
+        StringBuilder text = new StringBuilder();
+
+        WtNodeDeepVisitor.deepVisit(n, (node) -> {
+            String nn = node.getNodeName();
+            if (nn.equals("WtText")) {
+                text.append(((WtText) node).getContent()).append(" ");
+                return false;
+            }
+            return true;
+        });
+
+        return NLP.stripSentence(text.toString());
+    }
+
+    // content of table cell
+    public String getCellText(WtNode n) {
+        StringBuilder content = new StringBuilder();
+
+        WtNodeDeepVisitor.deepVisit(n, (node) -> {
+            String nn = node.getNodeName();
+            if (nn.equals("WtText")) {
+                content.append(((WtText) node).getContent()).append(" ");
+                return false;
+            }
+            if (nn.equals("WtInternalLink")) {
+                content.append(getInternalLinkContent((WtInternalLink) node).second).append(" ");
+                return false;
+            }
+            if (nn.equals("WtXmlEntityRef")) {
+                content.append(((WtXmlEntityRef) node).getResolved()).append(" ");
+                return false;
+            }
+            if (nn.equals("WtImageLink") || nn.equals("WtTemplate")) {
+                return false;
+            }
+            return true;
+        });
+
+        return NLP.stripSentence(content.toString());
+    }
+
+    // return Pair <target, surface>
+    public Pair<String, String> getInternalLinkContent(WtInternalLink link) {
+        String target = getAstText(link.getTarget());
+        String surface = getAstText(link.getTitle());
+        if (surface.isEmpty()) {
+            surface = target;
+        }
+        return new Pair<>(target, surface);
     }
 
     public static void main(String[] args) {
