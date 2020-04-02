@@ -67,7 +67,7 @@ public class TableBuilder {
         Object[][] table = getTable();
         for (Object[] r : table) {
             for (Object c : r) {
-                sb.append(c.toString()).append("\t");
+                sb.append(c).append("\t");
             }
             sb.append("\r\n");
         }
