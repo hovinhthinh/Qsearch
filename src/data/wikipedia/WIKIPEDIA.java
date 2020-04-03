@@ -36,7 +36,7 @@ public class WIKIPEDIA {
             }
             el.target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + e;
             el.candidates = new LinkedList<>();
-            el.candidates.add(new Triple<>("<" + e + ">", -1, null));
+            el.candidates.add(new Triple<>("<" + e + ">", -1, -1.0));
             cell.entityLinks.add(el);
         }
 
