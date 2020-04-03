@@ -6,12 +6,16 @@ import model.table.Table;
 import pipeline.*;
 import util.FileUtils;
 import util.SelfMonitor;
+import util.distributed.String2StringMap;
 
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.List;
 
-public class WIKIPEDIA_TaggingPipeline {
+public class WIKIPEDIA_TaggingPipeline implements String2StringMap {
+    TaggingPipeline pipeline = getDefaultTaggingPipeline();
+    Gson gson = new Gson();
 
-    @Deprecated
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
@@ -37,26 +41,33 @@ public class WIKIPEDIA_TaggingPipeline {
     public static void main(String[] args) {
 //        args = "/local/home/hvthinh/datasets/TabEL.json.shuf.gz /local/home/hvthinh/datasets/TabEL.json.shuf.out.gz".split("\\s++");
 
-        TaggingPipeline pipeline = getAnnotationPipeline();
         PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
         FileUtils.LineStream stream = FileUtils.getLineStream(args[0], "UTF-8");
 
-        Gson gson = new Gson();
+        WIKIPEDIA_TaggingPipeline p = new WIKIPEDIA_TaggingPipeline();
 
         SelfMonitor m = new SelfMonitor(WIKIPEDIA_TaggingPipeline.class.getName(), -1, 60);
         m.start();
         for (String line : stream) {
             m.incAndGet();
-            Table table = WIKIPEDIA.parseFromJSON(line); // already contains Entity Tags
-            if (table == null) {
+            List<String> result = p.map(line);
+            if (result == null) {
                 continue;
             }
-            if (!pipeline.tag(table)) {
-                continue;
+            for (String r : result) {
+                out.println(r);
             }
-            out.println(gson.toJson(table));
         }
         m.forceShutdown();
         out.close();
+    }
+
+    @Override
+    public List<String> map(String input) {
+        Table table = WIKIPEDIA.parseFromJSON(input); // already contains Entity Tags
+        if (table == null || !pipeline.tag(table)) {
+            return null;
+        }
+        return Arrays.asList(gson.toJson(table));
     }
 }
