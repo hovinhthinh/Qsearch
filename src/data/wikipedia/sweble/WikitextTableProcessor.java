@@ -73,6 +73,12 @@ public class WikitextTableProcessor implements String2StringMap {
 
             EngProcessedPage cp = engine.postprocess(new PageId(PageTitle.make(config, pageTitle), -1), wikitext, null);
 
+//            if (pageTitle.equals("Bubblegum Crisis")) {
+//                StringBuilder sb = new StringBuilder();
+//                debugNode(cp, sb, 0);
+//                System.out.println(sb);
+//                System.exit(0);
+//            }
             visitTables(cp, new Stack<>());
 
             if (tables.size() == 0) {
@@ -175,7 +181,7 @@ public class WikitextTableProcessor implements String2StringMap {
         if (table.length == 0 || table[0].length == 0) {
             return;
         }
-
+        nHeaderRows = Math.min(nHeaderRows, table.length);
         // populate header & body
         JSONArray header = new JSONArray();
         JSONArray body = new JSONArray();
