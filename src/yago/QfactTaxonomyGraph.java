@@ -188,7 +188,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 double quantityMatchScr = quantity.compareTo(o.quantity) == 0 ? 1 : 0;
 
                 double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT + quantityMatchScr * (1 - QFACT_CONTEXT_MATCH_WEIGHT);
-                if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
+                if (matchedQfact == null || matchScr > singleEntityResult.first) {
                     singleEntityResult.first = matchScr;
                     matchedQfact = o;
                 }
@@ -218,7 +218,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                         double contextMatchScr = matcher.directedEmbeddingIdfSimilarity(thisContext, o.context);
 
                         double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT;
-                        if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
+                        if (matchedQfact == null || matchScr > singleEntityResult.first) {
                             singleEntityResult.first = matchScr;
                             matchedQfact = o;
                         }
