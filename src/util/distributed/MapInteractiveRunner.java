@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class MapInteractiveRunner {
     public static final String ON_READY = "__map_ready__";
     public static final String ON_OUTPUT = "__interactive_output__";
+    public static final String ON_FAIL = "__fail_input__";
 
     // args: <String2StringMapClass>
     public static void main(String[] args) {
@@ -29,7 +30,7 @@ public class MapInteractiveRunner {
                 output = mapper.map(str);
             } catch (Exception e) {
                 e.printStackTrace();
-                System.err.println(str);
+                System.err.println(String.format("%s\t%s", ON_FAIL, str));
             }
 
             JSONArray arr = new JSONArray();
