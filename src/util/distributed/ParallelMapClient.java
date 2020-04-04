@@ -60,12 +60,12 @@ class MultiThreadedMapClient {
 // TODO: create monitor for each individual thread.
 // TODO: handle error on each client.
 public class ParallelMapClient {
-    public static final boolean PART_OUTPUT_STREAM = true;
+    public static final boolean PART_OUTPUT_STREAM = false;
     public static final boolean PART_ERROR_STREAM = true;
 
     // args: <memorySpecsPerClient> <nClient> <String2StringMapClass> <inputFile> <outputFile>
     // TODO: support arguments in each single client.
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         int nClients = Integer.parseInt(args[1]);
 
         MultiThreadedMapClient client = new MultiThreadedMapClient(args[2], args[0], nClients,
