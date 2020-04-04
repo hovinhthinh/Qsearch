@@ -56,6 +56,9 @@ class MapClient {
                     outStream.println(str);
                 }
             }
+            if (outStream != null) {
+                outStream.println(MapInteractiveRunner.ON_OUTPUT);
+            }
             List<String> output = new LinkedList<>();
             JSONArray arr = new JSONArray(str.substring(str.indexOf("\t") + 1));
             for (int i = 0; i < arr.length(); ++i) {
@@ -90,7 +93,7 @@ class MapClient {
 
     }
 
-    public void closeOutAndErrStreams() {
+    public void closeStreams() {
         try {
             outStream.close();
         } catch (Exception e) {

@@ -52,7 +52,7 @@ class MultiThreadedMapClient {
 
     public void closeOutAndErrStreams() {
         for (MapClient client : clients) {
-            client.closeOutAndErrStreams();
+            client.closeStreams();
         }
     }
 }
