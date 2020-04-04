@@ -47,9 +47,9 @@ class MapClient {
     }
 
     public List<String> map(String input) {
-        out.println(input);
-        out.flush();
         try {
+            out.println(input);
+            out.flush();
             String str;
             while (!(str = in.readLine()).startsWith(MapInteractiveRunner.ON_OUTPUT)) {
                 if (outStream != null) {

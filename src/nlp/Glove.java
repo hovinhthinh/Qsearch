@@ -16,7 +16,7 @@ public class Glove {
     private static Object2IntOpenHashMap<String> EMBEDDING_ID = null;
     private static ArrayList<double[]> EMBEDDING_VALUE = null;
 
-    private static final int CACHE_COSINE_SIZE = 1000000;
+    private static final int CACHE_COSINE_SIZE = 10000000;
     private static Long2DoubleLinkedOpenHashMap CACHE_COSINE = new Long2DoubleLinkedOpenHashMap(CACHE_COSINE_SIZE);
 
     private synchronized static void init() {
