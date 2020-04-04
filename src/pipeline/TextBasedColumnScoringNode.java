@@ -234,12 +234,12 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                     }
 
                     // (1) combined quantity header
-                    Pair<Double, String> matchResult = qfactGraph.getMatchScore(e.first, combinedContext, ql.quantity, (r * table.nColumn + qCol) * 2);
+                    Pair<Double, QfactTaxonomyGraph.EntityTextQfact> matchResult = qfactGraph.getMatchScore(e.first, combinedContext, ql.quantity, (r * table.nColumn + qCol) * 2);
                     if (matchResult != null) {
                         // we need score, instead of distance
                         if (table.nHeaderRow > 1) {
                             // (2) last quantity header
-                            Pair<Double, String> lastHeaderResult = qfactGraph.getMatchScore(e.first, lastHeaderContext, ql.quantity, (r * table.nColumn + qCol) * 2 + 1);
+                            Pair<Double, QfactTaxonomyGraph.EntityTextQfact> lastHeaderResult = qfactGraph.getMatchScore(e.first, lastHeaderContext, ql.quantity, (r * table.nColumn + qCol) * 2 + 1);
                             if (lastHeaderResult != null && lastHeaderResult.first > matchResult.first) {
                                 matchResult = lastHeaderResult;
                             }
@@ -248,7 +248,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                         matchResult = new Pair<>(0.0, null);
                     }
                     currentQfactMatchingScore[r][qCol] = matchResult.first;
-                    currentQfactMatchingStr[r][qCol] = matchResult.second;
+                    currentQfactMatchingStr[r][qCol] = matchResult.second.toString();
                 }
             }
         }
@@ -477,13 +477,13 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                                 }
                                 // (1) combined quantity header
                                 double matchScr;
-                                Pair<Double, String> matchResult = qfactGraph.getMatchScore(candidate.first, table.getQuantityDescriptionFromCombinedHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2);
+                                Pair<Double, QfactTaxonomyGraph.EntityTextQfact> matchResult = qfactGraph.getMatchScore(candidate.first, table.getQuantityDescriptionFromCombinedHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2);
                                 if (matchResult != null) {
                                     // we need score, instead of distance
                                     matchScr = matchResult.first;
                                     if (table.nHeaderRow > 1) {
                                         // (2) last quantity header
-                                        Pair<Double, String> lastHeaderResult = qfactGraph.getMatchScore(candidate.first, table.getQuantityDescriptionFromLastHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2 + 1);
+                                        Pair<Double, QfactTaxonomyGraph.EntityTextQfact> lastHeaderResult = qfactGraph.getMatchScore(candidate.first, table.getQuantityDescriptionFromLastHeader(i, false), ql.quantity, (r * table.nColumn + i) * 2 + 1);
                                         if (lastHeaderResult != null && lastHeaderResult.first > matchScr) {
                                             matchScr = lastHeaderResult.first;
                                         }
@@ -613,12 +613,12 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                     }
 
                     // (1) combined quantity header
-                    Pair<Double, String> matchResult = qfactGraph.getMatchScore(e, combinedContext, ql.quantity, (r * table.nColumn + qCol) * 2);
+                    Pair<Double, QfactTaxonomyGraph.EntityTextQfact> matchResult = qfactGraph.getMatchScore(e, combinedContext, ql.quantity, (r * table.nColumn + qCol) * 2);
                     if (matchResult != null) {
                         // we need score, instead of distance
                         if (table.nHeaderRow > 1) {
                             // (2) last quantity header
-                            Pair<Double, String> lastHeaderResult = qfactGraph.getMatchScore(e, lastHeaderContext, ql.quantity, (r * table.nColumn + qCol) * 2 + 1);
+                            Pair<Double, QfactTaxonomyGraph.EntityTextQfact> lastHeaderResult = qfactGraph.getMatchScore(e, lastHeaderContext, ql.quantity, (r * table.nColumn + qCol) * 2 + 1);
                             if (lastHeaderResult != null && lastHeaderResult.first > matchResult.first) {
                                 matchResult = lastHeaderResult;
                             }
@@ -627,7 +627,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                         matchResult = new Pair<>(0.0, null);
                     }
                     info.currentQfactMatchingScore[r][qCol] = matchResult.first;
-                    info.currentQfactMatchingStr[r][qCol] = matchResult.second;
+                    info.currentQfactMatchingStr[r][qCol] = matchResult.second.toString();
                 }
 
                 double lScore = 0;
