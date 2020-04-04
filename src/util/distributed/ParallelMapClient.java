@@ -94,7 +94,9 @@ public class ParallelMapClient {
                 m.incAndGet();
             }
         }, nClients);
-        System.out.println("ParallelMapResult: " + mapResult);
+        if (!mapResult) {
+            System.err.println("[FAIL] Some map client suddenly shutdowns.");
+        }
         m.forceShutdown();
         out.close();
         client.closeOutAndErrStreams();
