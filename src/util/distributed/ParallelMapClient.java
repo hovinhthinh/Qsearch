@@ -76,7 +76,7 @@ public class ParallelMapClient {
 
         SelfMonitor m = new SelfMonitor(ParallelMapClient.class.getName() + ":" + args[2], -1, 60);
         m.start();
-        Concurrent.runAndWait(() -> {
+        boolean mapResult = Concurrent.runAndWait(() -> {
             while (true) {
                 String input;
                 synchronized (in) {
@@ -94,6 +94,7 @@ public class ParallelMapClient {
                 m.incAndGet();
             }
         }, nClients);
+        System.out.println("ParallelMapResult: " + mapResult);
         m.forceShutdown();
         out.close();
         client.closeOutAndErrStreams();
