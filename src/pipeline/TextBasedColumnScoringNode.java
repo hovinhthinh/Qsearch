@@ -248,7 +248,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                         matchResult = new Pair<>(0.0, null);
                     }
                     currentQfactMatchingScore[r][qCol] = matchResult.first;
-                    currentQfactMatchingStr[r][qCol] = matchResult.second.toString();
+                    currentQfactMatchingStr[r][qCol] = "" + matchResult.second;
                 }
             }
         }
@@ -627,7 +627,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                         matchResult = new Pair<>(0.0, null);
                     }
                     info.currentQfactMatchingScore[r][qCol] = matchResult.first;
-                    info.currentQfactMatchingStr[r][qCol] = matchResult.second.toString();
+                    info.currentQfactMatchingStr[r][qCol] = "" + matchResult.second;
                 }
 
                 double lScore = 0;
