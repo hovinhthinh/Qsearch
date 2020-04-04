@@ -24,7 +24,14 @@ public class MapInteractiveRunner {
 
         String str;
         while ((str = in.nextLine()) != null) {
-            List<String> output = mapper.map(str);
+            List<String> output = null;
+            try {
+                output = mapper.map(str);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println(str);
+            }
+
             JSONArray arr = new JSONArray();
             if (output != null) {
                 for (String o : output) {

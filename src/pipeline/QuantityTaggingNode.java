@@ -76,7 +76,7 @@ public class QuantityTaggingNode implements TaggingNode {
                 return new Quadruple(u1.getBaseName(), u2.getMultiplier(), span, preprocessed);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
 //            throw new RuntimeException(e);
             return null;
         }
