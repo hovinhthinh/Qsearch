@@ -28,11 +28,17 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     public static double TYPE_RELATED_PENALTY_WEIGHT = 0;
 
     public class EntityTextQfact {
+        String entity;
         ArrayList<String> context;
         Quantity quantity;
         String sentence;
         String source;
         String referSentence;
+
+        @Override
+        public String toString() {
+            return String.format("%s\t%s\t%s\t%s", entity, sentence, source, referSentence);
+        }
     }
 
     private ArrayList<EntityTextQfact>[] entityQfactLists;
@@ -61,6 +67,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 continue;
             }
             EntityTextQfact qfact = new EntityTextQfact();
+            qfact.entity = arr[0];
             qfact.quantity = Quantity.fromQuantityString(arr[2]);
             if (QuantityDomain.getDomain(qfact.quantity).equals(QuantityDomain.Domain.DIMENSIONLESS)) {
                 arr[1] += " " + qfact.quantity.unit;
@@ -170,6 +177,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         ArrayList<EntityTextQfact> qfacts = entityQfactLists[entityId];
         if (qfacts != null) {
             Pair<Double, String> singleEntityResult = new Pair<>(0.0, null);
+            EntityTextQfact matchedQfact = null;
             for (EntityTextQfact o : qfacts) {
                 // different concept should be ignored
                 if (!thisDomain.equals(QuantityDomain.getDomain(o.quantity))) {
@@ -182,9 +190,11 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT + quantityMatchScr * (1 - QFACT_CONTEXT_MATCH_WEIGHT);
                 if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
                     singleEntityResult.first = matchScr;
-                    singleEntityResult.second = DEBUG == false ? "<OMITTED>" :
-                            String.format("%s\t%s\t%s\t%s", entity, o.sentence, o.source, o.referSentence);
+                    matchedQfact = o;
                 }
+            }
+            if (matchedQfact != null) {
+                singleEntityResult.second = DEBUG == false ? "<OMITTED>" : matchedQfact.toString();
             }
             queue.enqueue(singleEntityResult);
         }
@@ -199,6 +209,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 Pair<Double, String> singleEntityResult = cache.get(localKey);
                 if (singleEntityResult == null) {
                     singleEntityResult = new Pair<>(0.0, null);
+                    EntityTextQfact matchedQfact = null;
                     for (EntityTextQfact o : qfacts) {
                         // different concept should be ignored
                         if (!thisDomain.equals(QuantityDomain.getDomain(o.quantity))) {
@@ -209,9 +220,11 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                         double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT;
                         if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
                             singleEntityResult.first = matchScr;
-                            singleEntityResult.second = DEBUG == false ? "<OMITTED>" :
-                                    String.format("%s\t%s\t%s\t%s", id2Entity.get(p.getKey()), o.sentence, o.source, o.referSentence);
+                            matchedQfact = o;
                         }
+                    }
+                    if (matchedQfact != null) {
+                        singleEntityResult.second = DEBUG == false ? "<OMITTED>" : matchedQfact.toString();
                     }
                     if (key >= 0) {
                         cache.put(localKey, singleEntityResult);
