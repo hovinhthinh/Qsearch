@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class QfactTaxonomyGraph extends TaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(QfactTaxonomyGraph.class.getName());
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
     public static final String DEFAULT_QFACT_FILE = "non-deep/qfact_text_coref.gz";
 
     public static int DEFAULT_RELATED_ENTITY_DIST_LIM = 4;
