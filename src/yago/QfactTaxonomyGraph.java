@@ -37,7 +37,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
 
         @Override
         public String toString() {
-            return String.format("%s\t%s\t%s\t%s", entity, sentence, source, referSentence);
+            return DEBUG ? String.format("%s\t%s\t%s\t%s", entity, sentence, source, referSentence) : "<OMITTED>";
         }
     }
 
@@ -47,7 +47,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     private ContextEmbeddingMatcher matcher = new ContextEmbeddingMatcher(-1); // alpha not used
     private int relatedEntityDistanceLimit;
 
-    private Long2ObjectOpenHashMap<Pair<Double, String>> cache = new Long2ObjectOpenHashMap<>(10000000);
+    private Long2ObjectOpenHashMap<Pair<Double, EntityTextQfact>> cache = new Long2ObjectOpenHashMap<>(10000000);
 
     public void resetCache() {
         cache.clear();
@@ -154,13 +154,13 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
 
     // returns Pair<score, matchedQfactStr>
     // returns null of cannot match.
-    public Pair<Double, String> getMatchScore(String entity, String context, Quantity quantity, int key) {
+    public Pair<Double, EntityTextQfact> getMatchScore(String entity, String context, Quantity quantity, int key) {
         Integer entityId = entity2Id.get(entity);
         if (entityId == null) {
             return null;
         }
         long globalKey = 1000000000L * entityId + key;
-        Pair<Double, String> result = cache.get(globalKey);
+        Pair<Double, EntityTextQfact> result = cache.get(globalKey);
         if (result != null) {
             return result.second == null ? null : result;
         }
@@ -171,13 +171,12 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         }
         ArrayList<String> thisContext = NLP.splitSentence(context.toLowerCase());
 
-        ObjectHeapPriorityQueue<Pair<Double, String>> queue = new ObjectHeapPriorityQueue<>(Comparator.comparing(o -> o.first));
+        ObjectHeapPriorityQueue<Pair<Double, EntityTextQfact>> queue = new ObjectHeapPriorityQueue<>(Comparator.comparing(o -> o.first));
 
         // match exact entitiy
         ArrayList<EntityTextQfact> qfacts = entityQfactLists[entityId];
         if (qfacts != null) {
-            Pair<Double, String> singleEntityResult = new Pair<>(0.0, null);
-            EntityTextQfact matchedQfact = null;
+            Pair<Double, EntityTextQfact> singleEntityResult = new Pair<>(0.0, null);
             for (EntityTextQfact o : qfacts) {
                 // different concept should be ignored
                 if (!thisDomain.equals(QuantityDomain.getDomain(o.quantity))) {
@@ -188,13 +187,10 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 double quantityMatchScr = quantity.compareTo(o.quantity) == 0 ? 1 : 0;
 
                 double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT + quantityMatchScr * (1 - QFACT_CONTEXT_MATCH_WEIGHT);
-                if (matchedQfact == null || matchScr > singleEntityResult.first) {
+                if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
                     singleEntityResult.first = matchScr;
-                    matchedQfact = o;
+                    singleEntityResult.second = o;
                 }
-            }
-            if (matchedQfact != null) {
-                singleEntityResult.second = DEBUG == false ? "<OMITTED>" : matchedQfact.toString();
             }
             queue.enqueue(singleEntityResult);
         }
@@ -206,10 +202,9 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                 qfacts = entityQfactLists[p.getKey()];
 
                 long localKey = -(1000000000L * (p.getKey() + 1) + key);
-                Pair<Double, String> singleEntityResult = cache.get(localKey);
+                Pair<Double, EntityTextQfact> singleEntityResult = cache.get(localKey);
                 if (singleEntityResult == null) {
                     singleEntityResult = new Pair<>(0.0, null);
-                    EntityTextQfact matchedQfact = null;
                     for (EntityTextQfact o : qfacts) {
                         // different concept should be ignored
                         if (!thisDomain.equals(QuantityDomain.getDomain(o.quantity))) {
@@ -218,13 +213,10 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                         double contextMatchScr = matcher.directedEmbeddingIdfSimilarity(thisContext, o.context);
 
                         double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT;
-                        if (matchedQfact == null || matchScr > singleEntityResult.first) {
+                        if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
                             singleEntityResult.first = matchScr;
-                            matchedQfact = o;
+                            singleEntityResult.second = o;
                         }
-                    }
-                    if (matchedQfact != null) {
-                        singleEntityResult.second = DEBUG == false ? "<OMITTED>" : matchedQfact.toString();
                     }
                     if (key >= 0) {
                         cache.put(localKey, singleEntityResult);
@@ -246,7 +238,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
 
         result = new Pair<>(0.0, null);
         while (!queue.isEmpty()) {
-            Pair<Double, String> top = queue.dequeue();
+            Pair<Double, EntityTextQfact> top = queue.dequeue();
             result.first += top.first / NTOP_RELATED_ENTITY;
             if (queue.isEmpty()) {
                 result.second = top.second;
