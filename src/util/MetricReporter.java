@@ -69,7 +69,7 @@ public class MetricReporter {
                 sb.append("\r\n");
             }
             for (int j = i; j < kv.size(); j += nLine) {
-                Pair<String, String> p = kv.get(i);
+                Pair<String, String> p = kv.get(j);
                 sb.append(String.format(formatStr, p.first, p.second));
             }
         }
