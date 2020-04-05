@@ -39,7 +39,7 @@ public abstract class Monitor extends Thread {
 
     public abstract int getCurrent();
 
-    private final void log(String logString) {
+    public final void log(String logString) {
         if (out == null) {
             System.out.println(logString);
         } else {
