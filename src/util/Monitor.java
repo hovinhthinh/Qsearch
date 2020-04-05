@@ -48,6 +48,10 @@ public abstract class Monitor extends Thread {
         }
     }
 
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
     // Override these log methods for another logging way.
     public void logStart() {
         log(String.format("MONITOR [%s] : STARTED.", name));

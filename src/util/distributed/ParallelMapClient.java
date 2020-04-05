@@ -76,6 +76,15 @@ public class ParallelMapClient {
 
         SelfMonitor m = new SelfMonitor(ParallelMapClient.class.getName() + ":" + args[2], -1, 60);
         m.start();
+
+        new Thread(() -> {
+            int nLine = 0;
+            for (String line : FileUtils.getLineStream(args[3], "UTF-8")) {
+                ++nLine;
+            }
+            m.setTotal(nLine);
+        }).start();
+        
         boolean mapResult = Concurrent.runAndWait(() -> {
             while (true) {
                 String input;
