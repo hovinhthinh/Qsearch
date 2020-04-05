@@ -89,7 +89,7 @@ public abstract class Monitor extends Thread {
             try {
                 Thread.sleep(time * 1000);
             } catch (InterruptedException e) {
-                return;
+                break;
             }
             current = getCurrent();
             if (current < 0 || (total >= 0 && current > total)) {
@@ -121,6 +121,10 @@ public abstract class Monitor extends Thread {
                 stopped = true;
             }
         }
+        current = getCurrent();
+        if (current < 0 || (total >= 0 && current > total)) {
+            throw new RuntimeException("'getCurrent()' is invalid.");
+        }
         if (current == total) {
             logDone();
         } else {
@@ -131,6 +135,7 @@ public abstract class Monitor extends Thread {
     public boolean forceShutdown() {
         if (!stopped) {
             stopped = true;
+            this.interrupt();
             return true;
         } else {
             return false;

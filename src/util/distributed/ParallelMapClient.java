@@ -112,6 +112,5 @@ public class ParallelMapClient {
         m.forceShutdown();
         out.close();
         client.closeStreams();
-        System.exit(0);
     }
 }
