@@ -5,13 +5,13 @@ public class SelfMonitor extends Monitor {
     private MetricReporter reporter;
 
     public int incAndGet() {
-        return incAndGet(null);
+        return incAndGet(null, 1);
     }
 
-    public synchronized int incAndGet(String partName) {
-        ++curr;
+    public synchronized int incAndGet(String partName, int count) {
+        curr += count;
         if (partName != null) {
-            reporter.recordCount(partName);
+            reporter.recordCount(partName, count);
         }
         return curr;
     }
@@ -24,14 +24,14 @@ public class SelfMonitor extends Monitor {
     public SelfMonitor(String name, int total, int time) {
         super(name, total, time);
         curr = 0;
-        reporter = new MetricReporter(name);
+        reporter = new MetricReporter(null);
     }
 
     @Override
     public void logProgress(Progress progress) {
         super.logProgress(progress);
         if (!reporter.isEmpty()) {
-            log(reporter.getReportString(4, true));
+            log(reporter.getReportString(6, false));
         }
     }
 }

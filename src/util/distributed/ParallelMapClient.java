@@ -13,7 +13,7 @@ import java.util.concurrent.*;
 
 class MultiThreadedMapClient {
 
-    private ArrayBlockingQueue<MapClient> clients;
+    public ArrayBlockingQueue<MapClient> clients;
 
     public MultiThreadedMapClient(String String2StringMapClass, String memorySpecs, int nClients, String outStreamPrefix, String errStreamPrefix) {
         clients = new ArrayBlockingQueue<>(nClients);
@@ -78,7 +78,9 @@ public class ParallelMapClient {
 
         SelfMonitor m = new SelfMonitor(ParallelMapClient.class.getName() + ":" + args[2], -1, 60);
         m.start();
-
+        for (MapClient cli : client.clients) {
+            m.incAndGet(cli.getName(), 0);
+        }
         new Thread(() -> {
             int nLine = 0;
             for (String line : FileUtils.getLineStream(args[3], "UTF-8")) {
@@ -101,7 +103,7 @@ public class ParallelMapClient {
                         out.println(o);
                     }
                 }
-                m.incAndGet(output.second);
+                m.incAndGet(output.second, 1);
             }
         }, nClients);
         if (!mapResult) {
