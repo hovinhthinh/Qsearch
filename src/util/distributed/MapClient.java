@@ -8,13 +8,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 class MapClient {
-    private BufferedReader in = null, err = null;
-    private PrintWriter out = null;
-    private Process p = null;
-    private PrintWriter outStream = null;
+    private BufferedReader in;
+    private PrintWriter out;
+    private Process p;
+    private PrintWriter outStream;
+    private String name;
 
     // String2StringMap
-    public MapClient(String String2StringMapClass, String memorySpecs, PrintWriter outStream, String errPath) {
+    public MapClient(String clientName, String String2StringMapClass, String memorySpecs, PrintWriter outStream, String errPath) {
+        this.name = clientName;
         this.outStream = outStream;
         try {
             String mainCmd =
@@ -44,6 +46,10 @@ class MapClient {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    public String getName() {
+        return name;
     }
 
     public List<String> map(String input) {
@@ -76,10 +82,6 @@ class MapClient {
     protected void finalize() throws Throwable {
         try {
             in.close();
-        } catch (Exception e) {
-        }
-        try {
-            err.close();
         } catch (Exception e) {
         }
         try {
