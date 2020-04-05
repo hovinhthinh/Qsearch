@@ -35,7 +35,7 @@ mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="util.FileSplitter"
 echo "Run in parallel"
 for i in $(seq -f "%03g" 0 ${np}); do
 args="$3.part$i.gz $4.part$i.gz ${@:5}"
-export MAVEN_OPTS="-Xmx12G" && mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="$2" -Dexec.args="$args" 1>$4.part$i.out 2>$4.part$i.err &
+export MAVEN_OPTS="-Xmx12G -XX:ParallelGCThreads=4" && mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="$2" -Dexec.args="$args" 1>$4.part$i.out 2>$4.part$i.err &
 done
 
 wait
