@@ -47,7 +47,7 @@ public class Table {
     }
 
     // for debugging TextBasedColumnScoringNode.
-    public transient String[][] QfactMatchingStr;
+    public String[][] QfactMatchingStr;
 
     public String getTableContentPrintable(boolean showAnnotations, boolean multipleLine, boolean printColumnIndex, boolean singleLinkForCell) {
         StringBuilder sb = new StringBuilder();
