@@ -79,7 +79,7 @@ public class MetricReporter {
             sb.append("--- Count ---\r\n");
             ArrayList<Pair<String, String>> kv = new ArrayList<>();
             for (String k : cnt_key2freq.keySet()) {
-                kv.add(new Pair(String.format("%s", k), String.format("%d", cnt_key2freq.get(k))));
+                kv.add(new Pair<>(String.format("%s", k), String.format("%d", cnt_key2freq.get(k))));
 
             }
             sb.append(getKeyValuePairsStr(kv, nKeyPerLine));
@@ -89,7 +89,7 @@ public class MetricReporter {
             sb.append("--- Average ---\r\n");
             ArrayList<Pair<String, String>> kv = new ArrayList<>();
             for (String k : avg_key2freq.keySet()) {
-                kv.add(new Pair(String.format("%s", k), String.format("%.2f", avg_key2Sum.get(k) / avg_key2freq.get(k) * 100)));
+                kv.add(new Pair<>(String.format("%s", k), String.format("%.2f", avg_key2Sum.get(k) / avg_key2freq.get(k) * 100)));
             }
             sb.append(getKeyValuePairsStr(kv, nKeyPerLine));
 
@@ -99,7 +99,7 @@ public class MetricReporter {
             sb.append("--- Micro Average ---\r\n");
             ArrayList<Pair<String, String>> kv = new ArrayList<>();
             for (String k : microAvg_key2True.keySet()) {
-                kv.add(new Pair(String.format("%s", k), String.format("%.2f", 1.0 * microAvg_key2True.get(k) / microAvg_key2Total.get(k) * 100)));
+                kv.add(new Pair<>(String.format("%s", k), String.format("%.2f", 1.0 * microAvg_key2True.get(k) / microAvg_key2Total.get(k) * 100)));
             }
             sb.append(getKeyValuePairsStr(kv, nKeyPerLine));
         }

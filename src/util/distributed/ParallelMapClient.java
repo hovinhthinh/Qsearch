@@ -2,6 +2,7 @@ package util.distributed;
 
 import util.Concurrent;
 import util.FileUtils;
+import util.Pair;
 import util.SelfMonitor;
 
 import java.io.PrintWriter;
@@ -25,7 +26,7 @@ class MultiThreadedMapClient {
                 PrintWriter outStream = outStreamPrefix == null ? null : FileUtils.getPrintWriter(
                         String.format("%s.part%03d.out", outStreamPrefix, finalI), "UTF-8");
                 String errPath = errStreamPrefix == null ? null : String.format("%s.part%03d.err", errStreamPrefix, finalI);
-                return new MapClient(String2StringMapClass, memorySpecs, outStream, errPath);
+                return new MapClient("Client_" + finalI, String2StringMapClass, memorySpecs, outStream, errPath);
             }));
         }
         try {
@@ -39,18 +40,19 @@ class MultiThreadedMapClient {
         }
     }
 
-    public List<String> map(String input) {
+    // return map outputs & client name
+    public Pair<List<String>, String> map(String input) {
         try {
             MapClient client = clients.take();
             List<String> result = client.map(input);
             clients.put(client);
-            return result;
+            return new Pair<>(result, client.getName());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void closeOutAndErrStreams() {
+    public void closeStreams() {
         for (MapClient client : clients) {
             client.closeStreams();
         }
@@ -84,7 +86,6 @@ public class ParallelMapClient {
             }
             m.setTotal(nLine);
         }).start();
-        
         boolean mapResult = Concurrent.runAndWait(() -> {
             while (true) {
                 String input;
@@ -94,13 +95,13 @@ public class ParallelMapClient {
                 if (input == null) {
                     return;
                 }
-                List<String> output = client.map(input);
+                Pair<List<String>, String> output = client.map(input);
                 synchronized (out) {
-                    for (String o : output) {
+                    for (String o : output.first) {
                         out.println(o);
                     }
                 }
-                m.incAndGet();
+                m.incAndGet(output.second);
             }
         }, nClients);
         if (!mapResult) {
@@ -108,7 +109,7 @@ public class ParallelMapClient {
         }
         m.forceShutdown();
         out.close();
-        client.closeOutAndErrStreams();
+        client.closeStreams();
         System.exit(0);
     }
 }
