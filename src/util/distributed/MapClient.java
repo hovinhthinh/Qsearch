@@ -67,6 +67,7 @@ class MapClient {
             return output;
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
+            System.err.println(String.format("__fatal_input__\t%s", input));
             throw new RuntimeException(e);
         }
     }
