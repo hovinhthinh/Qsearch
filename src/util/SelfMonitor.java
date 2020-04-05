@@ -31,7 +31,7 @@ public class SelfMonitor extends Monitor {
     public void logProgress(Progress progress) {
         super.logProgress(progress);
         if (!reporter.isEmpty()) {
-            log(reporter.getReportString(4));
+            log(reporter.getReportString(4, true));
         }
     }
 }

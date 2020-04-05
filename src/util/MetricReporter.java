@@ -4,6 +4,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class MetricReporter {
     private String name;
@@ -18,11 +20,11 @@ public class MetricReporter {
     private LinkedHashMap<String, Integer> microAvg_key2Total = new LinkedHashMap<>();
 
     public MetricReporter(String name) {
-        this.name = "noname";
+        this.name = name == null ? "noname" : name;
     }
 
     public MetricReporter() {
-        this(MetricReporter.class.getName());
+        this(null);
     }
 
     public void recordCount(String key, int addedCount) {
@@ -59,18 +61,18 @@ public class MetricReporter {
             valueWidth = Math.max(valueWidth, p.second.length());
         }
         StringBuilder sb = new StringBuilder();
-        String formatStr = "    [%" + keyWidth + "s : %-" + valueWidth + "s]";
+        String formatStr = "    [%-" + keyWidth + "s : %-" + valueWidth + "s]";
         for (int i = 0; i < kv.size(); ++i) {
-            Pair<String, String> p = kv.get(i);
-            sb.append(String.format(formatStr, p.first, p.second));
             if (i > 0 && i % nKeyPerLine == 0) {
                 sb.append("\r\n");
             }
+            Pair<String, String> p = kv.get(i);
+            sb.append(String.format(formatStr, p.first, p.second));
         }
         return sb.toString();
     }
 
-    public String getReportString(int nKeyPerLine) {
+    public String getReportString(int nKeyPerLine, boolean sortByKey) {
 
         StringBuilder sb = new StringBuilder();
         sb.append("========== ").append("METRIC_REPORTER [").append(name).append("]").append(" ==========\r\n");
@@ -78,7 +80,11 @@ public class MetricReporter {
         if (cnt_key2freq.size() > 0) {
             sb.append("--- Count ---\r\n");
             ArrayList<Pair<String, String>> kv = new ArrayList<>();
-            for (String k : cnt_key2freq.keySet()) {
+            Set<String> ks = cnt_key2freq.keySet();
+            if (sortByKey) {
+                ks = new TreeSet<>(ks);
+            }
+            for (String k : ks) {
                 kv.add(new Pair<>(String.format("%s", k), String.format("%d", cnt_key2freq.get(k))));
 
             }
@@ -88,7 +94,11 @@ public class MetricReporter {
         if (avg_key2freq.size() > 0) {
             sb.append("--- Average ---\r\n");
             ArrayList<Pair<String, String>> kv = new ArrayList<>();
-            for (String k : avg_key2freq.keySet()) {
+            Set<String> ks = avg_key2freq.keySet();
+            if (sortByKey) {
+                ks = new TreeSet<>(ks);
+            }
+            for (String k : ks) {
                 kv.add(new Pair<>(String.format("%s", k), String.format("%.2f", avg_key2Sum.get(k) / avg_key2freq.get(k) * 100)));
             }
             sb.append(getKeyValuePairsStr(kv, nKeyPerLine));
@@ -98,7 +108,11 @@ public class MetricReporter {
         if (microAvg_key2True.size() > 0) {
             sb.append("--- Micro Average ---\r\n");
             ArrayList<Pair<String, String>> kv = new ArrayList<>();
-            for (String k : microAvg_key2True.keySet()) {
+            Set<String> ks = microAvg_key2True.keySet();
+            if (sortByKey) {
+                ks = new TreeSet<>(ks);
+            }
+            for (String k : ks) {
                 kv.add(new Pair<>(String.format("%s", k), String.format("%.2f", 1.0 * microAvg_key2True.get(k) / microAvg_key2Total.get(k) * 100)));
             }
             sb.append(getKeyValuePairsStr(kv, nKeyPerLine));
@@ -107,7 +121,7 @@ public class MetricReporter {
     }
 
     public String getReportString() {
-        return getReportString(1);
+        return getReportString(1, false);
     }
 
     public String getReportJsonString() {
