@@ -26,7 +26,7 @@ class MultiThreadedMapClient {
                 PrintWriter outStream = outStreamPrefix == null ? null : FileUtils.getPrintWriter(
                         String.format("%s.part%03d.out", outStreamPrefix, finalI), "UTF-8");
                 String errPath = errStreamPrefix == null ? null : String.format("%s.part%03d.err", errStreamPrefix, finalI);
-                return new MapClient("Client_" + finalI, String2StringMapClass, memorySpecs, outStream, errPath);
+                return new MapClient("Client#" + finalI, String2StringMapClass, memorySpecs, outStream, errPath);
             }));
         }
         try {
