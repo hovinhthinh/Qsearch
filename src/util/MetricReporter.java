@@ -62,12 +62,16 @@ public class MetricReporter {
         }
         StringBuilder sb = new StringBuilder();
         String formatStr = "    [%-" + keyWidth + "s : %-" + valueWidth + "s]";
-        for (int i = 0; i < kv.size(); ++i) {
-            if (i > 0 && i % nKeyPerLine == 0) {
+
+        int nLine = (kv.size() - 1) / nKeyPerLine + 1;
+        for (int i = 0; i < nLine; ++i) {
+            if (i > 0) {
                 sb.append("\r\n");
             }
-            Pair<String, String> p = kv.get(i);
-            sb.append(String.format(formatStr, p.first, p.second));
+            for (int j = i; j < kv.size(); j += nLine) {
+                Pair<String, String> p = kv.get(i);
+                sb.append(String.format(formatStr, p.first, p.second));
+            }
         }
         return sb.toString();
     }
