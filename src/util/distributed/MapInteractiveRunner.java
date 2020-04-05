@@ -9,6 +9,7 @@ public class MapInteractiveRunner {
     public static final String ON_READY = "__map_ready__";
     public static final String ON_OUTPUT = "__interactive_output__";
     public static final String ON_FAIL = "__fail_input__";
+    public static final String ON_KEEP_ALIVE = "__im_alive__";
 
     // args: <String2StringMapClass>
     public static void main(String[] args) {
@@ -21,27 +22,49 @@ public class MapInteractiveRunner {
         System.out.println();
         System.out.println(ON_READY);
         System.out.flush();
-        Scanner in = new Scanner(System.in, "UTF-8");
 
-        String str;
-        while ((str = in.nextLine()) != null) {
-            List<String> output = null;
-            try {
-                output = mapper.map(str);
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println(String.format("%s\t%s", ON_FAIL, str));
-            }
+        Thread keepAlive = new Thread(() -> {
+            do {
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    break;
+                }
+                synchronized (System.out) {
+                    System.out.println(ON_KEEP_ALIVE);
+                    System.out.flush();
+                }
+            } while (!Thread.currentThread().isInterrupted());
+        });
+        keepAlive.start();
 
-            JSONArray arr = new JSONArray();
-            if (output != null) {
-                for (String o : output) {
-                    arr.put(o);
+        try {
+            Scanner in = new Scanner(System.in, "UTF-8");
+
+            String str;
+            while ((str = in.nextLine()) != null) {
+                List<String> output = null;
+                try {
+                    output = mapper.map(str);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.err.println(String.format("%s\t%s", ON_FAIL, str));
+                }
+
+                JSONArray arr = new JSONArray();
+                if (output != null) {
+                    for (String o : output) {
+                        arr.put(o);
+                    }
+                }
+                synchronized (System.out) {
+                    System.out.println();
+                    System.out.println(String.format("%s\t%s", ON_OUTPUT, arr.toString()));
+                    System.out.flush();
                 }
             }
-            System.out.println();
-            System.out.println(String.format("%s\t%s", ON_OUTPUT, arr.toString()));
-            System.out.flush();
+        } finally {
+            keepAlive.interrupt();
         }
     }
 }

@@ -58,7 +58,7 @@ class MapClient {
             out.flush();
             String str;
             while (!(str = in.readLine()).startsWith(MapInteractiveRunner.ON_OUTPUT)) {
-                if (outStream != null) {
+                if (outStream != null && !str.equals(MapInteractiveRunner.ON_KEEP_ALIVE)) {
                     outStream.println(str);
                 }
             }
