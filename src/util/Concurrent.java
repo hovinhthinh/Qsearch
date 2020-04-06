@@ -12,16 +12,15 @@ public class Concurrent {
             futures.add(service.submit(run));
         }
         boolean result = true;
-        try {
-            for (Future f : futures) {
+        for (Future f : futures) {
+            try {
                 f.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+                result = false;
             }
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            result = false;
-        } finally {
-            service.shutdown();
         }
+        service.shutdown();
         return result;
     }
 
