@@ -61,7 +61,7 @@ public class MetricReporter {
             valueWidth = Math.max(valueWidth, p.second.length());
         }
         StringBuilder sb = new StringBuilder();
-        String formatStr = "    [%-" + keyWidth + "s : %-" + valueWidth + "s]";
+        String formatStr = "    [%-" + keyWidth + "s: %-" + valueWidth + "s]";
 
         int nLine = (kv.size() - 1) / nKeyPerLine + 1;
         for (int i = 0; i < nLine; ++i) {

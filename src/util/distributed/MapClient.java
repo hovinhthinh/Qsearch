@@ -12,17 +12,22 @@ class MapClient {
     private PrintWriter out;
     private Process p;
     private PrintWriter outStream;
-    private String name;
+    private String clientName, mapClass, memorySpecs, errPath;
 
-    // String2StringMap
-    public MapClient(String clientName, String String2StringMapClass, String memorySpecs, PrintWriter outStream, String errPath) {
-        this.name = clientName;
-        this.outStream = outStream;
+    private void startService(boolean isReset) {
+        if (isReset) {
+            System.out.println(String.format("__reset_client__ [%s]", clientName));
+        }
+        try {
+            p.destroy();
+        } catch (Exception e) {
+        }
         try {
             String mainCmd =
-                    String.format("./run_no_notification.sh %s util.distributed.MapInteractiveRunner %s 2>%s",
+                    String.format("./run_no_notification.sh %s util.distributed.MapInteractiveRunner %s 2%s%s",
                             memorySpecs,
-                            String2StringMapClass,
+                            mapClass,
+                            isReset ? ">>" : ">",
                             errPath == null ? "/dev/null" : errPath
                     );
             String[] cmd = new String[]{
@@ -48,8 +53,18 @@ class MapClient {
         }
     }
 
+    // String2StringMap
+    public MapClient(String clientName, String String2StringMapClass, String memorySpecs, PrintWriter outStream, String errPath) {
+        this.clientName = clientName;
+        this.mapClass = String2StringMapClass;
+        this.memorySpecs = memorySpecs;
+        this.errPath = errPath;
+        this.outStream = outStream;
+        startService(false);
+    }
+
     public String getName() {
-        return name;
+        return clientName;
     }
 
     public List<String> map(String input) {
@@ -73,8 +88,9 @@ class MapClient {
             return output;
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
-            System.err.println(String.format("__fatal_input__ [%s]\t%s", name, input));
-            throw new RuntimeException(e);
+            System.err.println(String.format("__fatal_input__ [%s]\t%s", clientName, input));
+            startService(true);
+            return new LinkedList<>();
         }
     }
 
@@ -93,7 +109,6 @@ class MapClient {
         } catch (Exception e) {
         }
         super.finalize();
-
     }
 
     public void closeStreams() {
