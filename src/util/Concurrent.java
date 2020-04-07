@@ -6,7 +6,7 @@ import java.util.concurrent.*;
 
 public class Concurrent {
     public static boolean runAndWait(Runnable run, int nThreads) {
-        ExecutorService service = Executors.newFixedThreadPool(nThreads);
+        ExecutorService service = Executors.newCachedThreadPool();
         List<Future> futures = new ArrayList<>();
         for (int i = 0; i < nThreads; ++i) {
             futures.add(service.submit(run));
