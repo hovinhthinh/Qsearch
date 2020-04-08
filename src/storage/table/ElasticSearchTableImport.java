@@ -147,52 +147,73 @@ public class ElasticSearchTableImport {
     // Output content of canonicalized tables for indexing into Elasticsearch.
     public static void processTableData() {
         System.out.println("Process table data");
+        int nClients = 32;
         SelfMonitor m = new SelfMonitor(null, -1, 1);
         m.start();
         PrintWriter out = FileUtils.getPrintWriter("/GW/D5data-12/hvthinh/TabQs/to_be_indexed/wiki+tablem.gz", "UTF-8");
         Gson gson = new Gson();
 
         // TABLEM
-        for (String line : FileUtils.getLineStream("/GW/D5data-11/hvthinh/TABLEM/all/all+id.gz", "UTF-8")) {
-            try {
-                JSONObject o = new JSONObject(line);
-                TableIndex tableIndex = new TableIndex();
-                tableIndex.table = TABLEM.parseFromJSON(o);
-                if (tableIndex.table == null) {
+        FileUtils.LineStream stream1 = FileUtils.getLineStream("/GW/D5data-11/hvthinh/TABLEM/all/all+id.gz", "UTF-8");
+        Concurrent.runAndWait(() -> {
+            while (true) {
+                String line;
+                synchronized (stream1) {
+                    line = stream1.readLine();
+                }
+                if (line == null) {
+                    break;
+                }
+                try {
+                    JSONObject o = new JSONObject(line);
+                    TableIndex tableIndex = new TableIndex();
+                    tableIndex.table = TABLEM.parseFromJSON(o);
+                    if (tableIndex.table == null) {
+                        continue;
+                    }
+                    tableIndex.caption = o.has("title") ? o.getString("title") : "";
+                    tableIndex.pageTitle = o.has("pageTitle") ? o.getString("pageTitle") : "";
+                    tableIndex.pageContent = o.has("plainTextContent") ? o.getString("plainTextContent") : "";
+                    tableIndex.tableText = tableIndex.table.getTableRawContentForSearch();
+                    out.println(gson.toJson(tableIndex));
+                    m.incAndGet();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                     continue;
                 }
-                tableIndex.caption = o.has("title") ? o.getString("title") : "";
-                tableIndex.pageTitle = o.has("pageTitle") ? o.getString("pageTitle") : "";
-                tableIndex.pageContent = o.has("plainTextContent") ? o.getString("plainTextContent") : "";
-                tableIndex.tableText = tableIndex.table.getTableRawContentForSearch();
-                out.println(gson.toJson(tableIndex));
-                m.incAndGet();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                continue;
             }
-        }
+        }, nClients);
 
         // WIKIPEDIA
-        for (String line : FileUtils.getLineStream("/GW/D5data-12/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id.gz", "UTF-8")) {
-            try {
-                JSONObject o = new JSONObject(line);
-                TableIndex tableIndex = new TableIndex();
-                tableIndex.table = WIKIPEDIA.parseFromJSON(o);
-                if (tableIndex.table == null) {
+        FileUtils.LineStream stream2 = FileUtils.getLineStream("/GW/D5data-12/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id.gz", "UTF-8");
+        Concurrent.runAndWait(() -> {
+            while (true) {
+                String line;
+                synchronized (stream2) {
+                    line = stream2.readLine();
+                }
+                if (line == null) {
+                    break;
+                }
+                try {
+                    JSONObject o = new JSONObject(line);
+                    TableIndex tableIndex = new TableIndex();
+                    tableIndex.table = WIKIPEDIA.parseFromJSON(o);
+                    if (tableIndex.table == null) {
+                        continue;
+                    }
+                    tableIndex.caption = o.has("tableCaption") ? o.getString("tableCaption") : "";
+                    tableIndex.pageTitle = o.has("pgTitle") ? o.getString("pgTitle") : "";
+                    tableIndex.pageContent = o.has("sectionText") ? o.getString("sectionText") : "";
+                    tableIndex.tableText = tableIndex.table.getTableRawContentForSearch();
+                    out.println(gson.toJson(tableIndex));
+                    m.incAndGet();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                     continue;
                 }
-                tableIndex.caption = o.has("tableCaption") ? o.getString("tableCaption") : "";
-                tableIndex.pageTitle = o.has("pgTitle") ? o.getString("pgTitle") : "";
-                tableIndex.pageContent = o.has("sectionText") ? o.getString("sectionText") : "";
-                tableIndex.tableText = tableIndex.table.getTableRawContentForSearch();
-                out.println(gson.toJson(tableIndex));
-                m.incAndGet();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                continue;
             }
-        }
+        }, nClients);
 
         out.close();
         m.forceShutdown();
