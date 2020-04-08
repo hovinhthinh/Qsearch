@@ -52,7 +52,7 @@ class ClientMonitor extends Monitor {
             for (int j = i; j < kv.size(); j += nLine) {
                 Pair<String, String> p = kv.get(j);
                 sb.append(String.format(formatStr,
-                        clients[j].isNotAlive() ? "!" : " ",
+                        clients[j].isNotResponding() ? "!" : " ",
                         clients[j].isLongProcessing() ? "*" : " ",
                         p.first,
                         p.second));
