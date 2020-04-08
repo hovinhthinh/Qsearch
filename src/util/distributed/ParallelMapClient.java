@@ -9,20 +9,21 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 class ClientMonitor extends Monitor {
-    private int[] clientCount;
+    private AtomicInteger[] clientCount;
     private MapClient[] clients;
 
     public void incClient(int clientId) {
-        ++clientCount[clientId];
+        clientCount[clientId].incrementAndGet();
     }
 
     @Override
     public int getCurrent() {
         int totalCount = 0;
-        for (int c : clientCount) {
-            totalCount += c;
+        for (AtomicInteger c : clientCount) {
+            totalCount += c.get();
         }
         return totalCount;
     }
@@ -30,7 +31,10 @@ class ClientMonitor extends Monitor {
     public ClientMonitor(String name, int total, int time, MapClient[] clients) {
         super(name, total, time);
         this.clients = clients;
-        this.clientCount = new int[clients.length];
+        this.clientCount = new AtomicInteger[clients.length];
+        for (int i = 0; i < clients.length; ++i) {
+            clientCount[i] = new AtomicInteger();
+        }
     }
 
     public String getReportString(int nKeyPerLine) {
