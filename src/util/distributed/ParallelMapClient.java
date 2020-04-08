@@ -44,13 +44,11 @@ class ClientMonitor extends Monitor {
             valueWidth = Math.max(valueWidth, p.second.length());
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("Notes:    * Client is long processing    ! Client is not alive.\r\n");
+        sb.append("Notes:    * Client is long processing    ! Client is not alive.");
         String formatStr = "  %s%s[%-" + keyWidth + "s: %-" + valueWidth + "s]";
         int nLine = (kv.size() - 1) / nKeyPerLine + 1;
         for (int i = 0; i < nLine; ++i) {
-            if (i > 0) {
-                sb.append("\r\n");
-            }
+            sb.append("\r\n");
             for (int j = i; j < kv.size(); j += nLine) {
                 Pair<String, String> p = kv.get(j);
                 sb.append(String.format(formatStr,
