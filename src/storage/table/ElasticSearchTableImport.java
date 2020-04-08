@@ -3,13 +3,11 @@ package storage.table;
 import com.google.gson.Gson;
 import config.Configuration;
 import data.tablem.TABLEM;
+import data.wikipedia.WIKIPEDIA;
 import model.table.Table;
 import org.json.JSONException;
 import org.json.JSONObject;
-import util.Concurrent;
-import util.FileUtils;
-import util.HTTPRequest;
-import util.SelfMonitor;
+import util.*;
 
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -143,15 +141,16 @@ public class ElasticSearchTableImport {
         return true;
     }
 
-    // /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.gz /GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf_to_be_indexed.gz
-    // Output content of canonicalized TableM for indexing into Elasticsearch.
-    public static void processTableData(String[] args) {
-        PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
-        FileUtils.LineStream stream = FileUtils.getLineStream(args[0], "UTF-8");
-
+    // Output content of canonicalized tables for indexing into Elasticsearch.
+    public static void processTableData() {
+        System.out.println("Process table data");
+        Monitor m = new SelfMonitor(null, -1, 1);
+        m.start();
+        PrintWriter out = FileUtils.getPrintWriter("/GW/D5data-12/hvthinh/TabQs/to_be_indexed/wiki+tablem.gz", "UTF-8");
         Gson gson = new Gson();
 
-        for (String line : stream) {
+        // TABLEM
+        for (String line : FileUtils.getLineStream("/GW/D5data-11/hvthinh/TABLEM/all/all+id.gz", "UTF-8")) {
             try {
                 JSONObject o = new JSONObject(line);
                 TableIndex tableIndex = new TableIndex();
@@ -162,15 +161,36 @@ public class ElasticSearchTableImport {
                 tableIndex.caption = o.has("title") ? o.getString("title") : "";
                 tableIndex.pageTitle = o.has("pageTitle") ? o.getString("pageTitle") : "";
                 tableIndex.pageContent = o.has("plainTextContent") ? o.getString("plainTextContent") : "";
-                tableIndex.tableText = o.has("table_as_text") ? o.getString("table_as_text") : "";
-
+                tableIndex.tableText = tableIndex.table.getTableRawContentForSearch();
                 out.println(gson.toJson(tableIndex));
             } catch (JSONException e) {
                 e.printStackTrace();
                 continue;
             }
         }
+
+        // WIKIPEDIA
+        for (String line : FileUtils.getLineStream("/GW/D5data-12/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id.gz", "UTF-8")) {
+            try {
+                JSONObject o = new JSONObject(line);
+                TableIndex tableIndex = new TableIndex();
+                tableIndex.table = WIKIPEDIA.parseFromJSON(o);
+                if (tableIndex.table == null) {
+                    continue;
+                }
+                tableIndex.caption = o.has("tableCaption") ? o.getString("tableCaption") : "";
+                tableIndex.pageTitle = o.has("pgTitle") ? o.getString("pgTitle") : "";
+                tableIndex.pageContent = o.has("sectionText") ? o.getString("sectionText") : "";
+                tableIndex.tableText = tableIndex.table.getTableRawContentForSearch();
+                out.println(gson.toJson(tableIndex));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+
         out.close();
+        m.forceShutdown();
     }
 
     private static String removeField(String field) {
