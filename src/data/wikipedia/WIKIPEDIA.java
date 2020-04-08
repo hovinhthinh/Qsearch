@@ -17,29 +17,30 @@ import java.util.LinkedList;
 // Read from TabEL (entity links are from original wikipedia)
 // Entity Linking and Quantity Columns are already detected.
 public class WIKIPEDIA {
+    public static boolean PARSE_ENTITY = true;
 
     // Input is from "/GW/D5data/hvthinh/TabEL/tables.json.gz"
     private static Cell parseCellFromJSONObject(JSONObject json) {
         Cell cell = new Cell();
         cell.text = String.join(" ", NLP.tokenize(json.getString("text")));
-        JSONArray links = json.getJSONArray("surfaceLinks");
+        if (PARSE_ENTITY) {
+            JSONArray links = json.getJSONArray("surfaceLinks");
+            cell.entityLinks = new ArrayList<>();
+            for (int i = 0; i < links.length(); ++i) {
+                EntityLink el = new EntityLink();
+                JSONObject linkI = links.getJSONObject(i);
 
-        cell.entityLinks = new ArrayList<>();
-        for (int i = 0; i < links.length(); ++i) {
-            EntityLink el = new EntityLink();
-            JSONObject linkI = links.getJSONObject(i);
-
-            el.text = String.join(" ", NLP.tokenize(linkI.getString("surface")));
-            String e = linkI.getJSONObject("target").getString("title");
-            if (!YagoType.entityExists("<" + e + ">")) {
-                continue;
+                el.text = String.join(" ", NLP.tokenize(linkI.getString("surface")));
+                String e = linkI.getJSONObject("target").getString("title");
+                if (!YagoType.entityExists("<" + e + ">")) {
+                    continue;
+                }
+                el.target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + e;
+                el.candidates = new LinkedList<>();
+                el.candidates.add(new Triple<>("<" + e + ">", -1, -1.0));
+                cell.entityLinks.add(el);
             }
-            el.target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + e;
-            el.candidates = new LinkedList<>();
-            el.candidates.add(new Triple<>("<" + e + ">", -1, -1.0));
-            cell.entityLinks.add(el);
         }
-
         return cell;
     }
 

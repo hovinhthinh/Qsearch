@@ -12,6 +12,10 @@ import java.util.List;
 public class WIKIPEDIA implements String2StringMap {
     Gson gson = new Gson();
 
+    public WIKIPEDIA() {
+        data.wikipedia.WIKIPEDIA.PARSE_ENTITY = false;
+    }
+
     @Override
     public List<String> map(String input) {
         try {
