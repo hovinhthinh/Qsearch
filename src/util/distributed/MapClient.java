@@ -24,10 +24,7 @@ class MapClient {
         if (isReset) {
             System.out.println(String.format("__reset_client__ [Client#%d]", clientId));
         }
-        try {
-            p.destroy();
-        } catch (Exception e) {
-        }
+        destroy();
         try {
             String mainCmd =
                     String.format("./run_no_notification.sh %s util.distributed.MapInteractiveRunner %s 2%s%s",
@@ -116,8 +113,7 @@ class MapClient {
         return isProcessing && System.currentTimeMillis() - lastResponseTimeStamp >= (MapInteractiveRunner.KEEP_ALIVE_INTERVAL + 5) * 1000;
     }
 
-    @Override
-    protected void finalize() throws Throwable {
+    public void destroy() {
         try {
             in.close();
         } catch (Exception e) {
@@ -130,7 +126,6 @@ class MapClient {
             p.destroy();
         } catch (Exception e) {
         }
-        super.finalize();
     }
 
     public void closeStreams() {
