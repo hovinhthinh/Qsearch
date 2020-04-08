@@ -40,7 +40,7 @@ class ClientMonitor extends Monitor {
     public String getReportString(int nKeyPerLine) {
         ArrayList<Pair<String, String>> kv = new ArrayList<>();
         for (int i = 0; i < clientCount.length; ++i) {
-            kv.add(new Pair<>(String.format("Client#%d", i), String.format("%d", clientCount[i])));
+            kv.add(new Pair<>(String.format("Client#%d", i), String.format("%d", clientCount[i].get())));
         }
         int keyWidth = 0, valueWidth = 0;
         for (Pair<String, String> p : kv) {
