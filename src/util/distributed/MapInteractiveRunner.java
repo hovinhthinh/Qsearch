@@ -11,6 +11,8 @@ public class MapInteractiveRunner {
     public static final String ON_FAIL = "__fail_input__";
     public static final String ON_KEEP_ALIVE = "__im_alive__";
 
+    public static final int KEEP_ALIVE_INTERVAL = 10;
+
     // args: <String2StringMapClass>
     public static void main(String[] args) {
         String2StringMap mapper;
@@ -26,7 +28,7 @@ public class MapInteractiveRunner {
         Thread keepAlive = new Thread(() -> {
             do {
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(KEEP_ALIVE_INTERVAL * 1000);
                 } catch (InterruptedException e) {
                     break;
                 }
