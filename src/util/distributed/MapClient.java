@@ -9,6 +9,7 @@ import java.util.List;
 
 class MapClient {
     public static final int LONG_PROCESSING_INTERVAL = 300;
+    public static final int NO_RESPONDING_INTERVAL = 30;
 
     private BufferedReader in;
     private PrintWriter out;
@@ -109,8 +110,8 @@ class MapClient {
         return isProcessing && System.currentTimeMillis() - lastMapStartTimestamp >= LONG_PROCESSING_INTERVAL * 1000;
     }
 
-    public boolean isNotAlive() {
-        return isProcessing && System.currentTimeMillis() - lastResponseTimeStamp >= (MapInteractiveRunner.KEEP_ALIVE_INTERVAL + 5) * 1000;
+    public boolean isNotResponding() {
+        return isProcessing && System.currentTimeMillis() - lastResponseTimeStamp >= (MapInteractiveRunner.KEEP_ALIVE_INTERVAL + NO_RESPONDING_INTERVAL) * 1000;
     }
 
     public void destroy() {
