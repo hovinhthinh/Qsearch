@@ -2,18 +2,79 @@ package util.distributed;
 
 import util.Concurrent;
 import util.FileUtils;
+import util.Monitor;
 import util.Pair;
-import util.SelfMonitor;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
+class ClientMonitor extends Monitor {
+    private int[] clientCount;
+    private MapClient[] clients;
+
+    public void incClient(int clientId) {
+        ++clientCount[clientId];
+    }
+
+    @Override
+    public int getCurrent() {
+        int totalCount = 0;
+        for (int c : clientCount) {
+            totalCount += c;
+        }
+        return totalCount;
+    }
+
+    public ClientMonitor(String name, int total, int time, MapClient[] clients) {
+        super(name, total, time);
+        this.clients = clients;
+        this.clientCount = new int[clients.length];
+    }
+
+    public String getReportString(int nKeyPerLine) {
+        ArrayList<Pair<String, String>> kv = new ArrayList<>();
+        for (int i = 0; i < clientCount.length; ++i) {
+            kv.add(new Pair<>(String.format("Client#%d", i), String.format("%d", clientCount[i])));
+        }
+        int keyWidth = 0, valueWidth = 0;
+        for (Pair<String, String> p : kv) {
+            keyWidth = Math.max(keyWidth, p.first.length());
+            valueWidth = Math.max(valueWidth, p.second.length());
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("Notes:    * Client is long processing    ! Client is not alive.\r\n");
+        String formatStr = "  %s%s[%-" + keyWidth + "s: %-" + valueWidth + "s]";
+        int nLine = (kv.size() - 1) / nKeyPerLine + 1;
+        for (int i = 0; i < nLine; ++i) {
+            if (i > 0) {
+                sb.append("\r\n");
+            }
+            for (int j = i; j < kv.size(); j += nLine) {
+                Pair<String, String> p = kv.get(j);
+                sb.append(String.format(formatStr,
+                        clients[j].isNotAlive() ? "!" : " ",
+                        clients[j].isLongProcessing() ? "*" : " ",
+                        p.first,
+                        p.second));
+            }
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public void logProgress(Progress progress) {
+        super.logProgress(progress);
+        System.out.println(getReportString(6));
+    }
+}
+
 
 class MultiThreadedMapClient {
+    private ArrayBlockingQueue<MapClient> clients;
 
-    public ArrayBlockingQueue<MapClient> clients;
+    public MapClient[] clientArray;
 
     public MultiThreadedMapClient(String String2StringMapClass, String memorySpecs, int nClients, String outStreamPrefix, String errStreamPrefix) {
         clients = new ArrayBlockingQueue<>(nClients);
@@ -26,12 +87,13 @@ class MultiThreadedMapClient {
                 PrintWriter outStream = outStreamPrefix == null ? null : FileUtils.getPrintWriter(
                         String.format("%s.part%03d.out", outStreamPrefix, finalI), "UTF-8");
                 String errPath = errStreamPrefix == null ? null : String.format("%s.part%03d.err", errStreamPrefix, finalI);
-                return new MapClient("Client#" + finalI, String2StringMapClass, memorySpecs, outStream, errPath);
+                return new MapClient(finalI, String2StringMapClass, memorySpecs, outStream, errPath);
             }));
         }
+        clientArray = new MapClient[nClients];
         try {
-            for (Future<MapClient> f : futureClients) {
-                clients.add(f.get());
+            for (int i = 0; i < nClients; ++i) {
+                clients.add(clientArray[i] = futureClients.get(i).get());
             }
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
@@ -40,13 +102,13 @@ class MultiThreadedMapClient {
         }
     }
 
-    // return map outputs & client name
-    public Pair<List<String>, String> map(String input) {
+    // return map outputs & client id
+    public Pair<List<String>, Integer> map(String input) {
         try {
             MapClient client = clients.take();
             List<String> result = client.map(input);
             clients.put(client);
-            return new Pair<>(result, client.getName());
+            return new Pair<>(result, client.getId());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -76,11 +138,9 @@ public class ParallelMapClient {
         FileUtils.LineStream in = FileUtils.getLineStream(args[3], "UTF-8");
         PrintWriter out = FileUtils.getPrintWriter(args[4], "UTF-8");
 
-        SelfMonitor m = new SelfMonitor(ParallelMapClient.class.getName() + ":" + args[2], -1, 60);
+        ClientMonitor m = new ClientMonitor(ParallelMapClient.class.getName() + ":" + args[2], -1, 60, client.clientArray);
         m.start();
-        for (MapClient cli : client.clients) {
-            m.incAndGet(cli.getName(), 0);
-        }
+
         new Thread(() -> {
             int nLine = 0;
             for (String line : FileUtils.getLineStream(args[3], "UTF-8")) {
@@ -88,6 +148,7 @@ public class ParallelMapClient {
             }
             m.setTotal(nLine);
         }).start();
+
         boolean mapResult = Concurrent.runAndWait(() -> {
             while (true) {
                 String input;
@@ -97,13 +158,13 @@ public class ParallelMapClient {
                 if (input == null) {
                     return;
                 }
-                Pair<List<String>, String> output = client.map(input);
+                Pair<List<String>, Integer> output = client.map(input);
                 synchronized (out) {
                     for (String o : output.first) {
                         out.println(o);
                     }
                 }
-                m.incAndGet(output.second, 1);
+                m.incClient(output.second);
             }
         }, nClients);
         if (!mapResult) {

@@ -8,15 +8,21 @@ import java.util.LinkedList;
 import java.util.List;
 
 class MapClient {
+    public static final int LONG_PROCESSING_INTERVAL = 300;
+
     private BufferedReader in;
     private PrintWriter out;
     private Process p;
     private PrintWriter outStream;
-    private String clientName, mapClass, memorySpecs, errPath;
+    private int clientId;
+    private String mapClass, memorySpecs, errPath;
+
+    private boolean isProcessing;
+    private long lastMapStartTimestamp, lastResponseTimeStamp;
 
     private void startService(boolean isReset) {
         if (isReset) {
-            System.out.println(String.format("__reset_client__ [%s]", clientName));
+            System.out.println(String.format("__reset_client__ [Client#%d]", clientId));
         }
         try {
             p.destroy();
@@ -54,25 +60,31 @@ class MapClient {
     }
 
     // String2StringMap
-    public MapClient(String clientName, String String2StringMapClass, String memorySpecs, PrintWriter outStream, String errPath) {
-        this.clientName = clientName;
+    public MapClient(int clientId, String String2StringMapClass, String memorySpecs, PrintWriter outStream, String errPath) {
+        this.clientId = clientId;
         this.mapClass = String2StringMapClass;
         this.memorySpecs = memorySpecs;
         this.errPath = errPath;
         this.outStream = outStream;
+        this.isProcessing = false;
+        this.lastMapStartTimestamp = -1;
+        this.lastResponseTimeStamp = -1;
         startService(false);
     }
 
-    public String getName() {
-        return clientName;
+    public int getId() {
+        return clientId;
     }
 
     public List<String> map(String input) {
         try {
+            isProcessing = true;
+            lastMapStartTimestamp = lastResponseTimeStamp = System.currentTimeMillis();
             out.println(input);
             out.flush();
             String str;
             while (!(str = in.readLine()).startsWith(MapInteractiveRunner.ON_OUTPUT)) {
+                lastResponseTimeStamp = System.currentTimeMillis();
                 if (outStream != null && !str.equals(MapInteractiveRunner.ON_KEEP_ALIVE)) {
                     outStream.println(str);
                 }
@@ -88,10 +100,20 @@ class MapClient {
             return output;
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
-            System.err.println(String.format("__fatal_input__ [%s]\t%s", clientName, input));
+            System.err.println(String.format("__fatal_input__ [Client#%d]\t%s", clientId, input));
             startService(true);
             return new LinkedList<>();
+        } finally {
+            isProcessing = false;
         }
+    }
+
+    public boolean isLongProcessing() {
+        return isProcessing && System.currentTimeMillis() - lastMapStartTimestamp >= LONG_PROCESSING_INTERVAL * 1000;
+    }
+
+    public boolean isNotAlive() {
+        return isProcessing && System.currentTimeMillis() - lastResponseTimeStamp >= (MapInteractiveRunner.KEEP_ALIVE_INTERVAL + 5) * 1000;
     }
 
     @Override
