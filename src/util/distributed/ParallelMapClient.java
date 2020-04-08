@@ -100,6 +100,13 @@ class MultiThreadedMapClient {
         }
     }
 
+    public void clearIdleClients() {
+        MapClient cli;
+        while ((cli = clients.poll()) != null) {
+            cli.destroy();
+        }
+    }
+
     // return map outputs & client id
     public Pair<List<String>, Integer> map(String input) {
         try {
@@ -152,6 +159,7 @@ public class ParallelMapClient {
                     input = in.readLine();
                 }
                 if (input == null) {
+                    client.clearIdleClients();
                     return;
                 }
                 Pair<List<String>, Integer> output = client.map(input);
