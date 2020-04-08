@@ -7,7 +7,10 @@ import data.wikipedia.WIKIPEDIA;
 import model.table.Table;
 import org.json.JSONException;
 import org.json.JSONObject;
-import util.*;
+import util.Concurrent;
+import util.FileUtils;
+import util.HTTPRequest;
+import util.SelfMonitor;
 
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -144,7 +147,7 @@ public class ElasticSearchTableImport {
     // Output content of canonicalized tables for indexing into Elasticsearch.
     public static void processTableData() {
         System.out.println("Process table data");
-        Monitor m = new SelfMonitor(null, -1, 1);
+        SelfMonitor m = new SelfMonitor(null, -1, 1);
         m.start();
         PrintWriter out = FileUtils.getPrintWriter("/GW/D5data-12/hvthinh/TabQs/to_be_indexed/wiki+tablem.gz", "UTF-8");
         Gson gson = new Gson();
@@ -163,6 +166,7 @@ public class ElasticSearchTableImport {
                 tableIndex.pageContent = o.has("plainTextContent") ? o.getString("plainTextContent") : "";
                 tableIndex.tableText = tableIndex.table.getTableRawContentForSearch();
                 out.println(gson.toJson(tableIndex));
+                m.incAndGet();
             } catch (JSONException e) {
                 e.printStackTrace();
                 continue;
@@ -183,6 +187,7 @@ public class ElasticSearchTableImport {
                 tableIndex.pageContent = o.has("sectionText") ? o.getString("sectionText") : "";
                 tableIndex.tableText = tableIndex.table.getTableRawContentForSearch();
                 out.println(gson.toJson(tableIndex));
+                m.incAndGet();
             } catch (JSONException e) {
                 e.printStackTrace();
                 continue;
@@ -241,7 +246,7 @@ public class ElasticSearchTableImport {
 
 
     public static void main(String[] args) throws Exception {
-//        processTableData(args);
+        processTableData();
 //        System.out.println(deleteIndex());
 //        System.out.println(createIndex());
 //        System.out.println(importTables("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.to_be_indexed.gz"));
