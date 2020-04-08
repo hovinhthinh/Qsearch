@@ -49,6 +49,24 @@ public class Table {
     // for debugging TextBasedColumnScoringNode.
     public String[][] QfactMatchingStr;
 
+    public String getTableRawContentForSearch() {
+        StringBuilder sb = new StringBuilder();
+        for (Cell[][] part : new Cell[][][]{header, data}) {
+            for (int i = 0; i < part.length; ++i) {
+                if (sb.length() > 0) {
+                    sb.append("\n");
+                }
+                for (int j = 0; j < part[i].length; ++j) {
+                    if (j > 0) {
+                        sb.append("\t");
+                    }
+                    sb.append(part[i][j].text);
+                }
+            }
+        }
+        return sb.toString();
+    }
+
     public String getTableContentPrintable(boolean showAnnotations, boolean multipleLine, boolean printColumnIndex, boolean singleLinkForCell) {
         StringBuilder sb = new StringBuilder();
         int[] columnMaxWidth = new int[nColumn];
