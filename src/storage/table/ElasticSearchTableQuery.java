@@ -383,8 +383,8 @@ public class ElasticSearchTableQuery {
                         newBestQfact.QELinkingScore = table.quantityToEntityColumnScore[qCol];
 
                         newBestQfact.tableId = table._id;
-                        newBestQfact.caption = source.getString("caption");
-                        newBestQfact.pageTitle = source.getString("pageTitle");
+                        newBestQfact.caption = source.has("caption") ? source.getString("caption") : null;
+                        newBestQfact.pageTitle = source.has("pageTitle") ? source.getString("pageTitle") : null;
                         newBestQfact.row = row;
                         newBestQfact.entityColumn = table.quantityToEntityColumn[qCol];
                         newBestQfact.quantityColumn = qCol;
