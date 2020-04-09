@@ -260,8 +260,9 @@ public class ElasticSearchTableQuery {
                 double elasticScore = o.getDouble("_score");
 
                 Table table;
+                JSONObject source = o.getJSONObject("_source");
                 synchronized (GSON) {
-                    table = GSON.fromJson(o.getJSONObject("_source").getString("parsedJson"), Table.class);
+                    table = GSON.fromJson(source.getString("parsedJson"), Table.class);
                 }
 
                 // check corpus target
@@ -382,8 +383,8 @@ public class ElasticSearchTableQuery {
                         newBestQfact.QELinkingScore = table.quantityToEntityColumnScore[qCol];
 
                         newBestQfact.tableId = table._id;
-                        newBestQfact.caption = table.caption;
-                        newBestQfact.pageTitle = table.pageTitle;
+                        newBestQfact.caption = source.getString("caption");
+                        newBestQfact.pageTitle = source.getString("pageTitle");
                         newBestQfact.row = row;
                         newBestQfact.entityColumn = table.quantityToEntityColumn[qCol];
                         newBestQfact.quantityColumn = qCol;
