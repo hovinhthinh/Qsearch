@@ -2,8 +2,11 @@ package util.distributed;
 
 import org.json.JSONArray;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Scanner;
 
 public class MapInteractiveRunner {
     public static final String ON_READY = "__map_ready__";
@@ -41,10 +44,10 @@ public class MapInteractiveRunner {
         keepAlive.start();
 
         try {
-            Scanner in = new Scanner(System.in, "UTF-8");
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
 
             String str;
-            while ((str = in.nextLine()) != null) {
+            while ((str = in.readLine()) != null) {
                 List<String> output = null;
                 try {
                     output = mapper.map(str);
@@ -65,6 +68,8 @@ public class MapInteractiveRunner {
                     System.out.flush();
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             keepAlive.interrupt();
         }
