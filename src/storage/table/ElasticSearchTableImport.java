@@ -183,12 +183,14 @@ public class ElasticSearchTableImport {
 //        processTableData();
 //        System.out.println(deleteIndex());
 //        System.out.println(createIndex());
-//        System.out.println(importTables("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.to_be_indexed.gz"));
+//        System.out.println(importTables("/GW/D5data-12/hvthinh/TabQs/to_be_indexed/wiki.gz"));
+//        System.out.println(importTables("/GW/D5data-12/hvthinh/TabQs/to_be_indexed/tablem.gz"));
 
         // Optional
 //        System.out.println("Remove 'searchable' Field: " + removeField("searchable"));
 //        System.out.println("Remove 'parsedJson' Field: " + removeField("parsedJson"));
 
-//        System.out.println(setSearchableDocuments("/GW/D5data-11/hvthinh/TABLEM/all/all+id.shuf.annotation+linking.gz"));
+//        System.out.println(setSearchableDocuments("/GW/D5data-11/hvthinh/TABLEM/all/all+id.annotation+linking.gz"));
+//        System.out.println(setSearchableDocuments("/GW/D5data-12/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id_annotation+linking.gz"));
     }
 }
