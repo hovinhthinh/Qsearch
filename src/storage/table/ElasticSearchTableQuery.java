@@ -54,7 +54,7 @@ public class ElasticSearchTableQuery {
             private Queue<JSONObject> data = null;
             private String url = PROTOCOL + "://" + ES_HOST + "/" + TABLE_INDEX + "/" + TABLE_TYPE + "/_search?scroll=5m";
             private String body = "{\n" +
-                    "  \"_source\": [\"parsedJson\"],\n" +
+                    "  \"_source\": [\"parsedJson\",\"caption\",\"pageTitle\"],\n" +
                     "  \"size\": 1000,\n" +
                     "  \"query\": {\n" +
                     "    \"bool\": {\n" +
