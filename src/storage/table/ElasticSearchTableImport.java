@@ -2,17 +2,15 @@ package storage.table;
 
 import com.google.gson.Gson;
 import config.Configuration;
-import data.tablem.TABLEM;
-import data.wikipedia.WIKIPEDIA;
 import model.table.Table;
 import org.json.JSONException;
 import org.json.JSONObject;
+import storage.table.index.TableIndex;
 import util.Concurrent;
 import util.FileUtils;
 import util.HTTPRequest;
 import util.SelfMonitor;
 
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -24,23 +22,6 @@ public class ElasticSearchTableImport {
     public static final String TABLE_TYPE = Configuration.get("storage.elasticsearch.table_type");
     public static final int BATCH_SIZE = 1024 * 8;
     public static ArrayList<String> bulks = new ArrayList<>();
-
-    // For unparsed tables (without any annotation).
-    public static class TableIndex {
-        private static final Gson GSON = new Gson();
-        public Table table;
-        public String pageContent, caption, pageTitle, tableText;
-
-        public String toESBulkContent() {
-            return new JSONObject()
-                    .put("pageContent", pageContent)
-                    .put("caption", caption)
-                    .put("pageTitle", pageTitle)
-                    .put("tableText", tableText)
-                    .put("json", GSON.toJson(table))
-                    .toString();
-        }
-    }
 
     public static String deleteIndex() {
         return HTTPRequest.DELETE(PROTOCOL + "://" + ES_HOST + "/" + TABLE_INDEX, null);
@@ -148,7 +129,7 @@ public class ElasticSearchTableImport {
     // TableM input: /GW/D5data-11/hvthinh/TABLEM/all/all+id.gz
     // Wikipedia input: /GW/D5data-12/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id.gz
     public static void processTableData() {
-        throw new RuntimeException("Moved to package 'tobeindexed'");
+        throw new RuntimeException("Moved to package 'index'");
     }
 
     private static String removeField(String field) {

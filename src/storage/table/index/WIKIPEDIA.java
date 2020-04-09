@@ -1,9 +1,8 @@
-package storage.table.tobeindexed;
+package storage.table.index;
 
 import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
-import storage.table.ElasticSearchTableImport;
 import util.distributed.String2StringMap;
 
 import java.util.Arrays;
@@ -20,7 +19,7 @@ public class WIKIPEDIA implements String2StringMap {
     public List<String> map(String input) {
         try {
             JSONObject o = new JSONObject(input);
-            ElasticSearchTableImport.TableIndex tableIndex = new ElasticSearchTableImport.TableIndex();
+            TableIndex tableIndex = new TableIndex();
             tableIndex.table = data.wikipedia.WIKIPEDIA.parseFromJSON(o);
             if (tableIndex.table == null) {
                 return null;
