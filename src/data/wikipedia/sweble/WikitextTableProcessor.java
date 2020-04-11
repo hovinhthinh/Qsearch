@@ -74,9 +74,7 @@ public class WikitextTableProcessor implements String2StringMap {
             EngProcessedPage cp = engine.postprocess(new PageId(PageTitle.make(config, pageTitle), -1), wikitext, null);
 
 //            if (pageTitle.equals("Bubblegum Crisis")) {
-//                StringBuilder sb = new StringBuilder();
-//                debugNode(cp, sb, 0);
-//                System.out.println(sb);
+//                System.out.println(debugNode(cp));
 //                System.exit(0);
 //            }
             visitTables(cp, new Stack<>());
@@ -236,9 +234,15 @@ public class WikitextTableProcessor implements String2StringMap {
         nodeStack.pop();
     }
 
-    public void debugNode(WtNode n, StringBuilder sb, int nIndent) {
+    public static String debugNode(WtNode n) {
+        StringBuilder sb = new StringBuilder();
+        debugNode(n, sb, 0);
+        return sb.toString();
+    }
+
+    private static void debugNode(WtNode n, StringBuilder sb, int nIndent) {
         for (int i = 0; i < nIndent; ++i) {
-            sb.append("\t");
+            sb.append("  ");
         }
         sb.append(n.getNodeName());
         List<String> fullPrintNodes = Arrays.asList(
