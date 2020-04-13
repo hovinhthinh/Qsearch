@@ -137,7 +137,7 @@ public class QuantityTaggingNode implements TaggingNode {
 
         table.majorUnitInColumn = new String[table.nColumn];
         for (int col = 0; col < table.nColumn; ++col) {
-            String header = table.getCombinedHeader(col);
+            String header = table.getOriginalCombinedHeader(col);
             // Extends units from the header.
             Quadruple<String, Double, String, String> unitInfoFromHeader = getHeaderUnit(header);
             if (unitInfoFromHeader != null) {
