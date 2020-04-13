@@ -34,6 +34,12 @@ public class TimeTaggingNode implements TaggingNode {
                 // tagCell(table.header[r][c]);
                 table.header[r][c].timeLinks = new ArrayList<>();
             }
+
+            // if header has an unit then this column is not time column.
+            if (QuantityTaggingNode.getHeaderUnit(table.getOriginalCombinedHeader(c)) != null) {
+                continue;
+            }
+
             for (int r = 0; r < table.nDataRow; ++r) {
                 if (table.data[r][c].entityLinks != null && table.data[r][c].entityLinks.size() > 0) {
                     // not tagging cells with entities;
