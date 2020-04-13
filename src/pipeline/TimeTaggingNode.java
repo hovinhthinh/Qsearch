@@ -1,6 +1,7 @@
 package pipeline;
 
 import edu.stanford.nlp.pipeline.*;
+import edu.stanford.nlp.time.SUTime;
 import edu.stanford.nlp.time.TimeAnnotations;
 import edu.stanford.nlp.time.TimeAnnotator;
 import edu.stanford.nlp.time.TimeExpression;
@@ -55,7 +56,10 @@ public class TimeTaggingNode implements TaggingNode {
 //        annotation.set(CoreAnnotations.DocDateAnnotation.class, "2019-01-14");
         pipeline.annotate(annotation);
         for (CoreMap cm : annotation.get(TimeAnnotations.TimexAnnotations.class)) {
-            links.add(new TimeLink(cm.toString(), cm.get(TimeExpression.Annotation.class).getTemporal().toString()));
+            SUTime.Temporal t = cm.get(TimeExpression.Annotation.class).getTemporal();
+            if (t.getTime().getTimexType().toString().equals("DATE")) {
+                links.add(new TimeLink(cm.toString(), t.toString()));
+            }
         }
         return links;
     }
