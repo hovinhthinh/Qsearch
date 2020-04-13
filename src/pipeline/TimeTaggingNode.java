@@ -57,7 +57,8 @@ public class TimeTaggingNode implements TaggingNode {
         pipeline.annotate(annotation);
         for (CoreMap cm : annotation.get(TimeAnnotations.TimexAnnotations.class)) {
             SUTime.Temporal t = cm.get(TimeExpression.Annotation.class).getTemporal();
-            if (t.getTime().getTimexType().toString().equals("DATE")) {
+            SUTime.Time time = t.getTime();
+            if (time != null && time.getTimexType().toString().equals("DATE")) {
                 links.add(new TimeLink(cm.toString(), t.toString()));
             }
         }
