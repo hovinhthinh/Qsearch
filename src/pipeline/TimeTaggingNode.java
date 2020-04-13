@@ -36,9 +36,7 @@ public class TimeTaggingNode implements TaggingNode {
             }
 
             // if header has an unit then this column is not time column.
-            if (QuantityTaggingNode.getHeaderUnit(table.getOriginalCombinedHeader(c)) != null) {
-                continue;
-            }
+            boolean headerHasUnit = QuantityTaggingNode.getHeaderUnit(table.getOriginalCombinedHeader(c)) != null;
 
             for (int r = 0; r < table.nDataRow; ++r) {
                 if (table.data[r][c].entityLinks != null && table.data[r][c].entityLinks.size() > 0) {
@@ -48,7 +46,7 @@ public class TimeTaggingNode implements TaggingNode {
                     // for webtables, time tagging nodes should be done before entities tagging node.
                     table.data[r][c].timeLinks = new ArrayList<>();
                 } else {
-                    table.data[r][c].timeLinks = getLinks(table.data[r][c].text);
+                    table.data[r][c].timeLinks = headerHasUnit ? new ArrayList<>() : getLinks(table.data[r][c].text);
                 }
             }
         }
