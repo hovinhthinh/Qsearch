@@ -15,7 +15,10 @@ import parser.UnitFeatures;
 import parser.UnitSpan;
 import util.Quadruple;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Pattern;
 
 // Now using IllinoisQuantifier.
 // TODO: Problem: "Google pays $ 17 million compensation over privacy breach .": compensation is detected in the
@@ -97,7 +100,9 @@ public class QuantityTaggingNode implements TaggingNode {
         System.out.println(getHeaderUnit("speed ( M km / h )"));
     }
 
-    private void tagBodyCell(Cell cell, String unit, double multiplier) {
+    private Pattern timeMatcher = Pattern.compile("\\d{1,2}:\\d{2}[\\.:]\\d{2}"); // e.g., 3:50.77 or 1:15:20
+
+    private void tagBodyCell(Cell cell, String unit, double multiplier, String originalCombinedHeader) {
         cell.quantityLinks = new ArrayList<>();
         if (cell.entityLinks != null && cell.entityLinks.size() > 0) {
             // not tagging cells with entities;
@@ -109,6 +114,35 @@ public class QuantityTaggingNode implements TaggingNode {
         if (cell.getRepresentativeTimeLink() != null) {
             return;
         }
+
+        // Use rules first
+        if (timeMatcher.matcher(cell.text).matches()) {
+            int p1 = cell.text.indexOf(':');
+            int p2 = cell.text.lastIndexOf('.');
+            if (p2 != -1) {
+                // min:sec:centisec
+                Integer a = Integer.parseInt(cell.text.substring(0, p1));
+                Integer b = Integer.parseInt(cell.text.substring(p1 + 1, p2));
+                Integer c = Integer.parseInt(cell.text.substring(p2 + 1));
+                if (a > 0 && a < 60 && b < 60 && c < 100) {
+                    cell.quantityLinks.add(
+                            new QuantityLink(cell.text, a * 60 + b + 0.01 * c, "second", "="));
+                    return;
+                }
+            } else {
+                // hour:min:sec
+                p2 = cell.text.lastIndexOf(':');
+                Integer a = Integer.parseInt(cell.text.substring(0, p1));
+                Integer b = Integer.parseInt(cell.text.substring(p1 + 1, p2));
+                Integer c = Integer.parseInt(cell.text.substring(p2 + 1));
+                if (a > 0 && b < 60 && c < 60) {
+                    cell.quantityLinks.add(
+                            new QuantityLink(cell.text, a * 3600 + b + 60 * c, "second", "="));
+                    return;
+                }
+            }
+        }
+        // Now use IllinoisQuantifier
         String dumpyText = "This quantity is " + cell.text + " .";
         for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(dumpyText, true)) {
             if (span.object instanceof Quantity) {
@@ -120,9 +154,32 @@ public class QuantityTaggingNode implements TaggingNode {
                     multiplier /= 100;
                 }
 
-                cell.quantityLinks.add(new QuantityLink(dumpyText.substring(span.start, span.end), q.value * multiplier,
-                        // prefer header unit if available
-                        NLP.stripSentence(unit != null ? unit : q.units), q.bound));
+                // prefer header unit if available
+                String cellUnit = NLP.stripSentence(unit != null ? unit : q.units);
+
+                // !!! Apply rules here (when unit is missing)
+                if (cellUnit.trim().isEmpty()) {
+                    if (originalCombinedHeader.equalsIgnoreCase("height")) {
+                        // human height
+                        if (q.value > 100 && q.value <= 250) {
+                            cellUnit = "centimetre";
+                        } else if (q.value > 1 && q.value <= 2.5) {
+                            cellUnit = "metre";
+                        }
+                    } else if (originalCombinedHeader.equalsIgnoreCase("weight")) {
+                        // human weight
+                        if (q.value >= 50 && q.value <= 100) {
+                            cellUnit = "kilogram";
+                        }
+                    } else if (originalCombinedHeader.equalsIgnoreCase("record")) {
+                        if (q.value < 60) {
+                            cellUnit = "second";
+                        }
+                    }
+                }
+
+                cell.quantityLinks.add(
+                        new QuantityLink(dumpyText.substring(span.start, span.end), q.value * multiplier, cellUnit, q.bound));
             }
         }
     }
@@ -149,7 +206,7 @@ public class QuantityTaggingNode implements TaggingNode {
             HashMap<String, Integer> unitToFreq = new HashMap<>();
             for (Cell[] row : table.data) {
                 tagBodyCell(row[col], unitInfoFromHeader == null ? null : unitInfoFromHeader.first,
-                        unitInfoFromHeader == null ? 1.0 : unitInfoFromHeader.second);
+                        unitInfoFromHeader == null ? 1.0 : unitInfoFromHeader.second, header);
 
                 QuantityLink q = row[col].getRepresentativeQuantityLink();
                 if (q != null) {
