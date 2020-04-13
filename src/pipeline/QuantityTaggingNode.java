@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 public class QuantityTaggingNode implements TaggingNode {
 
     // returns: Unit (QuTree Basename), Multiplier, Span String, Preprocessed String (removed Span String)
-    private static Quadruple<String, Double, String, String> getHeaderUnit(String header) {
+    public static Quadruple<String, Double, String, String> getHeaderUnit(String header) {
         try {
             ParseState[] state = new ParseState[1];
             List<EntryWithScore<Unit>> units = (List<EntryWithScore<Unit>>) Static.getTableHeaderParser().parseHeaderExplain(header, null, 0, state);
