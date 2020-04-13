@@ -137,7 +137,7 @@ public class QuantityTaggingNode implements TaggingNode {
                 Integer c = Integer.parseInt(cell.text.substring(p2 + 1));
                 if (a > 0 && b < 60 && c < 60) {
                     cell.quantityLinks.add(
-                            new QuantityLink(cell.text, a * 3600 + b + 60 * c, "second", "="));
+                            new QuantityLink(cell.text, a * 3600 + b * 60 + c, "second", "="));
                     return;
                 }
             }
