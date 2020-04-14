@@ -69,8 +69,14 @@ public class Cell {
 
         // the second check is actually done by PriorEntityTagger, however we double check here, in case the entity is not
         // tagged using this tagger (e.g. WIKIPEDIA corpus has it own annotation)
-        return repELink = (entityLinks.get(0).text.split(" ").length >=
-                text.split(" ").length * PriorBasedEntityTaggingNode.REPRESENTATIVE_THRESHOLD
+        String[] arr = text.split(" ");
+        int repLength = arr.length;
+        for (String s : arr) {
+            if (s.equals("(") || s.equals(")") || s.equals("\"") || s.equals("'")) {
+                --repLength;
+            }
+        }
+        return repELink = (entityLinks.get(0).text.split(" ").length >= repLength * PriorBasedEntityTaggingNode.REPRESENTATIVE_THRESHOLD
                 ? entityLinks.get(0) : null);
     }
 
