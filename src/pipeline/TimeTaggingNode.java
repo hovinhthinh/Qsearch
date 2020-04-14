@@ -36,7 +36,9 @@ public class TimeTaggingNode implements TaggingNode {
             }
 
             // if header has an unit then this column is not time column.
-            boolean headerHasUnit = QuantityTaggingNode.getHeaderUnit(table.getOriginalCombinedHeader(c)) != null;
+            String header = table.getOriginalCombinedHeader(c);
+            boolean headerHasUnit = !header.equalsIgnoreCase("year")
+                    && QuantityTaggingNode.getHeaderUnit(header) != null;
 
             for (int r = 0; r < table.nDataRow; ++r) {
                 if (table.data[r][c].entityLinks != null && table.data[r][c].entityLinks.size() > 0) {
@@ -70,7 +72,8 @@ public class TimeTaggingNode implements TaggingNode {
     }
 
     public static void main(String[] args) {
-        System.out.println(new TimeTaggingNode().getLinks("Today is 2019-01-14."));
+        System.out.println(QuantityTaggingNode.getHeaderUnit("Second"));
+        System.out.println(new TimeTaggingNode().getLinks("1995"));
     }
 }
 
