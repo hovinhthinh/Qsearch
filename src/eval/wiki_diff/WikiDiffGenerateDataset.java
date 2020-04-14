@@ -19,8 +19,7 @@ public class WikiDiffGenerateDataset {
         for (String line : FileUtils.getLineStream("/GW/D5data-12/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id.gz", "UTF-8")) {
             m.incAndGet();
             JSONObject o = new JSONObject(line);
-            String hash = o.getInt("pgId") + "\t" + o.getInt("tableId");
-            if (tableIdHash.contains(hash)) {
+            if (tableIdHash.contains(o.get("_id"))) {
                 out.println(line);
             }
         }
