@@ -70,6 +70,7 @@ public class Wikitext2Html {
             PrintWriter out = FileUtils.getPrintWriter(outputFile, "UTF-8");
             out.print(html);
             out.close();
+            System.out.println(WikitextTableProcessor.debugNode(cp));
             return true;
         } catch (Exception e) {
             e.printStackTrace();
