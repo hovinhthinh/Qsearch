@@ -171,7 +171,8 @@ public class QuantityTaggingNode implements TaggingNode {
                         if (q.value >= 50 && q.value <= 100) {
                             cellUnit = "kilogram";
                         }
-                    } else if (originalCombinedHeader.equalsIgnoreCase("record")) {
+                    } else if (originalCombinedHeader.equalsIgnoreCase("record")
+                            || originalCombinedHeader.equalsIgnoreCase("time")) {
                         if (q.value < 60) {
                             cellUnit = "second";
                         }
