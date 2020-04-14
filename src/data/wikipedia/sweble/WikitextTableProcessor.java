@@ -259,6 +259,9 @@ public class WikitextTableProcessor implements String2StringMap {
         } else if (n.getNodeName().equals("WtText")) {
             sb.append(" : ").append(((WtText) n).getContent());
             sb.append("\r\n");
+        } else if (n.getNodeName().equals("WtTemplate")) {
+            sb.append(" : ").append(((WtTemplate) n).toString());
+            sb.append("\r\n");
         } else {
             sb.append("\r\n");
             for (WtNode child : n) {
