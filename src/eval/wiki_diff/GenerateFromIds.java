@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 
+@Deprecated
 public class GenerateFromIds {
     public static void main(String[] args) {
         Set<String> idSet = new HashSet<>();
