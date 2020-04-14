@@ -157,6 +157,8 @@ public class QuantityTaggingNode implements TaggingNode {
                 // prefer header unit if available
                 String cellUnit = NLP.stripSentence(unit != null ? unit : q.units);
 
+                String quantitySpan = dumpyText.substring(span.start, span.end);
+
                 // !!! Apply rules here (when unit is missing)
                 if (cellUnit.trim().isEmpty()) {
                     if (originalCombinedHeader.equalsIgnoreCase("height")) {
@@ -176,11 +178,28 @@ public class QuantityTaggingNode implements TaggingNode {
                         if (q.value < 60) {
                             cellUnit = "second";
                         }
+                    } else if (cell.text.contains("€" + quantitySpan)) {
+                        cellUnit = "euro";
+                        quantitySpan = "€" + quantitySpan;
+                    } else if (cell.text.contains("€ " + quantitySpan)) {
+                        cellUnit = "euro";
+                        quantitySpan = "€ " + quantitySpan;
+                    } else if (cell.text.contains("£" + quantitySpan)) {
+                        cellUnit = "British pound";
+                        quantitySpan = "£" + quantitySpan;
+                    } else if (cell.text.contains("£ " + quantitySpan)) {
+                        cellUnit = "British pound";
+                        quantitySpan = "£ " + quantitySpan;
+                    } else if (cell.text.contains("¥" + quantitySpan)) {
+                        cellUnit = "yuan";
+                        quantitySpan = "¥" + quantitySpan;
+                    } else if (cell.text.contains("¥ " + quantitySpan)) {
+                        cellUnit = "yuan";
+                        quantitySpan = "¥ " + quantitySpan;
                     }
                 }
 
-                cell.quantityLinks.add(
-                        new QuantityLink(dumpyText.substring(span.start, span.end), q.value * multiplier, cellUnit, q.bound));
+                cell.quantityLinks.add(new QuantityLink(quantitySpan, q.value * multiplier, cellUnit, q.bound));
             }
         }
     }
