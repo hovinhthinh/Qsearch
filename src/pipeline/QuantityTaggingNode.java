@@ -154,13 +154,13 @@ public class QuantityTaggingNode implements TaggingNode {
                     multiplier /= 100;
                 }
 
-                if (q.units.equalsIgnoreCase("millions")) {
+                if (q.units.trim().equalsIgnoreCase("millions")) {
                     q.value *= 1000000;
                     q.units = "";
                 }
 
                 // prefer header unit if available
-                String cellUnit = NLP.stripSentence(unit != null ? unit : q.units);
+                String cellUnit = NLP.stripSentence(unit != null ? unit : q.units.trim());
 
                 String quantitySpan = dumpyText.substring(span.start, span.end);
 
