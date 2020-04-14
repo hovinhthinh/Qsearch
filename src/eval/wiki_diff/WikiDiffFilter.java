@@ -7,6 +7,7 @@ import util.FileUtils;
 import java.io.PrintWriter;
 import java.util.*;
 
+@Deprecated
 public class WikiDiffFilter {
     static List<String> blockStr = Arrays.asList("Capacity", "Attendance");
 
