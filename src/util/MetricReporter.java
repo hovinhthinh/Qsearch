@@ -79,8 +79,9 @@ public class MetricReporter {
     public String getReportString(int nKeyPerLine, boolean sortByKey) {
 
         StringBuilder sb = new StringBuilder();
-        sb.append("========== ").append("METRIC_REPORTER [").append(name).append("]").append(" ==========\r\n");
+        sb.append("========== ").append("METRIC_REPORTER [").append(name).append("]").append(" ==========");
         // count
+        sb.append("\r\n");
         if (cnt_key2freq.size() > 0) {
             sb.append("--- Count ---\r\n");
             ArrayList<Pair<String, String>> kv = new ArrayList<>();
@@ -95,6 +96,7 @@ public class MetricReporter {
             sb.append(getKeyValuePairsStr(kv, nKeyPerLine));
         }
         // avg
+        sb.append("\r\n");
         if (avg_key2freq.size() > 0) {
             sb.append("--- Average ---\r\n");
             ArrayList<Pair<String, String>> kv = new ArrayList<>();
@@ -109,6 +111,7 @@ public class MetricReporter {
 
         }
         // micro avg
+        sb.append("\r\n");
         if (microAvg_key2True.size() > 0) {
             sb.append("--- Micro Average ---\r\n");
             ArrayList<Pair<String, String>> kv = new ArrayList<>();
