@@ -4,16 +4,56 @@ import catalog.QuantityCatalog;
 import catalog.Unit;
 import org.w3c.dom.Element;
 
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class QuantityDomain {
     public static final QuantityCatalog QUANTITY_CATALOG;
 
+    private static Map<String, List<Unit>> SURFACE_UNITS_MAP;
+
     static {
         try {
             QUANTITY_CATALOG = new QuantityCatalog((Element) null);
+            SURFACE_UNITS_MAP = new HashMap<>();
+            for (catalog.Quantity q : QUANTITY_CATALOG.getQuantities()) {
+                if (q.isUnitLess()) {
+                    continue;
+                }
+                for (Unit u : q.getUnits()) {
+                    Set<String> surfaceForms = new HashSet<>();
+                    for (String s : u.getBaseSymbols()) {
+                        surfaceForms.add(s.trim());
+                    }
+                    for (String s : u.getBaseNames()) {
+                        surfaceForms.add(s.trim());
+                    }
+                    for (String s : u.getLemmas()) {
+                        surfaceForms.add(s.trim());
+                    }
+                    for (String s : surfaceForms) {
+                        if (s.isEmpty()) {
+                            continue;
+                        }
+                        if (!SURFACE_UNITS_MAP.containsKey(s)) {
+                            SURFACE_UNITS_MAP.put(s, new LinkedList<>());
+                        }
+                        SURFACE_UNITS_MAP.get(s).add(u);
+                    }
+                }
+            }
+            for (Map.Entry<String, List<Unit>> e : SURFACE_UNITS_MAP.entrySet()) {
+                if (e.getValue().size() > 1) {
+                    Unit standardUnit = QUANTITY_CATALOG.getUnitFromBaseName(e.getKey());
+                    if (standardUnit != null) {
+                        // if standard unit can be found from base name, then use it.
+                        e.getValue().clear();
+                        e.getValue().add(standardUnit);
+                    }
+                    // else we keep all candidate units, however we should use the first one.
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -176,8 +216,9 @@ public class QuantityDomain {
         }
         // Now use QuTree.
         try {
-            Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
-            if (u != null && !u.getParentQuantity().isUnitLess()) {
+            List<Unit> units = SURFACE_UNITS_MAP.get(quantity.unit);
+            Unit u = units == null ? null : units.get(0);
+            if (u != null) {
                 String domain = u.getParentQuantity().getConcept();
                 // allows only these specific domains
                 if (domain.equals(Domain.LENGTH) ||
@@ -228,8 +269,9 @@ public class QuantityDomain {
         }
         // Now use QuTree.
         try {
-            Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
-            if (u != null && !u.getParentQuantity().isUnitLess()) {
+            List<Unit> units = SURFACE_UNITS_MAP.get(quantity.unit);
+            Unit u = units == null ? null : units.get(0);
+            if (u != null) {
                 String domain = u.getParentQuantity().getConcept();
                 // allows only these specific domains
                 if (domain.equals(Domain.LENGTH) ||
