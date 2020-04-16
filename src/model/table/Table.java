@@ -331,6 +331,7 @@ public class Table {
     // Check if first column is index column
     public boolean hasIndexColumn() {
         boolean startWith0 = false, startWith1 = false;
+        int lastRank = -1;
         for (int i = 0; i < nDataRow; ++i) {
             try {
                 String indexStr = data[i][0].text;
@@ -338,6 +339,10 @@ public class Table {
                     indexStr = indexStr.substring(0, indexStr.length() - 1).trim();
                 }
                 int rank = Integer.parseInt(indexStr);
+                if (lastRank != -1 && rank == lastRank) {
+                    continue;
+                }
+                lastRank = rank;
                 if (rank == i) {
                     startWith0 = true;
                 } else if (rank == i + 1) {
