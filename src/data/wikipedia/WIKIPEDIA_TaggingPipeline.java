@@ -33,7 +33,8 @@ public class WIKIPEDIA_TaggingPipeline implements String2StringMap {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
                 new TimeTaggingNode(),
-                new QuantityTaggingNode()
+                new QuantityTaggingNode(),
+                new ColumnTypeTaggingNode()
         );
     }
 
