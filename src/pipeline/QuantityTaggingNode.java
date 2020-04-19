@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 // TODO: Completed in 2010 , the Zifeng Tower in Nanjing has an architectural height of 1,476 feet ( 450 meters ) and is occupied to a height of 1,039 feet ( 316.6 meters ) .
 // TODO: In 2013 , SBB Cargo had 3,061 employees and achieved consolidated sales of CHF 953 million .
 public class QuantityTaggingNode implements TaggingNode {
+    public static final double CLEAR_TIME_LINK_THRESHOLD = 0.5;
 
     // returns: Unit (QuTree Basename), Multiplier, Span String, Preprocessed String (removed Span String)
     public static Quadruple<String, Double, String, String> getHeaderUnit(String header) {
@@ -102,8 +103,10 @@ public class QuantityTaggingNode implements TaggingNode {
 
     private Pattern timeMatcher = Pattern.compile("\\d{1,2}:\\d{2}[\\.:]\\d{2}"); // e.g., 3:50.77 or 1:15:20
 
-    private void tagBodyCell(Cell cell, String unit, double multiplier, String originalCombinedHeader) {
-        cell.quantityLinks = new ArrayList<>();
+    private void tagBodyCell(Cell cell, String unit, double multiplier, String originalCombinedHeader, boolean hasTimeLink) {
+        if (cell.quantityLinks == null) {
+            cell.quantityLinks = new ArrayList<>();
+        }
         if (cell.entityLinks != null && cell.entityLinks.size() > 0) {
             // not tagging cells with entities;
             // only in case of wikipedia, quantity tagging is run after entities tagging.
@@ -111,7 +114,7 @@ public class QuantityTaggingNode implements TaggingNode {
             // for webtables, quantities tagging nodes should be done before entities tagging node.
             return;
         }
-        if (cell.getRepresentativeTimeLink() != null) {
+        if (hasTimeLink != (cell.getRepresentativeTimeLink() != null)) {
             return;
         }
 
@@ -229,11 +232,28 @@ public class QuantityTaggingNode implements TaggingNode {
                 table.setCombinedHeader(col, unitInfoFromHeader.fourth);
             }
 
-            HashMap<String, Integer> unitToFreq = new HashMap<>();
+            int nQLs = 0;
             for (Cell[] row : table.data) {
                 tagBodyCell(row[col], unitInfoFromHeader == null ? null : unitInfoFromHeader.first,
-                        unitInfoFromHeader == null ? 1.0 : unitInfoFromHeader.second, header);
+                        unitInfoFromHeader == null ? 1.0 : unitInfoFromHeader.second, header, false);
+                if (row[col].getRepresentativeQuantityLink() != null) {
+                    ++nQLs;
+                }
+            }
+            if (nQLs >= CLEAR_TIME_LINK_THRESHOLD * table.nDataRow) {
+                for (Cell[] row : table.data) {
+                    row[col].resetCachedRepresentativeLink();
+                    tagBodyCell(row[col], unitInfoFromHeader == null ? null : unitInfoFromHeader.first,
+                            unitInfoFromHeader == null ? 1.0 : unitInfoFromHeader.second, header, true);
+                    if (row[col].getRepresentativeQuantityLink() != null) {
+                        row[col].timeLinks.clear();
+                        row[col].resetCachedRepresentativeLink();
+                    }
+                }
+            }
 
+            HashMap<String, Integer> unitToFreq = new HashMap<>();
+            for (Cell[] row : table.data) {
                 QuantityLink q = row[col].getRepresentativeQuantityLink();
                 if (q != null) {
                     unitToFreq.put(q.quantity.unit, unitToFreq.getOrDefault(q.quantity.unit, 0) + 1);
