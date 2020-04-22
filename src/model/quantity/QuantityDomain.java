@@ -78,7 +78,8 @@ public class QuantityDomain {
             {"inches", 0.0254},
             {"inch", 0.0254},
             {"yards", 0.9144},
-            {"- yards", 0.9144}
+            {"- yards", 0.9144},
+            {"- yard", 0.9144}
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
     public static final Map<String, Double> MONEY_DOMAIN = Stream.of(new Object[][]{
             {"usd", 1.0},
