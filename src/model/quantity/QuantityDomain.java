@@ -113,6 +113,9 @@ public class QuantityDomain {
             {"percent", 1.0},
             {"per cent", 1.0}
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
+    public static final Map<String, Double> MASS_DOMAIN = Stream.of(new Object[][]{
+            // TODO
+    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
     public static final Map<String, Double> AREA_DOMAIN = Stream.of(new Object[][]{ // Domain added for Wikipedia
             {"square miles", 2859988.11},
             {"square mile", 2859988.11},
@@ -202,6 +205,10 @@ public class QuantityDomain {
             quantity.scale = TIME_DOMAIN.get(quantity.unit);
             return TIME_DOMAIN.get(quantity.unit);
         }
+        if (MASS_DOMAIN.containsKey(quantity.unit)) {
+            quantity.scale = MASS_DOMAIN.get(quantity.unit);
+            return MASS_DOMAIN.get(quantity.unit);
+        }
         if (PERCENTAGE_DOMAIN.containsKey(quantity.unit)) {
             quantity.scale = PERCENTAGE_DOMAIN.get(quantity.unit);
             return PERCENTAGE_DOMAIN.get(quantity.unit);
@@ -225,6 +232,7 @@ public class QuantityDomain {
                         domain.equals(Domain.MONEY) ||
                         domain.equals(Domain.TIME) ||
                         domain.equals(Domain.PERCENTAGE) ||
+                        domain.equals(Domain.MASS) ||
                         domain.equals(Domain.AREA) ||
                         domain.equals(Domain.VOLUME)
                 ) {
@@ -255,6 +263,10 @@ public class QuantityDomain {
             quantity.domain = Domain.TIME;
             return Domain.TIME;
         }
+        if (MASS_DOMAIN.containsKey(quantity.unit)) {
+            quantity.domain = Domain.MASS;
+            return Domain.MASS;
+        }
         if (PERCENTAGE_DOMAIN.containsKey(quantity.unit)) {
             quantity.domain = Domain.PERCENTAGE;
             return Domain.PERCENTAGE;
@@ -278,6 +290,7 @@ public class QuantityDomain {
                         domain.equals(Domain.MONEY) ||
                         domain.equals(Domain.TIME) ||
                         domain.equals(Domain.PERCENTAGE) ||
+                        domain.equals(Domain.MASS) ||
                         domain.equals(Domain.AREA) ||
                         domain.equals(Domain.VOLUME)
                 ) {
@@ -318,6 +331,7 @@ public class QuantityDomain {
         System.out.println(Domain.MONEY);
         System.out.println(Domain.TIME);
         System.out.println(Domain.PERCENTAGE);
+        System.out.println(Domain.MASS);
         System.out.println(Domain.AREA);
         System.out.println(Domain.VOLUME);
         System.out.println(Domain.DIMENSIONLESS);
@@ -329,6 +343,7 @@ public class QuantityDomain {
         public static final String MONEY = QUANTITY_CATALOG.getUnitFromBaseName("United States dollar").getParentQuantity().getConcept();
         public static final String TIME = QUANTITY_CATALOG.getUnitFromBaseName("second").getParentQuantity().getConcept();
         public static final String PERCENTAGE = QUANTITY_CATALOG.getUnitFromBaseName("percent").getParentQuantity().getConcept();
+        public static final String MASS = QUANTITY_CATALOG.getUnitFromBaseName("kilogram").getParentQuantity().getConcept();
         public static final String AREA = QUANTITY_CATALOG.getUnitFromBaseName("square metre").getParentQuantity().getConcept();
         public static final String VOLUME = QUANTITY_CATALOG.getUnitFromBaseName("cubic metre").getParentQuantity().getConcept();
         public static final String DIMENSIONLESS = "DIMENSIONLESS";
