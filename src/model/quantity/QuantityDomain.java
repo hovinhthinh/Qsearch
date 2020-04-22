@@ -115,7 +115,8 @@ public class QuantityDomain {
             {"per cent", 1.0}
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
     public static final Map<String, Double> MASS_DOMAIN = Stream.of(new Object[][]{
-            // TODO
+            {"kilogram", 1.0}, // this is the standard
+            {"tonnes", 1000.0}
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
     public static final Map<String, Double> AREA_DOMAIN = Stream.of(new Object[][]{ // Domain added for Wikipedia
             {"square miles", 2859988.11},
