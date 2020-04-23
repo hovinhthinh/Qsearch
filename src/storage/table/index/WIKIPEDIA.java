@@ -26,6 +26,12 @@ public class WIKIPEDIA implements String2StringMap {
             }
             tableIndex.caption = o.has("tableCaption") ? o.getString("tableCaption") : "";
             tableIndex.pageTitle = o.has("pgTitle") ? o.getString("pgTitle") : "";
+            if (o.has("sectionTitles")) {
+                if (o.has("pgTitle")) {
+                    tableIndex.pageTitle += "\r\n";
+                }
+                tableIndex.pageTitle += o.getString("sectionTitles");
+            }
             tableIndex.pageContent = o.has("sectionText") ? o.getString("sectionText") : "";
             tableIndex.tableText = tableIndex.table.getTableRawContentForSearch();
             return Arrays.asList(gson.toJson(tableIndex));
