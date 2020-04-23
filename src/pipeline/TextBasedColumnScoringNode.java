@@ -28,10 +28,10 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     public static final int INDEPENDENT_INFERENCE = 3;
 
     // Homogeneity weights
-    public static double PRIOR_WEIGHT = 0.4;
+    public static double PRIOR_WEIGHT = 0.35;
     public static double COOCCUR_WEIGHT = 0;
-    public static double CONTEXT_WEIGHT = 0.5;
-    public static double AGREE_WEIGHT = -1; // UNUSED this should be derived from above two
+    public static double CONTEXT_WEIGHT = 0.55;
+    public static double AGREE_WEIGHT = -1; // UNUSED this should be derived from above three
 
     // this normalized value covers at least 99 %
     public static double COOCCUR_NORMALIZED_VALUE = 8;
