@@ -54,15 +54,15 @@ public abstract class Monitor extends Thread {
 
     // Override these log methods for another logging way.
     public void logStart() {
-        log(String.format("MONITOR [%s] : STARTED.", name));
+        log(String.format("MONITOR [%s]: STARTED.", name));
     }
 
     public void logDone() {
-        log(String.format("MONITOR [%s] : DONE.", name));
+        log(String.format("MONITOR [%s]: DONE.", name));
     }
 
     public void logForcedShutdown() {
-        log(String.format("MONITOR [%s] : FORCED SHUTDOWN.", name));
+        log(String.format("MONITOR [%s]: FORCED SHUTDOWN.", name));
     }
 
     public void logProgress(Progress progress) {
@@ -74,7 +74,7 @@ public abstract class Monitor extends Thread {
         String etaString = progress.total == -1 ? "--d --:--:--" :
                 String.format("%dd %02d:%02d:%02d", progress.eta_d, progress.eta_h, progress.eta_m, progress.eta_s);
 
-        log(String.format("MONITOR [%s] : current: %s     percent: %s     speed: %s     eta: %s",
+        log(String.format("MONITOR [%s]: current: %s     percent: %s     speed: %s     eta: %s",
                 name, currentString, percentString, speedString, etaString));
     }
 
