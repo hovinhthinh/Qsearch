@@ -24,6 +24,7 @@ public class MapInteractiveRunner {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+        mapper.before();
         System.out.println();
         System.out.println(ON_READY);
         System.out.flush();
@@ -68,6 +69,7 @@ public class MapInteractiveRunner {
                     System.out.flush();
                 }
             }
+            mapper.after();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
