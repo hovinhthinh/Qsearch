@@ -194,10 +194,10 @@ public class QuantityTaggingNode implements TaggingNode {
                         cellUnit = "euro";
                         quantitySpan = "€ " + quantitySpan;
                     } else if (cell.text.contains("£" + quantitySpan)) {
-                        cellUnit = "British pound";
+                        cellUnit = "british pound";
                         quantitySpan = "£" + quantitySpan;
                     } else if (cell.text.contains("£ " + quantitySpan)) {
-                        cellUnit = "British pound";
+                        cellUnit = "british pound";
                         quantitySpan = "£ " + quantitySpan;
                     } else if (cell.text.contains("¥" + quantitySpan)) {
                         cellUnit = "yuan";
