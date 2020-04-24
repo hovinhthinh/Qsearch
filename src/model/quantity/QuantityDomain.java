@@ -225,8 +225,11 @@ public class QuantityDomain {
         }
         // Now use QuTree.
         try {
-            List<Unit> units = SURFACE_UNITS_MAP.get(quantity.unit);
-            Unit u = units == null ? null : units.get(0);
+            Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
+            if (u == null) {
+                List<Unit> units = SURFACE_UNITS_MAP.get(quantity.unit);
+                u = units == null ? null : units.get(0);
+            }
             if (u != null) {
                 String domain = u.getParentQuantity().getConcept();
                 // allows only these specific domains
@@ -283,8 +286,11 @@ public class QuantityDomain {
         }
         // Now use QuTree.
         try {
-            List<Unit> units = SURFACE_UNITS_MAP.get(quantity.unit);
-            Unit u = units == null ? null : units.get(0);
+            Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
+            if (u == null) {
+                List<Unit> units = SURFACE_UNITS_MAP.get(quantity.unit);
+                u = units == null ? null : units.get(0);
+            }
             if (u != null) {
                 String domain = u.getParentQuantity().getConcept();
                 // allows only these specific domains
