@@ -8,7 +8,7 @@ import util.distributed.String2StringMap;
 import java.util.Arrays;
 import java.util.List;
 
-public class WIKIPEDIA implements String2StringMap {
+public class WIKIPEDIA extends String2StringMap {
     Gson gson = new Gson();
 
     public WIKIPEDIA() {

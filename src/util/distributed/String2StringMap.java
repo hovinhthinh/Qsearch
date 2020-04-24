@@ -2,7 +2,7 @@ package util.distributed;
 
 import java.util.List;
 
-public interface String2StringMap {
+public abstract class String2StringMap {
     // return null to discard output
-    List<String> map(String input);
+    public abstract List<String> map(String input);
 }
