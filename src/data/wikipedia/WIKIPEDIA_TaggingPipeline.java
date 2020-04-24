@@ -3,6 +3,7 @@ package data.wikipedia;
 
 import com.google.gson.Gson;
 import model.table.Table;
+import nlp.Static;
 import pipeline.*;
 import util.FileUtils;
 import util.SelfMonitor;
@@ -13,6 +14,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class WIKIPEDIA_TaggingPipeline extends String2StringMap {
+    @Override
+    public void before() {
+        Static.getOpenIe();
+        Static.getIllinoisQuantifier();
+    }
+
     TaggingPipeline pipeline = getDefaultTaggingPipeline();
     Gson gson = new Gson();
 
