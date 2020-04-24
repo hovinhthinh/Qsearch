@@ -50,6 +50,9 @@ public class TaxonomyGraph {
         return id2Type.size() - 1;
     }
 
+    public int getTypeId(String type) {
+        return getTypeId(type, false);
+    }
 
     public int getEntityId(String entity, boolean addIfAbsent) {
         Integer id = entity2Id.get(entity);
@@ -63,6 +66,10 @@ public class TaxonomyGraph {
         id2Entity.add(entity);
         entityTypeLists.add(new IntArrayList());
         return id2Entity.size() - 1;
+    }
+
+    public int getEntityId(String entity) {
+        return getEntityId(entity, false);
     }
 
     public TaxonomyGraph(String yagoTaxonomyFile, String yagoTypeFile) {
