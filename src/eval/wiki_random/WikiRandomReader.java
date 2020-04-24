@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import util.FileUtils;
 import util.SelfMonitor;
 import util.Triple;
-import yago.QfactTaxonomyGraph;
+import yago.TaxonomyGraph;
 
 import java.io.PrintWriter;
 import java.net.URLEncoder;
@@ -34,7 +34,7 @@ public class WikiRandomReader {
 
             el.text = String.join(" ", NLP.tokenize(linkI.getString("surface")));
             String e = StringEscapeUtils.unescapeJava(linkI.getJSONObject("target").getString("title"));
-            if (QfactTaxonomyGraph.getDefaultGraphInstance().getEntityId("<" + e + ">") == -1) {
+            if (TaxonomyGraph.getDefaultGraphInstance().getEntityId("<" + e + ">") == -1) {
                 continue;
             }
             el.target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + e;

@@ -3,7 +3,7 @@ package data.background.mention2entity;
 import nlp.NLP;
 import util.FileUtils;
 import util.Triple;
-import yago.QfactTaxonomyGraph;
+import yago.TaxonomyGraph;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +30,7 @@ public class Mention2EntityPrior {
             for (int i = infoLine.entityFreq.size() - 1; i >= 0; --i) {
                 // if the frequency is too low; or the entity does not exist in YAGO type system
                 if (infoLine.entityFreq.get(i).second < minMention2EntityFreq
-                        || QfactTaxonomyGraph.getDefaultGraphInstance().getEntityId(infoLine.entityFreq.get(i).first) == -1) {
+                        || TaxonomyGraph.getDefaultGraphInstance().getEntityId(infoLine.entityFreq.get(i).first) == -1) {
                     infoLine.entityFreq.remove(i);
                 }
             }

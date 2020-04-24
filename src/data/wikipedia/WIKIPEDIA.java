@@ -9,7 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import util.Triple;
-import yago.QfactTaxonomyGraph;
+import yago.TaxonomyGraph;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class WIKIPEDIA {
 
                 el.text = String.join(" ", NLP.tokenize(linkI.getString("surface")));
                 String e = StringEscapeUtils.unescapeJava(linkI.getJSONObject("target").getString("title"));
-                if (QfactTaxonomyGraph.getDefaultGraphInstance().getEntityId("<" + e + ">") == -1) {
+                if (TaxonomyGraph.getDefaultGraphInstance().getEntityId("<" + e + ">") == -1) {
                     continue;
                 }
                 el.target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + e;
