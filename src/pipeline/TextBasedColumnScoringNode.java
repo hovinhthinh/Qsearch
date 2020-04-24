@@ -47,7 +47,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     public double homogeneityWeight;
     private QfactTaxonomyGraph qfactGraph;
 
-    private static HashSet<String> BLOCKED_OVERLAP_CONTEXT_TOKENS = new HashSet<>(Arrays.asList(
+    public static HashSet<String> BLOCKED_OVERLAP_CONTEXT_TOKENS = new HashSet<>(Arrays.asList(
             "~", "`", "!", "@", "#", "^", "&", "*", "(", ")", "_", "=", "{", "}", "-", "+",
             "[", "]", "\\", "|", ":", ";", "\"", "'", ",", ".", "/", "?", "<", ">"
     ));
