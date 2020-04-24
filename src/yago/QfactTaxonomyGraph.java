@@ -122,6 +122,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             // sort by distance
             Collections.sort(entitiesWithQfact, Comparator.comparing(o -> o.second));
         }
+        System.gc();
     }
 
     public QfactTaxonomyGraph() {
