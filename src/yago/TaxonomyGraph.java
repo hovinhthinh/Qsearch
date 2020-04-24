@@ -176,6 +176,8 @@ public class TaxonomyGraph {
         // common type cache
         cachedEntityTypeAgreement = new Long2DoubleLinkedOpenHashMap();
         cachedEntityTypeAgreement.defaultReturnValue(-1);
+
+        System.gc();
     }
 
     // ordered by increasing distance
