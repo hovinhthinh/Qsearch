@@ -326,7 +326,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
                         continue;
                     }
                     // Here we ignore checking eId != null, because it should be in the KB.
-                    Integer eId = qfactGraph.entity2Id.get(e.first);
+                    Integer eId = qfactGraph.taxonomy.entity2Id.get(e.first);
 
                     entityIds[r][i] = eId == null ? -1 : eId; // -1 means there is no type info for this entity.
 
@@ -371,7 +371,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
                         agreeScore += (entityIds[r1][i] == -1 || entityIds[r2][i] == -1)
                                 ? 0
-                                : qfactGraph.getTypeAgreement(entityIds[r1][i], entityIds[r2][i]);
+                                : qfactGraph.taxonomy.getTypeAgreement(entityIds[r1][i], entityIds[r2][i]);
                         ++nAgreeEdges;
                     }
                 }

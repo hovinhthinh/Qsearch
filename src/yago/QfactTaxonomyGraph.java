@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class QfactTaxonomyGraph extends TaxonomyGraph {
+public class QfactTaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(QfactTaxonomyGraph.class.getName());
     public static final boolean DEBUG = true;
     public static final String DEFAULT_QFACT_FILE = "non-deep/qfact_text_coref.gz";
@@ -58,20 +58,23 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
 
     private Long2ObjectOpenHashMap<Pair<Double, EntityTextQfact>> cache = new Long2ObjectOpenHashMap<>(10000000);
 
+    public TaxonomyGraph taxonomy;
+
     public void resetCache() {
         cache.clear();
     }
 
     public QfactTaxonomyGraph(String qfactFile, int relatedEntityDistanceLimit) {
+        this.taxonomy = TaxonomyGraph.getDefaultGraphInstance();
         this.relatedEntityDistanceLimit = relatedEntityDistanceLimit;
         LOGGER.info("Loading YAGO Qfact taxonomy graph");
-        entityQfactLists = new ArrayList[nEntities];
-        for (int i = 0; i < nEntities; ++i) {
+        entityQfactLists = new ArrayList[taxonomy.nEntities];
+        for (int i = 0; i < taxonomy.nEntities; ++i) {
             entityQfactLists[i] = new ArrayList<>();
         }
         for (String line : FileUtils.getLineStream(qfactFile, "UTF-8")) {
             String[] arr = line.split("\t");
-            Integer entityId = entity2Id.get(arr[0]);
+            Integer entityId = taxonomy.entity2Id.get(arr[0]);
             if (entityId == null) {
                 continue;
             }
@@ -94,11 +97,11 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         }
 
         LOGGER.info("Populating entities with Qfact to taxonomy.");
-        taxonomyEntityWithQfactLists = new ArrayList[nTypes];
-        for (int i = 0; i < nTypes; ++i) {
+        taxonomyEntityWithQfactLists = new ArrayList[taxonomy.nTypes];
+        for (int i = 0; i < taxonomy.nTypes; ++i) {
             taxonomyEntityWithQfactLists[i] = new ArrayList<>();
         }
-        for (int i = 0; i < nEntities; ++i) {
+        for (int i = 0; i < taxonomy.nEntities; ++i) {
             ArrayList<EntityTextQfact> qfacts = entityQfactLists[i];
             if (qfacts.size() == 0) {
                 entityQfactLists[i] = null;
@@ -107,12 +110,12 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
             qfacts.trimToSize();
 
             // populate for a single entity
-            Int2IntLinkedOpenHashMap typeId2Dist = getType2DistanceMapForEntity(i);
+            Int2IntLinkedOpenHashMap typeId2Dist = taxonomy.getType2DistanceMapForEntity(i);
             for (Int2IntMap.Entry t : Int2IntMaps.fastIterable(typeId2Dist)) {
                 taxonomyEntityWithQfactLists[t.getIntKey()].add(new Pair<>(i, t.getIntValue()));
             }
         }
-        for (int i = 0; i < nTypes; ++i) {
+        for (int i = 0; i < taxonomy.nTypes; ++i) {
             ArrayList<Pair<Integer, Integer>> entitiesWithQfact = taxonomyEntityWithQfactLists[i];
             if (entitiesWithQfact.size() == 0) {
                 taxonomyEntityWithQfactLists[i] = null;
@@ -131,7 +134,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     // returns Pair<entityId, agreement with key entity>
     public HashMap<Integer, Double> getSimilarEntityIdsWithQfact(int entityId) {
         // Go up to get type list.
-        Int2IntLinkedOpenHashMap typeId2Distance = getType2DistanceMapForEntity(entityId);
+        Int2IntLinkedOpenHashMap typeId2Distance = taxonomy.getType2DistanceMapForEntity(entityId);
         HashMap<Integer, Double> entityId2Itf = new HashMap<>();
         for (Int2IntMap.Entry e : typeId2Distance.int2IntEntrySet()) {
             if (e.getIntValue() >= relatedEntityDistanceLimit) {
@@ -146,8 +149,8 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
                     break;
                 }
                 // Update agreement (now using Itf)
-                if (entityId2Itf.getOrDefault(p.first, 0.0) < type2Itf[e.getIntKey()]) {
-                    entityId2Itf.put(p.first, type2Itf[e.getIntKey()]);
+                if (entityId2Itf.getOrDefault(p.first, 0.0) < taxonomy.type2Itf[e.getIntKey()]) {
+                    entityId2Itf.put(p.first, taxonomy.type2Itf[e.getIntKey()]);
                 }
             }
         }
@@ -157,14 +160,14 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     // returns Pair<entity, itf>
     public ArrayList<Pair<String, Double>> getSimilarEntitiesWithQfact(int entityId) {
         return getSimilarEntityIdsWithQfact(entityId).entrySet().stream().map(
-                o -> new Pair<>(id2Entity.get(o.getKey()), o.getValue())
+                o -> new Pair<>(taxonomy.id2Entity.get(o.getKey()), o.getValue())
         ).collect(Collectors.toCollection(ArrayList::new));
     }
 
     // returns Pair<score, matchedQfactStr>
     // returns null of cannot match.
     public Pair<Double, EntityTextQfact> getMatchScore(String entity, String context, Quantity quantity, int key) {
-        Integer entityId = entity2Id.get(entity);
+        Integer entityId = taxonomy.entity2Id.get(entity);
         if (entityId == null) {
             return null;
         }
@@ -206,7 +209,7 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
         // match related entities
         HashMap<Integer, Double> relatedEntities = getSimilarEntityIdsWithQfact(entityId);
         if (relatedEntities != null) {
-            double itfScalingFactor = Math.log10((nEntities - 0.5) / 1.5);
+            double itfScalingFactor = Math.log10((taxonomy.nEntities - 0.5) / 1.5);
             for (Map.Entry<Integer, Double> p : relatedEntities.entrySet()) { // contains eId & itf
                 qfacts = entityQfactLists[p.getKey()];
 
