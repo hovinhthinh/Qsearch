@@ -7,10 +7,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class TaxonomyGraph {
@@ -310,6 +307,45 @@ public class TaxonomyGraph {
             }
         }
         return entitySet;
+    }
+
+    // These types have more than 1M entities in YAGO, however some of them are good, so being excluded from the list.
+    private static final HashSet<String> BLOCKED_GENERAL_TEXTUALIZED_TYPES = new HashSet<>(Arrays.asList(
+            "owl thing",
+            "physical entity",
+            "object",
+            "whole",
+            "yagolegalactorgeo",
+            "yagolegalactor",
+            "yagopermanentlylocatedentity",
+//            "living thing",
+//            "organism",
+            "causal agent",
+//            "person",
+            "person associated with building and structure",
+            "person associated with place",
+            "abstraction",
+            "yagogeoentity",
+//            "artifact",
+//            "european person",
+            "physical object"
+    ));
+
+    public Set<String> getTextualizedTypes(String entity, boolean specificOnly) { // entity: <Cris_Ronaldo>
+        Integer eId = entity2Id.get(entity);
+        if (eId == null) {
+            return null;
+        }
+        Int2IntLinkedOpenHashMap t2d = getType2DistanceMapForEntity(eId);
+
+        Set<String> types = new HashSet<>(t2d.size());
+        for (Int2IntMap.Entry e : Int2IntMaps.fastIterable(t2d)) {
+            String t = id2TextualizedType.get(e.getIntKey());
+            if (!specificOnly || !BLOCKED_GENERAL_TEXTUALIZED_TYPES.contains(t)) {
+                types.add(t);
+            }
+        }
+        return types;
     }
 
     public TaxonomyGraph() {

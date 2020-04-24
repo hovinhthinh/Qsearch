@@ -12,7 +12,6 @@ import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
 import nlp.NLP;
-import nlp.YagoType;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +22,7 @@ import util.Concurrent;
 import util.HTTPRequest;
 import util.Pair;
 import util.headword.StringUtils;
+import yago.TaxonomyGraph;
 
 import java.io.IOException;
 import java.util.*;
@@ -146,9 +146,7 @@ public class ElasticSearchTableQuery {
     }
 
     public static boolean entityHasType(String entity, String queryHeadWord, HashSet<String> queryTypeSet) {
-        List<Pair<String, Double>> entityTypes = YagoType.getTypes(entity, false);
-        for (Pair<String, Double> p : entityTypes) {
-            String type = p.first;
+        for (String type : TaxonomyGraph.getDefaultGraphInstance().getTextualizedTypes(entity, false)) {
             // check head word
             if (!NLP.getHeadWord(type, true).equals(queryHeadWord)) {
                 continue;
