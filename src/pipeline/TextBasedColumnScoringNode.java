@@ -58,7 +58,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
 
     private TextBasedColumnScoringNode(int inferenceMode, double homogeneityWeight) {
         this.inferenceMode = inferenceMode;
-        this.qfactGraph = new QfactTaxonomyGraph();
+        this.qfactGraph = QfactTaxonomyGraph.getDefaultGraphInstance();
         this.homogeneityWeight = homogeneityWeight;
     }
 
