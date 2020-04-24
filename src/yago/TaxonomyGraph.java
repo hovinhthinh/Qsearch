@@ -34,7 +34,7 @@ public class TaxonomyGraph {
     public int nEntities;
     public int nTypes;
 
-    private static transient final int CACHE_ENTITY_TRANSITIVE_TYPE_2_DISTANCE_SIZE = 100000;
+    private static transient final int CACHE_ENTITY_TRANSITIVE_TYPE_2_DISTANCE_SIZE = 10000;
     private transient Int2ObjectLinkedOpenHashMap<Int2IntLinkedOpenHashMap> cachedEntityTransitiveType2Distance;
 
     private static transient final int CACHE_MOST_SPEC_COMMON_TYPE_SIZE = 1000000;
