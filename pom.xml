@@ -330,13 +330,14 @@
             <version>3.1.9</version>
         </dependency>
 
-        <!-- memory footprint -->
+        <!-- memory footprint (disabled - use the file from lib/ folder)-->
+        <!-- https://mvnrepository.com/artifact/com.github.jbellis/jamm -->
         <dependency>
             <groupId>external</groupId>
-            <artifactId>object-explorer</artifactId>
+            <artifactId>jamm</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/object-explorer.jar</systemPath>
+            <systemPath>${project.basedir}/lib/jamm-0.3.3.jar</systemPath>
         </dependency>
 
     </dependencies>
