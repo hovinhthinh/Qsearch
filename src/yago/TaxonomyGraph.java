@@ -7,6 +7,7 @@ import util.FileUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
@@ -26,6 +27,7 @@ public class TaxonomyGraph {
     public HashMap<String, Integer> entity2Id;
     public ArrayList<String> id2Entity;
     public ArrayList<IntArrayList> entityTypeLists;
+    public ArrayList<IntArrayList> typeEntityLists;
     public int nEntities;
     public int nTypes;
 
@@ -47,6 +49,7 @@ public class TaxonomyGraph {
         id2Type.add(type);
         typeDadLists.add(new IntArrayList());
         typeChildLists.add(new IntArrayList());
+        typeEntityLists.add(new IntArrayList());
         return id2Type.size() - 1;
     }
 
@@ -79,6 +82,7 @@ public class TaxonomyGraph {
         id2Type = new ArrayList<>();
         typeDadLists = new ArrayList<>();
         typeChildLists = new ArrayList<>();
+        typeEntityLists = new ArrayList<>();
         for (String line : FileUtils.getLineStream(yagoTaxonomyFile, "UTF-8")) {
             String[] arr = line.split("\t");
             if (arr.length != 4 || !arr[2].equals("rdfs:subClassOf")) {
@@ -126,9 +130,11 @@ public class TaxonomyGraph {
                 throw new RuntimeException("type not found");
             }
             entityTypeLists.get(entityId).add(typeId);
+            typeEntityLists.get(typeId).add(entityId);
         }
         id2Entity.trimToSize();
         entityTypeLists.trimToSize();
+        typeEntityLists.trimToSize();
         nEntities = id2Entity.size();
         cachedEntityTransitiveType2Distance = new Int2ObjectLinkedOpenHashMap<>();
 
@@ -139,8 +145,9 @@ public class TaxonomyGraph {
                 ++type2nEntities[e.getIntKey()];
             }
         }
-        // calculate itf for types
         for (int i = 0; i < nTypes; ++i) {
+            typeEntityLists.get(i).trim();
+            // calculate itf for types
             // (Robertson version)
             type2Itf[i] = Math.max(0.0001, Math.log10((nEntities - type2nEntities[i] + 0.5) / (type2nEntities[i] + 0.5)));
             // normal
@@ -259,6 +266,27 @@ public class TaxonomyGraph {
             cachedEntityTypeAgreement.removeLastDouble();
         }
         return result;
+    }
+
+    public HashSet<Integer> getEntitySetForType(int typeId) {
+        HashSet<Integer> entitySet = new HashSet<>();
+
+        LinkedList<Integer> queue = new LinkedList<>();
+        IntOpenHashSet visitedTypeSet = new IntOpenHashSet();
+        queue.add(typeId);
+        visitedTypeSet.add(typeId);
+        while (!queue.isEmpty()) {
+            int t = queue.removeFirst();
+            entitySet.addAll(typeEntityLists.get(t));
+            IntArrayList subTypes = typeChildLists.get(t);
+            for (int i = 0; i < subTypes.size(); ++i) {
+                int c = subTypes.getInt(i);
+                if (visitedTypeSet.add(c)) {
+                    queue.addLast(c);
+                }
+            }
+        }
+        return entitySet;
     }
 
     public TaxonomyGraph() {
