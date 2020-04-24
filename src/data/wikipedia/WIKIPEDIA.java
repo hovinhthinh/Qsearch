@@ -4,12 +4,12 @@ import model.table.Cell;
 import model.table.Table;
 import model.table.link.EntityLink;
 import nlp.NLP;
-import nlp.YagoType;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import util.Triple;
+import yago.QfactTaxonomyGraph;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class WIKIPEDIA {
 
                 el.text = String.join(" ", NLP.tokenize(linkI.getString("surface")));
                 String e = StringEscapeUtils.unescapeJava(linkI.getJSONObject("target").getString("title"));
-                if (!YagoType.entityExists("<" + e + ">")) {
+                if (QfactTaxonomyGraph.getDefaultGraphInstance().getEntityId("<" + e + ">") == -1) {
                     continue;
                 }
                 el.target = "WIKIPEDIA:" + linkI.getString("linkType") + ":" + e;

@@ -27,7 +27,16 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
 
     public static double TYPE_RELATED_PENALTY_WEIGHT = 0;
 
-    public class EntityTextQfact {
+    private static QfactTaxonomyGraph DEFAULT_GRAPH;
+
+    public static QfactTaxonomyGraph getDefaultGraphInstance() {
+        if (DEFAULT_GRAPH == null) {
+            DEFAULT_GRAPH = new QfactTaxonomyGraph();
+        }
+        return DEFAULT_GRAPH;
+    }
+
+    public static class EntityTextQfact {
         String entity;
         ArrayList<String> context;
         Quantity quantity;
@@ -256,6 +265,6 @@ public class QfactTaxonomyGraph extends TaxonomyGraph {
     }
 
     public static void main(String[] args) {
-        QfactTaxonomyGraph graph = new QfactTaxonomyGraph();
+        QfactTaxonomyGraph graph = getDefaultGraphInstance();
     }
 }
