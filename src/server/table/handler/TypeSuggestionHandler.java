@@ -4,18 +4,16 @@ import com.google.gson.Gson;
 import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
-import nlp.NLP;
-import nlp.YagoType;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import storage.table.ElasticSearchTableImport;
-import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 import util.HTTPRequest;
 import util.Pair;
 import util.SelfMonitor;
+import yago.TaxonomyGraph;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -131,13 +129,7 @@ public class TypeSuggestionHandler extends AbstractHandler {
         // entities to types
         HashMap<String, Integer> specificTypeStats = new HashMap<>();
         for (String e : entities) {
-            HashSet<String> specificTypeSet = new HashSet<>();
-            for (Pair<String, Double> p : YagoType.getTypes(e, false)) {
-                String t = p.first;
-                t = NLP.fastStemming(t, Morpha.noun);
-                specificTypeSet.add(t);
-            }
-            for (String type : specificTypeSet) {
+            for (String type : TaxonomyGraph.getDefaultGraphInstance().getTextualizedTypes(e, false)) {
                 specificTypeStats.put(type, specificTypeStats.getOrDefault(type, 0) + 1);
             }
         }
