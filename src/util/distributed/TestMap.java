@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestMap implements String2StringMap {
+public class TestMap extends String2StringMap {
     @Override
     public List<String> map(String input) {
         String o1 = new JSONObject().put("input", input).toString();

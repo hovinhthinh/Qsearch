@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 
-public class TABLEM_TaggingPipeline implements String2StringMap {
+public class TABLEM_TaggingPipeline extends String2StringMap {
     TaggingPipeline pipeline = TaggingPipeline.getDefaultTaggingPipeline();
     Gson gson = new Gson();
 

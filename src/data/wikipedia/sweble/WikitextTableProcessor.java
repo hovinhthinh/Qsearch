@@ -36,7 +36,7 @@ interface WtNodeDeepVisitor {
     boolean visit(WtNode n);
 }
 
-public class WikitextTableProcessor implements String2StringMap {
+public class WikitextTableProcessor extends String2StringMap {
     private WikiConfig config = DefaultConfigEnWp.generate();
     private WtEngineImpl engine = new WtEngineImpl(config);
 

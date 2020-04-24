@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 
-public class WIKIPEDIA_TaggingPipeline implements String2StringMap {
+public class WIKIPEDIA_TaggingPipeline extends String2StringMap {
     TaggingPipeline pipeline = getDefaultTaggingPipeline();
     Gson gson = new Gson();
 
