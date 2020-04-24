@@ -330,5 +330,14 @@
             <version>3.1.9</version>
         </dependency>
 
+        <!-- memory footprint -->
+        <dependency>
+            <groupId>external</groupId>
+            <artifactId>object-explorer</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/object-explorer.jar</systemPath>
+        </dependency>
+
     </dependencies>
 </project>
