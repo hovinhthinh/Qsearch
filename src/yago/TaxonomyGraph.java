@@ -2,7 +2,9 @@ package yago;
 
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.longs.Long2DoubleLinkedOpenHashMap;
+import nlp.NLP;
 import org.apache.commons.lang.StringEscapeUtils;
+import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class TaxonomyGraph {
 
     public HashMap<String, Integer> type2Id;
     public ArrayList<String> id2Type;
+    public ArrayList<String> id2TextualizedType;
     public int[] type2nEntities;
     public double[] type2Itf;
     public ArrayList<IntArrayList> typeDadLists;
@@ -36,6 +39,15 @@ public class TaxonomyGraph {
 
     private static transient final int CACHE_MOST_SPEC_COMMON_TYPE_SIZE = 1000000;
     private transient Long2DoubleLinkedOpenHashMap cachedEntityTypeAgreement;
+
+    private static TaxonomyGraph DEFAULT_GRAPH;
+
+    public static TaxonomyGraph getDefaultGraphInstance() {
+        if (DEFAULT_GRAPH == null) {
+            DEFAULT_GRAPH = new TaxonomyGraph();
+        }
+        return DEFAULT_GRAPH;
+    }
 
     public int getTypeId(String type, boolean addIfAbsent) {
         Integer id = type2Id.get(type);
@@ -75,6 +87,17 @@ public class TaxonomyGraph {
         return getEntityId(entity, false);
     }
 
+    public static String textualize(String type) {
+        type = NLP.fastStemming(NLP.stripSentence(type.replaceAll("[^A-Za-z0-9]", " ")).toLowerCase(), Morpha.noun);
+        if (type.startsWith("wikicat ")) {
+            type = type.substring(8);
+        }
+        if (type.startsWith("wordnet ")) {
+            type = type.substring(type.indexOf(" ") + 1, type.lastIndexOf(" "));
+        }
+        return type;
+    }
+
     public TaxonomyGraph(String yagoTaxonomyFile, String yagoTypeFile) {
         LOGGER.info("Loading YAGO taxonomy graph");
         // Load taxonomy
@@ -107,6 +130,13 @@ public class TaxonomyGraph {
         type2nEntities = new int[nTypes];
         type2Itf = new double[nTypes];
 
+        // Textualized types
+        id2TextualizedType = new ArrayList<>(nTypes);
+        for (String t : id2Type) {
+            id2TextualizedType.add(textualize(t));
+        }
+        id2TextualizedType.trimToSize();
+
         // Load entity types
         entity2Id = new HashMap<>();
         id2Entity = new ArrayList<>();
@@ -117,13 +147,6 @@ public class TaxonomyGraph {
                 continue;
             }
             String entity = StringEscapeUtils.unescapeJava(arr[1]), type = arr[3];
-//            String type = NLP.fastStemming(NLP.stripSentence(arr[3].replaceAll("[^A-Za-z0-9]", " ")).toLowerCase(), Morpha.noun);
-//            if (type.startsWith("wikicat ")) {
-//                type = type.substring(8);
-//            }
-//            if (type.startsWith("wordnet ")) {
-//                type = type.substring(type.indexOf(" ") + 1, type.lastIndexOf(" "));
-//            }
 
             int entityId = getEntityId(entity, true), typeId = getTypeId(type, false);
             if (typeId == -1) {
@@ -176,8 +199,6 @@ public class TaxonomyGraph {
         // common type cache
         cachedEntityTypeAgreement = new Long2DoubleLinkedOpenHashMap();
         cachedEntityTypeAgreement.defaultReturnValue(-1);
-
-        System.gc();
     }
 
     // ordered by increasing distance
