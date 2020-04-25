@@ -123,7 +123,7 @@ public class ElasticSearchDataImport {
             System.out.println("Updated : " + updated.get() + " Threw: " + threw.incrementAndGet());
             return;
         }
-        System.out.println("Adding: " + entity);
+//        System.out.println("Adding: " + entity);
         JSONObject newData = new JSONObject(data).getJSONObject("_source");
         // Append, not create new.
         JSONArray newFacts = newData.has("facts") ? newData.getJSONArray("facts") : new JSONArray();
