@@ -26,7 +26,7 @@ public class TableQfactSaver {
         double LINKING_THRESHOLD = 0.70;
 
         Gson gson = new Gson();
-        PrintWriter out = FileUtils.getPrintWriter("/GW/D5data-12/hvthinh/TabQs/annotation+linking/wiki+wiki+tablem_qfacts.gz", "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter("/GW/D5data-12/hvthinh/TabQs/annotation+linking/wiki+tablem_qfacts.gz", "UTF-8");
         for (String file : Arrays.asList(tablemFile, wikiFile))
             for (String line : FileUtils.getLineStream(file, "UTF-8")) {
                 Table table = gson.fromJson(line, Table.class);
