@@ -1,28 +1,25 @@
 package storage.table.experimental;
 
-
+import com.google.gson.Gson;
 import config.Configuration;
-import model.context.ContextEmbeddingMatcher;
 import model.context.ContextMatcher;
+import model.context.IDF;
 import model.quantity.Quantity;
-import model.quantity.QuantityConstraint;
 import model.quantity.QuantityDomain;
+import nlp.Glove;
 import nlp.NLP;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.ac.susx.informatics.Morpha;
-import util.Constants;
 import util.HTTPRequest;
-import util.Pair;
 import util.headword.StringUtils;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.logging.Logger;
 
-@Deprecated
 abstract class StreamedIterable<T> implements Iterable<T> {
     public boolean error = false;
     public int total = -1;
@@ -31,12 +28,45 @@ abstract class StreamedIterable<T> implements Iterable<T> {
 
 @Deprecated
 public class ElasticSearchQuery {
+    public static final Logger LOGGER = Logger.getLogger(ElasticSearchQuery.class.getName());
+
     public static final String PROTOCOL = Configuration.get("storage.elasticsearch.protocol");
     public static final String ES_HOST = Configuration.get("storage.elasticsearch.address");
     public static final String INDEX = "table_entity";
-    public static final String TYPE = "tentity";
+    public static final String TYPE = "entity";
 
-    public static ContextMatcher DEFAULT_MATCHER = new ContextEmbeddingMatcher(3);
+    public static ContextMatcher DEFAULT_MATCHER = new ContextMatcher() {
+        // Higher is better
+        // range from 0 -> 1
+        public double directedEmbeddingIdfSimilarity(ArrayList<String> queryX, ArrayList<String> factX) {
+            // TODO: Currently not supporting TIME (TIME is computed like normal terms).
+            if (queryX.isEmpty() || factX.isEmpty()) {
+                return queryX.isEmpty() && factX.isEmpty() ? 1 : 0;
+            }
+            double score = 0;
+            double totalIdf = 0;
+            for (String qX : queryX) {
+                double max = 0;
+                for (String fX : factX) {
+                    double sim = Glove.cosineDistance(qX, fX);
+                    if (sim != -1) {
+                        max = Math.max(max, 1 - sim);
+                    }
+                }
+                double idf = IDF.getRobertsonIdf(qX);
+                score += max * idf;
+                totalIdf += idf;
+            }
+            return score / totalIdf;
+        }
+
+        @Override
+        public double match(ArrayList<String> queryContext, ArrayList<String> factContext) {
+            return directedEmbeddingIdfSimilarity(queryContext, factContext);
+        }
+    };
+
+    private static Gson GSON = new Gson();
 
     private static StreamedIterable<JSONObject> searchRawES(String queryType) {
         // remove stopwords
@@ -178,127 +208,32 @@ public class ElasticSearchQuery {
         };
     }
 
-    public static Pair<QuantityConstraint, ArrayList<JSONObject>> search(String queryType, String queryContext,
-                                                                         String quantityConstraint,
-                                                                         ContextMatcher matcher, Session session) {
+    public static ArrayList<ResultInstance> searchWithoutQuantityConstraint(String queryType, String queryContext, Map additionalParameters) {
         queryType = queryType.toLowerCase();
         queryContext = queryContext.toLowerCase();
-        quantityConstraint = quantityConstraint.toLowerCase();
 
-        Pair<QuantityConstraint, ArrayList<JSONObject>> result = new Pair<>();
-
-        QuantityConstraint constraint = QuantityConstraint.parseFromString(quantityConstraint);
-        result.first = constraint;
-        if (constraint == null) {
-            return result;
-        }
+        ArrayList<ResultInstance> result = new ArrayList<>();
 
         StreamedIterable<JSONObject> instances = searchByType(queryType);
 
-        if (QuantityDomain.getDomain(constraint.quantity) == QuantityDomain.Domain.DIMENSIONLESS) {
-            queryContext += " " + constraint.quantity.unit;
-        }
-        ArrayList<String> queryContextTerms =
-                NLP.splitSentence(NLP.fastStemming(queryContext.toLowerCase(), Morpha.any));
-        ArrayList<Pair<JSONObject, Double>> scoredInstances = new ArrayList<>();
+        // Process query context terms
+        ArrayList<String> queryContextTerms = NLP.splitSentence(NLP.fastStemming(queryContext.toLowerCase(), Morpha.any));
+
+        // retrieve additional parameters
+        Session session = additionalParameters == null ? null : (Session) additionalParameters.get("session");
         int lastPercent = 0;
+
+        // Corpus constraint
+        ArrayList<String> corpusConstraint = new ArrayList<>();
+        synchronized (GSON) {
+            corpusConstraint = additionalParameters == null ? null :
+                    (additionalParameters.containsKey("corpus") ? GSON.fromJson((String) additionalParameters.get("corpus"), corpusConstraint.getClass()) : null);
+        }
+
         try {
             // for each entity.
             for (JSONObject o : instances) {
-                String matchContext = "null";
-                String matchQuantity = "null";
-                String matchSentence = "null";
-                String matchSource = "null";
-                String matchEntityStr = "null";
-                String matchQuantityStr = "null";
-                String matchQuantityConvertedStr = "null";
-
-                // computer score
-                double minDist = Constants.MAX_DOUBLE;
-                JSONArray facts = o.getJSONObject("_source").getJSONArray("facts");
-                // save space.
-                o.put("_source", "<OMITTED>");
-                for (int i = 0; i < facts.length(); ++i) {
-                    String Q = facts.getJSONObject(i).getString("quantity");
-                    Quantity qt = Quantity.fromQuantityString(Q);
-                    if (!constraint.match(qt)) {
-                        continue;
-                    }
-
-                    ArrayList<String> X = new ArrayList<>();
-                    JSONArray context = facts.getJSONObject(i).getJSONArray("context");
-                    for (int k = 0; k < context.length(); ++k) {
-                        String ct = context.getString(k);
-                        if (ct.startsWith("<T>:")) {
-                            // handle time like normal terms.
-                            X.addAll(NLP.splitSentence(ct.substring(4)));
-                        } else if (ct.startsWith("<E>:")) {
-                            X.addAll(NLP.splitSentence(ct.substring(4)));
-                        } else {
-                            X.add(ct);
-                        }
-                    }
-                    if (QuantityDomain.quantityMatchesDomain(qt, QuantityDomain.Domain.DIMENSIONLESS)) {
-                        X.addAll(NLP.splitSentence(qt.unit));
-                    }
-                    if (X.isEmpty()) {
-                        continue;
-                    }
-                    for (int j = 0; j < X.size(); ++j) {
-                        X.set(j, StringUtils.stem(X.get(j).toLowerCase(), Morpha.any));
-                    }
-                    double dist = matcher.match(queryContextTerms, X);
-                    if (dist < minDist) {
-                        minDist = dist;
-                        StringBuilder contextString = new StringBuilder();
-                        X.forEach(e -> {
-                            if (contextString.length() > 0) {
-                                contextString.append(" ");
-                            }
-                            contextString.append(e);
-                        });
-                        matchContext = contextString.toString();
-                        matchQuantity = qt.toString(1);
-                        matchSentence = facts.getJSONObject(i).getString("sentence");
-                        matchSource = facts.getJSONObject(i).getString("source");
-
-                        matchEntityStr = facts.getJSONObject(i).getString("entityStr");
-                        matchQuantityStr = facts.getJSONObject(i).getString("quantityStr");
-
-                        // Get quantity converted string.
-                        double scale = QuantityDomain.getScale(qt) / QuantityDomain.getScale(constraint.quantity);
-                        if (Math.abs(scale - 1.0) >= 1e-6) {
-                            double convertedValue = scale * qt.value;
-                            if (Math.abs(convertedValue) >= 1e9) {
-                                matchQuantityConvertedStr = String.format("%.1f", convertedValue / 1e9) + " billion";
-                            } else if (convertedValue >= 1e6) {
-                                matchQuantityConvertedStr = String.format("%.1f", convertedValue / 1e6) + " million";
-                            } else if (convertedValue >= 1e5) {
-                                matchQuantityConvertedStr = String.format("%.0f", convertedValue / 1e3) + " thousand";
-                            } else {
-                                matchQuantityConvertedStr = String.format("%.2f", convertedValue);
-                            }
-                            matchQuantityConvertedStr += " (" + constraint.quantity.unit + ")";
-                        } else {
-                            matchQuantityConvertedStr = "null";
-                        }
-                    }
-                }
-                if (matchQuantity.equals("null")) {
-                    continue;
-                }
-                o.put("match_score", minDist);
-                o.put("match_context", matchContext);
-                o.put("match_quantity", matchQuantity);
-                o.put("match_sentence", matchSentence);
-                o.put("match_source", matchSource);
-
-                o.put("match_entity_str", matchEntityStr);
-                o.put("match_quantity_str", matchQuantityStr);
-
-                o.put("match_quantity_converted_str", matchQuantityConvertedStr);
-
-                scoredInstances.add(new Pair<>(o, minDist));
+                // log progress
                 if (session != null) {
                     int currentPercent = instances.total > 0 ? (int) ((double) instances.streamed * 100 / instances.total) : 100;
                     if (currentPercent > lastPercent) {
@@ -310,13 +245,70 @@ public class ElasticSearchQuery {
                         }
                     }
                 }
+
+                JSONArray facts = o.getJSONObject("_source").getJSONArray("facts");
+                // save space.
+                o.put("_source", "<OMITTED>");
+                ResultInstance inst = new ResultInstance();
+                inst.entity = o.getString("_id");
+
+                for (int i = 0; i < facts.length(); ++i) {
+                    // check corpus target
+                    if (corpusConstraint != null) {
+                        boolean goodSource = false;
+                        for (String c : corpusConstraint) {
+                            if (facts.getJSONObject(i).getString("source").startsWith(c + ":")) {
+                                goodSource = true;
+                                break;
+                            }
+                        }
+                        if (!goodSource) {
+                            continue;
+                        }
+                    }
+
+                    // quantity
+                    String Q = facts.getJSONObject(i).getString("quantity");
+                    Quantity qt = Quantity.fromQuantityString(Q);
+
+                    // context
+                    ArrayList<String> X = new ArrayList<>();
+                    JSONArray context = facts.getJSONObject(i).getJSONArray("context");
+                    for (int k = 0; k < context.length(); ++k) {
+                        X.add(context.getString(k));
+                    }
+                    String contextVerbose;
+                    synchronized (GSON) {
+                        contextVerbose = GSON.toJson(X);
+                    }
+                    if (X.isEmpty()) {
+                        continue;
+                    }
+
+                    ResultInstance.SubInstance si = new ResultInstance.SubInstance();
+                    si.quantity = qt.toString(2);
+                    si.context = contextVerbose;
+                    si.domain = QuantityDomain.getDomain(qt);
+                    si.source = facts.getJSONObject(i).getString("source");
+
+                    // match
+                    for (int j = 0; j < X.size(); ++j) {
+                        X.set(j, StringUtils.stem(X.get(j).toLowerCase(), Morpha.any));
+                    }
+                    // use explicit matcher if given.
+                    si.score = DEFAULT_MATCHER.match(queryContextTerms, X);
+                    inst.addSubInstance(si);
+                }
+
+                if (inst.subInstances.size() > 0) {
+                    Collections.sort(inst.subInstances, (o1, o2) -> Double.compare(o2.score, o1.score));
+                    result.add(inst);
+                }
             }
             if (instances.error) {
-                result.second = null;
-                return result;
+                return null;
             }
-            Collections.sort(scoredInstances, (o1, o2) -> o1.second.compareTo(o2.second));
-            result.second = scoredInstances.stream().map(o -> o.first).collect(Collectors.toCollection(ArrayList::new));
+            Collections.sort(result, (o1, o2) -> Double.compare(o2.score, o1.score));
             return result;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -324,37 +316,10 @@ public class ElasticSearchQuery {
         }
     }
 
-    public static Pair<QuantityConstraint, ArrayList<JSONObject>> search(String queryType, String queryContext,
-                                                                         String quantityConstraint,
-                                                                         ContextMatcher matcher) {
-        return search(queryType, queryContext, quantityConstraint, matcher, null);
-    }
-
-    public static Pair<QuantityConstraint, ArrayList<JSONObject>> search(String queryType, String queryContext,
-                                                                         String quantityConstraint) {
-        return search(queryType, queryContext, quantityConstraint, DEFAULT_MATCHER);
-    }
-
     public static void main(String[] args) {
-        ArrayList<JSONObject> result =
-                search("car",
-                        "consumption",
-                        "more than 0 mpg").second;
-
-        int nPrinted = 0;
-        for (JSONObject o : result) {
-            try {
-                if (nPrinted < 20) {
-                    System.out.println(String.format("%30s\t%10.3f\t%50s\t%20s\t%s\t%s", o.getString("_id"),
-                            o.getDouble(
-                                    "match_score"),
-                            o.getString("match_context"), o.getString("match_quantity"),
-                            o.getString("match_sentence"), o.getString("match_source")));
-                    ++nPrinted;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+        Gson g = new Gson();
+        ArrayList<ResultInstance> res = searchWithoutQuantityConstraint("businessperson", "net worth", null);
+        res.subList(5, res.size()).clear();
+        System.out.println(g.toJson(res));
     }
 }
