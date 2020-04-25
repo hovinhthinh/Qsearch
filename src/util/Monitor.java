@@ -12,6 +12,7 @@ public abstract class Monitor extends Thread {
     private PrintWriter out;
     private boolean stopped;
     private int current, lastTick;
+    private long startTime;
 
     // Start from 0, end at <total>. <time> in seconds is the delay between 2 logs.
     // <total> == -1 indicates INF. In this case, we need to call forceShutdown() manually.
@@ -71,11 +72,12 @@ public abstract class Monitor extends Thread {
                 : String.format("%d/%d", progress.current, progress.total);
         String percentString = progress.total == -1 ? "--" : String.format("%.2f%%", progress.percent);
         String speedString = String.format("%.2f/sec", progress.speed);
+        String etString = String.format("%dd %02d:%02d:%02d", progress.et_d, progress.et_h, progress.et_m, progress.et_s);
         String etaString = progress.total == -1 ? "--d --:--:--" :
                 String.format("%dd %02d:%02d:%02d", progress.eta_d, progress.eta_h, progress.eta_m, progress.eta_s);
 
-        log(String.format("MONITOR [%s]: current: %s     percent: %s     speed: %s     eta: %s",
-                name, currentString, percentString, speedString, etaString));
+        log(String.format("MONITOR [%s]: et: %s    current: %s    percent: %s    speed: %s    eta: %s",
+                name, etString, currentString, percentString, speedString, etaString));
     }
 
     public void run() {
@@ -85,6 +87,7 @@ public abstract class Monitor extends Thread {
             logDone();
             return;
         }
+        startTime = System.currentTimeMillis();
         while (!stopped) {
             try {
                 Thread.sleep(time * 1000);
@@ -98,6 +101,12 @@ public abstract class Monitor extends Thread {
 
             // Compute progress.
             Progress progress = new Progress();
+            int elapsedTimeInSeconds = (int) ((System.currentTimeMillis() - startTime) / 1000);
+            progress.et_d = elapsedTimeInSeconds / (24 * 3600);
+            progress.et_h = (elapsedTimeInSeconds % (24 * 3600)) / 3600;
+            progress.et_m = (elapsedTimeInSeconds % 3600) / 60;
+            progress.et_s = elapsedTimeInSeconds % 60;
+
             progress.current = current;
             if (total != -1) {
                 progress.total = total;
@@ -151,6 +160,7 @@ public abstract class Monitor extends Thread {
     }
 
     public static final class Progress {
+        int et_d, et_h, et_m, et_s;
         int current = 0;
         int total = -1;
         double percent = -1; // -1 means unknown.
