@@ -120,7 +120,7 @@ public class ElasticSearchDataImport {
                 HTTPRequest.GET(PROTOCOL + "://" + ES_HOST + "/" + INDEX + "/" + TYPE + "/" + URLEncoder.encode(entity, "UTF-8"));
         if (data == null) {
             System.out.println("Threw: " + entity);
-            threw.incrementAndGet();
+            System.out.println("Updated : " + updated.get() + " Threw: " + threw.incrementAndGet());
             return;
         }
         System.out.println("Adding: " + entity);
@@ -140,7 +140,6 @@ public class ElasticSearchDataImport {
             throw new Exception("Importing facts fail.");
         }
         updated.incrementAndGet();
-        System.out.println("Updated : " + updated.get() + " Threw: " + threw.get());
     }
 
     public static boolean importFacts(double minConf, String... inputs) {
@@ -201,7 +200,9 @@ public class ElasticSearchDataImport {
                             data.put("context", context);
                             data.put("quantity", qt.toString());
                             data.put("sentence", "null");
-                            data.put("source", table.source.replace("WIKIPEDIA:Link:", "").replace("TABLEM:Link:", ""));
+                            data.put("source", table.source
+//                                    .replace("WIKIPEDIA:Link:", "").replace("TABLEM:Link:", "")
+                            );
                             tempOut.println(String.format("%s\t%s", entity, data.toString()));
                         }
                     }
@@ -215,7 +216,7 @@ public class ElasticSearchDataImport {
 
             // Import.
             System.out.println("Importing facts");
-            Concurrent.BoundedExecutor executor = new Concurrent.BoundedExecutor(8);
+            Concurrent.BoundedExecutor executor = new Concurrent.BoundedExecutor(32);
             String lastEntity = null;
             JSONArray entityFacts = null;
             SelfMonitor m = new SelfMonitor("Import", -1, 10);
