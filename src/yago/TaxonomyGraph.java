@@ -31,7 +31,7 @@ public class TaxonomyGraph {
     public int nEntities;
     public int nTypes;
 
-    private static transient final int CACHE_ENTITY_TRANSITIVE_TYPE_2_DISTANCE_SIZE = 20000;
+    private static transient final int CACHE_ENTITY_TRANSITIVE_TYPE_2_DISTANCE_SIZE = 100000;
     private transient Int2ObjectLinkedOpenHashMap<Int2IntLinkedOpenHashMap> cachedEntityTransitiveType2Distance;
 
     private static transient final int CACHE_MOST_SPEC_COMMON_TYPE_SIZE = 1000000;
@@ -223,7 +223,7 @@ public class TaxonomyGraph {
                 queue.addLast(v);
             }
         }
-        typeId2Dist.trim();
+//        typeId2Dist.trim();
         cachedEntityTransitiveType2Distance.putAndMoveToFirst(entityId, typeId2Dist);
         if (cachedEntityTransitiveType2Distance.size() > CACHE_ENTITY_TRANSITIVE_TYPE_2_DISTANCE_SIZE) {
             cachedEntityTransitiveType2Distance.removeLast();
