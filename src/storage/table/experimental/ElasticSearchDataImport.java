@@ -14,10 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import pipeline.TextBasedColumnScoringNode;
 import uk.ac.susx.informatics.Morpha;
-import util.Concurrent;
-import util.FileUtils;
-import util.HTTPRequest;
-import util.ShellCommand;
+import util.*;
 import util.headword.StringUtils;
 import yago.TaxonomyGraph;
 
@@ -146,68 +143,69 @@ public class ElasticSearchDataImport {
         System.out.println("Updated : " + updated.get() + " Threw: " + threw.get());
     }
 
-    public static boolean importFacts(String input, double minConf) {
+    public static boolean importFacts(double minConf, String... inputs) {
         try {
             // Load
             Gson gson = new Gson();
-            File tempFile = File.createTempFile("yagoImport", ".gz", new File("./"));
+            File tempFile = File.createTempFile("yagoImport", ".gz");
             System.out.println("Loading: " + tempFile.getAbsolutePath());
             PrintWriter tempOut = FileUtils.getPrintWriter(tempFile, Charset.forName("UTF-8"));
-            for (String line : FileUtils.getLineStream(input, "UTF-8")) {
-                Table table = gson.fromJson(line, Table.class);
-                // for all Qfacts
-                for (int qCol = 0; qCol < table.nColumn; ++qCol) {
-                    if (!table.isNumericColumn[qCol] || (minConf != -1 && table.quantityToEntityColumnScore[qCol] < minConf)) {
-                        continue;
-                    }
-
-                    for (int row = 0; row < table.nDataRow; ++row) {
-                        QuantityLink ql = table.data[row][qCol].getRepresentativeQuantityLink();
-                        if (ql == null) {
-                            continue;
-                        }
-                        EntityLink el = table.data[row][table.quantityToEntityColumn[qCol]].getRepresentativeEntityLink();
-                        if (el == null) {
+            for (String input : inputs)
+                for (String line : FileUtils.getLineStream(input, "UTF-8")) {
+                    Table table = gson.fromJson(line, Table.class);
+                    // for all Qfacts
+                    for (int qCol = 0; qCol < table.nColumn; ++qCol) {
+                        if (!table.isNumericColumn[qCol] || (minConf != -1 && table.quantityToEntityColumnScore[qCol] < minConf)) {
                             continue;
                         }
 
-                        String entity = el.target;
-                        if (entity.startsWith("YAGO:")) {
-                            entity = "<" + entity.substring(5) + ">";
-                        }
-
-                        Quantity qt = ql.quantity;
-
-                        String domain = QuantityDomain.getDomain(qt);
-                        // context
-                        ArrayList<String> X = new ArrayList<>(NLP.splitSentence(table.getCombinedHeader(qCol)));
-                        if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
-                            X.addAll(NLP.splitSentence(qt.unit));
-                            qt.unit = "";
-                        }
-                        for (int j = X.size() - 1; j >= 0; --j) {
-                            X.set(j, StringUtils.stem(X.get(j).toLowerCase(), Morpha.any));
-                            if (NLP.BLOCKED_STOPWORDS.contains(X.get(j)) || TextBasedColumnScoringNode.BLOCKED_OVERLAP_CONTEXT_TOKENS.contains(X.get(j))) {
-                                X.remove(j);
+                        for (int row = 0; row < table.nDataRow; ++row) {
+                            QuantityLink ql = table.data[row][qCol].getRepresentativeQuantityLink();
+                            if (ql == null) {
+                                continue;
                             }
-                        }
-                        if (X.isEmpty()) {
-                            continue;
-                        }
+                            EntityLink el = table.data[row][table.quantityToEntityColumn[qCol]].getRepresentativeEntityLink();
+                            if (el == null) {
+                                continue;
+                            }
 
-                        JSONArray context = new JSONArray();
-                        for (String x : X) {
-                            context.put(x);
+                            String entity = el.target;
+                            if (entity.startsWith("YAGO:")) {
+                                entity = "<" + entity.substring(5) + ">";
+                            }
+
+                            Quantity qt = ql.quantity;
+
+                            String domain = QuantityDomain.getDomain(qt);
+                            // context
+                            ArrayList<String> X = new ArrayList<>(NLP.splitSentence(table.getCombinedHeader(qCol)));
+                            if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+                                X.addAll(NLP.splitSentence(qt.unit));
+                                qt.unit = "";
+                            }
+                            for (int j = X.size() - 1; j >= 0; --j) {
+                                X.set(j, StringUtils.stem(X.get(j).toLowerCase(), Morpha.any));
+                                if (NLP.BLOCKED_STOPWORDS.contains(X.get(j)) || TextBasedColumnScoringNode.BLOCKED_OVERLAP_CONTEXT_TOKENS.contains(X.get(j))) {
+                                    X.remove(j);
+                                }
+                            }
+                            if (X.isEmpty()) {
+                                continue;
+                            }
+
+                            JSONArray context = new JSONArray();
+                            for (String x : X) {
+                                context.put(x);
+                            }
+                            JSONObject data = new JSONObject();
+                            data.put("context", context);
+                            data.put("quantity", qt.toString());
+                            data.put("sentence", "null");
+                            data.put("source", table.source.replace("WIKIPEDIA:Link:", "").replace("TABLEM:Link:", ""));
+                            tempOut.println(String.format("%s\t%s", entity, data.toString()));
                         }
-                        JSONObject data = new JSONObject();
-                        data.put("context", context);
-                        data.put("quantity", qt.toString());
-                        data.put("sentence", "null");
-                        data.put("source", table.source.replace("WIKIPEDIA:Link:", "").replace("TABLEM:Link:", ""));
-                        tempOut.println(String.format("%s\t%s", entity, data.toString()));
                     }
                 }
-            }
             tempOut.close();
 
             File newTempFile = File.createTempFile("yagoImport", ".gz", new File("./"));
@@ -220,6 +218,8 @@ public class ElasticSearchDataImport {
             Concurrent.BoundedExecutor executor = new Concurrent.BoundedExecutor(8);
             String lastEntity = null;
             JSONArray entityFacts = null;
+            SelfMonitor m = new SelfMonitor("Import", -1, 10);
+            m.start();
             for (String line : FileUtils.getLineStream(newTempFile, Charset.forName("UTF-8"))) {
                 int pos = line.indexOf("\t");
                 String entity = line.substring(0, pos);
@@ -232,6 +232,7 @@ public class ElasticSearchDataImport {
                         final JSONArray eF = entityFacts;
                         executor.submit(() -> {
                             importEntityFacts(lE, eF);
+                            m.incAndGet();
                             return null;
                         });
                     }
@@ -248,7 +249,8 @@ public class ElasticSearchDataImport {
                 });
             }
             executor.joinAndShutdown(10);
-            newTempFile.delete();
+//            newTempFile.delete();
+            m.forceShutdown();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -260,11 +262,13 @@ public class ElasticSearchDataImport {
 
 
     public static void main(String[] args) throws Exception {
-        System.out.println(deleteIndex());
-        System.out.println(createIndex());
-        System.out.println("Importing YAGO:");
-        System.out.println(importYago("/GW/D5data-10/hvthinh/yagoTransitiveType.tsv"));
-        System.out.println("Importing facts:");
-        System.out.println(importFacts("/GW/D5data-12/hvthinh/TabQs/annotation+linking/wiki+tablem_annotation_linking.gz", 0.7));
+//        System.out.println(deleteIndex());
+//        System.out.println(createIndex());
+//        System.out.println("Importing YAGO:");
+//        System.out.println(importYago("/GW/D5data-10/hvthinh/yagoTransitiveType.tsv"));
+//        System.out.println("Importing facts:");
+//        System.out.println(importFacts(0.7,
+//                "/GW/D5data-12/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id_annotation+linking.gz",
+//                "/GW/D5data-11/hvthinh/TABLEM/all/all+id.annotation+linking.gz"));
     }
 }
