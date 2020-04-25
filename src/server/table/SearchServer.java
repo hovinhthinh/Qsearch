@@ -10,11 +10,12 @@ import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.webapp.WebAppContext;
 import server.table.handler.TypeSuggestionHandler;
 import server.table.handler.search.SearchHandler;
 
 public class SearchServer {
-    public static final String RESOURCE_BASE = "./web/";
+//    public static final String RESOURCE_BASE = "./web/";
     public static final String SEARCH_PATH = "/search";
     public static final String TYPE_SUGGESTION_PATH = "/type_suggest";
     public static final String EVALUATE_PATH = "/evaluate";
@@ -35,8 +36,8 @@ public class SearchServer {
 
         boolean dev = (args.length > 0 && args[0].equals("DEV"));
 
-        resourceHandler.setWelcomeFiles(new String[]{dev ? "table/index_dev.html" : "table/index.html"});
-        resourceHandler.setResourceBase(RESOURCE_BASE);
+//        resourceHandler.setWelcomeFiles(new String[]{dev ? "table/index_dev.html" : "table/index.html"});
+//        resourceHandler.setResourceBase(RESOURCE_BASE);
 
         ContextHandler searchHandler = new ContextHandler();
         searchHandler.setContextPath(SEARCH_PATH);
@@ -46,6 +47,14 @@ public class SearchServer {
         typeSuggestionHandler.setContextPath(TYPE_SUGGESTION_PATH);
         typeSuggestionHandler.setHandler(new TypeSuggestionHandler(10));
 
+        WebAppContext ctx = new WebAppContext();
+        ctx.setResourceBase("./web/");
+        ctx.setContextPath("/");
+        ctx.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern", ".*/[^/]*jstl.*\\.jar$");
+        org.eclipse.jetty.webapp.Configuration.ClassList classlist = org.eclipse.jetty.webapp.Configuration.ClassList.setServerDefault(server);
+        classlist.addAfter("org.eclipse.jetty.webapp.FragmentConfiguration", "org.eclipse.jetty.plus.webapp.EnvConfiguration", "org.eclipse.jetty.plus.webapp.PlusConfiguration");
+        classlist.addBefore("org.eclipse.jetty.webapp.JettyWebXmlConfiguration", "org.eclipse.jetty.annotations.AnnotationConfiguration");
+
         HandlerList handlers = new HandlerList();
         if (!dev) {
 //            handlers.setHandlers(new Handler[]{resourceHandler, typeSuggestionHandler, searchHandler, new DefaultHandler()});
@@ -54,7 +63,7 @@ public class SearchServer {
 //            evaluateHandler.setContextPath(EVALUATE_PATH);
 //            evaluateHandler.setHandler(new EvaluateHandler("./exp_2/"));
 //            handlers.setHandlers(new Handler[]{resourceHandler, searchHandler, evaluateHandler, new DefaultHandler()});
-            handlers.setHandlers(new Handler[]{resourceHandler, searchHandler, typeSuggestionHandler, new DefaultHandler()});
+            handlers.setHandlers(new Handler[]{searchHandler, typeSuggestionHandler, ctx});
         }
 
         server.setHandler(handlers);
