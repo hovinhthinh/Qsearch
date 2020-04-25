@@ -20,7 +20,7 @@ import java.util.Arrays;
 @Deprecated
 public class TableQfactSaver {
     public static void main(String[] args) {
-        String wikiFile = "/GW/D5data-12/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2";
+        String wikiFile = "/GW/D5data-12/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id_annotation+linking.gz";
         String tablemFile = "/GW/D5data-11/hvthinh/TABLEM/all/all+id.annotation+linking.gz";
 
         double LINKING_THRESHOLD = 0.70;
