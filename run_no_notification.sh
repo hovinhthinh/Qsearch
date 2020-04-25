@@ -3,5 +3,5 @@
 # Ex: run_no_notification.sh 8G <MainClass> <args...>
 
 args="${@:3}"
-export MAVEN_OPTS="-Xms$1 -Xmx$1 -XX:+UseG1GC -XX:ParallelGCThreads=4" && mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="$2" -Dexec.args="$args"
+export MAVEN_OPTS="-Xms$1 -Xmx$1 -XX:ParallelGCThreads=4" && mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="$2" -Dexec.args="$args"
 
