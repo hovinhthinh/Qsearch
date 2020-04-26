@@ -54,6 +54,7 @@ public class TableQfactSaver {
                         if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
                             X.addAll(NLP.splitSentence(qt.unit));
                             qt.unit = "";
+                            domain = "Other";
                         }
                         for (int j = X.size() - 1; j >= 0; --j) {
                             X.set(j, StringUtils.stem(X.get(j).toLowerCase(), Morpha.any));
@@ -65,12 +66,13 @@ public class TableQfactSaver {
                             continue;
                         }
 
-                        out.println(String.format("%s\t%s\t%s\t%s\t%s\t%s",
+                        out.println(String.format("%s\t%s\t%s\t%.2f\t%s\t%s",
                                 el.target,
                                 X.toString(),
                                 ql.quantity.toString(2),
+                                table.quantityToEntityColumnScore[qCol],
                                 domain,
-                                TaxonomyGraph.getDefaultGraphInstance().getTextualizedTypes("<" + el.target.substring(el.target.lastIndexOf(':') + 1) + ">", false).toString(),
+//                                TaxonomyGraph.getDefaultGraphInstance().getTextualizedTypes("<" + el.target.substring(el.target.lastIndexOf(':') + 1) + ">", false).toString(),
                                 table.source
                         ));
                     }
