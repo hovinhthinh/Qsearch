@@ -21,7 +21,7 @@ public class EntityQfactHandler extends AbstractHandler {
 
     static class Qfact {
         String entity;
-        String entityForSearch;
+        transient String entityForSearch;
         String context;
         String quantity;
         double score;
