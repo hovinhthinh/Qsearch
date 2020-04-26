@@ -20,7 +20,7 @@ import java.io.PrintWriter;
 import java.util.*;
 import java.util.logging.Logger;
 
-
+@Deprecated
 public class TypeSuggestionHandler extends AbstractHandler {
     public static final Logger LOGGER = Logger.getLogger(TypeSuggestionHandler.class.getName());
     private Gson GSON = new Gson();

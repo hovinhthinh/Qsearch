@@ -184,7 +184,7 @@ DEV_MODE
             contentType: 'application/json; charset=utf-8',
             dataType: "json",
             beforeSend: function () {
-                $("#search").attr('disabled', 'disabled');
+                $("#search").attr('disabled', 'disabled').attr("value", "Wait...");
                 // $("#parsed").html("");
                 $("#data").html("");
                 $("#submit").attr("hidden", "");
@@ -224,7 +224,7 @@ DEV_MODE
                 alert("An error occurred.");
             },
             complete: function () {
-                $("#search").removeAttr('disabled');
+                $("#search").removeAttr('disabled').attr("value", "Explore");;
             }
         });
     }
