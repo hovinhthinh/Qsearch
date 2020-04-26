@@ -64,18 +64,19 @@ public class EntityQfactHandler extends AbstractHandler {
         String entityConstraint = NLP.stripSentence(request.getParameter("entity")).toLowerCase();
 
         HashMap<String, List<Qfact>> result = new HashMap<>();
-        for (int i = 0; i < qfacts.size(); ++i) {
-            if (qfacts.get(i).entityForSearch.contains(entityConstraint)) {
-                int j = i;
-                while (j < qfacts.size() - 1 && qfacts.get(j + 1).entity.equals(qfacts.get(j).entity)) {
-                    ++j;
+        if (!entityConstraint.isEmpty()) {
+            for (int i = 0; i < qfacts.size(); ++i) {
+                if (qfacts.get(i).entityForSearch.contains(entityConstraint)) {
+                    int j = i;
+                    while (j < qfacts.size() - 1 && qfacts.get(j + 1).entity.equals(qfacts.get(j).entity)) {
+                        ++j;
+                    }
+                    if (result.size() < 100) {
+                        result.put(qfacts.get(i).entity, qfacts.subList(i, j + 1));
+                    }
+                    i = j;
                 }
-                result.put(qfacts.get(i).entity, qfacts.subList(i, j + 1));
-                i = j;
             }
-        }
-        if (result.size() >= 100) {
-            result.clear();
         }
 
         synchronized (GSON) {
