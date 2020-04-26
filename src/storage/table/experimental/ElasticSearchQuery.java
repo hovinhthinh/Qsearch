@@ -5,6 +5,7 @@ import config.Configuration;
 import model.context.ContextMatcher;
 import model.context.IDF;
 import model.quantity.Quantity;
+import model.quantity.QuantityConstraint;
 import model.quantity.QuantityDomain;
 import nlp.Glove;
 import nlp.NLP;
@@ -208,7 +209,19 @@ public class ElasticSearchQuery {
         };
     }
 
-    public static ArrayList<ResultInstance> searchWithoutQuantityConstraint(String queryType, String queryContext, Map additionalParameters) {
+    public static ArrayList<ResultInstance> searchWithoutQuantityConstraint(String queryType, String queryContext, String quantityConstraint, Map additionalParameters) {
+        QuantityConstraint constraint = null;
+        if (quantityConstraint != null) {
+            constraint = QuantityConstraint.parseFromString(quantityConstraint.toLowerCase());
+            if (constraint == null) {
+                return null;
+            }
+            if (QuantityDomain.getDomain(constraint.quantity) == QuantityDomain.Domain.DIMENSIONLESS) {
+                queryContext += " " + constraint.quantity.unit;
+                constraint.quantity.unit = "";
+            }
+        }
+
         queryType = queryType.toLowerCase();
         queryContext = queryContext.toLowerCase();
 
@@ -270,6 +283,9 @@ public class ElasticSearchQuery {
                     // quantity
                     String Q = facts.getJSONObject(i).getString("quantity");
                     Quantity qt = Quantity.fromQuantityString(Q);
+                    if (constraint != null && !constraint.match(qt)) {
+                        continue;
+                    }
 
                     // context
                     ArrayList<String> X = new ArrayList<>();
@@ -321,7 +337,7 @@ public class ElasticSearchQuery {
 
     public static void main(String[] args) {
         Gson g = new Gson();
-        ArrayList<ResultInstance> res = searchWithoutQuantityConstraint("businessperson", "net worth", null);
+        ArrayList<ResultInstance> res = searchWithoutQuantityConstraint("businessperson", "net worth", null, null);
         res.subList(5, res.size()).clear();
         System.out.println(g.toJson(res));
     }
