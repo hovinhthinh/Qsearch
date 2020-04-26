@@ -76,6 +76,7 @@ DEV_MODE
             <th scope="col">Context</th>
             <th scope="col">Quantity</th>
             <th scope="col">Domain</th>
+            <th scope="col">Conf</th>
             <th scope="col">Source</th>
             <!--            <th scope="col">Verdict</th>-->
         </tr>
@@ -83,6 +84,7 @@ DEV_MODE
         <tbody id="data">
         </tbody>
         <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -155,6 +157,7 @@ DEV_MODE
             line += cell(inst[i]["context"], 1);
             line += cell(inst[i]["quantity"], 1);
             line += cell(inst[i]["domain"], 1);
+            line += cell(inst[i]["score"], 1);
             line += cell(inst[i]["source"], 1);
 
             // line += "<td>" + (verdictId == null ? "" : createCheckForm(verdictId)) + "</td>";
