@@ -297,6 +297,9 @@ public class ElasticSearchQuery {
                     }
                     // use explicit matcher if given.
                     si.score = DEFAULT_MATCHER.match(queryContextTerms, X);
+                    if (si.score < 0.7) {
+                        continue;
+                    }
                     inst.addSubInstance(si);
                 }
 
