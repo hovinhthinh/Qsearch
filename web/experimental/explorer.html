@@ -155,7 +155,7 @@ DEV_MODE
             }
             line += cell(subI[i]["context"].replace(/","/g, '" , "'), 1);
             line += cell(subI[i]["quantity"], 1);
-            line += cell(subI[i]["domain"], 1);
+            line += cell(subI[i]["domain"] == "DIMENSIONLESS" ? "Other" : subI[i]["domain"], 1);
             line += cell(subI[i]["source"], 1);
 
             // line += "<td>" + (verdictId == null ? "" : createCheckForm(verdictId)) + "</td>";
