@@ -44,6 +44,7 @@ public class EntityQfactHandler extends AbstractHandler {
             f.domain = arr[4];
             f.source = arr[5];
             f.entityForSearch = arr[0].substring(5).replace('_', ' ').toLowerCase();
+            qfacts.add(f);
         }
         Collections.sort(qfacts, (o1, o2) -> {
             int x = o1.entity.compareTo(o2.entity);
