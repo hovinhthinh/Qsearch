@@ -32,7 +32,7 @@ public class ExplorerServer {
 
         ContextHandler searchHandler = new ContextHandler();
         searchHandler.setContextPath(SEARCH_PATH);
-        searchHandler.setHandler(new SearchHandler(100));
+        searchHandler.setHandler(new SearchHandler(1000));
 
         ContextHandler typeSuggestionHandler = new ContextHandler();
         typeSuggestionHandler.setContextPath(TYPE_SUGGESTION_PATH);
