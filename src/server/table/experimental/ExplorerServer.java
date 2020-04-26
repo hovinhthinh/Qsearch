@@ -14,6 +14,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 @Deprecated
 public class ExplorerServer {
     public static final String SEARCH_PATH = "/search";
+    public static final String ENTITY_PATH = "/entity";
     public static final String TYPE_SUGGESTION_PATH = "/type_suggest";
     public static final int DEFAULT_PORT = Integer.parseInt(Configuration.get("search.server.default-port"));
 
@@ -38,6 +39,10 @@ public class ExplorerServer {
         typeSuggestionHandler.setContextPath(TYPE_SUGGESTION_PATH);
         typeSuggestionHandler.setHandler(new TypeSuggestionHandler(10));
 
+        ContextHandler entityHandler = new ContextHandler();
+        entityHandler.setContextPath(ENTITY_PATH);
+        entityHandler.setHandler(new EntityQfactHandler());
+
         WebAppContext ctx = new WebAppContext();
         ctx.setResourceBase("./web/");
         ctx.setContextPath("/");
@@ -50,6 +55,7 @@ public class ExplorerServer {
         handlers.setHandlers(new Handler[]{
                 searchHandler,
                 typeSuggestionHandler,
+                entityHandler,
                 ctx});
 
         server.setHandler(handlers);
