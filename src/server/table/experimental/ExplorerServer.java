@@ -34,9 +34,9 @@ public class ExplorerServer {
         searchHandler.setContextPath(SEARCH_PATH);
         searchHandler.setHandler(new SearchHandler(100));
 
-//        ContextHandler typeSuggestionHandler = new ContextHandler();
-//        typeSuggestionHandler.setContextPath(TYPE_SUGGESTION_PATH);
-//        typeSuggestionHandler.setHandler(new TypeSuggestionHandler(10));
+        ContextHandler typeSuggestionHandler = new ContextHandler();
+        typeSuggestionHandler.setContextPath(TYPE_SUGGESTION_PATH);
+        typeSuggestionHandler.setHandler(new TypeSuggestionHandler(10));
 
         WebAppContext ctx = new WebAppContext();
         ctx.setResourceBase("./web/");
@@ -49,7 +49,7 @@ public class ExplorerServer {
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[]{
                 searchHandler,
-//                typeSuggestionHandler,
+                typeSuggestionHandler,
                 ctx});
 
         server.setHandler(handlers);
