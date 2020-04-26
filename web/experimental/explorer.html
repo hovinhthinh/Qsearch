@@ -50,8 +50,7 @@ DEV_MODE
                        value="businessperson">
                 <input type="text" class="form-control" placeholder="context" id="context"
                        value="net worth">
-<!--                <input hidden type="text" class="form-control" placeholder="quantity constraint" id="quantity"-->
-<!--                       value="more than 50 km">-->
+                <input type="text" class="form-control" placeholder="quantity (optional)" id="quantity">
 <!--                <input hidden type="text" class="form-control" placeholder="what do you want to search for?" id="full"-->
 <!--                       value="electric cars with range more than 50 km">-->
                 <span class="input-group-btn"><input class="btn btn-success" type="submit" value="Explore"
@@ -173,7 +172,12 @@ DEV_MODE
         // if ($("#mode-full").attr("value") == 1) {
         //     params = {full: $("#full").val()};
         // } else {
-        params = {type: $("#type").val(), context: $("#context").val(), quantity: $("#quantity").val()};
+
+        params = {type: $("#type").val(), context: $("#context").val()};
+        var quantity = $("#quantity").val().trim();
+        if (quantity != "") {
+            params.quantity = quantity;
+        }
         // }
         // params["model"] = $("#model").val();
 

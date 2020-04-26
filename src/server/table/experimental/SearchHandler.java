@@ -34,6 +34,7 @@ public class SearchHandler extends AbstractHandler {
         // Get parameters
         String typeConstraint = request.getParameter("type");
         String contextConstraint = request.getParameter("context");
+        String quantityConstraint = request.getParameter("quantity");
 
         Map additionalParams = new HashMap();
 
@@ -42,7 +43,7 @@ public class SearchHandler extends AbstractHandler {
 
         httpServletResponse.setCharacterEncoding("utf-8");
 
-        ArrayList<ResultInstance> response = search(nResult, typeConstraint, contextConstraint, additionalParams);
+        ArrayList<ResultInstance> response = search(nResult, typeConstraint, contextConstraint, quantityConstraint, additionalParams);
 
         synchronized (GSON) {
             httpServletResponse.getWriter().print(GSON.toJson(response));
@@ -50,7 +51,7 @@ public class SearchHandler extends AbstractHandler {
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 
-    public static ArrayList<ResultInstance> search(int nTopResult, String typeConstraint, String contextConstraint, Map additionalParameters) {
+    public static ArrayList<ResultInstance> search(int nTopResult, String typeConstraint, String contextConstraint, String quantityConstraint, Map additionalParameters) {
         // Optimize
         if (typeConstraint != null) {
             typeConstraint = NLP.stripSentence(typeConstraint).toLowerCase();
@@ -63,7 +64,7 @@ public class SearchHandler extends AbstractHandler {
         LOGGER.info("Query: {Type: \"" + typeConstraint + "\"; Context: \"" + contextConstraint +
                 "\"; Quantity: \"" + null + "\"}");
 
-        ArrayList<ResultInstance> response = ElasticSearchQuery.searchWithoutQuantityConstraint(typeConstraint, contextConstraint, additionalParameters);
+        ArrayList<ResultInstance> response = ElasticSearchQuery.searchWithoutQuantityConstraint(typeConstraint, contextConstraint, quantityConstraint, additionalParameters);
         if (response.size() > nTopResult) {
             response.subList(nTopResult, response.size()).clear();
         }
