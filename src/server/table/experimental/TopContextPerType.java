@@ -87,6 +87,7 @@ public class TopContextPerType {
                 ArrayList<Pair<String, Integer>> topContext = processType(typeToFreq.get(i).first);
                 if (topContext == null) {
                     System.out.println("Err: " + typeToFreq.get(i).first);
+                    continue;
                 }
                 String output = String.format("%s\t%d\t%s", typeToFreq.get(i).first, typeToFreq.get(i).second, topContext.toString());
                 synchronized (out) {
