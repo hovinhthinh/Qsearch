@@ -289,19 +289,18 @@ public class TaxonomyGraph {
         return result;
     }
 
-    public HashSet<Integer> getEntitySetForType(int typeId) {
+    public HashSet<Integer> getEntitySetForTypes(Collection<Integer> typeIds) {
         HashSet<Integer> entitySet = new HashSet<>();
 
         LinkedList<Integer> queue = new LinkedList<>();
         IntOpenHashSet visitedTypeSet = new IntOpenHashSet();
-        queue.add(typeId);
-        visitedTypeSet.add(typeId);
+        queue.addAll(typeIds);
+        visitedTypeSet.addAll(typeIds);
         while (!queue.isEmpty()) {
             int t = queue.removeFirst();
             entitySet.addAll(typeEntityLists.get(t));
             IntArrayList subTypes = typeChildLists.get(t);
-            for (int i = 0; i < subTypes.size(); ++i) {
-                int c = subTypes.getInt(i);
+            for (int c : subTypes) {
                 if (visitedTypeSet.add(c)) {
                     queue.addLast(c);
                 }
@@ -351,5 +350,11 @@ public class TaxonomyGraph {
 
     public TaxonomyGraph() {
         this(YAGO_TAXONOMY_FILE, YAGO_TYPE_FILE);
+    }
+
+    public static void main(String[] args) {
+        long time = System.currentTimeMillis();
+        getDefaultGraphInstance();
+        System.out.println(System.currentTimeMillis() - time);
     }
 }
