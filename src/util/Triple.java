@@ -19,6 +19,6 @@ public class Triple<F, S, T> {
 
     @Override
     public String toString() {
-        return first.toString() + "," + second.toString() + "," + third.toString();
+        return "(" + first.toString() + "," + second.toString() + "," + third.toString() + ")";
     }
 }
