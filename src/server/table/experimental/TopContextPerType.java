@@ -85,17 +85,18 @@ public class TopContextPerType {
         Concurrent.runAndWait(() -> {
             int i;
             while ((i = cnt.getAndIncrement()) < typeToFreq.size()) {
-                ArrayList<String> topContext = processType(typeToFreq.get(i).first).stream().map(o -> o.first).collect(Collectors.toCollection(ArrayList::new));
-                if (topContext == null) {
+                try {
+                    ArrayList<String> topContext = processType(typeToFreq.get(i).first).stream().map(o -> o.first).collect(Collectors.toCollection(ArrayList::new));
+                    if (topContext.size() > 0) {
+                        String output = String.format("%s\t%d\t%s", typeToFreq.get(i).first, typeToFreq.get(i).second, topContext.toString());
+                        synchronized (out) {
+                            System.out.println(output);
+                            out.println(output);
+                        }
+                    }
+                } catch (NullPointerException e) {
                     System.out.println("Err: " + typeToFreq.get(i).first);
                     continue;
-                }
-                if (topContext.size() > 0) {
-                    String output = String.format("%s\t%d\t%s", typeToFreq.get(i).first, typeToFreq.get(i).second, topContext.toString());
-                    synchronized (out) {
-                        System.out.println(output);
-                        out.println(output);
-                    }
                 }
             }
         }, 32);
