@@ -11,6 +11,6 @@ public class TimeLink {
 
     @Override
     public String toString() {
-        return String.format("[%s : %s]", text, temporalStr);
+        return String.format("(%s : %s)", text, temporalStr);
     }
 }
