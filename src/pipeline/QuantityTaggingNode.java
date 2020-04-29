@@ -235,8 +235,43 @@ public class QuantityTaggingNode implements TaggingNode {
         table.majorUnitInColumn = new String[table.nColumn];
         for (int col = 0; col < table.nColumn; ++col) {
             String header = table.getOriginalCombinedHeader(col);
-            // Extends units from the header.
-            Quadruple<String, Double, String, String> unitInfoFromHeader = getHeaderUnit(header);
+
+            // Apply rules to get header unit:
+            Quadruple<String, Double, String, String> unitInfoFromHeader = null;
+            // these are cases when 2 units are given (we only consider the first one, the second one is a converted value of another unit)
+            for (String suffix : new String[]{
+                    " mph ( km / h )",
+                    " km / h ( mph )",
+                    " Miles ( Km )",
+                    " mi ( km )",
+                    " inches ( cm )",
+                    " m ( ft )",
+                    " meters ( feet )",
+                    " ft ( m )",
+                    " ft (m)",
+                    " m² ( sq ft ) )",
+                    " km² ( sq mi )",
+                    " km 2 ( sq mi )"}) {
+                if (header.endsWith(suffix)) {
+                    unitInfoFromHeader = new Quadruple<>();
+                    // main unit
+                    unitInfoFromHeader.first = suffix.substring(0, suffix.indexOf('(')).trim();
+                    // muliplier
+                    unitInfoFromHeader.second = 1.0;
+                    // unit span
+                    unitInfoFromHeader.third = suffix.trim();
+                    // combined header after removing unit span
+                    unitInfoFromHeader.fourth = header.substring(0, header.length() - suffix.length()).trim();
+                    break;
+                }
+            }
+
+            // Now get header unit using QWET.
+            if (unitInfoFromHeader == null) {
+                unitInfoFromHeader = getHeaderUnit(header);
+            }
+
+
             if (unitInfoFromHeader != null) {
                 table.setHeaderUnitSpan(col, unitInfoFromHeader.third);
                 // Remove unit span from combined header
