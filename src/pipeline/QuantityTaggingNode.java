@@ -99,6 +99,15 @@ public class QuantityTaggingNode implements TaggingNode {
         System.out.println(getHeaderUnit("value ( billion usd )"));
         System.out.println(getHeaderUnit("speed ( km / h )"));
         System.out.println(getHeaderUnit("speed ( M km / h )"));
+
+        Cell cell = new Cell();
+        cell.timeLinks = new ArrayList<>();
+        cell.text = "455 ft ( 138.6 m )";
+        new QuantityTaggingNode().tagBodyCell(cell, null, 1, "dummy header", false);
+        for (QuantityLink l : cell.quantityLinks) {
+            System.out.println(l.quantity.toString() + "\t" + l.text);
+        }
+        System.out.println(cell.getRepresentativeQuantityLink());
     }
 
     private Pattern timeMatcher = Pattern.compile("\\d{1,2}:\\d{2}[\\.:]\\d{2}"); // e.g., 3:50.77 or 1:15:20
@@ -147,6 +156,7 @@ public class QuantityTaggingNode implements TaggingNode {
         }
         // Now use IllinoisQuantifier
         String dumpyText = "This quantity is " + cell.text + " .";
+        boolean firstQuantity = true;
         for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(dumpyText, true)) {
             if (span.object instanceof Quantity) {
                 Quantity q = (Quantity) span.object;
@@ -163,8 +173,9 @@ public class QuantityTaggingNode implements TaggingNode {
                     q.units = "";
                 }
 
-                // prefer header unit if available
-                String cellUnit = NLP.stripSentence(unit != null ? unit : q.units);
+                // prefer header unit if available (only for firstQuantity)
+                String cellUnit = firstQuantity ? NLP.stripSentence(unit != null ? unit : q.units) : q.units;
+                firstQuantity = false;
 
                 String quantitySpan = dumpyText.substring(span.start, span.end);
 
