@@ -117,7 +117,7 @@ public class Cell {
         }
         calledTLink = true;
 
-        if (timeLinks.size() == 1 && text.equals(timeLinks.get(0).text)) {
+        if (timeLinks.size() > 0 && text.startsWith(timeLinks.get(0).text)) {
             return repTLink = timeLinks.get(0);
         } else {
             return null;
