@@ -15,7 +15,7 @@ public class ProcessWikiDiff{
     public static TaggingPipeline getPipeline() {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
-                new TimeTaggingNode(),
+                TimeTaggingNode.getDefaultInstance(),
                 new QuantityTaggingNode(),
                 new ColumnTypeTaggingNode(0.3, 0.3)
         );

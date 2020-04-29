@@ -26,7 +26,7 @@ public class WIKIPEDIA_TaggingPipeline extends String2StringMap {
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
-                new TimeTaggingNode(),
+                TimeTaggingNode.getDefaultInstance(),
                 new QuantityTaggingNode(),
                 new ColumnTypeTaggingNode(),
                 TextBasedColumnScoringNode.getDefaultInferenceInstance(),
@@ -39,7 +39,7 @@ public class WIKIPEDIA_TaggingPipeline extends String2StringMap {
     public static TaggingPipeline getAnnotationPipeline() {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
-                new TimeTaggingNode(),
+                TimeTaggingNode.getDefaultInstance(),
                 new QuantityTaggingNode(),
                 new ColumnTypeTaggingNode()
         );
