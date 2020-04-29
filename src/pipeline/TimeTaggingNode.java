@@ -73,7 +73,7 @@ public class TimeTaggingNode implements TaggingNode {
 
     public static void main(String[] args) {
         System.out.println(QuantityTaggingNode.getHeaderUnit("Second"));
-        System.out.println(new TimeTaggingNode().getLinks("1995"));
+        System.out.println(new TimeTaggingNode().getLinks("1995 - 1996"));
     }
 }
 
