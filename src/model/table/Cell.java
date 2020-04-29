@@ -108,9 +108,8 @@ public class Cell {
         return null;
     }
 
-    // returns null if either:
-    // - has no or more than 1 time links
-    // - the surface text of cell has extra words bot belonging to the time
+    // returns first link if:
+    // - the surface text of cell starts with the surface text of time
     public TimeLink getRepresentativeTimeLink() {
         if (calledTLink) {
             return repTLink;
