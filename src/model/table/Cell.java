@@ -62,6 +62,7 @@ public class Cell {
             return repELink;
         }
         calledELink = true;
+        repELink = null;
 
         if (entityLinks.size() != 1) {
             return null;
@@ -89,23 +90,30 @@ public class Cell {
             return repQLink;
         }
         calledQLink = true;
+        repQLink = null;
 
-        if (quantityLinks.size() != 1) {
+        if (quantityLinks.size() == 1) {
+            int quantityPos = text.indexOf(quantityLinks.get(0).text);
+            if (quantityPos == -1) {
+                return null;
+            }
+            String before = text.substring(0, quantityPos).trim();
+            String after = text.substring(quantityPos + quantityLinks.get(0).text.length()).trim();
+            if (before.contains(" ") || after.contains(" ")) {
+                return null;
+            }
+            if (before.isEmpty() || before.equals("+") || before.equals("-") || before.equals("≈")) {
+                return repQLink = quantityLinks.get(0);
+            }
+            return null;
+        } else if (quantityLinks.size() == 2) {
+            if (text.equals(String.format("%s ( %s )", quantityLinks.get(0).text, quantityLinks.get(1).text))) {
+                return repQLink = quantityLinks.get(0);
+            }
+            return null;
+        } else {
             return null;
         }
-        int quantityPos = text.indexOf(quantityLinks.get(0).text);
-        if (quantityPos == -1) {
-            return null;
-        }
-        String before = text.substring(0, quantityPos).trim();
-        String after = text.substring(quantityPos + quantityLinks.get(0).text.length()).trim();
-        if (before.contains(" ") || after.contains(" ")) {
-            return null;
-        }
-        if (before.isEmpty() || before.equals("+") || before.equals("-") || before.equals("≈")) {
-            return repQLink = quantityLinks.get(0);
-        }
-        return null;
     }
 
     // returns first link if:
@@ -115,6 +123,7 @@ public class Cell {
             return repTLink;
         }
         calledTLink = true;
+        repTLink = null;
 
         if (timeLinks.size() > 0 && text.startsWith(timeLinks.get(0).text)) {
             return repTLink = timeLinks.get(0);
