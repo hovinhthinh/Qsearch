@@ -17,7 +17,7 @@ public class ProcessEquity {
     public static TaggingPipeline getPipeline() {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
-                new TimeTaggingNode(),
+                TimeTaggingNode.getDefaultInstance(),
                 new QuantityTaggingNode(),
                 new ColumnTypeTaggingNode(0.25, 0.25)
         );

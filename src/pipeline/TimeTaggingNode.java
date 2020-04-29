@@ -16,6 +16,15 @@ import java.util.Properties;
 public class TimeTaggingNode implements TaggingNode {
     private AnnotationPipeline pipeline;
 
+    private static TimeTaggingNode DEFAULT_TIME_NODE = null;
+
+    public static TimeTaggingNode getDefaultInstance() {
+        if (DEFAULT_TIME_NODE == null) {
+            DEFAULT_TIME_NODE = new TimeTaggingNode();
+        }
+        return DEFAULT_TIME_NODE;
+    }
+
     public TimeTaggingNode() {
         Properties props = new Properties();
         pipeline = new AnnotationPipeline();
@@ -73,7 +82,7 @@ public class TimeTaggingNode implements TaggingNode {
 
     public static void main(String[] args) {
         System.out.println(QuantityTaggingNode.getHeaderUnit("Second"));
-        System.out.println(new TimeTaggingNode().getLinks("1995 - 1996"));
+        System.out.println(getDefaultInstance().getLinks("1995 - 1996"));
     }
 }
 

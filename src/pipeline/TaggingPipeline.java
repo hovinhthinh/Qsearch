@@ -13,7 +13,7 @@ public class TaggingPipeline {
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
-                new TimeTaggingNode(),
+                TimeTaggingNode.getDefaultInstance(),
                 new QuantityTaggingNode(),
                 new PriorBasedEntityTaggingNode(),
                 new ColumnTypeTaggingNode(),
@@ -27,7 +27,7 @@ public class TaggingPipeline {
     public static TaggingPipeline getAnnotationPipeline() {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
-                new TimeTaggingNode(),
+                TimeTaggingNode.getDefaultInstance(),
                 new QuantityTaggingNode(),
                 new PriorBasedEntityTaggingNode(),
                 new ColumnTypeTaggingNode()
