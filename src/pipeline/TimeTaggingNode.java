@@ -8,6 +8,7 @@ import edu.stanford.nlp.time.TimeExpression;
 import edu.stanford.nlp.util.CoreMap;
 import model.table.Table;
 import model.table.link.TimeLink;
+import util.Quadruple;
 
 import java.util.ArrayList;
 import java.util.Properties;
@@ -45,9 +46,9 @@ public class TimeTaggingNode implements TaggingNode {
             }
 
             // if header has an unit then this column is not time column.
-            String header = table.getOriginalCombinedHeader(c);
-            boolean headerHasUnit = !header.equalsIgnoreCase("year")
-                    && QuantityTaggingNode.getHeaderUnit(header) != null;
+            Quadruple<String, Double, String, String> headerUnit = QuantityTaggingNode.getHeaderUnit(table.getOriginalCombinedHeader(c));
+
+            boolean headerHasUnit = headerUnit != null && !headerUnit.first.equalsIgnoreCase("year");
 
             for (int r = 0; r < table.nDataRow; ++r) {
                 if (table.data[r][c].entityLinks != null && table.data[r][c].entityLinks.size() > 0) {
