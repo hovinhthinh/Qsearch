@@ -380,7 +380,7 @@ public class WikitextTableProcessor extends String2StringMap {
                             );
                         }
                     }
-                } else if (tName.equals("flag")) {
+                } else if (tName.equals("flag") || tName.equals("flagcountry")) {
                     if (args.size() == 1) {
                         content.append(getAstText(args.get(0).getValue())).append(" ");
                     }
