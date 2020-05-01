@@ -384,6 +384,10 @@ public class WikitextTableProcessor extends String2StringMap {
                     if (args.size() == 1) {
                         content.append(getAstText(args.get(0).getValue())).append(" ");
                     }
+                } else if (tName.equals("Tooltip")) {
+                    if (args.size() == 2) {
+                        content.append(getAstText(args.get(1).getValue())).append(" ");
+                    }
                 } else if (tName.equals("flagathlete")) {
                     if (args.size() >= 1) {
                         WtValue v = args.get(0).getValue();
