@@ -330,7 +330,7 @@ public class WikitextTableProcessor extends String2StringMap {
                 return false;
             }
             if (nn.equals("WtTemplate")) {
-                String tName = ((WtTemplate) node).getName().getAsString();
+                String tName = ((WtTemplate) node).getName().getAsString().toLowerCase();
                 List<WtTemplateArgument> args = ((WtTemplate) node).getArgs().stream()
                         .map(o -> (WtTemplateArgument) o).collect(Collectors.toList());
                 if (tName.equals("sort")) {
@@ -366,7 +366,7 @@ public class WikitextTableProcessor extends String2StringMap {
 
                         String link = name;
                         if (args.size() == 3) {
-                            if (!args.get(2).hasName()) {
+                            if (!args.get(2).hasName() || args.get(2).getName().equals("link")) {
                                 link = getAstText(args.get(2).getValue());
                             } else { // arg name is "nolink"
                                 link = null;
@@ -384,7 +384,7 @@ public class WikitextTableProcessor extends String2StringMap {
                     if (args.size() == 1) {
                         content.append(getAstText(args.get(0).getValue())).append(" ");
                     }
-                } else if (tName.equals("Tooltip")) {
+                } else if (tName.equals("tooltip")) {
                     if (args.size() == 2) {
                         content.append(getAstText(args.get(1).getValue())).append(" ");
                     }
