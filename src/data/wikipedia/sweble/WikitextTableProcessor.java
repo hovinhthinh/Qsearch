@@ -330,7 +330,11 @@ public class WikitextTableProcessor extends String2StringMap {
                 return false;
             }
             if (nn.equals("WtTemplate")) {
-                String tName = ((WtTemplate) node).getName().getAsString().toLowerCase();
+                WtName wtName = ((WtTemplate) node).getName();
+                if (!wtName.isResolved()) {
+                    return false;
+                }
+                String tName = wtName.getAsString().toLowerCase();
                 List<WtTemplateArgument> args = ((WtTemplate) node).getArgs().stream()
                         .map(o -> (WtTemplateArgument) o).collect(Collectors.toList());
                 if (tName.equals("sort")) {
