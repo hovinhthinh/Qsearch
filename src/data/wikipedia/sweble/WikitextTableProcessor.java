@@ -354,6 +354,10 @@ public class WikitextTableProcessor extends String2StringMap {
                             );
                         }
                     }
+                } else if (tName.equals("flag")) {
+                    if (args.size() == 1) {
+                        content.append(getAstText(args.get(0).getValue())).append(" ");
+                    }
                 } else if (tName.equals("small")) {
                     // Ignore this template.
                     if (true) {
