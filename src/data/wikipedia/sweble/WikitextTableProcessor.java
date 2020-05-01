@@ -336,19 +336,26 @@ public class WikitextTableProcessor extends String2StringMap {
                 if (tName.equals("sort")) {
                     if (args.size() == 2) {
                         WtValue v = args.get(1).getValue();
-                        if (v.size() == 1 && v.get(0) instanceof WtText) {
-                            String text = ((WtText) v.get(0)).getContent();
-                            try {
-                                WtNode subNode = engine.postprocess(pageId, text, null);
-                                JSONObject subContent = getDisplayText(subNode);
-
-                                content.append(subContent.getString("text")).append(" ");
-                                JSONArray subLinks = subContent.getJSONArray("surfaceLinks");
-                                for (int i = 0; i < subLinks.length(); ++i) {
-                                    entityLinks.put(subLinks.getJSONObject(i));
+                        if (v.size() == 1) {
+                            WtNode subNode;
+                            if (v.get(0) instanceof WtText) {
+                                try {
+                                    subNode = engine.postprocess(pageId, ((WtText) v.get(0)).getContent(), null);
+                                } catch (EngineException e) {
+                                    e.printStackTrace();
+                                    return false;
                                 }
-                            } catch (EngineException e) {
-                                e.printStackTrace();
+                            } else if (v.get(0) instanceof WtTemplate) {
+                                subNode = v.get(0);
+                            } else {
+                                return false;
+                            }
+
+                            JSONObject subContent = getDisplayText(subNode);
+                            content.append(subContent.getString("text")).append(" ");
+                            JSONArray subLinks = subContent.getJSONArray("surfaceLinks");
+                            for (int i = 0; i < subLinks.length(); ++i) {
+                                entityLinks.put(subLinks.getJSONObject(i));
                             }
                         }
                     }
@@ -393,19 +400,26 @@ public class WikitextTableProcessor extends String2StringMap {
                     }
                     if (args.size() == 1) {
                         WtValue v = args.get(0).getValue();
-                        if (v.size() == 1 && v.get(0) instanceof WtText) {
-                            String text = ((WtText) v.get(0)).getContent();
-                            try {
-                                WtNode subNode = engine.postprocess(pageId, text, null);
-                                JSONObject subContent = getDisplayText(subNode);
-
-                                content.append(subContent.getString("text")).append(" ");
-                                JSONArray subLinks = subContent.getJSONArray("surfaceLinks");
-                                for (int i = 0; i < subLinks.length(); ++i) {
-                                    entityLinks.put(subLinks.getJSONObject(i));
+                        if (v.size() == 1) {
+                            WtNode subNode;
+                            if (v.get(0) instanceof WtText) {
+                                try {
+                                    subNode = engine.postprocess(pageId, ((WtText) v.get(0)).getContent(), null);
+                                } catch (EngineException e) {
+                                    e.printStackTrace();
+                                    return false;
                                 }
-                            } catch (EngineException e) {
-                                e.printStackTrace();
+                            } else if (v.get(0) instanceof WtTemplate) {
+                                subNode = v.get(0);
+                            } else {
+                                return false;
+                            }
+
+                            JSONObject subContent = getDisplayText(subNode);
+                            content.append(subContent.getString("text")).append(" ");
+                            JSONArray subLinks = subContent.getJSONArray("surfaceLinks");
+                            for (int i = 0; i < subLinks.length(); ++i) {
+                                entityLinks.put(subLinks.getJSONObject(i));
                             }
                         }
                     }
