@@ -358,6 +358,11 @@ public class WikitextTableProcessor extends String2StringMap {
                     if (args.size() == 1) {
                         content.append(getAstText(args.get(0).getValue())).append(" ");
                     }
+                } else if (tName.equals("convert")) {
+                    if (args.size() >= 2) {
+                        content.append(getAstText(args.get(0).getValue())).append(" ")
+                                .append(getAstText(args.get(1).getValue())).append(" ");
+                    }
                 } else if (tName.equals("small")) {
                     // Ignore this template.
                     if (true) {
