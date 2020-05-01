@@ -382,6 +382,10 @@ public class WikitextTableProcessor extends String2StringMap {
                         content.append(getAstText(args.get(0).getValue())).append(" ")
                                 .append(getAstText(args.get(1).getValue())).append(" ");
                     }
+                } else if (tName.equals("nts")) {
+                    if (args.size() == 1) {
+                        content.append(getAstText(args.get(0).getValue())).append(" ");
+                    }
                 } else if (tName.equals("small")) {
                     // Ignore this template.
                     if (true) {
