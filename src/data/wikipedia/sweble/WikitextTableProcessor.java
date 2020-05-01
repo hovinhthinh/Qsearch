@@ -5,6 +5,7 @@ import nlp.NLP;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.sweble.wikitext.engine.EngineException;
 import org.sweble.wikitext.engine.PageId;
 import org.sweble.wikitext.engine.PageTitle;
 import org.sweble.wikitext.engine.WtEngineImpl;
@@ -42,6 +43,8 @@ public class WikitextTableProcessor extends String2StringMap {
 
     private ArrayList<JSONObject> tables = new ArrayList<>();
 
+    private PageId pageId;
+
     public static void main(String[] args) {
         WikitextTableProcessor processor = new WikitextTableProcessor();
         args = "/local/home/hvthinh/datasets/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.wikitext.gz".split(" ");
@@ -71,7 +74,8 @@ public class WikitextTableProcessor extends String2StringMap {
                 return null;
             }
 
-            EngProcessedPage cp = engine.postprocess(new PageId(PageTitle.make(config, pageTitle), -1), wikitext, null);
+            pageId = new PageId(PageTitle.make(config, pageTitle), -1);
+            EngProcessedPage cp = engine.postprocess(pageId, wikitext, null);
 
 //            if (pageTitle.equals("Bubblegum Crisis")) {
 //                System.out.println(debugNode(cp));
@@ -331,7 +335,22 @@ public class WikitextTableProcessor extends String2StringMap {
                         .map(o -> (WtTemplateArgument) o).collect(Collectors.toList());
                 if (tName.equals("sort")) {
                     if (args.size() == 2) {
-                        content.append(getAstText(args.get(1).getValue())).append(" ");
+                        WtValue v = args.get(1).getValue();
+                        if (v.size() == 1 && v.get(0) instanceof WtText) {
+                            String text = ((WtText) v.get(0)).getContent();
+                            try {
+                                WtNode subNode = engine.postprocess(pageId, text, null);
+                                JSONObject subContent = getDisplayText(subNode);
+
+                                content.append(subContent.getString("text")).append(" ");
+                                JSONArray subLinks = subContent.getJSONArray("surfaceLinks");
+                                for (int i = 0; i < subLinks.length(); ++i) {
+                                    entityLinks.put(subLinks.getJSONObject(i));
+                                }
+                            } catch (EngineException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 } else if (tName.equals("sortname")) {
                     if (args.size() == 2 || args.size() == 3) {
@@ -372,32 +391,17 @@ public class WikitextTableProcessor extends String2StringMap {
                         WtValue v = args.get(0).getValue();
                         if (v.size() == 1 && v.get(0) instanceof WtText) {
                             String text = ((WtText) v.get(0)).getContent();
-                            int currentIndex = 0;
-                            while (currentIndex < text.length()) {
-                                int nextEntityIndex = text.indexOf("[[", currentIndex);
-                                int endEntityIndex = nextEntityIndex == -1 ? -1 : text.indexOf("]]", nextEntityIndex);
-                                if (nextEntityIndex == -1 || endEntityIndex == -1) {
-                                    content.append(text.substring(currentIndex)).append(" ");
-                                    currentIndex = text.length();
-                                } else {
-                                    if (currentIndex < nextEntityIndex) {
-                                        content.append(text.substring(currentIndex, nextEntityIndex)).append(" ");
-                                    }
-                                    String linkSpecs = text.substring(nextEntityIndex + 2, endEntityIndex);
-                                    String surface = linkSpecs, target = linkSpecs;
-                                    int p = linkSpecs.indexOf('|');
-                                    if (p != -1) {
-                                        target = linkSpecs.substring(0, p);
-                                        surface = linkSpecs.substring(p + 1);
-                                    }
-                                    content.append(surface).append(" ");
-                                    entityLinks.put(new JSONObject()
-                                            .put("linkType", "INTERNAL")
-                                            .put("surface", NLP.stripSentence(surface))
-                                            .put("target", new JSONObject().put("title", target.replace(' ', '_')))
-                                    );
-                                    currentIndex = endEntityIndex + 2;
+                            try {
+                                WtNode subNode = engine.postprocess(pageId, text, null);
+                                JSONObject subContent = getDisplayText(subNode);
+
+                                content.append(subContent.getString("text")).append(" ");
+                                JSONArray subLinks = subContent.getJSONArray("surfaceLinks");
+                                for (int i = 0; i < subLinks.length(); ++i) {
+                                    entityLinks.put(subLinks.getJSONObject(i));
                                 }
+                            } catch (EngineException e) {
+                                e.printStackTrace();
                             }
                         }
                     }
