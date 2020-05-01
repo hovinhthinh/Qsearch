@@ -325,7 +325,39 @@ public class WikitextTableProcessor extends String2StringMap {
                 content.append(((WtXmlEntityRef) node).getResolved()).append(" ");
                 return false;
             }
-            return !nn.equals("WtImageLink") && !nn.equals("WtTemplate") && !nn.equals("WtXmlAttributes");
+            if (nn.equals("WtTemplate")) {
+                String tName = ((WtTemplate) node).getName().getAsString();
+                List<WtTemplateArgument> args = ((WtTemplate) node).getArgs().stream()
+                        .map(o -> (WtTemplateArgument) o).collect(Collectors.toList());
+                if (tName.equals("sort")) {
+                    if (args.size() == 2) {
+                        content.append(getAstText(args.get(1).getValue())).append(" ");
+                    }
+                } else if (tName.equals("sortname")) {
+                    if (args.size() == 2 || args.size() == 3) {
+                        String name = getAstText(args.get(0).getValue()) + " " + getAstText(args.get(1).getValue());
+                        content.append(name).append(" ");
+
+                        String link = name;
+                        if (args.size() == 3) {
+                            if (!args.get(2).hasName()) {
+                                link = getAstText(args.get(2).getValue());
+                            } else { // arg name is "nolink"
+                                link = null;
+                            }
+                        }
+                        if (link != null) {
+                            entityLinks.put(new JSONObject()
+                                    .put("linkType", "INTERNAL")
+                                    .put("surface", NLP.stripSentence(name))
+                                    .put("target", new JSONObject().put("title", link.replace(' ', '_')))
+                            );
+                        }
+                    }
+                }
+                return false;
+            }
+            return !nn.equals("WtImageLink") && !nn.equals("WtXmlAttributes");
         });
 
         return new JSONObject()
