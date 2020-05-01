@@ -368,7 +368,6 @@ public class WikitextTableProcessor extends String2StringMap {
                         if (v.size() == 1 && v.get(0) instanceof WtText) {
                             String text = ((WtText) v.get(0)).getContent();
                             int currentIndex = 0;
-                            int x = content.length();
                             while (currentIndex < text.length()) {
                                 int nextEntityIndex = text.indexOf("[[", currentIndex);
                                 int endEntityIndex = nextEntityIndex == -1 ? -1 : text.indexOf("]]", nextEntityIndex);
