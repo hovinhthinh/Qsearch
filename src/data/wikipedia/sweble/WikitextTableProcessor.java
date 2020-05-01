@@ -384,6 +384,32 @@ public class WikitextTableProcessor extends String2StringMap {
                     if (args.size() == 1) {
                         content.append(getAstText(args.get(0).getValue())).append(" ");
                     }
+                } else if (tName.equals("flagathlete")) {
+                    if (args.size() >= 1) {
+                        WtValue v = args.get(0).getValue();
+                        if (v.size() == 1) {
+                            WtNode subNode;
+                            if (v.get(0) instanceof WtText) {
+                                try {
+                                    subNode = engine.postprocess(pageId, ((WtText) v.get(0)).getContent(), null);
+                                } catch (EngineException e) {
+                                    e.printStackTrace();
+                                    return false;
+                                }
+                            } else if (v.get(0) instanceof WtTemplate) {
+                                subNode = v.get(0);
+                            } else {
+                                return false;
+                            }
+
+                            JSONObject subContent = getDisplayText(subNode);
+                            content.append(subContent.getString("text")).append(" ");
+                            JSONArray subLinks = subContent.getJSONArray("surfaceLinks");
+                            for (int i = 0; i < subLinks.length(); ++i) {
+                                entityLinks.put(subLinks.getJSONObject(i));
+                            }
+                        }
+                    }
                 } else if (tName.equals("convert")) {
                     if (args.size() >= 2) {
                         content.append(getAstText(args.get(0).getValue())).append(" ")
