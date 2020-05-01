@@ -354,6 +354,45 @@ public class WikitextTableProcessor extends String2StringMap {
                             );
                         }
                     }
+                } else if (tName.equals("small")) {
+                    // Ignore this template.
+                    if (true) {
+                        return false;
+                    }
+                    if (args.size() == 1) {
+                        WtValue v = args.get(0).getValue();
+                        if (v.size() == 1 && v.get(0) instanceof WtText) {
+                            String text = ((WtText) v.get(0)).getContent();
+                            int currentIndex = 0;
+                            int x = content.length();
+                            while (currentIndex < text.length()) {
+                                int nextEntityIndex = text.indexOf("[[", currentIndex);
+                                int endEntityIndex = nextEntityIndex == -1 ? -1 : text.indexOf("]]", nextEntityIndex);
+                                if (nextEntityIndex == -1 || endEntityIndex == -1) {
+                                    content.append(text.substring(currentIndex)).append(" ");
+                                    currentIndex = text.length();
+                                } else {
+                                    if (currentIndex < nextEntityIndex) {
+                                        content.append(text.substring(currentIndex, nextEntityIndex)).append(" ");
+                                    }
+                                    String linkSpecs = text.substring(nextEntityIndex + 2, endEntityIndex);
+                                    String surface = linkSpecs, target = linkSpecs;
+                                    int p = linkSpecs.indexOf('|');
+                                    if (p != -1) {
+                                        target = linkSpecs.substring(0, p);
+                                        surface = linkSpecs.substring(p + 1);
+                                    }
+                                    content.append(surface).append(" ");
+                                    entityLinks.put(new JSONObject()
+                                            .put("linkType", "INTERNAL")
+                                            .put("surface", NLP.stripSentence(surface))
+                                            .put("target", new JSONObject().put("title", target.replace(' ', '_')))
+                                    );
+                                    currentIndex = endEntityIndex + 2;
+                                }
+                            }
+                        }
+                    }
                 }
                 return false;
             }
