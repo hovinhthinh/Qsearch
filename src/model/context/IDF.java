@@ -1,25 +1,22 @@
 package model.context;
 
 import data.DfSummary;
+import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import util.FileUtils;
-
-import java.util.HashMap;
-import java.util.Map;
-
 
 // Computed from STIC+NYT corpus.
 // TODO: Compute from WIKIPEDIA AS WELL ??
 public class IDF {
-    private static Map<String, Double> DEFAULT_IDF;
-    private static Map<String, Double> ROBERTSON_IDF;
+    private static Object2DoubleOpenHashMap<String> DEFAULT_IDF;
+    private static Object2DoubleOpenHashMap<String> ROBERTSON_IDF;
     private static double N_DOC;
     private static double MIN_IDF = 0.0001;
     private static double OOV_DEFAULT_IDF;
     private static double OOV_ROBERTSON_IDF;
 
     static {
-        DEFAULT_IDF = new HashMap<>();
-        ROBERTSON_IDF = new HashMap<>();
+        DEFAULT_IDF = new Object2DoubleOpenHashMap<>();
+        ROBERTSON_IDF = new Object2DoubleOpenHashMap<>();
         // first line is N_DOC
         for (String line : FileUtils.getLineStream("./data/df_stics+nyt.gz", "UTF-8")) {
             String[] arr = line.split("\t");
@@ -36,13 +33,13 @@ public class IDF {
     }
 
 
-    public static double getDefaultIdf(String word) {
+    public static final double getDefaultIdf(String word) {
         return getDefaultIdf(word, true);
     }
 
     // word should be lowercase
     // if allowOOV = false, OOV will get MIN_IDF
-    public static double getDefaultIdf(String word, boolean allowOOV) {
+    public static final double getDefaultIdf(String word, boolean allowOOV) {
         double idf = DEFAULT_IDF.getOrDefault(word, 0.0);
         if (idf == 0 && !allowOOV) {
             return MIN_IDF;
@@ -51,13 +48,13 @@ public class IDF {
     }
 
 
-    public static double getRobertsonIdf(String word) {
+    public static final double getRobertsonIdf(String word) {
         return getRobertsonIdf(word, true);
     }
 
     // word should be lowercase
     // if allowOOV = false, OOV will get MIN_IDF
-    public static double getRobertsonIdf(String word, boolean allowOOV) {
+    public static final double getRobertsonIdf(String word, boolean allowOOV) {
         double idf = ROBERTSON_IDF.getOrDefault(word, 0.0);
         if (idf == 0 && !allowOOV) {
             return MIN_IDF;
