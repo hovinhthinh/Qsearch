@@ -11,7 +11,6 @@ import pipeline.TextBasedColumnScoringNode;
 import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 import util.headword.StringUtils;
-import yago.TaxonomyGraph;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -54,7 +53,6 @@ public class TableQfactSaver {
                         if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
                             X.addAll(NLP.splitSentence(qt.unit));
                             qt.unit = "";
-                            domain = "Other";
                         }
                         for (int j = X.size() - 1; j >= 0; --j) {
                             X.set(j, StringUtils.stem(X.get(j).toLowerCase(), Morpha.any));
