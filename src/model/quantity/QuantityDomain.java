@@ -192,6 +192,10 @@ public class QuantityDomain {
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
 
     public static double getScale(Quantity quantity) {
+        return getScale(quantity, false);
+    }
+
+    public static double getScale(Quantity quantity, boolean includeSpecificDomain) {
         if (quantity.scale != null) {
             return quantity.scale;
         }
@@ -233,7 +237,7 @@ public class QuantityDomain {
             if (u != null) {
                 String domain = u.getParentQuantity().getConcept();
                 // allows only these specific domains
-                if (domain.equals(Domain.LENGTH) ||
+                if (includeSpecificDomain || domain.equals(Domain.LENGTH) ||
                         domain.equals(Domain.MONEY) ||
                         domain.equals(Domain.TIME) ||
                         domain.equals(Domain.PERCENTAGE) ||
@@ -253,6 +257,10 @@ public class QuantityDomain {
     // anything else is considered dimensionless
 
     public static String getDomain(Quantity quantity) {
+        return getDomain(quantity, false);
+    }
+
+    public static String getDomain(Quantity quantity, boolean includeSpecificDomain) {
         if (quantity.domain != null) {
             return quantity.domain;
         }
@@ -294,7 +302,7 @@ public class QuantityDomain {
             if (u != null) {
                 String domain = u.getParentQuantity().getConcept();
                 // allows only these specific domains
-                if (domain.equals(Domain.LENGTH) ||
+                if (includeSpecificDomain || domain.equals(Domain.LENGTH) ||
                         domain.equals(Domain.MONEY) ||
                         domain.equals(Domain.TIME) ||
                         domain.equals(Domain.PERCENTAGE) ||
@@ -354,7 +362,7 @@ public class QuantityDomain {
         public static final String MASS = QUANTITY_CATALOG.getUnitFromBaseName("kilogram").getParentQuantity().getConcept();
         public static final String AREA = QUANTITY_CATALOG.getUnitFromBaseName("square metre").getParentQuantity().getConcept();
         public static final String VOLUME = QUANTITY_CATALOG.getUnitFromBaseName("cubic metre").getParentQuantity().getConcept();
-        public static final String DIMENSIONLESS = "DIMENSIONLESS";
+        public static final String DIMENSIONLESS = "Dimensionless";
     }
 
 }
