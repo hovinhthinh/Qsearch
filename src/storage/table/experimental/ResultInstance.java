@@ -8,11 +8,11 @@ public class ResultInstance {
     public double score;
 
     public static class SubInstance {
-        double score;
-        String quantity;
-        String context;
-        String domain;
-        String source;
+        public double score;
+        public String quantity;
+        public String context;
+        public String domain;
+        public String source;
     }
 
     public ArrayList<SubInstance> subInstances = new ArrayList<>();
