@@ -229,7 +229,7 @@ public class QuantityDomain {
         }
         // Now use QuTree.
         try {
-            Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
+            Unit u = quantity.unit.isEmpty() ? null : QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
             if (u == null) {
                 List<Unit> units = SURFACE_UNITS_MAP.get(quantity.unit);
                 u = units == null ? null : units.get(0);
@@ -294,7 +294,7 @@ public class QuantityDomain {
         }
         // Now use QuTree.
         try {
-            Unit u = QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
+            Unit u = quantity.unit.isEmpty() ? null : QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
             if (u == null) {
                 List<Unit> units = SURFACE_UNITS_MAP.get(quantity.unit);
                 u = units == null ? null : units.get(0);
