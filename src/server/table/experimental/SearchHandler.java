@@ -158,6 +158,7 @@ public class SearchHandler extends AbstractHandler {
                 i = j;
             }
         }
+        Collections.sort(response, (o1, o2) -> Double.compare(o2.score, o1.score));
 
         LOGGER.info("Query: {Type: \"" + queryType + "\"; Context: \"" + queryContext +
                 "\"; Quantity: \"" + quantityConstraint + "\"}");
