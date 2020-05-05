@@ -1,18 +1,23 @@
 package server.table.experimental;
 
 import com.google.gson.Gson;
+import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
+import model.quantity.Quantity;
+import model.quantity.QuantityConstraint;
+import model.quantity.QuantityDomain;
 import nlp.NLP;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import storage.table.experimental.ElasticSearchQuery;
 import storage.table.experimental.ResultInstance;
+import uk.ac.susx.informatics.Morpha;
+import util.headword.StringUtils;
+import yago.TaxonomyGraph;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Deprecated
@@ -51,20 +56,112 @@ public class SearchHandler extends AbstractHandler {
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 
-    public static ArrayList<ResultInstance> search(int nTopResult, String typeConstraint, String contextConstraint, String quantityConstraint, Map additionalParameters) {
+    public static ArrayList<ResultInstance> search(int nTopResult, String queryType, String queryContext, String quantityConstraint, Map additionalParameters) {
         // Optimize
-        if (typeConstraint != null) {
-            typeConstraint = NLP.stripSentence(typeConstraint).toLowerCase();
+        if (queryType != null) {
+            queryType = NLP.stripSentence(queryType).toLowerCase();
         }
-        if (contextConstraint != null) {
-            contextConstraint = NLP.stripSentence(contextConstraint).toLowerCase();
+        if (queryContext != null) {
+            queryContext = NLP.stripSentence(queryContext).toLowerCase();
         }
 
+        QuantityConstraint constraint = null;
+        if (quantityConstraint != null) {
+            constraint = QuantityConstraint.parseFromString(quantityConstraint.toLowerCase());
+            if (constraint == null) {
+                return null;
+            }
+            if (QuantityDomain.getDomain(constraint.quantity) == QuantityDomain.Domain.DIMENSIONLESS) {
+                queryContext += " " + constraint.quantity.unit;
+                constraint.quantity.unit = "";
+            }
+        }
 
-        LOGGER.info("Query: {Type: \"" + typeConstraint + "\"; Context: \"" + contextConstraint +
-                "\"; Quantity: \"" + null + "\"}");
+        queryType = queryType.toLowerCase();
+        queryContext = queryContext.toLowerCase();
 
-        ArrayList<ResultInstance> response = ElasticSearchQuery.searchWithoutQuantityConstraint(typeConstraint, contextConstraint, quantityConstraint, additionalParameters);
+        // Process query context terms
+        ArrayList<String> queryContextTerms = NLP.splitSentence(NLP.fastStemming(queryContext.toLowerCase(), Morpha.any));
+
+        ArrayList<EntityQfactHandler.Qfact> qfacts = EntityQfactHandler.qfacts;
+
+        ArrayList<ResultInstance> response = new ArrayList<>();
+        if (!queryType.isEmpty()) {
+            String optimizedQueryType = NLP.stripSentence(NLP.fastStemming(queryType.toLowerCase(), Morpha.noun));
+            String searchingHead = NLP.getHeadWord(optimizedQueryType, true);
+
+            for (int i = 0; i < qfacts.size(); ++i) {
+                if (i > 0 && qfacts.get(i).entity.equals(qfacts.get(i - 1).entity)) {
+                    continue;
+                }
+                String entity = qfacts.get(i).entity;
+
+                int j = i;
+                while (j < qfacts.size() - 1 && qfacts.get(j + 1).entity.equals(entity)) {
+                    ++j;
+                }
+                // process type
+                Int2IntLinkedOpenHashMap typeSet = TaxonomyGraph.getDefaultGraphInstance().getType2DistanceMapForEntity(
+                        TaxonomyGraph.getDefaultGraphInstance().entity2Id.get("<" + entity.substring(5) + ">")
+                );
+                boolean flag = false;
+                for (int typeId : typeSet.keySet()) {
+                    String typeStr = TaxonomyGraph.getDefaultGraphInstance().id2TextualizedType.get(typeId);
+                    if (typeStr.contains(optimizedQueryType) && searchingHead.equals(NLP.getHeadWord(typeStr, true))) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag) {
+                    i = j;
+                    continue;
+                }
+
+                ResultInstance inst = new ResultInstance();
+                inst.entity = "<" + entity.substring(5) + ">";
+
+                for (int k = i; k <= j; ++k) {
+                    EntityQfactHandler.Qfact qfact = qfacts.get(k);
+                    // quantity
+                    Quantity qt = Quantity.fromQuantityString(qfact.quantity);
+                    if (constraint != null && !constraint.match(qt)) {
+                        continue;
+                    }
+                    // context
+                    ArrayList<String> X = new ArrayList<>(
+                            Arrays.asList(qfact.context.substring(1, qfact.context.length() - 1).split(", ")));
+
+                    ResultInstance.SubInstance si = new ResultInstance.SubInstance();
+                    si.quantity = qt.toString(2);
+                    si.context = qfact.context;
+                    si.domain = QuantityDomain.getDomain(qt, true);
+                    si.source = qfact.source;
+
+                    // match
+                    for (int l = 0; l < X.size(); ++l) {
+                        X.set(l, StringUtils.stem(X.get(l).toLowerCase(), Morpha.any));
+                    }
+                    // use explicit matcher if given.
+                    si.score = ElasticSearchQuery.DEFAULT_MATCHER.match(queryContextTerms, X);
+                    if (si.score < 0.7) {
+                        continue;
+                    }
+                    inst.addSubInstance(si);
+                }
+
+                if (inst.subInstances.size() > 0) {
+                    Collections.sort(inst.subInstances, (o1, o2) -> Double.compare(o2.score, o1.score));
+                    response.add(inst);
+                }
+
+                // done processing
+                i = j;
+            }
+        }
+
+        LOGGER.info("Query: {Type: \"" + queryType + "\"; Context: \"" + queryContext +
+                "\"; Quantity: \"" + quantityConstraint + "\"}");
+
         if (response.size() > nTopResult) {
             response.subList(nTopResult, response.size()).clear();
         }
