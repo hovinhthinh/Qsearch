@@ -47,7 +47,7 @@ public class TableQfactSaver {
 
                         Quantity qt = ql.quantity;
 
-                        String domain = QuantityDomain.getDomain(qt);
+                        String domain = QuantityDomain.getDomain(qt, true);
                         // context
                         ArrayList<String> X = new ArrayList<>(NLP.splitSentence(table.getCombinedHeader(qCol)));
                         if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
