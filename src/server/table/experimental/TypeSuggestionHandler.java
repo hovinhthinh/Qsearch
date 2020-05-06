@@ -1,16 +1,16 @@
 package server.table.experimental;
 
 import com.google.gson.Gson;
+import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import nlp.NLP;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import storage.table.experimental.ElasticSearchDataImport;
 import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
-import util.HTTPRequest;
 import util.Pair;
+import yago.TaxonomyGraph;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,11 +32,6 @@ public class TypeSuggestionHandler extends AbstractHandler {
 
     public TypeSuggestionHandler(int nTopSuggestion) {
         this.nTopSuggestion = nTopSuggestion;
-
-    }
-
-    static {
-        load(10);
     }
 
     // Use for analyzing.
@@ -61,38 +56,34 @@ public class TypeSuggestionHandler extends AbstractHandler {
     // Use for analyzing.
     private static void analyzeAndSaveToFile() {
         HashMap<String, Integer> specificTypeStats = new HashMap<>();
-        ArrayList<Pair<String, Integer>> type2freq = new ArrayList<>();
-        try {
-            String url = ElasticSearchDataImport.PROTOCOL + "://" + ElasticSearchDataImport.ES_HOST + "/" + ElasticSearchDataImport.INDEX + "/" + ElasticSearchDataImport.TYPE + "/_search?scroll=15m";
-            String body = "{\"size\":1000,\"query\":{\"bool\":{\"must\":[{\"exists\":{\"field\":\"searchable\"}}]}}}";
-            String data = HTTPRequest.POST(url, body);
-            if (data == null) {
-                throw new RuntimeException("cannot load type suggestion module: null data.");
+
+        ArrayList<Qfact> qfacts = TableQfactSaver.load();
+        for (int i = 0; i < qfacts.size(); ++i) {
+            if (i > 0 && qfacts.get(i).entity.equals(qfacts.get(i - 1).entity)) {
+                continue;
             }
-            JSONObject json = new JSONObject(data);
-            JSONArray arr = json.getJSONObject("hits").getJSONArray("hits");
-            for (int i = 0; i < arr.length(); ++i) {
-                processObject(arr.getJSONObject(i), specificTypeStats);
+            String entity = qfacts.get(i).entity;
+
+            int j = i;
+            while (j < qfacts.size() - 1 && qfacts.get(j + 1).entity.equals(entity)) {
+                ++j;
             }
-            String scroll_id = json.getString("_scroll_id");
-            url = ElasticSearchDataImport.PROTOCOL + "://" + ElasticSearchDataImport.ES_HOST + "/_search/scroll";
-            body = "{\"scroll\":\"15m\",\"scroll_id\":\"" + scroll_id + "\"}";
-            do {
-                data = HTTPRequest.POST(url, body);
-                if (data == null) {
-                    throw new RuntimeException("cannot load type suggestion module: scroll_id expired.");
-                }
-                json = new JSONObject(data);
-                arr = json.getJSONObject("hits").getJSONArray("hits");
-                for (int i = 0; i < arr.length(); ++i) {
-                    processObject(arr.getJSONObject(i), specificTypeStats);
-                }
-            } while (arr.length() > 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("cannot load type suggestion module: unknown exception.");
+            // process type
+            HashSet<String> specificTypeSet = new HashSet<>();
+            Int2IntLinkedOpenHashMap typeSet = TaxonomyGraph.getDefaultGraphInstance().getType2DistanceMapForEntity(
+                    TaxonomyGraph.getDefaultGraphInstance().entity2Id.get("<" + entity.substring(5) + ">")
+            );
+            for (int typeId : typeSet.keySet()) {
+                specificTypeSet.add(TaxonomyGraph.getDefaultGraphInstance().id2TextualizedType.get(typeId));
+            }
+            for (String type : specificTypeSet) {
+                specificTypeStats.put(type, specificTypeStats.getOrDefault(type, 0) + 1);
+            }
+            // done processing
+            i = j;
         }
 
+        ArrayList<Pair<String, Integer>> type2freq = new ArrayList<>();
         for (Map.Entry<String, Integer> e : specificTypeStats.entrySet()) {
             type2freq.add(new Pair(e.getKey(), e.getValue()));
         }
@@ -107,7 +98,7 @@ public class TypeSuggestionHandler extends AbstractHandler {
         out.close();
     }
 
-    private static void load(int nEntityThreshold) {
+    public static void load(int nEntityThreshold) {
         for (String line : FileUtils.getLineStream("./data/type_table_wiki+tablem.gz", "UTF-8")) {
             String[] arr = line.split("\t");
             int freq = Integer.parseInt(arr[1]);
@@ -180,7 +171,8 @@ public class TypeSuggestionHandler extends AbstractHandler {
     }
 
     public static void main(String[] args) {
-//        analyzeAndSaveToFile();
-        System.out.println(new Gson().toJson(TypeSuggestionHandler.suggest("business", 7)));
+        analyzeAndSaveToFile();
+//        load(10);
+//        System.out.println(new Gson().toJson(TypeSuggestionHandler.suggest("business", 7)));
     }
 }
