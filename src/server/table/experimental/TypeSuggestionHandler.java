@@ -35,25 +35,6 @@ public class TypeSuggestionHandler extends AbstractHandler {
     }
 
     // Use for analyzing.
-    private static void processObject(JSONObject o, HashMap<String, Integer> specificTypeStats) {
-        HashSet<String> specificTypeSet = new HashSet<>();
-        try {
-            System.out.println("Processing: " + o.getString("_id"));
-            JSONArray types = o.getJSONObject("_source").getJSONArray("types");
-            for (int i = 0; i < types.length(); ++i) {
-                String t = types.getJSONObject(i).getString("value");
-                t = NLP.fastStemming(t, Morpha.noun);
-                specificTypeSet.add(t);
-            }
-            for (String type : specificTypeSet) {
-                specificTypeStats.put(type, specificTypeStats.getOrDefault(type, 0) + 1);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Use for analyzing.
     private static void analyzeAndSaveToFile() {
         HashMap<String, Integer> specificTypeStats = new HashMap<>();
 
