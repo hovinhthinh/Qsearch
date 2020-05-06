@@ -1,9 +1,9 @@
 package eval;
 
 
-import com.google.gson.Gson;
 import model.table.Table;
 import model.table.link.EntityLink;
+import util.Gson;
 import util.Pair;
 
 import java.util.Arrays;
@@ -11,8 +11,6 @@ import java.util.HashSet;
 
 // For ground truth of column linkings.
 public class TruthTable extends Table {
-    private static final transient Gson GSON = new Gson();
-
     @Deprecated
     public int keyColumnGroundTruth = -1;
 
@@ -24,7 +22,7 @@ public class TruthTable extends Table {
     public int[][] yusraBodyEntityTarget;
 
     public static TruthTable fromTable(Table t) {
-        TruthTable truth = GSON.fromJson(GSON.toJson(t), TruthTable.class);
+        TruthTable truth = Gson.fromJson(Gson.toJson(t), TruthTable.class);
 
         truth.quantityToEntityColumnGroundTruth = new int[truth.nColumn];
         Arrays.fill(truth.quantityToEntityColumnGroundTruth, -1);

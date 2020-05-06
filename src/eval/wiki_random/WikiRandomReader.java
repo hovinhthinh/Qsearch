@@ -1,6 +1,5 @@
 package eval.wiki_random;
 
-import com.google.gson.Gson;
 import eval.TruthTable;
 import model.table.Cell;
 import model.table.Table;
@@ -11,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import util.FileUtils;
+import util.Gson;
 import util.SelfMonitor;
 import util.Triple;
 import yago.TaxonomyGraph;
@@ -106,8 +106,6 @@ public class WikiRandomReader {
         PrintWriter out = FileUtils.getPrintWriter("eval/wiki_random/wiki_random_ground.gz", "UTF-8");
         FileUtils.LineStream stream = FileUtils.getLineStream("eval/wiki_random/wiki_random_data.gz", "UTF-8");
 
-        Gson gson = new Gson();
-
         SelfMonitor m = new SelfMonitor(WikiRandomReader.class.getName(), -1, 60);
         m.start();
         for (String line : stream) {
@@ -129,7 +127,7 @@ public class WikiRandomReader {
                 }
             }
 
-            out.println(gson.toJson(truthTable));
+            out.println(Gson.toJson(truthTable));
         }
         m.forceShutdown();
         out.close();

@@ -1,15 +1,11 @@
 package storage.table;
 
-import com.google.gson.Gson;
 import config.Configuration;
 import model.table.Table;
 import org.json.JSONException;
 import org.json.JSONObject;
 import storage.table.index.TableIndex;
-import util.Concurrent;
-import util.FileUtils;
-import util.HTTPRequest;
-import util.SelfMonitor;
+import util.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -106,9 +102,8 @@ public class ElasticSearchTableImport {
         SelfMonitor monitor = new SelfMonitor("ImportTable", -1, 10);
         monitor.start();
 
-        Gson gson = new Gson();
         for (String line : FileUtils.getLineStream(input)) {
-            TableIndex tableIndex = gson.fromJson(line, TableIndex.class);
+            TableIndex tableIndex = Gson.fromJson(line, TableIndex.class);
             if (tableIndex.table._id == null) {
                 throw new RuntimeException("null table id");
             }
@@ -157,10 +152,9 @@ public class ElasticSearchTableImport {
             Concurrent.BoundedExecutor executor = new Concurrent.BoundedExecutor(64);
             SelfMonitor m = new SelfMonitor("SetSearchableDocs", -1, 10);
             m.start();
-            Gson gson = new Gson();
             for (String line : FileUtils.getLineStream(inputFile, "UTF-8")) {
                 m.incAndGet();
-                Table table = gson.fromJson(line, Table.class);
+                Table table = Gson.fromJson(line, Table.class);
                 executor.submit(() -> {
                     String output = setSearchable(table._id, line);
                     if (output == null) {

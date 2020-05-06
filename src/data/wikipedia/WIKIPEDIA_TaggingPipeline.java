@@ -1,11 +1,10 @@
 package data.wikipedia;
 
-
-import com.google.gson.Gson;
 import model.table.Table;
 import nlp.Static;
 import pipeline.*;
 import util.FileUtils;
+import util.Gson;
 import util.SelfMonitor;
 import util.distributed.String2StringMap;
 
@@ -21,7 +20,6 @@ public class WIKIPEDIA_TaggingPipeline extends String2StringMap {
     }
 
     TaggingPipeline pipeline = getDefaultTaggingPipeline();
-    Gson gson = new Gson();
 
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
@@ -76,6 +74,6 @@ public class WIKIPEDIA_TaggingPipeline extends String2StringMap {
         if (table == null || !pipeline.tag(table)) {
             return null;
         }
-        return Arrays.asList(gson.toJson(table));
+        return Arrays.asList(Gson.toJson(table));
     }
 }

@@ -1,10 +1,10 @@
 package data.tablem;
 
-import com.google.gson.Gson;
 import model.table.Table;
 import nlp.Static;
 import pipeline.TaggingPipeline;
 import util.FileUtils;
+import util.Gson;
 import util.SelfMonitor;
 import util.distributed.String2StringMap;
 
@@ -20,7 +20,6 @@ public class TABLEM_TaggingPipeline extends String2StringMap {
     }
 
     TaggingPipeline pipeline = TaggingPipeline.getDefaultTaggingPipeline();
-    Gson gson = new Gson();
 
     // Args: <input> <output>
     public static void main(String[] args) {
@@ -51,6 +50,6 @@ public class TABLEM_TaggingPipeline extends String2StringMap {
         if (table == null || !pipeline.tag(table)) {
             return null;
         }
-        return Arrays.asList(gson.toJson(table));
+        return Arrays.asList(Gson.toJson(table));
     }
 }

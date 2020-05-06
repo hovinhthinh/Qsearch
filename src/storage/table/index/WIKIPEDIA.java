@@ -1,16 +1,14 @@
 package storage.table.index;
 
-import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
+import util.Gson;
 import util.distributed.String2StringMap;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class WIKIPEDIA extends String2StringMap {
-    Gson gson = new Gson();
-
     public WIKIPEDIA() {
         data.wikipedia.WIKIPEDIA.PARSE_ENTITY = false;
     }
@@ -34,7 +32,7 @@ public class WIKIPEDIA extends String2StringMap {
             }
             tableIndex.pageContent = o.has("sectionText") ? o.getString("sectionText") : "";
             tableIndex.tableText = tableIndex.table.getTableRawContentForSearch();
-            return Arrays.asList(gson.toJson(tableIndex));
+            return Arrays.asList(Gson.toJson(tableIndex));
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

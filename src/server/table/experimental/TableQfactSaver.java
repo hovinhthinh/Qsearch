@@ -1,6 +1,5 @@
 package server.table.experimental;
 
-import com.google.gson.Gson;
 import model.quantity.Quantity;
 import model.quantity.QuantityDomain;
 import model.table.Table;
@@ -10,6 +9,7 @@ import nlp.NLP;
 import pipeline.TextBasedColumnScoringNode;
 import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
+import util.Gson;
 import util.headword.StringUtils;
 
 import java.io.PrintWriter;
@@ -32,10 +32,9 @@ public class TableQfactSaver {
         String wikiFile = "/GW/D5data-12/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id_annotation+linking.gz";
         String tablemFile = "/GW/D5data-11/hvthinh/TABLEM/all/all+id.annotation+linking.gz";
 
-        Gson gson = new Gson();
         for (String file : Arrays.asList(tablemFile, wikiFile))
             for (String line : FileUtils.getLineStream(file, "UTF-8")) {
-                Table table = gson.fromJson(line, Table.class);
+                Table table = Gson.fromJson(line, Table.class);
                 // for all Qfacts
                 for (int qCol = 0; qCol < table.nColumn; ++qCol) {
                     if (!table.isNumericColumn[qCol] || (LINKING_THRESHOLD != -1 && table.quantityToEntityColumnScore[qCol] < LINKING_THRESHOLD)) {

@@ -1,8 +1,8 @@
 package eval.wiki_diff;
 
-import com.google.gson.Gson;
 import model.table.Table;
 import util.FileUtils;
+import util.Gson;
 
 import java.io.PrintWriter;
 import java.util.*;
@@ -12,14 +12,13 @@ public class WikiDiffFilter {
     static List<String> blockStr = Arrays.asList("Capacity", "Attendance");
 
     public static void main(String[] args) {
-        Gson gson = new Gson();
         Scanner in = new Scanner(System.in);
         PrintWriter out = FileUtils.getPrintWriter("./tmp2", "UTF-8");
         ArrayList<Table> tbs = new ArrayList<>();
         int cnt = 0;
         loop:
         for (String line : FileUtils.getLineStream("data/wiki+tablem_annotation+linking.gz")) {
-            Table t = gson.fromJson(line, Table.class);
+            Table t = Gson.fromJson(line, Table.class);
             if (!t._id.startsWith("WIKIPEDIA")) {
                 continue;
             }

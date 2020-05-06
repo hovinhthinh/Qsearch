@@ -1,9 +1,9 @@
 package server.table.experimental;
 
-import com.google.gson.Gson;
 import nlp.NLP;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import util.Gson;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 @Deprecated
 public class EntityQfactHandler extends AbstractHandler {
     public static final Logger LOGGER = Logger.getLogger(EntityQfactHandler.class.getName());
-    private static Gson GSON = new Gson();
 
     static ArrayList<Qfact> qfacts = TableQfactSaver.load();
 
@@ -54,9 +53,8 @@ public class EntityQfactHandler extends AbstractHandler {
         }
         Collections.sort(result, (o1, o2) -> Integer.compare(o2.size(), o1.size()));
 
-        synchronized (GSON) {
-            httpServletResponse.getWriter().print(GSON.toJson(result));
-        }
+        httpServletResponse.getWriter().print(Gson.toJson(result));
+
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 }

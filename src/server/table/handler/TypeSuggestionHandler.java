@@ -1,6 +1,5 @@
 package server.table.handler;
 
-import com.google.gson.Gson;
 import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
@@ -9,10 +8,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import storage.table.ElasticSearchTableImport;
-import util.FileUtils;
-import util.HTTPRequest;
-import util.Pair;
-import util.SelfMonitor;
+import util.*;
 import yago.TaxonomyGraph;
 
 import javax.servlet.ServletException;
@@ -26,8 +22,6 @@ import java.util.stream.Collectors;
 
 public class TypeSuggestionHandler extends AbstractHandler {
     public static final Logger LOGGER = Logger.getLogger(TypeSuggestionHandler.class.getName());
-    private static Gson GSON = new Gson();
-
 
     private static ArrayList<Pair<String, Integer>> typeToFreq = new ArrayList<>();
 
@@ -45,7 +39,7 @@ public class TypeSuggestionHandler extends AbstractHandler {
     // Use for analyzing
     private static void extractEntities(JSONObject o, HashSet<String> entities) {
         try {
-            Table table = GSON.fromJson(o.getJSONObject("_source").getString("parsedJson"), Table.class);
+            Table table = Gson.fromJson(o.getJSONObject("_source").getString("parsedJson"), Table.class);
             // for all Qfacts
             for (int qCol = 0; qCol < table.nColumn; ++qCol) {
                 if (!table.isNumericColumn[qCol]) {
@@ -210,10 +204,9 @@ public class TypeSuggestionHandler extends AbstractHandler {
 
         typePrefix = typePrefix.toLowerCase().replaceAll("\\s++", " ").replaceAll("^\\s++", "");
 
-        synchronized (GSON) {
-            JSONObject response = new JSONObject().put("prefix", typePrefix).put("suggestions", new JSONArray(GSON.toJson(suggest(typePrefix, nTopSuggestion))));
-            httpServletResponse.getWriter().print(response.toString());
-        }
+        JSONObject response = new JSONObject().put("prefix", typePrefix).put("suggestions", new JSONArray(Gson.toJson(suggest(typePrefix, nTopSuggestion))));
+        httpServletResponse.getWriter().print(response.toString());
+
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 

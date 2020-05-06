@@ -1,12 +1,11 @@
 package storage.table.index;
 
-import com.google.gson.Gson;
 import model.table.Table;
 import org.json.JSONObject;
+import util.Gson;
 
 // For unparsed tables (without any annotation).
 public class TableIndex {
-    private static final Gson GSON = new Gson();
     public Table table;
     public String pageContent, caption, pageTitle, tableText;
 
@@ -16,7 +15,7 @@ public class TableIndex {
                 .put("caption", caption)
                 .put("pageTitle", pageTitle)
                 .put("tableText", tableText)
-                .put("json", GSON.toJson(table))
+                .put("json", Gson.toJson(table))
                 .toString();
     }
 }
