@@ -1,6 +1,5 @@
 package server.table.experimental;
 
-import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
@@ -46,14 +45,7 @@ public class TypeSuggestionHandler extends AbstractHandler {
                 ++j;
             }
             // process type
-            HashSet<String> specificTypeSet = new HashSet<>();
-            Int2IntLinkedOpenHashMap typeSet = TaxonomyGraph.getDefaultGraphInstance().getType2DistanceMapForEntity(
-                    TaxonomyGraph.getDefaultGraphInstance().entity2Id.get("<" + entity.substring(5) + ">")
-            );
-            for (int typeId : typeSet.keySet()) {
-                specificTypeSet.add(TaxonomyGraph.getDefaultGraphInstance().id2TextualizedType.get(typeId));
-            }
-            for (String type : specificTypeSet) {
+            for (String type : TaxonomyGraph.getDefaultGraphInstance().getTextualizedTypes("<" + entity.substring(5) + ">", true)) {
                 specificTypeStats.put(type, specificTypeStats.getOrDefault(type, 0) + 1);
             }
             // done processing

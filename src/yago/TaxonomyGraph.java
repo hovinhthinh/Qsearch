@@ -199,13 +199,23 @@ public class TaxonomyGraph {
     }
 
     // ordered by increasing distance
-    public Int2IntLinkedOpenHashMap getType2DistanceMapForEntity(int entityId) {
+    public Int2IntLinkedOpenHashMap getType2DistanceMapForEntityWithCache(int entityId) {
         Int2IntLinkedOpenHashMap typeId2Dist = cachedEntityTransitiveType2Distance.getAndMoveToFirst(entityId);
         if (typeId2Dist != null) {
             return typeId2Dist;
         }
 
-        typeId2Dist = new Int2IntLinkedOpenHashMap();
+        typeId2Dist = getType2DistanceMapForEntity(entityId);
+
+        cachedEntityTransitiveType2Distance.putAndMoveToFirst(entityId, typeId2Dist);
+        if (cachedEntityTransitiveType2Distance.size() > CACHE_ENTITY_TRANSITIVE_TYPE_2_DISTANCE_SIZE) {
+            cachedEntityTransitiveType2Distance.removeLast();
+        }
+        return typeId2Dist;
+    }
+
+    public Int2IntLinkedOpenHashMap getType2DistanceMapForEntity(int entityId) {
+        Int2IntLinkedOpenHashMap typeId2Dist = new Int2IntLinkedOpenHashMap();
         typeId2Dist.defaultReturnValue(-1);
         LinkedList<Integer> queue = new LinkedList<>();
         for (int v : entityTypeLists.get(entityId)) {
@@ -224,10 +234,6 @@ public class TaxonomyGraph {
             }
         }
 //        typeId2Dist.trim();
-        cachedEntityTransitiveType2Distance.putAndMoveToFirst(entityId, typeId2Dist);
-        if (cachedEntityTransitiveType2Distance.size() > CACHE_ENTITY_TRANSITIVE_TYPE_2_DISTANCE_SIZE) {
-            cachedEntityTransitiveType2Distance.removeLast();
-        }
         return typeId2Dist;
     }
 
@@ -240,8 +246,8 @@ public class TaxonomyGraph {
         if (entity1.equals(entity2)) {
             return 0;
         }
-        Int2IntLinkedOpenHashMap typeId2Dist1 = getType2DistanceMapForEntity(eId1);
-        Int2IntLinkedOpenHashMap typeId2Dist2 = getType2DistanceMapForEntity(eId2);
+        Int2IntLinkedOpenHashMap typeId2Dist1 = getType2DistanceMapForEntityWithCache(eId1);
+        Int2IntLinkedOpenHashMap typeId2Dist2 = getType2DistanceMapForEntityWithCache(eId2);
         int minDist = Integer.MAX_VALUE;
         for (Int2IntMap.Entry t : Int2IntMaps.fastIterable(typeId2Dist1)) {
             if (t.getIntValue() >= minDist) {
@@ -267,8 +273,8 @@ public class TaxonomyGraph {
             return result;
         }
 
-        Int2IntLinkedOpenHashMap typeId2Dist1 = getType2DistanceMapForEntity(entityId1);
-        Int2IntLinkedOpenHashMap typeId2Dist2 = getType2DistanceMapForEntity(entityId2);
+        Int2IntLinkedOpenHashMap typeId2Dist1 = getType2DistanceMapForEntityWithCache(entityId1);
+        Int2IntLinkedOpenHashMap typeId2Dist2 = getType2DistanceMapForEntityWithCache(entityId2);
 
         int lca = -1;
         for (Int2IntMap.Entry t : Int2IntMaps.fastIterable(typeId2Dist1)) {
