@@ -2,12 +2,10 @@ package server.table.experimental;
 
 import com.google.gson.Gson;
 import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
-import nlp.NLP;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 import util.Pair;
 import yago.TaxonomyGraph;
@@ -68,9 +66,7 @@ public class TypeSuggestionHandler extends AbstractHandler {
         for (Map.Entry<String, Integer> e : specificTypeStats.entrySet()) {
             type2freq.add(new Pair(e.getKey(), e.getValue()));
         }
-        Collections.sort(type2freq, (a, b) -> {
-            return a.first.compareTo(b.first);
-        });
+        Collections.sort(type2freq, (a, b) -> b.second.compareTo(a.second));
 
         PrintWriter out = FileUtils.getPrintWriter("./data/type_table_wiki+tablem.gz", "UTF-8");
         for (Pair<String, Integer> p : type2freq) {
@@ -107,6 +103,7 @@ public class TypeSuggestionHandler extends AbstractHandler {
         while (r < typeToFreq.size() && typeToFreq.get(r).first.startsWith(prefix)) {
             suggestions.add(typeToFreq.get(r++));
         }
+        Collections.sort(suggestions, (a, b) -> b.second.compareTo(a.second));
         if (suggestions.size() > nTopSuggestion) {
             return suggestions.subList(0, nTopSuggestion);
         } else {
