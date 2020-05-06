@@ -29,7 +29,7 @@ public class TopContextPerType {
             HashSet<String> tokenSet = new HashSet<>();
             for (int k = i; k <= j; ++k) {
                 String ctx = qfacts.get(k).context;
-                tokenSet.addAll(Arrays.asList(ctx.substring(1, ctx.length() - 1).split(", ")));
+                tokenSet.addAll(Arrays.asList(ctx.split(" ")));
             }
             entity2Token.put(entity, tokenSet);
             i = j;
