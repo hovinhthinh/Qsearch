@@ -110,7 +110,7 @@ public class QfactTaxonomyGraph {
             qfacts.trimToSize();
 
             // populate for a single entity
-            Int2IntLinkedOpenHashMap typeId2Dist = taxonomy.getType2DistanceMapForEntity(i);
+            Int2IntLinkedOpenHashMap typeId2Dist = taxonomy.getType2DistanceMapForEntityWithCache(i);
             for (Int2IntMap.Entry t : Int2IntMaps.fastIterable(typeId2Dist)) {
                 taxonomyEntityWithQfactLists[t.getIntKey()].add(new Pair<>(i, t.getIntValue()));
             }
@@ -134,7 +134,7 @@ public class QfactTaxonomyGraph {
     // returns Pair<entityId, agreement with key entity>
     public HashMap<Integer, Double> getSimilarEntityIdsWithQfact(int entityId) {
         // Go up to get type list.
-        Int2IntLinkedOpenHashMap typeId2Distance = taxonomy.getType2DistanceMapForEntity(entityId);
+        Int2IntLinkedOpenHashMap typeId2Distance = taxonomy.getType2DistanceMapForEntityWithCache(entityId);
         HashMap<Integer, Double> entityId2Itf = new HashMap<>();
         for (Int2IntMap.Entry e : typeId2Distance.int2IntEntrySet()) {
             if (e.getIntValue() >= relatedEntityDistanceLimit) {
