@@ -1,6 +1,5 @@
 package storage.table;
 
-import com.google.gson.Gson;
 import config.Configuration;
 import model.context.ContextEmbeddingMatcher;
 import model.context.ContextMatcher;
@@ -19,6 +18,7 @@ import org.json.JSONObject;
 import storage.StreamedIterable;
 import uk.ac.susx.informatics.Morpha;
 import util.Concurrent;
+import util.Gson;
 import util.HTTPRequest;
 import util.Pair;
 import util.headword.StringUtils;
@@ -44,8 +44,6 @@ public class ElasticSearchTableQuery {
     public static ContextMatcher DEFAULT_MATCHER = new ContextEmbeddingMatcher(3);
 
     public static final Concurrent.BoundedExecutor BOUNDED_EXECUTOR = new Concurrent.BoundedExecutor(32);
-
-    private static Gson GSON = new Gson();
 
     private static StreamedIterable<JSONObject> searchDocuments(String fullQuery, int nTop) { // nTop = -1 means INF
         // search
@@ -169,7 +167,6 @@ public class ElasticSearchTableQuery {
 
     private static class UpdateInfoCallable implements Callable<Boolean> {
         private static final String URL_PREFIX = PROTOCOL + "://" + ES_HOST + "/" + TABLE_INDEX + "/" + TABLE_TYPE + "/";
-        private static Gson GSON = new Gson();
         private ResultInstance result;
 
         public UpdateInfoCallable(ResultInstance result) {
@@ -182,9 +179,8 @@ public class ElasticSearchTableQuery {
                 JSONObject o = new JSONObject(HTTPRequest.GET(URL_PREFIX + result.tableId)).getJSONObject("_source");
                 result.pageContent = o.getString("pageContent");
                 Table t;
-                synchronized (GSON) {
-                    t = GSON.fromJson(o.getString("parsedJson"), Table.class);
-                }
+                t = Gson.fromJson(o.getString("parsedJson"), Table.class);
+
                 result.header = new String[t.nColumn];
                 result.data = new String[t.nDataRow][t.nColumn];
                 for (int c = 0; c < t.nColumn; ++c) {
@@ -230,10 +226,8 @@ public class ElasticSearchTableQuery {
 
         // Corpus constraint
         ArrayList<String> corpusConstraint = new ArrayList<>();
-        synchronized (GSON) {
-            corpusConstraint = additionalParameters == null ? null :
-                    (additionalParameters.containsKey("corpus") ? GSON.fromJson((String) additionalParameters.get("corpus"), corpusConstraint.getClass()) : null);
-        }
+        corpusConstraint = additionalParameters == null ? null :
+                (additionalParameters.containsKey("corpus") ? Gson.fromJson((String) additionalParameters.get("corpus"), corpusConstraint.getClass()) : null);
 
         // Explicit matching model
         String explicitMatchingModel = additionalParameters == null ? null : (String) additionalParameters.get("model");
@@ -259,9 +253,8 @@ public class ElasticSearchTableQuery {
 
                 Table table;
                 JSONObject source = o.getJSONObject("_source");
-                synchronized (GSON) {
-                    table = GSON.fromJson(source.getString("parsedJson"), Table.class);
-                }
+                table = Gson.fromJson(source.getString("parsedJson"), Table.class);
+
 
                 // check corpus target
                 if (corpusConstraint != null) {

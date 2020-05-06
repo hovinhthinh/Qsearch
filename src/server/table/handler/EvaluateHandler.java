@@ -1,10 +1,10 @@
 package server.table.handler;
 
-import com.google.gson.Gson;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONObject;
 import server.table.handler.search.SearchResult;
+import util.Gson;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 @Deprecated
 public class EvaluateHandler extends AbstractHandler {
     public static final Logger LOGGER = Logger.getLogger(EvaluateHandler.class.getName());
-    private static Gson GSON = new Gson();
     private String savePath;
 
     public EvaluateHandler(String savePath) {
@@ -40,9 +39,8 @@ public class EvaluateHandler extends AbstractHandler {
                 builder.append(buffer, 0, c);
             }
             SearchResult evalResult;
-            synchronized (GSON) {
-                evalResult = GSON.fromJson(builder.toString(), SearchResult.class);
-            }
+            evalResult = Gson.fromJson(builder.toString(), SearchResult.class);
+
             File saveFile = new File(savePath,
                     evalResult.evalDomain + "_" + evalResult.matchingModel + "_" + evalResult.encode());
             LOGGER.info("Logging: " + saveFile.getName());
@@ -53,9 +51,8 @@ public class EvaluateHandler extends AbstractHandler {
             }
 
             PrintWriter out = new PrintWriter(saveFile);
-            synchronized (GSON) {
-                out.println(GSON.toJson(evalResult));
-            }
+            out.println(Gson.toJson(evalResult));
+
             out.close();
             response.put("verdict", overwrite ? "OVERWRITE" : "OK");
         } catch (Exception e) {

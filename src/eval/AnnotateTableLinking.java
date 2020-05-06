@@ -1,7 +1,7 @@
 package eval;
 
-import com.google.gson.Gson;
 import util.FileUtils;
+import util.Gson;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -18,14 +18,13 @@ public class AnnotateTableLinking {
 
         PrintWriter out = FileUtils.getPrintWriter(args[1]);
         Scanner in = new Scanner(System.in);
-        Gson gson = new Gson();
         int toBeIgnored = args.length == 3 ? Integer.parseInt(args[2]) : 0;
         nIgnored = toBeIgnored;
         if (toBeIgnored > 0) {
             System.out.println("=== Ignoring " + toBeIgnored + " tables ===");
         }
         for (String line : FileUtils.getLineStream(args[0], "UTF-8")) {
-            TruthTable t = gson.fromJson(line, TruthTable.class);
+            TruthTable t = Gson.fromJson(line, TruthTable.class);
 
             if (toBeIgnored > 0) {
                 --toBeIgnored;
@@ -73,7 +72,7 @@ public class AnnotateTableLinking {
                     break;
                 } else if (cmd.equals("s")) {
                     t.quantityToEntityColumnGroundTruth = Arrays.copyOf(t.quantityToEntityColumn, t.nColumn);
-                    out.println(gson.toJson(t));
+                    out.println(Gson.toJson(t));
                     out.flush();
                     ++nAnnotated;
                     break;

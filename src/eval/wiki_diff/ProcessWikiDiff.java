@@ -1,16 +1,16 @@
 package eval.wiki_diff;
 
-import com.google.gson.Gson;
 import data.background.mention2entity.Mention2EntityPrior;
 import eval.TruthTable;
 import model.table.link.EntityLink;
 import pipeline.*;
 import util.FileUtils;
+import util.Gson;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class ProcessWikiDiff{
+public class ProcessWikiDiff {
     // Just the annotations of entities and quantities, there is no linking.
     public static TaggingPipeline getPipeline() {
         return new TaggingPipeline(
@@ -30,11 +30,10 @@ public class ProcessWikiDiff{
 
         PrintWriter out = FileUtils.getPrintWriter("eval/wiki_diff/table_ground_annotation.gz", "UTF-8");
         int nGood = 0;
-        Gson gson = new Gson();
         for (String line : FileUtils.getLineStream("eval/wiki_diff/table_ground.gz", "UTF-8")) {
 
             TruthTable t;
-            t = gson.fromJson(line, TruthTable.class);
+            t = Gson.fromJson(line, TruthTable.class);
 
             for (int i = 0; i < t.nDataRow; ++i) {
                 for (int j = 0; j < t.nColumn; ++j) {
@@ -56,7 +55,7 @@ public class ProcessWikiDiff{
             }
             ++nGood;
 
-            out.println(gson.toJson(t));
+            out.println(Gson.toJson(t));
 //            System.out.println(line);
 //            System.out.println("source: " + t.source);
 //            System.out.println("caption: " + t.caption);

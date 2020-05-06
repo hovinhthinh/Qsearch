@@ -1,6 +1,5 @@
 package server.table.experimental;
 
-import com.google.gson.Gson;
 import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import model.context.ContextMatcher;
 import model.context.IDF;
@@ -12,6 +11,7 @@ import nlp.NLP;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import uk.ac.susx.informatics.Morpha;
+import util.Gson;
 import util.headword.StringUtils;
 import yago.TaxonomyGraph;
 
@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 @Deprecated
 public class SearchHandler extends AbstractHandler {
     public static final Logger LOGGER = Logger.getLogger(SearchHandler.class.getName());
-    private static Gson GSON = new Gson();
 
     static ArrayList<Qfact> qfacts = TableQfactSaver.load();
 
@@ -85,9 +84,8 @@ public class SearchHandler extends AbstractHandler {
 
         ArrayList<ResultInstance> response = search(nResult, typeConstraint, contextConstraint, quantityConstraint, additionalParams);
 
-        synchronized (GSON) {
-            httpServletResponse.getWriter().print(GSON.toJson(response));
-        }
+        httpServletResponse.getWriter().print(Gson.toJson(response));
+
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 

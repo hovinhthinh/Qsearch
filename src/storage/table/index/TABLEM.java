@@ -1,16 +1,14 @@
 package storage.table.index;
 
-import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
+import util.Gson;
 import util.distributed.String2StringMap;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class TABLEM extends String2StringMap {
-    Gson gson = new Gson();
-
     @Override
     public List<String> map(String input) {
         try {
@@ -24,7 +22,7 @@ public class TABLEM extends String2StringMap {
             tableIndex.pageTitle = o.has("pageTitle") ? o.getString("pageTitle") : "";
             tableIndex.pageContent = o.has("plainTextContent") ? o.getString("plainTextContent") : "";
             tableIndex.tableText = tableIndex.table.getTableRawContentForSearch();
-            return Arrays.asList(gson.toJson(tableIndex));
+            return Arrays.asList(Gson.toJson(tableIndex));
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

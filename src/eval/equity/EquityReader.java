@@ -1,6 +1,5 @@
 package eval.equity;
 
-import com.google.gson.Gson;
 import eval.TruthTable;
 import model.table.Cell;
 import model.table.Table;
@@ -10,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import util.FileUtils;
+import util.Gson;
 import util.Triple;
 import util.db.Database;
 
@@ -47,7 +47,6 @@ public class EquityReader {
         }
 
         PrintWriter out = FileUtils.getPrintWriter("eval/equity/dataset/AnnotatedTables-19092016/dataset_ground.json", "UTF-8");
-        Gson gson = new Gson();
 
         JSONObject o = new JSONObject(FileUtils.getContent("eval/equity/dataset/AnnotatedTables-19092016/dataset_original_yibrahim.json", "UTF-8"));
 
@@ -168,7 +167,7 @@ public class EquityReader {
                         }
                     }
                 }
-                out.println(gson.toJson(truthTable));
+                out.println(Gson.toJson(truthTable));
             }
         }
 

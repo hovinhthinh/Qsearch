@@ -1,6 +1,5 @@
 package server.table.handler.search;
 
-import com.google.gson.Gson;
 import model.context.ContextMatcher;
 import model.context.KullBackLeiblerMatcher;
 import model.quantity.QuantityConstraint;
@@ -11,6 +10,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONException;
 import storage.table.ElasticSearchTableQuery;
 import storage.table.ResultInstance;
+import util.Gson;
 import util.Pair;
 import util.Triple;
 
@@ -29,7 +29,6 @@ public class SearchHandler extends AbstractHandler {
     public static final String EMBEDDING_MODEL_STRING = "EMBEDDING";
 
     private static ContextMatcher KULLBACK_LEIBLER_MATCHER = null;
-    private static Gson GSON = new Gson();
 
     private int nTopResult;
 
@@ -75,9 +74,8 @@ public class SearchHandler extends AbstractHandler {
 
         SearchResult response = search(null, nResult, nTopTable, linkThreshold, fullConstraint, typeConstraint, contextConstraint, quantityConstraint, additionalParams);
 
-        synchronized (GSON) {
-            httpServletResponse.getWriter().print(GSON.toJson(response));
-        }
+        httpServletResponse.getWriter().print(Gson.toJson(response));
+
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 

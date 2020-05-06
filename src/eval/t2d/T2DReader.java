@@ -1,6 +1,5 @@
 package eval.t2d;
 
-import com.google.gson.Gson;
 import eval.TruthTable;
 import model.table.Cell;
 import nlp.NLP;
@@ -8,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import util.FileUtils;
+import util.Gson;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -70,7 +70,6 @@ public class T2DReader {
 
         PrintWriter out = FileUtils.getPrintWriter("./eval/T2D/ground_truth", "UTF-8");
 
-        Gson gson = new Gson();
         for (File f : folder.listFiles()) {
             if (f.isDirectory()) {
                 continue;
@@ -80,7 +79,7 @@ public class T2DReader {
                 if (t == null) {
                     continue;
                 }
-                out.println(gson.toJson(t));
+                out.println(Gson.toJson(t));
             }
         }
 

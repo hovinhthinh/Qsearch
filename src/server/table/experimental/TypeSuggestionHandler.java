@@ -1,12 +1,12 @@
 package server.table.experimental;
 
-import com.google.gson.Gson;
 import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import util.FileUtils;
+import util.Gson;
 import util.Pair;
 import yago.TaxonomyGraph;
 
@@ -21,8 +21,6 @@ import java.util.logging.Logger;
 @Deprecated
 public class TypeSuggestionHandler extends AbstractHandler {
     public static final Logger LOGGER = Logger.getLogger(TypeSuggestionHandler.class.getName());
-    private Gson GSON = new Gson();
-
 
     private static ArrayList<Pair<String, Integer>> typeToFreq = new ArrayList<>();
 
@@ -141,10 +139,9 @@ public class TypeSuggestionHandler extends AbstractHandler {
 
         typePrefix = typePrefix.toLowerCase().replaceAll("\\s++", " ").replaceAll("^\\s++", "");
 
-        synchronized (GSON) {
-            JSONObject response = new JSONObject().put("prefix", typePrefix).put("suggestions", new JSONArray(GSON.toJson(suggest(typePrefix, nTopSuggestion))));
-            httpServletResponse.getWriter().print(response.toString());
-        }
+        JSONObject response = new JSONObject().put("prefix", typePrefix).put("suggestions", new JSONArray(Gson.toJson(suggest(typePrefix, nTopSuggestion))));
+        httpServletResponse.getWriter().print(response.toString());
+
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 

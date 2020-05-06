@@ -1,11 +1,11 @@
 package eval;
 
-import com.google.gson.Gson;
 import pipeline.ColumnLinkFilteringNode;
 import pipeline.PostFilteringNode;
 import pipeline.TaggingPipeline;
 import pipeline.TextBasedColumnScoringNode;
 import util.FileUtils;
+import util.Gson;
 import util.MetricReporter;
 import util.Pair;
 import yago.QfactTaxonomyGraph;
@@ -85,13 +85,12 @@ public class Evaluate {
             pipeline = getPipeline(jointWeight);
         }
 
-        Gson gson = new Gson();
         int nGoodTable = 0, nBadTable = 0;
 
         MetricReporter reporter = new MetricReporter(Evaluate.class.getName());
 
         for (String line : FileUtils.getLineStream(inputFile, "UTF-8")) {
-            TruthTable table = gson.fromJson(line, TruthTable.class);
+            TruthTable table = Gson.fromJson(line, TruthTable.class);
 
             System.out.println("--- Original ---");
             System.out.println("- URL: " + table.source);
