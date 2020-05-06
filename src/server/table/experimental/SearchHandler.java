@@ -161,8 +161,7 @@ public class SearchHandler extends AbstractHandler {
                         continue;
                     }
                     // context
-                    ArrayList<String> X = new ArrayList<>(
-                            Arrays.asList(qfact.context.substring(1, qfact.context.length() - 1).split(", ")));
+                    ArrayList<String> X = new ArrayList<>(Arrays.asList(qfact.context.split(" ")));
 
                     ResultInstance.SubInstance si = new ResultInstance.SubInstance();
                     si.quantity = qt.toString(2);
