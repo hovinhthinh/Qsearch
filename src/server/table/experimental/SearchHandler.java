@@ -2,14 +2,15 @@ package server.table.experimental;
 
 import com.google.gson.Gson;
 import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
+import model.context.ContextMatcher;
+import model.context.IDF;
 import model.quantity.Quantity;
 import model.quantity.QuantityConstraint;
 import model.quantity.QuantityDomain;
+import nlp.Glove;
 import nlp.NLP;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import storage.table.experimental.ElasticSearchQuery;
-import storage.table.experimental.ResultInstance;
 import uk.ac.susx.informatics.Morpha;
 import util.headword.StringUtils;
 import yago.TaxonomyGraph;
@@ -24,6 +25,40 @@ import java.util.logging.Logger;
 public class SearchHandler extends AbstractHandler {
     public static final Logger LOGGER = Logger.getLogger(SearchHandler.class.getName());
     private static Gson GSON = new Gson();
+
+    static ArrayList<Qfact> qfacts = TableQfactSaver.load();
+
+    public static ContextMatcher DEFAULT_MATCHER = new ContextMatcher() {
+        // Higher is better
+        // range from 0 -> 1
+        public double directedEmbeddingIdfSimilarity(ArrayList<String> queryX, ArrayList<String> factX) {
+            // TODO: Currently not supporting TIME (TIME is computed like normal terms).
+            if (queryX.isEmpty() || factX.isEmpty()) {
+                return queryX.isEmpty() && factX.isEmpty() ? 1 : 0;
+            }
+            double score = 0;
+            double totalIdf = 0;
+            for (String qX : queryX) {
+                double max = 0;
+                for (String fX : factX) {
+                    double sim = Glove.cosineDistance(qX, fX);
+                    if (sim != -1) {
+                        max = Math.max(max, 1 - sim);
+                    }
+                }
+                double idf = IDF.getRobertsonIdf(qX);
+                score += max * idf;
+                totalIdf += idf;
+            }
+            return score / totalIdf;
+        }
+
+        @Override
+        public double match(ArrayList<String> queryContext, ArrayList<String> factContext) {
+            return directedEmbeddingIdfSimilarity(queryContext, factContext);
+        }
+    };
+
 
     private int nTopResult;
 
@@ -83,8 +118,6 @@ public class SearchHandler extends AbstractHandler {
         // Process query context terms
         ArrayList<String> queryContextTerms = NLP.splitSentence(NLP.fastStemming(queryContext.toLowerCase(), Morpha.any));
 
-        ArrayList<EntityQfactHandler.Qfact> qfacts = EntityQfactHandler.qfacts;
-
         ArrayList<ResultInstance> response = new ArrayList<>();
         if (!queryType.isEmpty()) {
             String optimizedQueryType = NLP.stripSentence(NLP.fastStemming(queryType.toLowerCase(), Morpha.noun));
@@ -121,7 +154,7 @@ public class SearchHandler extends AbstractHandler {
                 inst.entity = "<" + entity.substring(5) + ">";
 
                 for (int k = i; k <= j; ++k) {
-                    EntityQfactHandler.Qfact qfact = qfacts.get(k);
+                    Qfact qfact = qfacts.get(k);
                     // quantity
                     Quantity qt = Quantity.fromQuantityString(qfact.quantity);
                     if (constraint != null && !constraint.match(qt)) {
@@ -142,7 +175,7 @@ public class SearchHandler extends AbstractHandler {
                         X.set(l, StringUtils.stem(X.get(l).toLowerCase(), Morpha.any));
                     }
                     // use explicit matcher if given.
-                    si.score = ElasticSearchQuery.DEFAULT_MATCHER.match(queryContextTerms, X);
+                    si.score = DEFAULT_MATCHER.match(queryContextTerms, X);
                     if (si.score < 0.7) {
                         continue;
                     }

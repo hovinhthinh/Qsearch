@@ -37,6 +37,7 @@ public class ExplorerServer {
 
         ContextHandler typeSuggestionHandler = new ContextHandler();
         typeSuggestionHandler.setContextPath(TYPE_SUGGESTION_PATH);
+        TypeSuggestionHandler.load(10);
         typeSuggestionHandler.setHandler(new TypeSuggestionHandler(10));
 
         ContextHandler entityHandler = new ContextHandler();

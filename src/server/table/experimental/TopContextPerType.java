@@ -18,7 +18,7 @@ public class TopContextPerType {
     static TaxonomyGraph graph = TaxonomyGraph.getDefaultGraphInstance();
 
     static {
-        ArrayList<EntityQfactHandler.Qfact> qfacts = EntityQfactHandler.qfacts;
+        ArrayList<Qfact> qfacts = TableQfactSaver.load();
         entity2Token = new HashMap<>();
         for (int i = 0; i < qfacts.size(); ++i) {
             int j = i;
