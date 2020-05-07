@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package data.wikipedia.sweble;
+package data.table.wikipedia.sweble;
 
 import org.sweble.wikitext.articlecruncher.Job;
 import org.sweble.wikitext.dumpreader.export_0_10.*;

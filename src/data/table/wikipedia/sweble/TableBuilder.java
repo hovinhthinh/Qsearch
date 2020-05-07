@@ -1,4 +1,4 @@
-package data.wikipedia.sweble;
+package data.table.wikipedia.sweble;
 
 import java.util.HashMap;
 import java.util.Map;

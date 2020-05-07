@@ -1,6 +1,6 @@
 package pipeline;
 
-import data.background.mention2entity.Mention2EntityPrior;
+import data.table.background.mention2entity.Mention2EntityPrior;
 import model.table.Cell;
 import model.table.Table;
 import model.table.link.EntityLink;

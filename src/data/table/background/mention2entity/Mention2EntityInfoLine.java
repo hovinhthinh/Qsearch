@@ -1,4 +1,4 @@
-package data.background.mention2entity;
+package data.table.background.mention2entity;
 
 import org.json.JSONArray;
 import util.Pair;

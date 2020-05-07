@@ -10,7 +10,7 @@ import java.util.List;
 
 public class WIKIPEDIA extends String2StringMap {
     public WIKIPEDIA() {
-        data.wikipedia.WIKIPEDIA.PARSE_ENTITY = false;
+        data.table.wikipedia.WIKIPEDIA.PARSE_ENTITY = false;
     }
 
     @Override
@@ -18,7 +18,7 @@ public class WIKIPEDIA extends String2StringMap {
         try {
             JSONObject o = new JSONObject(input);
             TableIndex tableIndex = new TableIndex();
-            tableIndex.table = data.wikipedia.WIKIPEDIA.parseFromJSON(o);
+            tableIndex.table = data.table.wikipedia.WIKIPEDIA.parseFromJSON(o);
             if (tableIndex.table == null) {
                 return null;
             }

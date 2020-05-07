@@ -1,6 +1,6 @@
 package tmp;
 
-import data.wikipedia.WIKIPEDIA;
+import data.table.wikipedia.WIKIPEDIA;
 import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
 import model.quantity.QuantityConstraint;
@@ -16,7 +16,6 @@ import util.Pair;
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class MapQfactInTextToTable {

@@ -1,4 +1,4 @@
-package data;
+package data.table;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 // read zip data from yusra and save into combined format
+@Deprecated
 public class TestReadZip {
 
     public static void main(String[] args) throws Exception {

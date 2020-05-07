@@ -1,4 +1,4 @@
-package data.wikipedia;
+package data.table.wikipedia;
 
 import model.table.Table;
 import nlp.Static;
