@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package data.wikipedia.sweble;
+package data.table.wikipedia.sweble;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.sweble.wikitext.engine.PageId;

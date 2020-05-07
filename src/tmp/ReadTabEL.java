@@ -1,7 +1,7 @@
 package tmp;
 
 import com.google.gson.Gson;
-import data.wikipedia.WIKIPEDIA;
+import data.table.wikipedia.WIKIPEDIA;
 import model.table.Cell;
 import model.table.link.EntityLink;
 import model.table.Table;

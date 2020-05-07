@@ -1,6 +1,6 @@
-package data.background.mention2entity;
+package data.table.background.mention2entity;
 
-import data.wikipedia.WIKIPEDIA;
+import data.table.wikipedia.WIKIPEDIA;
 import model.table.Cell;
 import model.table.Table;
 import model.table.link.EntityLink;

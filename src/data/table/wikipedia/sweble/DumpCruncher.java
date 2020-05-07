@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package data.wikipedia.sweble;
+package data.table.wikipedia.sweble;
 
 import de.fau.cs.osr.utils.WrappedException;
 import de.fau.cs.osr.utils.getopt.Options;
@@ -46,7 +46,7 @@ public class DumpCruncher {
 
     private Nexus nexus;
 
-    private data.wikipedia.sweble.Gui gui;
+    private data.table.wikipedia.sweble.Gui gui;
 
     private WikiConfig wikiConfig;
 
@@ -76,7 +76,7 @@ public class DumpCruncher {
     }
 
     public void setUp() throws Throwable {
-        gui = new data.wikipedia.sweble.Gui(this);
+        gui = new data.table.wikipedia.sweble.Gui(this);
 
         nexus = new Nexus();
 
@@ -201,7 +201,7 @@ public class DumpCruncher {
         return nexus;
     }
 
-    public data.wikipedia.sweble.Gui getGui() {
+    public data.table.wikipedia.sweble.Gui getGui() {
         return gui;
     }
 

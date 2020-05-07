@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package data.wikipedia.sweble;
+package data.table.wikipedia.sweble;
 
 import de.fau.cs.osr.utils.WrappedException;
 import org.sweble.wikitext.articlecruncher.Job;
@@ -128,7 +128,7 @@ public class DumpReaderJobGenerator extends WorkerBase {
 
         for (Object o : page.getRevisionOrUpload()) {
             if (o instanceof RevisionType) {
-                data.wikipedia.sweble.RevisionJob job = new RevisionJob(page, (RevisionType) o);
+                data.table.wikipedia.sweble.RevisionJob job = new RevisionJob(page, (RevisionType) o);
 
                 JobTrace trace = job.getTrace();
                 trace.signOff(getClass(), null);

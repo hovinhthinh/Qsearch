@@ -1,4 +1,4 @@
-package data.tablem;
+package data.table.tablem;
 
 import model.table.Cell;
 import model.table.Table;

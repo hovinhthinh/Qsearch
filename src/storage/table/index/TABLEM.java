@@ -14,7 +14,7 @@ public class TABLEM extends String2StringMap {
         try {
             JSONObject o = new JSONObject(input);
             TableIndex tableIndex = new TableIndex();
-            tableIndex.table = data.tablem.TABLEM.parseFromJSON(o);
+            tableIndex.table = data.table.tablem.TABLEM.parseFromJSON(o);
             if (tableIndex.table == null) {
                 return null;
             }

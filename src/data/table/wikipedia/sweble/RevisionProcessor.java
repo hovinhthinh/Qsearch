@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package data.wikipedia.sweble;
+package data.table.wikipedia.sweble;
 
 import de.fau.cs.osr.utils.WrappedException;
 import org.apache.commons.lang3.StringEscapeUtils;

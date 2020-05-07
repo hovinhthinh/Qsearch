@@ -1,6 +1,6 @@
 package eval.table.wiki_diff;
 
-import data.background.mention2entity.Mention2EntityPrior;
+import data.table.background.mention2entity.Mention2EntityPrior;
 import eval.table.TruthTable;
 import model.table.link.EntityLink;
 import pipeline.*;
