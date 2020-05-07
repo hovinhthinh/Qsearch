@@ -1,7 +1,7 @@
-package eval.equity;
+package eval.table.equity;
 
 import data.background.mention2entity.Mention2EntityPrior;
-import eval.TruthTable;
+import eval.table.TruthTable;
 import model.table.link.EntityLink;
 import pipeline.*;
 import util.FileUtils;
@@ -30,13 +30,13 @@ public class ProcessEquity {
 
         Mention2EntityPrior mention2EntityPrior = new Mention2EntityPrior(1, 10);
 
-        PrintWriter out = FileUtils.getPrintWriter("eval/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation.json", "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter("eval/table/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation.json", "UTF-8");
         int nGood = 0;
         for (String line : new FileUtils.LineStream(
 //                new GzipCompressorInputStream(
 //                JSchUtils.getFileInputStreamFromServer
                 new FileInputStream
-                        ("eval/equity/dataset/AnnotatedTables-19092016/dataset_ground.json"), StandardCharsets.UTF_8)) {
+                        ("eval/table/equity/dataset/AnnotatedTables-19092016/dataset_ground.json"), StandardCharsets.UTF_8)) {
 
             TruthTable t;
             t = Gson.fromJson(line, TruthTable.class);

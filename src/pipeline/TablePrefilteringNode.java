@@ -1,7 +1,7 @@
 package pipeline;
 
 
-import eval.TruthTable;
+import eval.table.TruthTable;
 import model.table.Cell;
 import model.table.Table;
 
