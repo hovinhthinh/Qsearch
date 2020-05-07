@@ -1,4 +1,4 @@
-package pipeline;
+package pipeline.table;
 
 import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.time.SUTime;

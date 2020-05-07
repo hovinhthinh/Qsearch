@@ -1,4 +1,4 @@
-package pipeline;
+package pipeline.table;
 
 import model.table.Table;
 

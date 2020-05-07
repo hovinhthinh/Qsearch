@@ -3,7 +3,7 @@ package eval.table.equity;
 import data.table.background.mention2entity.Mention2EntityPrior;
 import eval.table.TruthTable;
 import model.table.link.EntityLink;
-import pipeline.*;
+import pipeline.table.*;
 import util.FileUtils;
 import util.Gson;
 

@@ -3,7 +3,7 @@ package model.table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
 import model.table.link.TimeLink;
-import pipeline.PriorBasedEntityTaggingNode;
+import pipeline.table.PriorBasedEntityTaggingNode;
 
 import java.util.ArrayList;
 

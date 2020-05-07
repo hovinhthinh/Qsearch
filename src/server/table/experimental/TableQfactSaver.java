@@ -6,7 +6,7 @@ import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
 import nlp.NLP;
-import pipeline.TextBasedColumnScoringNode;
+import pipeline.table.TextBasedColumnScoringNode;
 import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 import util.Gson;

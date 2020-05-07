@@ -3,9 +3,8 @@ package tmp;
 import com.google.gson.Gson;
 import model.table.Table;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
-import pipeline.TaggingPipeline;
+import pipeline.table.TaggingPipeline;
 import util.FileUtils;
-import util.JSchUtils;
 
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
