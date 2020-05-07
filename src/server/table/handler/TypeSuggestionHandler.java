@@ -128,7 +128,7 @@ public class TypeSuggestionHandler extends AbstractHandler {
             }
         }
 
-        PrintWriter out = FileUtils.getPrintWriter("./data/type_stics+nyt.gz", "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter("data/table/type_wiki+tablem.gz", "UTF-8");
         for (Map.Entry<String, Integer> p : specificTypeStats.entrySet().stream()
                 .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
                 .collect(Collectors.toList())) {
@@ -138,7 +138,7 @@ public class TypeSuggestionHandler extends AbstractHandler {
     }
 
     private static void load(int nEntityThreshold) {
-        for (String line : FileUtils.getLineStream("./data/type_stics+nyt.gz", "UTF-8")) {
+        for (String line : FileUtils.getLineStream("data/table/type_wiki+tablem.gz", "UTF-8")) {
             String[] arr = line.split("\t");
             int freq = Integer.parseInt(arr[1]);
             if (freq >= nEntityThreshold) {
