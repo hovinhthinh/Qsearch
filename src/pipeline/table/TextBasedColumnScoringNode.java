@@ -10,7 +10,6 @@ import nlp.NLP;
 import uk.ac.susx.informatics.Morpha;
 import util.Pair;
 import util.Triple;
-import yago.QfactTaxonomyGraph;
 
 import java.util.ArrayList;
 import java.util.Arrays;

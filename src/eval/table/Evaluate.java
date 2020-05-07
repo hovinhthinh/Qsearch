@@ -8,7 +8,7 @@ import util.FileUtils;
 import util.Gson;
 import util.MetricReporter;
 import util.Pair;
-import yago.QfactTaxonomyGraph;
+import pipeline.table.QfactTaxonomyGraph;
 
 import java.util.Scanner;
 

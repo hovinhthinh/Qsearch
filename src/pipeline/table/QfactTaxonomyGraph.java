@@ -1,4 +1,4 @@
-package yago;
+package pipeline.table;
 
 import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
@@ -11,6 +11,7 @@ import model.quantity.QuantityDomain;
 import nlp.NLP;
 import util.FileUtils;
 import util.Pair;
+import yago.TaxonomyGraph;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class QfactTaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(QfactTaxonomyGraph.class.getName());
     public static final boolean DEBUG = true;
-    public static final String DEFAULT_QFACT_FILE = "non-deep/qfact_text_coref.gz";
+    public static final String DEFAULT_QFACT_FILE = "table-non-deep/qfact_text_coref.gz";
 
     public static int DEFAULT_RELATED_ENTITY_DIST_LIM = 4;
     public static int NTOP_RELATED_ENTITY = 5;
