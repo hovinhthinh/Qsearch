@@ -188,6 +188,11 @@ public class QuantityTaggingNode implements TaggingNode {
                         } else if (q.value > 1 && q.value <= 2.5) {
                             cellUnit = "metre";
                         }
+                    } else if (originalCombinedHeader.equalsIgnoreCase("reaction")) {
+                        // athletics reaction time
+                        if (q.value > 0 && q.value < 0.5) {
+                            cellUnit = "second";
+                        }
                     } else if (originalCombinedHeader.equalsIgnoreCase("weight")) {
                         // human weight
                         if (q.value >= 50 && q.value <= 100) {
