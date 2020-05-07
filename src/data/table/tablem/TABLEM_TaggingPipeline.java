@@ -2,7 +2,7 @@ package data.table.tablem;
 
 import model.table.Table;
 import nlp.Static;
-import pipeline.TaggingPipeline;
+import pipeline.table.TaggingPipeline;
 import util.FileUtils;
 import util.Gson;
 import util.SelfMonitor;

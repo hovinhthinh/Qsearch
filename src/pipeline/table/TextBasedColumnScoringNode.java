@@ -1,4 +1,4 @@
-package pipeline;
+package pipeline.table;
 
 import eval.table.TruthTable;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;

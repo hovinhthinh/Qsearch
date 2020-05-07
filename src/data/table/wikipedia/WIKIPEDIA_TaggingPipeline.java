@@ -2,7 +2,7 @@ package data.table.wikipedia;
 
 import model.table.Table;
 import nlp.Static;
-import pipeline.*;
+import pipeline.table.*;
 import util.FileUtils;
 import util.Gson;
 import util.SelfMonitor;

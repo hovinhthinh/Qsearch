@@ -5,7 +5,7 @@ import data.table.wikipedia.WIKIPEDIA;
 import data.table.wikipedia.WIKIPEDIA_TaggingPipeline;
 import model.table.Table;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
-import pipeline.TaggingPipeline;
+import pipeline.table.TaggingPipeline;
 import util.FileUtils;
 import util.JSchUtils;
 

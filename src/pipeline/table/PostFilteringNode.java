@@ -1,8 +1,6 @@
-package pipeline;
+package pipeline.table;
 
 import model.table.Table;
-import model.text.Sentence;
-import org.junit.Assert;
 
 @Deprecated
 public class PostFilteringNode implements TaggingNode {

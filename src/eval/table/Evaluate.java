@@ -1,9 +1,9 @@
 package eval.table;
 
-import pipeline.ColumnLinkFilteringNode;
-import pipeline.PostFilteringNode;
-import pipeline.TaggingPipeline;
-import pipeline.TextBasedColumnScoringNode;
+import pipeline.table.ColumnLinkFilteringNode;
+import pipeline.table.PostFilteringNode;
+import pipeline.table.TaggingPipeline;
+import pipeline.table.TextBasedColumnScoringNode;
 import util.FileUtils;
 import util.Gson;
 import util.MetricReporter;

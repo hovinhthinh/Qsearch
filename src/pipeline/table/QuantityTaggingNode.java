@@ -1,4 +1,4 @@
-package pipeline;
+package pipeline.table;
 
 import catalog.Unit;
 import catalog.UnitPair;
