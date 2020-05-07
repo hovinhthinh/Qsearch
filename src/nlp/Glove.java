@@ -66,7 +66,10 @@ public class Glove {
         }
 
         long key = ((long) aId) * EMBEDDING_VALUE.size() + bId;
-        double r = CACHE_COSINE.getAndMoveToFirst(key);
+        double r;
+        synchronized (CACHE_COSINE) {
+            r = CACHE_COSINE.getAndMoveToFirst(key);
+        }
         if (r != -1.0) {
             return r;
         }
@@ -85,9 +88,11 @@ public class Glove {
         // Normalize.
         double cosine = 0.5 - dotProduct / Math.sqrt(aLength) / Math.sqrt(bLength) / 2;
 
-        CACHE_COSINE.putAndMoveToFirst(key, cosine);
-        if (CACHE_COSINE.size() > CACHE_COSINE_SIZE) {
-            CACHE_COSINE.removeLastDouble();
+        synchronized (CACHE_COSINE) {
+            CACHE_COSINE.putAndMoveToFirst(key, cosine);
+            if (CACHE_COSINE.size() > CACHE_COSINE_SIZE) {
+                CACHE_COSINE.removeLastDouble();
+            }
         }
         return cosine;
     }
