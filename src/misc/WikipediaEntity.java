@@ -24,7 +24,7 @@ public class WikipediaEntity {
     public static final String PROTOCOL = Configuration.get("storage.elasticsearch.protocol");
     public static final String ES_HOST = Configuration.get("storage.elasticsearch.address");
     public static final String WIKIPEDIA_INDEX = "wikipedia";
-    public static final String ENTITY_TYPE = Configuration.get("storage.elasticsearch.entity_type");
+    public static final String ENTITY_TYPE = "entity";
     public static final int BATCH_SIZE = 1024 * 4;
     public static ArrayList<String> bulks = new ArrayList<>();
 
