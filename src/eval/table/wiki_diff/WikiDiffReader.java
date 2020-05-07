@@ -1,6 +1,6 @@
-package eval.wiki_random;
+package eval.table.wiki_diff;
 
-import eval.TruthTable;
+import eval.table.TruthTable;
 import model.table.Cell;
 import model.table.Table;
 import model.table.link.EntityLink;
@@ -20,7 +20,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class WikiRandomReader {
+public class WikiDiffReader {
     // Input is from "/GW/D5data/hvthinh/TabEL/tables.json.gz"
     private static Cell parseCellFromJSONObject(JSONObject json) {
         Cell cell = new Cell();
@@ -103,10 +103,10 @@ public class WikiRandomReader {
     }
 
     public static void main(String[] args) {
-        PrintWriter out = FileUtils.getPrintWriter("eval/wiki_random/wiki_random_ground.gz", "UTF-8");
-        FileUtils.LineStream stream = FileUtils.getLineStream("eval/wiki_random/wiki_random_data.gz", "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter("eval/table/wiki_diff/table_ground.gz", "UTF-8");
+        FileUtils.LineStream stream = FileUtils.getLineStream("eval/table/wiki_diff/table_data.gz", "UTF-8");
 
-        SelfMonitor m = new SelfMonitor(WikiRandomReader.class.getName(), -1, 60);
+        SelfMonitor m = new SelfMonitor(WikiDiffReader.class.getName(), -1, 60);
         m.start();
         for (String line : stream) {
             m.incAndGet();

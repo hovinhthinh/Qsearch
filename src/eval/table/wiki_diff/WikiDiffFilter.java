@@ -1,4 +1,4 @@
-package eval.wiki_diff;
+package eval.table.wiki_diff;
 
 import model.table.Table;
 import util.FileUtils;

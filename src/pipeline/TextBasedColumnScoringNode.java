@@ -1,6 +1,6 @@
 package pipeline;
 
-import eval.TruthTable;
+import eval.table.TruthTable;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import misc.WikipediaEntity;
 import model.table.Table;

@@ -1,4 +1,4 @@
-package eval;
+package eval.table;
 
 
 import model.table.Table;
