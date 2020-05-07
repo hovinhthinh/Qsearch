@@ -1,0 +1,527 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Qsearch</title>
+    <link href="fontawesome_5.10.1/css/all.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="css/bootstrap_4.0.0.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="css/local.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="css/bootstrap-multiselect.css" rel="stylesheet" crossorigin="anonymous">
+</head>
+
+<body>
+<script src="js/jquery_3.2.1.min.js" crossorigin="anonymous"></script>
+<script src="js/jquery.cookie_1.4.1.js" crossorigin="anonymous"></script>
+<script src="js/popper_1.12.9.min.js" crossorigin="anonymous"></script>
+<script src="js/bootstrap_4.0.0.min.js" crossorigin="anonymous"></script>
+<script src="js/nanobar_0.4.2.min.js" crossorigin="anonymous"></script>
+<script src="js/bootstrap-multiselect.js" crossorigin="anonymous"></script>
+
+<div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12 offset-xs-0 offset-sm-0 offset-md-0 offset-lg-0">
+    <div class="row">
+        <a href="/" class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <br/>
+            <img style="object-fit: contain; height:75px" src="img/logo.png" class="img-responsive img-fluid ml-2 mr-2">
+        </a>
+        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 mt-2">
+            <br/>
+            <div class="input-group">
+                <input style="height: 40px;" type="text" class="form-control"
+                       placeholder="what do you want to search for?" id="full">
+                <button style="height: 40px" type="button" class="btn btn-success" id="search">Search</button>
+            </div>
+            <br/>
+            <div id="parsed" class="mb-3"></div>
+        </div>
+        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="margin-top: 15px">
+            <div class="float-right card" style=" border-color: #d6e9c6;">
+                <div class="card-header" style="background-color: #dff0d8; border-color: #d6e9c6">
+                    <a id='setting-toggle' data-toggle="collapse" href="#setting-body"
+                       style="text-decoration: none;">
+            <span style="color: #3c763d">
+                <strong>Settings</strong>&nbsp;&nbsp;<i class="float-right fa fa-chevron-up"></i>
+            </span>
+                    </a>
+                </div>
+                <div id="setting-body" class="collapse show">
+                    <div class="card-body">
+                        <table>
+                            <tr>
+                                <td>Input corpus:&nbsp;</td>
+                                <td>
+                                    <select class="custom-select" multiple id="corpus">
+                                        <option value="STICS" selected>Stics</option>
+                                        <option value="NYT" selected>New York Times</option>
+                                        <option value="WIKIPEDIA" selected>Wikipedia</option>
+                                    </select>
+                                </td>
+                                <td>&nbsp;&nbsp;nTop:&nbsp;</td>
+                                <td>
+                                    <select class="custom-select" id="ntop">
+                                        <option value="10">10</option>
+                                        <option value="20" selected>20</option>
+                                        <option value="30">30</option>
+                                        <option value="40">40</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-top: 5px;">Ranking model:&nbsp;</td>
+                                <td style="padding-top: 5px;" colspan="3">
+                                    <select class="custom-select" id="model">
+                                        <option value="EMBEDDING" selected>Context Embedding Distance (ced)</option>
+                                        <option value="KL">Kullback-Leibler Divergence (KL)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr id="alpha-option">
+                                <td style="padding-top: 10px;">Penalty (&alpha;):&nbsp;</td>
+                                <td style="padding-top: 10px;" colspan="3">
+                                    <table style="width: 100%">
+                                        <tr>
+                                            <td><input type="range" value="3" class="slider" step="0.1" min="0" max="10"
+                                                       id="alpha"
+                                                       oninput="$('#alpha-value').text(parseFloat(this.value).toFixed(1));">
+                                            </td>
+                                            <td id="alpha-value" align="right" style="width: 2.5em">3.0</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr id="lambda-option">
+                                <td style="padding-top: 10px;">Smoothing (&lambda;):&nbsp;</td>
+                                <td style="padding-top: 10px;" colspan="3">
+                                    <table style="width: 100%">
+                                        <tr>
+                                            <td><input type="range" value="0.1" class="slider" step="0.1" min="0"
+                                                       max="1"
+                                                       id="lambda"
+                                                       oninput="$('#lambda-value').text(parseFloat(this.value).toFixed(1));">
+                                            </td>
+                                            <td id="lambda-value" align="right" style="width: 2.5em">0.1</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container col-xs-9 col-sm-9 col-md-9 col-lg-9">
+    <table class="table table-hover">
+        <thead id="head" hidden>
+        <tr>
+            <th style="border-top: 0px;" scope="col">#</th>
+            <th style="border-top: 0px;" scope="col">Result</th>
+            <th style="border-top: 0px;" scope="col" colspan="2">
+                <div class="row">
+                    <div class="col-8"><span style="position:absolute;bottom:0;">Source</span></div>
+                    <div class="dropdown col-4" align="right" id="sort-dropdown" hidden>
+                        <button class="btn dropdown-toggle btn-sm" type="button" id="sort-dropdown-btn"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                style="background-color: #dff0d8; border-color: #d6e9c6; color: #3c763d">
+                            <strong id="sort-by-text">Sort by: Default</strong>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="sort-dropdown-btn">
+                            <a class="dropdown-item dropdown-item-checked sort-option" href='#' id="sort-default">Default</a>
+                            <a class="dropdown-item sort-option" href='#' id="sort-quantity">Quantity</a>
+                            <a class="dropdown-item sort-option" href='#' id="sort-entity" hidden>Entity</a>
+                        </div>
+                    </div>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody id="data">
+        </tbody>
+    </table>
+</div>
+<br/>
+<br/>
+<br/>
+<footer class="footer fixed-bottom" style="background-color: #ffffff; padding-top: 5px">
+    <table align="center">
+        <tr>
+            <td valign="middle" style="padding-top: 15px">
+                <div class="container mb-3">
+                    &copy; 2019
+                    <a href="https://www.mpi-inf.mpg.de/departments/databases-and-information-systems/"
+                       referrerpolicy="no-referrer">Database
+                        & Information Systems Group</a>, Max Planck Institute for Informatics
+                    &nbsp;|&nbsp;<a href="https://imprint.mpi-klsb.mpg.de/inf/qsearch.mpi-inf.mpg.de"
+                                    referrerpolicy="no-referrer">
+                    Impressum</a>&nbsp;|&nbsp;<a
+                        href="https://data-protection.mpi-klsb.mpg.de/inf/qsearch.mpi-inf.mpg.de"
+                        referrerpolicy="no-referrer">
+                    Datenschutzhinweis</a>
+                </div>
+            </td>
+            <td style="width: 50px"></td>
+            <td>
+                <img style="height: 60px" src="img/mpi.png" class="img-fluid" alt="logo">
+            </td>
+        </tr>
+    </table>
+</footer>
+<script src="js/local.js" crossorigin="anonymous"></script>
+
+<script>
+    var VERBOSE = true;
+
+    var nanobar = new Nanobar();
+    document.getElementById('nanobarcss').innerHTML += '.nanobar .bar { background: #6aa94e; }';
+
+    $("#full").focus();
+
+    function escapeText(text) {
+        return $('<div>').text(text).html();
+    }
+
+    function cell(value) {
+        value = String(value);
+        if (value.startsWith("<")) {
+            value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result" href="https://www.wikipedia.org/wiki/'
+                + encodeURI(value.substring(1, value.length - 1)) + '" target="_blank" referrerpolicy="no-referrer">'
+                + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
+                + '</a>';
+        } else if (value.startsWith("STICS:Link:")) {
+            value = '<a href="' + value.substr(11) + '" target="_blank" referrerpolicy="no-referrer"><i class="fas fa-arrow-alt-circle-right"></i></a>';
+        } else if (value.startsWith("NYT:Link:")) {
+            value = '<a href="' + value.substr(9) + '" target="_blank" referrerpolicy="no-referrer"><i class="fas fa-arrow-alt-circle-right"></i></a>';
+        } else if (value.startsWith("NYT:docID:")) {
+            value = ''; //'<a href="' + value + '" target="_blank">DOCID</a>';
+        } else if (value.startsWith("WIKIPEDIA:Link:")) {
+            value = '<a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer"><i class="fas fa-arrow-alt-circle-right"></i></a>';
+        } else {
+            value = escapeText(value).replace(/ /g, '&nbsp;');
+        }
+        return "<td>" + value + "</td>";
+    }
+
+    function contentCell(sentenceContent) {
+        var value = escapeText(sentenceContent['value']);
+        if (VERBOSE) {
+            var pE = -1, pQ = -1;
+            var eStr = null, qStr = null;
+
+            if ('entityStr' in sentenceContent) {
+                eStr = escapeText(sentenceContent['entityStr']);
+                pE = value.indexOf(eStr);
+            }
+            if ('quantityStr' in sentenceContent) {
+                qStr = escapeText(sentenceContent['quantityStr']);
+                pQ = value.indexOf(qStr);
+            }
+            if ('contextStr' in sentenceContent) {
+                var context = sentenceContent['contextStr'];
+                context = context.filter(function (value, index, self) {
+                    return self.indexOf(value) === index;
+                });
+                var processedContext = [];
+                for (var i = 0; i < context.length; ++i) {
+                    var contextToken = escapeText(context[i]);
+                    var optimalCursor = 0, currentCursor = 0, optimalDist = 1e9;
+                    var nextPosition = -1;
+                    do {
+                        nextPosition = value.indexOf(contextToken, nextPosition + 1);
+                        if ((nextPosition > 0 && value.charAt(nextPosition - 1) != ' ') ||
+                            (nextPosition + contextToken.length < value.length && value.charAt(nextPosition + contextToken.length) != ' ')) {
+                            continue;
+                        }
+                        if (nextPosition != -1) {
+                            ++currentCursor;
+                            var currentDist = (pE == -1 ? 0 : Math.abs(pE - nextPosition)) + (pQ == -1 ? 0 : Math.abs(pQ - nextPosition));
+                            if (currentDist < optimalDist) {
+                                optimalDist = currentDist;
+                                optimalCursor = currentCursor;
+                            }
+                        }
+                    } while (nextPosition != -1);
+
+                    if (optimalCursor > 0) {
+                        processedContext.push([contextToken, optimalCursor]);
+                    }
+                }
+                processedContext.forEach(function (o) {
+                    var nextPosition = -1;
+                    for (var i = 0; i < o[1]; ++i) {
+                        nextPosition = value.indexOf(o[0], nextPosition + 1);
+                        if ((nextPosition > 0 && value.charAt(nextPosition - 1) != ' ') ||
+                            (nextPosition + o[0].length < value.length && value.charAt(nextPosition + o[0].length) != ' ')) {
+                            --i;
+                        }
+                    }
+                    value = value.substring(0, nextPosition)
+                        + '<span class="context-box">' + o[0] + '</span>'
+                        + value.substring(nextPosition + o[0].length);
+                });
+                value = value.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
+            }
+            if (pE != -1) {
+                value = value.replace(eStr, '<span class="entity-box">' + eStr + '</span>');
+            }
+            if (pQ != -1) {
+                value = value.replace(qStr, '<span class="quantity-box converted-quantity"' +
+                    ' data-animation="true" data-placement="top" data-trigger="hover" data-html="true"' +
+                    ' data-content="Equals: ' + sentenceContent['quantityConvertedStr'] + '">' + qStr + '</span>');
+            }
+        }
+        return "<td>" + value + "</td>";
+    }
+
+    function encode(id, score, entity, quantity, sentenceContent, source) {
+        var line = "<tr>";
+        line += cell(id) + cell(entity) + contentCell(sentenceContent) + cell(source);
+        line += "</tr>";
+        return line;
+    }
+
+    function showParsedQuery(type, context, quantity) {
+        $('#parsed').html('Parsed:&nbsp;&nbsp;&nbsp;' + '<span class="entity-box">' + escapeText(type) + '</span>'
+            + " &rarr; " + '<span class="context-box">' + escapeText(context) + '</span>'
+            + " &rarr; " + '<span class="quantity-box">' + escapeText(quantity['phrase']) + '</span>');
+    }
+
+    var convertedQuantityShowingTimeout;
+    var wikiLinkToImageMap = {};
+
+    function show(data) {
+        if (data["verdict"] != "OK") {
+            $("#data").html(data["verdict"]);
+            return;
+        }
+        $("#head").removeAttr("hidden");
+        var topResults = data["topResults"];
+        showParsedQuery(data["typeConstraint"], data["contextConstraint"], data["quantityConstraint"]);
+        if (topResults.length == 0) {
+            $("#data").html(encode("No data", "No data", "No data", "No data", {'value': "No data"}, ""));
+        } else {
+            var str = "";
+            for (var i = 0; i < topResults.length; ++i) {
+                var instance = topResults[i];
+                str += encode(i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"],
+                    {
+                        'value': instance["sentence"],
+                        'entityStr': instance["entityStr"],
+                        'quantityStr': instance["quantityStr"],
+                        'quantityConvertedStr': instance["quantityConvertedStr"],
+                        'contextStr': instance["contextStr"]
+                    },
+                    instance["source"]);
+            }
+            if (data["numResults"] > topResults.length)
+                str += encode("", "", "More " + (data["numResults"] - topResults.length) + " results", "", {'value': ""}, "");
+            $("#data").html(str);
+            $("#sort-dropdown").removeAttr('hidden');
+        }
+
+        $('.converted-quantity').each(function () {
+            var current = this;
+            if (!($(current).attr('data-content') == 'Equals: null')) {
+                var popoverElement = $(current).popover('show')
+                    .data('bs.popover').getTipElement();
+                $(popoverElement).addClass('popover-converted-quantity');
+            }
+        });
+
+        // hide converted quantity after sometime
+        convertedQuantityShowingTimeout = setTimeout(function () {
+            $('.converted-quantity').trigger('mouseleave');
+        }, 7500);
+
+        $('.result').each(function () {
+            var current = this;
+            if ($(current).attr('href') in wikiLinkToImageMap) {
+                if (wikiLinkToImageMap[$(current).attr('href')] != 'None') {
+                    $(current).attr("data-content", wikiLinkToImageMap[$(current).attr('href')]);
+                    $(current).popover();
+                    if ($(current).is(':hover')) {
+                        $(current).trigger('mouseenter');
+                    }
+                }
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: "/wikilink/",
+                    data: {"link": $(current).attr("href")},
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: "json",
+                    success: function (data) {
+                        if ("imgLink" in data) {
+                            var imgLink = "<img referrerpolicy=\"no-referrer\" style=\"object-fit: contain;\" src=\"" + data["imgLink"] + "\" class=\"img-responsive img-fluid\">";
+                            $(current).attr("data-content", imgLink);
+                            wikiLinkToImageMap[$(current).attr("href")] = imgLink;
+                            $(current).popover();
+                            if ($(current).is(':hover')) {
+                                $(current).trigger('mouseenter');
+                            }
+                        } else {
+                            wikiLinkToImageMap[$(current).attr("href")] = "None";
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function search() {
+        if ($("#full").val().trim() == "") {
+            return;
+        }
+        var params = {
+            full: $("#full").val(),
+            corpus: JSON.stringify($("#corpus").val()),
+            model: $("#model").val(),
+            lambda: $("#lambda").val(),
+            alpha: $("#alpha").val(),
+            ntop: $("#ntop").val()
+        };
+        if ("WebSocket" in window) {
+            $("#search").attr('disabled', 'disabled').html("Searching <i class=\"fas fa-spinner fa-spin\"></i>");
+            $("#full").attr('disabled', 'disabled');
+
+            var ws = new WebSocket(location.protocol.replace("http", "ws") + "//" + location.host + "/search_socket");
+            ws.onopen = function () {
+                ws.send(JSON.stringify(params));
+            };
+
+            ws.onmessage = function (evt) {
+                var msg = evt.data;
+                var data = JSON.parse(msg);
+                if ("progress" in data) {
+                    nanobar.go(data["progress"]);
+                } else {
+                    window.location.replace("/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(msg))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                }
+            };
+            ws.onerror = function () {
+                alert("An error occurred.");
+            };
+            ws.onclose = function () {
+                $("#search").removeAttr('disabled').html("Search");
+                $("#full").removeAttr('disabled')
+            };
+        } else {
+            $.ajax({
+                type: "GET",
+                url: "/search/",
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                beforeSend: function () {
+                    $("#search").attr('disabled', 'disabled').html("Searching <i class=\"fas fa-spinner fa-spin\"></i>");
+                    $("#full").attr('disabled', 'disabled');
+                },
+                success: function (data) {
+                    window.location.replace("/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(data)))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                },
+                error: function () {
+                    alert("An error occurred.");
+                },
+                complete: function () {
+                    $("#search").removeAttr('disabled').html("Search");
+                    $("#full").removeAttr('disabled')
+                }
+            });
+        }
+    }
+
+    $("#search").click(search);
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has("q")) {
+        $("#full").val(decodeURIComponent(atob(decodeURIComponent(urlParams.get("q")))));
+    }
+    var data = null;
+    var resultsForWikiView = null;
+    var wikiViewCountLeft = 0;
+    if (urlParams.has("d")) {
+        data = JSON.parse(decodeURIComponent(atob(decodeURIComponent(urlParams.get('d')))));
+        show(data);
+
+        // now trigger wikiview.
+        resultsForWikiView = data['topResults'];
+        wikiViewCountLeft = resultsForWikiView.length;
+        resultsForWikiView.forEach(function (o) {
+            $.ajax({
+                type: "GET",
+                url: "/wikiview/",
+                data: {"entity": o['entity']},
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                success: function (response) {
+                    if (response['view'] != -1) {
+                        o['view'] = response['view'];
+                        --wikiViewCountLeft;
+                        if (wikiViewCountLeft == 0) {
+                            data['topResults'] = resultsForWikiView;
+                            $('#sort-entity').removeAttr('hidden');
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    $('#sort-default').click(function () {
+        var topResults = data['topResults'];
+        topResults.sort(function (a, b) {
+            var av = a['score'], bv = b['score'];
+            return av < bv ? -1 : (av > bv ? 1 : 0);
+        });
+        data['topResults'] = topResults;
+        clearTimeout(convertedQuantityShowingTimeout);
+        $('.converted-quantity').trigger('mouseleave');
+        show(data);
+        $('.sort-option').each(function () {
+            $(this).removeClass('dropdown-item-checked');
+        });
+        $(this).addClass('dropdown-item-checked');
+        $('#sort-by-text').text('Sort by: Default');
+    });
+    $('#sort-entity').click(function () {
+        var topResults = data['topResults'];
+        topResults.sort(function (a, b) {
+            var av = a['view'], bv = b['view'];
+            return av < bv ? 1 : (av > bv ? -1 : 0);
+        });
+        data['topResults'] = topResults;
+        clearTimeout(convertedQuantityShowingTimeout);
+        $('.converted-quantity').trigger('mouseleave');
+        show(data);
+        $('.sort-option').each(function () {
+            $(this).removeClass('dropdown-item-checked');
+        });
+        $(this).addClass('dropdown-item-checked');
+        $('#sort-by-text').text('Sort by: Entity');
+    });
+    $('#sort-quantity').click(function () {
+        var topResults = data['topResults'];
+        topResults.sort(function (a, b) {
+            var av = a['quantityStandardValue'], bv = b['quantityStandardValue'];
+            var c = av < bv ? -1 : (av > bv ? 1 : 0);
+            if (data['quantityConstraint']['resolutionCode'] == 'UPPER_BOUND') {
+                return c * -1;
+            } else {
+                return c;
+            }
+        });
+        data['topResults'] = topResults;
+        clearTimeout(convertedQuantityShowingTimeout);
+        $('.converted-quantity').trigger('mouseleave');
+        show(data);
+        $('.sort-option').each(function () {
+            $(this).removeClass('dropdown-item-checked');
+        });
+        $(this).addClass('dropdown-item-checked');
+        $('#sort-by-text').text('Sort by: Quantity');
+    });
+
+    autocomplete(document.getElementById("full"));
+</script>
+</body>
+</html>
