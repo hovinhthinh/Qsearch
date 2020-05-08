@@ -1,5 +1,6 @@
 package server.table.experimental;
 
+import model.quantity.QuantityDomain;
 import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
@@ -78,6 +79,7 @@ public class TableQfactLoader {
 
                         f.quantity = ql.quantity.toString();
                         f.quantitySpan = ql.text;
+                        f.domain = QuantityDomain.getDomain(ql.quantity, true);
 
                         f.headerContext = table.getCombinedHeader(qCol);
                         f.headerUnitSpan = table.getHeaderUnitSpan(qCol);

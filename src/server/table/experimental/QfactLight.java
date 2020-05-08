@@ -10,6 +10,7 @@ public class QfactLight {
 
     String quantity;
     String quantitySpan;
+    String domain;
 
     String headerContext;
     String headerUnitSpan;
