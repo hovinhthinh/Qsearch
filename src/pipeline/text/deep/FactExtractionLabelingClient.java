@@ -16,7 +16,7 @@ public class FactExtractionLabelingClient {
                     "../" + modelPath
             };
             ProcessBuilder pb = new ProcessBuilder(cmd);
-            pb.directory(new File("./deep"));
+            pb.directory(new File("./text-deep"));
             p = pb.start();
             in = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(p.getOutputStream(), StandardCharsets.UTF_8)));
