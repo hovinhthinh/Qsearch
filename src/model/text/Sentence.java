@@ -1,12 +1,15 @@
 package model.text;
 
+import data.table.background.qfact_text.OpenIETaggingNodeTabQs;
 import model.text.tag.*;
 import nlp.NLP;
 import nlp.Static;
+import org.apache.commons.lang.StringEscapeUtils;
 import scala.collection.JavaConversions;
 import util.Pair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Sentence {
@@ -72,6 +75,80 @@ public class Sentence {
         }
         return sb.toString();
 
+    }
+
+    public List<String> getPrintingTrainingDataForTabQs() {
+        List<String> result = new ArrayList<>();
+
+        for (QuantitativeFact qfact : quantitativeFacts) {
+            if (qfact.entityTag == null) {
+                continue;
+            }
+            String entity = null;
+
+            if (qfact.entityTag.id.startsWith("YAGO3:")) { // STICS
+                entity = StringEscapeUtils.unescapeJava(qfact.entityTag.id.substring(6));
+            } else if (qfact.entityTag.id.startsWith("YAGO:")) { // NYT
+                entity = "<" + StringEscapeUtils.unescapeJava(qfact.entityTag.id.substring(5)) + ">";
+            } else if (qfact.entityTag.id.startsWith("<") && qfact.entityTag.id.endsWith(">")) { // WIKI
+                entity = "<" + StringEscapeUtils.unescapeJava(qfact.entityTag.id.substring(1, qfact.entityTag.id.length() - 1)) + ">";
+            } else {
+                throw new RuntimeException("Entity unrecognized");
+            }
+
+            StringBuilder sb = new StringBuilder();
+            boolean flag = false;
+            for (EntityTag t : qfact.contextEntityTags) {
+                if (flag) {
+                    sb.append(" ");
+                }
+                flag = true;
+//                sb.append("<E>:");
+//                sb.append(t.id); // Not using entityID at this time.
+                sb.append(getSubTokensString(t.beginIndex, t.endIndex).toLowerCase());
+            }
+//            if (false) // ignore time tags
+            for (TimeTag t : qfact.contextTimeTags) {
+                if (flag) {
+                    sb.append(" ");
+                }
+                flag = true;
+                //                sb.append("<T>:");
+                // Not using time range at this time. (we may ignore time in the context when processing matching).
+                sb.append(getSubTokensString(t.beginIndex, t.endIndex).toLowerCase());
+            }
+            for (Token t : qfact.contextTokens) {
+                if (!OpenIETaggingNodeTabQs.ALLOWED_CONTEXT_POSTAGS.contains(t.POS) || NLP.BLOCKED_STOPWORDS.contains(t.str.toLowerCase())) {
+                    continue;
+                }
+                if (flag) {
+                    sb.append(" ");
+                }
+                flag = true;
+                sb.append(t.str.toLowerCase());
+            }
+//            if (!qfact.quantityTag.quantity.unit.isEmpty()) {
+//                if (flag) {
+//                    sb.append(" ");
+//                }
+//                flag = true;
+//                sb.append(qfact.quantityTag.quantity.unit.toLowerCase());
+//            }
+            if (!flag) {
+                continue;
+            }
+            String[] contextSplitted = Arrays.stream(sb.toString().split("\\s++")).sorted().distinct().toArray(String[]::new);
+
+            StringBuilder entityAndContext = new StringBuilder();
+            entityAndContext.append(entity)
+                    .append("\t").append(String.join(" ", contextSplitted))
+                    .append("\t").append(qfact.quantityTag.quantity.toString())
+                    .append("\t").append(this.toString())
+                    .append("\t").append(this.source)
+                    .append("\t").append(qfact.entityTag.referSentence);
+            result.add(entityAndContext.toString());
+        }
+        return result;
     }
 
     public List<String> getPrintingQuantitativeFacts() {
