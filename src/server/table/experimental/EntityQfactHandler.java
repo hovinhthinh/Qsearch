@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class EntityQfactHandler extends AbstractHandler {
     public static final Logger LOGGER = Logger.getLogger(EntityQfactHandler.class.getName());
 
-    static ArrayList<Qfact> qfacts = TableQfactSaver.load();
+    static ArrayList<QfactLight> qfacts = TableQfactLoader.load();
 
     @Override
     public void handle(String s, Request request, HttpServletRequest httpServletRequest,
@@ -28,10 +28,10 @@ public class EntityQfactHandler extends AbstractHandler {
         // Get parameters
         String entityConstraint = NLP.stripSentence(request.getParameter("entity")).toLowerCase();
 
-        ArrayList<List<Qfact>> result = new ArrayList<>();
+        ArrayList<List<QfactLight>> result = new ArrayList<>();
         if (!entityConstraint.isEmpty()) {
             for (int i = 0; i < qfacts.size(); ++i) {
-                if (qfacts.get(i).entityForSearch.contains(entityConstraint)) {
+                if (qfacts.get(i).entity.substring(5).replace('_', ' ').toLowerCase().contains(entityConstraint)) {
                     int j = i;
                     while (j < qfacts.size() - 1 && qfacts.get(j + 1).entity.equals(qfacts.get(j).entity)) {
                         ++j;

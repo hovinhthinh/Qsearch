@@ -33,7 +33,7 @@ public class TypeSuggestionHandler extends AbstractHandler {
     private static void analyzeAndSaveToFile() {
         HashMap<String, Integer> specificTypeStats = new HashMap<>();
 
-        ArrayList<Qfact> qfacts = TableQfactSaver.load();
+        ArrayList<QfactLight> qfacts = TableQfactLoader.load();
         for (int i = 0; i < qfacts.size(); ++i) {
             if (i > 0 && qfacts.get(i).entity.equals(qfacts.get(i - 1).entity)) {
                 continue;

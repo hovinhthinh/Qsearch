@@ -13,6 +13,15 @@ public class ResultInstance {
         public String context;
         public String domain;
         public String source;
+
+        // For table
+        public int row, entityColumn, quantityColumn;
+        public String tableId;
+        public String[] header;
+        public String[][] data;
+        public String headerUnitSpan;
+        public String caption, pageTitle, pageContent;
+
     }
 
     public ArrayList<SubInstance> subInstances = new ArrayList<>();

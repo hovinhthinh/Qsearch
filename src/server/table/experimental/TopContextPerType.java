@@ -18,7 +18,7 @@ public class TopContextPerType {
     static TaxonomyGraph graph = TaxonomyGraph.getDefaultGraphInstance();
 
     static {
-        ArrayList<Qfact> qfacts = TableQfactSaver.load();
+        ArrayList<QfactLight> qfacts = TableQfactLoader.load();
         entity2Token = new HashMap<>();
         for (int i = 0; i < qfacts.size(); ++i) {
             int j = i;
@@ -28,7 +28,7 @@ public class TopContextPerType {
             String entity = "<" + qfacts.get(i).entity.substring(5) + ">";
             HashSet<String> tokenSet = new HashSet<>();
             for (int k = i; k <= j; ++k) {
-                String ctx = qfacts.get(k).context;
+                String ctx = qfacts.get(k).headerContext;
                 tokenSet.addAll(Arrays.asList(ctx.split(" ")));
             }
             entity2Token.put(entity, tokenSet);
