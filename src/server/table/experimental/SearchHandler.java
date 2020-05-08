@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 public class SearchHandler extends AbstractHandler {
     public static final Logger LOGGER = Logger.getLogger(SearchHandler.class.getName());
 
-    static ArrayList<Qfact> qfacts = TableQfactSaver.load();
+    static ArrayList<QfactLight> qfacts = TableQfactLoader.load();
 
     public static ContextMatcher DEFAULT_MATCHER = new ContextMatcher() {
         // Higher is better
@@ -152,20 +152,20 @@ public class SearchHandler extends AbstractHandler {
                 inst.entity = "<" + entity.substring(5) + ">";
 
                 for (int k = i; k <= j; ++k) {
-                    Qfact qfact = qfacts.get(k);
+                    QfactLight qfact = qfacts.get(k);
                     // quantity
                     Quantity qt = Quantity.fromQuantityString(qfact.quantity);
                     if (constraint != null && !constraint.match(qt)) {
                         continue;
                     }
                     // context
-                    ArrayList<String> X = new ArrayList<>(Arrays.asList(qfact.context.split(" ")));
+                    ArrayList<String> X = new ArrayList<>(Arrays.asList(qfact.headerContext.split(" ")));
 
                     ResultInstance.SubInstance si = new ResultInstance.SubInstance();
                     si.quantity = qt.toString(2);
-                    si.context = qfact.context;
+                    si.context = qfact.headerContext;
                     si.domain = QuantityDomain.getDomain(qt, true);
-                    si.source = qfact.source;
+                    si.source = qfact.tableIndex.table.source;
 
                     // match
                     for (int l = 0; l < X.size(); ++l) {
