@@ -1,5 +1,6 @@
 package storage.table.index;
 
+import nlp.NLP;
 import org.json.JSONException;
 import org.json.JSONObject;
 import util.Gson;
@@ -18,9 +19,16 @@ public class TABLEM extends String2StringMap {
             if (tableIndex.table == null) {
                 return null;
             }
-            tableIndex.caption = o.has("title") ? o.getString("title") : "";
-            tableIndex.pageTitle = o.has("pageTitle") ? o.getString("pageTitle") : "";
-            tableIndex.pageContent = o.has("plainTextContent") ? o.getString("plainTextContent") : "";
+            tableIndex.caption = String.join(" ", NLP.tokenize(
+                    o.has("title") ? o.getString("title") : "")
+            );
+            tableIndex.pageTitle = String.join(" ", NLP.tokenize(
+                    o.has("pageTitle") ? o.getString("pageTitle") : "")
+            );
+            tableIndex.sectionTitles = "";
+            tableIndex.pageContent = String.join(" ", NLP.tokenize(
+                    o.has("plainTextContent") ? o.getString("plainTextContent") : "")
+            );
             tableIndex.tableText = tableIndex.table.getTableRawContentForSearch();
             return Arrays.asList(Gson.toJson(tableIndex));
         } catch (JSONException e) {
