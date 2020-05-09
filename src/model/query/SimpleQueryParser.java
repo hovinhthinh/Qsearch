@@ -7,7 +7,7 @@ import model.quantity.QuantityConstraint;
 import nlp.NLP;
 import nlp.Static;
 import scala.collection.JavaConversions;
-import server.table.handler.TypeSuggestionHandler;
+import server.text.handler.TypeSuggestionHandler;
 import uk.ac.susx.informatics.Morpha;
 import util.Triple;
 
