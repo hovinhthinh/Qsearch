@@ -12,6 +12,7 @@ import util.Pair;
 import util.Triple;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,20 +21,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class SearchHandler extends AbstractHandler {
+public class SearchHandler extends HttpServlet {
     public static final Logger LOGGER = Logger.getLogger(SearchHandler.class.getName());
 
-    private int nTopResult;
-
-    public SearchHandler(int nTopResult) {
-        this.nTopResult = nTopResult;
-    }
-
     @Override
-    public void handle(String s, Request request, HttpServletRequest httpServletRequest,
-                       HttpServletResponse httpServletResponse) throws IOException, ServletException {
-        request.setHandled(true);
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         // Get parameters
         String typeConstraint = request.getParameter("type");
         String contextConstraint = request.getParameter("context");
@@ -46,7 +38,7 @@ public class SearchHandler extends AbstractHandler {
         }
 
         String ntop = request.getParameter("ntop");
-        int nResult = ntop != null ? Integer.parseInt(ntop) : nTopResult;
+        int nResult = ntop != null ? Integer.parseInt(ntop) : 10;
 
         httpServletResponse.setCharacterEncoding("utf-8");
 
