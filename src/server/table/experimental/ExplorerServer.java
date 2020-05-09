@@ -10,6 +10,7 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
+import server.table.experimental.gui.search.SearchHandler;
 
 @Deprecated
 public class ExplorerServer {
@@ -33,7 +34,7 @@ public class ExplorerServer {
 
         ContextHandler searchHandler = new ContextHandler();
         searchHandler.setContextPath(SEARCH_PATH);
-        searchHandler.setHandler(new SearchHandler(1000));
+        searchHandler.setHandler(new SearchHandler(100));
 
         ContextHandler typeSuggestionHandler = new ContextHandler();
         typeSuggestionHandler.setContextPath(TYPE_SUGGESTION_PATH);

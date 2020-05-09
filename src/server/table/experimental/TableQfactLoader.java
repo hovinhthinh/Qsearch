@@ -11,7 +11,6 @@ import util.Gson;
 
 import java.util.*;
 
-@Deprecated
 class TableIndexLoader {
     private HashMap<String, TableIndex> tableId2Index;
 
@@ -36,7 +35,6 @@ class TableIndexLoader {
     }
 }
 
-@Deprecated
 public class TableQfactLoader {
     public static final double LINKING_THRESHOLD = 0.70;
 

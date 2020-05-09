@@ -2,7 +2,6 @@ package server.table.experimental;
 
 import storage.table.index.TableIndex;
 
-@Deprecated
 public class QfactLight {
     public String entity;
     public String entitySpan;
