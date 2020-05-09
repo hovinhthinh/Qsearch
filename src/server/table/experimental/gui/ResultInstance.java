@@ -1,27 +1,37 @@
-package server.table.experimental;
+package server.table.experimental.gui;
+
+import server.table.experimental.QfactLight;
 
 import java.util.ArrayList;
 
-@Deprecated
 public class ResultInstance {
     public String entity;
     public double score;
 
+
     public static class SubInstance {
+        public QfactLight qfact;
         public double score;
-        public String quantity;
-        public String context;
-        public String domain;
-        public String source;
 
-        // For table
-        public int row, entityColumn, quantityColumn;
-        public String tableId;
-        public String[] header;
-        public String[][] data;
-        public String headerUnitSpan;
-        public String caption, pageTitle, pageContent;
+        public static class ContextMatchTrace {
+            String token;
+            double score;
+            String place; // HEADER, CAPTION, TITLE, (maybe more...)
 
+            public ContextMatchTrace(String token, double score, String place) {
+                this.token = token;
+                this.score = score;
+                this.place = place;
+            }
+        }
+
+        public ArrayList<ContextMatchTrace> traces;
+
+        public SubInstance(QfactLight qfact, double score, ArrayList<ContextMatchTrace> traces) {
+            this.qfact = qfact;
+            this.score = score;
+            this.traces = traces;
+        }
     }
 
     public ArrayList<SubInstance> subInstances = new ArrayList<>();
