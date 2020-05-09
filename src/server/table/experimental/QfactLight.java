@@ -4,18 +4,17 @@ import storage.table.index.TableIndex;
 
 @Deprecated
 public class QfactLight {
-    // entity
-    String entity;
-    String entitySpan;
+    public String entity;
+    public String entitySpan;
 
-    String quantity;
-    String quantitySpan;
-    String domain;
+    public String quantity;
+    public String quantitySpan;
+    public String domain;
 
-    String headerContext;
-    String headerUnitSpan;
+    public String headerContext;
+    public String headerUnitSpan;
 
-    String tableId;
-    TableIndex tableIndex;
-    int row, eCol, qCol;
+    public String tableId;
+    public TableIndex tableIndex;
+    public int row, eCol, qCol;
 }
