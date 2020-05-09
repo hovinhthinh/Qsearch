@@ -25,13 +25,15 @@
         <input type="text" class="form-control" placeholder="what do you want to search for?" id="full">
         <button type="button" class="btn btn-success" id="search">Search</button>
     </div>
-    <div class="mt-3"><a href="#" class="sample-query">skyscrapers with more than 1000 feet in height</a></div>
+    <div class="mt-3"><a href="#" class="sample-query">skyscrapers with height above 1000 feet</a></div>
     <!--    <div><a href="#" class="sample-query">footballers with transfer cost more than 50 million euros</a></div>-->
-    <div><a href="#" class="sample-query">which hybrid cars have range on battery above 50 km?</a></div>
+    <div><a href="#" class="sample-query">which hybrid cars have range on battery more than 50 km?</a></div>
     <!--    <div><a href="#" class="sample-query">celebrities having over 5m followers on Instagram</a></div>-->
-    <div><a href="#" class="sample-query">tennis players that won more than 1000 matches</a></div>
-    <div><a href="#" class="sample-query">technology companies having at least 1 billion usd annual profit</a></div>
-    <div><a href="#" class="sample-query">mobile phones containing battery with capacity higher than 2000 mAh</a></div>
+    <div><a href="#" class="sample-query">sprinters who ran 100 meter in less than 10 seconds</a></div>
+    <div><a href="#" class="sample-query">technology companies with more than 1 billion usd annual profit</a></div>
+    <div><a href="#" class="sample-query">sport utility vehicles with engine power above 150 horsepower</a></div>
+    <!--    <div><a href="#" class="sample-query">mobile phones with battery capacity higher than 2000 mAh</a></div>-->
+    <div><a href="#" class="sample-query">computer games with number of players more than 100 million </a></div>
 </div>
 <footer class="footer fixed-bottom">
     <table align="center">
@@ -73,9 +75,8 @@
                     <td>Input corpus:&nbsp;</td>
                     <td>
                         <select class="custom-select" multiple id="corpus">
-                            <option value="STICS" selected>Stics</option>
-                            <option value="NYT" selected>New York Times</option>
-                            <option value="WIKIPEDIA" selected>Wikipedia</option>
+                            <option value="TABLEM:Link" selected>TableL</option>
+                            <option value="WIKIPEDIA:Link" selected>Wikipedia</option>
                         </select>
                     </td>
                     <td>&nbsp;&nbsp;nTop:&nbsp;</td>
@@ -87,40 +88,6 @@
                             <option value="40">40</option>
                             <option value="50">50</option>
                         </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding-top: 5px;">Ranking model:&nbsp;</td>
-                    <td style="padding-top: 5px;" colspan="3">
-                        <select class="custom-select" id="model">
-                            <option value="EMBEDDING" selected>Context Embedding Distance (ced)</option>
-                            <option value="KL">Kullback-Leibler Divergence (KL)</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr id="alpha-option">
-                    <td style="padding-top: 10px;">Penalty (&alpha;):&nbsp;</td>
-                    <td style="padding-top: 10px;" colspan="3">
-                        <table style="width: 100%">
-                            <tr>
-                                <td><input type="range" value="3" class="slider" step="0.1" min="0" max="10" id="alpha"
-                                           oninput="$('#alpha-value').text(parseFloat(this.value).toFixed(1));"></td>
-                                <td id="alpha-value" align="right" style="width: 2.5em">3.0</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr id="lambda-option">
-                    <td style="padding-top: 10px;">Smoothing (&lambda;):&nbsp;</td>
-                    <td style="padding-top: 10px;" colspan="3">
-                        <table style="width: 100%">
-                            <tr>
-                                <td><input type="range" value="0.1" class="slider" step="0.1" min="0" max="1"
-                                           id="lambda"
-                                           oninput="$('#lambda-value').text(parseFloat(this.value).toFixed(1));"></td>
-                                <td id="lambda-value" align="right" style="width: 2.5em">0.1</td>
-                            </tr>
-                        </table>
                     </td>
                 </tr>
             </table>
@@ -140,9 +107,6 @@
         var params = {
             full: $("#full").val(),
             corpus: JSON.stringify($("#corpus").val()),
-            model: $("#model").val(),
-            lambda: $("#lambda").val(),
-            alpha: $("#alpha").val(),
             ntop: $("#ntop").val()
         };
         if ("WebSocket" in window) {
@@ -160,7 +124,7 @@
                 if ("progress" in data) {
                     nanobar.go(data["progress"]);
                 } else {
-                    window.location.replace("/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(msg))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/table/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(msg))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
                 }
             };
             ws.onerror = function () {
@@ -182,7 +146,7 @@
                     $("#full").attr('disabled', 'disabled');
                 },
                 success: function (data) {
-                    window.location.replace("/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(data)))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/table/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(data)))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
                 },
                 error: function () {
                     alert("An error occurred.");

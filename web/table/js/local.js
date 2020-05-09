@@ -162,56 +162,21 @@ $('#setting-body').on('hidden.bs.collapse', function () {
 });
 
 // load saved settings.
-var corpus = $.cookie('corpus');
+var corpus = $.cookie('corpus_table');
 if (corpus != null) {
     $('#corpus').multiselect('deselectAll', false);
     $('#corpus').multiselect('select', JSON.parse(corpus));
 }
-var ntop = $.cookie('ntop');
+var ntop = $.cookie('ntop_table');
 if (ntop != null) {
     $("#ntop option[value=" + ntop + "]").prop('selected', true);
 }
-var model = $.cookie('model');
-if (model != null) {
-    $("#model option[value=" + model + "]").prop('selected', true);
-}
-var lambda = $.cookie('lambda');
-if (lambda != null) {
-    $("#lambda").val(lambda);
-    $("#lambda").trigger('input');
-}
-var alpha = $.cookie('alpha');
-if (alpha != null) {
-    $("#alpha").val(alpha);
-    $("#alpha").trigger('input');
-}
-$("#lambda").on('input', function () {
-    $.cookie('lambda', this.value);
-});
-$("#alpha").on('input', function () {
-    $.cookie('alpha', this.value);
-});
 
-function hideParameter() {
-    if ($("#model").val() == 'EMBEDDING') {
-        $('#lambda-option').attr('hidden', 'hidden');
-        $('#alpha-option').removeAttr('hidden');
-    } else {
-        $('#alpha-option').attr('hidden', 'hidden');
-        $('#lambda-option').removeAttr('hidden');
-    }
-}
-
-hideParameter();
 $("#corpus").on('change', function () {
-    $.cookie('corpus', JSON.stringify($(this).val()));
+    $.cookie('corpus_table', JSON.stringify($(this).val()));
 });
 $("#ntop").on('change', function () {
-    $.cookie('ntop', this.value);
-});
-$("#model").on('change', function () {
-    $.cookie('model', this.value);
-    hideParameter();
+    $.cookie('ntop_table', this.value);
 });
 
 
