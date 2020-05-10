@@ -1,6 +1,4 @@
-package server.table.experimental.gui;
-
-import server.table.experimental.QfactLight;
+package server.table;
 
 import java.util.ArrayList;
 
@@ -14,9 +12,9 @@ public class ResultInstance {
         public double score;
 
         public static class ContextMatchTrace {
-            String token;
-            double score;
-            String place; // HEADER, CAPTION, TITLE, (maybe more...)
+            public String token;
+            public double score;
+            public String place; // HEADER, CAPTION, TITLE, (maybe more...)
 
             public ContextMatchTrace(String token, double score, String place) {
                 this.token = token;

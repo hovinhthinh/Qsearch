@@ -1,4 +1,4 @@
-package server.text;
+package server.text.handler.search;
 
 import model.quantity.QuantityConstraint;
 import org.apache.commons.codec.digest.DigestUtils;

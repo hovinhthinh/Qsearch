@@ -1,4 +1,4 @@
-package server.table.experimental.gui;
+package server.table;
 
 import model.context.IDF;
 import model.quantity.Quantity;
@@ -7,8 +7,6 @@ import model.quantity.QuantityDomain;
 import nlp.Glove;
 import nlp.NLP;
 import org.eclipse.jetty.websocket.api.Session;
-import server.table.experimental.QfactLight;
-import server.table.experimental.TableQfactLoader;
 import uk.ac.susx.informatics.Morpha;
 import util.Gson;
 import util.Pair;

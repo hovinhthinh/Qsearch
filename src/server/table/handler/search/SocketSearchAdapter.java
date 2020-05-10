@@ -1,4 +1,4 @@
-package server.table.experimental.gui.search;
+package server.table.handler.search;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;

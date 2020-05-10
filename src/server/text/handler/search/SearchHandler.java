@@ -6,16 +6,14 @@ import model.context.KullBackLeiblerMatcher;
 import model.quantity.QuantityConstraint;
 import model.query.SimpleQueryParser;
 import nlp.NLP;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
-import server.text.SearchResult;
 import storage.text.ElasticSearchQuery;
 import util.Pair;
 import util.Triple;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class SearchHandler extends AbstractHandler {
+public class SearchHandler extends HttpServlet {
     public static final Logger LOGGER = Logger.getLogger(SearchHandler.class.getName());
     public static final String KL_MODEL_STRING = "KL";
     public static final String EMBEDDING_MODEL_STRING = "EMBEDDING";
@@ -32,17 +30,8 @@ public class SearchHandler extends AbstractHandler {
     private static ContextMatcher KULLBACK_LEIBLER_MATCHER = null;
     private static Gson GSON = new Gson();
 
-    private int nTopResult;
-
-    public SearchHandler(int nTopResult) {
-        this.nTopResult = nTopResult;
-    }
-
     @Override
-    public void handle(String s, Request request, HttpServletRequest httpServletRequest,
-                       HttpServletResponse httpServletResponse) throws IOException, ServletException {
-        request.setHandled(true);
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         // Get parameters
         String typeConstraint = request.getParameter("type");
         String contextConstraint = request.getParameter("context");
@@ -64,7 +53,7 @@ public class SearchHandler extends AbstractHandler {
         }
 
         String ntop = request.getParameter("ntop");
-        int nResult = ntop != null ? Integer.parseInt(ntop) : nTopResult;
+        int nResult = ntop != null ? Integer.parseInt(ntop) : 10;
 
         httpServletResponse.setCharacterEncoding("utf-8");
 

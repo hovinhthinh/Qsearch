@@ -3,6 +3,8 @@ package server.table.experimental;
 import nlp.NLP;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import server.table.QfactLight;
+import server.table.TableQfactLoader;
 import util.Gson;
 
 import javax.servlet.http.HttpServletRequest;

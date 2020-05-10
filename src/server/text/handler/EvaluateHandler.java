@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONObject;
-import server.text.SearchResult;
+import server.text.handler.search.SearchResult;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
