@@ -397,7 +397,7 @@
             } else {
                 $.ajax({
                     type: "GET",
-                    url: "/wikilink/",
+                    url: "/wikilink",
                     data: {"link": $(current).attr("href")},
                     contentType: 'application/json; charset=utf-8',
                     dataType: "json",
@@ -456,7 +456,7 @@
         } else {
             $.ajax({
                 type: "GET",
-                url: "/search_table/",
+                url: "/search_table",
                 data: params,
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
@@ -496,7 +496,7 @@
         resultsForWikiView.forEach(function (o) {
             $.ajax({
                 type: "GET",
-                url: "/wikiview/",
+                url: "/wikiview",
                 data: {"entity": o['entity']},
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
