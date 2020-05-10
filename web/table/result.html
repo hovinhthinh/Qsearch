@@ -144,11 +144,13 @@
         return $('<div>').text(text).html();
     }
 
-    function entityCell(value) {
+    function entityCell(inst) {
+        var value = inst.entity;
         value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result" href="https://www.wikipedia.org/wiki/'
             + encodeURI(value.substring(1, value.length - 1)) + '" target="_blank" referrerpolicy="no-referrer">'
             + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
-            + '</a>';
+            + '</a>'
+            + '</br><span class="badge badge-pill badge-secondary">Score: ' + inst.score.toFixed(3) + '</span>';
         return $.parseHTML("<td style='width: auto !important;'>" + value + "</td>")[0];
     }
 
@@ -322,7 +324,7 @@
             line += i == 0 ? "<tr style='border-top:2px solid gray'>" : "<tr>";
             if (i == 0) {
                 line += "<td style='width: auto !important;' rowspan='" + instance.subInstances.length + "'>" + (index + 1) + "</td>";
-                var eCel = entityCell(instance.entity);
+                var eCel = entityCell(instance);
                 $(eCel).attr("rowspan", instance.subInstances.length);
                 line += $(eCel).wrapAll('<div>').parent().html();
             }
