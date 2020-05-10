@@ -19,7 +19,7 @@
 
 <div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12 offset-xs-0 offset-sm-0 offset-md-0 offset-lg-0">
     <div class="row">
-        <a href="/" class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        <a href="/table/index.html" class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <br/>
             <img style="object-fit: contain; height:75px" src="img/logo.png" class="img-responsive img-fluid ml-2 mr-2">
         </a>
@@ -50,9 +50,8 @@
                                 <td>Input corpus:&nbsp;</td>
                                 <td>
                                     <select class="custom-select" multiple id="corpus">
-                                        <option value="STICS" selected>Stics</option>
-                                        <option value="NYT" selected>New York Times</option>
-                                        <option value="WIKIPEDIA" selected>Wikipedia</option>
+                                        <option value="TABLEM:Link" selected>TableL</option>
+                                        <option value="WIKIPEDIA:Link" selected>Wikipedia</option>
                                     </select>
                                 </td>
                                 <td>&nbsp;&nbsp;nTop:&nbsp;</td>
@@ -66,44 +65,6 @@
                                     </select>
                                 </td>
                             </tr>
-                            <tr>
-                                <td style="padding-top: 5px;">Ranking model:&nbsp;</td>
-                                <td style="padding-top: 5px;" colspan="3">
-                                    <select class="custom-select" id="model">
-                                        <option value="EMBEDDING" selected>Context Embedding Distance (ced)</option>
-                                        <option value="KL">Kullback-Leibler Divergence (KL)</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr id="alpha-option">
-                                <td style="padding-top: 10px;">Penalty (&alpha;):&nbsp;</td>
-                                <td style="padding-top: 10px;" colspan="3">
-                                    <table style="width: 100%">
-                                        <tr>
-                                            <td><input type="range" value="3" class="slider" step="0.1" min="0" max="10"
-                                                       id="alpha"
-                                                       oninput="$('#alpha-value').text(parseFloat(this.value).toFixed(1));">
-                                            </td>
-                                            <td id="alpha-value" align="right" style="width: 2.5em">3.0</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr id="lambda-option">
-                                <td style="padding-top: 10px;">Smoothing (&lambda;):&nbsp;</td>
-                                <td style="padding-top: 10px;" colspan="3">
-                                    <table style="width: 100%">
-                                        <tr>
-                                            <td><input type="range" value="0.1" class="slider" step="0.1" min="0"
-                                                       max="1"
-                                                       id="lambda"
-                                                       oninput="$('#lambda-value').text(parseFloat(this.value).toFixed(1));">
-                                            </td>
-                                            <td id="lambda-value" align="right" style="width: 2.5em">0.1</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
                         </table>
                     </div>
                 </div>
@@ -112,13 +73,13 @@
     </div>
 </div>
 
-<div class="container col-xs-9 col-sm-9 col-md-9 col-lg-9">
-    <table class="table table-hover">
+<div class="container col-xs-12 col-sm-12 col-md-11 col-lg-11">
+    <table class="table table-hover" style="width: auto !important; table-layout: auto !important; margin-left:auto; margin-right:auto;">
         <thead id="head" hidden>
         <tr>
-            <th style="border-top: 0px;" scope="col">#</th>
-            <th style="border-top: 0px;" scope="col">Result</th>
-            <th style="border-top: 0px;" scope="col" colspan="2">
+            <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col">#</th>
+            <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col">Result</th>
+            <th style="border-top: 0px; border-bottom: 0px;" scope="col" colspan="2">
                 <div class="row">
                     <div class="col-8"><span style="position:absolute;bottom:0;">Source</span></div>
                     <div class="dropdown col-4" align="right" id="sort-dropdown" hidden>
@@ -182,28 +143,91 @@
         return $('<div>').text(text).html();
     }
 
-    function cell(value) {
-        value = String(value);
-        if (value.startsWith("<")) {
-            value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result" href="https://www.wikipedia.org/wiki/'
-                + encodeURI(value.substring(1, value.length - 1)) + '" target="_blank" referrerpolicy="no-referrer">'
-                + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
-                + '</a>';
-        } else if (value.startsWith("STICS:Link:")) {
-            value = '<a href="' + value.substr(11) + '" target="_blank" referrerpolicy="no-referrer"><i class="fas fa-arrow-alt-circle-right"></i></a>';
-        } else if (value.startsWith("NYT:Link:")) {
-            value = '<a href="' + value.substr(9) + '" target="_blank" referrerpolicy="no-referrer"><i class="fas fa-arrow-alt-circle-right"></i></a>';
-        } else if (value.startsWith("NYT:docID:")) {
-            value = ''; //'<a href="' + value + '" target="_blank">DOCID</a>';
-        } else if (value.startsWith("WIKIPEDIA:Link:")) {
-            value = '<a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer"><i class="fas fa-arrow-alt-circle-right"></i></a>';
-        } else {
-            value = escapeText(value).replace(/ /g, '&nbsp;');
-        }
-        return "<td>" + value + "</td>";
+    function entityCell(value) {
+        value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result" href="https://www.wikipedia.org/wiki/'
+            + encodeURI(value.substring(1, value.length - 1)) + '" target="_blank" referrerpolicy="no-referrer">'
+            + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
+            + '</a>';
+        return $.parseHTML("<td style='width: auto !important;'>" + value + "</td>")[0];
     }
 
-    function contentCell(sentenceContent) {
+    function sourceCell(value) {
+        if (value.startsWith("WIKIPEDIA:Link:")) {
+            value = '<a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-danger">Wiki</a>';
+        } else if (value.startsWith("TABLEM:Link:")) {
+            value = '<a href="' + value.substr(12) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-success">TableL</a>';
+        }
+        return $.parseHTML("<td style='width: auto !important;'>" + value + "</td>")[0];
+    }
+
+    function drawCollapsedTable(si) {
+        var cell = $('<td>');
+
+        var table = si.qfact.tableIndex.table;
+        // titles
+        var title = $('<div>');
+        $(title).html('<span class="badge badge-pill badge-warning">Title</span> <span class="font-weight-bold small">' + si.qfact.tableIndex.pageTitle + '</span>');
+        $(cell).append($(title));
+
+        // subTitles
+        var st = si.qfact.tableIndex.sectionTitles.split('\r\n');
+        if (st.length > 1 || st[0] != "") {
+            for (var i = 0; i < st.length; ++i) {
+                var subTitles = $('<div>');
+                var content = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                for (var j = 0; j < i; ++j) {
+                    content += '&nbsp;&nbsp;&nbsp;&nbsp;';
+                }
+                content += '&rdsh; <span class="small">' + st[i] + '</span>';
+                $(subTitles).html(content);
+                $(cell).append($(subTitles));
+            }
+        }
+
+        // table
+        var thead = $('<thead>');
+        for (var i = 0; i < table.header.length; ++i) {
+            var headRow = $('<tr>');
+            for (var j = 0; j < table.header[i].length; ++j) {
+                var c = $('<th>');
+                c.text(table.header[i][j].text);
+                $(headRow).append($(c));
+            }
+            $(thead).append($(headRow));
+        }
+        var tbody = $('<tbody>');
+
+        for (var i = si.qfact.row; i <= si.qfact.row; ++i) {
+            var bodyRow = $('<tr>');
+            for (var j = 0; j < table.data[i].length; ++j) {
+                var c = $('<td>');
+                c.text(table.data[i][j].text);
+                $(bodyRow).append($(c));
+            }
+            $(tbody).append($(bodyRow));
+        }
+
+        var t = $('<table>');
+        $(t).append($(thead), $(tbody));
+        $(t).attr("class", "table table-sm w-auto small table-bordered mb-0");
+
+        $(cell).append($(t));
+
+        // caption
+        if (si.qfact.tableIndex.caption != "") {
+            var wrapper = $('<div>');
+            $(wrapper).attr("style", "text-align: center;");
+            var cap = $('<div>');
+            $(cap).attr("style", "display: inline-block;")
+            $(cap).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + si.qfact.tableIndex.caption + '</span>');
+            $(wrapper).append($(cap));
+            $(cell).append($(wrapper));
+        }
+
+        return cell;
+    }
+
+    function contentCell(si) {
         var value = escapeText(sentenceContent['value']);
         if (VERBOSE) {
             var pE = -1, pQ = -1;
@@ -274,10 +298,23 @@
         return "<td>" + value + "</td>";
     }
 
-    function encode(id, score, entity, quantity, sentenceContent, source) {
-        var line = "<tr>";
-        line += cell(id) + cell(entity) + contentCell(sentenceContent) + cell(source);
-        line += "</tr>";
+    function encodeEntityResultAsHtml(index, instance) {
+        var line = "";
+        for (var i = 0; i < instance.subInstances.length; ++i) {
+            line += i == 0 ? "<tr style='border-top:2px solid gray'>" : "<tr>";
+            if (i == 0) {
+                line += "<td style='width: auto !important;' rowspan='" + instance.subInstances.length + "'>" + (index + 1) + "</td>";
+                var eCel = entityCell(instance.entity);
+                $(eCel).attr("rowspan", instance.subInstances.length);
+                line += $(eCel).wrapAll('<div>').parent().html();
+            }
+            var cCel = drawCollapsedTable(instance.subInstances[i]);
+            line += $(cCel).wrapAll('<div>').parent().html();
+
+            var sCel = sourceCell(instance.subInstances[i].qfact.tableIndex.table.source);
+            line += $(sCel).wrapAll('<div>').parent().html();
+            line += "</tr>";
+        }
         return line;
     }
 
@@ -295,27 +332,20 @@
             $("#data").html(data["verdict"]);
             return;
         }
-        $("#head").removeAttr("hidden");
         var topResults = data["topResults"];
         showParsedQuery(data["typeConstraint"], data["contextConstraint"], data["quantityConstraint"]);
         if (topResults.length == 0) {
-            $("#data").html(encode("No data", "No data", "No data", "No data", {'value': "No data"}, ""));
+            $("#data").html("NO DATA");
         } else {
+            $("#head").removeAttr("hidden");
             var str = "";
             for (var i = 0; i < topResults.length; ++i) {
                 var instance = topResults[i];
-                str += encode(i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"],
-                    {
-                        'value': instance["sentence"],
-                        'entityStr': instance["entityStr"],
-                        'quantityStr': instance["quantityStr"],
-                        'quantityConvertedStr': instance["quantityConvertedStr"],
-                        'contextStr': instance["contextStr"]
-                    },
-                    instance["source"]);
+                $("#data").append();
+                str += encodeEntityResultAsHtml(i, instance);
             }
-            if (data["numResults"] > topResults.length)
-                str += encode("", "", "More " + (data["numResults"] - topResults.length) + " results", "", {'value': ""}, "");
+            if (data.numResults > topResults.length)
+                str += '<tr style="border-top:2px solid gray"><td></td><td>More ' + (data.numResults - topResults.length) + ' results</td><td colspan="2"></td></tr>';
             $("#data").html(str);
             $("#sort-dropdown").removeAttr('hidden');
         }
@@ -376,9 +406,6 @@
         var params = {
             full: $("#full").val(),
             corpus: JSON.stringify($("#corpus").val()),
-            model: $("#model").val(),
-            lambda: $("#lambda").val(),
-            alpha: $("#alpha").val(),
             ntop: $("#ntop").val()
         };
         if ("WebSocket" in window) {
@@ -396,7 +423,7 @@
                 if ("progress" in data) {
                     nanobar.go(data["progress"]);
                 } else {
-                    window.location.replace("/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(msg))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/table/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(msg))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
                 }
             };
             ws.onerror = function () {
@@ -418,7 +445,7 @@
                     $("#full").attr('disabled', 'disabled');
                 },
                 success: function (data) {
-                    window.location.replace("/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(data)))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/table/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(data)))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
                 },
                 error: function () {
                     alert("An error occurred.");
