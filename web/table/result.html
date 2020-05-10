@@ -239,17 +239,20 @@
         cell.append(t);
 
         // caption
-        var wrapper = $('<div style="text-align: center;">');
-        var cap = $('<div style="display: inline-block;">');
+        var wrapper = $('<div style="text-align: center;"><div style="display: inline-block;"></div></div>');
         if (si.qfact.tableIndex.caption != "") {
-            cap.html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + si.qfact.tableIndex.caption + '</span>');
+            wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + si.qfact.tableIndex.caption + '</span>');
         } else {
-            cap.html('<span class="badge badge-pill badge-secondary">No Caption</span>');
+            wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-secondary">No Caption</span>');
         }
-        wrapper.append(cap);
         cell.append(wrapper);
 
         return cell;
+    }
+
+    function showMoreTables(current) {
+        $(current).parent().parent().next().collapse('toggle');
+        $(current).text($(current).text() == "Show more" ? "Show less" : "Show more");
     }
 
     function encodeEntityResultAsHtml(index, instance) {
@@ -261,12 +264,17 @@
         var tCel = $('<td>');
         tCel.append(drawCollapsedTable(instance.subInstances[0]));
 
-        var moreTCel = $('<div>');
-        for (var i = 1; i < instance.subInstances.length; ++i) {
-            moreTCel.append($('<hr>'));
-            moreTCel.append(drawCollapsedTable(instance.subInstances[i]));
+        if (instance.subInstances.length > 1) {
+            var wrapper = $('<div style="text-align: center;"><div style="display: inline-block;"></div></div>');
+            wrapper.eq(0).children().eq(0).html('<button class="mt-1 btn btn-sm btn-link" onclick="showMoreTables(this)">Show more</button>');
+            tCel.append(wrapper);
+            var moreTCel = $('<div class="collapse">');
+            for (var i = 1; i < instance.subInstances.length; ++i) {
+                moreTCel.append($('<hr>'));
+                moreTCel.append(drawCollapsedTable(instance.subInstances[i]));
+            }
+            tCel.append(moreTCel);
         }
-        tCel.append(moreTCel);
 
         line += tCel.wrapAll('<div>').parent().html();
 
