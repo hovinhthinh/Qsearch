@@ -133,6 +133,7 @@
 <script src="js/local.js" crossorigin="anonymous"></script>
 
 <script>
+    var showTimeOut = 10000;
     var nanobar = new Nanobar();
     document.getElementById('nanobarcss').innerHTML += '.nanobar .bar { background: #6aa94e; }';
 
@@ -161,7 +162,7 @@
         return value;
     }
 
-    function drawCollapsedTable(si) {
+    function drawCollapsedTable(index, si) {
         var cell = $('<div>');
 
         var table = si.qfact.tableIndex.table;
@@ -239,7 +240,7 @@
                     text = text.replace(entitySpan, '<span class="entity-box">' + entitySpan + '</span>');
                 } else if (j == si.qfact.qCol) {
                     var quantitySpan = escapeText(si.qfact.quantitySpan);
-                    text = text.replace(quantitySpan, '<span class="quantity-box converted-quantity"' +
+                    text = text.replace(quantitySpan, '<span class="quantity-box ' + (index == 0 ? 'converted-quantity' : 'converted-quantity-2') + '"' +
                         ' data-animation="true" data-placement="top" data-trigger="hover" data-html="true"' +
                         ' data-content="Equals: ' +
                         (si.quantityConvertedStr == null ? "null" : si.quantityConvertedStr) +
@@ -278,9 +279,33 @@
         return cell;
     }
 
-    function showMoreTables(current) {
+    var convertedQuantityShowingTimeout;
+    var convertedQuantity2ShowingTimeout = [];
+    var wikiLinkToImageMap = {};
+
+    function showMoreTables(index, current) {
         $(current).parent().parent().next().collapse('toggle');
-        $(current).text($(current).text() == "Show more" ? "Show less" : "Show more");
+        if ($(current).text() == "Show more") {
+            $(current).text("Show less");
+            $(current).parent().parent().next().find('.converted-quantity-2').each(function () {
+                if (!($(this).attr('data-content') == 'Equals: null')) {
+                    var popoverElement = $(this).popover('show');
+                }
+            });
+            convertedQuantity2ShowingTimeout[index] = setTimeout(function () {
+                $(current).parent().parent().next().find('.converted-quantity-2').each(function () {
+                    $(this).trigger('mouseleave');
+                });
+            }, showTimeOut);
+        } else {
+            $(current).text("Show more");
+            clearTimeout(convertedQuantity2ShowingTimeout[index]);
+            $(current).parent().parent().next().find('.converted-quantity-2').each(function () {
+                if (!($(this).attr('data-content') == 'Equals: null')) {
+                    var popoverElement = $(this).popover('hide');
+                }
+            });
+        }
     }
 
     function encodeEntityResultAsHtml(index, instance) {
@@ -290,16 +315,16 @@
         line += eCel.wrapAll('<div>').parent().html();
 
         var tCel = $('<td>');
-        tCel.append(drawCollapsedTable(instance.subInstances[0]));
+        tCel.append(drawCollapsedTable(0, instance.subInstances[0]));
 
         if (instance.subInstances.length > 1) {
             var wrapper = $('<div style="text-align: center;"><div style="display: inline-block;"></div></div>');
-            wrapper.eq(0).children().eq(0).html('<button class="mt-1 btn btn-sm btn-link" onclick="showMoreTables(this)">Show more</button>');
+            wrapper.eq(0).children().eq(0).html('<button class="mt-1 btn btn-sm btn-link" onclick="showMoreTables(' + index + ', this)">Show more</button>');
             tCel.append(wrapper);
             var moreTCel = $('<div class="collapse">');
             for (var i = 1; i < instance.subInstances.length; ++i) {
                 moreTCel.append($('<hr>'));
-                moreTCel.append(drawCollapsedTable(instance.subInstances[i]));
+                moreTCel.append(drawCollapsedTable(i, instance.subInstances[i]));
             }
             tCel.append(moreTCel);
         }
@@ -315,9 +340,6 @@
             + " &rarr; " + '<span class="context-box">' + escapeText(context) + '</span>'
             + " &rarr; " + '<span class="quantity-box">' + escapeText(quantity['phrase']) + '</span>');
     }
-
-    var convertedQuantityShowingTimeout;
-    var wikiLinkToImageMap = {};
 
     function show(data) {
         if (data["verdict"] != "OK") {
@@ -350,11 +372,19 @@
                 $(popoverElement).addClass('popover-converted-quantity');
             }
         });
+        $('.converted-quantity-2').each(function () {
+            var current = this;
+            if (!($(current).attr('data-content') == 'Equals: null')) {
+                var popoverElement = $(current).popover('enable')
+                    .data('bs.popover').getTipElement();
+                $(popoverElement).addClass('popover-converted-quantity');
+            }
+        });
 
         // hide converted quantity after sometime
         convertedQuantityShowingTimeout = setTimeout(function () {
             $('.converted-quantity').trigger('mouseleave');
-        }, 30000);
+        }, showTimeOut);
 
         $('.result').each(function () {
             var current = this;
@@ -494,7 +524,13 @@
         });
         data['topResults'] = topResults;
         clearTimeout(convertedQuantityShowingTimeout);
-        $('.converted-quantity').trigger('mouseleave');
+        convertedQuantity2ShowingTimeout.forEach(function (t) {
+            try {
+                clearTimeout(t);
+            } catch (e) {
+            }
+        });
+        $('.converted-quantity, .converted-quantity-2').trigger('mouseleave');
         show(data);
         $('.sort-option').each(function () {
             $(this).removeClass('dropdown-item-checked');
@@ -510,7 +546,13 @@
         });
         data['topResults'] = topResults;
         clearTimeout(convertedQuantityShowingTimeout);
-        $('.converted-quantity').trigger('mouseleave');
+        convertedQuantity2ShowingTimeout.forEach(function (t) {
+            try {
+                clearTimeout(t);
+            } catch (e) {
+            }
+        });
+        $('.converted-quantity, .converted-quantity-2').trigger('mouseleave');
         show(data);
         $('.sort-option').each(function () {
             $(this).removeClass('dropdown-item-checked');
@@ -531,7 +573,13 @@
         });
         data['topResults'] = topResults;
         clearTimeout(convertedQuantityShowingTimeout);
-        $('.converted-quantity').trigger('mouseleave');
+        convertedQuantity2ShowingTimeout.forEach(function (t) {
+            try {
+                clearTimeout(t);
+            } catch (e) {
+            }
+        });
+        $('.converted-quantity, .converted-quantity-2').trigger('mouseleave');
         show(data);
         $('.sort-option').each(function () {
             $(this).removeClass('dropdown-item-checked');
