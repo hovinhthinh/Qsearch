@@ -56,7 +56,7 @@ function autocomplete(inp) {
         var params = {prefix: val};
         $.ajax({
             type: "GET",
-            url: "/type_suggest/",
+            url: "/type_suggest_table",
             data: params,
             contentType: 'application/json; charset=utf-8',
             dataType: "json",
