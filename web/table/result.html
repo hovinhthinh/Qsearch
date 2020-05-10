@@ -176,7 +176,7 @@
                 continue;
             }
             var token = escapeText(si.traces[i].token);
-            titleText = titleText.replace(new RegExp('\\b' + token + '\\b'), '<span class="context-box">' + token + '</span>');
+            titleText = titleText.replace(new RegExp('\\b' + token + '\\b', "i"), '<span class="context-box">' + token + '</span>');
         }
         titleText = titleText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
         title.html('<span class="badge badge-pill badge-warning">Title</span> <span class="font-weight-bold small">'
@@ -198,7 +198,7 @@
                         continue;
                     }
                     var token = escapeText(si.traces[j].token);
-                    subTitleText = subTitleText.replace(new RegExp('\\b' + token + '\\b'), '<span class="context-box">' + token + '</span>');
+                    subTitleText = subTitleText.replace(new RegExp('\\b' + token + '\\b', "i"), '<span class="context-box">' + token + '</span>');
                 }
                 subTitleText = subTitleText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
                 content += '&rdsh; <span class="small">' + subTitleText + '</span>';
@@ -266,7 +266,7 @@
                     continue;
                 }
                 var token = escapeText(si.traces[i].token);
-                captionText = captionText.replace(new RegExp('\\b' + token + '\\b'), '<span class="context-box">' + token + '</span>');
+                captionText = captionText.replace(new RegExp('\\b' + token + '\\b', "i"), '<span class="context-box">' + token + '</span>');
             }
             captionText = captionText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
             wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + captionText + '</span>');
