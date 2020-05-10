@@ -149,7 +149,7 @@
             + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
             + '</a>'
             + '</br><span class="badge badge-pill badge-secondary">Score: ' + inst.score.toFixed(3) + '</span>';
-        return $.parseHTML("<td style='width: auto !important;'>" + value + "</td>")[0];
+        return $("<td style='width: auto !important;'>" + value + "</td>");
     }
 
     function source(value) {
@@ -170,8 +170,8 @@
 
         // titles
         var title = $('<div>');
-        $(title).html('<span class="badge badge-pill badge-warning">Title</span> <span class="font-weight-bold small">' + si.qfact.tableIndex.pageTitle + '</span>');
-        $(preTables).eq(0).children().eq(0).children().eq(0).append($(title));
+        title.html('<span class="badge badge-pill badge-warning">Title</span> <span class="font-weight-bold small">' + si.qfact.tableIndex.pageTitle + '</span>');
+        preTables.eq(0).children().eq(0).children().eq(0).append(title);
 
         // subTitles
         var st = si.qfact.tableIndex.sectionTitles.split('\r\n');
@@ -183,15 +183,15 @@
                     content += '&nbsp;&nbsp;&nbsp;&nbsp;';
                 }
                 content += '&rdsh; <span class="small">' + st[i] + '</span>';
-                $(subTitles).html(content);
-                $(preTables).eq(0).children().eq(0).children().eq(0).append($(subTitles));
+                subTitles.html(content);
+                preTables.eq(0).children().eq(0).children().eq(0).append(subTitles);
             }
         }
 
         // source
-        $(preTables).eq(0).children().eq(0).children().eq(1).html(source(si.qfact.tableIndex.table.source));
+        preTables.eq(0).children().eq(0).children().eq(1).html(source(si.qfact.tableIndex.table.source));
 
-        $(cell).append($(preTables));
+        cell.append(preTables);
         // table
         var thead = $('<thead>');
         for (var i = 0; i < table.header.length; ++i) {
@@ -204,9 +204,9 @@
                     text += '</br><span class="badge badge-pill badge-secondary">' + unitSpan + '</span>';
                 }
                 c.html(text);
-                $(headRow).append($(c));
+                headRow.append(c);
             }
-            $(thead).append($(headRow));
+            thead.append(headRow);
         }
         var tbody = $('<tbody>');
 
@@ -227,27 +227,27 @@
                         '">' + quantitySpan + '</span>');
                 }
                 c.html(text);
-                $(bodyRow).append($(c));
+                bodyRow.append(c);
             }
-            $(tbody).append($(bodyRow));
+            tbody.append(bodyRow);
         }
 
         var t = $('<table>');
-        $(t).append($(thead), $(tbody));
-        $(t).attr("class", "table table-sm w-auto small table-bordered mb-0");
+        t.append(thead, tbody);
+        t.attr("class", "table table-sm w-auto small table-bordered mb-0");
 
-        $(cell).append($(t));
+        cell.append(t);
 
         // caption
         var wrapper = $('<div style="text-align: center;">');
         var cap = $('<div style="display: inline-block;">');
         if (si.qfact.tableIndex.caption != "") {
-            $(cap).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + si.qfact.tableIndex.caption + '</span>');
+            cap.html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + si.qfact.tableIndex.caption + '</span>');
         } else {
-            $(cap).html('<span class="badge badge-pill badge-secondary">No Caption</span>');
+            cap.html('<span class="badge badge-pill badge-secondary">No Caption</span>');
         }
-        $(wrapper).append($(cap));
-        $(cell).append($(wrapper));
+        wrapper.append(cap);
+        cell.append(wrapper);
 
         return cell;
     }
@@ -256,15 +256,15 @@
         var line = "<tr style='border-top:2px solid gray'>";
         line += "<td style='width: auto !important;'>" + (index + 1) + "</td>";
         var eCel = entityCell(instance);
-        line += $(eCel).wrapAll('<div>').parent().html();
+        line += eCel.wrapAll('<div>').parent().html();
 
         var tCel = $('<td>');
         for (var i = 0; i < instance.subInstances.length; ++i) {
             var sub = drawCollapsedTable(instance.subInstances[i]);
-            $(tCel).append($(sub));
+            tCel.append(sub);
         }
 
-        line += $(tCel).wrapAll('<div>').parent().html();
+        line += tCel.wrapAll('<div>').parent().html();
 
         line += "</tr>";
         return line;
