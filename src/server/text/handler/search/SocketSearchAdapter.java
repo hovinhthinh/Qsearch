@@ -3,7 +3,6 @@ import com.google.gson.Gson;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.json.JSONObject;
-import server.text.SearchResult;
 
 import java.io.IOException;
 import java.util.HashMap;

@@ -7,22 +7,79 @@
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
+    <!-- Support -->
     <servlet>
-        <servlet-name>TableSearchSocket</servlet-name>
-        <servlet-class>server.table.experimental.gui.search.SocketSearchServlet</servlet-class>
+        <servlet-name>WikiView</servlet-name>
+        <servlet-class>server.common.handler.WikiViewHandler</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>TableSearchSocket</servlet-name>
+        <servlet-name>WikiView</servlet-name>
+        <url-pattern>/wikiview</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>WikiLink</servlet-name>
+        <servlet-class>server.common.handler.WikiImageHandler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WikiLink</servlet-name>
+        <url-pattern>/wikilink</url-pattern>
+    </servlet-mapping>
+
+    <!-- Text -->
+    <servlet>
+        <servlet-name>SearchSocket</servlet-name>
+        <servlet-class>server.text.handler.search.SocketSearchServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SearchSocket</servlet-name>
         <url-pattern>/search_socket</url-pattern>
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>Search</servlet-name>
+        <servlet-class>server.text.handler.search.SearchHandler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Search</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TypeSuggest</servlet-name>
+        <servlet-class>server.text.handler.TypeSuggestionHandler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TypeSuggest</servlet-name>
+        <url-pattern>/type_suggest</url-pattern>
+    </servlet-mapping>
+
+    <!-- Table -->
+    <servlet>
+        <servlet-name>TableSearchSocket</servlet-name>
+        <servlet-class>server.table.handler.search.SocketSearchServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TableSearchSocket</servlet-name>
+        <url-pattern>/search_socket_table</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>TableSearch</servlet-name>
-        <servlet-class>server.table.experimental.gui.search.SearchHandler</servlet-class>
+        <servlet-class>server.table.handler.search.SearchHandler</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>TableSearch</servlet-name>
-        <url-pattern>/search</url-pattern>
+        <url-pattern>/search_table</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TypeSuggestTable</servlet-name>
+        <servlet-class>server.table.handler.TypeSuggestionHandler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TypeSuggestTable</servlet-name>
+        <url-pattern>/type_suggest_table</url-pattern>
     </servlet-mapping>
 
 </web-app>

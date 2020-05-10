@@ -113,7 +113,7 @@
             $("#search").attr('disabled', 'disabled').html("Searching <i class=\"fas fa-spinner fa-spin\"></i>");
             $("#full").attr('disabled', 'disabled');
 
-            var ws = new WebSocket(location.protocol.replace("http", "ws") + "//" + location.host + "/search_socket");
+            var ws = new WebSocket(location.protocol.replace("http", "ws") + "//" + location.host + "/search_socket_table");
             ws.onopen = function () {
                 ws.send(JSON.stringify(params));
             };
@@ -137,7 +137,7 @@
         } else {
             $.ajax({
                 type: "GET",
-                url: "/search/",
+                url: "/search_table/",
                 data: params,
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",

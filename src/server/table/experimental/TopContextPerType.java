@@ -1,5 +1,7 @@
 package server.table.experimental;
 
+import server.table.QfactLight;
+import server.table.TableQfactLoader;
 import util.Concurrent;
 import util.FileUtils;
 import util.Pair;

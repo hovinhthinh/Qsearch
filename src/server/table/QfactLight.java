@@ -1,4 +1,4 @@
-package server.table.experimental;
+package server.table;
 
 import storage.table.index.TableIndex;
 

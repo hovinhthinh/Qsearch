@@ -1,4 +1,4 @@
-package server.table.experimental;
+package server.table;
 
 import model.quantity.QuantityDomain;
 import model.table.Table;

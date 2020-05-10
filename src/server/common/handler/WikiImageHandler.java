@@ -1,7 +1,5 @@
-package server.text.handler;
+package server.common.handler;
 
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,13 +7,14 @@ import org.jsoup.nodes.Element;
 import util.Crawler;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
-public class WikiImageHandler extends AbstractHandler {
+public class WikiImageHandler extends HttpServlet {
     private static final Proxy p = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("dmz-gw.mpi-klsb.mpg.de", 3128));
     private static final boolean USE_PROXY = false;
 
@@ -31,9 +30,7 @@ public class WikiImageHandler extends AbstractHandler {
     }
 
     @Override
-    public void handle(String s, Request request, HttpServletRequest httpServletRequest,
-                       HttpServletResponse httpServletResponse) throws IOException, ServletException {
-        request.setHandled(true);
+    protected void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         httpServletResponse.setCharacterEncoding("utf-8");
         JSONObject response = new JSONObject();
         String wikiLink = request.getParameter("link");

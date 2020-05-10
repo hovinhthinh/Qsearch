@@ -2,8 +2,6 @@ package server.text.handler;
 
 import com.google.gson.Gson;
 import nlp.NLP;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import storage.text.ElasticSearchDataImport;
@@ -13,6 +11,7 @@ import util.HTTPRequest;
 import util.Pair;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,19 +20,12 @@ import java.util.*;
 import java.util.logging.Logger;
 
 
-public class TypeSuggestionHandler extends AbstractHandler {
+public class TypeSuggestionHandler extends HttpServlet {
     public static final Logger LOGGER = Logger.getLogger(TypeSuggestionHandler.class.getName());
+    public static final int N_TOP_SUGGESTION = 10;
     private Gson GSON = new Gson();
 
-
     private static ArrayList<Pair<String, Integer>> typeToFreq = new ArrayList<>();
-
-    private int nTopSuggestion;
-
-    public TypeSuggestionHandler(int nTopSuggestion) {
-        this.nTopSuggestion = nTopSuggestion;
-
-    }
 
     static {
         load(10);
@@ -162,10 +154,7 @@ public class TypeSuggestionHandler extends AbstractHandler {
     }
 
     @Override
-    public void handle(String s, Request request, HttpServletRequest httpServletRequest,
-                       HttpServletResponse httpServletResponse) throws IOException, ServletException {
-        request.setHandled(true);
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         String typePrefix = request.getParameter("prefix");
         if (typePrefix == null) {
             httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -174,7 +163,7 @@ public class TypeSuggestionHandler extends AbstractHandler {
         typePrefix = typePrefix.toLowerCase().replaceAll("\\s++", " ").replaceAll("^\\s++", "");
 
         synchronized (GSON) {
-            JSONObject response = new JSONObject().put("prefix", typePrefix).put("suggestions", new JSONArray(GSON.toJson(suggest(typePrefix, nTopSuggestion))));
+            JSONObject response = new JSONObject().put("prefix", typePrefix).put("suggestions", new JSONArray(GSON.toJson(suggest(typePrefix, N_TOP_SUGGESTION))));
             httpServletResponse.getWriter().print(response.toString());
         }
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
