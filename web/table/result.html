@@ -239,23 +239,15 @@
         $(cell).append($(t));
 
         // caption
+        var wrapper = $('<div style="text-align: center;">');
+        var cap = $('<div style="display: inline-block;">');
         if (si.qfact.tableIndex.caption != "") {
-            var wrapper = $('<div>');
-            $(wrapper).attr("style", "text-align: center;");
-            var cap = $('<div>');
-            $(cap).attr("style", "display: inline-block;")
             $(cap).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + si.qfact.tableIndex.caption + '</span>');
-            $(wrapper).append($(cap));
-            $(cell).append($(wrapper));
         } else {
-            var wrapper = $('<div>');
-            $(wrapper).attr("style", "text-align: center;");
-            var cap = $('<div>');
-            $(cap).attr("style", "display: inline-block;")
             $(cap).html('<span class="badge badge-pill badge-secondary">No Caption</span>');
-            $(wrapper).append($(cap));
-            $(cell).append($(wrapper));
         }
+        $(wrapper).append($(cap));
+        $(cell).append($(wrapper));
 
         return cell;
     }
