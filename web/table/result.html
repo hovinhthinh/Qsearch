@@ -74,7 +74,8 @@
 </div>
 
 <div class="container col-xs-12 col-sm-12 col-md-11 col-lg-11">
-    <table class="table table-hover" style="width: auto !important; table-layout: auto !important; margin-left:auto; margin-right:auto;">
+    <table class="table table-hover"
+           style="width: auto !important; table-layout: auto !important; margin-left:auto; margin-right:auto;">
         <thead id="head" hidden>
         <tr>
             <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col">#</th>
@@ -214,7 +215,9 @@
                     var quantitySpan = escapeText(si.qfact.quantitySpan);
                     text = text.replace(quantitySpan, '<span class="quantity-box converted-quantity"' +
                         ' data-animation="true" data-placement="top" data-trigger="hover" data-html="true"' +
-                        ' data-content="Equals: ' + si.quantityConvertedStr + '">' + quantitySpan + '</span>');
+                        ' data-content="Equals: ' +
+                        (si.quantityConvertedStr == null ? "null" : si.quantityConvertedStr) +
+                        '">' + quantitySpan + '</span>');
                 }
                 c.html(text);
                 $(bodyRow).append($(c));
@@ -377,7 +380,7 @@
         // hide converted quantity after sometime
         convertedQuantityShowingTimeout = setTimeout(function () {
             $('.converted-quantity').trigger('mouseleave');
-        }, 7500);
+        }, 30000);
 
         $('.result').each(function () {
             var current = this;
