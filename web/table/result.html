@@ -201,7 +201,15 @@
             var bodyRow = $('<tr>');
             for (var j = 0; j < table.data[i].length; ++j) {
                 var c = $('<td>');
-                c.text(table.data[i][j].text);
+                var text = escapeText(table.data[i][j].text);
+                if (j == si.qfact.eCol) {
+                    var entitySpan = escapeText(si.qfact.entitySpan);
+                    text = text.replace(entitySpan, '<span class="entity-box">' + entitySpan + '</span>');
+                } else if (j == si.qfact.qCol) {
+                    var quantitySpan = escapeText(si.qfact.quantitySpan);
+                    text = text.replace(quantitySpan, '<span class="quantity-box">' + quantitySpan + '</span>');
+                }
+                c.html(text);
                 $(bodyRow).append($(c));
             }
             $(tbody).append($(bodyRow));
