@@ -212,6 +212,8 @@ public class TableQuery {
                 if (matchScore.first < 0.7) {
                     continue;
                 }
+                //
+                double quantityStandardValue = qt.value * QuantityDomain.getScale(qt);
                 // quantity convert str
                 String matchQuantityConvertedStr = null;
                 double scale = QuantityDomain.getScale(qt) / QuantityDomain.getScale(constraint.quantity);
@@ -229,7 +231,7 @@ public class TableQuery {
                     matchQuantityConvertedStr += " (" + constraint.quantity.unit + ")";
                 }
 
-                inst.addSubInstance(new ResultInstance.SubInstance(f, matchScore.first, matchQuantityConvertedStr, matchScore.second));
+                inst.addSubInstance(new ResultInstance.SubInstance(f, matchScore.first, quantityStandardValue, matchQuantityConvertedStr, matchScore.second));
             }
 
             if (inst.subInstances.size() > 0) {
