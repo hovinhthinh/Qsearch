@@ -154,7 +154,7 @@
 
     function source(value) {
         if (value.startsWith("WIKIPEDIA:Link:")) {
-            value = '<a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-danger">Wiki</a>';
+            value = '<a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-danger">Wikipedia</a>';
         } else if (value.startsWith("TABLEM:Link:")) {
             value = '<a href="' + value.substr(12) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-success">TableL</a>';
         }
@@ -166,7 +166,7 @@
 
         var table = si.qfact.tableIndex.table;
 
-        var preTables = $('<div class="container-fluid"><div class="row"><div class="col-8 p-0"></div><div class="col-4 p-0 text-right"></div></div></div>');
+        var preTables = $('<div class="container-fluid"><div class="row"><div class="col-10 p-0"></div><div class="col-2 p-0 text-right"></div></div></div>');
 
         // titles
         var title = $('<div>');
@@ -201,7 +201,7 @@
                 var text = escapeText(table.header[i][j].text);
                 if (j == si.qfact.qCol && si.qfact.headerUnitSpan != null) {
                     var unitSpan = escapeText(si.qfact.headerUnitSpan);
-                    text += '</br><span class="badge badge-pill badge-secondary">' + unitSpan + '</span>';
+                    text += '</br><span class="badge badge-pill badge-secondary">Unit/Multiplier: ' + unitSpan + '</span>';
                 }
                 c.html(text);
                 headRow.append(c);
@@ -259,10 +259,14 @@
         line += eCel.wrapAll('<div>').parent().html();
 
         var tCel = $('<td>');
-        for (var i = 0; i < instance.subInstances.length; ++i) {
-            var sub = drawCollapsedTable(instance.subInstances[i]);
-            tCel.append(sub);
+        tCel.append(drawCollapsedTable(instance.subInstances[0]));
+
+        var moreTCel = $('<div>');
+        for (var i = 1; i < instance.subInstances.length; ++i) {
+            moreTCel.append($('<hr>'));
+            moreTCel.append(drawCollapsedTable(instance.subInstances[i]));
         }
+        tCel.append(moreTCel);
 
         line += tCel.wrapAll('<div>').parent().html();
 
