@@ -190,7 +190,12 @@
             var headRow = $('<tr>');
             for (var j = 0; j < table.header[i].length; ++j) {
                 var c = $('<th>');
-                c.text(table.header[i][j].text);
+                var text = escapeText(table.header[i][j].text);
+                if (j == si.qfact.qCol && si.qfact.headerUnitSpan != null) {
+                    var unitSpan = escapeText(si.qfact.headerUnitSpan);
+                    text += '</br><span class="badge badge-pill badge-secondary">' + unitSpan + '</span>';
+                }
+                c.html(text);
                 $(headRow).append($(c));
             }
             $(thead).append($(headRow));
