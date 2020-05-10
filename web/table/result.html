@@ -518,7 +518,7 @@
         var topResults = data['topResults'];
         topResults.sort(function (a, b) {
             var av = a['score'], bv = b['score'];
-            return av < bv ? -1 : (av > bv ? 1 : 0);
+            return av < bv ? 1 : (av > bv ? -1 : 0);
         });
         data['topResults'] = topResults;
         clearTimeout(convertedQuantityShowingTimeout);
@@ -549,7 +549,7 @@
     $('#sort-quantity').click(function () {
         var topResults = data['topResults'];
         topResults.sort(function (a, b) {
-            var av = a['quantityStandardValue'], bv = b['quantityStandardValue'];
+            var av = a.subInstances[0].quantityStandardValue, bv = b.subInstances[0].quantityStandardValue;
             var c = av < bv ? -1 : (av > bv ? 1 : 0);
             if (data['quantityConstraint']['resolutionCode'] == 'UPPER_BOUND') {
                 return c * -1;
