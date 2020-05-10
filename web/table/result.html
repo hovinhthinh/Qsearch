@@ -80,7 +80,7 @@
         <tr>
             <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col">#</th>
             <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col">Result</th>
-            <th style="border-top: 0px; border-bottom: 0px;" scope="col" colspan="2">
+            <th style="border-top: 0px; border-bottom: 0px;" scope="col">
                 <div class="row">
                     <div class="col-8"><span style="position:absolute;bottom:0;">Source</span></div>
                     <div class="dropdown col-4" align="right" id="sort-dropdown" hidden>
@@ -133,8 +133,6 @@
 <script src="js/local.js" crossorigin="anonymous"></script>
 
 <script>
-    var VERBOSE = true;
-
     var nanobar = new Nanobar();
     document.getElementById('nanobarcss').innerHTML += '.nanobar .bar { background: #6aa94e; }';
 
@@ -154,23 +152,26 @@
         return $.parseHTML("<td style='width: auto !important;'>" + value + "</td>")[0];
     }
 
-    function sourceCell(value) {
+    function source(value) {
         if (value.startsWith("WIKIPEDIA:Link:")) {
             value = '<a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-danger">Wiki</a>';
         } else if (value.startsWith("TABLEM:Link:")) {
             value = '<a href="' + value.substr(12) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-success">TableL</a>';
         }
-        return $.parseHTML("<td style='width: auto !important;'>" + value + "</td>")[0];
+        return value;
     }
 
     function drawCollapsedTable(si) {
-        var cell = $('<td>');
+        var cell = $('<div>');
 
         var table = si.qfact.tableIndex.table;
+
+        var preTables = $('<div class="container-fluid"><div class="row"><div class="col-8 p-0"></div><div class="col-4 p-0 text-right"></div></div></div>');
+
         // titles
         var title = $('<div>');
         $(title).html('<span class="badge badge-pill badge-warning">Title</span> <span class="font-weight-bold small">' + si.qfact.tableIndex.pageTitle + '</span>');
-        $(cell).append($(title));
+        $(preTables).eq(0).children().eq(0).children().eq(0).append($(title));
 
         // subTitles
         var st = si.qfact.tableIndex.sectionTitles.split('\r\n');
@@ -183,10 +184,14 @@
                 }
                 content += '&rdsh; <span class="small">' + st[i] + '</span>';
                 $(subTitles).html(content);
-                $(cell).append($(subTitles));
+                $(preTables).eq(0).children().eq(0).children().eq(0).append($(subTitles));
             }
         }
 
+        // source
+        $(preTables).eq(0).children().eq(0).children().eq(1).html(source(si.qfact.tableIndex.table.source));
+
+        $(cell).append($(preTables));
         // table
         var thead = $('<thead>');
         for (var i = 0; i < table.header.length; ++i) {
@@ -242,99 +247,34 @@
             $(cap).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + si.qfact.tableIndex.caption + '</span>');
             $(wrapper).append($(cap));
             $(cell).append($(wrapper));
+        } else {
+            var wrapper = $('<div>');
+            $(wrapper).attr("style", "text-align: center;");
+            var cap = $('<div>');
+            $(cap).attr("style", "display: inline-block;")
+            $(cap).html('<span class="badge badge-pill badge-secondary">No Caption</span>');
+            $(wrapper).append($(cap));
+            $(cell).append($(wrapper));
         }
 
         return cell;
     }
 
-    function contentCell(si) {
-        var value = escapeText(sentenceContent['value']);
-        if (VERBOSE) {
-            var pE = -1, pQ = -1;
-            var eStr = null, qStr = null;
-
-            if ('entityStr' in sentenceContent) {
-                eStr = escapeText(sentenceContent['entityStr']);
-                pE = value.indexOf(eStr);
-            }
-            if ('quantityStr' in sentenceContent) {
-                qStr = escapeText(sentenceContent['quantityStr']);
-                pQ = value.indexOf(qStr);
-            }
-            if ('contextStr' in sentenceContent) {
-                var context = sentenceContent['contextStr'];
-                context = context.filter(function (value, index, self) {
-                    return self.indexOf(value) === index;
-                });
-                var processedContext = [];
-                for (var i = 0; i < context.length; ++i) {
-                    var contextToken = escapeText(context[i]);
-                    var optimalCursor = 0, currentCursor = 0, optimalDist = 1e9;
-                    var nextPosition = -1;
-                    do {
-                        nextPosition = value.indexOf(contextToken, nextPosition + 1);
-                        if ((nextPosition > 0 && value.charAt(nextPosition - 1) != ' ') ||
-                            (nextPosition + contextToken.length < value.length && value.charAt(nextPosition + contextToken.length) != ' ')) {
-                            continue;
-                        }
-                        if (nextPosition != -1) {
-                            ++currentCursor;
-                            var currentDist = (pE == -1 ? 0 : Math.abs(pE - nextPosition)) + (pQ == -1 ? 0 : Math.abs(pQ - nextPosition));
-                            if (currentDist < optimalDist) {
-                                optimalDist = currentDist;
-                                optimalCursor = currentCursor;
-                            }
-                        }
-                    } while (nextPosition != -1);
-
-                    if (optimalCursor > 0) {
-                        processedContext.push([contextToken, optimalCursor]);
-                    }
-                }
-                processedContext.forEach(function (o) {
-                    var nextPosition = -1;
-                    for (var i = 0; i < o[1]; ++i) {
-                        nextPosition = value.indexOf(o[0], nextPosition + 1);
-                        if ((nextPosition > 0 && value.charAt(nextPosition - 1) != ' ') ||
-                            (nextPosition + o[0].length < value.length && value.charAt(nextPosition + o[0].length) != ' ')) {
-                            --i;
-                        }
-                    }
-                    value = value.substring(0, nextPosition)
-                        + '<span class="context-box">' + o[0] + '</span>'
-                        + value.substring(nextPosition + o[0].length);
-                });
-                value = value.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
-            }
-            if (pE != -1) {
-                value = value.replace(eStr, '<span class="entity-box">' + eStr + '</span>');
-            }
-            if (pQ != -1) {
-                value = value.replace(qStr, '<span class="quantity-box converted-quantity"' +
-                    ' data-animation="true" data-placement="top" data-trigger="hover" data-html="true"' +
-                    ' data-content="Equals: ' + sentenceContent['quantityConvertedStr'] + '">' + qStr + '</span>');
-            }
-        }
-        return "<td>" + value + "</td>";
-    }
-
     function encodeEntityResultAsHtml(index, instance) {
-        var line = "";
-        for (var i = 0; i < instance.subInstances.length; ++i) {
-            line += i == 0 ? "<tr style='border-top:2px solid gray'>" : "<tr>";
-            if (i == 0) {
-                line += "<td style='width: auto !important;' rowspan='" + instance.subInstances.length + "'>" + (index + 1) + "</td>";
-                var eCel = entityCell(instance);
-                $(eCel).attr("rowspan", instance.subInstances.length);
-                line += $(eCel).wrapAll('<div>').parent().html();
-            }
-            var cCel = drawCollapsedTable(instance.subInstances[i]);
-            line += $(cCel).wrapAll('<div>').parent().html();
+        var line = "<tr style='border-top:2px solid gray'>";
+        line += "<td style='width: auto !important;'>" + (index + 1) + "</td>";
+        var eCel = entityCell(instance);
+        line += $(eCel).wrapAll('<div>').parent().html();
 
-            var sCel = sourceCell(instance.subInstances[i].qfact.tableIndex.table.source);
-            line += $(sCel).wrapAll('<div>').parent().html();
-            line += "</tr>";
+        var tCel = $('<td>');
+        for (var i = 0; i < instance.subInstances.length; ++i) {
+            var sub = drawCollapsedTable(instance.subInstances[i]);
+            $(tCel).append($(sub));
         }
+
+        line += $(tCel).wrapAll('<div>').parent().html();
+
+        line += "</tr>";
         return line;
     }
 
