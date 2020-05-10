@@ -25,11 +25,13 @@ public class ResultInstance {
             }
         }
 
+        public String quantityConvertedStr;
         public ArrayList<ContextMatchTrace> traces;
 
-        public SubInstance(QfactLight qfact, double score, ArrayList<ContextMatchTrace> traces) {
+        public SubInstance(QfactLight qfact, double score, String quantityConvertedStr, ArrayList<ContextMatchTrace> traces) {
             this.qfact = qfact;
             this.score = score;
+            this.quantityConvertedStr = quantityConvertedStr;
             this.traces = traces;
         }
     }
@@ -37,8 +39,24 @@ public class ResultInstance {
     public ArrayList<SubInstance> subInstances = new ArrayList<>();
 
     public void addSubInstance(SubInstance si) {
-        subInstances.add(si);
         score = Math.max(score, si.score);
+        
+        // check if there is a better fact from same table;
+        int sameIdPivot = -1;
+        for (int i = 0; i < subInstances.size(); ++i) {
+            if (subInstances.get(i).qfact.tableId.equals(si.qfact.tableId)) {
+                sameIdPivot = i;
+                break;
+            }
+        }
+        if (sameIdPivot != -1) {
+            if (subInstances.get(sameIdPivot).score < si.score) {
+                subInstances.set(sameIdPivot, si);
+            }
+            return;
+        }
+
+        subInstances.add(si);
         if (subInstances.size() > 5) {
             int pivot = 0;
             for (int i = 1; i < subInstances.size(); ++i) {

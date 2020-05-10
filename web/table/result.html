@@ -212,7 +212,9 @@
                     text = text.replace(entitySpan, '<span class="entity-box">' + entitySpan + '</span>');
                 } else if (j == si.qfact.qCol) {
                     var quantitySpan = escapeText(si.qfact.quantitySpan);
-                    text = text.replace(quantitySpan, '<span class="quantity-box">' + quantitySpan + '</span>');
+                    text = text.replace(quantitySpan, '<span class="quantity-box converted-quantity"' +
+                        ' data-animation="true" data-placement="top" data-trigger="hover" data-html="true"' +
+                        ' data-content="Equals: ' + si.quantityConvertedStr + '">' + quantitySpan + '</span>');
                 }
                 c.html(text);
                 $(bodyRow).append($(c));
