@@ -23,6 +23,6 @@ public class Quadruple<A, B, C, D> {
 
     @Override
     public String toString() {
-        return "(" + first.toString() + "," + second.toString() + "," + third.toString() + "," + fourth.toString() + ")";
+        return "(" + first + "," + second + "," + third + "," + fourth + ")";
     }
 }
