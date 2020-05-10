@@ -23,7 +23,7 @@ public class ExplorerServer {
 
         ServerConnector connector = new ServerConnector(server, new HttpConnectionFactory());
         connector.setPort(DEFAULT_PORT);
-        connector.getConnectionFactory(HttpConnectionFactory.class).getHttpConfiguration().setRequestHeaderSize(1024 * 1024);
+        connector.getConnectionFactory(HttpConnectionFactory.class).getHttpConfiguration().setRequestHeaderSize(1024 * 1024 * 10);
         server.addConnector(connector);
 
         ResourceHandler resourceHandler = new ResourceHandler();
