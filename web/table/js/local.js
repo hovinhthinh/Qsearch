@@ -149,7 +149,7 @@ $('#corpus').multiselect({
     }
 });
 
-var showSetting = $.cookie('show_setting');
+var showSetting = $.cookie('show_setting_table');
 if (showSetting == null) {
     $('#setting-body').removeClass('show');
     $('#setting-toggle').addClass('collapsed');
@@ -158,7 +158,7 @@ $('#setting-body').on('shown.bs.collapse', function () {
     $.cookie('show_setting', '1');
 });
 $('#setting-body').on('hidden.bs.collapse', function () {
-    $.removeCookie('show_setting');
+    $.removeCookie('show_setting_table');
 });
 
 // load saved settings.
