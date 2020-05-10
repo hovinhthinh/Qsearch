@@ -170,7 +170,17 @@
 
         // titles
         var title = $('<div>');
-        title.html('<span class="badge badge-pill badge-warning">Title</span> <span class="font-weight-bold small">' + si.qfact.tableIndex.pageTitle + '</span>');
+        var titleText = escapeText(si.qfact.tableIndex.pageTitle);
+        for (var i = 0; i < si.traces.length; ++i) {
+            if (si.traces[i].place != "TITLE") {
+                continue;
+            }
+            var token = escapeText(si.traces[i].token);
+            titleText = titleText.replace(new RegExp('\\b' + token + '\\b'), '<span class="context-box">' + token + '</span>');
+        }
+        titleText = titleText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
+        title.html('<span class="badge badge-pill badge-warning">Title</span> <span class="font-weight-bold small">'
+            + titleText + '</span>');
         preTables.eq(0).children().eq(0).children().eq(0).append(title);
 
         // subTitles
@@ -182,7 +192,16 @@
                 for (var j = 0; j < i; ++j) {
                     content += '&nbsp;&nbsp;&nbsp;&nbsp;';
                 }
-                content += '&rdsh; <span class="small">' + st[i] + '</span>';
+                var subTitleText = escapeText(st[i]);
+                for (var j = 0; j < si.traces.length; ++j) {
+                    if (si.traces[j].place != "TITLE") {
+                        continue;
+                    }
+                    var token = escapeText(si.traces[j].token);
+                    subTitleText = subTitleText.replace(new RegExp('\\b' + token + '\\b'), '<span class="context-box">' + token + '</span>');
+                }
+                subTitleText = subTitleText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
+                content += '&rdsh; <span class="small">' + subTitleText + '</span>';
                 subTitles.html(content);
                 preTables.eq(0).children().eq(0).children().eq(0).append(subTitles);
             }
@@ -241,7 +260,16 @@
         // caption
         var wrapper = $('<div style="text-align: center;"><div style="display: inline-block;"></div></div>');
         if (si.qfact.tableIndex.caption != "") {
-            wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + si.qfact.tableIndex.caption + '</span>');
+            var captionText = escapeText(si.qfact.tableIndex.caption);
+            for (var i = 0; i < si.traces.length; ++i) {
+                if (si.traces[i].place != "CAPTION") {
+                    continue;
+                }
+                var token = escapeText(si.traces[i].token);
+                captionText = captionText.replace(new RegExp('\\b' + token + '\\b'), '<span class="context-box">' + token + '</span>');
+            }
+            captionText = captionText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
+            wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + captionText + '</span>');
         } else {
             wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-secondary">No Caption</span>');
         }
