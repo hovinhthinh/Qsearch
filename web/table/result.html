@@ -214,7 +214,15 @@
         // pageContent
         var pg = $('<div class="small ml-1 mr-1">');
         if (si.qfact.tableIndex.pageContent != "") {
-            pg.html('<span class="badge badge-pill badge-info">Related Text</span> ' + escapeText(si.qfact.tableIndex.pageContent));
+            pg.html('<span class="badge badge-pill badge-info">Related Text</span> ');
+            var lim = 1000;
+            if (si.qfact.tableIndex.pageContent.length < lim) {
+                pg.append($('<span>').text(si.qfact.tableIndex.pageContent));
+            } else {
+                pg.append($('<span>').text(si.qfact.tableIndex.pageContent.substring(0, lim)));
+                pg.append($('<span hidden>').text(si.qfact.tableIndex.pageContent.substring(lim)));
+                pg.append($('<button class="btn btn-sm btn-link" onclick="showMoreText(this)">...more</button>'));
+            }
         } else {
             pg.html('<span class="badge badge-pill badge-secondary">No Related Text</span>');
         }
@@ -338,6 +346,16 @@
                     var popoverElement = $(this).popover('hide');
                 }
             });
+        }
+    }
+
+    function showMoreText(current) {
+        if ($(current).text() == "...more") {
+            $(current).text("...less");
+            $(current).prev().removeAttr('hidden');
+        } else {
+            $(current).text("...more");
+            $(current).prev().attr('hidden', 'hidden');
         }
     }
 
