@@ -103,13 +103,6 @@
 <script src="js/local.js" crossorigin="anonymous"></script>
 
 <script>
-    $('#change-mode').each(function () {
-        var current = this;
-        var popoverElement = $(current).popover('show')
-            .data('bs.popover').getTipElement();
-        $(popoverElement).addClass('popover-converted-quantity');
-    });
-
     var nanobar = new Nanobar();
     document.getElementById('nanobarcss').innerHTML += '.nanobar .bar { background: #6aa94e; }';
 
@@ -209,6 +202,15 @@
 
     autocomplete(document.getElementById("type"));
     autocomplete(document.getElementById("full"));
+
+    $(document).ready(function () {
+        $('#change-mode').each(function () {
+            var current = this;
+            var popoverElement = $(current).popover('show')
+                .data('bs.popover').getTipElement();
+            $(popoverElement).addClass('popover-converted-quantity');
+        });
+    });
 
     // use part-search mode.
     if ($.cookie('part_search_table') == null) {
