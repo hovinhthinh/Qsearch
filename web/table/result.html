@@ -26,6 +26,10 @@
         <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 mt-2">
             <br/>
             <div class="input-group">
+                <button id="change-mode" class="btn"><i class="fas fa-sync-alt"></i></button>
+                <input hidden type="text" class="form-control" placeholder="type" id="type">
+                <input hidden type="text" class="form-control" placeholder="context" id="context">
+                <input hidden type="text" class="form-control" placeholder="quantity" id="quantity">
                 <input style="height: 40px;" type="text" class="form-control"
                        placeholder="what do you want to search for?" id="full">
                 <button style="height: 40px" type="button" class="btn btn-success" id="search">Search</button>
@@ -137,8 +141,6 @@
     var showTimeOut = 10000;
     var nanobar = new Nanobar();
     document.getElementById('nanobarcss').innerHTML += '.nanobar .bar { background: #6aa94e; }';
-
-    $("#full").focus();
 
     function escapeText(text) {
         return $('<div>').text(text).html();
@@ -366,7 +368,7 @@
     function show(data) {
         if (data["verdict"] != "OK") {
             $("#data").html(data["verdict"]);
-            return;
+            return false;
         }
         var topResults = data["topResults"];
         showParsedQuery(data["typeConstraint"], data["contextConstraint"], data["quantityConstraint"]);
@@ -441,21 +443,37 @@
                 });
             }
         });
+
+        return true;
     }
 
     function search() {
-        if ($("#full").val().trim() == "") {
-            return;
-        }
         var params = {
-            full: $("#full").val(),
             corpus: JSON.stringify($("#corpus").val()),
             ntop: $("#ntop").val()
         };
-        if ("WebSocket" in window) {
-            $("#search").attr('disabled', 'disabled').html("Searching <i class=\"fas fa-spinner fa-spin\"></i>");
-            $("#full").attr('disabled', 'disabled');
+        if ($.cookie('part_search_table') != "1") {
+            if ($("#full").val().trim() == "") {
+                return;
+            }
+            params.full = $("#full").val();
+        } else {
+            if ($("#type").val().trim() == "" || $("#quantity").val().trim() == "") {
+                return;
+            }
+            params.type = $("#type").val();
+            params.context = $("#context").val();
+            params.quantity = $("#quantity").val();
+        }
 
+        $("#search").attr('disabled', 'disabled').html("Searching <i class=\"fas fa-spinner fa-spin\"></i>");
+        $("#change-mode").attr('disabled', 'disabled');
+        $("#full").attr('disabled', 'disabled');
+        $("#type").attr('disabled', 'disabled');
+        $("#context").attr('disabled', 'disabled');
+        $("#quantity").attr('disabled', 'disabled');
+
+        if ("WebSocket" in window) {
             var ws = new WebSocket(location.protocol.replace("http", "ws") + "//" + location.host + "/search_socket_table");
             ws.onopen = function () {
                 ws.send(JSON.stringify(params));
@@ -467,7 +485,7 @@
                 if ("progress" in data) {
                     nanobar.go(data["progress"]);
                 } else {
-                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
                 }
             };
             ws.onerror = function () {
@@ -475,7 +493,11 @@
             };
             ws.onclose = function () {
                 $("#search").removeAttr('disabled').html("Search");
-                $("#full").removeAttr('disabled')
+                $("#change-mode").removeAttr('disabled');
+                $("#full").removeAttr('disabled');
+                $("#type").removeAttr('disabled');
+                $("#context").removeAttr('disabled');
+                $("#quantity").removeAttr('disabled');
             };
         } else {
             $.ajax({
@@ -484,19 +506,19 @@
                 data: params,
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
-                beforeSend: function () {
-                    $("#search").attr('disabled', 'disabled').html("Searching <i class=\"fas fa-spinner fa-spin\"></i>");
-                    $("#full").attr('disabled', 'disabled');
-                },
                 success: function (data) {
-                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
                 },
                 error: function () {
                     alert("An error occurred.");
                 },
                 complete: function () {
                     $("#search").removeAttr('disabled').html("Search");
-                    $("#full").removeAttr('disabled')
+                    $("#change-mode").removeAttr('disabled');
+                    $("#full").removeAttr('disabled');
+                    $("#type").removeAttr('disabled');
+                    $("#context").removeAttr('disabled');
+                    $("#quantity").removeAttr('disabled');
                 }
             });
         }
@@ -505,7 +527,14 @@
     $("#search").click(search);
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has("q")) {
-        $("#full").val(decodeURIComponent(atob(decodeURIComponent(urlParams.get("q")))));
+        var q = JSON.parse(decodeURIComponent(atob(decodeURIComponent(urlParams.get("q")))));
+        if (q.full != null) {
+            $("#full").val(q.full);
+        } else {
+            $("#type").val(q.type);
+            $("#context").val(q.context);
+            $("#quantity").val(q.quantity);
+        }
     }
     var data = null;
     var resultsForWikiView = null;
@@ -519,11 +548,17 @@
             dataType: "json",
             beforeSend: function () {
                 $("#search").attr('disabled', 'disabled');
+                $("#change-mode").attr('disabled', 'disabled');
                 $("#full").attr('disabled', 'disabled');
+                $("#type").attr('disabled', 'disabled');
+                $("#context").attr('disabled', 'disabled');
+                $("#quantity").attr('disabled', 'disabled');
             },
             success: function (response) {
                 data = response;
-                show(data);
+                if (!show(data)) {
+                    return;
+                }
                 // now trigger wikiview.
                 resultsForWikiView = data['topResults'];
                 wikiViewCountLeft = resultsForWikiView.length;
@@ -553,7 +588,11 @@
             },
             complete: function () {
                 $("#search").removeAttr('disabled');
+                $("#change-mode").removeAttr('disabled');
                 $("#full").removeAttr('disabled');
+                $("#type").removeAttr('disabled');
+                $("#context").removeAttr('disabled');
+                $("#quantity").removeAttr('disabled');
                 $("#loading").attr('hidden', 'hidden');
             }
         });
@@ -632,6 +671,7 @@
     });
 
     autocomplete(document.getElementById("full"));
+    autocomplete(document.getElementById("type"));
 </script>
 </body>
 </html>

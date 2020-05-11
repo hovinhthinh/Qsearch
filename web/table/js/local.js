@@ -180,6 +180,30 @@ $("#ntop").on('change', function () {
     $.cookie('ntop_table', this.value);
 });
 
+// search mode.
+// load
+if ($.cookie('part_search_table') == "1") {
+    $("#type").removeAttr("hidden");
+    $("#type").focus();
+    $("#context").removeAttr("hidden");
+    $("#quantity").removeAttr("hidden");
+    $("#full").attr("hidden", "");
+}
 
-
-
+$("#change-mode").click(function () {
+    if ($.cookie('part_search_table') != "1") {
+        $("#type").removeAttr("hidden");
+        $("#type").focus();
+        $("#context").removeAttr("hidden");
+        $("#quantity").removeAttr("hidden");
+        $("#full").attr("hidden", "");
+        $.cookie('part_search_table', "1");
+    } else {
+        $("#type").attr("hidden", "");
+        $("#context").attr("hidden", "");
+        $("#quantity").attr("hidden", "");
+        $("#full").removeAttr("hidden");
+        $("#full").focus();
+        $.cookie('part_search_table', "0");
+    }
+});
