@@ -3,6 +3,8 @@ package server.table.handler.search;
 import model.quantity.QuantityConstraint;
 import model.query.SimpleQueryParser;
 import nlp.NLP;
+import org.json.JSONObject;
+import server.common.handler.ResultCacheHandler;
 import server.table.ResultInstance;
 import server.table.TableQuery;
 import util.Gson;
@@ -40,16 +42,17 @@ public class SearchHandler extends HttpServlet {
 
         httpServletResponse.setCharacterEncoding("utf-8");
 
-        SearchResult response = search(nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint, additionalParams);
+        String sessionKey = search(nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint, additionalParams);
 
-        httpServletResponse.getWriter().print(Gson.toJson(response));
+        httpServletResponse.getWriter().print(new JSONObject().append("s", sessionKey).toString());
 
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 
-    public static SearchResult search(int nTopResult, String fullConstraint,
-                                      String typeConstraint, String contextConstraint, String quantityConstraint,
-                                      Map additionalParameters) {
+    // return session key
+    public static String search(int nTopResult, String fullConstraint,
+                                String typeConstraint, String contextConstraint, String quantityConstraint,
+                                Map additionalParameters) {
         // Optimize
         if (typeConstraint != null) {
             typeConstraint = NLP.stripSentence(typeConstraint).toLowerCase();
@@ -109,6 +112,6 @@ public class SearchHandler extends HttpServlet {
             response = new SearchResult();
             response.verdict = "Unknown error occured.";
         }
-        return response;
+        return ResultCacheHandler.addResult(Gson.toJson(response));
     }
 }
