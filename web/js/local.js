@@ -48,7 +48,8 @@ function autocomplete(inp) {
         var listDOM = document.createElement("DIV");
         listDOM.setAttribute("id", this.id + "-autocomplete-list");
         listDOM.setAttribute("class", "autocomplete-items");
-        listDOM.style.width = $('#full').css('width');
+        listDOM.style.width = inp.offsetWidth + "px";
+        listDOM.style.left = inp.offsetLeft + "px";
         //append the DIV element as a child of the autocomplete container:
         this.parentNode.appendChild(listDOM);
 

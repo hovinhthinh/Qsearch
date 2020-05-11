@@ -41,21 +41,21 @@
 .entity-box {
     border-radius: 5px;
     background: #e6ffcc;
-    border: 1px solid #66BB6A;
+    border: 2px solid #66BB6A;
     padding: 2px;
 }
 
 .context-box {
     border-radius: 5px;
     background: #f0f2f4;
-    border: 1px solid #a8b4bd;
+    border: 2px solid #a8b4bd;
     padding: 2px;
 }
 
 .quantity-box {
     border-radius: 5px;
     background: #FADBD8;
-    border: 1px solid #EF5350;
+    border: 2px solid #EF5350;
     padding: 2px;
 }
 
