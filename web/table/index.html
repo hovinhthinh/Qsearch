@@ -22,7 +22,9 @@
         <img src="img/logo.png" class="img-fluid mb-3" alt="logo">
     </div>
     <div class="input-group">
-        <button id="change-mode" class="btn"><i class="fas fa-sync-alt"></i></button>
+        <button data-animation="true" data-placement="top" data-trigger="hover" data-html="true"
+                data-content="Click here to change search mode!" data-original-title="" title="" id="change-mode" class="btn"><i
+                class="fas fa-sync-alt"></i></button>
         <input hidden type="text" class="form-control" placeholder="type" id="type">
         <input hidden type="text" class="form-control" placeholder="context" id="context">
         <input hidden type="text" class="form-control" placeholder="quantity" id="quantity">
@@ -101,6 +103,13 @@
 <script src="js/local.js" crossorigin="anonymous"></script>
 
 <script>
+    $('#change-mode').each(function () {
+        var current = this;
+        var popoverElement = $(current).popover('show')
+            .data('bs.popover').getTipElement();
+        $(popoverElement).addClass('popover-converted-quantity');
+    });
+
     var nanobar = new Nanobar();
     document.getElementById('nanobarcss').innerHTML += '.nanobar .bar { background: #6aa94e; }';
 
@@ -200,6 +209,9 @@
 
     autocomplete(document.getElementById("type"));
     autocomplete(document.getElementById("full"));
+
+    // use part-search mode.
+    $("#change-mode").click();
 </script>
 
 </body>
