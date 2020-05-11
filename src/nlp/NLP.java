@@ -41,7 +41,13 @@ public class NLP {
             "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself",
             "yourselves"
     ));
-    
+
+    public static HashSet<String> BLOCKED_SPECIAL_CONTEXT_CHARS = new HashSet<>(Arrays.asList(
+            "~", "`", "!", "@", "#", "^", "&", "*", "(", ")", "_", "=", "{", "}", "-", "+",
+            "[", "]", "\\", "|", ":", ";", "\"", "'", ",", ".", "/", "?", "<", ">"
+    ));
+
+
     public static final HeadFinder HEAD_FINDER = new CollinsHeadFinder();
 
     public static String getHeadWord(String phrase, boolean fast) {
