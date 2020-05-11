@@ -445,7 +445,7 @@
                 if ("progress" in data) {
                     nanobar.go(data["progress"]);
                 } else {
-                    window.location.replace("/table/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(msg))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
                 }
             };
             ws.onerror = function () {
@@ -467,7 +467,7 @@
                     $("#full").attr('disabled', 'disabled');
                 },
                 success: function (data) {
-                    window.location.replace("/table/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(data)))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
                 },
                 error: function () {
                     alert("An error occurred.");
@@ -488,31 +488,51 @@
     var data = null;
     var resultsForWikiView = null;
     var wikiViewCountLeft = 0;
-    if (urlParams.has("d")) {
-        data = JSON.parse(decodeURIComponent(atob(decodeURIComponent(urlParams.get('d')))));
-        show(data);
-
-        // now trigger wikiview.
-        resultsForWikiView = data['topResults'];
-        wikiViewCountLeft = resultsForWikiView.length;
-        resultsForWikiView.forEach(function (o) {
-            $.ajax({
-                type: "GET",
-                url: "/wikiview",
-                data: {"entity": o['entity']},
-                contentType: 'application/json; charset=utf-8',
-                dataType: "json",
-                success: function (response) {
-                    if (response['view'] != -1) {
-                        o['view'] = response['view'];
-                        --wikiViewCountLeft;
-                        if (wikiViewCountLeft == 0) {
-                            data['topResults'] = resultsForWikiView;
-                            $('#sort-entity').removeAttr('hidden');
+    if (urlParams.has("s")) {
+        $.ajax({
+            type: "GET",
+            url: "/session",
+            data: {"s": urlParams.get('s')},
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json",
+            beforeSend: function () {
+                $("#search").attr('disabled', 'disabled');
+                $("#full").attr('disabled', 'disabled');
+            },
+            success: function (response) {
+                data = response;
+                show(data);
+                // now trigger wikiview.
+                resultsForWikiView = data['topResults'];
+                wikiViewCountLeft = resultsForWikiView.length;
+                resultsForWikiView.forEach(function (o) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/wikiview",
+                        data: {"entity": o['entity']},
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: "json",
+                        success: function (response) {
+                            if (response['view'] != -1) {
+                                o['view'] = response['view'];
+                                --wikiViewCountLeft;
+                                if (wikiViewCountLeft == 0) {
+                                    data['topResults'] = resultsForWikiView;
+                                    $('#sort-entity').removeAttr('hidden');
+                                }
+                            }
                         }
-                    }
-                }
-            });
+                    });
+                });
+
+            },
+            error: function () {
+                alert("Invalid session.");
+            },
+            complete: function () {
+                $("#search").removeAttr('disabled');
+                $("#full").removeAttr('disabled')
+            }
         });
     }
 
