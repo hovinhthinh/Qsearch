@@ -218,14 +218,35 @@
         for (var i = 0; i < table.header.length; ++i) {
             var headRow = $('<tr>');
             for (var j = 0; j < table.header[i].length; ++j) {
+                if (i > 0 && table.header[i][j].text == table.header[i - 1][j].text) {
+                    continue;
+                }
                 var c = $('<th>');
+                // colspan
+                var temp_1 = j;
+                while (temp_1 < table.header[i].length - 1 && table.header[i][temp_1 + 1].text == table.header[i][temp_1].text) {
+                    ++temp_1;
+                }
+                if (temp_1 > j) {
+                    c.attr('colspan', temp_1 - j + 1);
+                }
+                // rowspan
+                var temp_2 = i;
+                while (temp_2 < table.header.length - 1 && table.header[temp_2 + 1][j].text == table.header[temp_2][j].text) {
+                    ++temp_2;
+                }
+                if (temp_2 > i) {
+                    c.attr('rowspan', temp_2 - i + 1);
+                }
+
                 var text = escapeText(table.header[i][j].text);
-                if (j == si.qfact.qCol && si.qfact.headerUnitSpan != null && i == table.header.length - 1) {
+                if (si.qfact.headerUnitSpan != null && table.header[i][j].text == table.header[table.header.length - 1][si.qfact.qCol].text) {
                     var unitSpan = escapeText(si.qfact.headerUnitSpan);
                     text += '</br><span class="badge badge-pill badge-secondary">Unit/Multiplier: ' + unitSpan + '</span>';
                 }
                 c.html(text);
                 headRow.append(c);
+                j = temp_1;
             }
             thead.append(headRow);
         }
