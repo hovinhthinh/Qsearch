@@ -7,7 +7,16 @@
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
-    <!-- Support -->
+    <!-- Common -->
+    <servlet>
+        <servlet-name>ResultCache</servlet-name>
+        <servlet-class>server.common.handler.ResultCacheHandler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ResultCache</servlet-name>
+        <url-pattern>/session</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>WikiView</servlet-name>
         <servlet-class>server.common.handler.WikiViewHandler</servlet-class>
