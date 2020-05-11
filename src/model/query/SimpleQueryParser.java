@@ -171,7 +171,7 @@ public class SimpleQueryParser {
                     rawTokenized.replace(result.first, "").replace(preModifiedQuantity, ""));
             StringBuilder cSb = new StringBuilder();
             for (String s : context) {
-                if (NLP.BLOCKED_STOPWORDS.contains(s)) {
+                if (NLP.BLOCKED_STOPWORDS.contains(s) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(s)) {
                     continue;
                 }
                 cSb.append(" ").append(s);

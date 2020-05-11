@@ -46,11 +46,6 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     public double homogeneityWeight;
     private QfactTaxonomyGraph qfactGraph;
 
-    public static HashSet<String> BLOCKED_OVERLAP_CONTEXT_TOKENS = new HashSet<>(Arrays.asList(
-            "~", "`", "!", "@", "#", "^", "&", "*", "(", ")", "_", "=", "{", "}", "-", "+",
-            "[", "]", "\\", "|", ":", ";", "\"", "'", ",", ".", "/", "?", "<", ">"
-    ));
-
     private static final int ENTITY_PAGE_CONTENT_CACHE_SIZE = 1000;
     private Object2ObjectLinkedOpenHashMap<String, HashSet<String>> entityPageContentCache = new Object2ObjectLinkedOpenHashMap<>(ENTITY_PAGE_CONTENT_CACHE_SIZE);
 
@@ -302,7 +297,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
             int nCommon = 0;
             int nTotal = 0;
             for (String t : entityTableContext) {
-                if (NLP.BLOCKED_STOPWORDS.contains(t) || BLOCKED_OVERLAP_CONTEXT_TOKENS.contains(t)) {
+                if (NLP.BLOCKED_STOPWORDS.contains(t) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(t)) {
                     continue;
                 }
                 ++nTotal;
