@@ -194,11 +194,18 @@ public class ElasticSearchQuery {
 
         StreamedIterable<JSONObject> instances = searchByType(queryType);
 
-        if (QuantityDomain.getDomain(constraint.quantity) == QuantityDomain.Domain.DIMENSIONLESS) {
+        // Process query context terms
+        String domain = QuantityDomain.getDomain(constraint.quantity);
+        if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             queryContext += " " + constraint.quantity.unit;
         }
-        ArrayList<String> queryContextTerms =
-                NLP.splitSentence(NLP.fastStemming(queryContext.toLowerCase(), Morpha.any));
+        queryContext = NLP.fastStemming(queryContext.toLowerCase(), Morpha.any);
+        // expand with domain name if empty
+        if (queryContext.isEmpty() && !domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+            queryContext = NLP.stripSentence(domain.toLowerCase());
+        }
+        ArrayList<String> queryContextTerms = NLP.splitSentence(queryContext);
+
         ArrayList<Pair<JSONObject, Double>> scoredInstances = new ArrayList<>();
         int lastPercent = 0;
 

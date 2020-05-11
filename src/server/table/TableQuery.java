@@ -133,6 +133,7 @@ public class TableQuery {
             queryContext += " " + constraint.quantity.unit;
         }
         queryContext = NLP.fastStemming(queryContext.toLowerCase(), Morpha.any);
+        // expand with domain name if empty
         if (queryContext.isEmpty() && !domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             queryContext = NLP.stripSentence(domain.toLowerCase());
         }
