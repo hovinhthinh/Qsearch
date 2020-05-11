@@ -28,8 +28,13 @@ public class ResultCacheHandler extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         httpServletResponse.setCharacterEncoding("utf-8");
-        httpServletResponse.getWriter().print(CACHE.getIfPresent(request.getParameter("s")));
-        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+        String r = CACHE.getIfPresent(request.getParameter("s"));
+        if (r != null) {
+            httpServletResponse.getWriter().print(r);
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 
 }
