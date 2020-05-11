@@ -24,7 +24,7 @@ public class TableQuery {
     public static final Logger LOGGER = Logger.getLogger(TableQuery.class.getName());
     public static double HEADER_MATCH_WEIGHT = 1;
     public static double CAPTION_MATCH_WEIGHT = 0.9;
-    public static double TITLE_MATCH_WEIGHT = 0.9;
+    public static double TITLE_MATCH_WEIGHT = 0.8;
 
     private static ArrayList<QfactLight> QFACTS = TableQfactLoader.load();
     private static TaxonomyGraph TAXONOMY = TaxonomyGraph.getDefaultGraphInstance();
