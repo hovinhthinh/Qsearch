@@ -170,7 +170,7 @@
 
         var table = si.qfact.tableIndex.table;
 
-        var preTables = $('<div class="container-fluid"><div class="row"><div class="col-10 p-0"></div><div class="col-2 p-0 text-right"></div></div></div>');
+        var preTables = $('<div class="container-fluid"><div class="row"><div class="col-3 p-0"></div><div class="col-8 p-0"></div><div class="col-1 p-0 text-right"></div></div></div>');
 
         // titles
         var title = $('<div>');
@@ -211,8 +211,17 @@
             }
         }
 
+        // pageContent
+        var pg = $('<div class="small ml-1 mr-1">');
+        if (si.qfact.tableIndex.pageContent != "") {
+            pg.html('<span class="badge badge-pill badge-info">Related Text</span> ' + escapeText(si.qfact.tableIndex.pageContent));
+        } else {
+            pg.html('<span class="badge badge-pill badge-secondary">No Related Text</span>');
+        }
+        escapeText(si.qfact.tableIndex.pageContent);
+        preTables.eq(0).children().eq(0).children().eq(1).append(pg);
         // source
-        preTables.eq(0).children().eq(0).children().eq(1).html(source(si.qfact.tableIndex.table.source));
+        preTables.eq(0).children().eq(0).children().eq(2).html(source(si.qfact.tableIndex.table.source));
 
         cell.append(preTables);
         // table
