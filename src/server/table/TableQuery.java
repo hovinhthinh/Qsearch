@@ -214,9 +214,9 @@ public class TableQuery {
 
                 Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> matchScore = match(queryContextTerms, f);
 
-                if (matchScore.first < 0.7) {
-                    continue;
-                }
+//                if (matchScore.first < 0.7) {
+//                    continue;
+//                }
                 //
                 double quantityStandardValue = qt.value * QuantityDomain.getScale(qt);
                 // quantity convert str
