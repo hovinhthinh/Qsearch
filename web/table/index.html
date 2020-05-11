@@ -103,6 +103,9 @@
 <script src="js/local.js" crossorigin="anonymous"></script>
 
 <script>
+    // use part-search mode.
+    $("#change-mode").click();
+
     $('#change-mode').each(function () {
         var current = this;
         var popoverElement = $(current).popover('show')
@@ -209,9 +212,6 @@
 
     autocomplete(document.getElementById("type"));
     autocomplete(document.getElementById("full"));
-
-    // use part-search mode.
-    $("#change-mode").click();
 </script>
 
 </body>
