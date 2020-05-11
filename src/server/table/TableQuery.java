@@ -15,6 +15,7 @@ import yago.TaxonomyGraph;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -70,20 +71,22 @@ public class TableQuery {
                 }
             }
             // TITLE
-            for (String fX : NLP.splitSentence(f.tableIndex.pageTitle.toLowerCase())) {
-                if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
-                    continue;
-                }
-                double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
-                if (sim == -1) {
-                    continue;
-                }
-                sim = (1 - sim) * TITLE_MATCH_WEIGHT;
+            for (String title : Arrays.asList(f.tableIndex.pageTitle, f.tableIndex.sectionTitles)) {
+                for (String fX : NLP.splitSentence(title.toLowerCase())) {
+                    if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                        continue;
+                    }
+                    double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
+                    if (sim == -1) {
+                        continue;
+                    }
+                    sim = (1 - sim) * TITLE_MATCH_WEIGHT;
 
-                if (trace.score < sim) {
-                    trace.score = sim;
-                    trace.token = fX;
-                    trace.place = "TITLE";
+                    if (trace.score < sim) {
+                        trace.score = sim;
+                        trace.token = fX;
+                        trace.place = "TITLE";
+                    }
                 }
             }
 
@@ -255,8 +258,5 @@ public class TableQuery {
 
     public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String queryType, String queryContext, String quantityConstraint) {
         return search(queryType, queryContext, quantityConstraint, null);
-    }
-
-    public static void main(String[] args) throws Exception {
     }
 }
