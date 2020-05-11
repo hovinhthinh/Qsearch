@@ -14,6 +14,7 @@ public class QuantityConstraint {
     public Quantity quantity; // From Illinois Quantifier.
     public QuantityResolution.Value resolutionCode;
     public String domain;
+    public String fineGrainedDomain;
     public String phrase;
 
     public static QuantityConstraint parseFromString(String constraintString) {
@@ -29,6 +30,7 @@ public class QuantityConstraint {
                 // IllinoisQuantifier.
                 c.resolutionCode = QuantityResolution.getResolution(constraintString, c.quantity);
                 c.domain = QuantityDomain.getDomain(c.quantity);
+                c.fineGrainedDomain = QuantityDomain.getDomain(c.quantity, true);
                 return c;
             }
         }
