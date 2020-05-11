@@ -25,27 +25,28 @@ public class SocketSearchAdapter extends WebSocketAdapter {
         this.session = null;
     }
 
-    // queryDescription is a json consisting of following fields:
-    // 'full' : <fullQuery>, 'model': 'KL|EMBEDDING'
     @Override
     public void onWebSocketText(String queryDescription) {
         LOGGER.info(queryDescription);
         JSONObject o = new JSONObject(queryDescription);
         // Get parameters
-        String fullConstraint = o.getString("full");
+        String typeConstraint = o.has("type") ? o.getString("type") : null;
+        String contextConstraint = o.has("context") ? o.getString("context") : null;
+        String quantityConstraint = o.has("quantity") ? o.getString("quantity") : null;
+        String fullConstraint = o.has("full") ? o.getString("full") : null;
 
         Map additionalParams = new HashMap();
 
         if (o.has("corpus")) {
-            additionalParams.put("corpus", o.getString("corpus")); // ANY || STICS || NYT
+            additionalParams.put("corpus", o.getString("corpus"));
         }
 
         additionalParams.put("session", session);
 
-        int nResult = o.has("ntop") ? Integer.parseInt(o.getString("ntop")) : 20;
+        int nResult = o.has("ntop") ? Integer.parseInt(o.getString("ntop")) : 10;
 
         String sessionKey = SearchHandler.search(nResult, fullConstraint,
-                null, null, null, additionalParams);
+                typeConstraint, contextConstraint, quantityConstraint, additionalParams);
 
         try {
             session.getRemote().sendString(new JSONObject().append("s", sessionKey).toString());
