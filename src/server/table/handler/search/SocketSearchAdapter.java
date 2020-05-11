@@ -3,7 +3,6 @@ package server.table.handler.search;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.json.JSONObject;
-import util.Gson;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -45,13 +44,11 @@ public class SocketSearchAdapter extends WebSocketAdapter {
 
         int nResult = o.has("ntop") ? Integer.parseInt(o.getString("ntop")) : 20;
 
-        SearchResult response = SearchHandler.search(nResult, fullConstraint,
+        String sessionKey = SearchHandler.search(nResult, fullConstraint,
                 null, null, null, additionalParams);
 
-        String responseStr = Gson.toJson(response);
-
         try {
-            session.getRemote().sendString(responseStr);
+            session.getRemote().sendString(new JSONObject().append("s", sessionKey).toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
