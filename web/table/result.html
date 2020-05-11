@@ -389,7 +389,8 @@
     function showParsedQuery(type, context, quantity) {
         $('#parsed').html('Parsed:&nbsp;&nbsp;&nbsp;' + '<span class="entity-box">' + escapeText(type) + '</span>'
             + " &rarr; " + '<span class="context-box">' + escapeText(context) + '</span>'
-            + " &rarr; " + '<span class="quantity-box">' + escapeText(quantity['phrase']) + '</span>');
+            + " &rarr; " + '<span class="quantity-box">' + escapeText(quantity['phrase']) + '</span>'
+            + ' <span class="badge badge-pill badge-danger">Domain: ' + escapeText(quantity['fineGrainedDomain']) + '</span>');
     }
 
     function show(data) {
