@@ -124,7 +124,7 @@
                 if ("progress" in data) {
                     nanobar.go(data["progress"]);
                 } else {
-                    window.location.replace("/table/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(msg))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
                 }
             };
             ws.onerror = function () {
@@ -146,7 +146,7 @@
                     $("#full").attr('disabled', 'disabled');
                 },
                 success: function (data) {
-                    window.location.replace("/table/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(data)))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
                 },
                 error: function () {
                     alert("An error occurred.");
