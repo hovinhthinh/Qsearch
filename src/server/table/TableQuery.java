@@ -90,8 +90,9 @@ public class TableQuery {
             if (trace.score > 0) {
                 boolean toBeAdded = true;
                 for (ResultInstance.SubInstance.ContextMatchTrace t : traces) {
-                    if (t.token.equals(trace.token) && t.place.equals(trace.place) && t.score > trace.score) {
+                    if (t.token.equals(trace.token) && t.place.equals(trace.place)) {
                         toBeAdded = false;
+                        t.score = Math.max(t.score, trace.score);
                         break;
                     }
                 }
