@@ -170,7 +170,7 @@
 
         var table = si.qfact.tableIndex.table;
 
-        var preTables = $('<div class="container-fluid"><div class="row"><div class="col-4 p-0"></div><div class="col-7 p-0"></div><div class="col-1 p-0 text-right"></div></div></div>');
+        var preTables = $('<div class="container-fluid"><div class="row"><div class="col-auto p-0"></div><div class="col p-0"></div><div class="col-1 p-0 text-right"></div></div></div>');
 
         // titles
         var title = $('<div>');
@@ -212,7 +212,7 @@
         }
 
         // pageContent
-        var pg = $('<div class="small ml-1 mr-1">');
+        var pg = $('<div class="small ml-3 mr-1">');
         if (si.qfact.tableIndex.pageContent != "") {
             pg.html('<span class="badge badge-pill badge-info">Related Text</span> ');
             var lim = 500;
