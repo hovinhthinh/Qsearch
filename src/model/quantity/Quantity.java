@@ -8,8 +8,8 @@ public class Quantity {
     public String resolution;
 
     // these two properties is for cached calls
-    public transient String domain;
-    public transient Double scale;
+    public transient String domain, fineGrainedDomain;
+    public transient Double scale, fineGrainedScale;
     public transient String string;
 
     public Quantity(double value, String unit, String resolution) {
