@@ -103,11 +103,6 @@
 <script src="js/local.js" crossorigin="anonymous"></script>
 
 <script>
-    // use part-search mode.
-    if ($.cookie('part_search_table') == null) {
-        changeSearchMode();
-    }
-
     $('#change-mode').each(function () {
         var current = this;
         var popoverElement = $(current).popover('show')
@@ -214,6 +209,11 @@
 
     autocomplete(document.getElementById("type"));
     autocomplete(document.getElementById("full"));
+
+    // use part-search mode.
+    if ($.cookie('part_search_table') == null) {
+        changeSearchMode();
+    }
 </script>
 
 </body>
