@@ -37,7 +37,7 @@ public class TableQuery {
             ResultInstance.SubInstance.ContextMatchTrace trace = new ResultInstance.SubInstance.ContextMatchTrace(null, 0, null);
             // HEADER
             for (String fX : NLP.splitSentence(f.headerContext.toLowerCase())) {
-                if (NLP.BLOCKED_STOPWORDS.contains(fX)) {
+                if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
                     continue;
                 }
                 double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
@@ -54,7 +54,7 @@ public class TableQuery {
             }
             // CAPTION
             for (String fX : NLP.splitSentence(f.tableIndex.caption.toLowerCase())) {
-                if (NLP.BLOCKED_STOPWORDS.contains(fX)) {
+                if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
                     continue;
                 }
                 double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
@@ -71,7 +71,7 @@ public class TableQuery {
             }
             // TITLE
             for (String fX : NLP.splitSentence(f.tableIndex.pageTitle.toLowerCase())) {
-                if (NLP.BLOCKED_STOPWORDS.contains(fX)) {
+                if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
                     continue;
                 }
                 double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
