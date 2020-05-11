@@ -23,8 +23,8 @@
     </div>
     <div class="input-group">
         <button data-animation="true" data-placement="top" data-trigger="hover" data-html="true"
-                data-content="Click here to change search mode!" data-original-title="" title="" id="change-mode" class="btn"><i
-                class="fas fa-sync-alt"></i></button>
+                data-content="Click here to change search mode!" data-original-title="" title="" id="change-mode"
+                class="btn"><i class="fas fa-sync-alt"></i></button>
         <input hidden type="text" class="form-control" placeholder="type" id="type">
         <input hidden type="text" class="form-control" placeholder="context" id="context">
         <input hidden type="text" class="form-control" placeholder="quantity" id="quantity">
@@ -104,7 +104,9 @@
 
 <script>
     // use part-search mode.
-    $("#change-mode").click();
+    if ($.cookie('part_search_table') == null) {
+        $("#change-mode").click();
+    }
 
     $('#change-mode').each(function () {
         var current = this;
