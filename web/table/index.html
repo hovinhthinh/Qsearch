@@ -105,7 +105,7 @@
 <script>
     // use part-search mode.
     if ($.cookie('part_search_table') == null) {
-        $("#change-mode").click();
+        changeSearchMode();
     }
 
     $('#change-mode').each(function () {
@@ -202,7 +202,7 @@
     $(".sample-query").each(function (index) {
         $(this).click(function () {
             if ($.cookie('part_search_table') == "1") {
-                $("#change-mode").click();
+                changeSearchMode();
             }
             if ($("#full")[0].hasAttribute('disabled')) {
                 return;

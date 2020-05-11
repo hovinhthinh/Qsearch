@@ -190,7 +190,7 @@ if ($.cookie('part_search_table') == "1") {
     $("#full").attr("hidden", "");
 }
 
-$("#change-mode").click(function () {
+function changeSearchMode() {
     if ($.cookie('part_search_table') != "1") {
         $("#type").removeAttr("hidden");
         $("#type").focus();
@@ -206,4 +206,6 @@ $("#change-mode").click(function () {
         $("#full").focus();
         $.cookie('part_search_table', "0");
     }
-});
+}
+
+$("#change-mode").click(changeSearchMode);
