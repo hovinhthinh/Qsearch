@@ -77,7 +77,7 @@ public class TableQfactLoader {
 
                         f.quantity = ql.quantity.toString();
                         f.quantitySpan = ql.text;
-                        f.domain = QuantityDomain.getDomain(ql.quantity, true);
+                        f.domain = QuantityDomain.getFineGrainedDomain(ql.quantity);
 
                         f.headerContext = table.getCombinedHeader(qCol);
                         f.headerUnitSpan = table.getHeaderUnitSpan(qCol);

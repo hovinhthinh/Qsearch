@@ -30,7 +30,7 @@ public class QuantityConstraint {
                 // IllinoisQuantifier.
                 c.resolutionCode = QuantityResolution.getResolution(constraintString, c.quantity);
                 c.domain = QuantityDomain.getDomain(c.quantity);
-                c.fineGrainedDomain = QuantityDomain.getDomain(c.quantity, true);
+                c.fineGrainedDomain = QuantityDomain.getFineGrainedDomain(c.quantity);
                 return c;
             }
         }
