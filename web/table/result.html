@@ -378,7 +378,7 @@
 
         if (instance.subInstances.length > 1) {
             var wrapper = $('<div style="text-align: center;"><div style="display: inline-block;"></div></div>');
-            wrapper.eq(0).children().eq(0).html('<button class="mt-1 btn btn-sm btn-link" onclick="showMoreTables(' + index + ', this)">Show more</button>');
+            wrapper.eq(0).children().eq(0).html('<button class="mt-1 btn btn-link" onclick="showMoreTables(' + index + ', this)">Show more</button>');
             tCel.append(wrapper);
             var moreTCel = $('<div class="collapse">');
             for (var i = 1; i < instance.subInstances.length; ++i) {
