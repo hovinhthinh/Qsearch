@@ -136,7 +136,13 @@
 </footer>
 <img id="loading" src="img/loading.gif" style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"/>
 <script src="js/local.js" crossorigin="anonymous"></script>
-
+<style>
+    .result-img {
+        max-height: 200px;
+        height: auto;
+        width: auto;
+    }
+</style>
 <script>
     var showTimeOut = 10000;
     var nanobar = new Nanobar();
@@ -148,11 +154,12 @@
 
     function entityCell(inst) {
         var value = inst.entity;
-        value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result" href="https://www.wikipedia.org/wiki/'
+        value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result mr-1" href="https://www.wikipedia.org/wiki/'
             + encodeURI(value.substring(1, value.length - 1)) + '" target="_blank" referrerpolicy="no-referrer">'
             + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
             + '</a>'
-            + '</br><span class="badge badge-pill badge-secondary">Score: ' + inst.score.toFixed(3) + '</span>';
+            + '<span class="badge badge-pill badge-secondary">Score: ' + inst.score.toFixed(3) + '</span>';
+
         return $("<td style='width: auto !important;'>" + value + "</td>");
     }
 
@@ -442,7 +449,8 @@
             var current = this;
             if ($(current).attr('href') in wikiLinkToImageMap) {
                 if (wikiLinkToImageMap[$(current).attr('href')] != 'None') {
-                    $(current).attr("data-content", wikiLinkToImageMap[$(current).attr('href')]);
+                    // $(current).attr("data-content", wikiLinkToImageMap[$(current).attr('href')]);
+                    $(current).parent().append($('</br>' + wikiLinkToImageMap[$(current).attr('href')]).addClass('mt-1 rounded result-img'));
                     $(current).popover();
                     if ($(current).is(':hover')) {
                         $(current).trigger('mouseenter');
@@ -458,7 +466,8 @@
                     success: function (data) {
                         if ("imgLink" in data) {
                             var imgLink = "<img referrerpolicy=\"no-referrer\" style=\"object-fit: contain;\" src=\"" + data["imgLink"] + "\" class=\"img-responsive img-fluid\">";
-                            $(current).attr("data-content", imgLink);
+                            // $(current).attr("data-content", imgLink);
+                            $(current).parent().append($('</br>' + imgLink).addClass('mt-1 rounded result-img'));
                             wikiLinkToImageMap[$(current).attr("href")] = imgLink;
                             $(current).popover();
                             if ($(current).is(':hover')) {
