@@ -124,6 +124,7 @@ public class QuantityDomain {
             {"- square - mile", 2859988.11},
             {"sq miles", 2859988.11},
             {"sq mi", 2859988.11},
+            {"sqmi", 2859988.11},
             {"square feet", 0.0929},
             {"square foot", 0.0929},
             {"- square - foot", 0.0929},
@@ -143,6 +144,8 @@ public class QuantityDomain {
             {"square kilometer", 1000000.0},
             {"square km", 1000000.0},
             {"sq km", 1000000.0},
+            {"sqkm", 1000000.0},
+            {"km²", 1000000.0},
             {"km2", 1000000.0},
             {"km ^ 2", 1000000.0},
             {"square metres", 1.0}, // this is the standard
