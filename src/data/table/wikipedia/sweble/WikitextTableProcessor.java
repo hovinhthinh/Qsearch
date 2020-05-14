@@ -45,6 +45,8 @@ public class WikitextTableProcessor extends String2StringMap {
 
     private PageId pageId;
 
+    private boolean extendCellOnConvertTemplate;
+
     public static void main(String[] args) {
         WikitextTableProcessor processor = new WikitextTableProcessor();
         args = "/local/home/hvthinh/datasets/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.wikitext.gz".split(" ");
@@ -125,6 +127,7 @@ public class WikitextTableProcessor extends String2StringMap {
             WtNode r = rows.get(i);
             ArrayList<WtNode> cols = getSubNodeList(r, false, "WtTableHeader", "WtTableCell");
             int nHeaderCells = 0;
+            int nExtendedCellOnConvertTemplate = 0;
             for (int j = 0; j < cols.size(); ++j) {
                 WtNode c = cols.get(j);
                 WtXmlAttributes attrs;
@@ -159,9 +162,16 @@ public class WikitextTableProcessor extends String2StringMap {
                     }
                 }
 
+                extendCellOnConvertTemplate = false;
                 JSONObject cellContent = getDisplayText(body);
 
-                builder.addHtmlCell(i, j, rowspan, colspan, cellContent);
+                builder.addHtmlCell(i, j + nExtendedCellOnConvertTemplate, rowspan, colspan, cellContent);
+                if (extendCellOnConvertTemplate) {
+                    ++nExtendedCellOnConvertTemplate;
+                    builder.addHtmlCell(i, j + nExtendedCellOnConvertTemplate, 1, 1, new JSONObject()
+                            .put("text", "")
+                            .put("surfaceLinks", new JSONArray()));
+                }
             }
 
             if (nHeaderCells == cols.size()) {
@@ -422,6 +432,13 @@ public class WikitextTableProcessor extends String2StringMap {
                     if (args.size() >= 2) {
                         content.append(getAstText(args.get(0).getValue())).append(" ")
                                 .append(getAstText(args.get(1).getValue())).append(" ");
+                        for (int i = 2; i < args.size(); ++i) {
+                            if (args.get(i).hasName() && args.get(i).getName().getAsString().equals("disp")
+                                    && getAstText(args.get(i).getValue()).equals("table")) {
+                                extendCellOnConvertTemplate = true;
+                                break;
+                            }
+                        }
                     }
                 } else if (tName.equals("nts")) {
                     if (args.size() == 1) {
