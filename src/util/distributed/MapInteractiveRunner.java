@@ -15,6 +15,7 @@ public class MapInteractiveRunner {
     public static final String ON_KEEP_ALIVE = "__im_alive__";
 
     public static final int KEEP_ALIVE_INTERVAL = 10;
+    public static final int GC_INTERVAL = 1000;
 
     // args: <String2StringMapClass>
     public static void main(String[] args) {
@@ -48,6 +49,8 @@ public class MapInteractiveRunner {
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
 
             String str;
+
+            long lastGCTime = System.currentTimeMillis();
             while ((str = in.readLine()) != null) {
                 List<String> output = null;
                 try {
@@ -55,6 +58,10 @@ public class MapInteractiveRunner {
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.err.println(String.format("%s\t%s", ON_FAIL, str));
+                }
+                if (System.currentTimeMillis() >= lastGCTime + GC_INTERVAL * 1000) {
+                    System.gc();
+                    lastGCTime = System.currentTimeMillis();
                 }
 
                 JSONArray arr = new JSONArray();
