@@ -48,7 +48,7 @@ public class TimeTaggingNode implements TaggingNode {
             // if header has an unit then this column is not time column.
             Quadruple<String, Double, String, String> headerUnit = QuantityTaggingNode.getHeaderUnit(table.getOriginalCombinedHeader(c));
 
-            boolean headerHasUnit = headerUnit != null && !headerUnit.first.equalsIgnoreCase("year");
+            boolean headerHasUnit = headerUnit != null && headerUnit.first != null && !headerUnit.first.equalsIgnoreCase("year");
 
             for (int r = 0; r < table.nDataRow; ++r) {
                 if (table.data[r][c].entityLinks != null && table.data[r][c].entityLinks.size() > 0) {
