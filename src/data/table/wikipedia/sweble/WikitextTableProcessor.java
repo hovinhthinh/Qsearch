@@ -173,16 +173,21 @@ public class WikitextTableProcessor extends String2StringMap {
                             .put("surfaceLinks", new JSONArray()));
                 }
             }
-
-            if (cols.size() > 0 && nHeaderCells == cols.size()) {
+            if (cols.size() == 0) {
                 if (!bodyReached) {
                     ++nHeaderRows;
-                } else {
-                    // Malformed table
-                    return;
                 }
             } else {
-                bodyReached = true;
+                if (nHeaderCells == cols.size()) {
+                    if (!bodyReached) {
+                        ++nHeaderRows;
+                    } else {
+                        // Malformed table
+                        return;
+                    }
+                } else {
+                    bodyReached = true;
+                }
             }
         }
         if (builder.hasDuplicatedNode() || builder.hasBlankNode()) {
