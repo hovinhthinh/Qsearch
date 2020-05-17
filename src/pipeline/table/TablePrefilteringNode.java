@@ -16,7 +16,7 @@ public class TablePrefilteringNode implements TaggingNode {
     }
 
     public TablePrefilteringNode() {
-        this(4, 100);
+        this(4, 400);
     }
 
     private boolean[] rowTobePruned;
