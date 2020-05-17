@@ -174,7 +174,7 @@ public class WikitextTableProcessor extends String2StringMap {
                 }
             }
 
-            if (nHeaderCells == cols.size()) {
+            if (cols.size() > 0 && nHeaderCells == cols.size()) {
                 if (!bodyReached) {
                     ++nHeaderRows;
                 } else {
