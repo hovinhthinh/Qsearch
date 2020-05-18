@@ -46,7 +46,7 @@ public class TextBasedColumnScoringNode implements TaggingNode {
     public double homogeneityWeight;
     private QfactTaxonomyGraph qfactGraph;
 
-    private static final int ENTITY_PAGE_CONTENT_CACHE_SIZE = 1000;
+    private static final int ENTITY_PAGE_CONTENT_CACHE_SIZE = 4000;
     private Object2ObjectLinkedOpenHashMap<String, HashSet<String>> entityPageContentCache = new Object2ObjectLinkedOpenHashMap<>(ENTITY_PAGE_CONTENT_CACHE_SIZE);
 
 
