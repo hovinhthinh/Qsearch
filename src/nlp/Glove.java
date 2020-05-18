@@ -16,8 +16,8 @@ public class Glove {
     private static Object2IntOpenHashMap<String> EMBEDDING_ID = null;
     private static ArrayList<double[]> EMBEDDING_VALUE = null;
 
-//    private static final int CACHE_COSINE_SIZE = 10000000;
-//    private static Long2DoubleLinkedOpenHashMap CACHE_COSINE = new Long2DoubleLinkedOpenHashMap(CACHE_COSINE_SIZE);
+    private static final int CACHE_COSINE_SIZE = 50000000;
+    private static Long2DoubleLinkedOpenHashMap CACHE_COSINE = new Long2DoubleLinkedOpenHashMap(CACHE_COSINE_SIZE);
 
     private synchronized static void init() {
         if (EMBEDDING_ID != null) {
@@ -41,7 +41,7 @@ public class Glove {
         EMBEDDING_VALUE = tempValue;
         EMBEDDING_VALUE.trimToSize();
 
-//        CACHE_COSINE.defaultReturnValue(-1.0);
+        CACHE_COSINE.defaultReturnValue(-1.0);
     }
 
     // Normally cosine gives a value from -1 to 1. However, we normalize this value to 0 -> 1
@@ -59,20 +59,17 @@ public class Glove {
             return -1;
         }
 
-//        if (aId > bId) {
-//            int tmp = aId;
-//            aId = bId;
-//            bId = tmp;
-//        }
+        long key = aId < bId
+                ? ((long) aId) * EMBEDDING_VALUE.size() + bId
+                : ((long) bId) * EMBEDDING_VALUE.size() + aId;
 
-//        long key = ((long) aId) * EMBEDDING_VALUE.size() + bId;
-//        double r;
-//        synchronized (CACHE_COSINE) {
-//            r = CACHE_COSINE.getAndMoveToFirst(key);
-//        }
-//        if (r != -1.0) {
-//            return r;
-//        }
+        double r;
+        synchronized (CACHE_COSINE) {
+            r = CACHE_COSINE.getAndMoveToFirst(key);
+        }
+        if (r != -1.0) {
+            return r;
+        }
 
         double[] aEmbedding = EMBEDDING_VALUE.get(aId);
         double[] bEmbedding = EMBEDDING_VALUE.get(bId);
@@ -88,12 +85,12 @@ public class Glove {
         // Normalize.
         double cosine = 0.5 - dotProduct / Math.sqrt(aLength) / Math.sqrt(bLength) / 2;
 
-//        synchronized (CACHE_COSINE) {
-//            CACHE_COSINE.putAndMoveToFirst(key, cosine);
-//            if (CACHE_COSINE.size() > CACHE_COSINE_SIZE) {
-//                CACHE_COSINE.removeLastDouble();
-//            }
-//        }
+        synchronized (CACHE_COSINE) {
+            CACHE_COSINE.putAndMoveToFirst(key, cosine);
+            if (CACHE_COSINE.size() > CACHE_COSINE_SIZE) {
+                CACHE_COSINE.removeLastDouble();
+            }
+        }
         return cosine;
     }
 
