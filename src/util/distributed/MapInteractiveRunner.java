@@ -45,6 +45,7 @@ public class MapInteractiveRunner {
         });
         keepAlive.start();
 
+        System.gc();
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
 

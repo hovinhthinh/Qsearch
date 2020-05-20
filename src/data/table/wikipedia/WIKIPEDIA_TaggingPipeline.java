@@ -17,6 +17,7 @@ public class WIKIPEDIA_TaggingPipeline extends String2StringMap {
     public void before() {
         Static.getOpenIe();
         Static.getIllinoisQuantifier();
+        QfactTaxonomyGraph.getDefaultGraphInstance();
     }
 
     TaggingPipeline pipeline = getDefaultTaggingPipeline();

@@ -2,6 +2,7 @@ package data.table.tablem;
 
 import model.table.Table;
 import nlp.Static;
+import pipeline.table.QfactTaxonomyGraph;
 import pipeline.table.TaggingPipeline;
 import util.FileUtils;
 import util.Gson;
@@ -17,6 +18,7 @@ public class TABLEM_TaggingPipeline extends String2StringMap {
     public void before() {
         Static.getOpenIe();
         Static.getIllinoisQuantifier();
+        QfactTaxonomyGraph.getDefaultGraphInstance();
     }
 
     TaggingPipeline pipeline = TaggingPipeline.getDefaultTaggingPipeline();
