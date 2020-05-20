@@ -52,6 +52,9 @@ public class ContextEmbeddingMatcher implements ContextMatcher {
                 if (sim != -1) {
                     max = Math.max(max, 1 - sim);
                 }
+                if (sim == 0) {
+                    break; // early stop!
+                }
             }
             double idf = IDF.getRobertsonIdf(qX);
             score += max * idf;
