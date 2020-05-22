@@ -57,6 +57,7 @@ public class Static {
     public static Quantifier getIllinoisQuantifier() {
         if (ILLINOIS_QUANTIFIER == null) {
             ILLINOIS_QUANTIFIER = new Quantifier();
+            ILLINOIS_QUANTIFIER.initialize(null);
         }
         return ILLINOIS_QUANTIFIER;
     }
