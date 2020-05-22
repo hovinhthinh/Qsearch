@@ -1,7 +1,8 @@
 package model.query;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
-import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
+import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
 import edu.knowitall.tool.postag.PostaggedToken;
 import model.quantity.QuantityConstraint;
 import nlp.NLP;
@@ -9,6 +10,7 @@ import nlp.Static;
 import scala.collection.JavaConversions;
 import server.text.handler.TypeSuggestionHandler;
 import uk.ac.susx.informatics.Morpha;
+import util.FileUtils;
 import util.Triple;
 
 import java.util.ArrayList;
@@ -26,7 +28,6 @@ public class SimpleQueryParser {
     // (\b|\$)\d+(\.\d+)?\s*(k|m|b)(\b|\$)
     private static final Pattern QUANTITY_TO_OPTIMIZE_PATTERN =
             Pattern.compile("(\\b|\\$)\\d+(\\.\\d+)?\\s*(k|m|b)(\\b|\\$)");
-    private static Quantifier QUANTIFIER = new Quantifier();
 
     private static String preprocess(String query) {
         query = NLP.stripSentence(query).toLowerCase();
@@ -38,10 +39,14 @@ public class SimpleQueryParser {
         query = query.replaceFirst("^(am|is|are|was|were|be) ", "");
 
         int nQuantity = 0;
-        for (QuantSpan span : QUANTIFIER.getSpans(query, true)) { // get the last one.
-            if (span.object instanceof edu.illinois.cs.cogcomp.quant.standardize.Quantity) {
-                ++nQuantity;
+        try {
+            for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(query, true, null)) { // get the last one.
+                if (span.object instanceof Quantity) {
+                    ++nQuantity;
+                }
             }
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
         }
         // optimize k, m, b for quantities, only when nQuantity <= 1 quantity.
         if (nQuantity <= 1) {
@@ -128,9 +133,9 @@ public class SimpleQueryParser {
                 }
             }
             // quantity
-            for (QuantSpan span : QUANTIFIER.getSpans(rawTokenized, true)) { // get the last one.
-                if (span.object instanceof edu.illinois.cs.cogcomp.quant.standardize.Quantity) {
-                    String qStr = rawTokenized.substring(span.start, span.end).trim();
+            for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(rawTokenized, true, null)) { // get the last one.
+                if (span.object instanceof Quantity) {
+                    String qStr = rawTokenized.substring(span.start, span.end + 1).trim();
                     String passed = rawTokenized.substring(0, span.start).trim();
                     int startToken = 0;
                     if (!passed.isEmpty()) {
@@ -190,16 +195,23 @@ public class SimpleQueryParser {
     }
 
     public static void main(String[] args) {
-//        System.out.println(preprocess("Companies with revenue over 1B USD. "));
-//        System.out.println(preprocess("Companies with revenue over $1  K USD. "));
-//        System.out.println(preprocess("Companies with revenue over 1 m USD. "));
-//        System.out.println(preprocess("Companies with revenue over $1.2B USD. "));
-//        System.out.println(preprocess("Companies with revenue over 1.123 k$ USD. "));
-//        System.out.println(preprocess("Companies with revenue over $1  kK USD. "));
-//        System.out.println(preprocess("Companies with revenue over $1mm USD. "));
-        Triple t = parse("electric cars with range more than 50 km");
-        System.out.println(t.first);
-        System.out.println(t.second);
-        System.out.println(t.third);
+        String[] files = new String[]{
+                "eval/text/exp_2/inputs/FINANCE.txt",
+                "eval/text/exp_2/inputs/SPORTS.txt",
+                "eval/text/exp_2/inputs/TECHNOLOGY.txt",
+                "eval/text/exp_2/inputs/TRANSPORT.txt"
+        };
+        for (String file : files) {
+            for (String line : FileUtils.getLineStream(file, "UTF-8")) {
+                String[] arr = line.split("\t");
+                Triple<String, String, String> t = parse(arr[0]);
+                System.out.println(String.format("[Parsed] %s -- %s", arr[0], t.toString()));
+            }
+        }
+        System.out.println("--------------------------------------------------------------------------------");
+
+        System.out.println(parse("sprinters who ran 100m in less than 10 seconds"));
+        System.out.println(parse("companies with profit in 2018 less than 100m usd"));
+        System.out.println(parse("games with number of players less than 100 million in 2018"));
     }
 }

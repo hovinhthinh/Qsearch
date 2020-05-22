@@ -1,5 +1,6 @@
 package model.quantity;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
 import nlp.NLP;
@@ -10,7 +11,9 @@ import java.util.HashSet;
 
 // Not working: "higher than 1 million euros"
 public class QuantityConstraint {
-    private static transient ThreadLocal<Quantifier> QUANTIFIER_LOCAL = ThreadLocal.withInitial(() -> new Quantifier());
+    private static transient ThreadLocal<Quantifier> QUANTIFIER_LOCAL = ThreadLocal.withInitial(() -> new Quantifier() {{
+        initialize(null);
+    }});
     public Quantity quantity; // From Illinois Quantifier.
     public QuantityResolution.Value resolutionCode;
     public String domain;
@@ -22,17 +25,21 @@ public class QuantityConstraint {
         QuantityConstraint c = new QuantityConstraint();
         c.phrase = constraintString;
 
-        for (QuantSpan span : QUANTIFIER_LOCAL.get().getSpans(constraintString, true)) {
-            if (span.object instanceof edu.illinois.cs.cogcomp.quant.standardize.Quantity) {
-                edu.illinois.cs.cogcomp.quant.standardize.Quantity q =
-                        (edu.illinois.cs.cogcomp.quant.standardize.Quantity) span.object;
-                c.quantity = new Quantity(q.value, NLP.stripSentence(q.units), "external"); // not use resolution from
-                // IllinoisQuantifier.
-                c.resolutionCode = QuantityResolution.getResolution(constraintString, c.quantity);
-                c.domain = QuantityDomain.getDomain(c.quantity);
-                c.fineGrainedDomain = QuantityDomain.getFineGrainedDomain(c.quantity);
-                return c;
+        try {
+            for (QuantSpan span : QUANTIFIER_LOCAL.get().getSpans(constraintString, true, null)) {
+                if (span.object instanceof edu.illinois.cs.cogcomp.quant.standardize.Quantity) {
+                    edu.illinois.cs.cogcomp.quant.standardize.Quantity q =
+                            (edu.illinois.cs.cogcomp.quant.standardize.Quantity) span.object;
+                    c.quantity = new Quantity(q.value, NLP.stripSentence(q.units), "external"); // not use resolution from
+                    // IllinoisQuantifier.
+                    c.resolutionCode = QuantityResolution.getResolution(constraintString, c.quantity);
+                    c.domain = QuantityDomain.getDomain(c.quantity);
+                    c.fineGrainedDomain = QuantityDomain.getFineGrainedDomain(c.quantity);
+                    return c;
+                }
             }
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
         }
         return null;
     }

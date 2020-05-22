@@ -2,6 +2,7 @@ package pipeline.table;
 
 import catalog.Unit;
 import catalog.UnitPair;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
 import iitb.shared.EntryWithScore;
@@ -86,9 +87,9 @@ public class QuantityTaggingNode implements TaggingNode {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         String sentStr = "Neymar to earn $ 916k a week after record transfer .";
-        for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(sentStr, true)) {
+        for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(sentStr, true, null)) {
             if (span.object instanceof Quantity) {
                 Quantity q = (Quantity) span.object;
                 System.out.println(span.toString());
@@ -157,75 +158,79 @@ public class QuantityTaggingNode implements TaggingNode {
         // Now use IllinoisQuantifier
         String dumpyText = "This quantity is " + cell.text + " .";
         boolean firstQuantity = true;
-        for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(dumpyText, true)) {
-            if (span.object instanceof Quantity) {
-                Quantity q = (Quantity) span.object;
+        try {
+            for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(dumpyText, true, null)) {
+                if (span.object instanceof Quantity) {
+                    Quantity q = (Quantity) span.object;
 
-                // In case the unit is extracted from header, the value from cell should be divided by 100.
-                // This is due to the reason that Illinois Quantifier return percentage between [0,1]
-                if (unit != null && unit.equals("percent") && q.value > 1.0) {
-                    multiplier /= 100;
-                }
-
-                q.units = NLP.stripSentence(q.units);
-                if (q.units.equalsIgnoreCase("millions")) {
-                    q.value *= 1000000;
-                    q.units = "";
-                }
-
-                // prefer header unit if available (only for firstQuantity)
-                String cellUnit = firstQuantity ? NLP.stripSentence(unit != null ? unit : q.units) : q.units;
-                firstQuantity = false;
-
-                String quantitySpan = dumpyText.substring(span.start, span.end);
-
-                // !!! Apply rules here (when unit is missing)
-                if (cellUnit.trim().isEmpty()) {
-                    if (originalCombinedHeader.equalsIgnoreCase("height")) {
-                        // human height
-                        if (q.value > 100 && q.value <= 250) {
-                            cellUnit = "centimetre";
-                        } else if (q.value > 1 && q.value <= 2.5) {
-                            cellUnit = "metre";
-                        }
-                    } else if (originalCombinedHeader.equalsIgnoreCase("reaction")) {
-                        // athletics reaction time
-                        if (q.value > 0 && q.value < 0.5) {
-                            cellUnit = "second";
-                        }
-                    } else if (originalCombinedHeader.equalsIgnoreCase("weight")) {
-                        // human weight
-                        if (q.value >= 50 && q.value <= 100) {
-                            cellUnit = "kilogram";
-                        }
-                    } else if (originalCombinedHeader.equalsIgnoreCase("record")
-                            || originalCombinedHeader.equalsIgnoreCase("time")) {
-                        if (q.value < 60) {
-                            cellUnit = "second";
-                        }
-                    } else if (cell.text.contains("€" + quantitySpan)) {
-                        cellUnit = "euro";
-                        quantitySpan = "€" + quantitySpan;
-                    } else if (cell.text.contains("€ " + quantitySpan)) {
-                        cellUnit = "euro";
-                        quantitySpan = "€ " + quantitySpan;
-                    } else if (cell.text.contains("£" + quantitySpan)) {
-                        cellUnit = "british pound";
-                        quantitySpan = "£" + quantitySpan;
-                    } else if (cell.text.contains("£ " + quantitySpan)) {
-                        cellUnit = "british pound";
-                        quantitySpan = "£ " + quantitySpan;
-                    } else if (cell.text.contains("¥" + quantitySpan)) {
-                        cellUnit = "yuan";
-                        quantitySpan = "¥" + quantitySpan;
-                    } else if (cell.text.contains("¥ " + quantitySpan)) {
-                        cellUnit = "yuan";
-                        quantitySpan = "¥ " + quantitySpan;
+                    // In case the unit is extracted from header, the value from cell should be divided by 100.
+                    // This is due to the reason that Illinois Quantifier return percentage between [0,1]
+                    if (unit != null && unit.equals("percent") && q.value > 1.0) {
+                        multiplier /= 100;
                     }
-                }
 
-                cell.quantityLinks.add(new QuantityLink(quantitySpan, q.value * multiplier, cellUnit, q.bound));
+                    q.units = NLP.stripSentence(q.units);
+                    if (q.units.equalsIgnoreCase("millions")) {
+                        q.value *= 1000000;
+                        q.units = "";
+                    }
+
+                    // prefer header unit if available (only for firstQuantity)
+                    String cellUnit = firstQuantity ? NLP.stripSentence(unit != null ? unit : q.units) : q.units;
+                    firstQuantity = false;
+
+                    String quantitySpan = dumpyText.substring(span.start, span.end + 1);
+
+                    // !!! Apply rules here (when unit is missing)
+                    if (cellUnit.trim().isEmpty()) {
+                        if (originalCombinedHeader.equalsIgnoreCase("height")) {
+                            // human height
+                            if (q.value > 100 && q.value <= 250) {
+                                cellUnit = "centimetre";
+                            } else if (q.value > 1 && q.value <= 2.5) {
+                                cellUnit = "metre";
+                            }
+                        } else if (originalCombinedHeader.equalsIgnoreCase("reaction")) {
+                            // athletics reaction time
+                            if (q.value > 0 && q.value < 0.5) {
+                                cellUnit = "second";
+                            }
+                        } else if (originalCombinedHeader.equalsIgnoreCase("weight")) {
+                            // human weight
+                            if (q.value >= 50 && q.value <= 100) {
+                                cellUnit = "kilogram";
+                            }
+                        } else if (originalCombinedHeader.equalsIgnoreCase("record")
+                                || originalCombinedHeader.equalsIgnoreCase("time")) {
+                            if (q.value < 60) {
+                                cellUnit = "second";
+                            }
+                        } else if (cell.text.contains("€" + quantitySpan)) {
+                            cellUnit = "euro";
+                            quantitySpan = "€" + quantitySpan;
+                        } else if (cell.text.contains("€ " + quantitySpan)) {
+                            cellUnit = "euro";
+                            quantitySpan = "€ " + quantitySpan;
+                        } else if (cell.text.contains("£" + quantitySpan)) {
+                            cellUnit = "british pound";
+                            quantitySpan = "£" + quantitySpan;
+                        } else if (cell.text.contains("£ " + quantitySpan)) {
+                            cellUnit = "british pound";
+                            quantitySpan = "£ " + quantitySpan;
+                        } else if (cell.text.contains("¥" + quantitySpan)) {
+                            cellUnit = "yuan";
+                            quantitySpan = "¥" + quantitySpan;
+                        } else if (cell.text.contains("¥ " + quantitySpan)) {
+                            cellUnit = "yuan";
+                            quantitySpan = "¥ " + quantitySpan;
+                        }
+                    }
+
+                    cell.quantityLinks.add(new QuantityLink(quantitySpan, q.value * multiplier, cellUnit, q.bound));
+                }
             }
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
         }
     }
 
