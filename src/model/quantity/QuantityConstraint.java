@@ -3,6 +3,7 @@ package model.quantity;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
+import model.query.SimpleQueryParser;
 import nlp.NLP;
 
 import java.util.Arrays;
@@ -21,6 +22,8 @@ public class QuantityConstraint {
     public String phrase;
 
     public static QuantityConstraint parseFromString(String constraintString) {
+        constraintString = SimpleQueryParser.preprocess(constraintString);
+
         constraintString = NLP.stripSentence(constraintString).toLowerCase();
         QuantityConstraint c = new QuantityConstraint();
         c.phrase = constraintString;
@@ -49,7 +52,7 @@ public class QuantityConstraint {
     }
 
     public static void main(String[] args) {
-        System.out.println(parseFromString("more than 100 million dollars").toString());
+        System.out.println(parseFromString("more than $1b").toString());
         System.out.println(parseFromString("more than $100 million dollars").match(Quantity.fromQuantityString(
                 "(22600000.000;US$;=)")));
     }
