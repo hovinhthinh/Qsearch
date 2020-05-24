@@ -161,7 +161,6 @@ public class SimpleQueryParser {
                     }
 
                     constraint = QuantityConstraint.parseFromString(String.join(" ", arr.subList(start, end)));
-                    System.out.println(constraint);
                     // shrink to get a (fine-grained) non-dimensional unit
                     if (constraint.fineGrainedDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
 
