@@ -10,6 +10,7 @@ import nlp.Static;
 import scala.collection.JavaConversions;
 import server.text.handler.TypeSuggestionHandler;
 import uk.ac.susx.informatics.Morpha;
+import util.FileUtils;
 import util.Triple;
 
 import java.util.ArrayList;
