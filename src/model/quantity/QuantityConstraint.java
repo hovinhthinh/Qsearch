@@ -24,7 +24,7 @@ public class QuantityConstraint {
     public static QuantityConstraint parseFromString(String constraintString) {
         constraintString = SimpleQueryParser.preprocess(constraintString);
 
-        constraintString = NLP.stripSentence(constraintString).toLowerCase();
+        constraintString = String.join(" ", NLP.tokenize(constraintString));
         QuantityConstraint c = new QuantityConstraint();
         c.phrase = constraintString;
 
@@ -45,14 +45,13 @@ public class QuantityConstraint {
             if (flag) {
                 return c;
             }
-        } catch (AnnotatorException e) {
-            e.printStackTrace();
+        } catch (IndexOutOfBoundsException | AnnotatorException e) {
         }
         return null;
     }
 
     public static void main(String[] args) {
-        System.out.println(parseFromString("more than $1b").toString());
+        System.out.println(parseFromString("more than 30 km long").toString());
         System.out.println(parseFromString("more than $100 million dollars").match(Quantity.fromQuantityString(
                 "(22600000.000;US$;=)")));
     }

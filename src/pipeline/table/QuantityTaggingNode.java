@@ -229,7 +229,7 @@ public class QuantityTaggingNode implements TaggingNode {
                     cell.quantityLinks.add(new QuantityLink(quantitySpan, q.value * multiplier, cellUnit, q.bound));
                 }
             }
-        } catch (AnnotatorException e) {
+        } catch (AnnotatorException | IndexOutOfBoundsException e) {
             e.printStackTrace();
         }
     }
