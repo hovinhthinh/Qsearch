@@ -24,14 +24,12 @@ public class SimpleQueryParser {
     public static final Logger LOGGER = Logger.getLogger(SimpleQueryParser.class.getName());
     private static final HashSet<String> TYPE_SEPARATOR =
             new HashSet<>(Arrays.asList("that", "which", "where", "when", "who", "whom", "with", "whose"));
-    // (\b|\$)\d+(\.\d+)?(k|m|b)(\b|\$)
     private static final Pattern QUANTITY_TO_OPTIMIZE_PATTERN =
-            Pattern.compile("(\\b|\\$)\\d+(\\.\\d+)?(k|m|b)(\\b|\\$)");
+            Pattern.compile("(\\$\\s*|\\b)\\d+(\\.\\d+)?(k|m|b)(\\s*\\$|\\b)");
 
     public static String preprocess(String query) {
         query = NLP.stripSentence(query).toLowerCase();
-        if (query.length() > 0 && (query.charAt(query.length() - 1) == '.' || query.charAt(query.length() - 1) == ','
-                || query.charAt(query.length() - 1) == ';') || query.charAt(query.length() - 1) == '?') {
+        if (query.length() > 0 && Arrays.asList('.', ',', ';', '?').contains(query.charAt(query.length() - 1))) {
             query = query.substring(0, query.length() - 1);
         }
         query = query.replaceFirst("^(what|where|which|who) ", "");
@@ -45,12 +43,12 @@ public class SimpleQueryParser {
             int start = matcher.start(), end = matcher.end();
             boolean useMillionMul = false;
             if (sub.charAt(0) == '$') {
-                sub = sub.substring(1);
+                sub = sub.substring(1).trim();
                 ++start;
                 useMillionMul = true;
             }
             if (sub.charAt(sub.length() - 1) == '$') {
-                sub = sub.substring(0, sub.length() - 1);
+                sub = sub.substring(0, sub.length() - 1).trim();
                 --end;
                 useMillionMul = true;
             }
@@ -123,47 +121,63 @@ public class SimpleQueryParser {
                 }
             }
             // quantity
-            for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(rawTokenized, true, null)) { // get the last one.
+            // get the last one, or the last one right after a comparison signal.
+            String lastQuantityAfterSignal = null;
+            for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(rawTokenized, true, null)) {
                 if (span.object instanceof Quantity) {
                     String qStr = rawTokenized.substring(span.start, span.end + 1).trim();
-                    String passed = rawTokenized.substring(0, span.start).trim();
-                    int startToken = 0;
-                    if (!passed.isEmpty()) {
-                        startToken = NLP.splitSentence(passed).size();
-                        // FIX_FOR:"NFor further information , please contact : Virtue PR & Marketing
-                        // Communications P.O
-                        // Box : 191931 Dubai , United Arab Emirates Tel : +97144508835"
-                        if (rawTokenized.charAt(span.start) != ' ' && rawTokenized.charAt(span.start - 1) != ' ') {
-                            --startToken;
+                    boolean signalAdded = false;
+                    loop:
+                    for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS) {
+                        String[] candidates = new String[]{"not " + operator, "no " + operator, operator};
+                        for (String c : candidates) {
+                            String newQstr = NLP.stripSentence(c + " " + qStr.replace(operator, ""));
+                            if (rawTokenized.contains(newQstr)) {
+                                qStr = newQstr;
+                                signalAdded = true;
+                                break loop;
+                            }
                         }
                     }
-                    StringBuilder qSb = new StringBuilder();
-                    for (int i = startToken; i < startToken + NLP.splitSentence(qStr).size(); ++i) {
-                        qSb.append(" ").append(tagged.get(i).string());
+
+                    QuantityConstraint constraint = QuantityConstraint.parseFromString(qStr);
+                    if (constraint == null) {
+                        continue;
                     }
-                    result.third = qSb.toString().trim();
+                    String constraintStr = constraint.toString();
+                    // optimize quantity string
+
+                    ArrayList<String> arr = NLP.splitSentence(qStr);
+                    int start = 0, end = arr.size();
+                    while (start < end
+                            && (constraint = QuantityConstraint.parseFromString(String.join(" ", arr.subList(start + 1, end)))) != null
+                            && constraint.toString().equals(constraintStr)) {
+                        ++start;
+                    }
+                    while (start < end
+                            && (constraint = QuantityConstraint.parseFromString(String.join(" ", arr.subList(start, end - 1)))) != null
+                            && constraint.toString().equals(constraintStr)) {
+                        --end;
+                    }
+                    result.third = String.join(" ", arr.subList(start, end));
+                    if (signalAdded) {
+                        lastQuantityAfterSignal = result.third;
+                    }
+
                 }
             }
+
+            if (lastQuantityAfterSignal != null) {
+                result.third = lastQuantityAfterSignal;
+            }
+
             if (result.third == null) {
                 return null;
             }
-            String preModifiedQuantity = result.third;
 
-            loop:
-            for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS) {
-                String[] candidates = new String[]{"not " + operator, "no " + operator, operator};
-                for (String c : candidates) {
-                    String newQstr = NLP.stripSentence(c + " " + result.third.replace(operator, ""));
-                    if (rawTokenized.contains(newQstr)) {
-                        result.third = newQstr;
-                        rawTokenized = rawTokenized.replace(newQstr, "");
-                        break loop;
-                    }
-                }
-            }
             // context
             ArrayList<String> context = NLP.splitSentence(
-                    rawTokenized.replace(result.first, "").replace(preModifiedQuantity, ""));
+                    rawTokenized.replace(result.first, " ").replace(result.third, " "));
             StringBuilder cSb = new StringBuilder();
             for (String s : context) {
                 if (NLP.BLOCKED_STOPWORDS.contains(s) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(s)) {
@@ -195,7 +209,7 @@ public class SimpleQueryParser {
             for (String line : FileUtils.getLineStream(file, "UTF-8")) {
                 String[] arr = line.split("\t");
                 Triple<String, String, String> t = parse(arr[0]);
-                System.out.println(String.format("[Parsed] %s -- %s", arr[0], t.toString()));
+                System.out.println(String.format("[Parsed] %s -- %s", arr[0], t));
             }
         }
         System.out.println("--------------------------------------------------------------------------------");

@@ -67,7 +67,7 @@ public class QuantityTaggingNode implements TaggingNode {
                     }
                 }
             }
-        } catch (AnnotatorException e) {
+        } catch (AnnotatorException | IndexOutOfBoundsException e) {
             e.printStackTrace();
         }
     }
