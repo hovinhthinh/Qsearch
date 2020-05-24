@@ -10,7 +10,6 @@ import nlp.Static;
 import scala.collection.JavaConversions;
 import server.text.handler.TypeSuggestionHandler;
 import uk.ac.susx.informatics.Morpha;
-import util.FileUtils;
 import util.Triple;
 
 import java.util.ArrayList;
@@ -36,8 +35,19 @@ public class SimpleQueryParser {
         query = query.replaceFirst("^(what|where|which|who) ", "");
         query = query.replaceFirst("^(am|is|are|was|were|be) ", "");
 
+        // optimize resolution code
+        for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS.keySet()) {
+            int p = query.indexOf(" " + operator + " ");
+            if (p != -1) {
+                query = query.substring(0, p)
+                        + " " + QuantityConstraint.QuantityResolution.ALL_SIGNALS.get(operator) + " "
+                        + query.substring(p + operator.length() + 2);
+                break;
+            }
+        }
+
+        // optimize multiplier: process the first one only.
         Matcher matcher = QUANTITY_TO_OPTIMIZE_PATTERN.matcher(query);
-        // process the first one only.
         if (matcher.find()) {
             String sub = matcher.group();
             sub = sub.trim();
@@ -129,7 +139,7 @@ public class SimpleQueryParser {
                     String qStr = rawTokenized.substring(span.start, span.end + 1).trim();
                     boolean signalAdded = false;
                     loop:
-                    for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS) {
+                    for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS.keySet()) {
                         String[] candidates = new String[]{"not " + operator, "no " + operator, operator};
                         for (String c : candidates) {
                             String newQstr = NLP.stripSentence(c + " " + qStr.replace(operator, ""));

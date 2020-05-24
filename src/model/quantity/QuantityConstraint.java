@@ -5,9 +5,11 @@ import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
 import model.query.SimpleQueryParser;
 import nlp.NLP;
+import util.Pair;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 
 // Not working: "higher than 1 million euros"
@@ -17,6 +19,7 @@ public class QuantityConstraint {
     }});
     public Quantity quantity; // From Illinois Quantifier.
     public QuantityResolution.Value resolutionCode;
+    public boolean resolutionCodeExplicitlyGiven;
     public String domain;
     public String fineGrainedDomain;
     public String phrase;
@@ -36,7 +39,9 @@ public class QuantityConstraint {
                             (edu.illinois.cs.cogcomp.quant.standardize.Quantity) span.object;
                     c.quantity = new Quantity(q.value, NLP.stripSentence(q.units), "external"); // not use resolution from
                     // IllinoisQuantifier.
-                    c.resolutionCode = QuantityResolution.getResolution(constraintString, c.quantity);
+                    Pair<QuantityResolution.Value, Boolean> resolution = QuantityResolution.getResolution(constraintString, c.quantity);
+                    c.resolutionCode = resolution.first;
+                    c.resolutionCodeExplicitlyGiven = resolution.second;
                     c.domain = QuantityDomain.getDomain(c.quantity);
                     c.fineGrainedDomain = QuantityDomain.getFineGrainedDomain(c.quantity);
                     flag = true;
@@ -77,51 +82,63 @@ public class QuantityConstraint {
 
     @Override
     public String toString() {
-        return "<" + domain + ":" + resolutionCode + ":" + quantity.toString() + ">";
+        return "<" + domain
+                + ":" + (resolutionCodeExplicitlyGiven ? "explicit" : "implicit") + "-" + resolutionCode
+                + ":" + quantity.toString()
+                + ">";
     }
 
     public static class QuantityResolution {
         private static final int APPROXIMATE_THRESHOLD = 1000;
         private static final double APPROXIMATE_RATE = 0.01;
-        private static final HashSet<String> UPPER_BOUND_SIGNAL = new HashSet<>(Arrays.asList(
-                "within", "less than", "below", "lesser", "lower than", "under", "at most", "up to", "smaller than", "<", "<="
+        private static final LinkedHashSet<String> UPPER_BOUND_SIGNAL = new LinkedHashSet<>(Arrays.asList(
+                "less than", "within", "below", "lesser", "lower than", "under", "at most", "up to", "smaller than", "<", "<="
         ));
-        private static final HashSet<String> LOWER_BOUND_SIGNAL = new HashSet<>(Arrays.asList(
+        private static final LinkedHashSet<String> LOWER_BOUND_SIGNAL = new LinkedHashSet<>(Arrays.asList(
                 "more than", "above", "higher than", "above", "at least", "over", "greater than", ">", ">="
         ));
-        private static final HashSet<String> EXACT_SIGNAL = new HashSet<>(Arrays.asList(
-                "exact", "exactly"
+        private static final LinkedHashSet<String> EXACT_SIGNAL = new LinkedHashSet<>(Arrays.asList(
+                "exactly", "exact"
         ));
         // TODO: RANGE, OTHER_THAN
-        public static HashSet<String> ALL_SIGNALS = new HashSet<>();
 
+        // map signal to standard signal
+        public static HashMap<String, String> ALL_SIGNALS = new HashMap<>();
         static {
-            ALL_SIGNALS.addAll(UPPER_BOUND_SIGNAL);
-            ALL_SIGNALS.addAll(LOWER_BOUND_SIGNAL);
-            ALL_SIGNALS.addAll(EXACT_SIGNAL);
+            for (LinkedHashSet<String> signalSet : Arrays.asList(UPPER_BOUND_SIGNAL, LOWER_BOUND_SIGNAL, EXACT_SIGNAL)) {
+                String mainSignal = signalSet.iterator().next();
+                signalSet.forEach(o -> ALL_SIGNALS.put(o, mainSignal));
+            }
         }
 
-        public static Value getResolution(String constraintString, Quantity quantity) {
+        // return resolution code + is explicitly given.
+        public static Pair<Value, Boolean> getResolution(String constraintString, Quantity quantity) {
             constraintString = NLP.stripSentence(constraintString).toLowerCase();
             for (String s : UPPER_BOUND_SIGNAL) {
                 if (constraintString.contains(s)) {
-                    return (constraintString.contains("not ") || constraintString.contains("no ")) ?
-                            Value.LOWER_BOUND : Value.UPPER_BOUND;
+                    return new Pair<>(
+                            (constraintString.contains("not ") || constraintString.contains("no ")) ?
+                                    Value.LOWER_BOUND : Value.UPPER_BOUND,
+                            true);
                 }
             }
             for (String s : LOWER_BOUND_SIGNAL) {
                 if (constraintString.contains(s)) {
-                    return (constraintString.contains("not ") || constraintString.contains("no ")) ?
-                            Value.UPPER_BOUND : Value.LOWER_BOUND;
+                    return new Pair<>(
+                            (constraintString.contains("not ") || constraintString.contains("no ")) ?
+                                    Value.UPPER_BOUND : Value.LOWER_BOUND,
+                            true);
                 }
             }
             for (String s : EXACT_SIGNAL) {
                 if (constraintString.contains(s)) {
-                    return Value.EXACT;
+                    return new Pair<>(Value.EXACT, true);
                 }
             }
 
-            return Math.abs(quantity.value) <= APPROXIMATE_THRESHOLD ? Value.EXACT : Value.APPROXIMATE;
+            return new Pair<>(
+                    Math.abs(quantity.value) <= APPROXIMATE_THRESHOLD ? Value.EXACT : Value.APPROXIMATE,
+                    false);
         }
         // anything else is approximate
 
