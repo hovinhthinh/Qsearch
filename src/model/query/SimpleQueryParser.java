@@ -28,7 +28,7 @@ public class SimpleQueryParser {
     private static final Pattern QUANTITY_TO_OPTIMIZE_PATTERN =
             Pattern.compile("(\\b|\\$)\\d+(\\.\\d+)?(k|m|b)(\\b|\\$)");
 
-    private static String preprocess(String query) {
+    public static String preprocess(String query) {
         query = NLP.stripSentence(query).toLowerCase();
         if (query.length() > 0 && (query.charAt(query.length() - 1) == '.' || query.charAt(query.length() - 1) == ','
                 || query.charAt(query.length() - 1) == ';') || query.charAt(query.length() - 1) == '?') {
@@ -200,7 +200,7 @@ public class SimpleQueryParser {
         }
         System.out.println("--------------------------------------------------------------------------------");
 
-        System.out.println(parse("technology companies with more than 100b usd annual profit"));
+        System.out.println(parse("technology companies with more than $100b annual profit"));
         System.out.println(parse("sprinters who ran 200m in less than 25 s"));
         System.out.println(parse("companies with profit in 2018 under 100b usd"));
         System.out.println(parse("games with number of players less than 100 million in 2018"));
