@@ -1,6 +1,5 @@
 package model.query;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
 import edu.knowitall.tool.postag.PostaggedToken;
@@ -25,9 +24,9 @@ public class SimpleQueryParser {
     public static final Logger LOGGER = Logger.getLogger(SimpleQueryParser.class.getName());
     private static final HashSet<String> TYPE_SEPARATOR =
             new HashSet<>(Arrays.asList("that", "which", "where", "when", "who", "whom", "with", "whose"));
-    // (\b|\$)\d+(\.\d+)?\s*(k|m|b)(\b|\$)
+    // (\b|\$)\d+(\.\d+)?(k|m|b)(\b|\$)
     private static final Pattern QUANTITY_TO_OPTIMIZE_PATTERN =
-            Pattern.compile("(\\b|\\$)\\d+(\\.\\d+)?\\s*(k|m|b)(\\b|\\$)");
+            Pattern.compile("(\\b|\\$)\\d+(\\.\\d+)?(k|m|b)(\\b|\\$)");
 
     private static String preprocess(String query) {
         query = NLP.stripSentence(query).toLowerCase();
@@ -38,42 +37,33 @@ public class SimpleQueryParser {
         query = query.replaceFirst("^(what|where|which|who) ", "");
         query = query.replaceFirst("^(am|is|are|was|were|be) ", "");
 
-        int nQuantity = 0;
-        try {
-            for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(query, true, null)) { // get the last one.
-                if (span.object instanceof Quantity) {
-                    ++nQuantity;
-                }
+        Matcher matcher = QUANTITY_TO_OPTIMIZE_PATTERN.matcher(query);
+        // process the first one only.
+        if (matcher.find()) {
+            String sub = matcher.group();
+            sub = sub.trim();
+            int start = matcher.start(), end = matcher.end();
+            boolean useMillionMul = false;
+            if (sub.charAt(0) == '$') {
+                sub = sub.substring(1);
+                ++start;
+                useMillionMul = true;
             }
-        } catch (AnnotatorException e) {
-            e.printStackTrace();
-        }
-        // optimize k, m, b for quantities, only when nQuantity <= 1 quantity.
-        if (nQuantity <= 1) {
-            Matcher matcher = QUANTITY_TO_OPTIMIZE_PATTERN.matcher(query);
-            // process the first one only.
-            if (matcher.find()) {
-                String sub = matcher.group();
-                sub = sub.trim();
-                int start = matcher.start(), end = matcher.end();
-                if (sub.charAt(0) == '$') {
-                    sub = sub.substring(1);
-                    ++start;
-                }
-                if (sub.charAt(sub.length() - 1) == '$') {
-                    sub = sub.substring(0, sub.length() - 1);
-                    --end;
-                }
-                double num = Double.parseDouble(sub.substring(0, sub.length() - 1).trim());
-                if (sub.contains("k")) {
-                    num *= 1000;
-                } else if (sub.contains("m")) {
-                    num *= 1000000;
-                } else if (sub.contains("b")) {
-                    num *= 1000000000;
-                }
-                query = query.substring(0, start) + " " + String.format("%.0f", num) + " " + query.substring(end);
+            if (sub.charAt(sub.length() - 1) == '$') {
+                sub = sub.substring(0, sub.length() - 1);
+                --end;
+                useMillionMul = true;
             }
+            String num = sub.substring(0, sub.length() - 1);
+            String mul = "";
+            if (sub.contains("k")) {
+                mul = " thousand";
+            } else if (sub.contains("m")) {
+                mul = useMillionMul ? " million" : "m";
+            } else if (sub.contains("b")) {
+                mul = " billion";
+            }
+            query = query.substring(0, start) + " " + num + mul + " " + query.substring(end);
         }
 
         return NLP.stripSentence(query);
@@ -210,8 +200,10 @@ public class SimpleQueryParser {
         }
         System.out.println("--------------------------------------------------------------------------------");
 
-        System.out.println(parse("sprinters who ran 100m in less than 10 seconds"));
-        System.out.println(parse("companies with profit in 2018 less than 100m usd"));
+        System.out.println(parse("technology companies with more than 100b usd annual profit"));
+        System.out.println(parse("sprinters who ran 200m in less than 25 s"));
+        System.out.println(parse("companies with profit in 2018 under 100b usd"));
         System.out.println(parse("games with number of players less than 100 million in 2018"));
+        System.out.println(parse("which hybrid cars have range on battery more than 50 km?"));
     }
 }
