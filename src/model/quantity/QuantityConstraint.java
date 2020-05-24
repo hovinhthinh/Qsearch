@@ -26,7 +26,8 @@ public class QuantityConstraint {
         c.phrase = constraintString;
 
         try {
-            for (QuantSpan span : QUANTIFIER_LOCAL.get().getSpans(constraintString, true, null)) {
+            boolean flag = false;
+            for (QuantSpan span : QUANTIFIER_LOCAL.get().getSpans(constraintString, true, null)) { // get last one
                 if (span.object instanceof edu.illinois.cs.cogcomp.quant.standardize.Quantity) {
                     edu.illinois.cs.cogcomp.quant.standardize.Quantity q =
                             (edu.illinois.cs.cogcomp.quant.standardize.Quantity) span.object;
@@ -35,8 +36,11 @@ public class QuantityConstraint {
                     c.resolutionCode = QuantityResolution.getResolution(constraintString, c.quantity);
                     c.domain = QuantityDomain.getDomain(c.quantity);
                     c.fineGrainedDomain = QuantityDomain.getFineGrainedDomain(c.quantity);
-                    return c;
+                    flag = true;
                 }
+            }
+            if (flag) {
+                return c;
             }
         } catch (AnnotatorException e) {
             e.printStackTrace();
