@@ -30,7 +30,7 @@ public class QuantityConstraint {
 
         try {
             boolean flag = false;
-            for (QuantSpan span : QUANTIFIER_LOCAL.get().getSpans(constraintString, true, null)) { // get last one
+            for (QuantSpan span : QUANTIFIER_LOCAL.get().getSpans("This quantity is " + constraintString + " .", true, null)) { // get last one
                 if (span.object instanceof edu.illinois.cs.cogcomp.quant.standardize.Quantity) {
                     edu.illinois.cs.cogcomp.quant.standardize.Quantity q =
                             (edu.illinois.cs.cogcomp.quant.standardize.Quantity) span.object;
