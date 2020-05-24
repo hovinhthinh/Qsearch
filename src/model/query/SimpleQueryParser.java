@@ -4,6 +4,7 @@ import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
 import edu.knowitall.tool.postag.PostaggedToken;
 import model.quantity.QuantityConstraint;
+import model.quantity.QuantityDomain;
 import nlp.NLP;
 import nlp.Static;
 import scala.collection.JavaConversions;
@@ -86,8 +87,8 @@ public class SimpleQueryParser {
                 }
                 rawTokenizedSb.append(w.string());
                 String rawTokenizedSbStr = rawTokenizedSb.toString();
-                if (useTypeSuggestion && (TypeSuggestionHandler.getTypeFreq(rawTokenizedSbStr) >= 100
-                        || TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun)) >= 100)) {
+                if (useTypeSuggestion && (TypeSuggestionHandler.getTypeFreq(rawTokenizedSbStr) >= 50
+                        || TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun)) >= 50)) {
                     typeFromTypeSuggestionSystem = rawTokenizedSbStr;
                 }
             }
@@ -123,7 +124,7 @@ public class SimpleQueryParser {
             // quantity
             // get the last one, or the last one right after a comparison signal.
             String lastQuantityAfterSignal = null;
-            for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(rawTokenized, true, null)) {
+            for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(rawTokenized + " .", true, null)) {
                 if (span.object instanceof Quantity) {
                     String qStr = rawTokenized.substring(span.start, span.end + 1).trim();
                     boolean signalAdded = false;
@@ -146,7 +147,6 @@ public class SimpleQueryParser {
                     }
                     String constraintStr = constraint.toString();
                     // optimize quantity string
-
                     ArrayList<String> arr = NLP.splitSentence(qStr);
                     int start = 0, end = arr.size();
                     while (start < end
@@ -159,6 +159,34 @@ public class SimpleQueryParser {
                             && constraint.toString().equals(constraintStr)) {
                         --end;
                     }
+
+                    constraint = QuantityConstraint.parseFromString(String.join(" ", arr.subList(start, end)));
+                    System.out.println(constraint);
+                    // shrink to get a (fine-grained) non-dimensional unit
+                    if (constraint.fineGrainedDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+
+                        int shrinkedEnd = -1;
+                        int lastValidDimensionlessEnd = end;
+                        for (int i = end - 1; i > start; --i) {
+                            QuantityConstraint newConstraint = QuantityConstraint.parseFromString(String.join(" ", arr.subList(start, i)));
+                            if (newConstraint == null
+                                    || newConstraint.resolutionCode != constraint.resolutionCode
+                                    || newConstraint.quantity.value != constraint.quantity.value) {
+                                break;
+                            }
+                            lastValidDimensionlessEnd = i;
+                            if (!newConstraint.fineGrainedDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+                                shrinkedEnd = i;
+                                break;
+                            }
+                        }
+                        if (shrinkedEnd != -1) {
+                            end = shrinkedEnd; // shrink to first non-dimensionless
+                        } else {
+                            end = lastValidDimensionlessEnd; // shrink to empty unit
+                        }
+                    }
+
                     result.third = String.join(" ", arr.subList(start, end));
                     if (signalAdded) {
                         lastQuantityAfterSignal = result.third;
