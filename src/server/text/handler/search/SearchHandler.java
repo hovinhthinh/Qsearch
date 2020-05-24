@@ -84,6 +84,7 @@ public class SearchHandler extends HttpServlet {
         if (fullConstraint == null) {
             LOGGER.info("Query: {Type: \"" + typeConstraint + "\"; Context: \"" + contextConstraint +
                     "\"; Quantity: \"" + quantityConstraint + "\"}");
+            quantityConstraint = SimpleQueryParser.preprocess(quantityConstraint);
         } else {
             LOGGER.info("Query: {Full: \"" + fullConstraint + "\"}");
         }
