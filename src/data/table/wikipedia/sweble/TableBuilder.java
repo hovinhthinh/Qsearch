@@ -7,11 +7,11 @@ public class TableBuilder {
 
     private HashMap<String, Object> contentMap;
 
-    private boolean duplicated;
+    private int nDuplicated;
 
     public TableBuilder() {
         contentMap = new HashMap<>();
-        duplicated = false;
+        nDuplicated = 0;
     }
 
     public static void main(String[] args) {
@@ -23,20 +23,21 @@ public class TableBuilder {
         System.out.println(builder.getSimplePrint());
     }
 
-    public boolean hasDuplicatedNode() {
-        return duplicated;
+    public int getNDuplicatedNode() {
+        return nDuplicated;
     }
 
-    public boolean hasBlankNode() {
+    public int getNBlankNode() {
+        int nBlank = 0;
         Object[][] table = getTable();
         for (Object[] r : table) {
             for (Object c : r) {
                 if (c == null) {
-                    return true;
+                    ++nBlank;
                 }
             }
         }
-        return false;
+        return nBlank;
     }
 
     public void addHtmlCell(int htmlRowIndex, int htmlColIndex, int rowSpan, int colSpan, Object value) {
@@ -47,7 +48,7 @@ public class TableBuilder {
             for (int j = 0; j < colSpan; ++j) {
                 Object currentValue = contentMap.put(String.format("%d\t%d", htmlRowIndex + i, htmlColIndex + j), value);
                 if (currentValue != null) {
-                    duplicated = true;
+                    ++nDuplicated;
                 }
             }
         }

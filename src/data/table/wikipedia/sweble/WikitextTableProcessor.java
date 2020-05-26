@@ -190,7 +190,7 @@ public class WikitextTableProcessor extends String2StringMap {
                 }
             }
         }
-        if (builder.hasDuplicatedNode() || builder.hasBlankNode()) {
+        if (builder.getNDuplicatedNode() > 0 || builder.getNBlankNode() > 0) {
             return;
         }
 
