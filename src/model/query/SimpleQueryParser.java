@@ -25,8 +25,12 @@ public class SimpleQueryParser {
     public static final Logger LOGGER = Logger.getLogger(SimpleQueryParser.class.getName());
     private static final HashSet<String> TYPE_SEPARATOR =
             new HashSet<>(Arrays.asList("that", "which", "where", "when", "who", "whom", "with", "whose"));
-    private static final Pattern QUANTITY_TO_OPTIMIZE_PATTERN =
+
+    private static final Pattern MULTIPLIER_OPTIMIZE_PATTERN =
             Pattern.compile("(\\$\\s*|\\b)\\d+(\\.\\d+)?(k|m|b)(\\s*\\$|\\b)");
+
+    private static final Pattern RANGE_OPTIMIZE_PATTERN =
+            Pattern.compile("\\d+(\\.\\d+)?-\\d+(\\.\\d+)?");
 
     public static String preprocess(String query) {
         query = NLP.stripSentence(query).toLowerCase();
@@ -36,7 +40,7 @@ public class SimpleQueryParser {
         query = query.replaceFirst("^(what|where|which|who) ", "");
         query = query.replaceFirst("^(am|is|are|was|were|be) ", "");
 
-        // optimize resolution code
+        // optimize resolution code, map to standard resolution code (except for RANGE)
         for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS.keySet()) {
             int p = query.indexOf(" " + operator + " ");
             if (p != -1) {
@@ -46,9 +50,15 @@ public class SimpleQueryParser {
                 break;
             }
         }
+        // optimize for RANGE "-"
+        Matcher m = RANGE_OPTIMIZE_PATTERN.matcher(query);
+        if (m.find()) {
+            String str = m.group();
+            query = query.replace(str, str.replace("-", query.contains("between") ? " and " : " to "));
+        }
 
         // optimize multiplier: process the first one only.
-        Matcher matcher = QUANTITY_TO_OPTIMIZE_PATTERN.matcher(query);
+        Matcher matcher = MULTIPLIER_OPTIMIZE_PATTERN.matcher(query);
         if (matcher.find()) {
             String sub = matcher.group();
             sub = sub.trim();
