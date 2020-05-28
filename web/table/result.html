@@ -394,9 +394,22 @@
     }
 
     function showParsedQuery(type, context, quantity) {
+        var quantityConstraintDetail = "["
+            + quantity['fineGrainedDomain']
+            + ", " + (quantity['resolutionCodeExplicitlyGiven'] == true ? "explicit" : "implicit") + "-" + quantity['resolutionCode']
+            + ", "
+            + (quantity.quantity.value2 == null
+                ? quantity.quantity.value
+                : ("[" + quantity.quantity.value + "," + quantity.quantity.value2 + "]"))
+            + ", "
+            + quantity.quantity.unit
+            + "]";
+
         $('#parsed').html('Parsed:&nbsp;&nbsp;&nbsp;' + '<span class="entity-box">' + escapeText(type) + '</span>'
             + " &rarr; " + '<span class="context-box">' + escapeText(context) + '</span>'
-            + " &rarr; " + '<span class="quantity-box">' + escapeText(quantity['phrase']) + '</span>'
+            + " &rarr; " + '<span id="quantity-constraint" class="quantity-box" data-animation="true" data-placement="bottom" data-trigger="hover" data-html="true"' +
+            ' data-content="' + quantityConstraintDetail + '">'
+            + escapeText(quantity['phrase']) + '</span>'
             + ' <span class="badge badge-pill badge-danger">Domain: ' + escapeText(quantity['fineGrainedDomain']) + '</span>');
     }
 
@@ -443,6 +456,13 @@
         // hide converted quantity after sometime
         convertedQuantityShowingTimeout = setTimeout(function () {
             $('.converted-quantity').trigger('mouseleave');
+        }, showTimeOut);
+
+        // quantity constraint detail
+        $($('#quantity-constraint').popover('show').data('bs.popover').getTipElement())
+            .addClass('bg-light').attr;
+        setTimeout(function () {
+            $('#quantity-constraint').trigger('mouseleave');
         }, showTimeOut);
 
         $('.result').each(function () {
