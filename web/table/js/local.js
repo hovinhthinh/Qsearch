@@ -156,7 +156,7 @@ if (showSetting == null) {
     $('#setting-toggle').addClass('collapsed');
 }
 $('#setting-body').on('shown.bs.collapse', function () {
-    $.cookie('show_setting', '1');
+    $.cookie('show_setting_table', '1');
 });
 $('#setting-body').on('hidden.bs.collapse', function () {
     $.removeCookie('show_setting_table');
