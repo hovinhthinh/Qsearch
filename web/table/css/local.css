@@ -1,3 +1,7 @@
+.popover{
+    max-width: 100%;
+}
+
 .centered {
     position: fixed;
     top: 45%;
