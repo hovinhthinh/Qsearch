@@ -40,6 +40,19 @@ public class QuantityConstraint {
         return null;
     }
 
+    private static Double getMultiplier(edu.illinois.cs.cogcomp.quant.standardize.Quantity q) {
+        String surface = q.phrase.toLowerCase();
+        if (surface.contains("thousand")) {
+            return 1e3;
+        } else if (surface.contains("million")) {
+            return 1e6;
+        } else if (surface.contains("billion")) {
+            return 1e9;
+        } else {
+            return null;
+        }
+    }
+
     public static QuantityConstraint parseFromString(String constraintString) {
         constraintString = SimpleQueryParser.preprocess(constraintString);
 
@@ -84,15 +97,20 @@ public class QuantityConstraint {
                                 String midSpan = m.group();
                                 midSpan = midSpan.substring(0, midSpan.length() - q.phrase.length()).replaceFirst(p.pattern(), "").trim();
                                 if (!midSpan.isEmpty()) {
-                                    getQuantityFromStr(midSpan + " " + q.phrase);
                                     c.quantity.value = getQuantityFromStr(midSpan + " " + q.phrase).value;
                                 } // DONE
 
                                 v1Span = v1Span.substring(v1Span.indexOf(' '), v1Span.lastIndexOf(' ')).trim();
-                                edu.illinois.cs.cogcomp.quant.standardize.Quantity v1 = getQuantityFromStr(v1Span);
-                                if (v1 != null) {
+                                edu.illinois.cs.cogcomp.quant.standardize.Quantity q1 = getQuantityFromStr(v1Span);
+                                if (q1 != null) {
                                     c.quantity.value2 = c.quantity.value;
-                                    c.quantity.value = v1.value;
+                                    c.quantity.value = q1.value;
+
+                                    Double mul;
+                                    if (getMultiplier(q1) == null && (mul = getMultiplier(q)) != null) {
+                                        c.quantity.value *= mul;
+                                    }
+
                                     flag = true;
                                     break loop;
                                 }
