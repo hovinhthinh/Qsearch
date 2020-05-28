@@ -57,9 +57,9 @@ public class SimpleQueryParser {
             query = query.replace(str, str.replace("-", query.contains("between") ? " and " : " to "));
         }
 
-        // optimize multiplier: process the first one only.
-        Matcher matcher = MULTIPLIER_OPTIMIZE_PATTERN.matcher(query);
-        if (matcher.find()) {
+        // optimize multiplier
+        Matcher matcher;
+        while ((matcher = MULTIPLIER_OPTIMIZE_PATTERN.matcher(query)).find()) {
             String sub = matcher.group();
             sub = sub.trim();
             int start = matcher.start(), end = matcher.end();
