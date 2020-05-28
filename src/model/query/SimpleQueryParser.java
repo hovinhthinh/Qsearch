@@ -59,7 +59,12 @@ public class SimpleQueryParser {
 
         // optimize multiplier
         Matcher matcher;
-        while ((matcher = MULTIPLIER_OPTIMIZE_PATTERN.matcher(query)).find()) {
+        boolean hasChange;
+        do {
+            if (!(matcher = MULTIPLIER_OPTIMIZE_PATTERN.matcher(query)).find()) {
+                break;
+            }
+            hasChange = false;
             String sub = matcher.group();
             sub = sub.trim();
             int start = matcher.start(), end = matcher.end();
@@ -78,13 +83,20 @@ public class SimpleQueryParser {
             String mul = "";
             if (sub.contains("k")) {
                 mul = " thousand";
+                hasChange = true;
             } else if (sub.contains("m")) {
-                mul = useMillionMul ? " million" : "m";
+                if (useMillionMul) {
+                    mul = " million";
+                    hasChange = true;
+                } else {
+                    mul = "m";
+                }
             } else if (sub.contains("b")) {
                 mul = " billion";
+                hasChange = true;
             }
             query = query.substring(0, start) + " " + num + mul + " " + query.substring(end);
-        }
+        } while (hasChange);
 
         return NLP.stripSentence(query);
     }
@@ -158,6 +170,22 @@ public class SimpleQueryParser {
                                 qStr = newQstr;
                                 signalAdded = true;
                                 break loop;
+                            }
+                        }
+                    }
+
+                    if (!signalAdded) {
+                        for (Pattern p : QuantityConstraint.QuantityResolution.RANGE_SIGNAL) {
+                            Matcher m = Pattern.compile(p.pattern() + "\\s+"
+                                    // this is added to handle bad extraction from Illinois quantifier:
+                                    // Ex: query 'companies with annual profit between 1 and 10 billion usd':
+                                    // returns only 'billion usd', we need to handle '10'
+                                    // TODO: we need to remove this after upgrading Illinois quantifier
+                                    + "(\\d+(\\.\\d+)?\\s+)?"
+                                    + Pattern.quote(qStr)).matcher(rawTokenized);
+                            if (m.find()) {
+                                qStr = m.group();
+                                signalAdded = true;
                             }
                         }
                     }
@@ -266,6 +294,6 @@ public class SimpleQueryParser {
         System.out.println(parse("sprinters who ran 200m in less than 25 s"));
         System.out.println(parse("companies with profit in 2018 under 100b usd"));
         System.out.println(parse("games with number of players less than 100 million in 2018"));
-        System.out.println(parse("which hybrid cars have range on battery more than 50 km?"));
+        System.out.println(parse("technology companies with annual profit from 100 to 200b usd"));
     }
 }
