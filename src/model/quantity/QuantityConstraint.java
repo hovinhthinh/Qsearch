@@ -64,16 +64,34 @@ public class QuantityConstraint {
 
                     if (c.resolutionCode == QuantityResolution.Value.RANGE) {
                         // parse the first value
-                        c.quantity.value2 = c.quantity.value;
                         q.phrase = q.phrase.trim();
                         for (Pattern p : QuantityResolution.RANGE_SIGNAL) {
-                            Matcher m = Pattern.compile(p.pattern() + "\\s+" + Pattern.quote(q.phrase)).matcher(constraintString);
+                            Matcher m = Pattern.compile(p.pattern()
+                                    + "\\s+"
+                                    // this is added to handle bad extraction from Illinois quantifier:
+                                    // Ex: query 'companies with annual profit between 1 and 10 billion usd':
+                                    // returns only 'billion usd', we need to handle '10'
+                                    // TODO: we need to remove this after upgrading Illinois quantifier
+                                    + "(\\d+(\\.\\d+)?\\s+)?"
+                                    + Pattern.quote(q.phrase)).matcher(constraintString);
                             if (m.find()) {
-                                String v1Span = m.group();
-                                v1Span = v1Span.substring(0, v1Span.length() - q.phrase.length()).trim();
+                                Matcher m1 = p.matcher(m.group());
+                                m1.find();
+                                String v1Span = m1.group();
+
+                                // now handle the bad extraction from Illinois quantifier:
+                                // TODO: remove after upgrading Illinois quantifier
+                                String midSpan = m.group();
+                                midSpan = midSpan.substring(0, midSpan.length() - q.phrase.length()).replaceFirst(p.pattern(), "").trim();
+                                if (!midSpan.isEmpty()) {
+                                    getQuantityFromStr(midSpan + " " + q.phrase);
+                                    c.quantity.value = getQuantityFromStr(midSpan + " " + q.phrase).value;
+                                } // DONE
+
                                 v1Span = v1Span.substring(v1Span.indexOf(' '), v1Span.lastIndexOf(' ')).trim();
                                 edu.illinois.cs.cogcomp.quant.standardize.Quantity v1 = getQuantityFromStr(v1Span);
                                 if (v1 != null) {
+                                    c.quantity.value2 = c.quantity.value;
                                     c.quantity.value = v1.value;
                                     flag = true;
                                     break loop;
@@ -89,11 +107,14 @@ public class QuantityConstraint {
                 return c;
             }
         } catch (IndexOutOfBoundsException | AnnotatorException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     public static void main(String[] args) {
+        System.out.println(parseFromString("from 1 to 5 billion").toString());
         System.out.println(parseFromString("from 140-201 km").toString());
         System.out.println(parseFromString("between 100 million and 200 billion mpg").toString());
         System.out.println(parseFromString("more than 30 km long").toString());
@@ -134,18 +155,18 @@ public class QuantityConstraint {
     }
 
     public static class QuantityResolution {
-        private static final int APPROXIMATE_THRESHOLD = 1000;
-        private static final double APPROXIMATE_RATE = 0.01;
-        private static final LinkedHashSet<String> UPPER_BOUND_SIGNAL = new LinkedHashSet<>(Arrays.asList(
+        public static final int APPROXIMATE_THRESHOLD = 1000;
+        public static final double APPROXIMATE_RATE = 0.01;
+        public static final LinkedHashSet<String> UPPER_BOUND_SIGNAL = new LinkedHashSet<>(Arrays.asList(
                 "less than", "within", "below", "lesser", "lower than", "under", "at most", "up to", "smaller than", "<", "<="
         ));
-        private static final LinkedHashSet<String> LOWER_BOUND_SIGNAL = new LinkedHashSet<>(Arrays.asList(
+        public static final LinkedHashSet<String> LOWER_BOUND_SIGNAL = new LinkedHashSet<>(Arrays.asList(
                 "more than", "above", "higher than", "above", "at least", "over", "greater than", ">", ">="
         ));
-        private static final LinkedHashSet<String> EXACT_SIGNAL = new LinkedHashSet<>(Arrays.asList(
+        public static final LinkedHashSet<String> EXACT_SIGNAL = new LinkedHashSet<>(Arrays.asList(
                 "exactly", "exact"
         ));
-        private static final ArrayList<Pattern> RANGE_SIGNAL = new ArrayList<Pattern>() {{
+        public static final ArrayList<Pattern> RANGE_SIGNAL = new ArrayList<Pattern>() {{
             add(Pattern.compile("\\bbetween\\b.*?\\band\\b"));
             add(Pattern.compile("\\bfrom\\b.*?\\bto\\b"));
         }};
