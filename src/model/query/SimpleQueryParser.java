@@ -295,5 +295,6 @@ public class SimpleQueryParser {
         System.out.println(parse("companies with profit in 2018 under 100b usd"));
         System.out.println(parse("games with number of players less than 100 million in 2018"));
         System.out.println(parse("technology companies with annual profit from 100 to 200b usd"));
+        System.out.println(parse("teams who won UEFA champions league more than 2 times")); // TODO: fix
     }
 }
