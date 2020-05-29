@@ -398,11 +398,12 @@
         var value = (quantity.quantity.value2 == null
             ? quantity.quantity.value.toLocaleString('en-US')
             : ("[" + quantity.quantity.value.toLocaleString('en-US') + " - " + quantity.quantity.value2.toLocaleString('en-US') + "]"));
-        var quantityConstraintDetail = '<span class="badge badge badge-secondary">' + escapeText(operator) + '</span>'
-            + ", " + '<span class="badge badge badge-secondary">' + escapeText(value) + '</span>';
+        var quantityConstraintDetail = '( <span class="alert alert-secondary" style="padding: 0px 3px">' + escapeText(operator) + '</span>'
+            + ", " + '<span class="alert alert-secondary" style="padding: 0px 3px">' + escapeText(value) + '</span>';
         if (quantity.quantity.unit != '') {
-            quantityConstraintDetail += ", " + '<span class="badge badge badge-secondary">' + escapeText(quantity.quantity.unit) + '</span>';
+            quantityConstraintDetail += ", " + '<span class="alert alert-secondary" style="padding: 0px 3px">' + escapeText(quantity.quantity.unit) + '</span>';
         }
+        quantityConstraintDetail += " )";
 
         $('#parsed').html('Parsed:&nbsp;&nbsp;&nbsp;' + '<span class="entity-box">' + escapeText(type) + '</span>'
             + " &rarr; " + '<span class="context-box">' + escapeText(context) + '</span>'
@@ -458,7 +459,7 @@
 
         // quantity constraint detail
         $($('#quantity-constraint').popover('show').data('bs.popover').getTipElement())
-            .addClass('bg-light').css('z-index', -1).find('.popover-body').addClass('quantity-constraint-detail');
+            .css('z-index', -1).find('.popover-body').addClass('quantity-constraint-detail');
         setTimeout(function () {
             $('#quantity-constraint').trigger('mouseleave');
         }, showTimeOut);
