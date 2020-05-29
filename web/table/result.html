@@ -396,8 +396,8 @@
     function showParsedQuery(type, context, quantity) {
         var operator = (quantity['resolutionCodeExplicitlyGiven'] == true ? "explicit" : "implicit") + "-" + quantity['resolutionCode'];
         var value = (quantity.quantity.value2 == null
-            ? quantity.quantity.value
-            : ("[" + quantity.quantity.value + "," + quantity.quantity.value2 + "]"));
+            ? quantity.quantity.value.toLocaleString('en-US')
+            : ("[" + quantity.quantity.value.toLocaleString('en-US') + " - " + quantity.quantity.value2.toLocaleString('en-US') + "]"));
         var quantityConstraintDetail = '<span class="badge badge badge-secondary">' + escapeText(operator) + '</span>'
             + ", " + '<span class="badge badge badge-secondary">' + escapeText(value) + '</span>';
         if (quantity.quantity.unit != '') {
