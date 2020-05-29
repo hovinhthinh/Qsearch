@@ -1,5 +1,9 @@
-.popover{
+.popover {
     max-width: 100%;
+}
+
+.quantity-constraint-detail {
+    padding: 2px 5px;
 }
 
 .centered {
