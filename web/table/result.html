@@ -458,7 +458,7 @@
 
         // quantity constraint detail
         $($('#quantity-constraint').popover('show').data('bs.popover').getTipElement())
-            .addClass('bg-light').find('.popover-body').addClass('quantity-constraint-detail');
+            .addClass('bg-light').css('z-index', -1).find('.popover-body').addClass('quantity-constraint-detail');
         setTimeout(function () {
             $('#quantity-constraint').trigger('mouseleave');
         }, showTimeOut);
