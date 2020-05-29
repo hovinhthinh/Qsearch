@@ -45,7 +45,7 @@ public class SimpleQueryParser {
             int p = query.indexOf(" " + operator + " ");
             if (p != -1) {
                 query = query.substring(0, p)
-                        + " " + QuantityConstraint.QuantityResolution.ALL_SIGNALS.get(operator) + " "
+                        + " " + QuantityConstraint.QuantityResolution.ALL_SIGNALS.get(operator).first + " "
                         + query.substring(p + operator.length() + 2);
                 break;
             }
@@ -157,20 +157,31 @@ public class SimpleQueryParser {
             // quantity
             // get the last one, or the last one right after a comparison signal.
             String lastQuantityAfterSignal = null;
+            main_loop:
             for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(rawTokenized + " .", true, null)) {
                 if (span.object instanceof Quantity) {
                     String qStr = rawTokenized.substring(span.start, span.end + 1).trim();
+                    for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS.keySet()) {
+                        if (qStr.endsWith(operator)) {
+                            continue main_loop;
+                        }
+                    }
+
                     boolean signalAdded = false;
                     loop:
                     for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS.keySet()) {
-                        String[] candidates = new String[]{"not " + operator, "no " + operator, operator};
-                        for (String c : candidates) {
-                            String newQstr = NLP.stripSentence(c + " " + qStr.replace(operator, ""));
-                            if (rawTokenized.contains(newQstr)) {
-                                qStr = newQstr;
-                                signalAdded = true;
-                                break loop;
-                            }
+                        String phrase = qStr.replaceFirst("^.*" + Pattern.quote(operator), "").trim();
+                        Matcher m = Pattern.compile(Pattern.quote(operator) + "\\s+"
+                                // this is added to handle bad extraction from Illinois quantifier:
+                                // Ex: query 'teams who won UEFA champions league more than 2 times':
+                                // returns only 'times', we need to handle '2'
+                                // TODO: we need to remove this after upgrading Illinois quantifier
+                                + "(\\d+(\\.\\d+)?\\s+)?"
+                                + Pattern.quote(phrase)).matcher(rawTokenized);
+                        if (m.find()) {
+                            qStr = m.group();
+                            signalAdded = true;
+                            break loop;
                         }
                     }
 
@@ -186,6 +197,7 @@ public class SimpleQueryParser {
                             if (m.find()) {
                                 qStr = m.group();
                                 signalAdded = true;
+                                break;
                             }
                         }
                     }
@@ -293,8 +305,10 @@ public class SimpleQueryParser {
         System.out.println(parse("technology companies with more than $100b annual profit"));
         System.out.println(parse("sprinters who ran 200m in less than 25 s"));
         System.out.println(parse("companies with profit in 2018 under 100b usd"));
-        System.out.println(parse("games with number of players less than 100 million in 2018"));
+        System.out.println(parse("games with number of players no less than 100 million in 2018"));
         System.out.println(parse("technology companies with annual profit from 100 to 200b usd"));
-        System.out.println(parse("teams who won UEFA champions league more than 2 times")); // TODO: fix
+        System.out.println(parse("celebrities with worth between 1 and 5b usd"));
+        System.out.println(parse("cars of germany that costs less than 30 thousand euros"));
+        System.out.println(parse("Politician with more than 10 million Euros tax evasion charges "));
     }
 }
