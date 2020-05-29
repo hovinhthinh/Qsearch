@@ -282,22 +282,21 @@
     }
 
     function showParsedQuery(type, context, quantity) {
-        var quantityConstraintDetail = "["
-            + quantity['fineGrainedDomain']
-            + ", " + (quantity['resolutionCodeExplicitlyGiven'] == true ? "explicit" : "implicit") + "-" + quantity['resolutionCode']
-            + ", "
-            + (quantity.quantity.value2 == null
-                ? quantity.quantity.value
-                : ("[" + quantity.quantity.value + "," + quantity.quantity.value2 + "]"))
-            + ", "
-            + quantity.quantity.unit
-            + "]";
+        var operator = (quantity['resolutionCodeExplicitlyGiven'] == true ? "explicit" : "implicit") + "-" + quantity['resolutionCode'];
+        var value = (quantity.quantity.value2 == null
+            ? quantity.quantity.value
+            : ("[" + quantity.quantity.value + "," + quantity.quantity.value2 + "]"));
+        var quantityConstraintDetail = '<span class="badge badge badge-secondary">' + escapeText(operator) + '</span>'
+            + ", " + '<span class="badge badge badge-secondary">' + escapeText(value) + '</span>';
+        if (quantity.quantity.unit != '') {
+            quantityConstraintDetail += ", " + '<span class="badge badge badge-secondary">' + escapeText(quantity.quantity.unit) + '</span>';
+        }
 
         $('#parsed').html('Parsed:&nbsp;&nbsp;&nbsp;' + '<span class="entity-box">' + escapeText(type) + '</span>'
             + " &rarr; " + '<span class="context-box">' + escapeText(context) + '</span>'
-            + " &rarr; " + '<span id="quantity-constraint" class="quantity-box" data-animation="true" data-placement="bottom" data-trigger="hover" data-html="true"' +
-            ' data-content="' + quantityConstraintDetail + '">'
-            + escapeText(quantity['phrase']) + '</span>');
+            + " &rarr; " + '<span id="quantity-constraint" class="quantity-box" data-animation="true" data-placement="bottom" data-html="true">' + escapeText(quantity['phrase']) + '</span>'
+            + ' <span class="badge badge-pill badge-danger">Domain: ' + escapeText(quantity['fineGrainedDomain']) + '</span>');
+        $('#quantity-constraint').attr('data-content', quantityConstraintDetail);
     }
 
     var convertedQuantityShowingTimeout;
@@ -349,7 +348,7 @@
 
         // quantity constraint detail
         $($('#quantity-constraint').popover('show').data('bs.popover').getTipElement())
-            .addClass('bg-light').attr;
+            .addClass('bg-light').find('.popover-body').addClass('quantity-constraint-detail');
         setTimeout(function () {
             $('#quantity-constraint').trigger('mouseleave');
         }, 7500);
