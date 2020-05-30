@@ -5,6 +5,7 @@ import model.query.SimpleQueryParser;
 import nlp.NLP;
 import org.json.JSONObject;
 import server.common.handler.ResultCacheHandler;
+import server.table.QfactLight;
 import server.table.ResultInstance;
 import server.table.TableQuery;
 import util.Gson;
@@ -105,12 +106,22 @@ public class SearchHandler extends HttpServlet {
                     }
                     response.topResults = result.second;
                     response.verdict = "OK";
+
+                    // group table indexes to reduce size
+                    response.tableId2Index = new HashMap<>();
+                    for (ResultInstance ri : response.topResults) {
+                        for (ResultInstance.SubInstance si : ri.subInstances) {
+                            response.tableId2Index.put(si.qfact.tableId, si.qfact.tableIndex);
+                            si.qfact = (QfactLight) si.qfact.clone();
+                            si.qfact.tableIndex = null;
+                        }
+                    }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             response = new SearchResult();
-            response.verdict = "Unknown error occured.";
+            response.verdict = "Unknown error occurred.";
         }
         return ResultCacheHandler.addResult(Gson.toJson(response));
     }

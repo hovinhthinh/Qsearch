@@ -158,7 +158,7 @@ public class SearchHandler extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response = new SearchResult();
-            response.verdict = "Unknown error occured.";
+            response.verdict = "Unknown error occurred.";
         }
         return response;
     }
