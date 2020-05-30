@@ -313,6 +313,7 @@
         showParsedQuery(data["typeConstraint"], data["contextConstraint"], data["quantityConstraint"]);
         if (topResults.length == 0) {
             $("#data").html(encode("No data", "No data", "No data", "No data", {'value': "No data"}, ""));
+            $("#head").parent().parent().prepend("<br/>");
         } else {
             var str = "";
             for (var i = 0; i < topResults.length; ++i) {
