@@ -496,6 +496,7 @@
         data['topResults'] = topResults;
         clearTimeout(convertedQuantityShowingTimeout);
         $('.converted-quantity').trigger('mouseleave');
+        $('#quantity-constraint').popover('dispose');
         show(data);
         $('.sort-option').each(function () {
             $(this).removeClass('dropdown-item-checked');
@@ -512,6 +513,7 @@
         data['topResults'] = topResults;
         clearTimeout(convertedQuantityShowingTimeout);
         $('.converted-quantity').trigger('mouseleave');
+        $('#quantity-constraint').popover('dispose');
         show(data);
         $('.sort-option').each(function () {
             $(this).removeClass('dropdown-item-checked');
@@ -533,6 +535,7 @@
         data['topResults'] = topResults;
         clearTimeout(convertedQuantityShowingTimeout);
         $('.converted-quantity').trigger('mouseleave');
+        $('#quantity-constraint').popover('dispose');
         show(data);
         $('.sort-option').each(function () {
             $(this).removeClass('dropdown-item-checked');
