@@ -426,6 +426,11 @@
             var str = "";
             for (var i = 0; i < topResults.length; ++i) {
                 var instance = topResults[i];
+                // populate tableIndex
+                for (var j = 0; j < instance.subInstances.length; ++j) {
+                    instance.subInstances[j].qfact.tableIndex = data.tableId2Index[instance.subInstances[j].qfact.tableId];
+                }
+
                 $("#data").append();
                 str += encodeEntityResultAsHtml(i, instance);
             }
