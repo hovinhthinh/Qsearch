@@ -420,7 +420,7 @@
         var topResults = data["topResults"];
         showParsedQuery(data["typeConstraint"], data["contextConstraint"], data["quantityConstraint"]);
         if (topResults.length == 0) {
-            $("#data").html("NO DATA");
+            $("#data").html("<br/><br/>NO DATA");
         } else {
             $("#head").removeAttr("hidden");
             var str = "";
