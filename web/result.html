@@ -286,10 +286,10 @@
         var value = (quantity.quantity.value2 == null
             ? quantity.quantity.value.toLocaleString('en-US')
             : ("[" + quantity.quantity.value.toLocaleString('en-US') + " - " + quantity.quantity.value2.toLocaleString('en-US') + "]"));
-        var quantityConstraintDetail = '( <span class="alert alert-secondary" style="padding: 0px 3px; color: black">' + escapeText(operator) + '</span>'
-            + ", " + '<span class="alert alert-secondary" style="padding: 0px 3px; color: black">' + escapeText(value) + '</span>';
+        var quantityConstraintDetail = '( <span class="alert alert-danger" style="padding: 0px 3px; color: black">' + escapeText(operator) + '</span>'
+            + ", " + '<span class="alert alert-danger" style="padding: 0px 3px; color: black">' + escapeText(value) + '</span>';
         if (quantity.quantity.unit != '') {
-            quantityConstraintDetail += ", " + '<span class="alert alert-secondary" style="padding: 0px 3px; color: black">' + escapeText(quantity.quantity.unit) + '</span>';
+            quantityConstraintDetail += ", " + '<span class="alert alert-danger" style="padding: 0px 3px; color: black">' + escapeText(quantity.quantity.unit) + '</span>';
         }
         quantityConstraintDetail += " )";
 
