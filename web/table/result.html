@@ -155,7 +155,7 @@
         var value = inst.entity;
         value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result mr-1" href="https://www.wikipedia.org/wiki/'
             + encodeURI(value.substring(1, value.length - 1)) + '" target="_blank" referrerpolicy="no-referrer">'
-            + escapeText(value.substring(1, value.length - 1)).replace(/_/g, ' ')
+            + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
             + '</a>'
             + '<span class="badge badge-pill badge-secondary">Score: ' + inst.score.toFixed(3) + '</span>';
 
