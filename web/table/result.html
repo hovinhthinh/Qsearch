@@ -293,6 +293,14 @@
                         ' data-content="Equals: ' +
                         (si.quantityConvertedStr == null ? "null" : si.quantityConvertedStr) +
                         '">' + quantitySpan + '</span>');
+                } else {
+                    for (var k = 0; k < si.traces.length; ++k) {
+                        if (si.traces[k].place != "SAME_ROW") {
+                            continue;
+                        }
+                        var token = escapeText(si.traces[k].token);
+                        text = text.replace(new RegExp('\\b' + token + '\\b', "i"), '<span class="context-box">' + token + '</span>');
+                    }
                 }
                 c.html(text);
                 bodyRow.append(c);
