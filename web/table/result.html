@@ -137,7 +137,7 @@
 <script src="js/local.js" crossorigin="anonymous"></script>
 <style>
     .result-img {
-        max-height: 175px;
+        max-height: 150px;
         height: auto;
         width: auto;
     }
@@ -221,7 +221,7 @@
         var pg = $('<div class="small ml-3 mr-1">');
         if (si.qfact.tableIndex.pageContent != "") {
             pg.html('<span class="badge badge-pill badge-info">Related Text</span> ');
-            var lim = 500;
+            var lim = 400;
             if (si.qfact.tableIndex.pageContent.length < lim) {
                 pg.append($('<span>').text(si.qfact.tableIndex.pageContent));
             } else {
