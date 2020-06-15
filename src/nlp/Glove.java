@@ -54,6 +54,14 @@ public class Glove {
             return 0;
         }
 
+        try {
+            // if a and b are both numbers, but not equal, then return a default value.
+            Double.parseDouble(a);
+            Double.parseDouble(b);
+            return 0.4; // This is roughly equal to the average distance of top 10k popular words.
+        } catch (Exception e) {
+        }
+
         int aId, bId;
         if ((aId = EMBEDDING_ID.getInt(a)) == -1 || (bId = EMBEDDING_ID.getInt(b)) == -1) {
             return -1;
