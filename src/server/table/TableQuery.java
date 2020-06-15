@@ -25,7 +25,9 @@ public class TableQuery {
     public static final Logger LOGGER = Logger.getLogger(TableQuery.class.getName());
     public static double HEADER_MATCH_WEIGHT = 1;
     public static double CAPTION_MATCH_WEIGHT = 0.9;
-    public static double TITLE_MATCH_WEIGHT = 0.8;
+    public static double TITLE_MATCH_WEIGHT = 0.85;
+    public static double SAME_ROW_MATCH_WEIGHT = 0.85;
+    public static double RELATED_TEXT_MATCH_WEIGHT = 0.75; // TODO: implement
 
     private static ArrayList<QfactLight> QFACTS = TableQfactLoader.load();
     private static TaxonomyGraph TAXONOMY = TaxonomyGraph.getDefaultGraphInstance();
@@ -86,6 +88,28 @@ public class TableQuery {
                         trace.score = sim;
                         trace.token = fX;
                         trace.place = "TITLE";
+                    }
+                }
+            }
+            // SAME ROW
+            for (int c = 0; c < f.tableIndex.table.nColumn; ++c) {
+                if (c == f.eCol || c == f.qCol) {
+                    continue;
+                }
+                for (String fX : NLP.splitSentence(f.tableIndex.table.data[f.row][c].text)) {
+                    if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                        continue;
+                    }
+                    double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
+                    if (sim == -1) {
+                        continue;
+                    }
+                    sim = (1 - sim) * SAME_ROW_MATCH_WEIGHT;
+
+                    if (trace.score < sim) {
+                        trace.score = sim;
+                        trace.token = fX;
+                        trace.place = "SAME_ROW";
                     }
                 }
             }
