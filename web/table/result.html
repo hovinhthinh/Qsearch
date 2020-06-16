@@ -301,6 +301,7 @@
                         var token = escapeText(si.traces[k].token);
                         text = text.replace(new RegExp('\\b' + token + '\\b', "i"), '<span class="context-box">' + token + '</span>');
                     }
+                    text = text.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
                 }
                 c.html(text);
                 bodyRow.append(c);
