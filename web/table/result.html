@@ -151,6 +151,21 @@
         return $('<div>').text(text).html();
     }
 
+    function wrapContextBox(input, token) {
+        var result = '';
+        input.split(' ').forEach(function (t) {
+            if (result != '') {
+                result += ' ';
+            }
+            if (t.toLowerCase() == token.toLowerCase()) {
+                result += '<span class="context-box">' + t + '</span>'
+            } else {
+                result += t;
+            }
+        });
+        return result;
+    }
+
     function entityCell(inst) {
         var value = inst.entity;
         value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result mr-1" href="https://www.wikipedia.org/wiki/'
@@ -186,7 +201,7 @@
                 continue;
             }
             var token = escapeText(si.traces[i].token);
-            titleText = titleText.replace(new RegExp('\\b' + token + '\\b', "i"), '<span class="context-box">' + token + '</span>');
+            titleText = wrapContextBox(titleText, token);
         }
         titleText = titleText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
         title.html('<span class="badge badge-pill badge-warning">Title</span> <span class="font-weight-bold small">'
@@ -208,7 +223,7 @@
                         continue;
                     }
                     var token = escapeText(si.traces[j].token);
-                    subTitleText = subTitleText.replace(new RegExp('\\b' + token + '\\b', "i"), '<span class="context-box">' + token + '</span>');
+                    subTitleText = wrapContextBox(subTitleText, token);
                 }
                 subTitleText = subTitleText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
                 content += '&rdsh; <span class="small">' + subTitleText + '</span>';
@@ -299,7 +314,7 @@
                             continue;
                         }
                         var token = escapeText(si.traces[k].token);
-                        text = text.replace(new RegExp('\\b' + token + '\\b', "i"), '<span class="context-box">' + token + '</span>');
+                        text = wrapContextBox(text, token);
                     }
                     text = text.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
                 }
@@ -324,7 +339,7 @@
                     continue;
                 }
                 var token = escapeText(si.traces[i].token);
-                captionText = captionText.replace(new RegExp('\\b' + token + '\\b', "i"), '<span class="context-box">' + token + '</span>');
+                captionText = wrapContextBox(captionText, token);
             }
             captionText = captionText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
             wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + captionText + '</span>');
