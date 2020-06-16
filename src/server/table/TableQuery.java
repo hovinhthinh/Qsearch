@@ -96,7 +96,7 @@ public class TableQuery {
                 if (c == f.eCol || c == f.qCol) {
                     continue;
                 }
-                for (String fX : NLP.splitSentence(f.tableIndex.table.data[f.row][c].text)) {
+                for (String fX : NLP.splitSentence(f.tableIndex.table.data[f.row][c].text.toLowerCase())) {
                     if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
                         continue;
                     }
