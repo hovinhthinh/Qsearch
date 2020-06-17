@@ -91,4 +91,13 @@
         <url-pattern>/type_suggest_table</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>TableEvaluate</servlet-name>
+        <servlet-class>server.table.handler.EvaluateHandler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TableEvaluate</servlet-name>
+        <url-pattern>/evaluate_table</url-pattern>
+    </servlet-mapping>
+
 </web-app>
