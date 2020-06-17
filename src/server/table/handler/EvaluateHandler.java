@@ -18,11 +18,10 @@ import java.util.logging.Logger;
 
 public class EvaluateHandler extends HttpServlet {
     public static final Logger LOGGER = Logger.getLogger(EvaluateHandler.class.getName());
-    private String savePath;
+    public static final String SAVE_PATH = "eval/table/exp_2/annotation";
 
-    public EvaluateHandler(String savePath) {
-        this.savePath = savePath;
-        new File(savePath).mkdirs();
+    public EvaluateHandler() {
+        new File(SAVE_PATH).mkdirs();
     }
 
     @Override
@@ -39,7 +38,7 @@ public class EvaluateHandler extends HttpServlet {
             SearchResult evalResult;
             evalResult = Gson.fromJson(builder.toString(), SearchResult.class);
 
-            File saveFile = new File(savePath, evalResult.evalDomain + "_" + evalResult.encode());
+            File saveFile = new File(SAVE_PATH, evalResult.evalDomain + "_" + evalResult.encode());
             LOGGER.info("Logging: " + saveFile.getName());
 
             boolean overwrite = false;
