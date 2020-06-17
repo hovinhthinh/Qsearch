@@ -20,6 +20,9 @@ public class SearchResult {
     public HashMap<String, TableIndex> tableId2Index;
 
     public String encode() {
-        return DigestUtils.md5Hex(typeConstraint + "\t" + contextConstraint + "\t" + quantityConstraint.toString());
+//        return DigestUtils.md5Hex(typeConstraint + "\t" + contextConstraint + "\t" + quantityConstraint.toString());
+        return typeConstraint.replace(' ', '-')
+                + "_" + contextConstraint.replace(' ', '-')
+                + "_" + quantityConstraint.phrase.replace(' ', '-');
     }
 }
