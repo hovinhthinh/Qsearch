@@ -6,6 +6,7 @@ public class ResultInstance {
     public String entity;
     public double score;
 
+    public String eval; // For evaluation
 
     public static class SubInstance {
         public QfactLight qfact;

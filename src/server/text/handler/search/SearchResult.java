@@ -16,7 +16,10 @@ public class SearchResult {
     public ArrayList<ResultInstance> topResults = new ArrayList<>();
 
     public String encode() {
-        return DigestUtils.md5Hex(typeConstraint + "\t" + contextConstraint + "\t" + quantityConstraint.toString());
+//        return DigestUtils.md5Hex(typeConstraint + "\t" + contextConstraint + "\t" + quantityConstraint.toString());
+        return typeConstraint.replace(' ', '-')
+                + "_" + contextConstraint.replace(' ', '-')
+                + "_" + quantityConstraint.phrase.replace(' ', '-');
     }
 
     public static class ResultInstance {
