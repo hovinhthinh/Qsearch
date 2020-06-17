@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.logging.Logger;
 
+@Deprecated
 public class EvaluateHandler extends AbstractHandler {
     public static final Logger LOGGER = Logger.getLogger(EvaluateHandler.class.getName());
     private static Gson GSON = new Gson();
