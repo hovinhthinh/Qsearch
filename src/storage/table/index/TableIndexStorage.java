@@ -1,5 +1,6 @@
 package storage.table.index;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.openhft.chronicle.map.ChronicleMap;
 import util.FileUtils;
 import util.Gson;
@@ -12,6 +13,9 @@ public class TableIndexStorage {
     public static final String TABLE_INDEX_FILE = "./table.index";
 
     private static ChronicleMap<String, TableIndex> INDEX = null;
+
+    private static final int TABLE_INDEX_CACHE_SIZE = 10000;
+    private static final Object2ObjectLinkedOpenHashMap<String, TableIndex> TABLE_INDEX_CACHE = new Object2ObjectLinkedOpenHashMap<>(TABLE_INDEX_CACHE_SIZE);
 
     static {
         try {
@@ -44,6 +48,23 @@ public class TableIndexStorage {
     }
 
     public static TableIndex get(String tableId) {
-        return INDEX.get(tableId);
+        TableIndex ti;
+        synchronized (TABLE_INDEX_CACHE) {
+            ti = TABLE_INDEX_CACHE.getAndMoveToFirst(tableId);
+        }
+        if (ti != null) {
+            return ti;
+        }
+
+        ti = INDEX.get(tableId);
+        if (ti != null) {
+            synchronized (TABLE_INDEX_CACHE) {
+                TABLE_INDEX_CACHE.putAndMoveToFirst(tableId, ti);
+                if (TABLE_INDEX_CACHE.size() > TABLE_INDEX_CACHE_SIZE) {
+                    TABLE_INDEX_CACHE.removeLast();
+                }
+            }
+        }
+        return ti;
     }
 }

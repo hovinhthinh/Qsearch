@@ -340,5 +340,11 @@
             <systemPath>${project.basedir}/lib/jamm-0.3.3.jar</systemPath>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/net.openhft/chronicle-map -->
+        <dependency>
+            <groupId>net.openhft</groupId>
+            <artifactId>chronicle-map</artifactId>
+            <version>3.19.31</version>
+        </dependency>
     </dependencies>
 </project>
