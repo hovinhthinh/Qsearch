@@ -22,6 +22,12 @@
         <img src="img/logo.png" class="img-fluid mb-3" alt="logo">
     </div>
     <div class="input-group">
+        <button data-animation="true" data-placement="top" data-trigger="hover" data-html="true"
+                data-content="Click here to change search mode!" data-original-title="" title="" id="change-mode"
+                class="btn"><i class="fas fa-sync-alt"></i></button>
+        <input autocomplete="off" hidden type="text" class="form-control" placeholder="type" id="type">
+        <input autocomplete="off" hidden type="text" class="form-control" placeholder="context" id="context">
+        <input autocomplete="off" hidden type="text" class="form-control" placeholder="quantity" id="quantity">
         <input autocomplete="off" type="text" class="form-control" placeholder="what do you want to search for?" id="full">
         <button type="button" class="btn btn-success" id="search">Search</button>
     </div>
@@ -135,22 +141,38 @@
     var nanobar = new Nanobar();
     document.getElementById('nanobarcss').innerHTML += '.nanobar .bar { background: #6aa94e; }';
 
+    $("#full").focus();
+
     function search() {
-        if ($("#full").val().trim() == "") {
-            return;
-        }
         var params = {
-            full: $("#full").val(),
             corpus: JSON.stringify($("#corpus").val()),
             model: $("#model").val(),
             lambda: $("#lambda").val(),
             alpha: $("#alpha").val(),
             ntop: $("#ntop").val()
         };
-        if ("WebSocket" in window) {
-            $("#search").attr('disabled', 'disabled').html("Searching <i class=\"fas fa-spinner fa-spin\"></i>");
-            $("#full").attr('disabled', 'disabled');
+        if ($.cookie('part_search') != "1") {
+            if ($("#full").val().trim() == "") {
+                return;
+            }
+            params.full = $("#full").val();
+        } else {
+            if ($("#type").val().trim() == "" || $("#quantity").val().trim() == "") {
+                return;
+            }
+            params.type = $("#type").val();
+            params.context = $("#context").val();
+            params.quantity = $("#quantity").val();
+        }
 
+        $("#search").attr('disabled', 'disabled').html("Searching <i class=\"fas fa-spinner fa-spin\"></i>");
+        $("#change-mode").attr('disabled', 'disabled');
+        $("#full").attr('disabled', 'disabled');
+        $("#type").attr('disabled', 'disabled');
+        $("#context").attr('disabled', 'disabled');
+        $("#quantity").attr('disabled', 'disabled');
+
+        if ("WebSocket" in window) {
             var ws = new WebSocket(location.protocol.replace("http", "ws") + "//" + location.host + "/search_socket");
             ws.onopen = function () {
                 ws.send(JSON.stringify(params));
@@ -162,7 +184,7 @@
                 if ("progress" in data) {
                     nanobar.go(data["progress"]);
                 } else {
-                    window.location.replace("/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(msg))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
                 }
             };
             ws.onerror = function () {
@@ -170,7 +192,11 @@
             };
             ws.onclose = function () {
                 $("#search").removeAttr('disabled').html("Search");
-                $("#full").removeAttr('disabled')
+                $("#change-mode").removeAttr('disabled');
+                $("#full").removeAttr('disabled');
+                $("#type").removeAttr('disabled');
+                $("#context").removeAttr('disabled');
+                $("#quantity").removeAttr('disabled');
             };
         } else {
             $.ajax({
@@ -179,29 +205,31 @@
                 data: params,
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
-                beforeSend: function () {
-                    $("#search").attr('disabled', 'disabled').html("Searching <i class=\"fas fa-spinner fa-spin\"></i>");
-                    $("#full").attr('disabled', 'disabled');
-                },
                 success: function (data) {
-                    window.location.replace("/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(data)))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
                 },
                 error: function () {
                     alert("An error occurred.");
                 },
                 complete: function () {
                     $("#search").removeAttr('disabled').html("Search");
-                    $("#full").removeAttr('disabled')
+                    $("#change-mode").removeAttr('disabled');
+                    $("#full").removeAttr('disabled');
+                    $("#type").removeAttr('disabled');
+                    $("#context").removeAttr('disabled');
+                    $("#quantity").removeAttr('disabled');
                 }
             });
         }
     }
 
     $("#search").click(search);
-    $("#full").focus();
 
     $(".sample-query").each(function (index) {
         $(this).click(function () {
+            if ($.cookie('part_search') == "1") {
+                changeSearchMode();
+            }
             if ($("#full")[0].hasAttribute('disabled')) {
                 return;
             }
@@ -210,7 +238,22 @@
         });
     });
 
+    autocomplete(document.getElementById("type"));
     autocomplete(document.getElementById("full"));
+
+    $(document).ready(function () {
+        $('#change-mode').each(function () {
+            var current = this;
+            var popoverElement = $(current).popover('show')
+                .data('bs.popover').getTipElement();
+            $(popoverElement).addClass('popover-converted-quantity');
+        });
+    });
+
+    // use part-search mode.
+    if ($.cookie('part_search') == null) {
+        // changeSearchMode();
+    }
 </script>
 
 </body>

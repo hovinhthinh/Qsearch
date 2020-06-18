@@ -26,6 +26,10 @@
         <div class="col-xs-7 col-sm-7 col-md-7 col-lg-5 mt-2">
             <br/>
             <div class="input-group">
+                <button id="change-mode" class="btn"><i class="fas fa-sync-alt"></i></button>
+                <input autocomplete="off" hidden type="text" class="form-control" placeholder="type" id="type">
+                <input autocomplete="off" hidden type="text" class="form-control" placeholder="context" id="context">
+                <input autocomplete="off" hidden type="text" class="form-control" placeholder="quantity" id="quantity">
                 <input autocomplete="off" style="height: 40px;" type="text" class="form-control"
                        placeholder="what do you want to search for?" id="full">
                 <button style="height: 40px" type="button" class="btn btn-success" id="search">Search</button>
@@ -168,6 +172,7 @@
         </tr>
     </table>
 </footer>
+<img id="loading" src="img/loading.gif" style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"/>
 <script src="js/local.js" crossorigin="anonymous"></script>
 
 <script>
@@ -175,8 +180,6 @@
 
     var nanobar = new Nanobar();
     document.getElementById('nanobarcss').innerHTML += '.nanobar .bar { background: #6aa94e; }';
-
-    $("#full").focus();
 
     function escapeText(text) {
         return $('<div>').text(text).html();
@@ -306,7 +309,7 @@
     function show(data) {
         if (data["verdict"] != "OK") {
             $("#data").html(data["verdict"]);
-            return;
+            return false;
         }
         $("#head").removeAttr("hidden");
         var topResults = data["topResults"];
@@ -388,24 +391,40 @@
                 });
             }
         });
+
+        return true;
     }
 
     function search() {
-        if ($("#full").val().trim() == "") {
-            return;
-        }
         var params = {
-            full: $("#full").val(),
             corpus: JSON.stringify($("#corpus").val()),
             model: $("#model").val(),
             lambda: $("#lambda").val(),
             alpha: $("#alpha").val(),
             ntop: $("#ntop").val()
         };
-        if ("WebSocket" in window) {
-            $("#search").attr('disabled', 'disabled').html("Searching <i class=\"fas fa-spinner fa-spin\"></i>");
-            $("#full").attr('disabled', 'disabled');
+        if ($.cookie('part_search') != "1") {
+            if ($("#full").val().trim() == "") {
+                return;
+            }
+            params.full = $("#full").val();
+        } else {
+            if ($("#type").val().trim() == "" || $("#quantity").val().trim() == "") {
+                return;
+            }
+            params.type = $("#type").val();
+            params.context = $("#context").val();
+            params.quantity = $("#quantity").val();
+        }
 
+        $("#search").attr('disabled', 'disabled').html("Searching <i class=\"fas fa-spinner fa-spin\"></i>");
+        $("#change-mode").attr('disabled', 'disabled');
+        $("#full").attr('disabled', 'disabled');
+        $("#type").attr('disabled', 'disabled');
+        $("#context").attr('disabled', 'disabled');
+        $("#quantity").attr('disabled', 'disabled');
+
+        if ("WebSocket" in window) {
             var ws = new WebSocket(location.protocol.replace("http", "ws") + "//" + location.host + "/search_socket");
             ws.onopen = function () {
                 ws.send(JSON.stringify(params));
@@ -417,7 +436,7 @@
                 if ("progress" in data) {
                     nanobar.go(data["progress"]);
                 } else {
-                    window.location.replace("/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(msg))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
                 }
             };
             ws.onerror = function () {
@@ -425,7 +444,11 @@
             };
             ws.onclose = function () {
                 $("#search").removeAttr('disabled').html("Search");
-                $("#full").removeAttr('disabled')
+                $("#change-mode").removeAttr('disabled');
+                $("#full").removeAttr('disabled');
+                $("#type").removeAttr('disabled');
+                $("#context").removeAttr('disabled');
+                $("#quantity").removeAttr('disabled');
             };
         } else {
             $.ajax({
@@ -434,19 +457,19 @@
                 data: params,
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
-                beforeSend: function () {
-                    $("#search").attr('disabled', 'disabled').html("Searching <i class=\"fas fa-spinner fa-spin\"></i>");
-                    $("#full").attr('disabled', 'disabled');
-                },
                 success: function (data) {
-                    window.location.replace("/result.html?d=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(data)))) + "&q=" + encodeURIComponent(btoa(encodeURIComponent($("#full").val()))));
+                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
                 },
                 error: function () {
                     alert("An error occurred.");
                 },
                 complete: function () {
                     $("#search").removeAttr('disabled').html("Search");
-                    $("#full").removeAttr('disabled')
+                    $("#change-mode").removeAttr('disabled');
+                    $("#full").removeAttr('disabled');
+                    $("#type").removeAttr('disabled');
+                    $("#context").removeAttr('disabled');
+                    $("#quantity").removeAttr('disabled');
                 }
             });
         }
@@ -455,36 +478,74 @@
     $("#search").click(search);
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has("q")) {
-        $("#full").val(decodeURIComponent(atob(decodeURIComponent(urlParams.get("q")))));
+        var q = JSON.parse(decodeURIComponent(atob(decodeURIComponent(urlParams.get("q")))));
+        if (q.full != null) {
+            $("#full").val(q.full);
+        } else {
+            $("#type").val(q.type);
+            $("#context").val(q.context);
+            $("#quantity").val(q.quantity);
+        }
     }
     var data = null;
     var resultsForWikiView = null;
     var wikiViewCountLeft = 0;
-    if (urlParams.has("d")) {
-        data = JSON.parse(decodeURIComponent(atob(decodeURIComponent(urlParams.get('d')))));
-        show(data);
-
-        // now trigger wikiview.
-        resultsForWikiView = data['topResults'];
-        wikiViewCountLeft = resultsForWikiView.length;
-        resultsForWikiView.forEach(function (o) {
-            $.ajax({
-                type: "GET",
-                url: "/wikiview",
-                data: {"entity": o['entity']},
-                contentType: 'application/json; charset=utf-8',
-                dataType: "json",
-                success: function (response) {
-                    if (response['view'] != -1) {
-                        o['view'] = response['view'];
-                        --wikiViewCountLeft;
-                        if (wikiViewCountLeft == 0) {
-                            data['topResults'] = resultsForWikiView;
-                            $('#sort-entity').removeAttr('hidden');
-                        }
-                    }
+    if (urlParams.has("s")) {
+        $.ajax({
+            type: "GET",
+            url: "/session",
+            data: {"s": urlParams.get('s')},
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json",
+            beforeSend: function () {
+                $("#search").attr('disabled', 'disabled');
+                $("#change-mode").attr('disabled', 'disabled');
+                $("#full").attr('disabled', 'disabled');
+                $("#type").attr('disabled', 'disabled');
+                $("#context").attr('disabled', 'disabled');
+                $("#quantity").attr('disabled', 'disabled');
+            },
+            success: function (response) {
+                data = response;
+                if (!show(data)) {
+                    return;
                 }
-            });
+                // now trigger wikiview.
+                resultsForWikiView = data['topResults'];
+                wikiViewCountLeft = resultsForWikiView.length;
+                resultsForWikiView.forEach(function (o) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/wikiview",
+                        data: {"entity": o['entity']},
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: "json",
+                        success: function (response) {
+                            if (response['view'] != -1) {
+                                o['view'] = response['view'];
+                                --wikiViewCountLeft;
+                                if (wikiViewCountLeft == 0) {
+                                    data['topResults'] = resultsForWikiView;
+                                    $('#sort-entity').removeAttr('hidden');
+                                }
+                            }
+                        }
+                    });
+                });
+
+            },
+            error: function () {
+                alert("Invalid session.");
+            },
+            complete: function () {
+                $("#search").removeAttr('disabled');
+                $("#change-mode").removeAttr('disabled');
+                $("#full").removeAttr('disabled');
+                $("#type").removeAttr('disabled');
+                $("#context").removeAttr('disabled');
+                $("#quantity").removeAttr('disabled');
+                $("#loading").attr('hidden', 'hidden');
+            }
         });
     }
 
@@ -546,6 +607,7 @@
     });
 
     autocomplete(document.getElementById("full"));
+    autocomplete(document.getElementById("type"));
 </script>
 </body>
 </html>

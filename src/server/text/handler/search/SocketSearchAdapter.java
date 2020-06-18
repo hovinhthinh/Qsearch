@@ -1,5 +1,5 @@
 package server.text.handler.search;
-import com.google.gson.Gson;
+
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.json.JSONObject;
@@ -11,8 +11,6 @@ import java.util.logging.Logger;
 
 public class SocketSearchAdapter extends WebSocketAdapter {
     public static final Logger LOGGER = Logger.getLogger(SocketSearchAdapter.class.getName());
-    private static Gson GSON = new Gson();
-
     private Session session;
 
     @Override
@@ -34,7 +32,10 @@ public class SocketSearchAdapter extends WebSocketAdapter {
         LOGGER.info(queryDescription);
         JSONObject o = new JSONObject(queryDescription);
         // Get parameters
-        String fullConstraint = o.getString("full");
+        String typeConstraint = o.has("type") ? o.getString("type") : null;
+        String contextConstraint = o.has("context") ? o.getString("context") : null;
+        String quantityConstraint = o.has("quantity") ? o.getString("quantity") : null;
+        String fullConstraint = o.has("full") ? o.getString("full") : null;
 
         Map additionalParams = new HashMap();
 
@@ -54,16 +55,10 @@ public class SocketSearchAdapter extends WebSocketAdapter {
         additionalParams.put("session", session);
 
         int nResult = o.has("ntop") ? Integer.parseInt(o.getString("ntop")) : 20;
-        
-        SearchResult response = SearchHandler.search(null, nResult, fullConstraint,
-                null, null, null, additionalParams);
-
-        String responseStr = null;
-        synchronized (GSON) {
-            responseStr = GSON.toJson(response);
-        }
+        String sessionKey = SearchHandler.search(null, nResult, fullConstraint,
+                typeConstraint, contextConstraint, quantityConstraint, additionalParams);
         try {
-            session.getRemote().sendString(responseStr);
+            session.getRemote().sendString(new JSONObject().append("s", sessionKey).toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
