@@ -4,8 +4,10 @@ import model.table.Table;
 import org.json.JSONObject;
 import util.Gson;
 
+import java.io.Serializable;
+
 // For unparsed tables (without any annotation).
-public class TableIndex {
+public class TableIndex implements Serializable {
     public Table table;
     public String pageContent, caption, pageTitle, sectionTitles, tableText;
 
