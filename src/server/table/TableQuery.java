@@ -7,6 +7,8 @@ import model.quantity.QuantityDomain;
 import nlp.Glove;
 import nlp.NLP;
 import org.eclipse.jetty.websocket.api.Session;
+import storage.table.index.TableIndex;
+import storage.table.index.TableIndexStorage;
 import uk.ac.susx.informatics.Morpha;
 import util.Gson;
 import util.Pair;
@@ -32,7 +34,7 @@ public class TableQuery {
     private static ArrayList<QfactLight> QFACTS = TableQfactLoader.load();
     private static TaxonomyGraph TAXONOMY = TaxonomyGraph.getDefaultGraphInstance();
 
-    public static Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> match(ArrayList<String> queryX, QfactLight f) {
+    public static Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> match(ArrayList<String> queryX, QfactLight f, TableIndex ti) {
         double score = 0;
         ArrayList<ResultInstance.SubInstance.ContextMatchTrace> traces = new ArrayList<>();
         double totalIdf = 0;
@@ -56,7 +58,7 @@ public class TableQuery {
                 }
             }
             // CAPTION
-            for (String fX : NLP.splitSentence(f.tableIndex.caption.toLowerCase())) {
+            for (String fX : NLP.splitSentence(ti.caption.toLowerCase())) {
                 if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
                     continue;
                 }
@@ -73,7 +75,7 @@ public class TableQuery {
                 }
             }
             // TITLE
-            for (String title : Arrays.asList(f.tableIndex.pageTitle, f.tableIndex.sectionTitles)) {
+            for (String title : Arrays.asList(ti.pageTitle, ti.sectionTitles)) {
                 for (String fX : NLP.splitSentence(title.toLowerCase())) {
                     if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
                         continue;
@@ -92,11 +94,11 @@ public class TableQuery {
                 }
             }
             // SAME ROW
-            for (int c = 0; c < f.tableIndex.table.nColumn; ++c) {
+            for (int c = 0; c < ti.table.nColumn; ++c) {
                 if (c == f.eCol || c == f.qCol) {
                     continue;
                 }
-                for (String fX : NLP.splitSentence(f.tableIndex.table.data[f.row][c].text.toLowerCase())) {
+                for (String fX : NLP.splitSentence(ti.table.data[f.row][c].text.toLowerCase())) {
                     if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
                         continue;
                     }
@@ -220,11 +222,18 @@ public class TableQuery {
 
             for (int k = i; k <= j; ++k) {
                 QfactLight f = QFACTS.get(k);
+                // quantity
+                Quantity qt = Quantity.fromQuantityString(f.quantity);
+                if (!constraint.match(qt)) {
+                    continue;
+                }
+
+                TableIndex ti = TableIndexStorage.get(f.tableId);
                 // check corpus target
                 if (corpusConstraint != null) {
                     boolean goodSource = false;
                     for (String c : corpusConstraint) {
-                        if (f.tableIndex.table.source.startsWith(c + ":")) {
+                        if (ti.table.source.startsWith(c + ":")) {
                             goodSource = true;
                             break;
                         }
@@ -234,13 +243,7 @@ public class TableQuery {
                     }
                 }
 
-                // quantity
-                Quantity qt = Quantity.fromQuantityString(f.quantity);
-                if (!constraint.match(qt)) {
-                    continue;
-                }
-
-                Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> matchScore = match(queryContextTerms, f);
+                Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> matchScore = match(queryContextTerms, f, ti);
 
 //                if (matchScore.first < 0.7) {
 //                    continue;

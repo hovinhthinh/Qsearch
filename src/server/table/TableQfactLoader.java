@@ -4,36 +4,10 @@ import model.quantity.QuantityDomain;
 import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
-import org.junit.Assert;
-import storage.table.index.TableIndex;
 import util.FileUtils;
 import util.Gson;
 
 import java.util.*;
-
-class TableIndexLoader {
-    private HashMap<String, TableIndex> tableId2Index;
-
-    public TableIndexLoader(Set<String> tableIds) {
-        tableId2Index = new HashMap<>();
-
-        String wikiFile = "/GW/D5data-12/hvthinh/TabQs/to_be_indexed/wiki.gz";
-        String tablemFile = "/GW/D5data-12/hvthinh/TabQs/to_be_indexed/tablem.gz";
-        for (String file : Arrays.asList(tablemFile, wikiFile))
-            for (String line : FileUtils.getLineStream(file, "UTF-8")) {
-                TableIndex index = Gson.fromJson(line, TableIndex.class);
-                // omit some information
-                index.tableText = null;
-                if (tableIds.contains(index.table._id)) {
-                    tableId2Index.put(index.table._id, index);
-                }
-            }
-    }
-
-    public TableIndex getTableIndex(String tableId) {
-        return tableId2Index.get(tableId);
-    }
-}
 
 public class TableQfactLoader {
     public static final double LINKING_THRESHOLD = 0.70;
@@ -91,12 +65,6 @@ public class TableQfactLoader {
                 }
             }
         Collections.sort(QFACTS, (o1, o2) -> o1.entity.compareTo(o2.entity));
-
-        TableIndexLoader loader = new TableIndexLoader(tableIds);
-        for (QfactLight f : QFACTS) {
-            f.tableIndex = loader.getTableIndex(f.tableId);
-            Assert.assertTrue(f.tableIndex != null);
-        }
         LOADED = true;
         return QFACTS;
     }

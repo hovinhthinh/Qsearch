@@ -5,9 +5,9 @@ import model.query.SimpleQueryParser;
 import nlp.NLP;
 import org.json.JSONObject;
 import server.common.handler.ResultCacheHandler;
-import server.table.QfactLight;
 import server.table.ResultInstance;
 import server.table.TableQuery;
+import storage.table.index.TableIndexStorage;
 import util.Gson;
 import util.Pair;
 import util.Triple;
@@ -111,9 +111,9 @@ public class SearchHandler extends HttpServlet {
                     response.tableId2Index = new HashMap<>();
                     for (ResultInstance ri : response.topResults) {
                         for (ResultInstance.SubInstance si : ri.subInstances) {
-                            response.tableId2Index.put(si.qfact.tableId, si.qfact.tableIndex);
-                            si.qfact = (QfactLight) si.qfact.clone();
-                            si.qfact.tableIndex = null;
+                            if (!response.tableId2Index.containsKey(si.qfact.tableId)) {
+                                response.tableId2Index.put(si.qfact.tableId, TableIndexStorage.get(si.qfact.tableId));
+                            }
                         }
                     }
                 }

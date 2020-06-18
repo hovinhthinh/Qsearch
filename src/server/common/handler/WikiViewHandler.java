@@ -13,7 +13,7 @@ import java.net.Proxy;
 import java.net.URLEncoder;
 
 public class WikiViewHandler extends HttpServlet {
-    private static final String URL_TEMPLATE = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/{ENTITY}/monthly/2019070100/2019073100";
+    private static final String URL_TEMPLATE = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/{ENTITY}/monthly/2020050100/2020053100";
     private static final Proxy p = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("dmz-gw.mpi-klsb.mpg.de", 3128));
     private static final boolean USE_PROXY = false;
 
