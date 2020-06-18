@@ -5,9 +5,10 @@ import model.table.link.QuantityLink;
 import model.table.link.TimeLink;
 import pipeline.table.PriorBasedEntityTaggingNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Cell {
+public class Cell implements Serializable {
     public String text; // surface text
     public ArrayList<EntityLink> entityLinks;
     public ArrayList<QuantityLink> quantityLinks;

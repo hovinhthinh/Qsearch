@@ -2,9 +2,10 @@ package model.table;
 
 import nlp.NLP;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Table {
+public class Table implements Serializable {
     public transient static final int MAX_COLUMN_WIDTH = 30;
     public transient HashMap<String, Object> attributes = new HashMap<>(); // Used for any other purpose.
 
