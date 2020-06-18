@@ -1,6 +1,5 @@
 package server.text.handler.search;
 
-import com.google.gson.Gson;
 import model.context.ContextMatcher;
 import model.context.KullBackLeiblerMatcher;
 import model.quantity.QuantityConstraint;
@@ -8,7 +7,9 @@ import model.query.SimpleQueryParser;
 import nlp.NLP;
 import org.json.JSONException;
 import org.json.JSONObject;
+import server.common.handler.ResultCacheHandler;
 import storage.text.ElasticSearchQuery;
+import util.Gson;
 import util.Pair;
 import util.Triple;
 
@@ -28,7 +29,6 @@ public class SearchHandler extends HttpServlet {
     public static final String EMBEDDING_MODEL_STRING = "EMBEDDING";
 
     private static ContextMatcher KULLBACK_LEIBLER_MATCHER = null;
-    private static Gson GSON = new Gson();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws ServletException, IOException {
@@ -56,17 +56,16 @@ public class SearchHandler extends HttpServlet {
         int nResult = ntop != null ? Integer.parseInt(ntop) : 10;
 
         httpServletResponse.setCharacterEncoding("utf-8");
+        String sessionKey = search(null, nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint, additionalParams);
 
-        SearchResult response = search(null, nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint, additionalParams);
+        httpServletResponse.getWriter().print(new JSONObject().append("s", sessionKey).toString());
 
-        synchronized (GSON) {
-            httpServletResponse.getWriter().print(GSON.toJson(response));
-        }
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 
-    public static SearchResult search(String model, int nTopResult, String fullConstraint,
-                                      String typeConstraint, String contextConstraint, String quantityConstraint, Map additionalParameters) {
+    public static String search(String model, int nTopResult, String fullConstraint,
+                                String typeConstraint, String contextConstraint, String quantityConstraint,
+                                Map additionalParameters) {
         // Optimize
         if (typeConstraint != null) {
             typeConstraint = NLP.stripSentence(typeConstraint).toLowerCase();
@@ -140,9 +139,7 @@ public class SearchHandler extends HttpServlet {
 
                                 instance.quantityConvertedStr = o.getString("match_quantity_converted_str");
 
-                                synchronized (GSON) {
-                                    instance.contextStr = GSON.fromJson(o.getString("match_context_str"), new ArrayList<String>().getClass());
-                                }
+                                instance.contextStr = Gson.fromJson(o.getString("match_context_str"), new ArrayList<String>().getClass());
 
                                 response.topResults.add(instance);
                             } else {
@@ -160,6 +157,6 @@ public class SearchHandler extends HttpServlet {
             response = new SearchResult();
             response.verdict = "Unknown error occurred.";
         }
-        return response;
+        return ResultCacheHandler.addResult(Gson.toJson(response));
     }
 }

@@ -215,6 +215,34 @@ $("#model").on('change', function () {
     hideParameter();
 });
 
+// search mode.
+// load
+if ($.cookie('part_search') == "1") {
+    $("#type").removeAttr("hidden");
+    $("#type").focus();
+    $("#context").removeAttr("hidden");
+    $("#quantity").removeAttr("hidden");
+    $("#full").attr("hidden", "");
+}
 
+function changeSearchMode() {
+    if ($.cookie('part_search') != "1") {
+        $("#type").removeAttr("hidden");
+        $("#type").focus();
+        $("#context").removeAttr("hidden");
+        $("#quantity").removeAttr("hidden");
+        $("#full").attr("hidden", "");
+        $.cookie('part_search', "1");
+    } else {
+        $("#type").attr("hidden", "");
+        $("#context").attr("hidden", "");
+        $("#quantity").attr("hidden", "");
+        $("#full").removeAttr("hidden");
+        $("#full").focus();
+        $.cookie('part_search', "0");
+    }
+}
+
+$("#change-mode").click(changeSearchMode);
 
 
