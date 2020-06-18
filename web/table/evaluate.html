@@ -1,0 +1,846 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Qsearch</title>
+    <link href="fontawesome_5.10.1/css/all.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="css/bootstrap_4.0.0.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="css/local.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="css/bootstrap-multiselect.css" rel="stylesheet" crossorigin="anonymous">
+</head>
+
+<body>
+<script src="js/jquery_3.2.1.min.js" crossorigin="anonymous"></script>
+<script src="js/jquery.cookie_1.4.1.js" crossorigin="anonymous"></script>
+<script src="js/popper_1.12.9.min.js" crossorigin="anonymous"></script>
+<script src="js/bootstrap_4.0.0.min.js" crossorigin="anonymous"></script>
+<script src="js/nanobar_0.4.2.min.js" crossorigin="anonymous"></script>
+<script src="js/bootstrap-multiselect.js" crossorigin="anonymous"></script>
+
+<div id="template-check-form" hidden>
+    <label class="radio-inline text-success font-weight-bold" style="white-space:nowrap;">
+        <input type="radio" name="verdict-template" value="true"> True
+    </label>
+    <label class="radio-inline text-danger font-weight-bold" style="white-space:nowrap;">
+        <input type="radio" name="verdict-template" value="false"> False
+    </label>
+</div>
+
+<div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12 offset-xs-0 offset-sm-0 offset-md-0 offset-lg-0">
+    <div class="row">
+        <a href="#" class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            DEV_MODE<br/>
+            <img style="object-fit: contain; height:75px" src="img/logo.png" class="img-responsive img-fluid ml-2 mr-2">
+        </a>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-5 mt-2">
+            <br/>
+            <div class="input-group">
+                <button id="change-mode" class="btn"><i class="fas fa-sync-alt"></i></button>
+                <input hidden type="text" class="form-control" placeholder="type" id="type">
+                <input hidden type="text" class="form-control" placeholder="context" id="context">
+                <input hidden type="text" class="form-control" placeholder="quantity" id="quantity">
+                <input style="height: 40px;" type="text" class="form-control"
+                       placeholder="what do you want to search for?" id="full">
+                <button style="height: 40px" type="button" class="btn btn-success" id="search">Search</button>
+            </div>
+            <br/>
+            <div id="parsed" class="mb-3" style="white-space:nowrap;"></div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mt-2">
+            <br/>
+            <select class="custom-select" id="eval-domain">
+                <option disabled selected>Evaluation Domain</option>
+                <option value="FINANCE">FINANCE</option>
+                <option value="SPORTS">SPORTS</option>
+                <option value="TRANSPORT">TRANSPORT</option>
+                <option value="TECHNOLOGY">TECHNOLOGY</option>
+            </select>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-3" style="margin-top: 15px">
+            <div class="float-right card" style=" border-color: #d6e9c6;">
+                <div class="card-header" style="background-color: #dff0d8; border-color: #d6e9c6">
+                    <a id='setting-toggle' data-toggle="collapse" href="#setting-body"
+                       style="text-decoration: none;">
+            <span style="color: #3c763d">
+                <strong>Settings</strong>&nbsp;&nbsp;<i class="float-right fa fa-chevron-up"></i>
+            </span>
+                    </a>
+                </div>
+                <div id="setting-body" class="collapse show">
+                    <div class="card-body">
+                        <table>
+                            <tr>
+                                <td>Input corpus:&nbsp;</td>
+                                <td>
+                                    <select class="custom-select" multiple id="corpus">
+                                        <option value="TABLEM:Link" selected>TableL</option>
+                                        <option value="WIKIPEDIA:Link" selected>Wikipedia</option>
+                                    </select>
+                                </td>
+                                <td>&nbsp;&nbsp;nTop:&nbsp;</td>
+                                <td>
+                                    <select class="custom-select" id="ntop">
+                                        <option value="10">10</option>
+                                        <option value="20" selected>20</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container col-xs-12 col-sm-12 col-md-12 col-lg-11 mt-2">
+    <table class="table table-hover"
+           style="width: auto !important; table-layout: auto !important; margin-left:auto; margin-right:auto;">
+        <thead id="head" hidden>
+        <tr>
+            <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col">#</th>
+            <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col">Result</th>
+            <th style="border-top: 0px; border-bottom: 0px;" scope="col">
+                <div class="row">
+                    <div class="col-8"><span style="position:absolute;bottom:0;">Source</span></div>
+                    <div class="dropdown col-4" align="right" id="sort-dropdown" hidden>
+                        <button class="btn dropdown-toggle btn-sm" type="button" id="sort-dropdown-btn"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                style="background-color: #dff0d8; border-color: #d6e9c6; color: #3c763d">
+                            <strong id="sort-by-text">Sort by: Default</strong>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="sort-dropdown-btn">
+                            <a class="dropdown-item dropdown-item-checked sort-option" href='#' id="sort-default">Default</a>
+                            <a class="dropdown-item sort-option" href='#' id="sort-quantity">Quantity</a>
+                            <a class="dropdown-item sort-option" href='#' id="sort-entity" hidden>Entity</a>
+                        </div>
+                    </div>
+                </div>
+            </th>
+            <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col">Verdict</th>
+        </tr>
+        </thead>
+        <tbody id="data">
+        </tbody>
+    </table>
+</div>
+<br/>
+<br/>
+<br/>
+<footer class="footer fixed-bottom" style="background-color: #ffffff; padding-top: 5px">
+    <table align="center">
+        <tr>
+            <td valign="middle" style="padding-top: 15px">
+                <div class="container mb-3">
+                    &copy; 2020
+                    <a href="https://www.mpi-inf.mpg.de/departments/databases-and-information-systems/"
+                       referrerpolicy="no-referrer">Database
+                        & Information Systems Group</a>, Max Planck Institute for Informatics
+                    &nbsp;|&nbsp;<a href="https://imprint.mpi-klsb.mpg.de/inf/qsearch.mpi-inf.mpg.de"
+                                    referrerpolicy="no-referrer">
+                    Impressum</a>&nbsp;|&nbsp;<a
+                        href="https://data-protection.mpi-klsb.mpg.de/inf/qsearch.mpi-inf.mpg.de"
+                        referrerpolicy="no-referrer">
+                    Datenschutzhinweis</a>
+                </div>
+            </td>
+            <td style="width: 50px"></td>
+            <td>
+                <img style="height: 60px" src="img/mpi.png" class="img-fluid" alt="logo">
+            </td>
+        </tr>
+    </table>
+</footer>
+<img id="loading" src="img/loading.gif" style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"
+     hidden/>
+<script src="js/local.js" crossorigin="anonymous"></script>
+<style>
+    .result-img {
+        max-height: 150px;
+        height: auto;
+        width: auto;
+    }
+</style>
+<script>
+    var showTimeOut = 30000;
+    var nanobar = new Nanobar();
+    document.getElementById('nanobarcss').innerHTML += '.nanobar .bar { background: #6aa94e; }';
+
+    function escapeText(text) {
+        return $('<div>').text(text).html();
+    }
+
+    function wrapContextBox(input, token) {
+        var result = '';
+        input.split(' ').forEach(function (t) {
+            if (result != '') {
+                result += ' ';
+            }
+            if (t.toLowerCase() == token.toLowerCase()) {
+                result += '<span class="context-box">' + t + '</span>'
+            } else {
+                result += t;
+            }
+        });
+        return result;
+    }
+
+    function entityCell(inst) {
+        var value = inst.entity;
+        value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result mr-1" href="https://www.wikipedia.org/wiki/'
+            + encodeURI(value.substring(1, value.length - 1)) + '" target="_blank" referrerpolicy="no-referrer">'
+            + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
+            + '</a>'
+            + '<span class="badge badge-pill badge-secondary">Score: ' + inst.score.toFixed(3) + '</span>';
+
+        return $("<td style='width: auto !important;'>" + value + "</td>");
+    }
+
+    function source(value) {
+        if (value.startsWith("WIKIPEDIA:Link:")) {
+            value = '&rarr; <a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-danger">Wikipedia</a>';
+        } else if (value.startsWith("TABLEM:Link:")) {
+            value = '&rarr; <a href="' + value.substr(12) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-success">TableL</a>';
+        }
+        return value;
+    }
+
+    function drawCollapsedTable(index, si) {
+        var cell = $('<div>');
+
+        var table = si.qfact.tableIndex.table;
+
+        var preTables = $('<div class="container-fluid"><div class="row"><div class="col-auto p-0" style="max-width: 40%"></div><div class="col p-0"></div><div class="col-1 p-0 text-right"></div></div></div>');
+
+        // titles
+        var title = $('<div>');
+        var titleText = escapeText(si.qfact.tableIndex.pageTitle);
+        for (var i = 0; i < si.traces.length; ++i) {
+            if (si.traces[i].place != "TITLE") {
+                continue;
+            }
+            var token = escapeText(si.traces[i].token);
+            titleText = wrapContextBox(titleText, token);
+        }
+        titleText = titleText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
+        title.html('<span class="badge badge-pill badge-warning">Title</span> <span class="font-weight-bold small">'
+            + titleText + '</span>');
+        preTables.eq(0).children().eq(0).children().eq(0).append(title);
+
+        // subTitles
+        var st = si.qfact.tableIndex.sectionTitles.split('\r\n');
+        if (st.length > 1 || st[0] != "") {
+            for (var i = 0; i < st.length; ++i) {
+                var subTitles = $('<div>');
+                var content = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                for (var j = 0; j < i; ++j) {
+                    content += '&nbsp;&nbsp;&nbsp;&nbsp;';
+                }
+                var subTitleText = escapeText(st[i]);
+                for (var j = 0; j < si.traces.length; ++j) {
+                    if (si.traces[j].place != "TITLE") {
+                        continue;
+                    }
+                    var token = escapeText(si.traces[j].token);
+                    subTitleText = wrapContextBox(subTitleText, token);
+                }
+                subTitleText = subTitleText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
+                content += '&rdsh; <span class="small">' + subTitleText + '</span>';
+                subTitles.html(content);
+                preTables.eq(0).children().eq(0).children().eq(0).append(subTitles);
+            }
+        }
+
+        // pageContent
+        var pg = $('<div class="small ml-3 mr-1">');
+        if (si.qfact.tableIndex.pageContent != "") {
+            pg.html('<span class="badge badge-pill badge-info">Related Text</span> ');
+            var lim = 400;
+            if (si.qfact.tableIndex.pageContent.length < lim) {
+                pg.append($('<span>').text(si.qfact.tableIndex.pageContent));
+            } else {
+                pg.append($('<span>').text(si.qfact.tableIndex.pageContent.substring(0, lim)));
+                pg.append($('<span hidden>').text(si.qfact.tableIndex.pageContent.substring(lim)));
+                pg.append($('<button class="btn btn-sm btn-link" onclick="showMoreText(this)">...more</button>'));
+            }
+        } else {
+            pg.html('<span class="badge badge-pill badge-secondary">No Related Text</span>');
+        }
+        escapeText(si.qfact.tableIndex.pageContent);
+        preTables.eq(0).children().eq(0).children().eq(1).append(pg);
+        // source
+        preTables.eq(0).children().eq(0).children().eq(2).html(source(si.qfact.tableIndex.table.source));
+
+        cell.append(preTables);
+        // table
+        var thead = $('<thead>');
+        for (var i = 0; i < table.header.length; ++i) {
+            var headRow = $('<tr>');
+            for (var j = 0; j < table.header[i].length; ++j) {
+                if (i > 0 && table.header[i][j].text == table.header[i - 1][j].text) {
+                    continue;
+                }
+                var c = $('<th>');
+                // colspan
+                var temp_1 = j;
+                while (temp_1 < table.header[i].length - 1 && table.header[i][temp_1 + 1].text == table.header[i][temp_1].text) {
+                    ++temp_1;
+                }
+                if (temp_1 > j) {
+                    c.attr('colspan', temp_1 - j + 1);
+                }
+                // rowspan
+                var temp_2 = i;
+                while (temp_2 < table.header.length - 1 && table.header[temp_2 + 1][j].text == table.header[temp_2][j].text) {
+                    ++temp_2;
+                }
+                if (temp_2 > i) {
+                    c.attr('rowspan', temp_2 - i + 1);
+                }
+
+                var text = escapeText(table.header[i][j].text);
+                if (si.qfact.headerUnitSpan != null && table.header[i][j].text == table.header[table.header.length - 1][si.qfact.qCol].text
+                    && si.qfact.qCol >= j && si.qfact.qCol <= temp_1 && temp_2 == table.header.length - 1) {
+                    var unitSpan = escapeText(si.qfact.headerUnitSpan);
+                    text += '</br><span class="badge badge-pill badge-secondary">Unit/Multiplier: ' + unitSpan + '</span>';
+                }
+                c.html(text);
+                headRow.append(c);
+                j = temp_1;
+            }
+            thead.append(headRow);
+        }
+        var tbody = $('<tbody>');
+
+        for (var i = si.qfact.row; i <= si.qfact.row; ++i) {
+            var bodyRow = $('<tr>');
+            for (var j = 0; j < table.data[i].length; ++j) {
+                var c = $('<td>');
+                var text = escapeText(table.data[i][j].text);
+                if (j == si.qfact.eCol) {
+                    var entitySpan = escapeText(si.qfact.entitySpan);
+                    text = text.replace(entitySpan, '<span class="entity-box">' + entitySpan + '</span>');
+                } else if (j == si.qfact.qCol) {
+                    var quantitySpan = escapeText(si.qfact.quantitySpan);
+                    text = text.replace(quantitySpan, '<span class="quantity-box ' + (index == 0 ? 'converted-quantity' : 'converted-quantity-2') + '"' +
+                        ' data-animation="true" data-placement="top" data-trigger="hover" data-html="true"' +
+                        ' data-content="Equals: ' +
+                        (si.quantityConvertedStr == null ? "null" : si.quantityConvertedStr) +
+                        '">' + quantitySpan + '</span>');
+                } else {
+                    for (var k = 0; k < si.traces.length; ++k) {
+                        if (si.traces[k].place != "SAME_ROW") {
+                            continue;
+                        }
+                        var token = escapeText(si.traces[k].token);
+                        text = wrapContextBox(text, token);
+                    }
+                    text = text.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
+                }
+                c.html(text);
+                bodyRow.append(c);
+            }
+            tbody.append(bodyRow);
+        }
+
+        var t = $('<table>');
+        t.append(thead, tbody);
+        t.attr("class", "table table-sm w-auto small table-bordered mb-0");
+
+        cell.append(t);
+
+        // caption
+        var wrapper = $('<div style="text-align: center;"><div style="display: inline-block;"></div></div>');
+        if (si.qfact.tableIndex.caption != "") {
+            var captionText = escapeText(si.qfact.tableIndex.caption);
+            for (var i = 0; i < si.traces.length; ++i) {
+                if (si.traces[i].place != "CAPTION") {
+                    continue;
+                }
+                var token = escapeText(si.traces[i].token);
+                captionText = wrapContextBox(captionText, token);
+            }
+            captionText = captionText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
+            wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + captionText + '</span>');
+        } else {
+            wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-secondary">No Caption</span>');
+        }
+        cell.append(wrapper);
+
+        return cell;
+    }
+
+    var convertedQuantityShowingTimeout;
+    var convertedQuantity2ShowingTimeout = [];
+    var wikiLinkToImageMap = {};
+
+    function showMoreTables(index, current) {
+        $(current).parent().parent().next().collapse('toggle');
+        if ($(current).text() == "Show more") {
+            $(current).text("Show less");
+            $(current).parent().parent().next().find('.converted-quantity-2').each(function () {
+                if (!($(this).attr('data-content') == 'Equals: null')) {
+                    var popoverElement = $(this).popover('show');
+                }
+            });
+            convertedQuantity2ShowingTimeout[index] = setTimeout(function () {
+                $(current).parent().parent().next().find('.converted-quantity-2').each(function () {
+                    $(this).trigger('mouseleave');
+                });
+            }, showTimeOut);
+        } else {
+            $(current).text("Show more");
+            clearTimeout(convertedQuantity2ShowingTimeout[index]);
+            $(current).parent().parent().next().find('.converted-quantity-2').each(function () {
+                if (!($(this).attr('data-content') == 'Equals: null')) {
+                    var popoverElement = $(this).popover('hide');
+                }
+            });
+        }
+    }
+
+    function showMoreText(current) {
+        if ($(current).text() == "...more") {
+            $(current).text("...less");
+            $(current).prev().removeAttr('hidden');
+        } else {
+            $(current).text("...more");
+            $(current).prev().attr('hidden', 'hidden');
+        }
+    }
+
+    function encodeEntityResultAsHtml(index, instance) {
+        var line = "<tr style='border-top:2px solid gray'>";
+        line += "<td style='width: auto !important;'>" + (index + 1) + "</td>";
+        var eCel = entityCell(instance);
+        line += eCel.wrapAll('<div>').parent().html();
+
+        var tCel = $('<td>');
+        tCel.append(drawCollapsedTable(0, instance.subInstances[0]));
+
+        if (instance.subInstances.length > 1) {
+            var wrapper = $('<div style="text-align: center;"><div style="display: inline-block;"></div></div>');
+            wrapper.eq(0).children().eq(0).html('<button class="mt-1 btn btn-link" onclick="showMoreTables(' + index + ', this)">Show more</button>');
+            tCel.append(wrapper);
+            var moreTCel = $('<div class="collapse">');
+            for (var i = 1; i < instance.subInstances.length; ++i) {
+                moreTCel.append($('<hr>'));
+                moreTCel.append(drawCollapsedTable(i, instance.subInstances[i]));
+            }
+            tCel.append(moreTCel);
+        }
+
+        line += tCel.wrapAll('<div>').parent().html();
+
+        var vCel = $('<td>');
+        vCel.html($("#template-check-form").html().split("verdict-template").join("verdict-" + String(index)));
+        line += vCel.wrapAll('<div>').parent().html();
+
+        line += "</tr>";
+        return line;
+    }
+
+    function showParsedQuery(type, context, quantity) {
+        var operator = (quantity['resolutionCodeExplicitlyGiven'] == true ? "explicit" : "implicit") + "-" + quantity['resolutionCode'];
+        var value = (quantity.quantity.value2 == null
+            ? quantity.quantity.value.toLocaleString('en-US')
+            : ("[" + quantity.quantity.value.toLocaleString('en-US') + " - " + quantity.quantity.value2.toLocaleString('en-US') + "]"));
+        var quantityConstraintDetail = '( <span class="alert alert-danger" style="padding: 0px 3px; color: black">' + escapeText(operator) + '</span>'
+            + ", " + '<span class="alert alert-danger" style="padding: 0px 3px; color: black">' + escapeText(value) + '</span>';
+        if (quantity.quantity.unit != '') {
+            quantityConstraintDetail += ", " + '<span class="alert alert-danger" style="padding: 0px 3px; color: black">' + escapeText(quantity.quantity.unit) + '</span>';
+        }
+        quantityConstraintDetail += " )";
+
+        $('#parsed').html('Parsed:&nbsp;&nbsp;&nbsp;' + '<span class="entity-box">' + escapeText(type) + '</span>'
+            + " &rarr; " + '<span class="context-box">' + escapeText(context) + '</span>'
+            + " &rarr; " + '<span id="quantity-constraint" class="quantity-box" data-animation="true" data-placement="bottom" data-html="true">' + escapeText(quantity['phrase']) + '</span>'
+            + ' <span class="badge badge-pill badge-danger">Domain: ' + escapeText(quantity['fineGrainedDomain']) + '</span>');
+        $('#quantity-constraint').attr('data-content', quantityConstraintDetail);
+    }
+
+    function show(data) {
+        if (data["verdict"] != "OK") {
+            $("#data").html(data["verdict"]);
+            return false;
+        }
+        var topResults = data["topResults"];
+        showParsedQuery(data["typeConstraint"], data["contextConstraint"], data["quantityConstraint"]);
+        if (false) { // if (topResults.length == 0) {
+            $("#data").html("<br/><br/>NO DATA");
+        } else {
+            $("#head").removeAttr("hidden");
+            var str = "";
+            for (var i = 0; i < topResults.length; ++i) {
+                var instance = topResults[i];
+                // populate tableIndex
+                for (var j = 0; j < instance.subInstances.length; ++j) {
+                    instance.subInstances[j].qfact.tableIndex = data.tableId2Index[instance.subInstances[j].qfact.tableId];
+                }
+
+                $("#data").append();
+                str += encodeEntityResultAsHtml(i, instance);
+            }
+            if (data.numResults > topResults.length) {
+                str += '<tr style="border-top:2px solid gray"><td></td><td>More ' + (data.numResults - topResults.length) + ' results</td>';
+            } else {
+                str += '<tr style="border-top:2px solid gray"><td></td><td></td>';
+            }
+            str += '<td class="text-right" id="submit-status"></td><td><button class="btn btn-success" id="submit" onclick="submit()">Submit</button></td></tr>';
+
+            $("#data").html(str);
+            $("#sort-dropdown").removeAttr('hidden');
+        }
+
+        $('.converted-quantity').each(function () {
+            var current = this;
+            if (!($(current).attr('data-content') == 'Equals: null')) {
+                var popoverElement = $(current).popover('show')
+                    .data('bs.popover').getTipElement();
+                $(popoverElement).addClass('popover-converted-quantity');
+            }
+        });
+        $('.converted-quantity-2').each(function () {
+            var current = this;
+            if (!($(current).attr('data-content') == 'Equals: null')) {
+                var popoverElement = $(current).popover('enable')
+                    .data('bs.popover').getTipElement();
+                $(popoverElement).addClass('popover-converted-quantity');
+            }
+        });
+
+        // hide converted quantity after sometime
+        convertedQuantityShowingTimeout = setTimeout(function () {
+            $('.converted-quantity').trigger('mouseleave');
+        }, showTimeOut);
+
+        // quantity constraint detail
+        $($('#quantity-constraint').popover('show').data('bs.popover').getTipElement())
+            .css('z-index', -1).find('.popover-body').addClass('quantity-constraint-detail').css('color', 'black');
+        setTimeout(function () {
+            $('#quantity-constraint').trigger('mouseleave');
+        }, showTimeOut);
+
+        $('.result').each(function () {
+            var current = this;
+            if ($(current).attr('href') in wikiLinkToImageMap) {
+                if (wikiLinkToImageMap[$(current).attr('href')] != 'None') {
+                    // $(current).attr("data-content", wikiLinkToImageMap[$(current).attr('href')]);
+                    $(current).parent().append($('</br>' + wikiLinkToImageMap[$(current).attr('href')]).addClass('mt-1 rounded result-img'));
+                    $(current).popover();
+                    if ($(current).is(':hover')) {
+                        $(current).trigger('mouseenter');
+                    }
+                }
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: "/wikilink",
+                    data: {"link": $(current).attr("href")},
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: "json",
+                    success: function (data) {
+                        if ("imgLink" in data) {
+                            var imgLink = "<img referrerpolicy=\"no-referrer\" style=\"object-fit: contain;\" src=\"" + data["imgLink"] + "\" class=\"img-responsive img-fluid\">";
+                            // $(current).attr("data-content", imgLink);
+                            $(current).parent().append($('</br>' + imgLink).addClass('mt-1 rounded result-img'));
+                            wikiLinkToImageMap[$(current).attr("href")] = imgLink;
+                            $(current).popover();
+                            if ($(current).is(':hover')) {
+                                $(current).trigger('mouseenter');
+                            }
+                        } else {
+                            wikiLinkToImageMap[$(current).attr("href")] = "None";
+                        }
+                    }
+                });
+            }
+        });
+
+        return true;
+    }
+
+    function search() {
+        var params = {
+            corpus: JSON.stringify($("#corpus").val()),
+            ntop: $("#ntop").val()
+        };
+        if ($.cookie('part_search_table') != "1") {
+            if ($("#full").val().trim() == "") {
+                return;
+            }
+            params.full = $("#full").val();
+        } else {
+            if ($("#type").val().trim() == "" || $("#quantity").val().trim() == "") {
+                return;
+            }
+            params.type = $("#type").val();
+            params.context = $("#context").val();
+            params.quantity = $("#quantity").val();
+        }
+
+        $("#search").attr('disabled', 'disabled').html("Searching <i class=\"fas fa-spinner fa-spin\"></i>");
+        $("#change-mode").attr('disabled', 'disabled');
+        $("#full").attr('disabled', 'disabled');
+        $("#type").attr('disabled', 'disabled');
+        $("#context").attr('disabled', 'disabled');
+        $("#quantity").attr('disabled', 'disabled');
+
+        if ("WebSocket" in window) {
+            var ws = new WebSocket(location.protocol.replace("http", "ws") + "//" + location.host + "/search_socket_table");
+            ws.onopen = function () {
+                ws.send(JSON.stringify(params));
+            };
+
+            ws.onmessage = function (evt) {
+                var msg = evt.data;
+                var data = JSON.parse(msg);
+                if ("progress" in data) {
+                    nanobar.go(data["progress"]);
+                } else {
+                    window.location.replace("/table/evaluate.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
+                }
+            };
+            ws.onerror = function () {
+                alert("An error occurred.");
+            };
+            ws.onclose = function () {
+                $("#search").removeAttr('disabled').html("Search");
+                $("#change-mode").removeAttr('disabled');
+                $("#full").removeAttr('disabled');
+                $("#type").removeAttr('disabled');
+                $("#context").removeAttr('disabled');
+                $("#quantity").removeAttr('disabled');
+            };
+        } else {
+            $.ajax({
+                type: "GET",
+                url: "/search_table",
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                success: function (data) {
+                    window.location.replace("/table/evaluate.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
+                },
+                error: function () {
+                    alert("An error occurred.");
+                },
+                complete: function () {
+                    $("#search").removeAttr('disabled').html("Search");
+                    $("#change-mode").removeAttr('disabled');
+                    $("#full").removeAttr('disabled');
+                    $("#type").removeAttr('disabled');
+                    $("#context").removeAttr('disabled');
+                    $("#quantity").removeAttr('disabled');
+                }
+            });
+        }
+    }
+
+    $("#search").click(search);
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has("q")) {
+        var q = JSON.parse(decodeURIComponent(atob(decodeURIComponent(urlParams.get("q")))));
+        if (q.full != null) {
+            $("#full").val(q.full);
+        } else {
+            $("#type").val(q.type);
+            $("#context").val(q.context);
+            $("#quantity").val(q.quantity);
+        }
+    }
+    var data = null;
+    var resultsForWikiView = null;
+    var wikiViewCountLeft = 0;
+    if (urlParams.has("s")) {
+        $.ajax({
+            type: "GET",
+            url: "/session",
+            data: {"s": urlParams.get('s')},
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json",
+            beforeSend: function () {
+                $("#search").attr('disabled', 'disabled');
+                $("#change-mode").attr('disabled', 'disabled');
+                $("#full").attr('disabled', 'disabled');
+                $("#type").attr('disabled', 'disabled');
+                $("#context").attr('disabled', 'disabled');
+                $("#quantity").attr('disabled', 'disabled');
+                $("#loading").removeAttr('hidden');
+            },
+            success: function (response) {
+                data = response;
+                if (!show(data)) {
+                    return;
+                }
+                // now trigger wikiview.
+                resultsForWikiView = data['topResults'];
+                wikiViewCountLeft = resultsForWikiView.length;
+                resultsForWikiView.forEach(function (o) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/wikiview",
+                        data: {"entity": o['entity']},
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: "json",
+                        success: function (response) {
+                            if (response['view'] != -1) {
+                                o['view'] = response['view'];
+                                --wikiViewCountLeft;
+                                if (wikiViewCountLeft == 0) {
+                                    data['topResults'] = resultsForWikiView;
+                                    $('#sort-entity').removeAttr('hidden');
+                                }
+                            }
+                        }
+                    });
+                });
+
+            },
+            error: function () {
+                alert("Invalid session.");
+            },
+            complete: function () {
+                $("#search").removeAttr('disabled');
+                $("#change-mode").removeAttr('disabled');
+                $("#full").removeAttr('disabled');
+                $("#type").removeAttr('disabled');
+                $("#context").removeAttr('disabled');
+                $("#quantity").removeAttr('disabled');
+                $("#loading").attr('hidden', 'hidden');
+            }
+        });
+    }
+
+    $('#sort-default').click(function () {
+        var topResults = data['topResults'];
+        topResults.sort(function (a, b) {
+            var av = a['score'], bv = b['score'];
+            return av < bv ? 1 : (av > bv ? -1 : 0);
+        });
+        data['topResults'] = topResults;
+        clearTimeout(convertedQuantityShowingTimeout);
+        convertedQuantity2ShowingTimeout.forEach(function (t) {
+            try {
+                clearTimeout(t);
+            } catch (e) {
+            }
+        });
+        $('.converted-quantity, .converted-quantity-2').trigger('mouseleave');
+        $('#quantity-constraint').popover('dispose');
+        show(data);
+        $('.sort-option').each(function () {
+            $(this).removeClass('dropdown-item-checked');
+        });
+        $(this).addClass('dropdown-item-checked');
+        $('#sort-by-text').text('Sort by: Default');
+    });
+    $('#sort-entity').click(function () {
+        var topResults = data['topResults'];
+        topResults.sort(function (a, b) {
+            var av = a['view'], bv = b['view'];
+            return av < bv ? 1 : (av > bv ? -1 : 0);
+        });
+        data['topResults'] = topResults;
+        clearTimeout(convertedQuantityShowingTimeout);
+        convertedQuantity2ShowingTimeout.forEach(function (t) {
+            try {
+                clearTimeout(t);
+            } catch (e) {
+            }
+        });
+        $('.converted-quantity, .converted-quantity-2').trigger('mouseleave');
+        $('#quantity-constraint').popover('dispose');
+        show(data);
+        $('.sort-option').each(function () {
+            $(this).removeClass('dropdown-item-checked');
+        });
+        $(this).addClass('dropdown-item-checked');
+        $('#sort-by-text').text('Sort by: Entity');
+    });
+    $('#sort-quantity').click(function () {
+        var topResults = data['topResults'];
+        topResults.sort(function (a, b) {
+            var av = a.subInstances[0].quantityStandardValue, bv = b.subInstances[0].quantityStandardValue;
+            var c = av < bv ? -1 : (av > bv ? 1 : 0);
+            if (data['quantityConstraint']['resolutionCode'] == 'UPPER_BOUND') {
+                return c * -1;
+            } else {
+                return c;
+            }
+        });
+        data['topResults'] = topResults;
+        clearTimeout(convertedQuantityShowingTimeout);
+        convertedQuantity2ShowingTimeout.forEach(function (t) {
+            try {
+                clearTimeout(t);
+            } catch (e) {
+            }
+        });
+        $('.converted-quantity, .converted-quantity-2').trigger('mouseleave');
+        $('#quantity-constraint').popover('dispose');
+        show(data);
+        $('.sort-option').each(function () {
+            $(this).removeClass('dropdown-item-checked');
+        });
+        $(this).addClass('dropdown-item-checked');
+        $('#sort-by-text').text('Sort by: Quantity');
+    });
+
+    autocomplete(document.getElementById("full"));
+    autocomplete(document.getElementById("type"));
+
+    function submit() {
+        if (data == null) {
+            alert("An error occurred.");
+            return;
+        }
+        if ($("#eval-domain").val() == null) {
+            alert("Please choose evaluation domain.");
+            return;
+        }
+        for (var i = 0; i < data["topResults"].length; ++i) {
+            var verdict = $("input[name=verdict-" + String(i) + "]:checked").val();
+            if (verdict == null) {
+                alert("Please evaluate all the results.");
+                return;
+            }
+            data["topResults"][i]["eval"] = verdict;
+        }
+        data["evalDomain"] = $("#eval-domain").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/evaluate_table",
+            data: JSON.stringify(data),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json",
+            beforeSend: function () {
+                $("#submit").attr('disabled', 'disabled').text("Submitting");
+                $("#search").attr('disabled', 'disabled');
+            },
+            success: function (d) {
+                if (d["verdict"] == "OK") {
+                    $("#submit-status").html('<p class="text-success font-weight-bold">SAVED</p>');
+                } else if (d["verdict"] == "OVERWRITE") {
+                    $("#submit-status").html('<p class="text-warning font-weight-bold">OVERWRITTEN</p>');
+                } else {
+                    $("#submit-status").html('<p class="text-danger font-weight-bold">ERROR</p>');
+                }
+            },
+            error: function () {
+                alert("An error occurred.");
+            },
+            complete: function () {
+                $("#submit").removeAttr('disabled').text("Submit");
+                $("#search").removeAttr('disabled');
+            }
+        });
+    }
+
+    $("#submit").click(submit);
+</script>
+</body>
+</html>
