@@ -5,9 +5,11 @@ import org.json.JSONObject;
 import server.common.handler.ResultCacheHandler;
 import server.table.QfactLight;
 import server.table.TableQfactLoader;
+import server.table.TableQuery;
 import storage.table.index.TableIndex;
 import storage.table.index.TableIndexStorage;
 import util.Gson;
+import util.Pair;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 class BrowsingResult {
     public ArrayList<List<QfactLight>> result = new ArrayList<>();
@@ -36,6 +39,8 @@ public class EntityQfactHandler extends HttpServlet {
 
         // Get parameters
         String entityConstraint = NLP.stripSentence(request.getParameter("entity")).toLowerCase();
+        ArrayList<String> contextConstraint = NLP.splitSentence(request.getParameter("context").toLowerCase());
+
         BrowsingResult r = new BrowsingResult();
         if (!entityConstraint.isEmpty()) {
             for (int i = 0; i < qfacts.size(); ++i) {
@@ -66,6 +71,15 @@ public class EntityQfactHandler extends HttpServlet {
                     r.tableId2Index.put(f.tableId, TableIndexStorage.get(f.tableId));
                 }
             }
+        }
+
+        for (int i = 0; i < r.result.size(); ++i) {
+            r.result.set(i, r.result.get(i).stream()
+                    .map(f -> new Pair<>(f, TableQuery.match(contextConstraint, f, r.tableId2Index.get(f.tableId)).first))
+                    .sorted((a, b) -> b.second.compareTo(a.second))
+                    .map(o -> o.first)
+                    .collect(Collectors.toCollection(ArrayList::new))
+            );
         }
 
         String sessionKey = ResultCacheHandler.addResult(Gson.toJson(r));
