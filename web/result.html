@@ -354,9 +354,6 @@
         // quantity constraint detail
         $($('#quantity-constraint').popover('show').data('bs.popover').getTipElement())
             .css('z-index', -1).find('.popover-body').addClass('quantity-constraint-detail').css('color', 'black');
-        setTimeout(function () {
-            $('#quantity-constraint').trigger('mouseleave');
-        }, 7500);
 
         $('.result').each(function () {
             var current = this;
