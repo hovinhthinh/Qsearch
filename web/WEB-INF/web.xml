@@ -100,4 +100,13 @@
         <url-pattern>/evaluate_table</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>TableQfactBrowser</servlet-name>
+        <servlet-class>server.table.experimental.EntityQfactHandler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TableQfactBrowser</servlet-name>
+        <url-pattern>/browse_table</url-pattern>
+    </servlet-mapping>
+
 </web-app>
