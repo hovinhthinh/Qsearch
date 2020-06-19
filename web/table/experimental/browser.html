@@ -29,6 +29,8 @@
             <div class="input-group">
                 <input autocomplete="off" type="text" class="form-control" placeholder="entity" id="entity"
                        value="Tesla">
+                <input autocomplete="off" type="text" class="form-control" placeholder="context (optional)" id="context"
+                       value="">
                 <button style="height: 40px" type="button" class="btn btn-success" id="search">Browse</button>
             </div>
             <br/>
@@ -358,7 +360,8 @@
 
     function search() {
         var params = {
-            entity: $("#entity").val()
+            entity: $("#entity").val(),
+            context: $("#context").val()
         };
 
         $("#search").attr('disabled', 'disabled').html("Browsing <i class=\"fas fa-spinner fa-spin\"></i>");
@@ -388,6 +391,7 @@
     if (urlParams.has("q")) {
         var q = JSON.parse(decodeURIComponent(atob(decodeURIComponent(urlParams.get("q")))));
         $("#entity").val(q.entity);
+        $("#context").val(q.context);
     }
     var data = null;
     if (urlParams.has("s")) {
@@ -416,12 +420,6 @@
             }
         });
     }
-
-    $('#entity').on("keydown", function (e) {
-        if (e.keyCode == 13) {
-            $("#search").click();
-        }
-    });
 </script>
 </body>
 </html>
