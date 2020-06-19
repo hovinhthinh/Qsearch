@@ -366,6 +366,7 @@
 
         $("#search").attr('disabled', 'disabled').html("Browsing <i class=\"fas fa-spinner fa-spin\"></i>");
         $("#entity").attr('disabled', 'disabled');
+        $("#context").attr('disabled', 'disabled');
 
         $.ajax({
             type: "GET",
@@ -382,6 +383,7 @@
             complete: function () {
                 $("#search").removeAttr('disabled').html("Browse");
                 $("#entity").removeAttr('disabled');
+                $("#context").removeAttr('disabled');
             }
         });
     }
