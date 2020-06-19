@@ -406,6 +406,7 @@
             beforeSend: function () {
                 $("#search").attr('disabled', 'disabled');
                 $("#entity").attr('disabled', 'disabled');
+                $("#context").attr('disabled', 'disabled');
                 $("#loading").removeAttr('hidden');
             },
             success: function (response) {
@@ -418,6 +419,7 @@
             complete: function () {
                 $("#search").removeAttr('disabled');
                 $("#entity").removeAttr('disabled');
+                $("#context").removeAttr('disabled');
                 $("#loading").attr('hidden', 'hidden');
             }
         });
