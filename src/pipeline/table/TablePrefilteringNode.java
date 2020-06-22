@@ -1,6 +1,5 @@
 package pipeline.table;
 
-
 import eval.table.TruthTable;
 import model.table.Cell;
 import model.table.Table;
@@ -49,6 +48,8 @@ public class TablePrefilteringNode implements TaggingNode {
 
     @Override
     public boolean process(Table table) {
+        // ROW PRUNING DISABLED
+        /*
         // Remove empty data rows
         table.data = pruneEmptyRows(table.data);
         table.nDataRow = table.data.length;
@@ -71,6 +72,7 @@ public class TablePrefilteringNode implements TaggingNode {
         // Remove empty header rows
         table.header = pruneEmptyRows(table.header);
         table.nHeaderRow = table.header.length;
+         */
 
         if (table.nHeaderRow == 0 || table.nDataRow < minNDataRow || table.nDataRow > maxNDataRow) {
             return false;
