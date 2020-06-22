@@ -309,50 +309,43 @@ public class QuantityDomain {
         if (quantity.fineGrainedDomain != null) {
             return quantity.fineGrainedDomain;
         }
-        if (LENGTH_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedDomain = Domain.LENGTH;
+        return quantity.fineGrainedDomain = getFineGrainedDomainOfUnit(quantity.unit);
+    }
+
+    public static String getFineGrainedDomainOfUnit(String unit) {
+        if (LENGTH_DOMAIN.containsKey(unit)) {
             return Domain.LENGTH;
         }
-        if (MONEY_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedDomain = Domain.MONEY;
+        if (MONEY_DOMAIN.containsKey(unit)) {
             return Domain.MONEY;
         }
-        if (TIME_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedDomain = Domain.TIME;
+        if (TIME_DOMAIN.containsKey(unit)) {
             return Domain.TIME;
         }
-        if (MASS_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedDomain = Domain.MASS;
+        if (MASS_DOMAIN.containsKey(unit)) {
             return Domain.MASS;
         }
-        if (PERCENTAGE_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedDomain = Domain.PERCENTAGE;
+        if (PERCENTAGE_DOMAIN.containsKey(unit)) {
             return Domain.PERCENTAGE;
         }
-        if (AREA_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedDomain = Domain.AREA;
+        if (AREA_DOMAIN.containsKey(unit)) {
             return Domain.AREA;
         }
-        if (VOLUME_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedDomain = Domain.VOLUME;
+        if (VOLUME_DOMAIN.containsKey(unit)) {
             return Domain.VOLUME;
         }
         // Now use QuTree.
         try {
-            Unit u = quantity.unit.isEmpty() ? null : QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
+            Unit u = unit.isEmpty() ? null : QUANTITY_CATALOG.getUnitFromBaseName(unit);
             if (u == null) {
-                List<Unit> units = SURFACE_UNITS_MAP.get(quantity.unit);
+                List<Unit> units = SURFACE_UNITS_MAP.get(unit);
                 u = units == null ? null : units.get(0);
             }
             if (u != null) {
-                String domain = u.getParentQuantity().getConcept();
-                // allows only these specific domains
-                quantity.fineGrainedDomain = domain;
-                return domain;
+                return u.getParentQuantity().getConcept();
             }
         } catch (Exception e) {
         }
-        quantity.fineGrainedDomain = Domain.DIMENSIONLESS;
         return Domain.DIMENSIONLESS;
     }
 
