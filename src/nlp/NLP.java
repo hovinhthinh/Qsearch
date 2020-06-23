@@ -48,7 +48,7 @@ public class NLP {
     ));
 
 
-    public static final HeadFinder HEAD_FINDER = new CollinsHeadFinder();
+    private static final HeadFinder HEAD_FINDER = new CollinsHeadFinder();
 
     public static String getHeadWord(String phrase, boolean fast) {
         if (!phrase.contains(" ")) {
