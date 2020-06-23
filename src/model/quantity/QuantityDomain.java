@@ -194,43 +194,50 @@ public class QuantityDomain {
             {"square yd", 0.764},
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
 
+    // units are tokenized during preprocessing, e.g., "km/h" -> "km / h", this function reverts this action.
+    private static String untokenizeUnit(String unit) {
+        return unit.replace(" / ", "/");
+        // TODO: more;
+    }
+
     public static double getScale(Quantity quantity) {
         if (quantity.scale != null) {
             return quantity.scale;
         }
-        if (LENGTH_DOMAIN.containsKey(quantity.unit)) {
-            quantity.scale = LENGTH_DOMAIN.get(quantity.unit);
-            return LENGTH_DOMAIN.get(quantity.unit);
+        String unit = untokenizeUnit(quantity.unit);
+        if (LENGTH_DOMAIN.containsKey(unit)) {
+            quantity.scale = LENGTH_DOMAIN.get(unit);
+            return LENGTH_DOMAIN.get(unit);
         }
-        if (MONEY_DOMAIN.containsKey(quantity.unit)) {
-            quantity.scale = MONEY_DOMAIN.get(quantity.unit);
-            return MONEY_DOMAIN.get(quantity.unit);
+        if (MONEY_DOMAIN.containsKey(unit)) {
+            quantity.scale = MONEY_DOMAIN.get(unit);
+            return MONEY_DOMAIN.get(unit);
         }
-        if (TIME_DOMAIN.containsKey(quantity.unit)) {
-            quantity.scale = TIME_DOMAIN.get(quantity.unit);
-            return TIME_DOMAIN.get(quantity.unit);
+        if (TIME_DOMAIN.containsKey(unit)) {
+            quantity.scale = TIME_DOMAIN.get(unit);
+            return TIME_DOMAIN.get(unit);
         }
-        if (MASS_DOMAIN.containsKey(quantity.unit)) {
-            quantity.scale = MASS_DOMAIN.get(quantity.unit);
-            return MASS_DOMAIN.get(quantity.unit);
+        if (MASS_DOMAIN.containsKey(unit)) {
+            quantity.scale = MASS_DOMAIN.get(unit);
+            return MASS_DOMAIN.get(unit);
         }
-        if (PERCENTAGE_DOMAIN.containsKey(quantity.unit)) {
-            quantity.scale = PERCENTAGE_DOMAIN.get(quantity.unit);
-            return PERCENTAGE_DOMAIN.get(quantity.unit);
+        if (PERCENTAGE_DOMAIN.containsKey(unit)) {
+            quantity.scale = PERCENTAGE_DOMAIN.get(unit);
+            return PERCENTAGE_DOMAIN.get(unit);
         }
-        if (AREA_DOMAIN.containsKey(quantity.unit)) {
-            quantity.scale = AREA_DOMAIN.get(quantity.unit);
-            return AREA_DOMAIN.get(quantity.unit);
+        if (AREA_DOMAIN.containsKey(unit)) {
+            quantity.scale = AREA_DOMAIN.get(unit);
+            return AREA_DOMAIN.get(unit);
         }
-        if (VOLUME_DOMAIN.containsKey(quantity.unit)) {
-            quantity.scale = VOLUME_DOMAIN.get(quantity.unit);
-            return VOLUME_DOMAIN.get(quantity.unit);
+        if (VOLUME_DOMAIN.containsKey(unit)) {
+            quantity.scale = VOLUME_DOMAIN.get(unit);
+            return VOLUME_DOMAIN.get(unit);
         }
         // Now use QuTree.
         try {
-            Unit u = quantity.unit.isEmpty() ? null : QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
+            Unit u = unit.isEmpty() ? null : QUANTITY_CATALOG.getUnitFromBaseName(unit);
             if (u == null) {
-                List<Unit> units = SURFACE_UNITS_MAP.get(quantity.unit);
+                List<Unit> units = SURFACE_UNITS_MAP.get(unit);
                 u = units == null ? null : units.get(0);
             }
             if (u != null) {
@@ -244,8 +251,7 @@ public class QuantityDomain {
                         domain.equals(Domain.AREA) ||
                         domain.equals(Domain.VOLUME)
                 ) {
-                    quantity.scale = u.getMultiplier();
-                    return u.getMultiplier();
+                    return quantity.scale = u.getMultiplier();
                 }
             }
         } catch (Exception e) {
@@ -259,44 +265,44 @@ public class QuantityDomain {
         if (quantity.fineGrainedScale != null) {
             return quantity.fineGrainedScale;
         }
-        if (LENGTH_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedScale = LENGTH_DOMAIN.get(quantity.unit);
-            return LENGTH_DOMAIN.get(quantity.unit);
+        String unit = untokenizeUnit(quantity.unit);
+        if (LENGTH_DOMAIN.containsKey(unit)) {
+            quantity.fineGrainedScale = LENGTH_DOMAIN.get(unit);
+            return LENGTH_DOMAIN.get(unit);
         }
-        if (MONEY_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedScale = MONEY_DOMAIN.get(quantity.unit);
-            return MONEY_DOMAIN.get(quantity.unit);
+        if (MONEY_DOMAIN.containsKey(unit)) {
+            quantity.fineGrainedScale = MONEY_DOMAIN.get(unit);
+            return MONEY_DOMAIN.get(unit);
         }
-        if (TIME_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedScale = TIME_DOMAIN.get(quantity.unit);
-            return TIME_DOMAIN.get(quantity.unit);
+        if (TIME_DOMAIN.containsKey(unit)) {
+            quantity.fineGrainedScale = TIME_DOMAIN.get(unit);
+            return TIME_DOMAIN.get(unit);
         }
-        if (MASS_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedScale = MASS_DOMAIN.get(quantity.unit);
-            return MASS_DOMAIN.get(quantity.unit);
+        if (MASS_DOMAIN.containsKey(unit)) {
+            quantity.fineGrainedScale = MASS_DOMAIN.get(unit);
+            return MASS_DOMAIN.get(unit);
         }
-        if (PERCENTAGE_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedScale = PERCENTAGE_DOMAIN.get(quantity.unit);
-            return PERCENTAGE_DOMAIN.get(quantity.unit);
+        if (PERCENTAGE_DOMAIN.containsKey(unit)) {
+            quantity.fineGrainedScale = PERCENTAGE_DOMAIN.get(unit);
+            return PERCENTAGE_DOMAIN.get(unit);
         }
-        if (AREA_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedScale = AREA_DOMAIN.get(quantity.unit);
-            return AREA_DOMAIN.get(quantity.unit);
+        if (AREA_DOMAIN.containsKey(unit)) {
+            quantity.fineGrainedScale = AREA_DOMAIN.get(unit);
+            return AREA_DOMAIN.get(unit);
         }
-        if (VOLUME_DOMAIN.containsKey(quantity.unit)) {
-            quantity.fineGrainedScale = VOLUME_DOMAIN.get(quantity.unit);
-            return VOLUME_DOMAIN.get(quantity.unit);
+        if (VOLUME_DOMAIN.containsKey(unit)) {
+            quantity.fineGrainedScale = VOLUME_DOMAIN.get(unit);
+            return VOLUME_DOMAIN.get(unit);
         }
         // Now use QuTree.
         try {
-            Unit u = quantity.unit.isEmpty() ? null : QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
+            Unit u = unit.isEmpty() ? null : QUANTITY_CATALOG.getUnitFromBaseName(unit);
             if (u == null) {
-                List<Unit> units = SURFACE_UNITS_MAP.get(quantity.unit);
+                List<Unit> units = SURFACE_UNITS_MAP.get(unit);
                 u = units == null ? null : units.get(0);
             }
             if (u != null) {
-                quantity.fineGrainedScale = u.getMultiplier();
-                return u.getMultiplier();
+                return quantity.fineGrainedScale = u.getMultiplier();
             }
         } catch (Exception e) {
         }
@@ -313,6 +319,7 @@ public class QuantityDomain {
     }
 
     public static String getFineGrainedDomainOfUnit(String unit) {
+        unit = untokenizeUnit(unit);
         if (LENGTH_DOMAIN.containsKey(unit)) {
             return Domain.LENGTH;
         }
@@ -353,39 +360,40 @@ public class QuantityDomain {
         if (quantity.domain != null) {
             return quantity.domain;
         }
-        if (LENGTH_DOMAIN.containsKey(quantity.unit)) {
+        String unit = untokenizeUnit(quantity.unit);
+        if (LENGTH_DOMAIN.containsKey(unit)) {
             quantity.domain = Domain.LENGTH;
             return Domain.LENGTH;
         }
-        if (MONEY_DOMAIN.containsKey(quantity.unit)) {
+        if (MONEY_DOMAIN.containsKey(unit)) {
             quantity.domain = Domain.MONEY;
             return Domain.MONEY;
         }
-        if (TIME_DOMAIN.containsKey(quantity.unit)) {
+        if (TIME_DOMAIN.containsKey(unit)) {
             quantity.domain = Domain.TIME;
             return Domain.TIME;
         }
-        if (MASS_DOMAIN.containsKey(quantity.unit)) {
+        if (MASS_DOMAIN.containsKey(unit)) {
             quantity.domain = Domain.MASS;
             return Domain.MASS;
         }
-        if (PERCENTAGE_DOMAIN.containsKey(quantity.unit)) {
+        if (PERCENTAGE_DOMAIN.containsKey(unit)) {
             quantity.domain = Domain.PERCENTAGE;
             return Domain.PERCENTAGE;
         }
-        if (AREA_DOMAIN.containsKey(quantity.unit)) {
+        if (AREA_DOMAIN.containsKey(unit)) {
             quantity.domain = Domain.AREA;
             return Domain.AREA;
         }
-        if (VOLUME_DOMAIN.containsKey(quantity.unit)) {
+        if (VOLUME_DOMAIN.containsKey(unit)) {
             quantity.domain = Domain.VOLUME;
             return Domain.VOLUME;
         }
         // Now use QuTree.
         try {
-            Unit u = quantity.unit.isEmpty() ? null : QUANTITY_CATALOG.getUnitFromBaseName(quantity.unit);
+            Unit u = unit.isEmpty() ? null : QUANTITY_CATALOG.getUnitFromBaseName(unit);
             if (u == null) {
-                List<Unit> units = SURFACE_UNITS_MAP.get(quantity.unit);
+                List<Unit> units = SURFACE_UNITS_MAP.get(unit);
                 u = units == null ? null : units.get(0);
             }
             if (u != null) {
@@ -399,8 +407,7 @@ public class QuantityDomain {
                         domain.equals(Domain.AREA) ||
                         domain.equals(Domain.VOLUME)
                 ) {
-                    quantity.domain = domain;
-                    return domain;
+                    return quantity.domain = domain;
                 }
             }
         } catch (Exception e) {
@@ -419,10 +426,6 @@ public class QuantityDomain {
     // quantityString: "(<value>;<unit>;<resolution>)"
     public static boolean quantityMatchesDomain(String quantityString, String domain) {
         return quantityMatchesDomain(Quantity.fromQuantityString(quantityString), domain);
-    }
-
-    public static boolean unitMatchesDomain(String unit, String domain) {
-        return quantityMatchesDomain(new Quantity(0, unit, "="), domain);
     }
 
     public static void main(String[] args) {
