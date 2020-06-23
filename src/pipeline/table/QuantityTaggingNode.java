@@ -91,6 +91,7 @@ public class QuantityTaggingNode implements TaggingNode {
         String sentStr = "Neymar to earn $ 916k a week after record transfer .";
         for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(sentStr, true, null)) {
             if (span.object instanceof Quantity) {
+                model.quantity.Quantity.fixQuantityFromIllinois(span, sentStr);
                 Quantity q = (Quantity) span.object;
                 System.out.println(span.toString());
                 System.out.println(q.phrase);
@@ -161,6 +162,7 @@ public class QuantityTaggingNode implements TaggingNode {
         try {
             for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(dumpyText, true, null)) {
                 if (span.object instanceof Quantity) {
+                    model.quantity.Quantity.fixQuantityFromIllinois(span, dumpyText);
                     Quantity q = (Quantity) span.object;
 
                     // In case the unit is extracted from header, the value from cell should be divided by 100.

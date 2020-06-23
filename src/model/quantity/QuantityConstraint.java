@@ -30,8 +30,10 @@ public class QuantityConstraint {
     // return first one if available, null otherwise
     private static edu.illinois.cs.cogcomp.quant.standardize.Quantity getQuantityFromStr(String str) {
         try {
-            for (QuantSpan span : QUANTIFIER_LOCAL.get().getSpans("This quantity is " + str + " .", true, null)) {
+            String text = "This quantity is " + str + " .";
+            for (QuantSpan span : QUANTIFIER_LOCAL.get().getSpans(text, true, null)) {
                 if (span.object instanceof edu.illinois.cs.cogcomp.quant.standardize.Quantity) {
+                    model.quantity.Quantity.fixQuantityFromIllinois(span, text);
                     return (edu.illinois.cs.cogcomp.quant.standardize.Quantity) span.object;
                 }
             }
@@ -61,9 +63,11 @@ public class QuantityConstraint {
         c.phrase = constraintString;
 
         try {
+            String text = "This quantity is " + constraintString + " .";
             loop:
-            for (QuantSpan span : QUANTIFIER_LOCAL.get().getSpans("This quantity is " + constraintString + " .", true, null)) { // get last one
+            for (QuantSpan span : QUANTIFIER_LOCAL.get().getSpans(text, true, null)) { // get last one
                 if (span.object instanceof edu.illinois.cs.cogcomp.quant.standardize.Quantity) {
+                    model.quantity.Quantity.fixQuantityFromIllinois(span, text);
                     edu.illinois.cs.cogcomp.quant.standardize.Quantity q =
                             (edu.illinois.cs.cogcomp.quant.standardize.Quantity) span.object;
                     q.phrase = q.phrase.trim();

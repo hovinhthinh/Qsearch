@@ -157,9 +157,11 @@ public class SimpleQueryParser {
             // quantity
             // get the last one, or the last one right after a comparison signal.
             String lastQuantityAfterSignal = null;
+            String text = rawTokenized + " .";
             main_loop:
-            for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(rawTokenized + " .", true, null)) {
+            for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(text, true, null)) {
                 if (span.object instanceof Quantity) {
+                    model.quantity.Quantity.fixQuantityFromIllinois(span, text);
                     String qStr = rawTokenized.substring(span.start, span.end + 1).trim();
                     for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS.keySet()) {
                         if (qStr.endsWith(operator)) {
