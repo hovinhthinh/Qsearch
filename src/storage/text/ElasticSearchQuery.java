@@ -1,6 +1,5 @@
 package storage.text;
 
-import com.google.gson.Gson;
 import config.Configuration;
 import model.context.ContextEmbeddingMatcher;
 import model.context.ContextMatcher;
@@ -16,6 +15,7 @@ import org.json.JSONObject;
 import storage.StreamedIterable;
 import uk.ac.susx.informatics.Morpha;
 import util.Constants;
+import util.Gson;
 import util.HTTPRequest;
 import util.Pair;
 import util.headword.StringUtils;
@@ -34,8 +34,6 @@ public class ElasticSearchQuery {
     public static final String TYPE = Configuration.get("storage.elasticsearch.text_type");
 
     public static ContextMatcher DEFAULT_MATCHER = new ContextEmbeddingMatcher(3);
-
-    private static Gson GSON = new Gson();
 
     private static StreamedIterable<JSONObject> searchRawES(String queryType) {
         // remove stopwords
@@ -213,10 +211,8 @@ public class ElasticSearchQuery {
         Session session = additionalParameters == null ? null : (Session) additionalParameters.get("session");
 
         ArrayList<String> corpusConstraint = new ArrayList<>();
-        synchronized (GSON) {
-            corpusConstraint = additionalParameters == null ? null :
-                    (additionalParameters.containsKey("corpus") ? GSON.fromJson((String) additionalParameters.get("corpus"), corpusConstraint.getClass()) : null);
-        }
+        corpusConstraint = additionalParameters == null ? null :
+                (additionalParameters.containsKey("corpus") ? Gson.fromJson((String) additionalParameters.get("corpus"), corpusConstraint.getClass()) : null);
 
         String explicitMatchingModel = additionalParameters == null ? null : (String) additionalParameters.get("model");
         ContextMatcher explicitMatcher = null;
@@ -293,9 +289,9 @@ public class ElasticSearchQuery {
                         }
                     }
                     String contextVerbose;
-                    synchronized (GSON) {
-                        contextVerbose = GSON.toJson(X);
-                    }
+
+                    contextVerbose = Gson.toJson(X);
+
                     if (QuantityDomain.quantityMatchesDomain(qt, QuantityDomain.Domain.DIMENSIONLESS)) {
                         X.addAll(NLP.splitSentence(qt.unit));
                     }

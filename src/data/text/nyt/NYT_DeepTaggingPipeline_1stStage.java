@@ -1,9 +1,9 @@
 package data.text.nyt;
 
-import com.google.gson.Gson;
 import model.text.Paragraph;
 import pipeline.text.*;
 import util.FileUtils;
+import util.Gson;
 
 import java.io.PrintWriter;
 
@@ -29,8 +29,6 @@ public class NYT_DeepTaggingPipeline_1stStage {
         PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
         FileUtils.LineStream stream = FileUtils.getLineStream(args[0], "UTF-8");
 
-        Gson gson = new Gson();
-
         for (String line : stream) {
             Paragraph paragraph = NYT.parseFromJSON(line);
             if (paragraph == null) {
@@ -39,7 +37,7 @@ public class NYT_DeepTaggingPipeline_1stStage {
             if (!pipeline.tag(paragraph)) {
                 continue;
             }
-            out.println(gson.toJson(paragraph));
+            out.println(Gson.toJson(paragraph));
         }
         out.close();
     }

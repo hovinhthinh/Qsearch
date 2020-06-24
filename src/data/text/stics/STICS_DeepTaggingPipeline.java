@@ -1,6 +1,5 @@
 package data.text.stics;
 
-import com.google.gson.Gson;
 import model.quantity.QuantityDomain;
 import model.text.Paragraph;
 import model.text.Sentence;
@@ -13,9 +12,9 @@ import pipeline.text.EntityFilteringNode;
 import pipeline.text.QuantityFilteringNode;
 import pipeline.text.SentenceLengthFiltering;
 import util.FileUtils;
+import util.Gson;
 
 import java.io.PrintWriter;
-
 
 public class STICS_DeepTaggingPipeline {
 
@@ -41,8 +40,6 @@ public class STICS_DeepTaggingPipeline {
         PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
         FileUtils.LineStream stream = FileUtils.getLineStream(args[0], "UTF-8");
 
-        Gson gson = new Gson();
-
         for (String line : stream) {
             Paragraph paragraph = STICS.parseFromJSON(line);
             if (paragraph == null) {
@@ -52,7 +49,7 @@ public class STICS_DeepTaggingPipeline {
                 continue;
             }
             for (Sentence sent : paragraph.sentences) {
-                out.println(gson.toJson(sent));
+                out.println(Gson.toJson(sent));
             }
         }
         out.close();

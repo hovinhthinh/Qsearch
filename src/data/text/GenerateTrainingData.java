@@ -1,10 +1,10 @@
 package data.text;
 
-import com.google.gson.Gson;
 import model.quantity.QuantityDomain;
 import model.text.QuantitativeFact;
 import model.text.Sentence;
 import util.FileUtils;
+import util.Gson;
 
 import java.io.PrintWriter;
 import java.util.HashSet;
@@ -33,7 +33,6 @@ public class GenerateTrainingData {
 
 //        args = ("./data/nyt/nytimes_aida.tar.bz2_train_with_negative.gz ./data/nyt/train_all_with_negative.gz")
 //                .split("\\s++");
-        Gson gson = new Gson();
         PrintWriter train_out = FileUtils.getPrintWriter(args[1]);
         PrintWriter raw_out = null;
         if (args.length > 2) {
@@ -42,7 +41,7 @@ public class GenerateTrainingData {
 
 
         for (String line : FileUtils.getLineStream(args[0])) {
-            Sentence sent = gson.fromJson(line, Sentence.class);
+            Sentence sent = Gson.fromJson(line, Sentence.class);
             if (!isGoodSentence(sent)) {
                 continue;
             }

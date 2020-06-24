@@ -1,12 +1,12 @@
 package data.text;
 
-import com.google.gson.Gson;
 import model.text.Paragraph;
 import model.text.Sentence;
 import pipeline.text.DeepTaggingNode;
 import pipeline.text.PostFilteringNode;
 import pipeline.text.TaggingPipeline;
 import util.FileUtils;
+import util.Gson;
 
 import java.io.PrintWriter;
 
@@ -32,15 +32,13 @@ public class DeepTaggingPipeline_2ndStage {
         PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
         FileUtils.LineStream stream = FileUtils.getLineStream(args[0], "UTF-8");
 
-        Gson gson = new Gson();
-
         for (String line : stream) {
-            Paragraph paragraph = gson.fromJson(line, Paragraph.class);
+            Paragraph paragraph = Gson.fromJson(line, Paragraph.class);
             if (!pipeline.tag(paragraph)) {
                 continue;
             }
             for (Sentence sent : paragraph.sentences) {
-                out.println(gson.toJson(sent));
+                out.println(Gson.toJson(sent));
             }
         }
         out.close();
