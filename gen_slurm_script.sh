@@ -7,6 +7,10 @@ slurm_output=`realpath $5`
 echo "#!/bin/bash
 #SBATCH -p cpu20
 #SBATCH -t 2-00:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=256
+#SBATCH --mem=2000000
 #SBATCH -o ${slurm_output}
 
 eval \"\$(conda shell.bash hook)\"
