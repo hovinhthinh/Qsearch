@@ -82,18 +82,19 @@ class MultiThreadedMapClient {
         clients = new ArrayBlockingQueue<>(nClients);
 
         ExecutorService service = Executors.newFixedThreadPool(nClients);
-        ArrayList<Future<MapClient>> futureClients = new ArrayList<>();
-        for (int i = 0; i < nClients; ++i) {
-            final int finalI = i;
-            futureClients.add(service.submit(() -> {
-                PrintWriter outStream = outStreamPrefix == null ? null : FileUtils.getPrintWriter(
-                        String.format("%s.part%03d.out", outStreamPrefix, finalI), "UTF-8");
-                String errPath = errStreamPrefix == null ? null : String.format("%s.part%03d.err", errStreamPrefix, finalI);
-                return new MapClient(finalI, String2StringMapClass, memorySpecs, outStream, errPath);
-            }));
-        }
-        clientArray = new MapClient[nClients];
         try {
+            ArrayList<Future<MapClient>> futureClients = new ArrayList<>();
+            for (int i = 0; i < nClients; ++i) {
+                final int finalI = i;
+                futureClients.add(service.submit(() -> {
+                    PrintWriter outStream = outStreamPrefix == null ? null : FileUtils.getPrintWriter(
+                            String.format("%s.part%03d.out", outStreamPrefix, finalI), "UTF-8");
+                    String errPath = errStreamPrefix == null ? null : String.format("%s.part%03d.err", errStreamPrefix, finalI);
+                    return new MapClient(finalI, String2StringMapClass, memorySpecs, outStream, errPath);
+                }));
+                Thread.sleep(100);
+            }
+            clientArray = new MapClient[nClients];
             for (int i = 0; i < nClients; ++i) {
                 clients.add(clientArray[i] = futureClients.get(i).get());
             }
