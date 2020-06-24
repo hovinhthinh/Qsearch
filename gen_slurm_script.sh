@@ -9,6 +9,8 @@ echo "#!/bin/bash
 #SBATCH -t 2-00:00:00
 #SBATCH -o ${slurm_output}
 
+eval \"\$(conda shell.bash hook)\"
+
 cd /home/hvthinh/TabQs/ && ./run_map_parallel.sh $args"
 
 
