@@ -1,14 +1,12 @@
 package data.table.background.qfact_text;
 
-
-import com.google.gson.Gson;
 import model.quantity.QuantityDomain;
 import model.text.QuantitativeFact;
 import model.text.Sentence;
 import util.FileUtils;
+import util.Gson;
 
 import java.io.PrintWriter;
-import java.util.HashSet;
 
 public class GenerateTrainingDataForTabQs {
     public static boolean isGoodSentence(Sentence sent) {
@@ -34,11 +32,10 @@ public class GenerateTrainingDataForTabQs {
 
 //        args = ("./data/nyt/nytimes_aida.tar.bz2_train_with_negative.gz ./data/nyt/train_all_with_negative.gz")
 //                .split("\\s++");
-        Gson gson = new Gson();
         PrintWriter train_out = FileUtils.getPrintWriter(args[1]);
 
         for (String line : FileUtils.getLineStream(args[0])) {
-            Sentence sent = gson.fromJson(line, Sentence.class);
+            Sentence sent = Gson.fromJson(line, Sentence.class);
             if (!isGoodSentence(sent)) {
                 continue;
             }

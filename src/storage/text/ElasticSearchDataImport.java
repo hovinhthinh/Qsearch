@@ -1,6 +1,5 @@
 package storage.text;
 
-import com.google.gson.Gson;
 import config.Configuration;
 import model.text.QuantitativeFact;
 import model.text.Sentence;
@@ -13,10 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.ac.susx.informatics.Morpha;
-import util.Concurrent;
-import util.FileUtils;
-import util.HTTPRequest;
-import util.ShellCommand;
+import util.*;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -152,12 +148,11 @@ public class ElasticSearchDataImport {
     public static boolean importFacts(String input, double minConf) {
         try {
             // Load
-            Gson gson = new Gson();
             File tempFile = File.createTempFile("yagoImport", ".gz", new File("./"));
             System.out.println("Loading: " + tempFile.getAbsolutePath());
             PrintWriter tempOut = FileUtils.getPrintWriter(tempFile, Charset.forName("UTF-8"));
             for (String line : FileUtils.getLineStream(input, "UTF-8")) {
-                Sentence sent = gson.fromJson(line, Sentence.class);
+                Sentence sent = Gson.fromJson(line, Sentence.class);
                 for (QuantitativeFact qfact : sent.quantitativeFacts) {
                     if (qfact.entityTag == null
                             || (qfact.conf > 1e-6 && qfact.conf < minConf)

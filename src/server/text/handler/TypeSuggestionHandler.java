@@ -1,12 +1,12 @@
 package server.text.handler;
 
-import com.google.gson.Gson;
 import nlp.NLP;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import storage.text.ElasticSearchDataImport;
 import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
+import util.Gson;
 import util.HTTPRequest;
 import util.Pair;
 
@@ -19,11 +19,9 @@ import java.io.PrintWriter;
 import java.util.*;
 import java.util.logging.Logger;
 
-
 public class TypeSuggestionHandler extends HttpServlet {
     public static final Logger LOGGER = Logger.getLogger(TypeSuggestionHandler.class.getName());
     public static final int N_TOP_SUGGESTION = 10;
-    private Gson GSON = new Gson();
 
     private static ArrayList<Pair<String, Integer>> typeToFreq = new ArrayList<>();
 
@@ -162,15 +160,14 @@ public class TypeSuggestionHandler extends HttpServlet {
 
         typePrefix = typePrefix.toLowerCase().replaceAll("\\s++", " ").replaceAll("^\\s++", "");
 
-        synchronized (GSON) {
-            JSONObject response = new JSONObject().put("prefix", typePrefix).put("suggestions", new JSONArray(GSON.toJson(suggest(typePrefix, N_TOP_SUGGESTION))));
-            httpServletResponse.getWriter().print(response.toString());
-        }
+        JSONObject response = new JSONObject().put("prefix", typePrefix).put("suggestions", new JSONArray(Gson.toJson(suggest(typePrefix, N_TOP_SUGGESTION))));
+        httpServletResponse.getWriter().print(response.toString());
+
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 
     public static void main(String[] args) {
 //        analyzeAndSaveToFile();
-        System.out.println(new Gson().toJson(TypeSuggestionHandler.suggest("car ", 7)));
+        System.out.println(Gson.toJson(TypeSuggestionHandler.suggest("car ", 7)));
     }
 }
