@@ -92,7 +92,7 @@ class MultiThreadedMapClient {
                     String errPath = errStreamPrefix == null ? null : String.format("%s.part%03d.err", errStreamPrefix, finalI);
                     return new MapClient(finalI, String2StringMapClass, memorySpecs, outStream, errPath);
                 }));
-                Thread.sleep(500);
+                Thread.sleep(250);
             }
             clientArray = new MapClient[nClients];
             for (int i = 0; i < nClients; ++i) {
