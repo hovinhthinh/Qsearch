@@ -5,6 +5,7 @@ import de.unihd.dbs.heideltime.standalone.HeidelTimeStandalone;
 import de.unihd.dbs.heideltime.standalone.OutputType;
 import de.unihd.dbs.heideltime.standalone.POSTagger;
 import de.unihd.dbs.uima.annotator.heideltime.resources.Language;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
 import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
 import edu.knowitall.openie.OpenIE;
 import edu.knowitall.tool.parse.ClearParser;
@@ -12,13 +13,9 @@ import edu.knowitall.tool.postag.ClearPostagger;
 import edu.knowitall.tool.srl.ClearSrl;
 import edu.knowitall.tool.tokenize.ClearTokenizer;
 import iitb.shared.XMLConfigs;
-import org.xml.sax.SAXException;
 import parser.CFGParser4Header;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 
 public class Static {
     private static Quantifier ILLINOIS_QUANTIFIER = null;
@@ -58,6 +55,7 @@ public class Static {
         if (ILLINOIS_QUANTIFIER == null) {
             ILLINOIS_QUANTIFIER = new Quantifier();
             ILLINOIS_QUANTIFIER.initialize(null);
+            AnnotatorServiceConfigurator.DISABLE_CACHE.value = "true";
         }
         return ILLINOIS_QUANTIFIER;
     }
