@@ -27,26 +27,30 @@ start_time="$(TZ=UTC0 printf '%(%s)T\n' '-1')"
 
 # START JOB
 
-np=$(($1-1))
 echo "Split data"
-args="$3 $1"
-mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="util.FileSplitter" -Dexec.args="$args"
+islices="$3.slices" && mkdir ${islices}
+./split.sh $3 $1 ${islices}
 
 echo "Run in parallel"
-for i in $(seq -f "%03g" 0 ${np}); do
-args="$3.part$i.gz $4.part$i.gz ${@:5}"
-export MAVEN_OPTS="-Xmx12G -XX:ParallelGCThreads=4" && mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="$2" -Dexec.args="$args" 1>$4.part$i.out 2>$4.part$i.err &
+oslices="$4.slices" && mkdir ${oslices}
+np=$(($1-1))
+for i in $(seq -f "%g" 0 ${np}); do
+  args="${islices}/part$i.gz ${oslices}/part$i.gz ${@:5}"
+  export MAVEN_OPTS="-Xmx12G -XX:ParallelGCThreads=4" && \
+    mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="$2" -Dexec.args="$args" \
+      1>${oslices}/part$i.out 2>${oslices}/part$i.err &
 done
 
 wait
 
-echo "Combine result"
-zcat $4.part*.gz | gzip > $4
+echo "Combine results"
+zcat ${oslices}/part*.gz | gzip > $4
+
 echo "Clean"
 # Remove input parts.
-rm $3.part*.gz
+rm -rf ${islices}
 # Remove output parts.
-rm $4.part*.gz
+rm -rf ${oslices}
 
 # END JOB
 

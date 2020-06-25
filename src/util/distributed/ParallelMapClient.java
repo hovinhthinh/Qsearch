@@ -5,6 +5,7 @@ import util.FileUtils;
 import util.Monitor;
 import util.Pair;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,18 +79,22 @@ class MultiThreadedMapClient {
 
     public MapClient[] clientArray;
 
-    public MultiThreadedMapClient(String String2StringMapClass, String memorySpecs, int nClients, String outStreamPrefix, String errStreamPrefix) {
+    public MultiThreadedMapClient(String String2StringMapClass, String memorySpecs, int nClients,
+                                  String streamLogFolder, boolean streamOutput, boolean streamError) {
         clients = new ArrayBlockingQueue<>(nClients);
 
         ExecutorService service = Executors.newFixedThreadPool(nClients);
         try {
             ArrayList<Future<MapClient>> futureClients = new ArrayList<>();
+            if (streamOutput || streamError) {
+                new File(streamLogFolder).mkdirs();
+            }
             for (int i = 0; i < nClients; ++i) {
                 final int finalI = i;
                 futureClients.add(service.submit(() -> {
-                    PrintWriter outStream = outStreamPrefix == null ? null : FileUtils.getPrintWriter(
-                            String.format("%s.part%03d.out", outStreamPrefix, finalI), "UTF-8");
-                    String errPath = errStreamPrefix == null ? null : String.format("%s.part%03d.err", errStreamPrefix, finalI);
+                    PrintWriter outStream = streamOutput ? FileUtils.getPrintWriter(
+                            String.format("%s/part%d.out", streamLogFolder, finalI), "UTF-8") : null;
+                    String errPath = streamError ? String.format("%s/part%d.err", streamLogFolder, finalI) : null;
                     return new MapClient(finalI, String2StringMapClass, memorySpecs, outStream, errPath);
                 }));
                 Thread.sleep(250);
@@ -141,7 +146,7 @@ public class ParallelMapClient {
         int nClients = Integer.parseInt(args[1]);
 
         MultiThreadedMapClient client = new MultiThreadedMapClient(args[2], args[0], nClients,
-                PART_OUTPUT_STREAM ? args[4] : null, PART_ERROR_STREAM ? args[4] : null);
+                args[4] + ".log", PART_OUTPUT_STREAM, PART_ERROR_STREAM);
 
         FileUtils.LineStream in = FileUtils.getLineStream(args[3], "UTF-8");
         PrintWriter out = FileUtils.getPrintWriter(args[4], "UTF-8");

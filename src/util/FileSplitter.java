@@ -12,8 +12,7 @@ import java.util.Collections;
 
 public class FileSplitter {
     // Args: <input> <nParts> [outputFolder]
-    // nPart should be <= 1000
-    // Output files: <input>.part000.gz, <input>.part001.gz,..., <input>.part<nPart>.gz; with GZIP compression.
+    // Output files: <input.slices>/part0.gz, <input.slices>/part1.gz,..., <input.slices>/part<nPart-1>.gz; with GZIP compression.
     //
     // or:
     // <input> <output1> <ratio1> <output2> <ratio2> ... <outputn>
@@ -23,22 +22,15 @@ public class FileSplitter {
         if (args.length < 2) {
             System.err.println("Invalid arguments.");
         } else if (args.length <= 3) {
-            String inputName = new File(args[0]).getName();
-            File outputFolder = null;
-            if (args.length == 3) {
-                outputFolder = new File(args[2]);
-                outputFolder.mkdirs();
-            }
+            File outputFolder = (args.length == 3) ? new File(args[2]) : new File(args[0] + ".slices");
+            outputFolder.mkdir();
+
             PrintWriter[] outs = new PrintWriter[Integer.parseInt(args[1])];
             for (int i = 0; i < outs.length; ++i) {
-                if (outputFolder == null) {
-                    outs[i] = FileUtils.getPrintWriter(String.format("%s.part%03d.gz", args[0], i), "UTF-8");
-                } else {
-                    outs[i] = FileUtils.getPrintWriter(new File(outputFolder, String.format("%s.part%03d.gz", inputName, i)), Charset.forName("UTF-8"));
-                }
+                outs[i] = FileUtils.getPrintWriter(new File(outputFolder, String.format("part%d.gz", i)), Charset.forName("UTF-8"));
             }
 
-            SelfMonitor m = new SelfMonitor(FileSplitter.class.getName() + " -- " + inputName,-1, 10);
+            SelfMonitor m = new SelfMonitor(FileSplitter.class.getName() + " -- " + new File(args[0]).getName(), -1, 10);
             m.start();
             if (args[0].endsWith(".tar.bz2")) { // Each entry is a file now.
                 TarArchiveInputStream tarInput =
