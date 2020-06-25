@@ -8,7 +8,7 @@ TASK_JAVA_MEM="12G"
 #                stdout = <output>.slices/part$id.out ; stderr = <output>.slices/part$id.err
 
 np=$(($1-1))
-slurm_output=`realpath $4`.slices
+slurm_output=`realpath $4`.slices && mkdir ${slurm_output}
 
 echo "#!/bin/bash
 #SBATCH -p cpu20
