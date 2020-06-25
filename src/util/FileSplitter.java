@@ -45,12 +45,13 @@ public class FileSplitter {
                         new TarArchiveInputStream(new BZip2CompressorInputStream(new FileInputStream(args[0])));
                 int cur = 0;
                 while ((tarInput.getNextTarEntry()) != null) {
-                    String line = FileUtils.getContent(tarInput, "UTF-8");
-                    outs[cur++].println(line);
-                    if (cur == outs.length) {
-                        cur = 0;
+                    for (String line : new FileUtils.LineStream(tarInput, Charset.forName("UTF-8"), false)) {
+                        outs[cur++].println(line);
+                        if (cur == outs.length) {
+                            cur = 0;
+                        }
+                        m.incAndGet();
                     }
-                    m.incAndGet();
                 }
                 tarInput.close();
             } else {
