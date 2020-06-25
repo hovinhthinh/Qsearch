@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-# run_slurm.sh <nProcesses> <MapClass> <input> <output> <slurm_output/nohup.out>
+# run_slurm.sh <nProcesses> <MapClass> <input> <output>
+
+echo "Split data"
+islices="$3.slices" && mkdir ${islices}
+./split.sh $3 $1 ${islices}
+
+slurm_output=`realpath $4`.slices && mkdir ${slurm_output}
 
 temp_script=$(mktemp)
 echo "Temporary slurm script is generated at: ${temp_script}"
