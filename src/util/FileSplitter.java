@@ -39,6 +39,7 @@ public class FileSplitter {
             }
 
             SelfMonitor m = new SelfMonitor(FileSplitter.class.getName() + " -- " + inputName,-1, 10);
+            m.start();
             if (args[0].endsWith(".tar.bz2")) { // Each entry is a file now.
                 TarArchiveInputStream tarInput =
                         new TarArchiveInputStream(new BZip2CompressorInputStream(new FileInputStream(args[0])));
