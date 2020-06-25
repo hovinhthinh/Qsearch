@@ -27,6 +27,7 @@ public class FileSplitter {
             File outputFolder = null;
             if (args.length == 3) {
                 outputFolder = new File(args[2]);
+                outputFolder.mkdirs();
             }
             PrintWriter[] outs = new PrintWriter[Integer.parseInt(args[1])];
             for (int i = 0; i < outs.length; ++i) {
