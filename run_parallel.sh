@@ -36,7 +36,7 @@ oslices="$4.slices" && mkdir ${oslices}
 np=$(($1-1))
 for i in $(seq -f "%g" 0 ${np}); do
   args="${islices}/part$i.gz ${oslices}/part$i.gz ${@:5}"
-  export MAVEN_OPTS="-Xmx12G -XX:ParallelGCThreads=4" && \
+  export MAVEN_OPTS="-Xms8G -Xmx12G -XX:ParallelGCThreads=4" && \
     mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="$2" -Dexec.args="$args" \
       1>${oslices}/part$i.out 2>${oslices}/part$i.err &
 done

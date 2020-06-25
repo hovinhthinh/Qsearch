@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # run.sh <Xmx> <MainClass> <args...>
-# Ex: run.sh 8G <MainClass> <args...>
+# Ex: run.sh 12G <MainClass> <args...>
 
 textifyDuration() {
    local duration=$1
@@ -25,7 +25,7 @@ start_time="$(TZ=UTC0 printf '%(%s)T\n' '-1')"
 # START JOB
 
 args="${@:3}"
-export MAVEN_OPTS="-Xms$1 -Xmx$1 -XX:ParallelGCThreads=4" && mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="$2" -Dexec.args="$args"
+export MAVEN_OPTS="-Xms8G -Xmx$1 -XX:ParallelGCThreads=4" && mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="$2" -Dexec.args="$args"
 
 # END JOB
 
