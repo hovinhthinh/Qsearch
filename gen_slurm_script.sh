@@ -16,7 +16,7 @@ echo "#!/bin/bash
 #SBATCH --mail-type=END,FAIL
 #SBATCH --output=${slurm_output}/part%a.out
 #SBATCH --error=${slurm_output}/part%a.err
-#SBATCH --ntasks=$1
+#SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --array=0-${np}
 #SBATCH --mem=${ALLOC_MEM_PER_TASK}
