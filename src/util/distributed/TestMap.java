@@ -13,4 +13,9 @@ public class TestMap extends String2StringMap {
 //        System.err.println(o1);
         return Arrays.asList(o1, o2);
     }
+
+    static {
+        ARGS = new String[]{"test-map.in", "test-map.out"};
+        MAIN_CLASS = "util.distributed.TestMap";
+    }
 }
