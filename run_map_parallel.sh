@@ -28,7 +28,7 @@ args="${@:1}"
 export MAVEN_OPTS="-Xmx8G" && mvn exec:java \
     -Dexec.classpathScope=compile \
     -Dexec.mainClass=util.distributed.ParallelMapClient \
-    -Dexec.args="8G $args"
+    -Dexec.args="12G $args"
 
 # END JOB
 
