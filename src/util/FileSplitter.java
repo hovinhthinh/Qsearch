@@ -3,13 +3,15 @@ package util;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class FileSplitter {
-    // Args: <input> <nParts>
+    // Args: <input> <nParts> [outputFolder]
     // nPart should be <= 1000
     // Output files: <input>.part000.gz, <input>.part001.gz,..., <input>.part<nPart>.gz; with GZIP compression.
     //
@@ -18,12 +20,24 @@ public class FileSplitter {
     // ratio* should sum up to 1. <outputn> does not need the ratio, which will be calculated automatically.
     // <input> will be shuffled before splitting.
     public static void main(String[] args) throws Exception {
-        if (args.length == 2) {
+        if (args.length < 2) {
+            System.err.println("Invalid arguments.");
+        } else if (args.length <= 3) {
+            String inputName = new File(args[0]).getName();
+            File outputFolder = null;
+            if (args.length == 3) {
+                outputFolder = new File(args[2]);
+            }
             PrintWriter[] outs = new PrintWriter[Integer.parseInt(args[1])];
             for (int i = 0; i < outs.length; ++i) {
-                outs[i] = FileUtils.getPrintWriter(String.format("%s.part%03d.gz", args[0], i), "UTF-8");
+                if (outputFolder == null) {
+                    outs[i] = FileUtils.getPrintWriter(String.format("%s.part%03d.gz", args[0], i), "UTF-8");
+                } else {
+                    outs[i] = FileUtils.getPrintWriter(new File(outputFolder, String.format("%s.part%03d.gz", inputName, i)), Charset.forName("UTF-8"));
+                }
             }
 
+            SelfMonitor m = new SelfMonitor(FileSplitter.class.getName() + " -- " + inputName,-1, 10);
             if (args[0].endsWith(".tar.bz2")) { // Each entry is a file now.
                 TarArchiveInputStream tarInput =
                         new TarArchiveInputStream(new BZip2CompressorInputStream(new FileInputStream(args[0])));
@@ -34,6 +48,7 @@ public class FileSplitter {
                     if (cur == outs.length) {
                         cur = 0;
                     }
+                    m.incAndGet();
                 }
                 tarInput.close();
             } else {
@@ -43,11 +58,13 @@ public class FileSplitter {
                     if (cur == outs.length) {
                         cur = 0;
                     }
+                    m.incAndGet();
                 }
             }
             for (PrintWriter w : outs) {
                 w.close();
             }
+            m.forceShutdown();
         } else {
             ArrayList<String> lines = FileUtils.getLines(args[0], "UTF-8");
             Collections.shuffle(lines);
