@@ -158,7 +158,7 @@ public class CoreferenceTaggingNode implements TaggingNode {
     public boolean process(Paragraph paragraph) {
         String corefInfo = callCorefService(paragraph.toString());
         if (corefInfo == null) {
-            System.out.println("[CoreferenceTaggingNodeError]\t" + paragraph.sentences.get(0).source);
+            System.err.println("[CoreferenceTaggingNodeError]\t" + paragraph.sentences.get(0).source);
             // Coref error, but we still continue without it.
             return true;
         }
