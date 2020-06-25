@@ -2,6 +2,7 @@ package util.distributed;
 
 import org.json.JSONArray;
 import util.FileUtils;
+import util.SelfMonitor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,9 +42,11 @@ public class MapInteractiveRunner {
 
         System.gc();
 
-        // if input and ouput file are given, turns to normal mode.
+        // if input and output file are given, turns to normal mode.
         if (args.length == 3) {
             PrintWriter out = FileUtils.getPrintWriter(args[2], "UTF-8");
+            SelfMonitor m = new SelfMonitor(args[0], -1, 60);
+            m.start();
             for (String line : FileUtils.getLineStream(args[1], "UTF-8")) {
                 try {
                     List<String> result = mapper.map(line);
@@ -56,7 +59,9 @@ public class MapInteractiveRunner {
                     e.printStackTrace();
                     System.err.println(String.format("%s\t%s", ON_FAIL, line));
                 }
+                m.incAndGet();
             }
+            m.forceShutdown();
             out.close();
             return;
         }
