@@ -1,12 +1,15 @@
 package util.distributed;
 
 import org.json.JSONArray;
+import util.FileUtils;
+import util.SelfMonitor;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 
+// call MapInteractiveRunner
 class MapClient {
     public static final int LONG_PROCESSING_INTERVAL = 300;
     public static final int NO_RESPONDING_INTERVAL = 30;
@@ -57,7 +60,6 @@ class MapClient {
         }
     }
 
-    // String2StringMap
     public MapClient(int clientId, String String2StringMapClass, String memorySpecs, PrintWriter outStream, String errPath) {
         this.clientId = clientId;
         this.mapClass = String2StringMapClass;
@@ -86,9 +88,6 @@ class MapClient {
                 if (outStream != null && !str.equals(MapInteractiveRunner.ON_KEEP_ALIVE)) {
                     outStream.println(str);
                 }
-            }
-            if (outStream != null) {
-                outStream.println(MapInteractiveRunner.ON_OUTPUT);
             }
             List<String> output = new LinkedList<>();
             JSONArray arr = new JSONArray(str.substring(str.indexOf("\t") + 1));
@@ -134,5 +133,29 @@ class MapClient {
             outStream.close();
         } catch (Exception e) {
         }
+    }
+
+    // args: <memorySpecs> <String2StringMapClass> <inputFile> <outputFile> [stdout] [stderr]
+    // <stdout> and <stderr> are required to redirect output from MapInteractiveRunner to a file.
+    public static void main(String[] args) {
+        MapClient mapper = new MapClient(-1, args[1], args[0],
+                args.length > 4 ? FileUtils.getPrintWriter(args[4], "UTF-8") : null,
+                args.length > 5 ? args[5] : null);
+
+        PrintWriter out = FileUtils.getPrintWriter(args[3], "UTF-8");
+        SelfMonitor m = new SelfMonitor(args[0], -1, 60);
+        m.start();
+        for (String line : FileUtils.getLineStream(args[2], "UTF-8")) {
+            List<String> result = mapper.map(line);
+            for (String r : result) {
+                out.println(r);
+            }
+            m.incAndGet();
+        }
+        m.forceShutdown();
+        out.close();
+
+        mapper.destroy();
+        mapper.closeStreams();
     }
 }
