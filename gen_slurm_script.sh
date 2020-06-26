@@ -9,7 +9,7 @@ TASK_JAVA_MEM="12G"
 
 np=$(($1-1))
 slurm_output=`realpath $4`.slices && mkdir ${slurm_output}
-
+args="${TASK_JAVA_MEM} $2 $3.slices/part\${SLURM_ARRAY_TASK_ID}.gz $4.slices/part\${SLURM_ARRAY_TASK_ID}.gz ${slurm_output}/part\${SLURM_ARRAY_TASK_ID}.out ${slurm_output}/part\${SLURM_ARRAY_TASK_ID}.err"
 echo "#!/bin/bash
 #SBATCH -p cpu20
 #SBATCH -t 2-00:00:00
@@ -22,10 +22,9 @@ echo "#!/bin/bash
 #SBATCH --mem=${ALLOC_MEM_PER_TASK}
 
 eval \"\$(conda shell.bash hook)\"
+conda activate maven
 
-cd /home/hvthinh/TabQs/ && ./run_no_notification.sh ${TASK_JAVA_MEM} util.distributed.MapInteractiveRunner \\
-  $2 \\
-  $3.slices/part\${SLURM_ARRAY_TASK_ID}.gz \\
-  $4.slices/part\${SLURM_ARRAY_TASK_ID}.gz"
+cd /home/hvthinh/TabQs/ && export MAVEN_OPTS=\"-Xms128M -Xmx128M\" && \\
+mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass=\"util.distributed.MapClient\" -Dexec.args=\"$args\""
 
 

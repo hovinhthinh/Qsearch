@@ -1,19 +1,15 @@
 package util.distributed;
 
 import org.json.JSONArray;
-import util.FileUtils;
-import util.SelfMonitor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
-// Also support SLURM.
 public class MapInteractiveRunner {
     public static final String ON_READY = "__map_ready__";
     public static final String ON_OUTPUT = "__interactive_output__";
@@ -25,9 +21,6 @@ public class MapInteractiveRunner {
     public static final int SELF_KILLING_LONG_PROCESSING_TIMEOUT = 3600;
 
     // args: <String2StringMapClass>
-    // for interactive mode
-    //
-    // or: <String2StringMapClass> <inputFile> <outputFile>
     public static void main(String[] args) {
         String2StringMap mapper;
         try {
@@ -41,30 +34,6 @@ public class MapInteractiveRunner {
         System.out.flush();
 
         System.gc();
-
-        // if input and output file are given, turns to normal mode.
-        if (args.length == 3) {
-            PrintWriter out = FileUtils.getPrintWriter(args[2], "UTF-8");
-            SelfMonitor m = new SelfMonitor(args[0], -1, 60);
-            m.start();
-            for (String line : FileUtils.getLineStream(args[1], "UTF-8")) {
-                try {
-                    List<String> result = mapper.map(line);
-                    if (result != null) {
-                        for (String r : result) {
-                            out.println(r);
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.err.println(String.format("%s\t%s", ON_FAIL, line));
-                }
-                m.incAndGet();
-            }
-            m.forceShutdown();
-            out.close();
-            return;
-        }
 
         final AtomicBoolean isProcessingAnInput = new AtomicBoolean(false);
         final AtomicLong lastInputTimestamp = new AtomicLong(-1);
@@ -80,6 +49,7 @@ public class MapInteractiveRunner {
                     Runtime.getRuntime().halt(1);
                 }
                 synchronized (System.out) {
+                    System.out.println();
                     System.out.println(ON_KEEP_ALIVE);
                     System.out.flush();
                 }
