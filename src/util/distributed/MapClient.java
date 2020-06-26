@@ -143,7 +143,7 @@ class MapClient {
                 args.length > 5 ? args[5] : null);
 
         PrintWriter out = FileUtils.getPrintWriter(args[3], "UTF-8");
-        SelfMonitor m = new SelfMonitor(args[0], -1, 60);
+        SelfMonitor m = new SelfMonitor(args[1], -1, 60);
         m.start();
         for (String line : FileUtils.getLineStream(args[2], "UTF-8")) {
             List<String> result = mapper.map(line);
