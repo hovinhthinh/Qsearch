@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MapInteractiveRunner {
     public static final String ON_READY = "__map_ready__";
@@ -37,6 +38,7 @@ public class MapInteractiveRunner {
 
         final AtomicBoolean isProcessingAnInput = new AtomicBoolean(false);
         final AtomicLong lastInputTimestamp = new AtomicLong(-1);
+        final AtomicReference<String> currentInput = new AtomicReference<>();
 
         Thread keepAlive = new Thread(() -> {
             do {
@@ -46,6 +48,8 @@ public class MapInteractiveRunner {
                     break;
                 }
                 if (isProcessingAnInput.get() && System.currentTimeMillis() >= lastInputTimestamp.get() + SELF_KILLING_LONG_PROCESSING_TIMEOUT * 1000) {
+                    System.err.println(String.format("%s\t%s", ON_FAIL, currentInput.get()));
+                    System.err.flush();
                     Runtime.getRuntime().halt(1);
                 }
                 synchronized (System.out) {
@@ -61,9 +65,9 @@ public class MapInteractiveRunner {
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
 
             String str;
-
             long lastGCTime = System.currentTimeMillis();
             while ((str = in.readLine()) != null) {
+                currentInput.set(str);
                 lastInputTimestamp.set(System.currentTimeMillis());
                 isProcessingAnInput.set(true);
                 List<String> output = null;
