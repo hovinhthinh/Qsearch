@@ -48,8 +48,6 @@ public class MapInteractiveRunner {
                     break;
                 }
                 if (isProcessingAnInput.get() && System.currentTimeMillis() >= lastInputTimestamp.get() + SELF_KILLING_LONG_PROCESSING_TIMEOUT * 1000) {
-                    System.err.println(String.format("%s\t%s", ON_FAIL, currentInput.get()));
-                    System.err.flush();
                     Runtime.getRuntime().halt(1);
                 }
                 synchronized (System.out) {
