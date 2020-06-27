@@ -110,6 +110,7 @@ class MapClient {
         } catch (IOException | NullPointerException e) {
             if (errStream != null) {
                 synchronized (errStream) {
+                    // This is when the interactive client stops improperly, e.g., OUT OF MEMORY, SEGMENTATION FAULT
                     errStream.println(String.format("__fatal_input__ [Client#%d]\t%s", clientId, input));
                 }
             }
