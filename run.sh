@@ -25,7 +25,7 @@ start_time="$(TZ=UTC0 printf '%(%s)T\n' '-1')"
 # START JOB
 
 args="${@:3}"
-export MAVEN_OPTS="-Xms8G -Xmx$1 -XX:ParallelGCThreads=4" && mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="$2" -Dexec.args="$args"
+export MAVEN_OPTS="-Xmx$1 -XX:ParallelGCThreads=4" && mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="$2" -Dexec.args="$args"
 
 # END JOB
 
