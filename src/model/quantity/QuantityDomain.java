@@ -249,6 +249,8 @@ public class QuantityDomain {
                         domain.equals(Domain.PERCENTAGE) ||
                         domain.equals(Domain.MASS) ||
                         domain.equals(Domain.AREA) ||
+                        domain.equals(Domain.SPEED) ||
+                        domain.equals(Domain.POWER) ||
                         domain.equals(Domain.VOLUME)
                 ) {
                     return quantity.scale = u.getMultiplier();
@@ -405,6 +407,8 @@ public class QuantityDomain {
                         domain.equals(Domain.PERCENTAGE) ||
                         domain.equals(Domain.MASS) ||
                         domain.equals(Domain.AREA) ||
+                        domain.equals(Domain.SPEED) ||
+                        domain.equals(Domain.POWER) ||
                         domain.equals(Domain.VOLUME)
                 ) {
                     return quantity.domain = domain;
@@ -438,6 +442,8 @@ public class QuantityDomain {
         System.out.println(Domain.AREA);
         System.out.println(Domain.VOLUME);
         System.out.println(Domain.DIMENSIONLESS);
+        System.out.println(Domain.SPEED);
+        System.out.println(Domain.POWER);
     }
 
     public static class Domain {
@@ -449,6 +455,8 @@ public class QuantityDomain {
         public static final String MASS = QUANTITY_CATALOG.getUnitFromBaseName("kilogram").getParentQuantity().getConcept();
         public static final String AREA = QUANTITY_CATALOG.getUnitFromBaseName("square metre").getParentQuantity().getConcept();
         public static final String VOLUME = QUANTITY_CATALOG.getUnitFromBaseName("cubic metre").getParentQuantity().getConcept();
+        public static final String SPEED = QUANTITY_CATALOG.getUnitFromBaseName("kilometre per hour").getParentQuantity().getConcept();
+        public static final String POWER = QUANTITY_CATALOG.getUnitFromBaseName("horsepower").getParentQuantity().getConcept();
         public static final String DIMENSIONLESS = "Dimensionless";
     }
 
