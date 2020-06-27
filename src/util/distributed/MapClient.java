@@ -14,69 +14,81 @@ class MapClient {
     public static final int LONG_PROCESSING_INTERVAL = 300;
     public static final int NO_RESPONDING_INTERVAL = 30;
 
-    private BufferedReader in;
+    private BufferedReader in, err;
     private PrintWriter out;
     private Process p;
-    private PrintWriter outStream;
+    private PrintWriter outStream, errStream;
     private int clientId;
-    private String mapClass, memorySpecs, errPath;
+    private String mapClass, memorySpecs;
 
     private boolean isProcessing;
     private long lastMapStartTimestamp, lastResponseTimeStamp;
 
-    private void startService(boolean isReset) {
-        if (isReset) {
-            System.out.println(String.format("__reset_client__ [Client#%d]", clientId));
-        }
-        destroy();
+    private void startService() {
+        destroyInteractiveClient();
         try {
-            String mainCmd =
-                    String.format("./run_no_notification.sh %s util.distributed.MapInteractiveRunner %s 2%s%s",
-                            memorySpecs,
-                            mapClass,
-                            isReset ? ">>" : ">",
-                            errPath == null ? "/dev/null" : errPath
-                    );
-            String[] cmd = new String[]{
-                    "/bin/sh", "-c",
-                    mainCmd
-            };
+            String mainCmd = String.format("./run_no_notification.sh %s util.distributed.MapInteractiveRunner %s",
+                    memorySpecs, mapClass);
+            String[] cmd = new String[]{"/bin/sh", "-c", mainCmd};
             ProcessBuilder pb = new ProcessBuilder(cmd);
             pb.directory(new File("./"));
             p = pb.start();
             in = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(p.getOutputStream(), StandardCharsets.UTF_8)));
+            err = new BufferedReader(new InputStreamReader(p.getErrorStream(), StandardCharsets.UTF_8));
+
+            new Thread(() -> {
+                try {
+                    String str;
+                    while ((str = err.readLine()) != null) {
+                        if (errStream != null) {
+                            synchronized (errStream) {
+                                errStream.println(str);
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                }
+            }).start();
 
             String str;
             do {
                 str = in.readLine();
-                if (outStream != null) {
+                if (str != null && outStream != null) {
                     outStream.println(str);
                 }
             } while (!str.startsWith(MapInteractiveRunner.ON_READY));
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
+            if (outStream != null) {
+                outStream.flush();
+            }
+            if (errStream != null) {
+                synchronized (errStream) {
+                    errStream.flush();
+                }
+            }
             throw new RuntimeException(e);
         }
     }
 
-    public MapClient(int clientId, String String2StringMapClass, String memorySpecs, PrintWriter outStream, String errPath) {
+    public MapClient(int clientId, String String2StringMapClass, String memorySpecs, String outPath, String errPath) {
         this.clientId = clientId;
         this.mapClass = String2StringMapClass;
         this.memorySpecs = memorySpecs;
-        this.errPath = errPath;
-        this.outStream = outStream;
+        this.outStream = outPath == null ? null : FileUtils.getPrintWriter(outPath, "UTF-8");
+        this.errStream = errPath == null ? null : FileUtils.getPrintWriter(errPath, "UTF-8");
         this.isProcessing = false;
         this.lastMapStartTimestamp = -1;
         this.lastResponseTimeStamp = -1;
-        startService(false);
+        startService();
     }
 
     public int getId() {
         return clientId;
     }
 
-    public List<String> map(String input) {
+    public synchronized List<String> map(String input) {
         try {
             isProcessing = true;
             lastMapStartTimestamp = lastResponseTimeStamp = System.currentTimeMillis();
@@ -96,9 +108,12 @@ class MapClient {
             }
             return output;
         } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
-            System.err.println(String.format("__fatal_input__ [Client#%d]\t%s", clientId, input));
-            startService(true);
+            if (errStream != null) {
+                synchronized (errStream) {
+                    errStream.println(String.format("__fatal_input__ [Client#%d]\t%s", clientId, input));
+                }
+            }
+            startService();
             return new LinkedList<>();
         } finally {
             isProcessing = false;
@@ -113,13 +128,17 @@ class MapClient {
         return isProcessing && System.currentTimeMillis() - lastResponseTimeStamp >= (MapInteractiveRunner.KEEP_ALIVE_INTERVAL + NO_RESPONDING_INTERVAL) * 1000;
     }
 
-    public void destroy() {
+    public void destroyInteractiveClient() {
         try {
             in.close();
         } catch (Exception e) {
         }
         try {
             out.close();
+        } catch (Exception e) {
+        }
+        try {
+            err.close();
         } catch (Exception e) {
         }
         try {
@@ -133,14 +152,17 @@ class MapClient {
             outStream.close();
         } catch (Exception e) {
         }
+        try {
+            errStream.close();
+        } catch (Exception e) {
+        }
     }
 
     // args: <memorySpecs> <String2StringMapClass> <inputFile> <outputFile> [stdout] [stderr]
     // <stdout> and <stderr> are required to redirect output from MapInteractiveRunner to a file.
     public static void main(String[] args) {
         MapClient mapper = new MapClient(-1, args[1], args[0],
-                args.length > 4 ? FileUtils.getPrintWriter(args[4], "UTF-8") : null,
-                args.length > 5 ? args[5] : null);
+                args.length > 4 ? args[4] : null, args.length > 5 ? args[5] : null);
 
         PrintWriter out = FileUtils.getPrintWriter(args[3], "UTF-8");
         SelfMonitor m = new SelfMonitor(args[1], -1, 60);
@@ -155,7 +177,7 @@ class MapClient {
         m.forceShutdown();
         out.close();
 
-        mapper.destroy();
+        mapper.destroyInteractiveClient();
         mapper.closeStreams();
     }
 }

@@ -92,10 +92,9 @@ class MultiThreadedMapClient {
             for (int i = 0; i < nClients; ++i) {
                 final int finalI = i;
                 futureClients.add(service.submit(() -> {
-                    PrintWriter outStream = streamOutput ? FileUtils.getPrintWriter(
-                            String.format("%s/part%d.out", streamLogFolder, finalI), "UTF-8") : null;
+                    String outPath = streamOutput ? String.format("%s/part%d.out", streamLogFolder, finalI) : null;
                     String errPath = streamError ? String.format("%s/part%d.err", streamLogFolder, finalI) : null;
-                    return new MapClient(finalI, String2StringMapClass, memorySpecs, outStream, errPath);
+                    return new MapClient(finalI, String2StringMapClass, memorySpecs, outPath, errPath);
                 }));
                 Thread.sleep(250);
             }
@@ -110,10 +109,11 @@ class MultiThreadedMapClient {
         }
     }
 
-    public void clearIdleClients() {
+    public void closeIdleClients() {
         MapClient cli;
         while ((cli = clients.poll()) != null) {
-            cli.destroy();
+            cli.destroyInteractiveClient();
+            cli.closeStreams();
         }
     }
 
@@ -126,12 +126,6 @@ class MultiThreadedMapClient {
             return new Pair<>(result, client.getId());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    public void closeStreams() {
-        for (MapClient client : clients) {
-            client.closeStreams();
         }
     }
 }
@@ -169,7 +163,7 @@ public class ParallelMapClient {
                     input = in.readLine();
                 }
                 if (input == null) {
-                    client.clearIdleClients();
+                    client.closeIdleClients();
                     return;
                 }
                 Pair<List<String>, Integer> output = client.map(input);
@@ -186,6 +180,5 @@ public class ParallelMapClient {
         }
         m.forceShutdown();
         out.close();
-        client.closeStreams();
     }
 }
