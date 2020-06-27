@@ -46,6 +46,10 @@ public class TablePrefilteringNode implements TaggingNode {
         return newData;
     }
 
+    private int getNRowAfterPruning(Cell[][] data) {
+        return pruneEmptyRows(data).length;
+    }
+
     @Override
     public boolean process(Table table) {
         // ROW PRUNING DISABLED
@@ -74,7 +78,9 @@ public class TablePrefilteringNode implements TaggingNode {
         table.nHeaderRow = table.header.length;
          */
 
-        if (table.nHeaderRow == 0 || table.nDataRow < minNDataRow || table.nDataRow > maxNDataRow) {
+        if (getNRowAfterPruning(table.header) == 0
+                || getNRowAfterPruning(table.data) < minNDataRow
+                || table.nDataRow > maxNDataRow) {
             return false;
         }
 
