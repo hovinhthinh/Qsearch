@@ -122,6 +122,7 @@ public class WikipediaEntity {
                             + URLEncoder.encode(entity, "UTF-8"),
                     true);
             if (content == null) {
+                System.err.println("Cannot connect to Elasticsearch");
                 return null;
             }
             JSONObject obj = new JSONObject(content);
@@ -149,6 +150,7 @@ public class WikipediaEntity {
                             + URLEncoder.encode(entity, "UTF-8"),
                     true);
             if (content == null) {
+                System.err.println("Cannot connect to Elasticsearch");
                 return null;
             }
             JSONObject obj = new JSONObject(content);
@@ -195,6 +197,7 @@ public class WikipediaEntity {
                     PROTOCOL + "://" + ES_HOST + "/" + WIKIPEDIA_INDEX + "/" + ENTITY_TYPE + "/_search/?filter_path=hits.total",
                     body, true);
             if (content == null) {
+                System.err.println("Cannot connect to Elasticsearch");
                 return null;
             }
 
