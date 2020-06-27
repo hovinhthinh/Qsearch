@@ -18,7 +18,7 @@ public class MapInteractiveRunner {
     public static final String ON_KEEP_ALIVE = "__im_alive__";
 
     public static final int KEEP_ALIVE_INTERVAL = 10;
-    public static final int GC_INTERVAL = 1000;
+    public static final int GC_INTERVAL = 3600;
     public static final int SELF_KILLING_LONG_PROCESSING_TIMEOUT = 3600;
 
     // args: <String2StringMapClass>
