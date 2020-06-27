@@ -43,6 +43,9 @@ public class CoreferenceTaggingNode implements TaggingNode {
                     "python3 -u coref_runner.py"
             };
             ProcessBuilder pb = new ProcessBuilder(cmd);
+            if (!logErrStream) {
+                pb.redirectError(ProcessBuilder.Redirect.DISCARD);
+            }
             pb.directory(new File("./coref"));
             p = pb.start();
 
