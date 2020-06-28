@@ -19,7 +19,6 @@ public class MapInteractiveRunner {
 
     public static final int KEEP_ALIVE_INTERVAL = 10;
     public static final int GC_INTERVAL = 3600;
-    public static final int SELF_KILLING_LONG_PROCESSING_TIMEOUT = 3600;
 
     // args: <String2StringMapClass>
     public static void main(String[] args) {
@@ -47,7 +46,9 @@ public class MapInteractiveRunner {
                 } catch (InterruptedException e) {
                     break;
                 }
-                if (isProcessingAnInput.get() && System.currentTimeMillis() >= lastInputTimestamp.get() + SELF_KILLING_LONG_PROCESSING_TIMEOUT * 1000) {
+                // This is for self killing on input-processing-timeout, this is also implemented in MapClient,
+                // however, this is for safety in case the system call fails.
+                if (isProcessingAnInput.get() && System.currentTimeMillis() >= lastInputTimestamp.get() + MapClient.INPUT_PROCESSING_TIMEOUT * 1000) {
                     Runtime.getRuntime().halt(1);
                 }
                 synchronized (System.out) {

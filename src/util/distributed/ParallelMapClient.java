@@ -49,18 +49,23 @@ class ClientMonitor extends Monitor {
             valueWidth = Math.max(valueWidth, p.second.length());
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("Notes:    *Client is long processing    !Client is not responding");
-        String formatStr = "  %s%s[%-" + keyWidth + "s: %-" + valueWidth + "s]";
+        sb.append("Notes:    ~Reset on timeout    *Long processing    !Not responding");
+        String formatStr = "    %s%s%s[%-" + keyWidth + "s: %-" + valueWidth + "s]";
         int nLine = (kv.size() - 1) / nKeyPerLine + 1;
         for (int i = 0; i < nLine; ++i) {
             sb.append("\r\n");
             for (int j = i; j < kv.size(); j += nLine) {
                 Pair<String, String> p = kv.get(j);
                 sb.append(String.format(formatStr,
+                        clients[j].isHangOnAnInput() ? "~" : " ",
                         clients[j].isNotResponding() ? "!" : " ",
                         clients[j].isLongProcessing() ? "*" : " ",
                         p.first,
                         p.second));
+                if (clients[j].isHangOnAnInput()) {
+                    // destroy the non-responding client.
+                    clients[j].destroyInteractiveClient();
+                }
             }
         }
         return sb.toString();

@@ -3,6 +3,7 @@ package util.distributed;
 import org.json.JSONArray;
 import util.FileUtils;
 import util.SelfMonitor;
+import util.ShellCommand;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -16,6 +17,8 @@ class MapClient {
 
     public static final int LONG_PROCESSING_INTERVAL = 300;
     public static final int NO_RESPONDING_INTERVAL = 30;
+    public static final int INPUT_PROCESSING_TIMEOUT = 3600;
+
 
     private BufferedReader in, err;
     private PrintWriter out;
@@ -28,7 +31,6 @@ class MapClient {
     private long lastMapStartTimestamp, lastResponseTimeStamp;
 
     private void startService() {
-        destroyInteractiveClient();
         try {
             String mainCmd = String.format("./run_no_notification.sh %s util.distributed.MapInteractiveRunner %s",
                     memorySpecs, mapClass);
@@ -119,6 +121,11 @@ class MapClient {
                     errStream.println(String.format("%s [Client#%d]\t%s", ON_FATAL_INPUT, clientId, input));
                 }
             }
+            destroyInteractiveClient();
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e1) {
+            }
             startService();
             return new LinkedList<>();
         }
@@ -128,15 +135,18 @@ class MapClient {
         return isProcessing && System.currentTimeMillis() - lastMapStartTimestamp >= LONG_PROCESSING_INTERVAL * 1000;
     }
 
-    public boolean isHang() {
-        return isProcessing && System.currentTimeMillis() - lastMapStartTimestamp >= MapInteractiveRunner.SELF_KILLING_LONG_PROCESSING_TIMEOUT * 1000;
+    public boolean isHangOnAnInput() {
+        return isProcessing && System.currentTimeMillis() - lastMapStartTimestamp >= INPUT_PROCESSING_TIMEOUT * 1000;
     }
 
     public boolean isNotResponding() {
         return isProcessing && System.currentTimeMillis() - lastResponseTimeStamp >= (MapInteractiveRunner.KEEP_ALIVE_INTERVAL + NO_RESPONDING_INTERVAL) * 1000;
     }
 
-    public void destroyInteractiveClient() {
+    public synchronized void destroyInteractiveClient() {
+        if (p == null) {
+            return;
+        }
         try {
             p.getInputStream().close();
         } catch (Exception e) {
@@ -150,8 +160,12 @@ class MapClient {
         } catch (Exception e) {
         }
         try {
-            p.destroyForcibly();
+            // p.destroyForcibly();
+            // Better to use system call.
+            ShellCommand.execute("./kill_tree.sh " + p.pid());
         } catch (Exception e) {
+        } finally {
+            p = null;
         }
     }
 
