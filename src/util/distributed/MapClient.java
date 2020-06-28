@@ -19,7 +19,6 @@ class MapClient {
     public static final int NO_RESPONDING_INTERVAL = 30;
     public static final int INPUT_PROCESSING_TIMEOUT = 3600;
 
-
     private BufferedReader in, err;
     private PrintWriter out;
     private Process p;
@@ -197,7 +196,7 @@ class MapClient {
         };
         m.start();
 
-        Thread main = new Thread(() -> {
+        try {
             PrintWriter out = FileUtils.getPrintWriter(finalArgs[3], "UTF-8");
             for (String line : FileUtils.getLineStream(finalArgs[2], "UTF-8")) {
                 List<String> result = mapper.map(line);
@@ -207,12 +206,12 @@ class MapClient {
                 m.incAndGet();
             }
             out.close();
-        });
-        main.start();
-        main.join();
-
-        m.forceShutdown();
-        mapper.destroyInteractiveClient();
-        mapper.closeStreams();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            m.forceShutdown();
+            mapper.destroyInteractiveClient();
+            mapper.closeStreams();
+        }
     }
 }
