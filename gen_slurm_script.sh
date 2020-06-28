@@ -14,8 +14,7 @@ echo "#!/bin/bash
 #SBATCH -p cpu20
 #SBATCH -t 2-00:00:00
 #SBATCH --mail-type=END,FAIL
-#SBATCH --output=${slurm_output}/part%a.out
-#SBATCH --error=${slurm_output}/part%a.err
+#SBATCH --output=${slurm_output}/part%a.log
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --array=0-${np}
