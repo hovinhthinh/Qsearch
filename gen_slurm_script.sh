@@ -6,6 +6,7 @@ TASK_JAVA_MEM="12G"
 # gen_slurm_script.sh <nProcesses> <MapClass> <input> <output>
 # for each task: input = <input>.slices/part$id.gz ; output = <output>.slices/part$id.gz
 #                stdout = <output>.slices/part$id.out ; stderr = <output>.slices/part$id.err
+#                monitor = <output>.slices/part$id.log
 
 np=$(($1-1))
 slurm_output=`realpath $4`.slices && mkdir ${slurm_output}
