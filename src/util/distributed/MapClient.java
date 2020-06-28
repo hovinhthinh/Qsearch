@@ -117,7 +117,7 @@ class MapClient {
             isProcessing = false;
             if (errStream != null) {
                 synchronized (errStream) {
-                    // This is when the interactive client stops improperly, e.g., OUT OF MEMORY, SEGMENTATION FAULT
+                    // This is when the interactive client stops improperly, e.g., INPUT TIMEOUT, OUT OF MEMORY, SEGMENTATION FAULT
                     errStream.println(String.format("%s [Client#%d]\t%s", ON_FATAL_INPUT, clientId, input));
                 }
             }
