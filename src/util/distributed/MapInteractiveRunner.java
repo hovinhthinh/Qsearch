@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class MapInteractiveRunner {
     public static final String ON_READY = "__map_ready__";
     public static final String ON_OUTPUT = "__interactive_output__";
+    public static final String ON_HANG = "__client_hang__";
     public static final String ON_FAIL = "__fail_input__";
     public static final String ON_KEEP_ALIVE = "__im_alive__";
 
@@ -48,6 +49,8 @@ public class MapInteractiveRunner {
                     break;
                 }
                 if (isProcessingAnInput.get() && System.currentTimeMillis() >= lastInputTimestamp.get() + SELF_KILLING_LONG_PROCESSING_TIMEOUT * 1000) {
+                    System.err.println(ON_HANG);
+                    System.err.flush();
                     Runtime.getRuntime().halt(1);
                 }
                 synchronized (System.out) {
@@ -74,6 +77,7 @@ public class MapInteractiveRunner {
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.err.println(String.format("%s\t%s", ON_FAIL, str));
+                    System.err.flush();
                 }
                 if (System.currentTimeMillis() >= lastGCTime + GC_INTERVAL * 1000) {
                     System.gc();
