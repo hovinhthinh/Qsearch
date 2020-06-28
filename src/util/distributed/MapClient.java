@@ -182,11 +182,10 @@ class MapClient {
 
     // args: <memorySpecs> <String2StringMapClass> <inputFile> <outputFile> [stdout] [stderr]
     // <stdout> and <stderr> are required to redirect output from MapInteractiveRunner to a file.
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        String[] finalArgs = args;
         MapClient mapper = new MapClient(-1, args[1], args[0],
                 args.length > 4 ? args[4] : null, args.length > 5 ? args[5] : null);
-
-        PrintWriter out = FileUtils.getPrintWriter(args[3], "UTF-8");
         SelfMonitor m = new SelfMonitor(args[1], -1, 60) {
             @Override
             public void logProgress(Progress progress) {
@@ -197,16 +196,22 @@ class MapClient {
             }
         };
         m.start();
-        for (String line : FileUtils.getLineStream(args[2], "UTF-8")) {
-            List<String> result = mapper.map(line);
-            for (String r : result) {
-                out.println(r);
-            }
-            m.incAndGet();
-        }
-        m.forceShutdown();
-        out.close();
 
+        Thread main = new Thread(() -> {
+            PrintWriter out = FileUtils.getPrintWriter(finalArgs[3], "UTF-8");
+            for (String line : FileUtils.getLineStream(finalArgs[2], "UTF-8")) {
+                List<String> result = mapper.map(line);
+                for (String r : result) {
+                    out.println(r);
+                }
+                m.incAndGet();
+            }
+            out.close();
+        });
+        main.start();
+        main.join();
+
+        m.forceShutdown();
         mapper.destroyInteractiveClient();
         mapper.closeStreams();
     }
