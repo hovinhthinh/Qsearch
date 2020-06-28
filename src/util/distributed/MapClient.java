@@ -11,6 +11,9 @@ import java.util.List;
 
 // call MapInteractiveRunner
 class MapClient {
+    public static final String ON_HANG = "__client_hang__";
+    public static final String ON_FATAL_INPUT = "__fatal_input__";
+
     public static final int LONG_PROCESSING_INTERVAL = 300;
     public static final int NO_RESPONDING_INTERVAL = 30;
 
@@ -106,23 +109,27 @@ class MapClient {
             for (int i = 0; i < arr.length(); ++i) {
                 output.add(arr.getString(i));
             }
+            isProcessing = false;
             return output;
         } catch (IOException | NullPointerException e) {
+            isProcessing = false;
             if (errStream != null) {
                 synchronized (errStream) {
                     // This is when the interactive client stops improperly, e.g., OUT OF MEMORY, SEGMENTATION FAULT
-                    errStream.println(String.format("__fatal_input__ [Client#%d]\t%s", clientId, input));
+                    errStream.println(String.format("%s [Client#%d]\t%s", ON_FATAL_INPUT, clientId, input));
                 }
             }
             startService();
             return new LinkedList<>();
-        } finally {
-            isProcessing = false;
         }
     }
 
     public boolean isLongProcessing() {
         return isProcessing && System.currentTimeMillis() - lastMapStartTimestamp >= LONG_PROCESSING_INTERVAL * 1000;
+    }
+
+    public boolean isHang() {
+        return isProcessing && System.currentTimeMillis() - lastMapStartTimestamp >= MapInteractiveRunner.SELF_KILLING_LONG_PROCESSING_TIMEOUT * 1000;
     }
 
     public boolean isNotResponding() {
@@ -131,19 +138,19 @@ class MapClient {
 
     public void destroyInteractiveClient() {
         try {
-            in.close();
+            p.getInputStream().close();
         } catch (Exception e) {
         }
         try {
-            out.close();
+            p.getOutputStream().close();
         } catch (Exception e) {
         }
         try {
-            err.close();
+            p.getErrorStream().close();
         } catch (Exception e) {
         }
         try {
-            p.destroy();
+            p.destroyForcibly();
         } catch (Exception e) {
         }
     }
