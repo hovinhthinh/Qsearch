@@ -362,33 +362,30 @@ public class QuantityDomain {
         if (quantity.domain != null) {
             return quantity.domain;
         }
-        String unit = untokenizeUnit(quantity.unit);
+        return quantity.domain = getDomainOfUnit(quantity.unit);
+    }
+
+    public static String getDomainOfUnit(String unit) {
+        unit = untokenizeUnit(unit);
         if (LENGTH_DOMAIN.containsKey(unit)) {
-            quantity.domain = Domain.LENGTH;
             return Domain.LENGTH;
         }
         if (MONEY_DOMAIN.containsKey(unit)) {
-            quantity.domain = Domain.MONEY;
             return Domain.MONEY;
         }
         if (TIME_DOMAIN.containsKey(unit)) {
-            quantity.domain = Domain.TIME;
             return Domain.TIME;
         }
         if (MASS_DOMAIN.containsKey(unit)) {
-            quantity.domain = Domain.MASS;
             return Domain.MASS;
         }
         if (PERCENTAGE_DOMAIN.containsKey(unit)) {
-            quantity.domain = Domain.PERCENTAGE;
             return Domain.PERCENTAGE;
         }
         if (AREA_DOMAIN.containsKey(unit)) {
-            quantity.domain = Domain.AREA;
             return Domain.AREA;
         }
         if (VOLUME_DOMAIN.containsKey(unit)) {
-            quantity.domain = Domain.VOLUME;
             return Domain.VOLUME;
         }
         // Now use QuTree.
@@ -411,12 +408,11 @@ public class QuantityDomain {
                         domain.equals(Domain.POWER) ||
                         domain.equals(Domain.VOLUME)
                 ) {
-                    return quantity.domain = domain;
+                    return domain;
                 }
             }
         } catch (Exception e) {
         }
-        quantity.domain = Domain.DIMENSIONLESS;
         return Domain.DIMENSIONLESS;
     }
 

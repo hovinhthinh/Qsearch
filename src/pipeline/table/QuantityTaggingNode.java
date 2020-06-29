@@ -6,6 +6,7 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
 import iitb.shared.EntryWithScore;
+import model.quantity.QuantityDomain;
 import model.table.Cell;
 import model.table.Table;
 import model.table.link.QuantityLink;
@@ -177,8 +178,11 @@ public class QuantityTaggingNode implements TaggingNode {
                         q.units = "";
                     }
 
-                    // prefer header unit if available (only for firstQuantity)
-                    String cellUnit = firstQuantity ? NLP.stripSentence(unit != null ? unit : q.units) : q.units;
+                    // prefer header unit if available (only for first quantity, and the domain of the cell quantity
+                    // is dimensionless)
+                    String cellUnit = NLP.stripSentence((firstQuantity && unit != null
+                            && QuantityDomain.getDomainOfUnit(q.units).equals(QuantityDomain.Domain.DIMENSIONLESS))
+                            ? unit : q.units);
                     firstQuantity = false;
 
                     String quantitySpan = dumpyText.substring(span.start, span.end + 1);
