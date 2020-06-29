@@ -42,29 +42,12 @@ public class CoreferenceTaggingNode implements TaggingNode {
                     "/bin/sh", "-c",
                     "python3 -u coref_runner.py"
             };
-            ProcessBuilder pb = new ProcessBuilder(cmd);
-            if (!logErrStream) {
-                pb.redirectError(ProcessBuilder.Redirect.DISCARD);
-            }
+            ProcessBuilder pb = new ProcessBuilder(cmd)
+                    .redirectError(logErrStream ? ProcessBuilder.Redirect.INHERIT : ProcessBuilder.Redirect.DISCARD);
             pb.directory(new File("./coref"));
             p = pb.start();
 
-            if (logErrStream) {
-                BufferedReader err = new BufferedReader(new InputStreamReader(p.getErrorStream(), StandardCharsets.UTF_8));
-                new Thread(() -> {
-                    try {
-                        String str;
-                        while ((str = err.readLine()) != null) {
-                            System.err.println(str);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-            }
-
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(p.getOutputStream(), StandardCharsets.UTF_8)));
-
             String str;
             in = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
             while (!(str = in.readLine()).equals("__coref_ready__")) {
