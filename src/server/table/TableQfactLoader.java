@@ -20,8 +20,8 @@ public class TableQfactLoader {
             return QFACTS;
         }
         QFACTS = new ArrayList<>();
-        String wikiFile = "/GW/D5data-12/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id_annotation+linking.gz";
-        String tablemFile = "/GW/D5data-11/hvthinh/TABLEM/all/all+id.annotation+linking.gz";
+        String wikiFile = "/GW/D5data-13/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id_annotation+linking_new.gz";
+        String tablemFile = "/GW/D5data-13/hvthinh/TABLEM/all/all+id.annotation+linking_new.gz";
 
         HashSet<String> tableIds = new HashSet<>();
 
