@@ -181,7 +181,7 @@ class MapClient {
 
     // args: <memorySpecs> <String2StringMapClass> <inputFile> <outputFile> [stdout] [stderr]
     // <stdout> and <stderr> are required to redirect output from MapInteractiveRunner to a file.
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         String[] finalArgs = args;
         MapClient mapper = new MapClient(-1, args[1], args[0],
                 args.length > 4 ? args[4] : null, args.length > 5 ? args[5] : null);
@@ -207,7 +207,7 @@ class MapClient {
             }
             out.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             m.forceShutdown();
             mapper.destroyInteractiveClient();
