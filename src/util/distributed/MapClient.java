@@ -1,6 +1,7 @@
 package util.distributed;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import util.FileUtils;
 import util.SelfMonitor;
 import util.ShellCommand;
@@ -112,11 +113,12 @@ class MapClient {
             }
             isProcessing = false;
             return output;
-        } catch (IOException | NullPointerException e) {
+        } catch (IOException | NullPointerException | JSONException e) {
             isProcessing = false;
             if (errStream != null) {
                 synchronized (errStream) {
-                    // This is when the interactive client stops improperly, e.g., INPUT TIMEOUT, OUT OF MEMORY, SEGMENTATION FAULT
+                    // This is when the interactive client stops improperly, e.g.,
+                    // PROCESSING TIMEOUT, OUT OF MEMORY, SEGMENTATION FAULT, NETWORK ERROR (output received only partially)
                     errStream.println(String.format("%s [Client#%d]\t%s", ON_FATAL_INPUT, clientId, input));
                 }
             }

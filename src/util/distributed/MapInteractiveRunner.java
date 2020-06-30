@@ -54,8 +54,8 @@ public class MapInteractiveRunner {
                 synchronized (System.out) {
                     System.out.println();
                     System.out.println(ON_KEEP_ALIVE);
-                    System.out.flush();
                 }
+                System.out.flush();
             } while (!Thread.currentThread().isInterrupted());
         });
         keepAlive.start();
@@ -75,8 +75,8 @@ public class MapInteractiveRunner {
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.err.println(String.format("%s\t%s", ON_FAIL, str));
-                    System.err.flush();
                 }
+                System.err.flush();
                 if (System.currentTimeMillis() >= lastGCTime + GC_INTERVAL * 1000) {
                     System.gc();
                     lastGCTime = System.currentTimeMillis();
@@ -91,8 +91,8 @@ public class MapInteractiveRunner {
                 synchronized (System.out) {
                     System.out.println();
                     System.out.println(String.format("%s\t%s", ON_OUTPUT, arr.toString()));
-                    System.out.flush();
                 }
+                System.out.flush();
                 isProcessingAnInput.set(false);
             }
             mapper.after();
