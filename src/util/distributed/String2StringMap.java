@@ -46,21 +46,24 @@ public abstract class String2StringMap {
         PrintWriter out = FileUtils.getPrintWriter(ARGS[1], "UTF-8");
         SelfMonitor m = new SelfMonitor(MAIN_CLASS, -1, 60);
         m.start();
-        for (String line : FileUtils.getLineStream(ARGS[0], "UTF-8")) {
-            try {
-                List<String> result = mapper.map(line);
-                if (result != null) {
-                    for (String r : result) {
-                        out.println(r);
+        try {
+            for (String line : FileUtils.getLineStream(ARGS[0], "UTF-8")) {
+                try {
+                    List<String> result = mapper.map(line);
+                    if (result != null) {
+                        for (String r : result) {
+                            out.println(r);
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.err.println(String.format("%s\t%s", MapInteractiveRunner.ON_FAIL, line));
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println(String.format("%s\t%s", MapInteractiveRunner.ON_FAIL, line));
+                m.incAndGet();
             }
-            m.incAndGet();
+        } finally {
+            m.forceShutdown();
+            out.close();
         }
-        m.forceShutdown();
-        out.close();
     }
 }
