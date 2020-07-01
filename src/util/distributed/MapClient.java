@@ -208,8 +208,6 @@ class MapClient {
                 m.incAndGet();
             }
             out.close();
-        } catch (Exception e) {
-            throw e;
         } finally {
             m.forceShutdown();
             mapper.destroyInteractiveClient();
