@@ -94,7 +94,8 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="sort-dropdown-btn">
                             <a class="dropdown-item dropdown-item-checked sort-option" href='#' id="sort-default">Default</a>
-                            <a class="dropdown-item sort-option" href='#' id="sort-quantity">Quantity</a>
+                            <a class="dropdown-item sort-option" href='#' id="sort-quantity-asc">Quantity (ASC)</a>
+                            <a class="dropdown-item sort-option" href='#' id="sort-quantity-des">Quantity (DESC)</a>
                             <a class="dropdown-item sort-option" href='#' id="sort-entity" hidden>Entity</a>
                         </div>
                     </div>
@@ -726,16 +727,12 @@
         $(this).addClass('dropdown-item-checked');
         $('#sort-by-text').text('Sort by: Entity');
     });
-    $('#sort-quantity').click(function () {
+    $('#sort-quantity-asc').click(function () {
         var topResults = data['topResults'];
         topResults.sort(function (a, b) {
             var av = a.subInstances[0].quantityStandardValue, bv = b.subInstances[0].quantityStandardValue;
             var c = av < bv ? -1 : (av > bv ? 1 : 0);
-            if (data['quantityConstraint']['resolutionCode'] == 'UPPER_BOUND') {
-                return c * -1;
-            } else {
-                return c;
-            }
+            return c;
         });
         data['topResults'] = topResults;
         clearTimeout(convertedQuantityShowingTimeout);
@@ -752,7 +749,31 @@
             $(this).removeClass('dropdown-item-checked');
         });
         $(this).addClass('dropdown-item-checked');
-        $('#sort-by-text').text('Sort by: Quantity');
+        $('#sort-by-text').text('Sort by: Quantity (ASC)');
+    });
+    $('#sort-quantity-desc').click(function () {
+        var topResults = data['topResults'];
+        topResults.sort(function (a, b) {
+            var av = a.subInstances[0].quantityStandardValue, bv = b.subInstances[0].quantityStandardValue;
+            var c = av < bv ? -1 : (av > bv ? 1 : 0);
+            return c * -1;
+        });
+        data['topResults'] = topResults;
+        clearTimeout(convertedQuantityShowingTimeout);
+        convertedQuantity2ShowingTimeout.forEach(function (t) {
+            try {
+                clearTimeout(t);
+            } catch (e) {
+            }
+        });
+        $('.converted-quantity, .converted-quantity-2').trigger('mouseleave');
+        $('#quantity-constraint').popover('dispose');
+        show(data);
+        $('.sort-option').each(function () {
+            $(this).removeClass('dropdown-item-checked');
+        });
+        $(this).addClass('dropdown-item-checked');
+        $('#sort-by-text').text('Sort by: Quantity (DESC)');
     });
 
     autocomplete(document.getElementById("full"));
