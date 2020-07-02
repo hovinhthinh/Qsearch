@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Qsearch</title>
+    <title>TabQs</title>
     <link href="fontawesome_5.10.1/css/all.css" rel="stylesheet" crossorigin="anonymous">
     <link href="css/bootstrap_4.0.0.min.css" rel="stylesheet" crossorigin="anonymous">
     <link href="css/local.css" rel="stylesheet" crossorigin="anonymous">
@@ -32,19 +32,18 @@
                 <input autocomplete="off" hidden type="text" class="form-control" placeholder="quantity" id="quantity">
                 <input autocomplete="off" style="height: 40px;" type="text" class="form-control"
                        placeholder="what do you want to search for?" id="full">
-                <button style="height: 40px" type="button" class="btn btn-success" id="search">Search</button>
+                <button style="height: 40px" type="button" class="btn btn-primary" id="search">Search</button>
             </div>
             <br/>
             <div id="parsed" class="mb-3" style="white-space:nowrap;"></div>
         </div>
         <div class="col-xs-3 col-sm-3 col-md-3 col-lg-5" style="margin-top: 15px">
-            <div class="float-right card" style=" border-color: #d6e9c6;">
-                <div class="card-header" style="background-color: #dff0d8; border-color: #d6e9c6">
-                    <a id='setting-toggle' data-toggle="collapse" href="#setting-body"
-                       style="text-decoration: none;">
-            <span style="color: #3c763d">
-                <strong>Settings</strong>&nbsp;&nbsp;<i class="float-right fa fa-chevron-up"></i>
-            </span>
+            <div class="float-right card" style="border-color: #B8D2FA">
+                <div class="card-header" style="background-color: #DAE6F8; border-color: #B8D2FA">
+                    <a id='setting-toggle' data-toggle="collapse" href="#setting-body" style="text-decoration: none;">
+                        <span style="color: #3c78d8">
+                            <strong>Settings</strong>&nbsp;&nbsp;<i class="float-right fa fa-chevron-up"></i>
+                        </span>
                     </a>
                 </div>
                 <div id="setting-body" class="collapse show">
@@ -89,7 +88,7 @@
                     <div class="dropdown col-4" align="right" id="sort-dropdown" hidden>
                         <button class="btn dropdown-toggle btn-sm" type="button" id="sort-dropdown-btn"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                style="background-color: #dff0d8; border-color: #d6e9c6; color: #3c763d">
+                                style="background-color: #DAE6F8; border-color: #B8D2FA; color: #3c78d8">
                             <strong id="sort-by-text">Sort by: Default</strong>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="sort-dropdown-btn" style="min-width: 11rem;">
