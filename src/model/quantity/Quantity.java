@@ -102,8 +102,11 @@ public class Quantity {
             q.phrase = tokenizedText.substring(span.start, span.end + 1);
 
             // Extend to get a non-dimensionless unit
-            if (q.phrase.endsWith(" " + q.units)) {
+            if (q.units.isEmpty() || q.phrase.endsWith(" " + q.units)) {
                 int unitStart = span.end - q.units.length() + 1;
+                if (q.units.isEmpty()) {
+                    ++unitStart;
+                }
                 int spanEnd = span.end;
 
                 // extend as far as possible
