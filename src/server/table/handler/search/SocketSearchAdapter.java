@@ -41,6 +41,10 @@ public class SocketSearchAdapter extends WebSocketAdapter {
             additionalParams.put("corpus", o.getString("corpus"));
         }
 
+        if (o.has("linking-threshold")) {
+            additionalParams.put("linking-threshold", Float.parseFloat(o.getString("linking-threshold")));
+        }
+
         additionalParams.put("session", session);
 
         int nResult = o.has("ntop") ? Integer.parseInt(o.getString("ntop")) : 10;

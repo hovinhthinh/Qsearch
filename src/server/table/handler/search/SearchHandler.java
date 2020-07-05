@@ -38,6 +38,10 @@ public class SearchHandler extends HttpServlet {
             additionalParams.put("corpus", request.getParameter("corpus"));
         }
 
+        if (request.getParameter("linking-threshold") != null) {
+            additionalParams.put("linking-threshold", Float.parseFloat(request.getParameter("linking-threshold")));
+        }
+
         String ntop = request.getParameter("ntop");
         int nResult = ntop != null ? Integer.parseInt(ntop) : 10;
 
