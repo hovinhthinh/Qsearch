@@ -297,6 +297,12 @@
                     var unitSpan = escapeText(si.qfact.headerUnitSpan);
                     text += '</br><span class="badge badge-pill badge-secondary">Unit/Multiplier: ' + unitSpan + '</span>';
                 }
+
+                if (table.header[i][j].text == table.header[table.header.length - 1][si.qfact.eCol].text
+                    && si.qfact.eCol >= j && si.qfact.eCol <= temp_1 && temp_2 == table.header.length - 1) {
+                    var unitSpan = escapeText(si.qfact.headerUnitSpan);
+                    text += '</br><span class="badge badge-pill badge-secondary">LScore: ' + si.qfact.linkingScore.toFixed(3) + '</span>';
+                }
                 c.html(text);
                 headRow.append(c);
                 j = temp_1;
