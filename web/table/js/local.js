@@ -172,12 +172,20 @@ var ntop = $.cookie('ntop_table');
 if (ntop != null) {
     $("#ntop option[value=" + ntop + "]").prop('selected', true);
 }
+var linkingThreshold = $.cookie('linking-threshold');
+if (linkingThreshold != null) {
+    $("#linking-threshold").val(linkingThreshold);
+    $("#linking-threshold").trigger('input');
+}
 
 $("#corpus").on('change', function () {
     $.cookie('corpus_table', JSON.stringify($(this).val()));
 });
 $("#ntop").on('change', function () {
     $.cookie('ntop_table', this.value);
+});
+$("#linking-threshold").on('input', function () {
+    $.cookie('linking-threshold', this.value);
 });
 
 // search mode.
