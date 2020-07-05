@@ -10,7 +10,7 @@ import util.Gson;
 import java.util.*;
 
 public class TableQfactLoader {
-    public static final double LINKING_THRESHOLD = 0.70;
+    public static final double LINKING_THRESHOLD = -1; // 0.70;
 
     private static boolean LOADED = false;
     private static ArrayList<QfactLight> QFACTS;
@@ -22,8 +22,6 @@ public class TableQfactLoader {
         QFACTS = new ArrayList<>();
         String wikiFile = "/GW/D5data-13/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id_annotation+linking_new.gz";
         String tablemFile = "/GW/D5data-13/hvthinh/TABLEM/all/all+id.annotation+linking_new.gz";
-
-        HashSet<String> tableIds = new HashSet<>();
 
         for (String file : Arrays.asList(tablemFile, wikiFile))
             for (String line : FileUtils.getLineStream(file, "UTF-8")) {
@@ -45,7 +43,8 @@ public class TableQfactLoader {
                         }
 
                         QfactLight f = new QfactLight();
-                        tableIds.add(f.tableId = table._id);
+                        f.tableId = table._id;
+                        f.linkingScore = table.quantityToEntityColumnScore[qCol];
                         f.entity = el.target;
                         f.entitySpan = el.text;
 

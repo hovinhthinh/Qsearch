@@ -167,14 +167,16 @@ public class TableQuery {
         if (queryContext.isEmpty() && !domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             queryContext = NLP.stripSentence(domain.toLowerCase());
         }
-
         ArrayList<String> queryContextTerms = NLP.splitSentence(queryContext);
-
 
         // Corpus constraint
         ArrayList<String> corpusConstraint = new ArrayList<>();
         corpusConstraint = additionalParameters == null ? null :
                 (additionalParameters.containsKey("corpus") ? Gson.fromJson((String) additionalParameters.get("corpus"), corpusConstraint.getClass()) : null);
+
+        // linking threshold
+        double linkingThreshold = additionalParameters != null && additionalParameters.containsKey("linking-threshold")
+                ? (float) additionalParameters.get("linking-threshold") : -1; // default is no-threshold
 
         // retrieve additional parameters
         Session session = additionalParameters == null ? null : (Session) additionalParameters.get("session");
@@ -222,6 +224,9 @@ public class TableQuery {
 
             for (int k = i; k <= j; ++k) {
                 QfactLight f = QFACTS.get(k);
+                if (linkingThreshold != -1 && f.linkingScore < linkingThreshold) {
+                    continue;
+                }
                 // quantity
                 Quantity qt = Quantity.fromQuantityString(f.quantity);
                 if (!constraint.match(qt)) {
