@@ -86,6 +86,18 @@
                                     </select>
                                 </td>
                             </tr>
+                            <tr>
+                                <td style="padding-top: 10px;">Linking threshold:&nbsp;</td>
+                                <td style="padding-top: 10px;" colspan="3">
+                                    <table style="width: 100%">
+                                        <tr>
+                                            <td><input type="range" value="0.7" class="slider" step="0.1" min="0" max="1" id="linking-threshold"
+                                                       oninput="$('#linking-threshold-value').text(parseFloat(this.value).toFixed(1));"></td>
+                                            <td id="linking-threshold-value" align="right" style="width: 2.5em">0.7</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>
@@ -564,7 +576,8 @@
     function search() {
         var params = {
             corpus: JSON.stringify($("#corpus").val()),
-            ntop: $("#ntop").val()
+            ntop: $("#ntop").val(),
+            'linking-threshold': $("#linking-threshold").val()
         };
         if ($.cookie('part_search_table') != "1") {
             if ($("#full").val().trim() == "") {
