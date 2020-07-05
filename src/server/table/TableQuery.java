@@ -206,15 +206,29 @@ public class TableQuery {
             while (j < QFACTS.size() - 1 && QFACTS.get(j + 1).entity.equals(entity)) {
                 ++j;
             }
-            // process type
-            boolean flag = false;
-            for (String type : TAXONOMY.getTextualizedTypes("<" + entity.substring(5) + ">", true)) {
-                if (type.contains(queryType) && queryHeadWord.equals(NLP.getHeadWord(type, true))) {
-                    flag = true;
+
+            // pre-check
+            boolean hasQfactWithGoodLinkingThreshold = false;
+            for (int k = i; k <= j; ++k) {
+                if (linkingThreshold == -1 || QFACTS.get(k).linkingScore >= linkingThreshold) {
+                    hasQfactWithGoodLinkingThreshold = true;
                     break;
                 }
             }
-            if (!flag) {
+            if (!hasQfactWithGoodLinkingThreshold) {
+                i = j;
+                continue;
+            }
+
+            // process type
+            boolean entityIsOfCorrectType = false;
+            for (String type : TAXONOMY.getTextualizedTypes("<" + entity.substring(5) + ">", true)) {
+                if (type.contains(queryType) && queryHeadWord.equals(NLP.getHeadWord(type, true))) {
+                    entityIsOfCorrectType = true;
+                    break;
+                }
+            }
+            if (!entityIsOfCorrectType) {
                 i = j;
                 continue;
             }
