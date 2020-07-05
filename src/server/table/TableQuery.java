@@ -197,24 +197,18 @@ public class TableQuery {
                 }
             }
 
-            if (i > 0 && QFACTS.get(i).entity.equals(QFACTS.get(i - 1).entity)) {
-                continue;
-            }
             String entity = QFACTS.get(i).entity;
 
-            int j = i;
-            while (j < QFACTS.size() - 1 && QFACTS.get(j + 1).entity.equals(entity)) {
-                ++j;
-            }
-
-            // pre-check
             boolean hasQfactWithGoodLinkingThreshold = false;
-            for (int k = i; k <= j; ++k) {
-                if (linkingThreshold == -1 || QFACTS.get(k).linkingScore >= linkingThreshold) {
+            int j = i - 1;
+            QfactLight tempQfact;
+            while (j < QFACTS.size() - 1 && (tempQfact = QFACTS.get(j + 1)).entity.equals(entity)) {
+                ++j;
+                if (linkingThreshold == -1 || tempQfact.linkingScore >= linkingThreshold) {
                     hasQfactWithGoodLinkingThreshold = true;
-                    break;
                 }
             }
+
             if (!hasQfactWithGoodLinkingThreshold) {
                 i = j;
                 continue;
