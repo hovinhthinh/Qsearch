@@ -3,6 +3,7 @@ package model.query;
 import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
 import edu.knowitall.tool.postag.PostaggedToken;
+import model.context.ContextEmbeddingMatcher;
 import model.quantity.QuantityConstraint;
 import model.quantity.QuantityDomain;
 import nlp.NLP;
@@ -11,6 +12,7 @@ import scala.collection.JavaConversions;
 import server.text.handler.TypeSuggestionHandler;
 import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
+import util.Pair;
 import util.Triple;
 
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ public class SimpleQueryParser {
     public static final Logger LOGGER = Logger.getLogger(SimpleQueryParser.class.getName());
     private static final HashSet<String> TYPE_SEPARATOR =
             new HashSet<>(Arrays.asList("that", "which", "where", "when", "who", "whom", "with", "whose"));
+
+    private static final int SUGGESTING_THRESHOLD = 50;
 
     private static final Pattern MULTIPLIER_OPTIMIZE_PATTERN =
             Pattern.compile("(\\$\\s*|\\b)\\d+(\\.\\d+)?(k|m|b)(\\s*\\$|\\b)");
@@ -101,6 +105,30 @@ public class SimpleQueryParser {
         return NLP.stripSentence(query);
     }
 
+    private static final ContextEmbeddingMatcher dedMatcher = new ContextEmbeddingMatcher(0);
+
+    private static String suggestATypeFromRaw(String rawType) {
+        String mostSimilarType = null;
+        double similarityScore = -1;
+        ArrayList<String> inputType = NLP.splitSentence(NLP.fastStemming(rawType, Morpha.noun));
+        for (Pair<String, Integer> p : TypeSuggestionHandler.typeToFreq) {
+            if (p.second < SUGGESTING_THRESHOLD) {
+                continue;
+            }
+            ArrayList<String> suggestType = NLP.splitSentence(p.first);
+            double sim = dedMatcher.directedEmbeddingIdfSimilarity(inputType, suggestType)
+                    * dedMatcher.directedEmbeddingIdfSimilarity(suggestType, inputType);
+            if (sim > similarityScore) {
+                similarityScore = sim;
+                mostSimilarType = p.first;
+            }
+        }
+        if (similarityScore >= 0.85) {
+            LOGGER.info(String.format("Suggested type: %s --> %s (conf: %.3f)", rawType, mostSimilarType, similarityScore));
+            return mostSimilarType;
+        }
+        return null;
+    }
 
     public synchronized static Triple<String, String, String> parse(String rawQuery, boolean useTypeSuggestion) {
         rawQuery = preprocess(rawQuery);
@@ -120,15 +148,16 @@ public class SimpleQueryParser {
                 }
                 rawTokenizedSb.append(w.string());
                 String rawTokenizedSbStr = rawTokenizedSb.toString();
-                if (useTypeSuggestion && (TypeSuggestionHandler.getTypeFreq(rawTokenizedSbStr) >= 50
-                        || TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun)) >= 50)) {
+                if (useTypeSuggestion && (TypeSuggestionHandler.getTypeFreq(rawTokenizedSbStr) >= SUGGESTING_THRESHOLD
+                        || TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun)) >= SUGGESTING_THRESHOLD)) {
                     typeFromTypeSuggestionSystem = rawTokenizedSbStr;
                 }
             }
             String rawTokenized = rawTokenizedSb.toString();
 
+            String typeRawStr;
             if (typeFromTypeSuggestionSystem != null) {
-                result.first = typeFromTypeSuggestionSystem;
+                typeRawStr = result.first = typeFromTypeSuggestionSystem;
             } else {
                 StringBuilder type = new StringBuilder();
                 boolean hasNoun = false;
@@ -151,6 +180,15 @@ public class SimpleQueryParser {
                         hasNoun = true;
                     } else if (t.string().equals("in") || t.string().equals("of")) {
                         hasNoun = false;
+                    }
+                }
+
+                typeRawStr = result.first;
+                // find the most similar type in the type suggestion system.
+                if (useTypeSuggestion) {
+                    String suggestedType = suggestATypeFromRaw(result.first);
+                    if (suggestedType != null) {
+                        result.first = suggestedType;
                     }
                 }
             }
@@ -267,7 +305,7 @@ public class SimpleQueryParser {
 
             // context
             ArrayList<String> context = NLP.splitSentence(
-                    rawTokenized.replace(result.first, " ").replace(result.third, " "));
+                    rawTokenized.replace(typeRawStr, " ").replace(result.third, " "));
             StringBuilder cSb = new StringBuilder();
             for (String s : context) {
                 if (NLP.BLOCKED_STOPWORDS.contains(s) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(s)) {
