@@ -23,7 +23,7 @@ public class TypeSuggestionHandler extends HttpServlet {
     public static final Logger LOGGER = Logger.getLogger(TypeSuggestionHandler.class.getName());
     public static final int N_TOP_SUGGESTION = 10;
 
-    private static ArrayList<Pair<String, Integer>> typeToFreq = new ArrayList<>();
+    public static ArrayList<Pair<String, Integer>> typeToFreq = new ArrayList<>();
 
     static {
         load(10);
