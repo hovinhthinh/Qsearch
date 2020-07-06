@@ -105,8 +105,6 @@ public class SimpleQueryParser {
         return NLP.stripSentence(query);
     }
 
-    private static final ContextEmbeddingMatcher dedMatcher = new ContextEmbeddingMatcher(0);
-
     private static String suggestATypeFromRaw(String rawType) {
         String mostSimilarType = null;
         double similarityScore = -1;
@@ -116,8 +114,8 @@ public class SimpleQueryParser {
                 continue;
             }
             ArrayList<String> suggestType = NLP.splitSentence(p.first);
-            double sim = dedMatcher.directedEmbeddingIdfSimilarity(inputType, suggestType)
-                    * dedMatcher.directedEmbeddingIdfSimilarity(suggestType, inputType);
+            double sim = ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(inputType, suggestType)
+                    * ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(suggestType, inputType);
             if (sim > similarityScore) {
                 similarityScore = sim;
                 mostSimilarType = p.first;

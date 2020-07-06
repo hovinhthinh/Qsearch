@@ -14,7 +14,7 @@ public class ContextEmbeddingMatcher implements ContextMatcher {
 
     // Lower is better
     // range from 1 -> 2
-    public double directedEmbeddingIdfDistance(ArrayList<String> queryX, ArrayList<String> factX) {
+    public static double directedEmbeddingIdfDistance(ArrayList<String> queryX, ArrayList<String> factX) {
         // TODO: Currently not supporting TIME (TIME is computed like normal terms).
         if (queryX.isEmpty() || factX.isEmpty()) {
             return queryX.isEmpty() && factX.isEmpty() ? 1 : 2;
@@ -38,7 +38,7 @@ public class ContextEmbeddingMatcher implements ContextMatcher {
 
     // Higher is better
     // range from 0 -> 1
-    public double directedEmbeddingIdfSimilarity(ArrayList<String> queryX, ArrayList<String> factX) {
+    public static double directedEmbeddingIdfSimilarity(ArrayList<String> queryX, ArrayList<String> factX) {
         // TODO: Currently not supporting TIME (TIME is computed like normal terms).
         if (queryX.isEmpty() || factX.isEmpty()) {
             return queryX.isEmpty() && factX.isEmpty() ? 1 : 0;
