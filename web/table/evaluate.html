@@ -268,7 +268,7 @@
         var pg = $('<div class="small ml-3 mr-1">');
         if (si.qfact.tableIndex.pageContent != "") {
             pg.html('<span class="badge badge-pill badge-info">Related Text</span> ');
-            var lim = 400;
+            var lim = st.length > 1 ? 400 : 300;
             if (si.qfact.tableIndex.pageContent.length < lim) {
                 pg.append($('<span>').text(si.qfact.tableIndex.pageContent));
             } else {
@@ -322,7 +322,8 @@
                     && si.qfact.eCol >= j && si.qfact.eCol <= temp_1 && temp_2 == table.header.length - 1) {
                     var unitSpan = escapeText(si.qfact.headerUnitSpan);
                     text += '</br><span class="badge badge-pill badge-secondary">LScore: ' + si.qfact.linkingScore.toFixed(3) + '</span>';
-                }                c.html(text);
+                }
+                c.html(text);
                 headRow.append(c);
                 j = temp_1;
             }
@@ -438,7 +439,7 @@
 
         if (instance.subInstances.length > 1) {
             var wrapper = $('<div style="text-align: center;"><div style="display: inline-block;"></div></div>');
-            wrapper.eq(0).children().eq(0).html('<button class="mt-1 btn btn-link" onclick="showMoreTables(' + index + ', this)">Show more</button>');
+            wrapper.eq(0).children().eq(0).html('<button class="mt-1 btn btn-link p-0" onclick="showMoreTables(' + index + ', this)">Show more</button>');
             tCel.append(wrapper);
             var moreTCel = $('<div class="collapse">');
             for (var i = 1; i < instance.subInstances.length; ++i) {
