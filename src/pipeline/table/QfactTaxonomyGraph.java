@@ -54,7 +54,6 @@ public class QfactTaxonomyGraph {
     private ArrayList<EntityTextQfact>[] entityQfactLists;
     private ArrayList<Pair<Integer, Integer>>[] taxonomyEntityWithQfactLists; // Pair<entityId, distance>, order by distance
 
-    private ContextEmbeddingMatcher matcher = new ContextEmbeddingMatcher(-1); // alpha not used
     private int relatedEntityDistanceLimit;
 
     private Long2ObjectOpenHashMap<Pair<Double, EntityTextQfact>> cache = new Long2ObjectOpenHashMap<>(10000000);
@@ -196,7 +195,7 @@ public class QfactTaxonomyGraph {
                     continue;
                 }
 
-                double contextMatchScr = matcher.directedEmbeddingIdfSimilarity(thisContext, o.context);
+                double contextMatchScr = ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(thisContext, o.context);
                 double quantityMatchScr = quantity.compareTo(o.quantity) == 0 ? 1 : 0;
 
                 double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT + quantityMatchScr * (1 - QFACT_CONTEXT_MATCH_WEIGHT);
@@ -223,7 +222,7 @@ public class QfactTaxonomyGraph {
                         if (!thisDomain.equals(QuantityDomain.getDomain(o.quantity))) {
                             continue;
                         }
-                        double contextMatchScr = matcher.directedEmbeddingIdfSimilarity(thisContext, o.context);
+                        double contextMatchScr = ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(thisContext, o.context);
 
                         double matchScr = contextMatchScr * QFACT_CONTEXT_MATCH_WEIGHT;
                         if (singleEntityResult.second == null || matchScr > singleEntityResult.first) {
