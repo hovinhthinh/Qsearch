@@ -183,9 +183,21 @@ public class QfactTaxonomyGraph {
         }
         ArrayList<String> thisContext = NLP.splitSentence(context.toLowerCase());
 
-        ObjectHeapPriorityQueue<Pair<Double, EntityTextQfact>> queue = new ObjectHeapPriorityQueue<>(Comparator.comparing(o -> o.first));
+        ObjectHeapPriorityQueue<Pair<Double, EntityTextQfact>> queue = new ObjectHeapPriorityQueue<>((a, b) -> {
+            int i = a.first.compareTo(b.first);
+            if (i != 0) {
+                return i;
+            }
+            if (entity.equals(a.second.entity)) {
+                return 1;
+            } else if (entity.equals(b.second.entity)) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
 
-        // match exact entitiy
+        // match exact entity
         ArrayList<EntityTextQfact> qfacts = entityQfactLists[entityId];
         if (qfacts != null) {
             Pair<Double, EntityTextQfact> singleEntityResult = new Pair<>(0.0, null);
