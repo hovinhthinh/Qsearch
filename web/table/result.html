@@ -72,8 +72,10 @@
                                 <td style="padding-top: 10px;" colspan="3">
                                     <table style="width: 100%">
                                         <tr>
-                                            <td><input type="range" value="0.6" class="slider" step="0.1" min="0" max="1" id="linking-threshold"
-                                                       oninput="$('#linking-threshold-value').text(parseFloat(this.value).toFixed(1));"></td>
+                                            <td><input type="range" value="0.6" class="slider" step="0.1" min="0"
+                                                       max="1" id="linking-threshold"
+                                                       oninput="$('#linking-threshold-value').text(parseFloat(this.value).toFixed(1));">
+                                            </td>
                                             <td id="linking-threshold-value" align="right" style="width: 2.5em">0.6</td>
                                         </tr>
                                     </table>
@@ -145,6 +147,32 @@
         </tr>
     </table>
 </footer>
+<div id="explain-info" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Explanation for <a id='explain-entity' target="_blank" href="#">ENTITY</a></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li>
+                        <span class="badge badge-info">Best Evidence</span>&nbsp;
+                        <a id="explain-link" target="_blank" href="#">LINK</a>
+                    </li>
+                    <li>
+                        <span class="badge badge-info badge-l">Matching Type</span>&nbsp;
+                        <i id="explain-type">TYPE</i>
+                        <span id="explain-related-entity"> &rarr; <a target="_blank" href="#">RELATED_ENTITY</a></span>
+                        <p id="explain-content">CONTENT</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 <img id="loading" src="img/loading.gif" style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"/>
 <script src="js/local.js" crossorigin="anonymous"></script>
 <style>
@@ -198,7 +226,7 @@
         return value;
     }
 
-    function drawCollapsedTable(index, si) {
+    function drawCollapsedTable(entityIndex, subInstanceIndex, si) {
         var cell = $('<div>');
 
         var table = si.qfact.tableIndex.table;
@@ -319,9 +347,12 @@
                 if (j == si.qfact.eCol) {
                     var entitySpan = escapeText(si.qfact.entitySpan);
                     text = text.replace(entitySpan, '<span class="entity-box">' + entitySpan + '</span>');
+                    if (si.qfact.explainStr != null && si.qfact.explainStr != "null") {
+                        text += '<a class="explain-info badge" eindex="' + entityIndex + '" siindex="' + subInstanceIndex + '"href="#"><i class="fas fa-info-circle"></i> Info</a>'
+                    }
                 } else if (j == si.qfact.qCol) {
                     var quantitySpan = escapeText(si.qfact.quantitySpan);
-                    text = text.replace(quantitySpan, '<span class="quantity-box ' + (index == 0 ? 'converted-quantity' : 'converted-quantity-2') + '"' +
+                    text = text.replace(quantitySpan, '<span class="quantity-box ' + (subInstanceIndex == 0 ? 'converted-quantity' : 'converted-quantity-2') + '"' +
                         ' data-animation="true" data-placement="top" data-trigger="hover" data-html="true"' +
                         ' data-content="Equals: ' +
                         (si.quantityConvertedStr == null ? "null" : si.quantityConvertedStr) +
@@ -415,7 +446,7 @@
         line += eCel.wrapAll('<div>').parent().html();
 
         var tCel = $('<td>');
-        tCel.append(drawCollapsedTable(0, instance.subInstances[0]));
+        tCel.append(drawCollapsedTable(index, 0, instance.subInstances[0]));
 
         if (instance.subInstances.length > 1) {
             var wrapper = $('<div style="text-align: center;"><div style="display: inline-block;"></div></div>');
@@ -424,7 +455,7 @@
             var moreTCel = $('<div class="collapse">');
             for (var i = 1; i < instance.subInstances.length; ++i) {
                 moreTCel.append($('<hr>'));
-                moreTCel.append(drawCollapsedTable(i, instance.subInstances[i]));
+                moreTCel.append(drawCollapsedTable(index, i, instance.subInstances[i]));
             }
             tCel.append(moreTCel);
         }
@@ -497,6 +528,50 @@
                     .data('bs.popover').getTipElement();
                 $(popoverElement).addClass('popover-converted-quantity');
             }
+        });
+
+        // column-linking explain info
+        $('.explain-info').click(function (e) {
+            e.preventDefault();
+            var eIndex = parseInt($(this).attr('eindex'));
+            var siIndex = parseInt($(this).attr('siindex'));
+
+            var entity = data.topResults[eIndex].entity;
+            $('#explain-entity')
+                .html(escapeText(entity.substring(1, entity.length - 1)).replace(/_/g, '&nbsp;'))
+                .attr('href', 'https://www.wikipedia.org/wiki/' + encodeURI(entity.substring(1, entity.length - 1)));
+
+            var explainInfo = data.topResults[eIndex].subInstances[siIndex].qfact.explainStr.split('\t');
+
+            var explainLink = explainInfo[2];
+            if (explainLink.startsWith("STICS:Link:")) {
+                explainLink = explainLink.substr(11);
+            } else if (explainLink.startsWith("NYT:Link:")) {
+                explainLink = explainLink.substr(9);
+            } else if (explainLink.startsWith("WIKIPEDIA:Link:")) {
+                explainLink = explainLink.substr(15);
+            }
+            $('#explain-link').text(explainLink).attr('href', explainLink);
+
+            var relatedEntity = explainInfo[0];
+            if (relatedEntity == data.topResults[eIndex].entity) {
+                $('#explain-type').text("Exact-Entity")
+                $('#explain-related-entity').attr('hidden', 'hidden');
+            } else {
+                $('#explain-type').text("Type-Related")
+                $('#explain-related-entity').removeAttr('hidden');
+                $('#explain-related-entity a')
+                    .html(escapeText(relatedEntity.substring(1, relatedEntity.length - 1)).replace(/_/g, '&nbsp;'))
+                    .attr('href', 'https://www.wikipedia.org/wiki/' + encodeURI(relatedEntity.substring(1, relatedEntity.length - 1)));
+            }
+            var explainContent = escapeText(explainInfo[1]);
+            if (explainInfo[3] != "null") {
+                explainContent = escapeText(explainInfo[3])
+                    + "<br>...<br>" + explainContent;
+            }
+            $('#explain-content').html(explainContent);
+
+            $('#explain-info').modal('show');
         });
 
         // hide converted quantity after sometime
