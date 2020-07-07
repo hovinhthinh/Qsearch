@@ -106,7 +106,7 @@
     </div>
 </div>
 
-<div class="container col-xs-12 col-sm-12 col-md-12 col-lg-11 mt-2">
+<div class="container col-xs-12 col-sm-12 col-md-12 col-lg-11 mt-4">
     <table class="table table-hover"
            style="width: auto !important; table-layout: auto !important; margin-left:auto; margin-right:auto;">
         <thead id="head" hidden>
@@ -116,18 +116,6 @@
             <th style="border-top: 0px; border-bottom: 0px;" scope="col">
                 <div class="row">
                     <div class="col-8"><span style="position:absolute;bottom:0;">Source</span></div>
-                    <div class="dropdown col-4" align="right" id="sort-dropdown" hidden>
-                        <button class="btn dropdown-toggle btn-sm" type="button" id="sort-dropdown-btn"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                style="background-color: #DAE6F8; border-color: #B8D2FA; color: #3c78d8">
-                            <strong id="sort-by-text">Sort by: Default</strong>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="sort-dropdown-btn">
-                            <a class="dropdown-item dropdown-item-checked sort-option" href='#' id="sort-default">Default</a>
-                            <a class="dropdown-item sort-option" href='#' id="sort-quantity">Quantity</a>
-                            <a class="dropdown-item sort-option" href='#' id="sort-entity" hidden>Entity</a>
-                        </div>
-                    </div>
                 </div>
             </th>
             <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col">Verdict</th>
@@ -320,7 +308,6 @@
 
                 if (table.header[i][j].text == table.header[table.header.length - 1][si.qfact.eCol].text
                     && si.qfact.eCol >= j && si.qfact.eCol <= temp_1 && temp_2 == table.header.length - 1) {
-                    var unitSpan = escapeText(si.qfact.headerUnitSpan);
                     text += ' <span class="badge badge-pill badge-secondary">LScore: ' + si.qfact.linkingScore.toFixed(3) + '</span>';
                 }
                 c.html(text);
@@ -508,7 +495,6 @@
             str += '<td class="text-right" id="submit-status"></td><td><button class="btn btn-primary" id="submit" onclick="submit()">Submit</button></td></tr>';
 
             $("#data").html(str);
-            $("#sort-dropdown").removeAttr('hidden');
         }
 
         $('.converted-quantity').each(function () {
@@ -670,8 +656,6 @@
         }
     }
     var data = null;
-    var resultsForWikiView = null;
-    var wikiViewCountLeft = 0;
     if (urlParams.has("s")) {
         $.ajax({
             type: "GET",
@@ -693,29 +677,6 @@
                 if (!show(data)) {
                     return;
                 }
-                // now trigger wikiview.
-                resultsForWikiView = data['topResults'];
-                wikiViewCountLeft = resultsForWikiView.length;
-                resultsForWikiView.forEach(function (o) {
-                    $.ajax({
-                        type: "GET",
-                        url: "/wikiview",
-                        data: {"entity": o['entity']},
-                        contentType: 'application/json; charset=utf-8',
-                        dataType: "json",
-                        success: function (response) {
-                            if (response['view'] != -1) {
-                                o['view'] = response['view'];
-                                --wikiViewCountLeft;
-                                if (wikiViewCountLeft == 0) {
-                                    data['topResults'] = resultsForWikiView;
-                                    $('#sort-entity').removeAttr('hidden');
-                                }
-                            }
-                        }
-                    });
-                });
-
             },
             error: function () {
                 alert("Invalid session.");
@@ -731,81 +692,6 @@
             }
         });
     }
-
-    $('#sort-default').click(function () {
-        var topResults = data['topResults'];
-        topResults.sort(function (a, b) {
-            var av = a['score'], bv = b['score'];
-            return av < bv ? 1 : (av > bv ? -1 : 0);
-        });
-        data['topResults'] = topResults;
-        clearTimeout(convertedQuantityShowingTimeout);
-        convertedQuantity2ShowingTimeout.forEach(function (t) {
-            try {
-                clearTimeout(t);
-            } catch (e) {
-            }
-        });
-        $('.converted-quantity, .converted-quantity-2').trigger('mouseleave');
-        $('#quantity-constraint').popover('dispose');
-        show(data);
-        $('.sort-option').each(function () {
-            $(this).removeClass('dropdown-item-checked');
-        });
-        $(this).addClass('dropdown-item-checked');
-        $('#sort-by-text').text('Sort by: Default');
-    });
-    $('#sort-entity').click(function () {
-        var topResults = data['topResults'];
-        topResults.sort(function (a, b) {
-            var av = a['view'], bv = b['view'];
-            return av < bv ? 1 : (av > bv ? -1 : 0);
-        });
-        data['topResults'] = topResults;
-        clearTimeout(convertedQuantityShowingTimeout);
-        convertedQuantity2ShowingTimeout.forEach(function (t) {
-            try {
-                clearTimeout(t);
-            } catch (e) {
-            }
-        });
-        $('.converted-quantity, .converted-quantity-2').trigger('mouseleave');
-        $('#quantity-constraint').popover('dispose');
-        show(data);
-        $('.sort-option').each(function () {
-            $(this).removeClass('dropdown-item-checked');
-        });
-        $(this).addClass('dropdown-item-checked');
-        $('#sort-by-text').text('Sort by: Entity');
-    });
-    $('#sort-quantity').click(function () {
-        var topResults = data['topResults'];
-        topResults.sort(function (a, b) {
-            var av = a.subInstances[0].quantityStandardValue, bv = b.subInstances[0].quantityStandardValue;
-            var c = av < bv ? -1 : (av > bv ? 1 : 0);
-            if (data['quantityConstraint']['resolutionCode'] == 'UPPER_BOUND') {
-                return c * -1;
-            } else {
-                return c;
-            }
-        });
-        data['topResults'] = topResults;
-        clearTimeout(convertedQuantityShowingTimeout);
-        convertedQuantity2ShowingTimeout.forEach(function (t) {
-            try {
-                clearTimeout(t);
-            } catch (e) {
-            }
-        });
-        $('.converted-quantity, .converted-quantity-2').trigger('mouseleave');
-        $('#quantity-constraint').popover('dispose');
-        show(data);
-        $('.sort-option').each(function () {
-            $(this).removeClass('dropdown-item-checked');
-        });
-        $(this).addClass('dropdown-item-checked');
-        $('#sort-by-text').text('Sort by: Quantity');
-    });
 
     autocomplete(document.getElementById("full"));
     autocomplete(document.getElementById("type"));
