@@ -752,13 +752,15 @@
                         contentType: 'application/json; charset=utf-8',
                         dataType: "json",
                         success: function (response) {
-                            if (response['view'] != -1) {
-                                o['view'] = response['view'];
-                                --wikiViewCountLeft;
-                                if (wikiViewCountLeft == 0) {
-                                    data['topResults'] = resultsForWikiView;
-                                    $('#sort-entity').removeAttr('hidden');
-                                }
+                            o['view'] = response['view'];
+                            --wikiViewCountLeft;
+                            if (wikiViewCountLeft == 0) {
+                                data['topResults'] = resultsForWikiView;
+                                $('#sort-entity').removeAttr('hidden');
+                            }
+                            if (response['view'] == -1) {
+                                $('#sort-entity').append(' <i class="fas fa-exclamation-circle" style="color:red"></i>')
+                                    .attr('title', 'Wikiview is not available for all entities.');
                             }
                         }
                     });
@@ -801,7 +803,8 @@
             $(this).removeClass('dropdown-item-checked');
         });
         $(this).addClass('dropdown-item-checked');
-        $('#sort-by-text').text('Sort by: Default');
+        $('#sort-by-text').text('Sort by: Default')
+            .parent().removeAttr('title');
     });
     $('#sort-entity').click(function () {
         var topResults = data['topResults'];
@@ -824,7 +827,8 @@
             $(this).removeClass('dropdown-item-checked');
         });
         $(this).addClass('dropdown-item-checked');
-        $('#sort-by-text').text('Sort by: Entity');
+        $('#sort-by-text').html("Sort by: " + $('#sort-entity').html())
+            .parent().attr('title', $('#sort-entity').attr('title'));
     });
     $('#sort-quantity-asc').click(function () {
         var topResults = data['topResults'];
@@ -848,7 +852,8 @@
             $(this).removeClass('dropdown-item-checked');
         });
         $(this).addClass('dropdown-item-checked');
-        $('#sort-by-text').text('Sort by: Quantity (ASC)');
+        $('#sort-by-text').text('Sort by: Quantity (ASC)')
+            .parent().removeAttr('title');
     });
     $('#sort-quantity-desc').click(function () {
         var topResults = data['topResults'];
@@ -872,7 +877,8 @@
             $(this).removeClass('dropdown-item-checked');
         });
         $(this).addClass('dropdown-item-checked');
-        $('#sort-by-text').text('Sort by: Quantity (DESC)');
+        $('#sort-by-text').text('Sort by: Quantity (DESC)')
+            .parent().removeAttr('title');
     });
 
     autocomplete(document.getElementById("full"));
