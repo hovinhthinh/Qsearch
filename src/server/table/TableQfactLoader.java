@@ -15,7 +15,11 @@ public class TableQfactLoader {
     private static boolean LOADED = false;
     private static ArrayList<QfactLight> QFACTS;
 
-    public static synchronized ArrayList<QfactLight> load() {
+    public static ArrayList<QfactLight> load() {
+        return load(true);
+    }
+
+    public static synchronized ArrayList<QfactLight> load(boolean loadExplainStr) {
         if (LOADED) {
             return QFACTS;
         }
@@ -58,6 +62,10 @@ public class TableQfactLoader {
                         f.row = row;
                         f.qCol = qCol;
                         f.eCol = table.quantityToEntityColumn[qCol];
+
+                        if (loadExplainStr) {
+                            f.explainStr = table.QfactMatchingStr[row][qCol];
+                        }
 
                         QFACTS.add(f);
                     }

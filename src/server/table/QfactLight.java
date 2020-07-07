@@ -14,5 +14,8 @@ public class QfactLight {
     public String headerUnitSpan;
 
     public String tableId;
+
+    public String explainStr;
+
     public int row, eCol, qCol;
 }
