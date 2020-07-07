@@ -136,3 +136,7 @@
     background-color: #e6e6e6;
     border-color: #adadad;
 }
+
+.popover {
+    z-index: 1 !important;
+}
