@@ -188,9 +188,9 @@ public class QfactTaxonomyGraph {
             if (i != 0) {
                 return i;
             }
-            if (entity.equals(a.second.entity)) {
+            if (a.second != null && entity.equals(a.second.entity)) {
                 return 1;
-            } else if (entity.equals(b.second.entity)) {
+            } else if (b.second != null && entity.equals(b.second.entity)) {
                 return -1;
             } else {
                 return 0;
