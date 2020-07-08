@@ -454,7 +454,7 @@
             tCel.append(wrapper);
             var moreTCel = $('<div class="collapse">');
             for (var i = 1; i < instance.subInstances.length; ++i) {
-                moreTCel.append($('<hr>'));
+                moreTCel.append($('<hr style="border-color: gray;">'));
                 moreTCel.append(drawCollapsedTable(index, i, instance.subInstances[i]));
             }
             tCel.append(moreTCel);
