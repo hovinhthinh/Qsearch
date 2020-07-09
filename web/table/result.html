@@ -220,9 +220,9 @@
 
     function source(value) {
         if (value.startsWith("WIKIPEDIA:Link:")) {
-            value = '&rarr; <a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-danger">Wikipedia</a>';
+            value = '<a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-danger"><i class="fas fa-arrow-alt-circle-right"></i> Wiki</a>';
         } else if (value.startsWith("TABLEM:Link:")) {
-            value = '&rarr; <a href="' + value.substr(12) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-success">TableL</a>';
+            value = '<a href="' + value.substr(12) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-success"><i class="fas fa-arrow-alt-circle-right"></i> TableL</a>';
         }
         return value;
     }
