@@ -158,18 +158,17 @@
             </div>
             <div class="modal-body">
                 <div id="explain-table">TABLE</div>
-                <ul class="mt-3">
-                    <li>
-                        <span class="badge badge-info">Best Evidence</span>&nbsp;
-                        <a id="explain-link" target="_blank" href="#">LINK</a>
-                        <p class="mt-3">
-                            <i class="p-1 border border-secondary rounded" id="explain-type">TYPE</i>
-                            <span id="explain-related-entity"> &rarr; <a target="_blank"
-                                                                         href="#">RELATED_ENTITY</a></span>
-                        </p>
-                        <p id="explain-content">CONTENT</p>
-                    </li>
-                </ul>
+                <div id="explain-text">TEXT</div>
+                <li hidden id="explain-template">
+                    <span class="badge badge-info evidence-index"></span>&nbsp;
+                    <a class="explain-link" target="_blank" href="#">LINK</a>
+                    <p class="mt-3">
+                        <i class="p-1 border border-secondary rounded explain-type">TYPE</i>
+                        <span class="explain-related-entity"> &rarr; <a target="_blank"
+                                                                        href="#">RELATED_ENTITY</a></span>
+                    </p>
+                    <p class="explain-content">CONTENT</p>
+                </li>
             </div>
         </div>
     </div>
@@ -546,35 +545,43 @@
                 .html(escapeText(entity.substring(1, entity.length - 1)).replace(/_/g, '&nbsp;'))
                 .attr('href', 'https://www.wikipedia.org/wiki/' + encodeURI(entity.substring(1, entity.length - 1)));
 
-            var explainInfo = data.topResults[eIndex].subInstances[siIndex].qfact.explainStr.split('\t');
+            var explainEvidences = $('<ul class="mt-3"></ul>');
+            var explainInfos = data.topResults[eIndex].subInstances[siIndex].qfact.explainStr.split('\r\n');
+            for (var i = 0; i < explainInfos.length; ++i) {
+                var explainInfo = explainInfos[i].split('\t');
+                var explainEvi = $('#explain-template').clone().removeAttr('id').removeAttr('hidden');
+                explainEvi.find('.evidence-index').text('Evidence ' + (i + 1));
+                var explainLink = explainInfo[2];
+                if (explainLink.startsWith("STICS:Link:")) {
+                    explainLink = explainLink.substr(11);
+                } else if (explainLink.startsWith("NYT:Link:")) {
+                    explainLink = explainLink.substr(9);
+                } else if (explainLink.startsWith("WIKIPEDIA:Link:")) {
+                    explainLink = explainLink.substr(15);
+                }
+                explainEvi.find('.explain-link').text(explainLink).attr('href', explainLink);
 
-            var explainLink = explainInfo[2];
-            if (explainLink.startsWith("STICS:Link:")) {
-                explainLink = explainLink.substr(11);
-            } else if (explainLink.startsWith("NYT:Link:")) {
-                explainLink = explainLink.substr(9);
-            } else if (explainLink.startsWith("WIKIPEDIA:Link:")) {
-                explainLink = explainLink.substr(15);
-            }
-            $('#explain-link').text(explainLink).attr('href', explainLink);
+                var relatedEntity = explainInfo[0];
+                if (relatedEntity == data.topResults[eIndex].entity) {
+                    explainEvi.find('.explain-type').text("Exact-Entity")
+                    explainEvi.find('.explain-related-entity').attr('hidden', 'hidden');
+                } else {
+                    explainEvi.find('.explain-type').text("Type-Related")
+                    explainEvi.find('.explain-related-entity').removeAttr('hidden');
+                    explainEvi.find('.explain-related-entity a')
+                        .html(escapeText(relatedEntity.substring(1, relatedEntity.length - 1)).replace(/_/g, '&nbsp;'))
+                        .attr('href', 'https://www.wikipedia.org/wiki/' + encodeURI(relatedEntity.substring(1, relatedEntity.length - 1)));
+                }
+                var explainContent = escapeText(explainInfo[1]);
+                if (explainInfo[3] != "null") {
+                    explainContent = escapeText(explainInfo[3])
+                        + "<br>...<br>" + explainContent;
+                }
+                explainEvi.find('.explain-content').html(explainContent);
 
-            var relatedEntity = explainInfo[0];
-            if (relatedEntity == data.topResults[eIndex].entity) {
-                $('#explain-type').text("Exact-Entity")
-                $('#explain-related-entity').attr('hidden', 'hidden');
-            } else {
-                $('#explain-type').text("Type-Related")
-                $('#explain-related-entity').removeAttr('hidden');
-                $('#explain-related-entity a')
-                    .html(escapeText(relatedEntity.substring(1, relatedEntity.length - 1)).replace(/_/g, '&nbsp;'))
-                    .attr('href', 'https://www.wikipedia.org/wiki/' + encodeURI(relatedEntity.substring(1, relatedEntity.length - 1)));
+                explainEvidences.append(explainEvi);
             }
-            var explainContent = escapeText(explainInfo[1]);
-            if (explainInfo[3] != "null") {
-                explainContent = escapeText(explainInfo[3])
-                    + "<br>...<br>" + explainContent;
-            }
-            $('#explain-content').html(explainContent);
+            $('#explain-text').empty().append(explainEvidences);
 
             $('#explain-info').modal('show');
         });
