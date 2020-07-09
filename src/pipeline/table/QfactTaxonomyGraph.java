@@ -9,6 +9,7 @@ import model.context.ContextEmbeddingMatcher;
 import model.quantity.Quantity;
 import model.quantity.QuantityDomain;
 import nlp.NLP;
+import org.json.JSONArray;
 import util.FileUtils;
 import util.Pair;
 import yago.TaxonomyGraph;
@@ -82,7 +83,7 @@ public class QfactTaxonomyGraph {
 
     private int relatedEntityDistanceLimit;
 
-    private Long2ObjectOpenHashMap<Pair<Double, EntityTextQfact>> cache = new Long2ObjectOpenHashMap<>(10000000);
+    private Long2ObjectOpenHashMap cache = new Long2ObjectOpenHashMap(10000000);
 
     public TaxonomyGraph taxonomy;
 
@@ -174,15 +175,15 @@ public class QfactTaxonomyGraph {
         ).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    // returns Pair<score, matchedQfactStr>
-    // returns null of cannot match.
-    public Pair<Double, EntityTextQfact> getMatchScore(String entity, String context, Quantity quantity, int key) {
+    // returns Pair<score, matchedQfactStr>, matchedQfactStr is a string of ids in JSONArray format:e.g., [1,2,3,4]
+    // returns null if cannot match.
+    public Pair<Double, String> getMatchScore(String entity, String context, Quantity quantity, int key) {
         Integer entityId = taxonomy.entity2Id.get(entity);
         if (entityId == null) {
             return null;
         }
         long globalKey = 1000000000L * entityId + key;
-        Pair<Double, EntityTextQfact> result = cache.get(globalKey);
+        Pair<Double, String> result = (Pair<Double, String>) cache.get(globalKey);
         if (result != null) {
             return result.second == null ? null : result;
         }
@@ -194,9 +195,8 @@ public class QfactTaxonomyGraph {
         ArrayList<String> thisContext = NLP.splitSentence(context.toLowerCase());
 
         ObjectHeapPriorityQueue<Pair<Double, EntityTextQfact>> queue = new ObjectHeapPriorityQueue<>((a, b) -> {
-            int i = a.first.compareTo(b.first);
-            if (i != 0) {
-                return i;
+            if (Math.abs(a.first - b.first) > 1e-6) {
+                return a.first.compareTo(b.first);
             }
             if (a.second != null && entity.equals(a.second.entity)) {
                 return 1;
@@ -236,7 +236,7 @@ public class QfactTaxonomyGraph {
                 qfacts = entityQfactLists[p.getKey()];
 
                 long localKey = -(1000000000L * (p.getKey() + 1) + key);
-                Pair<Double, EntityTextQfact> singleEntityResult = cache.get(localKey);
+                Pair<Double, EntityTextQfact> singleEntityResult = (Pair<Double, EntityTextQfact>) cache.get(localKey);
                 if (singleEntityResult == null) {
                     singleEntityResult = new Pair<>(0.0, null);
                     for (EntityTextQfact o : qfacts) {
@@ -271,12 +271,19 @@ public class QfactTaxonomyGraph {
         }
 
         result = new Pair<>(0.0, null);
+        LinkedList<Integer> bgEvidenceQfactIds = null;
         while (!queue.isEmpty()) {
             Pair<Double, EntityTextQfact> top = queue.dequeue();
             result.first += top.first / NTOP_RELATED_ENTITY;
-            if (queue.isEmpty()) {
-                result.second = top.second;
+            if (top.second != null) {
+                if (bgEvidenceQfactIds == null) {
+                    bgEvidenceQfactIds = new LinkedList<>();
+                }
+                bgEvidenceQfactIds.addFirst(top.second.id);
             }
+        }
+        if (bgEvidenceQfactIds != null) {
+            result.second = new JSONArray(bgEvidenceQfactIds).toString();
         }
 
         if (key >= 0) {

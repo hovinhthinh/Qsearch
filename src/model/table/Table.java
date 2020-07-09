@@ -47,7 +47,8 @@ public class Table implements Serializable {
         return getTableContentPrintable(showAnnotations, multipleLine, printColumnIndex, false);
     }
 
-    // for debugging TextBasedColumnScoringNode.
+    // for debugging TextBasedColumnScoringNode: A string of Qfact ids in JSONArray format:e.g., [1,2,3,4].
+    // The actual Qfacts are from QfactTaxonomyGraph.QFACT_FILE
     public String[][] QfactMatchingStr;
 
     public String getTableRawContentForSearch() {
