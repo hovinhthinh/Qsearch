@@ -353,7 +353,7 @@
                 } else if (j == si.qfact.qCol) {
                     var quantitySpan = escapeText(si.qfact.quantitySpan);
                     text = text.replace(quantitySpan, '<span class="quantity-box ' + (subInstanceIndex == 0 ? 'converted-quantity' : 'converted-quantity-2') + '"' +
-                        ' data-animation="true" data-placement="top" data-trigger="hover" data-html="true"' +
+                        ' data-animation="true" data-placement="right" data-trigger="hover" data-html="true"' +
                         ' data-content="Equals: ' +
                         (si.quantityConvertedStr == null ? "null" : si.quantityConvertedStr) +
                         '">' + quantitySpan + '</span>');
