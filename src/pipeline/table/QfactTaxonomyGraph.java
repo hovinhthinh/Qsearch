@@ -19,8 +19,9 @@ import java.util.stream.Collectors;
 
 public class QfactTaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(QfactTaxonomyGraph.class.getName());
-    public static final boolean DEBUG = true;
-    public static final String DEFAULT_QFACT_FILE = "table-non-deep/qfact_text_coref.gz";
+
+    // The order of the lines are important (they are IDs).
+    public static final String QFACT_FILE = "table-non-deep/qfact_text_coref.gz";
 
     public static int DEFAULT_RELATED_ENTITY_DIST_LIM = 4;
     public static int NTOP_RELATED_ENTITY = 5;
@@ -38,6 +39,7 @@ public class QfactTaxonomyGraph {
     }
 
     public static class EntityTextQfact {
+        int id;
         String entity;
         ArrayList<String> context;
         Quantity quantity;
@@ -47,8 +49,32 @@ public class QfactTaxonomyGraph {
 
         @Override
         public String toString() {
-            return DEBUG ? String.format("%s\t%s\t%s\t%s", entity, sentence, source, referSentence) : "<OMITTED>";
+            return String.format("%s\t%s\t%s\t%s", entity, sentence, source, referSentence);
         }
+    }
+
+    public static HashMap<Integer, EntityTextQfact> loadBackgroundTextQfactMap() {
+        HashMap<Integer, EntityTextQfact> map = new HashMap<>();
+        int id = 0;
+        for (String line : FileUtils.getLineStream(QFACT_FILE, "UTF-8")) {
+            String[] arr = line.split("\t");
+            EntityTextQfact qfact = new EntityTextQfact();
+            qfact.id = id++;
+            qfact.entity = arr[0];
+            qfact.quantity = Quantity.fromQuantityString(arr[2]);
+            if (QuantityDomain.getDomain(qfact.quantity).equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+                arr[1] += " " + qfact.quantity.unit;
+            }
+            qfact.context = NLP.splitSentence(arr[1].toLowerCase());
+            qfact.context.trimToSize();
+
+            qfact.sentence = arr[3];
+            qfact.source = arr[4];
+            qfact.referSentence = arr[5];
+
+            map.put(qfact.id, qfact);
+        }
+        return map;
     }
 
     private ArrayList<EntityTextQfact>[] entityQfactLists;
@@ -64,7 +90,7 @@ public class QfactTaxonomyGraph {
         cache.clear();
     }
 
-    public QfactTaxonomyGraph(String qfactFile, int relatedEntityDistanceLimit) {
+    public QfactTaxonomyGraph(int relatedEntityDistanceLimit) {
         this.taxonomy = TaxonomyGraph.getDefaultGraphInstance();
         this.relatedEntityDistanceLimit = relatedEntityDistanceLimit;
         LOGGER.info("Loading YAGO Qfact taxonomy graph");
@@ -72,27 +98,11 @@ public class QfactTaxonomyGraph {
         for (int i = 0; i < taxonomy.nEntities; ++i) {
             entityQfactLists[i] = new ArrayList<>();
         }
-        for (String line : FileUtils.getLineStream(qfactFile, "UTF-8")) {
-            String[] arr = line.split("\t");
-            Integer entityId = taxonomy.entity2Id.get(arr[0]);
+        for (EntityTextQfact qfact : loadBackgroundTextQfactMap().values()) {
+            Integer entityId = taxonomy.entity2Id.get(qfact.entity);
             if (entityId == null) {
                 continue;
             }
-            EntityTextQfact qfact = new EntityTextQfact();
-            qfact.entity = arr[0];
-            qfact.quantity = Quantity.fromQuantityString(arr[2]);
-            if (QuantityDomain.getDomain(qfact.quantity).equals(QuantityDomain.Domain.DIMENSIONLESS)) {
-                arr[1] += " " + qfact.quantity.unit;
-            }
-            qfact.context = NLP.splitSentence(arr[1].toLowerCase());
-            qfact.context.trimToSize();
-
-            if (DEBUG) {
-                qfact.sentence = arr[3];
-                qfact.source = arr[4];
-                qfact.referSentence = arr[5];
-            }
-
             entityQfactLists[entityId].add(qfact);
         }
 
@@ -128,7 +138,7 @@ public class QfactTaxonomyGraph {
     }
 
     public QfactTaxonomyGraph() {
-        this(DEFAULT_QFACT_FILE, DEFAULT_RELATED_ENTITY_DIST_LIM);
+        this(DEFAULT_RELATED_ENTITY_DIST_LIM);
     }
 
     // returns Pair<entityId, agreement with key entity>
