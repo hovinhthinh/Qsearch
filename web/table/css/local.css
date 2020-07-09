@@ -44,6 +44,10 @@
     background: #ffffcc;
 }
 
+.popover-converted-quantity .popover-body {
+    padding: 5px 10px;
+}
+
 .entity-box {
     border-radius: 5px;
     background: #e6ffcc;
