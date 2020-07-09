@@ -298,8 +298,8 @@
         quantityConstraintDetail += " )";
 
         $('#parsed').html('Parsed:&nbsp;&nbsp;&nbsp;' + '<span class="entity-box">' + escapeText(type) + '</span>'
-            + " &rarr; " + '<span class="context-box">' + escapeText(context) + '</span>'
-            + " &rarr; " + '<span id="quantity-constraint" class="quantity-box" data-animation="true" data-placement="bottom" data-html="true">' + escapeText(quantity['phrase']) + '</span>'
+            + " - " + '<span class="context-box">' + escapeText(context) + '</span>'
+            + " - " + '<span id="quantity-constraint" class="quantity-box" data-animation="true" data-placement="bottom" data-html="true">' + escapeText(quantity['phrase']) + '</span>'
             + ' <span class="badge badge-pill badge-danger">Domain: ' + escapeText(quantity['fineGrainedDomain']) + '</span>');
         $('#quantity-constraint').attr('data-content', quantityConstraintDetail);
     }
