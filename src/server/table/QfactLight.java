@@ -1,6 +1,6 @@
 package server.table;
 
-public class QfactLight {
+public class QfactLight implements Cloneable {
     public double linkingScore;
 
     public String entity;
@@ -15,7 +15,13 @@ public class QfactLight {
 
     public String tableId;
 
+    public String explainQfactIds;
     public String explainStr;
 
     public int row, eCol, qCol;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

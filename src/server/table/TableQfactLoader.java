@@ -64,7 +64,7 @@ public class TableQfactLoader {
                         f.eCol = table.quantityToEntityColumn[qCol];
 
                         if (loadExplainStr) {
-                            f.explainStr = table.QfactMatchingStr[row][qCol];
+                            f.explainQfactIds = table.QfactMatchingStr[row][qCol];
                         }
 
                         QFACTS.add(f);
