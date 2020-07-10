@@ -106,6 +106,13 @@ public class SearchHandler extends HttpServlet {
                     typeConstraint = parsed.first;
                     contextConstraint = parsed.second;
                     quantityConstraint = parsed.third;
+                    LOGGER.info("Parsed query: {Type: \"" + typeConstraint + "\"; Context: \"" + contextConstraint +
+                            "\"; Quantity: \"" + quantityConstraint + "\"}");
+                }
+            } else if (typeConstraint != null) {
+                String suggestedType = SimpleQueryParser.suggestATypeFromRaw(typeConstraint);
+                if (suggestedType != null) {
+                    typeConstraint = suggestedType;
                 }
             }
             if (response.verdict == null) {

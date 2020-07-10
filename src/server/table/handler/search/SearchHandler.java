@@ -96,6 +96,11 @@ public class SearchHandler extends HttpServlet {
                     LOGGER.info("Parsed query: {Type: \"" + typeConstraint + "\"; Context: \"" + contextConstraint +
                             "\"; Quantity: \"" + quantityConstraint + "\"}");
                 }
+            } else if (typeConstraint != null) {
+                String suggestedType = SimpleQueryParser.suggestATypeFromRaw(typeConstraint);
+                if (suggestedType != null) {
+                    typeConstraint = suggestedType;
+                }
             }
             if (response.verdict == null) {
                 Pair<QuantityConstraint, ArrayList<ResultInstance>> result =
