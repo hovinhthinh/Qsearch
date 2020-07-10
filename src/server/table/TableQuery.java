@@ -291,7 +291,13 @@ public class TableQuery {
             i = j;
         }
 
-        Collections.sort(result.second, (o1, o2) -> Double.compare(o2.score, o1.score));
+        Collections.sort(result.second, (o1, o2) -> {
+            if (Math.abs(o1.score - o2.score) > 1e-6) {
+                return Double.compare(o2.score, o1.score);
+            }
+            // Entities with same score are ordered by estimated popularity.
+            return Integer.compare(o2.subInstances.get(0).qfact.estimatedPopularity, o1.subInstances.get(0).qfact.estimatedPopularity);
+        });
 
         return result;
     }
