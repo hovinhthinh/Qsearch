@@ -166,7 +166,7 @@
                     <div>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rdsh;
-                        <span class="badge badge-secondary badge-pill explain-type">TYPE</span>
+                        <span class="badge badge-pill explain-type">TYPE</span>
                         <span class="h6 explain-related-entity">
                             &rarr; <a target="_blank" href="#">RELATED_ENTITY</a></span>
                     </div>
@@ -569,10 +569,10 @@
 
                 var relatedEntity = explainInfo[0];
                 if (relatedEntity == data.topResults[eIndex].entity) {
-                    explainEvi.find('.explain-type').text("Exact-Entity")
+                    explainEvi.find('.explain-type').text("Exact-Entity").addClass('badge-primary');
                     explainEvi.find('.explain-related-entity').attr('hidden', 'hidden');
                 } else {
-                    explainEvi.find('.explain-type').text("Type-Related")
+                    explainEvi.find('.explain-type').text("Type-Related").addClass('badge-secondary');
                     explainEvi.find('.explain-related-entity').removeAttr('hidden');
                     explainEvi.find('.explain-related-entity a')
                         .html(escapeText(relatedEntity.substring(1, relatedEntity.length - 1)).replace(/_/g, '&nbsp;'))
