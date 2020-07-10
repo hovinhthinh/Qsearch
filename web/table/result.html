@@ -159,15 +159,17 @@
             <div class="modal-body">
                 <div id="explain-table">TABLE</div>
                 <div id="explain-text">TEXT</div>
-                <li hidden id="explain-template">
+                <li hidden id="explain-template" class="mt-3">
                     <span class="badge badge-info evidence-index"></span>&nbsp;
                     <a class="explain-link" target="_blank" href="#">LINK</a>
-                    <p class="mt-3">
-                        <i class="p-1 border border-secondary rounded explain-type">TYPE</i>
-                        <span class="explain-related-entity"> &rarr; <a target="_blank"
-                                                                        href="#">RELATED_ENTITY</a></span>
-                    </p>
-                    <p class="explain-content">CONTENT</p>
+                    <div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rdsh;
+                        <span class="badge badge-secondary badge-pill explain-type">TYPE</span>
+                        <span class="h6 explain-related-entity">
+                            &rarr; <a target="_blank" href="#">RELATED_ENTITY</a></span>
+                    </div>
+                    <div class="mt-2 explain-content">CONTENT</div>
                 </li>
             </div>
         </div>
@@ -545,7 +547,7 @@
                 .html(escapeText(entity.substring(1, entity.length - 1)).replace(/_/g, '&nbsp;'))
                 .attr('href', 'https://www.wikipedia.org/wiki/' + encodeURI(entity.substring(1, entity.length - 1)));
 
-            var explainEvidences = $('<ul class="mt-3"></ul>');
+            var explainEvidences = $('<ul></ul>');
             var explainInfos = data.topResults[eIndex].subInstances[siIndex].qfact.explainStr.split('\r\n');
             for (var i = 0; i < explainInfos.length; ++i) {
                 var explainInfo = explainInfos[i].split('\t');
