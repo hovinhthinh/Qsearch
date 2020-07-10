@@ -159,6 +159,9 @@ public class QfactTaxonomyGraph {
                 if (p.second > relatedEntityDistanceLimit - e.getIntValue()) {
                     break;
                 }
+                if (p.first == entityId) {
+                    continue;
+                }
                 // Update agreement (now using Itf)
                 if (entityId2Itf.getOrDefault(p.first, 0.0) < taxonomy.type2Itf[e.getIntKey()]) {
                     entityId2Itf.put(p.first, taxonomy.type2Itf[e.getIntKey()]);
