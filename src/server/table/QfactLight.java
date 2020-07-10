@@ -6,6 +6,8 @@ public class QfactLight implements Cloneable {
     public String entity;
     public String entitySpan;
 
+    public int estimatedPopularity; // this is estimated based on the number of Qfacts extracted, not the real popularity.
+
     public String quantity;
     public String quantitySpan;
     public String domain;

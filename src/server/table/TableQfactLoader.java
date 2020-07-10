@@ -27,6 +27,8 @@ public class TableQfactLoader {
         String wikiFile = "/GW/D5data-13/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id_annotation+linking_new.gz";
         String tablemFile = "/GW/D5data-13/hvthinh/TABLEM/all/all+id.annotation+linking_new.gz";
 
+        HashMap<String, Integer> popularityMap = new HashMap<>();
+
         for (String file : Arrays.asList(tablemFile, wikiFile))
             for (String line : FileUtils.getLineStream(file, "UTF-8")) {
                 Table table = Gson.fromJson(line, Table.class);
@@ -68,9 +70,14 @@ public class TableQfactLoader {
                         }
 
                         QFACTS.add(f);
+
+                        popularityMap.put(f.entity, popularityMap.getOrDefault(f.entity, 0) + 1);
                     }
                 }
             }
+        for (QfactLight f : QFACTS) {
+            f.estimatedPopularity = popularityMap.get(f.entity);
+        }
         Collections.sort(QFACTS, (o1, o2) -> o1.entity.compareTo(o2.entity));
         LOADED = true;
         return QFACTS;
