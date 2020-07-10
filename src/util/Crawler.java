@@ -27,7 +27,7 @@ public class Crawler {
     private static final String J_ACCEPT_ENCODING = "gzip,deflate,sdch";
     private static final String J_ACCEPT_LANGUAGE = "vi-VN,vi;q=0.8,fr-FR;q=0.6,fr;q=0.4,en-US;q=0.2,en;q=0.2";
 
-    private static final int NUM_RETRY_CONNECTION = 5;
+    private static final int NUM_RETRY_CONNECTION = 3;
 
 
     private static HttpURLConnection connect(URL url, Map<String, String> extendedHeader, Proxy proxy, String method) {
