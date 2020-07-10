@@ -105,7 +105,7 @@ public class SimpleQueryParser {
         return NLP.stripSentence(query);
     }
 
-    private static String suggestATypeFromRaw(String rawType) {
+    public synchronized static String suggestATypeFromRaw(String rawType) {
         String mostSimilarType = null;
         double similarityScore = -1;
         ArrayList<String> inputType = NLP.splitSentence(NLP.fastStemming(rawType, Morpha.noun));
