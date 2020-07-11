@@ -25,9 +25,12 @@ public class FileSplitter {
             File outputFolder = (args.length == 3) ? new File(args[2]) : new File(args[0] + ".slices");
             outputFolder.mkdir();
 
-            PrintWriter[] outs = new PrintWriter[Integer.parseInt(args[1])];
-            for (int i = 0; i < outs.length; ++i) {
+            int nParts = Integer.parseInt(args[1]);
+            PrintWriter[] outs = new PrintWriter[nParts];
+            ArrayList<Integer> outputPos = new ArrayList<>();
+            for (int i = 0; i < nParts; ++i) {
                 outs[i] = FileUtils.getPrintWriter(new File(outputFolder, String.format("part%d.gz", i)), Charset.forName("UTF-8"));
+                outputPos.add(i);
             }
 
             SelfMonitor m = new SelfMonitor(FileSplitter.class.getName() + " -- " + new File(args[0]).getName(), -1, 10);
@@ -38,8 +41,11 @@ public class FileSplitter {
                 int cur = 0;
                 while ((tarInput.getNextTarEntry()) != null) {
                     for (String line : new FileUtils.LineStream(tarInput, Charset.forName("UTF-8"), false)) {
-                        outs[cur++].println(line);
-                        if (cur == outs.length) {
+                        if (cur == 0) {
+                            Collections.shuffle(outputPos);
+                        }
+                        outs[outputPos.get(cur++)].println(line);
+                        if (cur == nParts) {
                             cur = 0;
                         }
                         m.incAndGet();
@@ -49,8 +55,11 @@ public class FileSplitter {
             } else {
                 int cur = 0;
                 for (String line : FileUtils.getLineStream(args[0], "UTF-8")) {
-                    outs[cur++].println(line);
-                    if (cur == outs.length) {
+                    if (cur == 0) {
+                        Collections.shuffle(outputPos);
+                    }
+                    outs[outputPos.get(cur++)].println(line);
+                    if (cur == nParts) {
                         cur = 0;
                     }
                     m.incAndGet();
