@@ -173,7 +173,7 @@
         </tr>
     </table>
 </footer>
-<img id="loading" src="img/loading.gif" style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"/>
+<img hidden id="loading" src="img/loading.gif" style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"/>
 <script src="js/local.js" crossorigin="anonymous"></script>
 
 <script>
@@ -502,6 +502,7 @@
                 $("#type").attr('disabled', 'disabled');
                 $("#context").attr('disabled', 'disabled');
                 $("#quantity").attr('disabled', 'disabled');
+                $("#loading").removeAttr('hidden');
             },
             success: function (response) {
                 data = response;
