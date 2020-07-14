@@ -180,7 +180,7 @@
 <script src="js/local.js" crossorigin="anonymous"></script>
 <style>
     .result-img {
-        max-height: 125px;
+        max-height: 75px;
         height: auto;
         width: auto;
     }
@@ -581,7 +581,7 @@
                 var explainContent = escapeText(explainInfo[1]);
                 if (explainInfo[3] != "null") {
                     explainContent = escapeText(explainInfo[3])
-                        + "<br>...<br>" + explainContent;
+                        + "<br/>...<br/>" + explainContent;
                 }
                 explainEvi.find('.explain-content').html(explainContent);
 
@@ -606,7 +606,7 @@
             if ($(current).attr('href') in wikiLinkToImageMap) {
                 if (wikiLinkToImageMap[$(current).attr('href')] != 'None') {
                     // $(current).attr("data-content", wikiLinkToImageMap[$(current).attr('href')]);
-                    $(current).parent().append($('</br>' + wikiLinkToImageMap[$(current).attr('href')]).addClass('mt-1 rounded result-img'));
+                    $(current).parent().append($('<br/>')).append($(wikiLinkToImageMap[$(current).attr('href')]));
                     $(current).popover();
                     if ($(current).is(':hover')) {
                         $(current).trigger('mouseenter');
@@ -621,9 +621,9 @@
                     dataType: "json",
                     success: function (data) {
                         if ("imgLink" in data) {
-                            var imgLink = "<img referrerpolicy=\"no-referrer\" style=\"object-fit: contain;\" src=\"" + data["imgLink"] + "\" class=\"img-responsive img-fluid\">";
+                            var imgLink = "<img class=\"mt-2 rounded result-img\" referrerpolicy=\"no-referrer\" style=\"object-fit: contain;\" src=\"" + data["imgLink"] + "\" class=\"img-responsive img-fluid\">";
                             // $(current).attr("data-content", imgLink);
-                            $(current).parent().append($('</br>' + imgLink).addClass('mt-1 rounded result-img'));
+                            $(current).parent().append($('<br/>')).append($(imgLink));
                             wikiLinkToImageMap[$(current).attr("href")] = imgLink;
                             $(current).popover();
                             if ($(current).is(':hover')) {
