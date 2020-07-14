@@ -247,7 +247,7 @@
             titleText = wrapContextBox(titleText, token);
         }
         titleText = titleText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
-        title.html('<span class="badge badge-pill badge-warning">Title</span> <span class="font-weight-bold small">'
+        title.html('<span class="badge badge-pill badge-warning">Pg-Title</span> <span class="font-weight-bold small">'
             + titleText + '</span>');
         preTables.eq(0).children().eq(0).children().eq(0).append(title);
 
@@ -256,7 +256,7 @@
         if (st.length > 1 || st[0] != "") {
             for (var i = 0; i < st.length; ++i) {
                 var subTitles = $('<div>');
-                var content = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                var content = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 for (var j = 0; j < i; ++j) {
                     content += '&nbsp;&nbsp;&nbsp;&nbsp;';
                 }
