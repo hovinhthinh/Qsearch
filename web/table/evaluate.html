@@ -569,9 +569,9 @@
         var params = {
             corpus: JSON.stringify($("#corpus").val()),
             // ntop: $("#ntop").val(),
-            ntop: 10,
+            ntop: '10',
             // 'linking-threshold': $("#linking-threshold").val()
-            'linking-threshold': 0.6
+            'linking-threshold': '0.6'
         };
         if ($.cookie('part_search_table') != "1") {
             if ($("#full").val().trim() == "") {
