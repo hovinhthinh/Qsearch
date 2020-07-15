@@ -5,13 +5,15 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.compressors.CompressorException;
-import org.apache.commons.compress.compressors.CompressorStreamFactory;
-import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class FileUtils {
     private static InputStream getFileDecodedStream(File file) throws IOException, CompressorException {
@@ -32,7 +34,7 @@ public class FileUtils {
         // Handle .tar.gz, read only the first file entry of tar file.
         if (file.getName().toLowerCase().endsWith(".tar.gz")) {
             TarArchiveInputStream tarInput =
-                    new TarArchiveInputStream(new GzipCompressorInputStream(new FileInputStream(file)));
+                    new TarArchiveInputStream(new GZIPInputStream(new FileInputStream(file)));
             TarArchiveEntry currentEntry;
             while ((currentEntry = tarInput.getNextTarEntry()) != null) {
                 if (currentEntry.isDirectory()) {
@@ -46,23 +48,20 @@ public class FileUtils {
         // Everything else.
         int dot = file.getName().lastIndexOf(".");
         String extension = dot == -1 ? null : file.getName().substring(dot + 1).toLowerCase();
+
+        InputStream stream = new FileInputStream(file);
         if (extension == null) {
-            return new FileInputStream(file);
+            return stream;
         }
-        String compressorName;
         switch (extension) {
             case "gz":
-                compressorName = CompressorStreamFactory.GZIP;
-                break;
+                return new GZIPInputStream(stream);
             case "bz2":
-                compressorName = CompressorStreamFactory.BZIP2;
-                break;
+                return new BZip2CompressorInputStream(stream);
             // More extensions here.
             default:
-                compressorName = null;
+                return stream;
         }
-        return compressorName == null ? new FileInputStream(file) :
-                new CompressorStreamFactory().createCompressorInputStream(compressorName, new FileInputStream(file));
     }
 
     private static InputStream getResourceDecodedStream(String file) throws IOException, CompressorException {
@@ -83,7 +82,7 @@ public class FileUtils {
         // Handle .tar.gz, read only the first file entry of tar file.
         if (file.toLowerCase().endsWith(".tar.gz")) {
             TarArchiveInputStream tarInput =
-                    new TarArchiveInputStream(new GzipCompressorInputStream(FileUtils.class.getClassLoader().getResourceAsStream(file)));
+                    new TarArchiveInputStream(new GZIPInputStream(FileUtils.class.getClassLoader().getResourceAsStream(file)));
             TarArchiveEntry currentEntry;
             while ((currentEntry = tarInput.getNextTarEntry()) != null) {
                 if (currentEntry.isDirectory()) {
@@ -97,45 +96,39 @@ public class FileUtils {
         // Everything else.
         int dot = file.lastIndexOf(".");
         String extension = dot == -1 ? null : file.substring(dot + 1).toLowerCase();
+
+        InputStream stream = FileUtils.class.getClassLoader().getResourceAsStream(file);
         if (extension == null) {
-            return FileUtils.class.getClassLoader().getResourceAsStream(file);
+            return stream;
         }
-        String compressorName;
         switch (extension) {
             case "gz":
-                compressorName = CompressorStreamFactory.GZIP;
-                break;
+                return new GZIPInputStream(stream);
             case "bz2":
-                compressorName = CompressorStreamFactory.BZIP2;
-                break;
+                return new BZip2CompressorInputStream(stream);
             // More extensions here.
             default:
-                compressorName = null;
+                return stream;
         }
-        return compressorName == null ? FileUtils.class.getClassLoader().getResourceAsStream(file) :
-                new CompressorStreamFactory().createCompressorInputStream(compressorName, FileUtils.class.getClassLoader().getResourceAsStream(file));
     }
 
     private static OutputStream getFileEncodedStream(File file) throws IOException, CompressorException {
         int dot = file.getName().lastIndexOf(".");
         String extension = dot == -1 ? null : file.getName().substring(dot + 1).toLowerCase();
+
+        OutputStream stream = new FileOutputStream(file);
         if (extension == null) {
-            return new FileOutputStream(file);
+            return stream;
         }
-        String compressorName;
         switch (extension) {
             case "gz":
-                compressorName = CompressorStreamFactory.GZIP;
-                break;
+                return new GZIPOutputStream(stream);
             case "bz2":
-                compressorName = CompressorStreamFactory.BZIP2;
-                break;
+                return new BZip2CompressorOutputStream(stream);
             // More extensions here.
             default:
-                compressorName = null;
+                return stream;
         }
-        return compressorName == null ? new FileOutputStream(file) :
-                new CompressorStreamFactory().createCompressorOutputStream(compressorName, new FileOutputStream(file));
     }
 
     public static ArrayList<String> getLines(File file, Charset charset) {
