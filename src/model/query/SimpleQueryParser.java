@@ -147,22 +147,23 @@ public class SimpleQueryParser {
         LOGGER.info("Preprocessed_query: " + rawQuery);
         Triple<String, String, String> result = new Triple<>();
         try {
-            List<PostaggedToken> tagged = JavaConversions.seqAsJavaList(Static.getOpenIe().postagger().postagTokenized(
-                    Static.getOpenIe().tokenizer().tokenize(rawQuery)));
-
+            ArrayList<PostaggedToken> tagged = new ArrayList<>(JavaConversions.seqAsJavaList(Static.getOpenIe().postagger().postagTokenized(
+                    Static.getOpenIe().tokenizer().tokenize(rawQuery))));
             // type
             String typeFromTypeSuggestionSystem = null;
 
             StringBuilder rawTokenizedSb = new StringBuilder();
             StringBuilder postag = new StringBuilder();
-            for (PostaggedToken w : tagged) {
+            for (int i = 0; i < tagged.size(); ++i) {
+                PostaggedToken w = tagged.get(i);
                 if (rawTokenizedSb.length() > 0) {
                     rawTokenizedSb.append(" ");
                 }
                 postag.append(new Pair(w.string(), w.postag())).append(" ");
                 rawTokenizedSb.append(w.string());
                 String rawTokenizedSbStr = rawTokenizedSb.toString();
-                if (useTypeSuggestion && TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun)) >= SUGGESTING_THRESHOLD) {
+                if (useTypeSuggestion && TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun)) >= SUGGESTING_THRESHOLD
+                        && (i == tagged.size() - 1 || !tagged.get(i + 1).postag().startsWith("NN"))) {
                     typeFromTypeSuggestionSystem = rawTokenizedSbStr;
                 }
             }
