@@ -206,10 +206,10 @@ public class QuantityConstraint {
         public static final int APPROXIMATE_THRESHOLD = 1000;
         public static final double APPROXIMATE_RATE = 0.01;
         public static final ArrayList<String> UPPER_BOUND_SIGNAL = new ArrayList<>(Arrays.asList(
-                "less than", "within", "below", "lesser", "lower than", "under", "at most", "up to", "smaller than", "<", "<="
+                "less than", "below", "fewer than", "lower than", "under", "at most", "up to", "smaller than", "within", "<", "<="
         ));
         public static final ArrayList<String> LOWER_BOUND_SIGNAL = new ArrayList<>(Arrays.asList(
-                "more than", "above", "higher than", "above", "at least", "over", "greater than", ">", ">="
+                "more than", "larger than", "bigger than", "above", "higher than", "above", "at least", "over", "greater than", ">", ">="
         ));
         public static final ArrayList<String> EXACT_SIGNAL = new ArrayList<>(Arrays.asList(
                 "exactly", "exact"
