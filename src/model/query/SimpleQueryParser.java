@@ -44,15 +44,20 @@ public class SimpleQueryParser {
         query = query.replaceFirst("^(what|where|which|who) ", "");
         query = query.replaceFirst("^(am|is|are|was|were|be) ", "");
 
+        int lastPos = -1;
+        String lastOperator = null;
         // optimize resolution code, map to standard resolution code (except for RANGE)
         for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS.keySet()) {
             int p = query.indexOf(" " + operator + " ");
-            if (p != -1) {
-                query = query.substring(0, p)
-                        + " " + QuantityConstraint.QuantityResolution.ALL_SIGNALS.get(operator).first + " "
-                        + query.substring(p + operator.length() + 2);
-                break;
+            if (p > lastPos) {
+                lastPos = p;
+                lastOperator = operator;
             }
+        }
+        if (lastPos != -1) {
+            query = query.substring(0, lastPos)
+                    + " " + QuantityConstraint.QuantityResolution.ALL_SIGNALS.get(lastOperator).first + " "
+                    + query.substring(lastPos + lastOperator.length() + 2);
         }
         // optimize for RANGE "-"
         Matcher m = RANGE_OPTIMIZE_PATTERN.matcher(query);
