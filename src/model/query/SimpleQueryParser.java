@@ -6,6 +6,7 @@ import edu.knowitall.tool.postag.PostaggedToken;
 import model.context.ContextEmbeddingMatcher;
 import model.quantity.QuantityConstraint;
 import model.quantity.QuantityDomain;
+import nlp.Glove;
 import nlp.NLP;
 import nlp.Static;
 import scala.collection.JavaConversions;
@@ -29,6 +30,7 @@ public class SimpleQueryParser {
             new HashSet<>(Arrays.asList("that", "which", "where", "when", "who", "whom", "with", "whose"));
 
     private static final int SUGGESTING_THRESHOLD = 50;
+    private static final double MIN_SUGGESTING_CONF = 0.85;
 
     private static final Pattern MULTIPLIER_OPTIMIZE_PATTERN =
             Pattern.compile("(\\$\\s*|\\b)\\d+(\\.\\d+)?(k|m|b)(\\s*\\$|\\b)");
@@ -113,9 +115,16 @@ public class SimpleQueryParser {
     public synchronized static String suggestATypeFromRaw(String rawType) {
         String mostSimilarType = null;
         double similarityScore = -1;
-        ArrayList<String> inputType = NLP.splitSentence(NLP.fastStemming(rawType, Morpha.noun));
+        rawType = NLP.fastStemming(rawType, Morpha.noun);
+        ArrayList<String> inputType = NLP.splitSentence(rawType);
+        String inputTypeHead = NLP.getHeadWord(rawType, true);
         for (Pair<String, Integer> p : TypeSuggestionHandler.typeToFreq) {
             if (p.second < SUGGESTING_THRESHOLD) {
+                continue;
+            }
+            String suggestTypeHead = NLP.getHeadWord(p.first, true);
+            double headDist = Glove.cosineDistance(suggestTypeHead, inputTypeHead);
+            if (headDist < 0 || headDist > 1 - MIN_SUGGESTING_CONF) {
                 continue;
             }
             ArrayList<String> suggestType = NLP.splitSentence(p.first);
@@ -126,7 +135,7 @@ public class SimpleQueryParser {
                 mostSimilarType = p.first;
             }
         }
-        if (similarityScore >= 0.85) {
+        if (similarityScore >= MIN_SUGGESTING_CONF) {
             LOGGER.info(String.format("Suggested type: %s --> %s (conf: %.3f)", rawType, mostSimilarType, similarityScore));
             return mostSimilarType;
         }
@@ -151,8 +160,7 @@ public class SimpleQueryParser {
                 }
                 rawTokenizedSb.append(w.string());
                 String rawTokenizedSbStr = rawTokenizedSb.toString();
-                if (useTypeSuggestion && (TypeSuggestionHandler.getTypeFreq(rawTokenizedSbStr) >= SUGGESTING_THRESHOLD
-                        || TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun)) >= SUGGESTING_THRESHOLD)) {
+                if (useTypeSuggestion && TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun)) >= SUGGESTING_THRESHOLD) {
                     typeFromTypeSuggestionSystem = rawTokenizedSbStr;
                 }
             }
