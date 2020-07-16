@@ -128,6 +128,9 @@ public class SimpleQueryParser {
                 continue;
             }
             ArrayList<String> suggestType = NLP.splitSentence(p.first);
+            if (Math.abs(inputType.size() - suggestType.size()) > 1) {
+                continue;
+            }
             double sim = ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(inputType, suggestType)
                     * ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(suggestType, inputType);
             if (sim > similarityScore) {
