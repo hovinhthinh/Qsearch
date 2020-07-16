@@ -116,6 +116,10 @@ public class Quantity {
                     if (i == tokenizedText.length() || tokenizedText.charAt(i) == ' ') {
                         ++nExtendedTokens;
                         String extendedUnit = tokenizedText.substring(unitStart, i);
+                        if (extendedUnit.substring(q.units.length()).trim().equals("in")) {
+                            // not extend this token, as it could be a preposition
+                            break;
+                        }
                         if (!QuantityDomain.getFineGrainedDomainOfUnit(extendedUnit).equals(QuantityDomain.Domain.DIMENSIONLESS)) {
                             q.units = extendedUnit;
                             span.end = i - 1;
