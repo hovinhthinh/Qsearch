@@ -154,16 +154,19 @@ public class SimpleQueryParser {
             String typeFromTypeSuggestionSystem = null;
 
             StringBuilder rawTokenizedSb = new StringBuilder();
+            StringBuilder postag = new StringBuilder();
             for (PostaggedToken w : tagged) {
                 if (rawTokenizedSb.length() > 0) {
                     rawTokenizedSb.append(" ");
                 }
+                postag.append(new Pair(w.string(), w.postag())).append(" ");
                 rawTokenizedSb.append(w.string());
                 String rawTokenizedSbStr = rawTokenizedSb.toString();
                 if (useTypeSuggestion && TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun)) >= SUGGESTING_THRESHOLD) {
                     typeFromTypeSuggestionSystem = rawTokenizedSbStr;
                 }
             }
+            LOGGER.info("Postag: " + postag);
             String rawTokenized = rawTokenizedSb.toString();
 
             String typeRawStr;
