@@ -112,6 +112,7 @@ public class SimpleQueryParser {
         return NLP.stripSentence(query);
     }
 
+    // find closest related type in the YAGO dictionary, by comparing headword similarity and full string similarity
     public synchronized static String suggestATypeFromRaw(String rawType) {
         String mostSimilarType = null;
         double similarityScore = -1;
@@ -128,9 +129,11 @@ public class SimpleQueryParser {
                 continue;
             }
             ArrayList<String> suggestType = NLP.splitSentence(p.first);
-            if (Math.abs(inputType.size() - suggestType.size()) > 1) {
-                continue;
-            }
+
+            // restrict size difference
+//            if (Math.abs(inputType.size() - suggestType.size()) > 1) {
+//                continue;
+//            }
             double sim = ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(inputType, suggestType)
                     * ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(suggestType, inputType);
             if (sim > similarityScore) {
