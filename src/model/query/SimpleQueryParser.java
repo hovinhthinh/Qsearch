@@ -51,15 +51,15 @@ public class SimpleQueryParser {
         // optimize resolution code, map to standard resolution code (except for RANGE)
         for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS.keySet()) {
             int p = query.indexOf(" " + operator + " ");
-            if (p > lastPos) {
-                lastPos = p;
+            if (p != -1 && p + operator.length() + 2 > lastPos) {
+                lastPos = p + operator.length() + 2;
                 lastOperator = operator;
             }
         }
         if (lastPos != -1) {
-            query = query.substring(0, lastPos)
+            query = query.substring(0, lastPos - lastOperator.length() - 2)
                     + " " + QuantityConstraint.QuantityResolution.ALL_SIGNALS.get(lastOperator).first + " "
-                    + query.substring(lastPos + lastOperator.length() + 2);
+                    + query.substring(lastPos);
         }
         // optimize for RANGE "-"
         Matcher m = RANGE_OPTIMIZE_PATTERN.matcher(query);
