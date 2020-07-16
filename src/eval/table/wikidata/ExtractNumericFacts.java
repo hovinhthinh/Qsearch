@@ -15,9 +15,8 @@ public class ExtractNumericFacts {
     public static void main(String[] args) {
         args = "/GW/D5data-13/hvthinh/wikidata/wikidata-20200629-all-BETA.nt.gz /GW/D5data-13/hvthinh/wikidata/wikidata-20200629-numeric-facts.gz".split(" ");
         PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
-        SelfMonitor m = new SelfMonitor(ExtractNumericFacts.class.getName(), -1, 60);
-        m.start();
         String prefix = "<http://www.wikidata.org/prop/";
+        long nFacts = 0;
         for (String line : FileUtils.getLineStream(args[0], "UTF-8")) {
             try {
                 String arr[] = line.split(" ");
@@ -27,9 +26,9 @@ public class ExtractNumericFacts {
             } catch (Exception e) {
                 System.err.println("err: " + line);
             }
-            m.incAndGet();
+            ++nFacts;
         }
-        m.forceShutdown();
+        System.out.println("nFacts: " + nFacts);
         out.close();
     }
 }
