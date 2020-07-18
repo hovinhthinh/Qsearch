@@ -222,9 +222,9 @@
 
     function source(value) {
         if (value.startsWith("WIKIPEDIA:Link:")) {
-            value = '<a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-danger"><i class="fas fa-arrow-alt-circle-right"></i> Wiki</a>';
+            value = '<a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer"><i class="fas fa-arrow-alt-circle-right"></i></a>';
         } else if (value.startsWith("TABLEM:Link:")) {
-            value = '<a href="' + value.substr(12) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-success"><i class="fas fa-arrow-alt-circle-right"></i> TableL</a>';
+            value = '<a href="' + value.substr(12) + '" target="_blank" referrerpolicy="no-referrer"><i class="fas fa-arrow-alt-circle-right"></i></a>';
         }
         return value;
     }
@@ -234,7 +234,7 @@
 
         var table = si.qfact.tableIndex.table;
 
-        var preTables = $('<div class="container-fluid"><div class="row"><div class="col-auto p-0" style="max-width: 40%"></div><div class="col p-0"></div><div class="col-1 p-0 text-right"></div></div></div>');
+        var preTables = $('<div class="container-fluid"><div class="row"><div class="col-auto p-0" style="max-width: 40%"></div><div class="col p-0"></div><div class="ml-2 p-0 text-right"></div></div></div>');
 
         // titles
         var title = $('<div>');
