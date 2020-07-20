@@ -19,7 +19,6 @@ import util.Triple;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,8 +28,9 @@ public class SimpleQueryParser {
     private static final HashSet<String> TYPE_SEPARATOR =
             new HashSet<>(Arrays.asList("that", "which", "where", "when", "who", "whom", "with", "whose"));
 
-    private static final int SUGGESTING_THRESHOLD = 50;
+    private static final int SUGGESTING_THRESHOLD = 20;
     private static final double MIN_SUGGESTING_CONF = 0.85;
+    private static final double MIN_SUGGESTING_HEADWORD_CONF = 0.9;
 
     private static final Pattern MULTIPLIER_OPTIMIZE_PATTERN =
             Pattern.compile("(\\$\\s*|\\b)\\d+(\\.\\d+)?(k|m|b)(\\s*\\$|\\b)");
@@ -125,7 +125,7 @@ public class SimpleQueryParser {
             }
             String suggestTypeHead = NLP.getHeadWord(p.first, true);
             double headDist = Glove.cosineDistance(suggestTypeHead, inputTypeHead);
-            if (headDist < 0 || headDist > 1 - MIN_SUGGESTING_CONF) {
+            if (headDist < 0 || headDist > 1 - MIN_SUGGESTING_HEADWORD_CONF) {
                 continue;
             }
             ArrayList<String> suggestType = NLP.splitSentence(p.first);
