@@ -56,7 +56,7 @@
                 <option value="TECHNOLOGY">TECHNOLOGY</option>
             </select>
         </div>
-        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-3" style="margin-top: 15px">
+        <div hidden class="col-xs-2 col-sm-2 col-md-2 col-lg-3" style="margin-top: 15px">
             <div class="float-right card" style="border-color: #B8D2FA">
                 <div class="card-header" style="background-color: #DAE6F8; border-color: #B8D2FA">
                     <a id='setting-toggle' data-toggle="collapse" href="#setting-body" style="text-decoration: none;">
@@ -91,8 +91,10 @@
                                 <td style="padding-top: 10px;" colspan="3">
                                     <table style="width: 100%">
                                         <tr>
-                                            <td><input type="range" value="0.6" class="slider" step="0.1" min="0" max="1" id="linking-threshold"
-                                                       oninput="$('#linking-threshold-value').text(parseFloat(this.value).toFixed(1));"></td>
+                                            <td><input type="range" value="0.6" class="slider" step="0.1" min="0"
+                                                       max="1" id="linking-threshold"
+                                                       oninput="$('#linking-threshold-value').text(parseFloat(this.value).toFixed(1));">
+                                            </td>
                                             <td id="linking-threshold-value" align="right" style="width: 2.5em">0.6</td>
                                         </tr>
                                     </table>
@@ -492,7 +494,10 @@
             } else {
                 str += '<tr style="border-top:2px solid gray"><td></td><td></td>';
             }
-            str += '<td class="text-right" id="submit-status"></td><td><button class="btn btn-primary" id="submit" onclick="submit()">Submit</button></td></tr>';
+            str += '<td class="text-right" id="submit-status"></td><td>' +
+                '<button class="btn btn-sm btn-danger" id="delete" onclick="submit(true)">Delete</button>' +
+                '<button class="btn btn-primary" id="submit" onclick="submit(false)">Submit</button>' +
+                '</td></tr>';
 
             $("#data").html(str);
         }
@@ -567,12 +572,12 @@
 
     function search() {
         var params = {
-            corpus: JSON.stringify($("#corpus").val()),
-            // corpus: '["TABLEM:Link","WIKIPEDIA:Link"]',
-            ntop: $("#ntop").val(),
-            // ntop: '10',
-            'linking-threshold': $("#linking-threshold").val()
-            // 'linking-threshold': '0.6'
+            // corpus: JSON.stringify($("#corpus").val()),
+            corpus: '["TABLEM:Link","WIKIPEDIA:Link"]',
+            // ntop: $("#ntop").val(),
+            ntop: '10',
+            // 'linking-threshold': $("#linking-threshold").val()
+            'linking-threshold': '0.6'
         };
         if ($.cookie('part_search_table') != "1") {
             if ($("#full").val().trim() == "") {
@@ -699,7 +704,7 @@
     autocomplete(document.getElementById("full"));
     autocomplete(document.getElementById("type"));
 
-    function submit() {
+    function submit(remove) {
         if (data == null) {
             alert("An error occurred.");
             return;
@@ -708,24 +713,26 @@
             alert("Please choose evaluation domain.");
             return;
         }
-        for (var i = 0; i < data["topResults"].length; ++i) {
-            var verdict = $("input[name=verdict-" + String(i) + "]:checked").val();
-            if (verdict == null) {
-                alert("Please evaluate all the results.");
-                return;
-            }
-            data["topResults"][i]["eval"] = verdict;
-        }
         data["evalDomain"] = $("#eval-domain").val();
-
+        if (!remove) {
+            for (var i = 0; i < data["topResults"].length; ++i) {
+                var verdict = $("input[name=verdict-" + String(i) + "]:checked").val();
+                if (verdict == null) {
+                    alert("Please evaluate all the results.");
+                    return;
+                }
+                data["topResults"][i]["eval"] = verdict;
+            }
+        }
         $.ajax({
             type: "POST",
-            url: "/evaluate_table",
+            url: "/evaluate_table" + (remove ? "?action=delete" : ""),
             data: JSON.stringify(data),
             contentType: 'application/json; charset=utf-8',
             dataType: "json",
             beforeSend: function () {
-                $("#submit").attr('disabled', 'disabled').text("Submitting");
+                $("#submit").attr('disabled', 'disabled');
+                $("#delete").attr('disabled', 'disabled');
                 $("#search").attr('disabled', 'disabled');
             },
             success: function (d) {
@@ -733,6 +740,10 @@
                     $("#submit-status").html('<p class="text-success font-weight-bold">SAVED</p>');
                 } else if (d["verdict"] == "OVERWRITE") {
                     $("#submit-status").html('<p class="text-warning font-weight-bold">OVERWRITTEN</p>');
+                } else if (d["verdict"] == "DELETE") {
+                    $("#submit-status").html('<p class="text-danger font-weight-bold">DELETED</p>');
+                } else if (d["verdict"] == "NOT_EXIST") {
+                    $("#submit-status").html('<p class="text-danger font-weight-bold">NOT FOUND</p>');
                 } else {
                     $("#submit-status").html('<p class="text-danger font-weight-bold">ERROR</p>');
                 }
@@ -741,7 +752,8 @@
                 alert("An error occurred.");
             },
             complete: function () {
-                $("#submit").removeAttr('disabled').text("Submit");
+                $("#submit").removeAttr('disabled');
+                $("#delete").removeAttr('disabled');
                 $("#search").removeAttr('disabled');
             }
         });
