@@ -11,7 +11,7 @@ public class Server {
     public static final int DEFAULT_PORT = Integer.parseInt(Configuration.get("search.server.default-port"));
 
     public static void main(String[] args) throws Exception {
-        org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(new QueuedThreadPool(32, 16));
+        org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(new QueuedThreadPool(128, 64));
 
         ServerConnector connector = new ServerConnector(server, new HttpConnectionFactory());
         connector.setPort(DEFAULT_PORT);
