@@ -16,6 +16,9 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.logging.Logger;
 
 public class EvaluateHandler extends HttpServlet {
@@ -79,12 +82,14 @@ public class EvaluateHandler extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         JSONObject response = new JSONObject();
         try {
-            JSONArray data = new JSONArray();
+            ArrayList<JSONObject> arr = new ArrayList<>();
             for (File f : new File(SAVE_PATH).listFiles()) {
-                data.put(new JSONObject(FileUtils.getContent(f, StandardCharsets.UTF_8)));
+                arr.add(new JSONObject(FileUtils.getContent(f, StandardCharsets.UTF_8)));
             }
+            Collections.sort(arr, Comparator.comparing(a -> a.getString("evalDomain")));
+
             response.put("verdict", "OK");
-            response.put("data", data);
+            response.put("data", new JSONArray(arr));
         } catch (Exception e) {
             try {
                 response.put("verdict", "Unknown error occurred.");
