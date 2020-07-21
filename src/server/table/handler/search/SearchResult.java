@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 public class SearchResult {
     public String verdict; // "OK" is good, otherwise the error message.
+    public String fullQuery; // optional
     public String typeConstraint;
     public String contextConstraint;
     public QuantityConstraint quantityConstraint;

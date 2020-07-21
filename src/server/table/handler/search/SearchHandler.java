@@ -110,6 +110,7 @@ public class SearchHandler extends HttpServlet {
                 } else if (result.second == null) {
                     response.verdict = "Search error."; // Should not happen!!!!!
                 } else {
+                    response.fullQuery = fullConstraint;
                     response.typeConstraint = typeConstraint;
                     response.contextConstraint = contextConstraint;
                     response.quantityConstraint = result.first;
