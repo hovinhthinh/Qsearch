@@ -18,9 +18,9 @@ public class SearchResult {
 
     public String encode() {
 //        return DigestUtils.md5Hex(typeConstraint + "\t" + contextConstraint + "\t" + quantityConstraint.toString());
-        return typeConstraint.replace(' ', '-')
+        return evalDomain + "_" + (typeConstraint.replace(' ', '-')
                 + "_" + contextConstraint.replace(' ', '-')
-                + "_" + quantityConstraint.phrase.replace(' ', '-');
+                + "_" + quantityConstraint.phrase.replace(' ', '-')).replace('/', '-');
     }
 
     public static class ResultInstance {
