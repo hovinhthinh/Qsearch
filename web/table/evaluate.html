@@ -201,9 +201,9 @@
 
     function source(value) {
         if (value.startsWith("WIKIPEDIA:Link:")) {
-            value = '&rarr; <a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-danger">Wikipedia</a>';
+            value = '<a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-danger"><i class="fas fa-arrow-alt-circle-right"></i> Wiki</a>';
         } else if (value.startsWith("TABLEM:Link:")) {
-            value = '&rarr; <a href="' + value.substr(12) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-success">TableL</a>';
+            value = '<a href="' + value.substr(12) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-success"><i class="fas fa-arrow-alt-circle-right"></i> TableL</a>';
         }
         return value;
     }
@@ -267,7 +267,7 @@
                 pg.append($('<button class="btn btn-sm btn-link" onclick="showMoreText(this)">...more</button>'));
             }
         } else {
-            pg.html('<span class="badge badge-pill badge-secondary">No Related Text</span>');
+            // pg.html('<span class="badge badge-pill badge-secondary">No Related Text</span>');
         }
         escapeText(si.qfact.tableIndex.pageContent);
         preTables.eq(0).children().eq(0).children().eq(1).append(pg);
@@ -371,7 +371,7 @@
             captionText = captionText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
             wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + captionText + '</span>');
         } else {
-            wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-secondary">No Caption</span>');
+            // wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-secondary">No Caption</span>');
         }
         cell.append(wrapper);
 
@@ -723,6 +723,9 @@
                 }
                 data["topResults"][i]["eval"] = verdict;
             }
+        }
+        if (remove && !confirm("Confirm to delete?")) {
+            return;
         }
         $.ajax({
             type: "POST",
