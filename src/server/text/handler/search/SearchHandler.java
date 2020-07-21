@@ -124,6 +124,7 @@ public class SearchHandler extends HttpServlet {
                     response.verdict = "Elasticsearch error.";
                 } else {
                     response.matchingModel = model;
+                    response.fullQuery = fullConstraint;
                     response.typeConstraint = typeConstraint;
                     response.contextConstraint = contextConstraint;
                     response.quantityConstraint = result.first;
