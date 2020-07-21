@@ -374,7 +374,7 @@
                     contentType: 'application/json; charset=utf-8',
                     dataType: "json",
                     success: function (data) {
-                        if ("imgLink" in data) {
+                        if ("imgLink" in data && data["imgLink"] != "") {
                             var imgLink = "<img referrerpolicy=\"no-referrer\" style=\"object-fit: contain;\" src=\"" + data["imgLink"] + "\" class=\"img-responsive img-fluid\">";
                             $(current).attr("data-content", imgLink);
                             wikiLinkToImageMap[$(current).attr("href")] = imgLink;
