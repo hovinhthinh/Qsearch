@@ -1,0 +1,654 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>TabQs</title>
+    <link href="fontawesome_5.10.1/css/all.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="css/bootstrap_4.0.0.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="css/local.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="css/bootstrap-multiselect.css" rel="stylesheet" crossorigin="anonymous">
+</head>
+
+<body>
+<script src="js/jquery_3.2.1.min.js" crossorigin="anonymous"></script>
+<script src="js/jquery.cookie_1.4.1.js" crossorigin="anonymous"></script>
+<script src="js/popper_1.12.9.min.js" crossorigin="anonymous"></script>
+<script src="js/bootstrap_4.0.0.min.js" crossorigin="anonymous"></script>
+<script src="js/nanobar_0.4.2.min.js" crossorigin="anonymous"></script>
+<script src="js/bootstrap-multiselect.js" crossorigin="anonymous"></script>
+
+<div id="template-check-form" hidden>
+    <label class="radio-inline text-success font-weight-bold" style="white-space:nowrap;">
+        <input type="radio" name="verdict-template" value="true"> True
+    </label>
+    <label class="radio-inline text-danger font-weight-bold" style="white-space:nowrap;">
+        <input type="radio" name="verdict-template" value="false"> False
+    </label>
+</div>
+
+<div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12 offset-xs-0 offset-sm-0 offset-md-0 offset-lg-0">
+    <div class="row">
+        <a href="#" class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            DEV_MODE<br/>
+            <img style="object-fit: contain; height:75px" src="img/logo.png" class="img-responsive img-fluid ml-2 mr-2">
+        </a>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-5 mt-2">
+            <br/>
+            <div class="input-group">
+                <input disabled autocomplete="off" style="height: 40px;" type="text" class="form-control"
+                       placeholder="full query unavailable" id="full">
+            </div>
+            <br/>
+            <div id="parsed" class="mb-3" style="white-space:nowrap;"></div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mt-2">
+            <br/>
+            <input disabled autocomplete="off" style="height: 40px;" type="text" class="form-control"
+                   placeholder="Evaluation Domain" id="eval-domain">
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-3 mt-2">
+            <br/>
+            <span class="current">--</span>/<span class="total">--</span>&nbsp;
+            <button class="btn btn-primary prev" disabled onclick="go(-1)">Prev</button>&nbsp;
+            <button class="btn btn-primary next" disabled onclick="go(1)">Next</button>
+        </div>
+    </div>
+</div>
+
+<div class="container col-xs-12 col-sm-12 col-md-12 col-lg-11 mt-3">
+    <table class="table table-hover"
+           style="width: auto !important; table-layout: auto !important; margin-left:auto; margin-right:auto;">
+        <thead id="head" hidden>
+        <tr>
+            <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col">#</th>
+            <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col">Result</th>
+            <th style="border-top: 0px; border-bottom: 0px;" scope="col">
+                <div class="row">
+                    <div class="col-8"><span>Source</span></div>
+                </div>
+            </th>
+            <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col">Verdict</th>
+        </tr>
+        </thead>
+        <tbody id="data">
+        </tbody>
+    </table>
+</div>
+<div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12 offset-xs-0 offset-sm-0 offset-md-0 offset-lg-0">
+    <div class="row">
+        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-9"></div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-3">
+            <span class="current">--</span>/<span class="total">--</span>&nbsp;
+            <button class="btn btn-primary prev" disabled onclick="go(-1)">Prev</button>&nbsp;
+            <button class="btn btn-primary next" disabled onclick="go(1)">Next</button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<footer class="footer fixed-bottom" style="background-color: #ffffff; padding-top: 5px">
+    <table align="center">
+        <tr>
+            <td valign="middle" style="padding-top: 15px">
+                <div class="container mb-3">
+                    &copy; 2020
+                    <a href="https://www.mpi-inf.mpg.de/departments/databases-and-information-systems/"
+                       referrerpolicy="no-referrer">Database
+                        & Information Systems Group</a>, Max Planck Institute for Informatics
+                    &nbsp;|&nbsp;<a href="https://imprint.mpi-klsb.mpg.de/inf/qsearch.mpi-inf.mpg.de"
+                                    referrerpolicy="no-referrer">
+                    Impressum</a>&nbsp;|&nbsp;<a
+                        href="https://data-protection.mpi-klsb.mpg.de/inf/qsearch.mpi-inf.mpg.de"
+                        referrerpolicy="no-referrer">
+                    Datenschutzhinweis</a>
+                </div>
+            </td>
+            <td style="width: 50px"></td>
+            <td>
+                <img style="height: 60px" src="img/mpi.png" class="img-fluid" alt="logo">
+            </td>
+        </tr>
+    </table>
+</footer>
+<img id="loading" src="img/loading.gif" style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"
+     hidden/>
+<style>
+    .result-img {
+        max-height: 100px;
+        height: auto;
+        width: auto;
+    }
+</style>
+<script>
+    var showTimeOut = 30000;
+    var nanobar = new Nanobar();
+    document.getElementById('nanobarcss').innerHTML += '.nanobar .bar { background: #3c78d8; }';
+
+    function escapeText(text) {
+        return $('<div>').text(text).html();
+    }
+
+    function wrapContextBox(input, token) {
+        var result = '';
+        input.split(' ').forEach(function (t) {
+            if (result != '') {
+                result += ' ';
+            }
+            if (t.toLowerCase() == token.toLowerCase()) {
+                result += '<span class="context-box">' + t + '</span>'
+            } else {
+                result += t;
+            }
+        });
+        return result;
+    }
+
+    function entityCell(inst) {
+        var value = inst.entity;
+        value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result mr-1" href="https://www.wikipedia.org/wiki/'
+            + encodeURI(value.substring(1, value.length - 1)) + '" target="_blank" referrerpolicy="no-referrer">'
+            + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
+            + '</a>'
+            + '<span class="badge badge-pill badge-secondary">Score: ' + inst.score.toFixed(3) + '</span>';
+
+        return $("<td style='width: auto !important;'>" + value + "</td>");
+    }
+
+    function source(value) {
+        if (value.startsWith("WIKIPEDIA:Link:")) {
+            value = '<a href="' + value.substr(15) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-danger"><i class="fas fa-arrow-alt-circle-right"></i> Wiki</a>';
+        } else if (value.startsWith("TABLEM:Link:")) {
+            value = '<a href="' + value.substr(12) + '" target="_blank" referrerpolicy="no-referrer" class="badge badge-pill badge-success"><i class="fas fa-arrow-alt-circle-right"></i> TableL</a>';
+        }
+        return value;
+    }
+
+    function drawCollapsedTable(index, si) {
+        var cell = $('<div>');
+
+        var table = si.qfact.tableIndex.table;
+
+        var preTables = $('<div class="container-fluid"><div class="row"><div class="col-auto p-0" style="max-width: 40%"></div><div class="col p-0"></div><div class="col-1 p-0 text-right"></div></div></div>');
+
+        // titles
+        var title = $('<div>');
+        var titleText = escapeText(si.qfact.tableIndex.pageTitle);
+        for (var i = 0; i < si.traces.length; ++i) {
+            if (si.traces[i].place != "TITLE") {
+                continue;
+            }
+            var token = escapeText(si.traces[i].token);
+            titleText = wrapContextBox(titleText, token);
+        }
+        titleText = titleText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
+        title.html('<span class="badge badge-pill badge-warning">Pg-Title</span> <span class="font-weight-bold small">'
+            + titleText + '</span>');
+        preTables.eq(0).children().eq(0).children().eq(0).append(title);
+
+        // subTitles
+        var st = si.qfact.tableIndex.sectionTitles.split('\r\n');
+        if (st.length > 1 || st[0] != "") {
+            for (var i = 0; i < st.length; ++i) {
+                var subTitles = $('<div>');
+                var content = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                for (var j = 0; j < i; ++j) {
+                    content += '&nbsp;&nbsp;&nbsp;&nbsp;';
+                }
+                var subTitleText = escapeText(st[i]);
+                for (var j = 0; j < si.traces.length; ++j) {
+                    if (si.traces[j].place != "TITLE") {
+                        continue;
+                    }
+                    var token = escapeText(si.traces[j].token);
+                    subTitleText = wrapContextBox(subTitleText, token);
+                }
+                subTitleText = subTitleText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
+                content += '&rdsh; <span class="small">' + subTitleText + '</span>';
+                subTitles.html(content);
+                preTables.eq(0).children().eq(0).children().eq(0).append(subTitles);
+            }
+        }
+
+        // pageContent
+        var pg = $('<div class="small ml-3 mr-1">');
+        if (si.qfact.tableIndex.pageContent != "") {
+            pg.html('<span class="badge badge-pill badge-info">Related Text</span> ');
+            var lim = st.length > 1 ? 400 : 300;
+            if (si.qfact.tableIndex.pageContent.length < lim) {
+                pg.append($('<span>').text(si.qfact.tableIndex.pageContent));
+            } else {
+                pg.append($('<span>').text(si.qfact.tableIndex.pageContent.substring(0, lim)));
+                pg.append($('<span hidden>').text(si.qfact.tableIndex.pageContent.substring(lim)));
+                pg.append($('<button class="btn btn-sm btn-link" onclick="showMoreText(this)">...more</button>'));
+            }
+        } else {
+            // pg.html('<span class="badge badge-pill badge-secondary">No Related Text</span>');
+        }
+        escapeText(si.qfact.tableIndex.pageContent);
+        preTables.eq(0).children().eq(0).children().eq(1).append(pg);
+        // source
+        preTables.eq(0).children().eq(0).children().eq(2).html(source(si.qfact.tableIndex.table.source));
+
+        cell.append(preTables);
+        // table
+        var thead = $('<thead>');
+        for (var i = 0; i < table.header.length; ++i) {
+            var headRow = $('<tr>');
+            for (var j = 0; j < table.header[i].length; ++j) {
+                if (i > 0 && table.header[i][j].text == table.header[i - 1][j].text) {
+                    continue;
+                }
+                var c = $('<th>');
+                // colspan
+                var temp_1 = j;
+                while (temp_1 < table.header[i].length - 1 && table.header[i][temp_1 + 1].text == table.header[i][temp_1].text) {
+                    ++temp_1;
+                }
+                if (temp_1 > j) {
+                    c.attr('colspan', temp_1 - j + 1);
+                }
+                // rowspan
+                var temp_2 = i;
+                while (temp_2 < table.header.length - 1 && table.header[temp_2 + 1][j].text == table.header[temp_2][j].text) {
+                    ++temp_2;
+                }
+                if (temp_2 > i) {
+                    c.attr('rowspan', temp_2 - i + 1);
+                }
+
+                var text = escapeText(table.header[i][j].text);
+                if (si.qfact.headerUnitSpan != null && table.header[i][j].text == table.header[table.header.length - 1][si.qfact.qCol].text
+                    && si.qfact.qCol >= j && si.qfact.qCol <= temp_1 && temp_2 == table.header.length - 1) {
+                    var unitSpan = escapeText(si.qfact.headerUnitSpan);
+                    text += ' <span class="badge badge-pill badge-secondary">Unit/Multiplier: ' + unitSpan + '</span>';
+                }
+
+                if (table.header[i][j].text == table.header[table.header.length - 1][si.qfact.eCol].text
+                    && si.qfact.eCol >= j && si.qfact.eCol <= temp_1 && temp_2 == table.header.length - 1) {
+                    text += ' <span class="badge badge-pill badge-secondary">LScore: ' + si.qfact.linkingScore.toFixed(3) + '</span>';
+                }
+                c.html(text);
+                headRow.append(c);
+                j = temp_1;
+            }
+            thead.append(headRow);
+        }
+        var tbody = $('<tbody>');
+
+        for (var i = si.qfact.row; i <= si.qfact.row; ++i) {
+            var bodyRow = $('<tr>');
+            for (var j = 0; j < table.data[i].length; ++j) {
+                var c = $('<td>');
+                var text = escapeText(table.data[i][j].text);
+                if (j == si.qfact.eCol) {
+                    var entitySpan = escapeText(si.qfact.entitySpan);
+                    text = text.replace(entitySpan, '<span class="entity-box">' + entitySpan + '</span>');
+                } else if (j == si.qfact.qCol) {
+                    var quantitySpan = escapeText(si.qfact.quantitySpan);
+                    text = text.replace(quantitySpan, '<span class="quantity-box ' + (index == 0 ? 'converted-quantity' : 'converted-quantity-2') + '"' +
+                        ' data-animation="true" data-placement="right" data-trigger="hover" data-html="true"' +
+                        ' data-content="Equals: ' +
+                        (si.quantityConvertedStr == null ? "null" : si.quantityConvertedStr) +
+                        '">' + quantitySpan + '</span>');
+                } else {
+                    for (var k = 0; k < si.traces.length; ++k) {
+                        if (si.traces[k].place != "SAME_ROW") {
+                            continue;
+                        }
+                        var token = escapeText(si.traces[k].token);
+                        text = wrapContextBox(text, token);
+                    }
+                    text = text.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
+                }
+                c.html(text);
+                bodyRow.append(c);
+            }
+            tbody.append(bodyRow);
+        }
+
+        var t = $('<table>');
+        t.append(thead, tbody);
+        t.attr("class", "table table-sm w-auto small table-bordered mb-0");
+
+        cell.append(t);
+
+        // caption
+        var wrapper = $('<div style="text-align: center;"><div style="display: inline-block;"></div></div>');
+        if (si.qfact.tableIndex.caption != "") {
+            var captionText = escapeText(si.qfact.tableIndex.caption);
+            for (var i = 0; i < si.traces.length; ++i) {
+                if (si.traces[i].place != "CAPTION") {
+                    continue;
+                }
+                var token = escapeText(si.traces[i].token);
+                captionText = wrapContextBox(captionText, token);
+            }
+            captionText = captionText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
+            wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + captionText + '</span>');
+        } else {
+            // wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-secondary">No Caption</span>');
+        }
+        cell.append(wrapper);
+
+        return cell;
+    }
+
+    var convertedQuantityShowingTimeout;
+    var convertedQuantity2ShowingTimeout = [];
+    var wikiLinkToImageMap = {};
+
+    function showMoreTables(index, current) {
+        $(current).parent().parent().next().collapse('toggle');
+        if ($(current).text() == "Show more") {
+            $(current).text("Show less");
+            $(current).parent().parent().next().find('.converted-quantity-2').each(function () {
+                if (!($(this).attr('data-content') == 'Equals: null')) {
+                    var popoverElement = $(this).popover('show');
+                }
+            });
+            convertedQuantity2ShowingTimeout[index] = setTimeout(function () {
+                $(current).parent().parent().next().find('.converted-quantity-2').each(function () {
+                    $(this).trigger('mouseleave');
+                });
+            }, showTimeOut);
+        } else {
+            $(current).text("Show more");
+            clearTimeout(convertedQuantity2ShowingTimeout[index]);
+            $(current).parent().parent().next().find('.converted-quantity-2').each(function () {
+                if (!($(this).attr('data-content') == 'Equals: null')) {
+                    var popoverElement = $(this).popover('hide');
+                }
+            });
+        }
+    }
+
+    function showMoreText(current) {
+        if ($(current).text() == "...more") {
+            $(current).text("...less");
+            $(current).prev().removeAttr('hidden');
+        } else {
+            $(current).text("...more");
+            $(current).prev().attr('hidden', 'hidden');
+        }
+    }
+
+    function encodeEntityResultAsHtml(index, instance) {
+        var line = "<tr style='border-top:2px solid gray'>";
+        line += "<td style='width: auto !important;'>" + (index + 1) + "</td>";
+        var eCel = entityCell(instance);
+        line += eCel.wrapAll('<div>').parent().html();
+
+        var tCel = $('<td>');
+        tCel.append(drawCollapsedTable(0, instance.subInstances[0]));
+
+        if (instance.subInstances.length > 1) {
+            var wrapper = $('<div style="text-align: center;"><div style="display: inline-block;"></div></div>');
+            wrapper.eq(0).children().eq(0).html('<button class="mt-1 btn btn-link p-0" onclick="showMoreTables(' + index + ', this)">Show more</button>');
+            tCel.append(wrapper);
+            var moreTCel = $('<div class="collapse">');
+            for (var i = 1; i < instance.subInstances.length; ++i) {
+                moreTCel.append($('<hr style="border-color: gray;">'));
+                moreTCel.append(drawCollapsedTable(i, instance.subInstances[i]));
+            }
+            tCel.append(moreTCel);
+        }
+
+        line += tCel.wrapAll('<div>').parent().html();
+
+        var vCel = $('<td>');
+        vCel.html($("#template-check-form").html().split("verdict-template").join("verdict-" + String(index)));
+
+        if (instance.eval == "true" || instance.eval == "false") {
+            vCel.find("input[value=" + instance.eval + "]").attr("checked", "checked");
+        }
+
+        line += vCel.wrapAll('<div>').parent().html();
+
+        line += "</tr>";
+        return line;
+    }
+
+    function showParsedQuery(type, context, quantity) {
+        var operator = (quantity['resolutionCodeExplicitlyGiven'] == true ? "explicit" : "implicit") + "-" + quantity['resolutionCode'];
+        var value = (quantity.quantity.value2 == null
+            ? quantity.quantity.value.toLocaleString('en-US')
+            : ("[" + quantity.quantity.value.toLocaleString('en-US') + " - " + quantity.quantity.value2.toLocaleString('en-US') + "]"));
+        var quantityConstraintDetail = '( <span class="alert alert-danger" style="padding: 0px 3px; color: black">' + escapeText(operator) + '</span>'
+            + ", " + '<span class="alert alert-danger" style="padding: 0px 3px; color: black">' + escapeText(value) + '</span>';
+        if (quantity.quantity.unit != '') {
+            quantityConstraintDetail += ", " + '<span class="alert alert-danger" style="padding: 0px 3px; color: black">' + escapeText(quantity.quantity.unit) + '</span>';
+        }
+        quantityConstraintDetail += " )";
+
+        $('#parsed').html('Parsed:&nbsp;&nbsp;&nbsp;' + '<span class="entity-box">' + escapeText(type) + '</span>'
+            + " &rarr; " + '<span class="context-box">' + escapeText(context) + '</span>'
+            + " &rarr; " + '<span id="quantity-constraint" class="quantity-box" data-animation="true" data-placement="bottom" data-html="true">' + escapeText(quantity['phrase']) + '</span>'
+            + ' <span class="badge badge-pill badge-danger">Domain: ' + escapeText(quantity['fineGrainedDomain']) + '</span>');
+        $('#quantity-constraint').attr('data-content', quantityConstraintDetail);
+    }
+
+    function show(data) {
+        // clear all popovers
+        clearTimeout(convertedQuantityShowingTimeout);
+        for (var t of convertedQuantity2ShowingTimeout) {
+            clearTimeout(t);
+        }
+        $('#quantity-constraint,.converted-quantity,.converted-quantity-2').each(function () {
+            $(this).popover('dispose');
+        });
+        // done
+        if (data["verdict"] != "OK") {
+            $("#data").html(data["verdict"]);
+            return false;
+        }
+        if (data.fullQuery != null) {
+            $('#full').val(data.fullQuery);
+        } else {
+            $('#full').val("");
+        }
+        if (data.evalDomain != null) {
+            $('#eval-domain').val(data.evalDomain);
+        } else {
+            $('#eval-domain').val("");
+        }
+
+        var topResults = data["topResults"];
+        showParsedQuery(data["typeConstraint"], data["contextConstraint"], data["quantityConstraint"]);
+        if (false) { // if (topResults.length == 0) {
+            $("#data").html("<br/><br/>NO DATA");
+        } else {
+            $("#head").removeAttr("hidden");
+            var str = "";
+            for (var i = 0; i < topResults.length; ++i) {
+                var instance = topResults[i];
+                // populate tableIndex
+                for (var j = 0; j < instance.subInstances.length; ++j) {
+                    instance.subInstances[j].qfact.tableIndex = data.tableId2Index[instance.subInstances[j].qfact.tableId];
+                }
+
+                $("#data").append();
+                str += encodeEntityResultAsHtml(i, instance);
+            }
+            if (data.numResults > topResults.length) {
+                str += '<tr style="border-top:2px solid gray"><td></td><td>More ' + (data.numResults - topResults.length) + ' results</td>';
+            } else {
+                str += '<tr style="border-top:2px solid gray"><td></td><td></td>';
+            }
+            str += '<td class="text-right" id="submit-status"></td><td style="text-align: center">' +
+                '<button class="btn btn-primary" id="submit" onclick="submit(false)">Submit</button><br/>' +
+                '<button class="text-danger btn btn-sm btn-link" id="delete" onclick="submit(true)">Delete</button>' +
+                '</td></tr>';
+
+            $("#data").html(str);
+        }
+
+        $('.converted-quantity').each(function () {
+            var current = this;
+            if (!($(current).attr('data-content') == 'Equals: null')) {
+                var popoverElement = $(current).popover('show')
+                    .data('bs.popover').getTipElement();
+                $(popoverElement).addClass('popover-converted-quantity');
+            }
+        });
+        $('.converted-quantity-2').each(function () {
+            var current = this;
+            if (!($(current).attr('data-content') == 'Equals: null')) {
+                var popoverElement = $(current).popover('enable')
+                    .data('bs.popover').getTipElement();
+                $(popoverElement).addClass('popover-converted-quantity');
+            }
+        });
+
+        // hide converted quantity after sometime
+        convertedQuantityShowingTimeout = setTimeout(function () {
+            $('.converted-quantity').trigger('mouseleave');
+        }, showTimeOut);
+
+        // quantity constraint detail
+        $($('#quantity-constraint').popover('show').data('bs.popover').getTipElement())
+            .css('z-index', -1).find('.popover-body').addClass('quantity-constraint-detail').css('color', 'black');
+        setTimeout(function () {
+            $('#quantity-constraint').trigger('mouseleave');
+        }, showTimeOut);
+
+        $('.result').each(function () {
+            var current = this;
+            if ($(current).attr('href') in wikiLinkToImageMap) {
+                // $(current).attr("data-content", wikiLinkToImageMap[$(current).attr('href')]);
+                $(current).parent().append($('<br/>')).append($(wikiLinkToImageMap[$(current).attr('href')]));
+                $(current).popover();
+                if ($(current).is(':hover')) {
+                    $(current).trigger('mouseenter');
+                }
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: "/wikilink",
+                    data: {"link": $(current).attr("href")},
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: "json",
+                    success: function (data) {
+                        if ("imgLink" in data) {
+                            var imgLink = "<img class=\"mt-2 rounded result-img\" referrerpolicy=\"no-referrer\" style=\"object-fit: contain;\" src=\"" + data["imgLink"] + "\" class=\"img-responsive img-fluid\">";
+                            // $(current).attr("data-content", imgLink);
+                            $(current).parent().append($('<br/>')).append($(imgLink));
+                            wikiLinkToImageMap[$(current).attr("href")] = imgLink;
+                            $(current).popover();
+                            if ($(current).is(':hover')) {
+                                $(current).trigger('mouseenter');
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        return true;
+    }
+
+    function submit(remove) {
+        if (data == null) {
+            alert("An error occurred.");
+            return;
+        }
+        if ($("#eval-domain").val() == null) {
+            alert("Please choose evaluation domain.");
+            return;
+        }
+        data["evalDomain"] = $("#eval-domain").val();
+        if (!remove) {
+            for (var i = 0; i < data["topResults"].length; ++i) {
+                var verdict = $("input[name=verdict-" + String(i) + "]:checked").val();
+                if (verdict == null) {
+                    alert("Please evaluate all the results.");
+                    return;
+                }
+                data["topResults"][i]["eval"] = verdict;
+            }
+        }
+        if (remove && !confirm("Confirm to delete?")) {
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/evaluate_table" + (remove ? "?action=delete" : ""),
+            data: JSON.stringify(data),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json",
+            beforeSend: function () {
+                $("#submit").attr('disabled', 'disabled');
+                $("#delete").attr('disabled', 'disabled');
+                $(".prev,.next").attr('disabled', 'disabled');
+            },
+            success: function (d) {
+                if (d["verdict"] == "OK") {
+                    $("#submit-status").html('<p class="text-success font-weight-bold">SAVED</p>');
+                } else if (d["verdict"] == "OVERWRITE") {
+                    $("#submit-status").html('<p class="text-warning font-weight-bold">OVERWRITTEN</p>');
+                } else if (d["verdict"] == "DELETE") {
+                    $("#submit-status").html('<p class="text-danger font-weight-bold">DELETED</p>');
+                } else if (d["verdict"] == "NOT_EXIST") {
+                    $("#submit-status").html('<p class="text-danger font-weight-bold">NOT FOUND</p>');
+                } else {
+                    $("#submit-status").html('<p class="text-danger font-weight-bold">ERROR</p>');
+                }
+            },
+            error: function () {
+                alert("An error occurred.");
+            },
+            complete: function () {
+                $("#submit").removeAttr('disabled');
+                $("#delete").removeAttr('disabled');
+                $(".prev,.next").removeAttr('disabled');
+            }
+        });
+    }
+
+    var data_arr = null;
+    var data = null;
+    var current = 0;
+    var total = 0;
+
+    function go(step) {
+        $('.total').html(total.toString());
+        if (total > 0) {
+            current = (current + step + total) % total;
+            $('.current').html((current + 1).toString());
+            data = data_arr[current];
+            show(data);
+            $(document).scrollTop(0);
+        } else {
+            $('.current').html('0');
+        }
+    }
+
+    $.ajax({
+        type: "GET",
+        url: "/evaluate_table",
+        contentType: 'application/json; charset=utf-8',
+        dataType: "json",
+        beforeSend: function () {
+            $("#loading").removeAttr('hidden');
+        },
+        success: function (response) {
+            if (response.verdict == "OK") {
+                data_arr = response.data;
+                total = data_arr.length;
+                $('.prev,.next').removeAttr('disabled');
+                go(0);
+            } else {
+                alert("An error occurred.");
+            }
+        },
+        error: function () {
+            alert("An error occurred.");
+        },
+        complete: function () {
+            $("#loading").attr('hidden', 'hidden');
+        }
+    });
+</script>
+</body>
+</html>
