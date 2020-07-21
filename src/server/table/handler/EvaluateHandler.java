@@ -70,6 +70,7 @@ public class EvaluateHandler extends HttpServlet {
             } catch (Exception ep) {
             }
         }
+        httpServletResponse.setCharacterEncoding("utf-8");
         httpServletResponse.getWriter().print(response.toString());
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
@@ -90,6 +91,7 @@ public class EvaluateHandler extends HttpServlet {
             } catch (Exception ep) {
             }
         }
+        httpServletResponse.setCharacterEncoding("utf-8");
         httpServletResponse.getWriter().print(response.toString());
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
