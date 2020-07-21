@@ -495,8 +495,8 @@
                 str += '<tr style="border-top:2px solid gray"><td></td><td></td>';
             }
             str += '<td class="text-right" id="submit-status"></td><td>' +
-                '<button class="btn btn-sm btn-danger" id="delete" onclick="submit(true)">Delete</button>' +
-                '<button class="btn btn-primary" id="submit" onclick="submit(false)">Submit</button>' +
+                '<button class="btn btn-primary" id="submit" onclick="submit(false)">Submit</button><br/>' +
+                '<button class="text-danger btn btn-sm btn-link" id="delete" onclick="submit(true)">Delete</button>' +
                 '</td></tr>';
 
             $("#data").html(str);
