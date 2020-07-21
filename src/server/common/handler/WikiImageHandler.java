@@ -13,16 +13,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class WikiImageHandler extends HttpServlet {
     private static final Proxy p = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("dmz-gw.mpi-klsb.mpg.de", 3128));
     private static final boolean USE_PROXY = false;
 
+    private static ConcurrentHashMap<String, String> CACHE = new ConcurrentHashMap<>();
+
     public static String getImageLink(String wikiLink) {
+        String link = CACHE.get(wikiLink);
+        if (link != null) {
+            return link;
+        }
         try {
             Document doc = Jsoup.parse(Crawler.getContentFromUrl(wikiLink, USE_PROXY ? p : null));
             Element infobox = doc.selectFirst(".infobox .image img");
-            String link = infobox.attr("src");
+            link = (infobox != null) ? infobox.attr("src") : "";
+            CACHE.put(wikiLink, link);
             return link;
         } catch (Exception e) {
             return null;
