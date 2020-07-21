@@ -44,7 +44,7 @@ public class EvaluateHandler extends HttpServlet {
             }
             SearchResult evalResult = Gson.fromJson(builder.toString(), SearchResult.class);
 
-            File saveFile = new File(SAVE_PATH, evalResult.evalDomain + "_" + evalResult.encode());
+            File saveFile = new File(SAVE_PATH, evalResult.encode());
             if (delete) {
                 LOGGER.info("Deleting: " + saveFile.getName());
                 if (saveFile.exists()) {
