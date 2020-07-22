@@ -30,6 +30,8 @@ public class SimpleQueryParser {
 
     private static final HashSet<String> TYPE_SEPARATOR =
             new HashSet<>(Arrays.asList("that", "which", "where", "when", "who", "whom", "with", "whose"));
+    private static final HashSet<String> BLOCKED_TYPE_FOLLOWED_TOKEN =
+            new HashSet<>(Arrays.asList("in", "of", "from"));
 
     private static final int SUGGESTING_THRESHOLD = 20;
     private static final double MIN_SUGGESTING_CONF = 0.85;
@@ -180,9 +182,18 @@ public class SimpleQueryParser {
                         : (typeSuggestionCode == SOURCE_CODE_TABLE
                         ? server.table.handler.TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun))
                         : -1);
-                if (typeSuggestionCode != 0 && typeFreq >= SUGGESTING_THRESHOLD
-                        && (i == tagged.size() - 1 || !tagged.get(i + 1).postag().startsWith("NN"))) {
-                    typeFromTypeSuggestionSystem = rawTokenizedSbStr;
+                if (typeSuggestionCode != 0 && typeFreq >= SUGGESTING_THRESHOLD) {
+                    boolean goodFollowedToken = true;
+                    if (i < tagged.size() - 1) {
+                        PostaggedToken followedToken = tagged.get(i + 1);
+                        if (followedToken.postag().startsWith("NN") ||
+                                (followedToken.postag().equals("IN") && BLOCKED_TYPE_FOLLOWED_TOKEN.contains(followedToken.string()))) {
+                            goodFollowedToken = false;
+                        }
+                    }
+                    if (goodFollowedToken) {
+                        typeFromTypeSuggestionSystem = rawTokenizedSbStr;
+                    }
                 }
             }
             LOGGER.info("Postag: " + postag);
