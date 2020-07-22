@@ -58,7 +58,7 @@ public class SearchHandler extends HttpServlet {
         httpServletResponse.setCharacterEncoding("utf-8");
         String sessionKey = search(null, nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint, additionalParams);
 
-        httpServletResponse.getWriter().print(new JSONObject().append("s", sessionKey).toString());
+        httpServletResponse.getWriter().print(new JSONObject().put("s", sessionKey).toString());
 
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
