@@ -10,7 +10,6 @@ import nlp.Glove;
 import nlp.NLP;
 import nlp.Static;
 import scala.collection.JavaConversions;
-import server.text.handler.TypeSuggestionHandler;
 import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 import util.Pair;
@@ -25,6 +24,10 @@ import java.util.regex.Pattern;
 
 public class SimpleQueryParser {
     public static final Logger LOGGER = Logger.getLogger(SimpleQueryParser.class.getName());
+
+    public static final int SOURCE_CODE_TEXT = 1;
+    public static final int SOURCE_CODE_TABLE = 2;
+
     private static final HashSet<String> TYPE_SEPARATOR =
             new HashSet<>(Arrays.asList("that", "which", "where", "when", "who", "whom", "with", "whose"));
 
@@ -113,13 +116,16 @@ public class SimpleQueryParser {
     }
 
     // find closest related type in the YAGO dictionary, by comparing headword similarity and full string similarity
-    public synchronized static String suggestATypeFromRaw(String rawType) {
+    public synchronized static String suggestATypeFromRaw(String rawType, int typeSuggestionCode) {
         String mostSimilarType = null;
         double similarityScore = -1;
         rawType = NLP.fastStemming(rawType, Morpha.noun);
         ArrayList<String> inputType = NLP.splitSentence(rawType);
         String inputTypeHead = NLP.getHeadWord(rawType, true);
-        for (Pair<String, Integer> p : TypeSuggestionHandler.typeToFreq) {
+        ArrayList<Pair<String, Integer>> typeToFreq = typeSuggestionCode == SOURCE_CODE_TEXT
+                ? server.text.handler.TypeSuggestionHandler.typeToFreq
+                : (typeSuggestionCode == SOURCE_CODE_TABLE ? server.table.handler.TypeSuggestionHandler.typeToFreq : null);
+        for (Pair<String, Integer> p : typeToFreq) {
             if (p.second < SUGGESTING_THRESHOLD) {
                 continue;
             }
@@ -148,7 +154,8 @@ public class SimpleQueryParser {
         return null;
     }
 
-    public synchronized static Triple<String, String, String> parse(String rawQuery, boolean useTypeSuggestion) {
+    // suggestion code = 0 means no suggestion.
+    public synchronized static Triple<String, String, String> parse(String rawQuery, int typeSuggestionCode) {
         rawQuery = preprocess(rawQuery);
         LOGGER.info("Preprocessed_query: " + rawQuery);
         Triple<String, String, String> result = new Triple<>();
@@ -168,7 +175,12 @@ public class SimpleQueryParser {
                 postag.append(new Pair(w.string(), w.postag())).append(" ");
                 rawTokenizedSb.append(w.string());
                 String rawTokenizedSbStr = rawTokenizedSb.toString();
-                if (useTypeSuggestion && TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun)) >= SUGGESTING_THRESHOLD
+                int typeFreq = typeSuggestionCode == SOURCE_CODE_TEXT
+                        ? server.text.handler.TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun))
+                        : (typeSuggestionCode == SOURCE_CODE_TABLE
+                        ? server.table.handler.TypeSuggestionHandler.getTypeFreq(NLP.fastStemming(rawTokenizedSbStr, Morpha.noun))
+                        : -1);
+                if (typeSuggestionCode != 0 && typeFreq >= SUGGESTING_THRESHOLD
                         && (i == tagged.size() - 1 || !tagged.get(i + 1).postag().startsWith("NN"))) {
                     typeFromTypeSuggestionSystem = rawTokenizedSbStr;
                 }
@@ -206,8 +218,8 @@ public class SimpleQueryParser {
 
                 typeRawStr = result.first;
                 // find the most similar type in the type suggestion system.
-                if (useTypeSuggestion) {
-                    String suggestedType = suggestATypeFromRaw(result.first);
+                if (typeSuggestionCode != 0) {
+                    String suggestedType = suggestATypeFromRaw(result.first, typeSuggestionCode);
                     if (suggestedType != null) {
                         result.first = suggestedType;
                     }
@@ -344,7 +356,7 @@ public class SimpleQueryParser {
     }
 
     public synchronized static Triple<String, String, String> parse(String rawQuery) {
-        return parse(rawQuery, true);
+        return parse(rawQuery, 0);
     }
 
     public static void main(String[] args) {
