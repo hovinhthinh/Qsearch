@@ -86,7 +86,7 @@ public class SearchHandler extends HttpServlet {
         SearchResult response = new SearchResult();
         try {
             if (fullConstraint != null) {
-                Triple<String, String, String> parsed = SimpleQueryParser.parse(fullConstraint, true);
+                Triple<String, String, String> parsed = SimpleQueryParser.parse(fullConstraint, SimpleQueryParser.SOURCE_CODE_TABLE);
                 if (parsed == null) {
                     response.verdict = "Cannot parse full query.";
                 } else {
@@ -97,7 +97,7 @@ public class SearchHandler extends HttpServlet {
                             "\"; Quantity: \"" + quantityConstraint + "\"}");
                 }
             } else if (typeConstraint != null) {
-                String suggestedType = SimpleQueryParser.suggestATypeFromRaw(typeConstraint);
+                String suggestedType = SimpleQueryParser.suggestATypeFromRaw(typeConstraint, SimpleQueryParser.SOURCE_CODE_TABLE);
                 if (suggestedType != null) {
                     typeConstraint = suggestedType;
                 }
