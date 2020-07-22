@@ -20,6 +20,7 @@ public class BatchQueryRunner {
         FileUtils.LineStream stream = FileUtils.getLineStream(argsFinal[0], "UTF-8");
         SelfMonitor monitor = new SelfMonitor(BatchQueryRunner.class.getName(), -1, 30);
         monitor.start();
+        Crawler.READ_TIME_OUT = 3000 * 1000;
         Concurrent.runAndWait(() -> {
             while (true) {
                 String line;
