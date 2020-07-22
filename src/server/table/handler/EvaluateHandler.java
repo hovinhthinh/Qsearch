@@ -44,7 +44,11 @@ public class EvaluateHandler extends HttpServlet {
             }
             SearchResult evalResult = Gson.fromJson(builder.toString(), SearchResult.class);
 
-            File saveFile = new File(SAVE_PATH, evalResult.encode());
+            String annotationPath = request.getParameter("path");
+            if (annotationPath == null) {
+                annotationPath = SAVE_PATH;
+            }
+            File saveFile = new File(annotationPath, evalResult.encode());
             if (delete) {
                 LOGGER.info("Deleting: " + saveFile.getName());
                 if (saveFile.exists()) {
@@ -83,7 +87,11 @@ public class EvaluateHandler extends HttpServlet {
         JSONObject response = new JSONObject();
         try {
             ArrayList<JSONObject> arr = new ArrayList<>();
-            for (File f : new File(SAVE_PATH).listFiles()) {
+            String annotationPath = request.getParameter("path");
+            if (annotationPath == null) {
+                annotationPath = SAVE_PATH;
+            }
+            for (File f : new File(annotationPath).listFiles()) {
                 arr.add(new JSONObject(FileUtils.getContent(f, StandardCharsets.UTF_8)));
             }
             Collections.sort(arr, Comparator.comparing(a -> a.getString("evalDomain")));
