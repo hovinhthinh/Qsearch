@@ -58,7 +58,7 @@ public class SocketSearchAdapter extends WebSocketAdapter {
         String sessionKey = SearchHandler.search(null, nResult, fullConstraint,
                 typeConstraint, contextConstraint, quantityConstraint, additionalParams);
         try {
-            session.getRemote().sendString(new JSONObject().append("s", sessionKey).toString());
+            session.getRemote().sendString(new JSONObject().put("s", sessionKey).toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

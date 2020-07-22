@@ -54,7 +54,7 @@ public class SearchHandler extends HttpServlet {
 
         String sessionKey = search(nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint, additionalParams);
 
-        httpServletResponse.getWriter().print(new JSONObject().append("s", sessionKey).toString());
+        httpServletResponse.getWriter().print(new JSONObject().put("s", sessionKey).toString());
 
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
