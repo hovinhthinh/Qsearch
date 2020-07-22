@@ -2,6 +2,7 @@ package server.table.handler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import server.table.ResultInstance;
 import server.table.handler.search.SearchResult;
 import util.FileUtils;
 import util.Gson;
@@ -65,6 +66,16 @@ public class EvaluateHandler extends HttpServlet {
                 boolean overwrite = false;
                 if (saveFile.exists()) {
                     overwrite = true;
+                    try {
+                        SearchResult oldResult = Gson.fromJson(FileUtils.getContent(saveFile, StandardCharsets.UTF_8), SearchResult.class);
+                        for (ResultInstance ri : oldResult.topResults) {
+                            if (ri.eval == null) {
+                                overwrite = false;
+                                break;
+                            }
+                        }
+                    } catch (Exception e) {
+                    }
                 }
                 PrintWriter out = FileUtils.getPrintWriter(saveFile, Charset.forName("UTF-8"));
                 out.println(Gson.toJson(evalResult));
