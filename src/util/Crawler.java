@@ -9,8 +9,10 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 public class Crawler {
-    public static final int CONNECT_TIME_OUT = 10 * 1000;
-    public static final int READ_TIME_OUT = 300 * 1000;
+    // These could be set for flexibility.
+    public static int CONNECT_TIME_OUT = 10 * 1000;
+    public static int READ_TIME_OUT = 300 * 1000;
+
     public static final int MAX_CONTENT_LENGTH = 1024 * 1024 * 1024; // 1G
     public static final int BUFFER_SIZE = 8 * 1024; // 8K
 
