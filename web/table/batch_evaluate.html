@@ -74,21 +74,21 @@
         </tbody>
     </table>
 </div>
-<div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12 offset-xs-0 offset-sm-0 offset-md-0 offset-lg-0">
-    <div class="row">
-        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-9"></div>
-        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-3">
-            <span class="current">--</span>/<span class="total">--</span>&nbsp;
-            <button class="btn btn-primary prev" disabled onclick="go(-1)">Prev</button>&nbsp;
-            <button class="btn btn-primary next" disabled onclick="go(1)">Next</button>
-        </div>
-    </div>
-</div>
-<br/>
 <br/>
 <br/>
 <br/>
 <footer class="footer fixed-bottom" style="background-color: #ffffff; padding-top: 5px">
+    <div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12 offset-xs-0 offset-sm-0 offset-md-0 offset-lg-0">
+        <div class="row mb-3">
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-9"></div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-3">
+                <span class="current">--</span>/<span class="total">--</span>&nbsp;
+                <button class="btn btn-primary prev" disabled onclick="go(-1)">Prev</button>&nbsp;
+                <button class="btn btn-primary next" disabled onclick="go(1)">Next</button>
+            </div>
+        </div>
+    </div>
+<!--
     <table align="center">
         <tr>
             <td valign="middle" style="padding-top: 15px">
@@ -111,6 +111,7 @@
             </td>
         </tr>
     </table>
+-->
 </footer>
 <img id="loading" src="img/loading.gif" style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"
      hidden/>
@@ -123,7 +124,7 @@
             </div>
             <div class="modal-body">
                 <input class="form-control" type="text" id="eval-path"
-                       value="/home/hvthinh/TabQs/eval/table/exp_2/annotation">
+                       value="/home/hvthinh/TabQs/eval/table/exp_2/annotation-sample">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="startEvaluating()">Start Evaluating</button>
