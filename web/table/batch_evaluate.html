@@ -169,8 +169,8 @@
         value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result mr-1" href="https://www.wikipedia.org/wiki/'
             + encodeURI(value.substring(1, value.length - 1)) + '" target="_blank" referrerpolicy="no-referrer">'
             + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
-            + '</a>'
-            + '<span class="badge badge-pill badge-secondary">Score: ' + inst.score.toFixed(3) + '</span>';
+            + '</a>';
+            // + '<span class="badge badge-pill badge-secondary">Score: ' + inst.score.toFixed(3) + '</span>';
 
         return $("<td style='width: auto !important;'>" + value + "</td>");
     }
@@ -286,7 +286,7 @@
 
                 if (table.header[i][j].text == table.header[table.header.length - 1][si.qfact.eCol].text
                     && si.qfact.eCol >= j && si.qfact.eCol <= temp_1 && temp_2 == table.header.length - 1) {
-                    text += ' <span class="badge badge-pill badge-secondary">LScore: ' + si.qfact.linkingScore.toFixed(3) + '</span>';
+                    // text += ' <span class="badge badge-pill badge-secondary">LScore: ' + si.qfact.linkingScore.toFixed(3) + '</span>';
                 }
                 c.html(text);
                 headRow.append(c);
