@@ -17,6 +17,7 @@ public class BatchQueryRunner {
         args = "eval/table/exp_2/queries_iswc.txt eval/table/exp_2/annotation-iswc".split(" ");
 
         File outputFolder = new File(args[1]);
+        outputFolder.mkdirs();
         FileUtils.LineStream stream = FileUtils.getLineStream(args[0], "UTF-8");
         SelfMonitor monitor = new SelfMonitor(BatchQueryRunner.class.getName(), -1, 30);
         monitor.start();
