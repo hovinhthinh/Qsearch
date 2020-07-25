@@ -14,10 +14,10 @@ public class BatchQueryRunner {
 
     // args: <inputFile> in format query[\tdomain]; <output-folder>
     public static void main(String[] args) throws Exception {
-        args = "eval/table/exp_2/queries_iswc.txt eval/table/exp_2/annotation_iswc".split(" ");
+        args = "eval/table/exp_2/queries_iswc.txt eval/table/exp_2/annotation-iswc".split(" ");
 
-        final String[] argsFinal = args;
-        FileUtils.LineStream stream = FileUtils.getLineStream(argsFinal[0], "UTF-8");
+        File outputFolder = new File(args[1]);
+        FileUtils.LineStream stream = FileUtils.getLineStream(args[0], "UTF-8");
         SelfMonitor monitor = new SelfMonitor(BatchQueryRunner.class.getName(), -1, 30);
         monitor.start();
         Crawler.READ_TIME_OUT = 3000 * 1000;
@@ -46,7 +46,7 @@ public class BatchQueryRunner {
                     if (arr.length > 1) {
                         r.evalDomain = arr[1];
                     }
-                    PrintWriter out = FileUtils.getPrintWriter(new File(argsFinal[1], r.encode()), StandardCharsets.UTF_8);
+                    PrintWriter out = FileUtils.getPrintWriter(new File(outputFolder, r.encode()), StandardCharsets.UTF_8);
                     out.println(Gson.toJson(r));
                     out.close();
                     monitor.incAndGet();
