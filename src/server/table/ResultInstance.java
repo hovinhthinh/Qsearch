@@ -12,6 +12,9 @@ public class ResultInstance {
         public QfactLight qfact;
         public double score;
 
+        // EXPERIMENTAL
+        public double rescore; // this is after applying consistency-based rescoring
+
         public static class ContextMatchTrace {
             public String token;
             public double score;
