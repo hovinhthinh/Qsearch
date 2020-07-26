@@ -193,9 +193,7 @@
         value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result mr-1" href="https://www.wikipedia.org/wiki/'
             + encodeURI(value.substring(1, value.length - 1)) + '" target="_blank" referrerpolicy="no-referrer">'
             + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
-            + '</a>'
-            + '<span class="badge badge-pill badge-secondary">Score: ' + inst.score.toFixed(3) + '</span>';
-
+            + '</a>';
         return $("<td style='width: auto !important;'>" + value + "</td>");
     }
 
@@ -267,7 +265,7 @@
                 pg.append($('<button class="btn btn-sm btn-link" onclick="showMoreText(this)">...more</button>'));
             }
         } else {
-            // pg.html('<span class="badge badge-pill badge-secondary">No Related Text</span>');
+            pg.html('<span class="badge badge-pill badge-secondary">No Related Text</span>');
         }
         escapeText(si.qfact.tableIndex.pageContent);
         preTables.eq(0).children().eq(0).children().eq(1).append(pg);
@@ -357,8 +355,9 @@
 
         cell.append(t);
 
-        // caption
-        var wrapper = $('<div style="text-align: center;"><div style="display: inline-block;"></div></div>');
+        // caption & score
+        var wrapper = $('<div class="row"><div style="text-align:left" class="col-2"></div><div style="text-align: center;" class="col-10 pl-0"></div></div>');
+        wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-secondary">Score: ' + si.score.toFixed(3) + '</span>');
         if (si.qfact.tableIndex.caption != "") {
             var captionText = escapeText(si.qfact.tableIndex.caption);
             for (var i = 0; i < si.traces.length; ++i) {
@@ -369,9 +368,9 @@
                 captionText = wrapContextBox(captionText, token);
             }
             captionText = captionText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
-            wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + captionText + '</span>');
+            wrapper.eq(0).children().eq(1).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + captionText + '</span>');
         } else {
-            // wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-secondary">No Caption</span>');
+            wrapper.eq(0).children().eq(1).html('<span class="badge badge-pill badge-secondary">No Caption</span>');
         }
         cell.append(wrapper);
 
