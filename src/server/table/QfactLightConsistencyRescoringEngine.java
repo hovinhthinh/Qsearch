@@ -81,10 +81,17 @@ class KNNEstimator {
 
         // kNN
         for (DataPoint t : training) {
+            if (p.si.qfact.tableId.equals(t.si.qfact.tableId)) {
+                continue;
+            }
             queue.enqueue(new Pair<>(p.dist(t, quantityMeanNormalizeValue), t));
             if (queue.size() > k) {
                 queue.dequeue();
             }
+        }
+
+        if (queue.size() == 0) {
+            return p.si.score;
         }
 
         double res = 0;
@@ -164,10 +171,10 @@ public class QfactLightConsistencyRescoringEngine {
         return termTfidfMap;
     }
 
-    public static final int CONSISTENCY_LEARNING_N_FOLD = 100;
-    public static final double CONSISTENCY_LEARNING_PROBE_RATE = 0.2;
-    public static final int KNN_ESTIMATOR_K = 5;
-    public static final double INTERPOLATION_WEIGHT = 0.2;
+    public static int CONSISTENCY_LEARNING_N_FOLD = 100;
+    public static double CONSISTENCY_LEARNING_PROBE_RATE = 0.2;
+    public static int KNN_ESTIMATOR_K = 5;
+    public static double INTERPOLATION_WEIGHT = 0.2;
 
     public static void consistencyBasedRescore(ArrayList<ResultInstance.SubInstance> priorScoredQfacts) {
         ArrayList<KNNEstimator.DataPoint> candidates = new ArrayList<>();
