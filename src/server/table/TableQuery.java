@@ -143,8 +143,6 @@ public class TableQuery {
 
     public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String queryType, String queryContext, String quantityConstraint,
                                                                              Map additionalParameters) {
-        quantityConstraint = quantityConstraint.toLowerCase();
-
         Pair<QuantityConstraint, ArrayList<ResultInstance>> result = new Pair<>();
 
         QuantityConstraint constraint = QuantityConstraint.parseFromString(quantityConstraint);
