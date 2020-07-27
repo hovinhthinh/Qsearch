@@ -123,7 +123,7 @@ public class SimpleQueryParser {
     public synchronized static String suggestATypeFromRaw(String rawType, int typeSuggestionCode) {
         String mostSimilarType = null;
         double similarityScore = -1;
-        rawType = NLP.fastStemming(rawType, Morpha.noun);
+        rawType = NLP.fastStemming(rawType.toLowerCase(), Morpha.noun);
         ArrayList<String> inputType = NLP.splitSentence(rawType);
         String inputTypeHead = NLP.getHeadWord(rawType, true);
         ArrayList<Pair<String, Integer>> typeToFreq = typeSuggestionCode == SOURCE_CODE_TEXT
@@ -373,28 +373,28 @@ public class SimpleQueryParser {
     }
 
     public static void main(String[] args) {
-        String[] files = new String[]{
-                "eval/text/exp_2/inputs/FINANCE.txt",
-                "eval/text/exp_2/inputs/SPORTS.txt",
-                "eval/text/exp_2/inputs/TECHNOLOGY.txt",
-                "eval/text/exp_2/inputs/TRANSPORT.txt"
-        };
-        for (String file : files) {
-            for (String line : FileUtils.getLineStream(file, "UTF-8")) {
-                String[] arr = line.split("\t");
-                Triple<String, String, String> t = parse(arr[0]);
-                System.out.println(String.format("[Parsed] %s -- %s", arr[0], t));
-            }
-        }
-        System.out.println("--------------------------------------------------------------------------------");
+//        String[] files = new String[]{
+//                "eval/text/exp_2/inputs/FINANCE.txt",
+//                "eval/text/exp_2/inputs/SPORTS.txt",
+//                "eval/text/exp_2/inputs/TECHNOLOGY.txt",
+//                "eval/text/exp_2/inputs/TRANSPORT.txt"
+//        };
+//        for (String file : files) {
+//            for (String line : FileUtils.getLineStream(file, "UTF-8")) {
+//                String[] arr = line.split("\t");
+//                Triple<String, String, String> t = parse(arr[0]);
+//                System.out.println(String.format("[Parsed] %s -- %s", arr[0], t));
+//            }
+//        }
+//        System.out.println("--------------------------------------------------------------------------------");
 
-        System.out.println(parse("technology companies with more than $100b annual profit"));
-        System.out.println(parse("sprinters who ran 200m in less than 25 s"));
-        System.out.println(parse("companies with profit in 2018 under 100b usd"));
-        System.out.println(parse("games with number of players no less than 100 million in 2018"));
-        System.out.println(parse("technology companies with annual profit from 100 to 200b usd"));
-        System.out.println(parse("celebrities with worth between 1 and 5b usd"));
-        System.out.println(parse("cars of germany that costs less than 30 thousand euros"));
-        System.out.println(parse("Politician with more than 10 million Euros tax evasion charges "));
+        System.out.println(parse("technology companies with more than 10M Euro annual profit"));
+//        System.out.println(parse("sprinters who ran 200m in less than 25 s"));
+//        System.out.println(parse("companies with profit in 2018 under 100b usd"));
+//        System.out.println(parse("games with number of players no less than 100 million in 2018"));
+//        System.out.println(parse("technology companies with annual profit from 100 to 200b usd"));
+//        System.out.println(parse("celebrities with worth between 1 and 5b usd"));
+//        System.out.println(parse("cars of germany that costs less than 30 thousand euros"));
+//        System.out.println(parse("Politician with more than 10 million Euros tax evasion charges "));
     }
 }
