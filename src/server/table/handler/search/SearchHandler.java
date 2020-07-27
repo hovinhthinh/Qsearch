@@ -65,16 +65,16 @@ public class SearchHandler extends HttpServlet {
                                 Map additionalParameters) {
         // Optimize
         if (typeConstraint != null) {
-            typeConstraint = NLP.stripSentence(typeConstraint).toLowerCase();
+            typeConstraint = NLP.stripSentence(typeConstraint);
         }
         if (contextConstraint != null) {
-            contextConstraint = NLP.stripSentence(contextConstraint).toLowerCase();
+            contextConstraint = NLP.stripSentence(contextConstraint);
         }
         if (quantityConstraint != null) {
-            quantityConstraint = NLP.stripSentence(quantityConstraint).toLowerCase();
+            quantityConstraint = NLP.stripSentence(quantityConstraint);
         }
         if (fullConstraint != null) {
-            fullConstraint = NLP.stripSentence(fullConstraint).toLowerCase();
+            fullConstraint = NLP.stripSentence(fullConstraint);
         }
 
         if (fullConstraint == null) {

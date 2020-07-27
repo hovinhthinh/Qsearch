@@ -180,7 +180,6 @@ public class ElasticSearchQuery {
                                                                          ContextMatcher matcher, Map additionalParameters) {
         queryType = queryType.toLowerCase();
         queryContext = queryContext.toLowerCase();
-        quantityConstraint = quantityConstraint.toLowerCase();
 
         Pair<QuantityConstraint, ArrayList<JSONObject>> result = new Pair<>();
 
