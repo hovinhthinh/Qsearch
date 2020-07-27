@@ -38,13 +38,56 @@ public class SimpleQueryParser {
     private static final double MIN_SUGGESTING_HEADWORD_CONF = 0.9;
 
     private static final Pattern MULTIPLIER_OPTIMIZE_PATTERN =
-            Pattern.compile("(\\$\\s*|\\b)\\d+(\\.\\d+)?(k|m|b)(\\s*\\$|\\b)");
+            Pattern.compile("(\\$\\s*|\\b)\\d+(\\.\\d+)?(k|K|m|M|b|B)(\\s*\\$|\\b)");
 
     private static final Pattern RANGE_OPTIMIZE_PATTERN =
             Pattern.compile("\\d+(\\.\\d+)?-\\d+(\\.\\d+)?");
 
     public static String preprocess(String query) {
-        query = NLP.stripSentence(query).toLowerCase();
+        query = NLP.stripSentence(query);
+        // optimize multiplier
+        Matcher matcher;
+        boolean hasChange;
+        do {
+            if (!(matcher = MULTIPLIER_OPTIMIZE_PATTERN.matcher(query)).find()) {
+                break;
+            }
+            hasChange = false;
+            String sub = matcher.group();
+            sub = sub.trim();
+            int start = matcher.start(), end = matcher.end();
+            boolean useMillionMul = false;
+            if (sub.charAt(0) == '$') {
+                sub = sub.substring(1).trim();
+                ++start;
+                useMillionMul = true;
+            }
+            if (sub.charAt(sub.length() - 1) == '$') {
+                sub = sub.substring(0, sub.length() - 1).trim();
+                --end;
+                useMillionMul = true;
+            }
+            String num = sub.substring(0, sub.length() - 1);
+            String mul = "";
+            if (sub.contains("k") || sub.contains("K")) {
+                mul = " thousand";
+                hasChange = true;
+            } else if (sub.contains("m") || sub.contains("M")) {
+                if (useMillionMul || sub.contains("M")) {
+                    mul = " million";
+                    hasChange = true;
+                } else {
+                    mul = "m";
+                }
+            } else if (sub.contains("b") || sub.contains("B")) {
+                mul = " billion";
+                hasChange = true;
+            }
+            query = query.substring(0, start) + " " + num + mul + " " + query.substring(end);
+        } while (hasChange);
+
+        query = query.toLowerCase();
+
         if (query.length() > 0 && Arrays.asList('.', ',', ';', '?').contains(query.charAt(query.length() - 1))) {
             query = query.substring(0, query.length() - 1);
         }
@@ -72,47 +115,6 @@ public class SimpleQueryParser {
             String str = m.group();
             query = query.replace(str, str.replace("-", query.contains("between") ? " and " : " to "));
         }
-
-        // optimize multiplier
-        Matcher matcher;
-        boolean hasChange;
-        do {
-            if (!(matcher = MULTIPLIER_OPTIMIZE_PATTERN.matcher(query)).find()) {
-                break;
-            }
-            hasChange = false;
-            String sub = matcher.group();
-            sub = sub.trim();
-            int start = matcher.start(), end = matcher.end();
-            boolean useMillionMul = false;
-            if (sub.charAt(0) == '$') {
-                sub = sub.substring(1).trim();
-                ++start;
-                useMillionMul = true;
-            }
-            if (sub.charAt(sub.length() - 1) == '$') {
-                sub = sub.substring(0, sub.length() - 1).trim();
-                --end;
-                useMillionMul = true;
-            }
-            String num = sub.substring(0, sub.length() - 1);
-            String mul = "";
-            if (sub.contains("k")) {
-                mul = " thousand";
-                hasChange = true;
-            } else if (sub.contains("m")) {
-                if (useMillionMul) {
-                    mul = " million";
-                    hasChange = true;
-                } else {
-                    mul = "m";
-                }
-            } else if (sub.contains("b")) {
-                mul = " billion";
-                hasChange = true;
-            }
-            query = query.substring(0, start) + " " + num + mul + " " + query.substring(end);
-        } while (hasChange);
 
         return NLP.stripSentence(query);
     }
