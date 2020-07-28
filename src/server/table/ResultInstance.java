@@ -3,6 +3,8 @@ package server.table;
 import java.util.ArrayList;
 
 public class ResultInstance {
+    public static transient final int TOP_KEEP_SUBINSTANCES = 5;
+
     public String entity;
     public double score;
 
@@ -60,7 +62,7 @@ public class ResultInstance {
         }
 
         subInstances.add(si);
-        if (subInstances.size() > 5) {
+        if (subInstances.size() > TOP_KEEP_SUBINSTANCES) {
             int pivot = 0;
             for (int i = 1; i < subInstances.size(); ++i) {
                 if (subInstances.get(i).score < subInstances.get(pivot).score) {
