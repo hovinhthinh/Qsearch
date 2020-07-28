@@ -31,6 +31,8 @@ public class TableQuery {
     public static double SAME_ROW_MATCH_WEIGHT = 0.85;
     public static double RELATED_TEXT_MATCH_WEIGHT = 0.75; // TODO: implement
 
+    public static final int N_TOP_ENTITY_CONSISTENCY_RESCORING = 200;
+
     private static ArrayList<QfactLight> QFACTS = TableQfactLoader.load();
     private static TaxonomyGraph TAXONOMY = TaxonomyGraph.getDefaultGraphInstance();
 
@@ -142,6 +144,7 @@ public class TableQuery {
     }
 
     public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String queryType, String queryContext, String quantityConstraint,
+                                                                             boolean performConsistencyRescoring,
                                                                              Map additionalParameters) {
         Pair<QuantityConstraint, ArrayList<ResultInstance>> result = new Pair<>();
 
@@ -289,18 +292,28 @@ public class TableQuery {
             i = j;
         }
 
-        Collections.sort(result.second, (o1, o2) -> {
-            if (Math.abs(o1.score - o2.score) > 1e-6) {
-                return Double.compare(o2.score, o1.score);
+        Collections.sort(result.second);
+
+        // Consistency rescoring
+        if (performConsistencyRescoring) {
+            int nEntityRescoring = Math.min(N_TOP_ENTITY_CONSISTENCY_RESCORING, result.second.size());
+            ArrayList<ResultInstance.SubInstance> qfacts = new ArrayList<>();
+            for (int i = 0; i < nEntityRescoring; ++i) {
+                qfacts.addAll(result.second.get(i).subInstances);
             }
-            // Entities with same score are ordered by estimated popularity.
-            return Integer.compare(o2.subInstances.get(0).qfact.estimatedPopularity, o1.subInstances.get(0).qfact.estimatedPopularity);
-        });
+            QfactLightConsistencyRescoringEngine.consistencyBasedRescore(qfacts);
+            for (int i = 0; i < nEntityRescoring; ++i) {
+                ResultInstance ri = result.second.get(i);
+                Collections.sort(ri.subInstances, (o1, o2) -> Double.compare(o2.rescore, o1.rescore));
+                ri.score = ri.subInstances.get(0).rescore;
+            }
+            Collections.sort(result.second.subList(0, nEntityRescoring));
+        }
 
         return result;
     }
 
     public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String queryType, String queryContext, String quantityConstraint) {
-        return search(queryType, queryContext, quantityConstraint, null);
+        return search(queryType, queryContext, quantityConstraint, false, null);
     }
 }

@@ -128,18 +128,18 @@ public class QfactLightConsistencyRescoringEngine {
     public static final Logger LOGGER = Logger.getLogger(QfactLightConsistencyRescoringEngine.class.getName());
 
     // TODO: adjust these params.
-    public static double HEADER_TF_WEIGHT = 1;
-    public static double CAPTION_TF_WEIGHT = 0.9;
-    public static double TITLE_TF_WEIGHT = 0.85;
-    public static double SAME_ROW_TF_WEIGHT = 0.85;
+    public static double HEADER_TF_WEIGHT = TableQuery.HEADER_MATCH_WEIGHT;
+    public static double CAPTION_TF_WEIGHT = TableQuery.CAPTION_MATCH_WEIGHT;
+    public static double TITLE_TF_WEIGHT = TableQuery.TITLE_MATCH_WEIGHT;
+    public static double SAME_ROW_TF_WEIGHT = TableQuery.SAME_ROW_MATCH_WEIGHT;
     public static double RELATED_TEXT_TF_WEIGHT = 0;
     public static double QUANTITY_FEATURE_BOOST = 1;
 
     // params for consistency learning
     public static int CONSISTENCY_LEARNING_N_FOLD = 100;
-    public static double CONSISTENCY_LEARNING_PROBE_RATE = 0.2;
+    public static double CONSISTENCY_LEARNING_PROBE_RATE = 0.3;
     public static int KNN_ESTIMATOR_K = 5;
-    public static double INTERPOLATION_WEIGHT = 0.2;
+    public static double INTERPOLATION_WEIGHT = 0.3;
 
     private static HashMap<String, Double> qfactLight2TermTfidfMap(QfactLight f, TableIndex ti) {
         HashMap<String, Double> termTfidfMap = new HashMap<>();

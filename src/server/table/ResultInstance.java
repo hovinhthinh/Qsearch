@@ -2,8 +2,8 @@ package server.table;
 
 import java.util.ArrayList;
 
-public class ResultInstance {
-    public static transient final int TOP_KEEP_SUBINSTANCES = 5;
+public class ResultInstance implements Comparable<ResultInstance> {
+    public static transient final int TOP_KEEP_SUBINSTANCES = 10;
 
     public String entity;
     public double score;
@@ -15,7 +15,7 @@ public class ResultInstance {
         public double score;
 
         // EXPERIMENTAL
-        public double rescore; // this is after applying consistency-based rescoring
+        public Double rescore; // this is after applying consistency-based rescoring
 
         public static class ContextMatchTrace {
             public String token;
@@ -36,6 +36,7 @@ public class ResultInstance {
         public SubInstance(QfactLight qfact, double score, double quantityStandardValue, String quantityConvertedStr, ArrayList<ContextMatchTrace> traces) {
             this.qfact = qfact;
             this.score = score;
+            this.rescore = null;
             this.quantityStandardValue = quantityStandardValue;
             this.quantityConvertedStr = quantityConvertedStr;
             this.traces = traces;
@@ -72,5 +73,14 @@ public class ResultInstance {
             subInstances.set(pivot, subInstances.get(subInstances.size() - 1));
             subInstances.remove(subInstances.size() - 1);
         }
+    }
+
+    @Override
+    public int compareTo(ResultInstance o) {
+        if (Math.abs(this.score - o.score) > 1e-6) {
+            return Double.compare(o.score, this.score);
+        }
+        // Entities with same score are ordered by estimated popularity.
+        return Integer.compare(o.subInstances.get(0).qfact.estimatedPopularity, this.subInstances.get(0).qfact.estimatedPopularity);
     }
 }
