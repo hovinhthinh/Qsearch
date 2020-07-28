@@ -52,7 +52,10 @@ public class SearchHandler extends HttpServlet {
 
         httpServletResponse.setCharacterEncoding("utf-8");
 
-        String sessionKey = search(nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint, additionalParams);
+        String rescore = request.getParameter("rescore");
+
+        String sessionKey = search(nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint,
+                rescore != null && rescore.equals("true"), additionalParams);
 
         httpServletResponse.getWriter().print(new JSONObject().put("s", sessionKey).toString());
 
@@ -62,6 +65,7 @@ public class SearchHandler extends HttpServlet {
     // return session key
     public static String search(int nTopResult, String fullConstraint,
                                 String typeConstraint, String contextConstraint, String quantityConstraint,
+                                boolean performConsistencyRescoring,
                                 Map additionalParameters) {
         // Optimize
         if (typeConstraint != null) {
@@ -104,7 +108,7 @@ public class SearchHandler extends HttpServlet {
             }
             if (response.verdict == null) {
                 Pair<QuantityConstraint, ArrayList<ResultInstance>> result =
-                        TableQuery.search(typeConstraint, contextConstraint, quantityConstraint, additionalParameters);
+                        TableQuery.search(typeConstraint, contextConstraint, quantityConstraint, performConsistencyRescoring, additionalParameters);
                 if (result.first == null) {
                     response.verdict = "Cannot detect quantity constraint.";
                 } else if (result.second == null) {

@@ -45,12 +45,14 @@ public class SocketSearchAdapter extends WebSocketAdapter {
             additionalParams.put("linking-threshold", Float.parseFloat(o.getString("linking-threshold")));
         }
 
+        boolean performConsistencyRescoring = o.has("rescore") && o.getString("rescore").equals("true");
+
         additionalParams.put("session", session);
 
         int nResult = o.has("ntop") ? Integer.parseInt(o.getString("ntop")) : 10;
 
         String sessionKey = SearchHandler.search(nResult, fullConstraint,
-                typeConstraint, contextConstraint, quantityConstraint, additionalParams);
+                typeConstraint, contextConstraint, quantityConstraint, performConsistencyRescoring, additionalParams);
 
         try {
             session.getRemote().sendString(new JSONObject().put("s", sessionKey).toString());
