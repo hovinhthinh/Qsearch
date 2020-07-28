@@ -1,6 +1,5 @@
 package server.table;
 
-import it.unimi.dsi.fastutil.objects.ObjectHeapPriorityQueue;
 import model.context.IDF;
 import model.quantity.Quantity;
 import model.quantity.QuantityDomain;
@@ -76,17 +75,40 @@ class KNNEstimator {
     }
 
     public double estimate(DataPoint p) {
-        ObjectHeapPriorityQueue<Pair<Double, DataPoint>> queue
-                = new ObjectHeapPriorityQueue<>((a, b) -> b.first.compareTo(a.first));
+        ArrayList<Pair<Double, DataPoint>> queue = new ArrayList<>();
 
         // kNN
+        loop:
         for (DataPoint t : training) {
             if (p.si.qfact.tableId.equals(t.si.qfact.tableId)) {
                 continue;
             }
-            queue.enqueue(new Pair<>(p.dist(t, quantityMeanNormalizeValue), t));
+            Pair<Double, DataPoint> dist2Point = new Pair<>(p.dist(t, quantityMeanNormalizeValue), t);
+
+            // update if there is a worse fact of the same table in queue.
+            for (int i = 0; i < queue.size(); ++i) {
+                Pair<Double, DataPoint> o = queue.get(i);
+                if (o.second.si.qfact.tableId.equals(t.si.qfact.tableId)) {
+                    if (dist2Point.first < o.first) {
+                        queue.set(i, dist2Point);
+                        continue loop;
+                    }
+                    break;
+                }
+            }
+
+            queue.add(dist2Point);
+            // remove the furthest point
             if (queue.size() > k) {
-                queue.dequeue();
+                int posToRemove = 0;
+                for (int i = 1; i < queue.size(); ++i) {
+                    if (queue.get(i).first > queue.get(posToRemove).first) {
+                        posToRemove = i;
+                    }
+                }
+
+                queue.set(posToRemove, queue.get(queue.size() - 1));
+                queue.remove(queue.size() - 1);
             }
         }
 
@@ -95,9 +117,8 @@ class KNNEstimator {
         }
 
         double res = 0;
-        int size = queue.size();
-        while (!queue.isEmpty()) {
-            res += queue.dequeue().second.si.score / size;
+        for (Pair<Double, DataPoint> dist2Point : queue) {
+            res += dist2Point.second.si.score / queue.size();
         }
         return res;
     }
