@@ -54,8 +54,8 @@ class KNNEstimator {
             Quantity q = Quantity.fromQuantityString(si.qfact.quantity);
             Quantity oQ = Quantity.fromQuantityString(o.si.qfact.quantity);
 
-            double qValue = q.value * QuantityDomain.getScale(q) / quantityMeanValue;
-            double oQValue = oQ.value * QuantityDomain.getScale(oQ) / quantityMeanValue;
+            double qValue = q.value * QuantityDomain.getScale(q) / quantityMeanValue * QfactLightConsistencyRescoringEngine.QUANTITY_FEATURE_BOOST;
+            double oQValue = oQ.value * QuantityDomain.getScale(oQ) / quantityMeanValue * QfactLightConsistencyRescoringEngine.QUANTITY_FEATURE_BOOST;
             dotProd += qValue * oQValue;
             length += qValue * qValue;
             oLength += oQValue * oQValue;
@@ -133,6 +133,13 @@ public class QfactLightConsistencyRescoringEngine {
     public static double TITLE_TF_WEIGHT = 0.85;
     public static double SAME_ROW_TF_WEIGHT = 0.85;
     public static double RELATED_TEXT_TF_WEIGHT = 0;
+    public static double QUANTITY_FEATURE_BOOST = 1;
+
+    // params for consistency learning
+    public static int CONSISTENCY_LEARNING_N_FOLD = 100;
+    public static double CONSISTENCY_LEARNING_PROBE_RATE = 0.2;
+    public static int KNN_ESTIMATOR_K = 5;
+    public static double INTERPOLATION_WEIGHT = 0.2;
 
     private static HashMap<String, Double> qfactLight2TermTfidfMap(QfactLight f, TableIndex ti) {
         HashMap<String, Double> termTfidfMap = new HashMap<>();
@@ -191,11 +198,6 @@ public class QfactLightConsistencyRescoringEngine {
         termTfidfMap.replaceAll((k, v) -> Math.log(1 + v) * IDF.getRobertsonIdf(k));
         return termTfidfMap;
     }
-
-    public static int CONSISTENCY_LEARNING_N_FOLD = 100;
-    public static double CONSISTENCY_LEARNING_PROBE_RATE = 0.2;
-    public static int KNN_ESTIMATOR_K = 5;
-    public static double INTERPOLATION_WEIGHT = 0.2;
 
     public static void consistencyBasedRescore(ArrayList<ResultInstance.SubInstance> priorScoredQfacts) {
         ArrayList<KNNEstimator.DataPoint> candidates = new ArrayList<>();
