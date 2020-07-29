@@ -674,6 +674,7 @@
         $("#context").attr('disabled', 'disabled');
         $("#quantity").attr('disabled', 'disabled');
 
+        var startRescore = false;
         if ("WebSocket" in window) {
             var ws = new WebSocket(location.protocol.replace("http", "ws") + "//" + location.host + "/search_socket_table");
             ws.onopen = function () {
@@ -685,6 +686,12 @@
                 var data = JSON.parse(msg);
                 if ("progress" in data) {
                     nanobar.go(data["progress"]);
+                } else if ("rescore-progress" in data) {
+                    nanobar.go(data["rescore-progress"]);
+                    if (!startRescore) {
+                        $("#search").html("Rescoring <i class=\"fas fa-spinner fa-spin\"></i>");
+                        startRescore = true;
+                    }
                 } else {
                     window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
                 }
