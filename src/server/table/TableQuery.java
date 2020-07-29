@@ -301,7 +301,7 @@ public class TableQuery {
             for (int i = 0; i < nEntityRescoring; ++i) {
                 qfacts.addAll(result.second.get(i).subInstances);
             }
-            QfactLightConsistencyRescoringEngine.consistencyBasedRescore(qfacts);
+            QfactLightConsistencyRescoringEngine.consistencyBasedRescore(qfacts, session);
             for (int i = 0; i < nEntityRescoring; ++i) {
                 ResultInstance ri = result.second.get(i);
                 Collections.sort(ri.subInstances, (o1, o2) -> Double.compare(o2.rescore, o1.rescore));

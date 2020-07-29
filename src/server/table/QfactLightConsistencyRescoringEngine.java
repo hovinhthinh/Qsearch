@@ -4,12 +4,14 @@ import model.context.IDF;
 import model.quantity.Quantity;
 import model.quantity.QuantityDomain;
 import nlp.NLP;
+import org.eclipse.jetty.websocket.api.Session;
 import storage.table.index.TableIndex;
 import storage.table.index.TableIndexStorage;
 import uk.ac.susx.informatics.Morpha;
 import util.Pair;
 import util.headword.StringUtils;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -199,7 +201,7 @@ public class QfactLightConsistencyRescoringEngine {
         return termTfidfMap;
     }
 
-    public static void consistencyBasedRescore(ArrayList<ResultInstance.SubInstance> priorScoredQfacts) {
+    public static void consistencyBasedRescore(ArrayList<ResultInstance.SubInstance> priorScoredQfacts, Session session) {
         ArrayList<KNNEstimator.DataPoint> candidates = new ArrayList<>();
 
         for (int i = 0; i < priorScoredQfacts.size(); ++i) {
@@ -213,6 +215,8 @@ public class QfactLightConsistencyRescoringEngine {
         if (nProbe == 0) {
             return;
         }
+
+        int lastPercent = 0;
         for (int i = 0; i < CONSISTENCY_LEARNING_N_FOLD; ++i) {
             Collections.shuffle(candidates);
             KNNEstimator estimator = new KNNEstimator(candidates.subList(nProbe, candidates.size()), KNN_ESTIMATOR_K);
@@ -220,6 +224,19 @@ public class QfactLightConsistencyRescoringEngine {
                 KNNEstimator.DataPoint p = candidates.get(j);
                 p.consistencyScr += estimator.estimate(p);
                 ++p.nProbeTimes;
+            }
+
+            // log progress
+            if (session != null) {
+                int currentPercent = (int) ((double) (i + 1) * 100 / CONSISTENCY_LEARNING_N_FOLD);
+                if (currentPercent > lastPercent) {
+                    lastPercent = currentPercent;
+                    try {
+                        session.getRemote().sendString("{\"rescore-progress\":" + currentPercent + "}");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
 
