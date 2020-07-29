@@ -332,9 +332,16 @@
 
         cell.append(t);
 
+        var scoreToShow = (si.rescore != null ? si.rescore : si.score).toFixed(3);
+        var rescoreDiff = parseFloat((si.rescore != null ? (si.rescore - si.score) : 0).toFixed(3));
+        if (rescoreDiff > 0) {
+            scoreToShow += ' (<span class="text-success">+' + rescoreDiff.toFixed(3) + '</span>)';
+        } else if (rescoreDiff < 0) {
+            scoreToShow += ' (<span class="text-danger">' + rescoreDiff.toFixed(3) + '</span>)';
+        }
         // caption & score
         var wrapper = $('<div class="row"><div style="text-align:left" class="pl-3"></div><div style="text-align: center;" class="col-10 pl-0"></div></div>');
-        // wrapper.eq(0).children().eq(0).html('<span class="badge badge-pill badge-secondary">Score: ' + si.score.toFixed(3) + '</span>');
+        // wrapper.eq(0).children().eq(0).html('<span class="font-weight-bold" style="font-size: 12px" style="background-color:white;">&nbsp;<u>Score:</u> ' + scoreToShow + '&nbsp;</span>');
         if (si.qfact.tableIndex.caption != "") {
             var captionText = escapeText(si.qfact.tableIndex.caption);
             for (var i = 0; i < si.traces.length; ++i) {
