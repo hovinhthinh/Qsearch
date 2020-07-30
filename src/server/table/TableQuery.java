@@ -146,7 +146,7 @@ public class TableQuery {
         }
 
         // Penalty by difference between header & query
-        score *= Math.pow(ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(header, queryX), 3);
+        score *= ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(header, queryX);
         return new Pair<>(score, traces);
     }
 
