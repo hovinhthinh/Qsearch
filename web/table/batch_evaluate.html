@@ -638,6 +638,18 @@
     var total = 0;
 
     function go(step) {
+        if (step != 0) {
+            var notSubmitted = false;
+            for (var i = 0; i < data["topResults"].length; ++i) {
+                if (data["topResults"][i].eval == null) {
+                    notSubmitted = true;
+                    break;
+                }
+            }
+            if (notSubmitted && !confirm("Question not submitted. Later?")) {
+                return;
+            }
+        }
         $('.total').html(total.toString());
         if (total > 0) {
             current = (current + step + total) % total;
