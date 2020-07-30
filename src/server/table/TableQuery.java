@@ -1,5 +1,6 @@
 package server.table;
 
+import model.context.ContextEmbeddingMatcher;
 import model.context.IDF;
 import model.quantity.Quantity;
 import model.quantity.QuantityConstraint;
@@ -40,6 +41,8 @@ public class TableQuery {
         double score = 0;
         ArrayList<ResultInstance.SubInstance.ContextMatchTrace> traces = new ArrayList<>();
         double totalIdf = 0;
+
+        ArrayList<String> header = new ArrayList<>();
         for (String qX : queryX) {
             ResultInstance.SubInstance.ContextMatchTrace trace = new ResultInstance.SubInstance.ContextMatchTrace(null, 0, null);
             // HEADER
@@ -47,7 +50,9 @@ public class TableQuery {
                 if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
                     continue;
                 }
-                double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
+                fX = StringUtils.stem(fX, Morpha.any);
+                header.add(fX);
+                double sim = Glove.cosineDistance(qX, fX);
                 if (sim == -1) {
                     continue;
                 }
@@ -140,6 +145,8 @@ public class TableQuery {
             score /= totalIdf;
         }
 
+        // Penalty by difference between header & query
+        score *= Math.pow(ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(header, queryX), 3);
         return new Pair<>(score, traces);
     }
 
