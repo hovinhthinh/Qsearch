@@ -135,7 +135,7 @@ public class QfactLightConsistencyRescoringEngine {
     public static double TITLE_TF_WEIGHT = TableQuery.TITLE_MATCH_WEIGHT;
     public static double SAME_ROW_TF_WEIGHT = TableQuery.SAME_ROW_MATCH_WEIGHT;
     public static double RELATED_TEXT_TF_WEIGHT = 0;
-    public static double QUANTITY_FEATURE_BOOST = 1;
+    public static double QUANTITY_FEATURE_BOOST = 10;
 
     // params for consistency learning
     public static int CONSISTENCY_LEARNING_N_FOLD = 100;
