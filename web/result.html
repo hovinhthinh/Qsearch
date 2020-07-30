@@ -488,6 +488,7 @@
     var data = null;
     var resultsForWikiView = null;
     var wikiViewCountLeft = 0;
+    var wikiViewUnavailable = false;
     if (urlParams.has("s")) {
         $.ajax({
             type: "GET",
@@ -521,14 +522,17 @@
                         dataType: "json",
                         success: function (response) {
                             o['view'] = response['view'];
+                            if (response['view'] == -1) {
+                                wikiViewUnavailable = true;
+                            }
                             --wikiViewCountLeft;
                             if (wikiViewCountLeft == 0) {
                                 data['topResults'] = resultsForWikiView;
                                 $('#sort-entity').removeAttr('hidden');
-                            }
-                            if (response['view'] == -1) {
-                                $('#sort-entity').append(' <i class="fas fa-exclamation-circle" style="color:red"></i>')
-                                    .attr('title', 'Wikiview is not available for all entities.');
+                                if (wikiViewUnavailable) {
+                                    $('#sort-entity').append(' <i class="fas fa-exclamation-circle" style="color: red"></i>')
+                                        .attr('title', 'Wikiview is not available for all entities.');
+                                }
                             }
                         }
                     });
