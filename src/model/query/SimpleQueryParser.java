@@ -38,7 +38,7 @@ public class SimpleQueryParser {
     private static final double MIN_SUGGESTING_HEADWORD_CONF = 0.9;
 
     private static final Pattern MULTIPLIER_OPTIMIZE_PATTERN =
-            Pattern.compile("(\\$\\s*|\\b)\\d+(\\.\\d+)?(k|K|m|M|b|B)(\\s*\\$|\\b)");
+            Pattern.compile("(?i)(\\$\\s*|\\b)\\d+(\\.\\d+)?(k|m|b| bio| mio)(\\s*\\$|\\b)");
 
     private static final Pattern RANGE_OPTIMIZE_PATTERN =
             Pattern.compile("\\d+(\\.\\d+)?-\\d+(\\.\\d+)?");
@@ -67,26 +67,32 @@ public class SimpleQueryParser {
                 --end;
                 useMillionMul = true;
             }
-            String num = sub.substring(0, sub.length() - 1);
-            String mul = "";
-            if (sub.contains("k") || sub.contains("K")) {
-                mul = " thousand";
+            String subLC = sub.toLowerCase();
+            String subChanged = null;
+            if (subLC.endsWith("k")) {
+                subChanged = sub.substring(0, sub.length() - 1) + " thousand";
                 hasChange = true;
-            } else if (sub.contains("m") || sub.contains("M")) {
-                if (useMillionMul || sub.contains("M")) {
-                    mul = " million";
+            } else if (subLC.endsWith("m")) {
+                if (useMillionMul || sub.endsWith("M")) {
+                    subChanged = sub.substring(0, sub.length() - 1) + " million";
                     hasChange = true;
                 } else {
-                    mul = "m";
+                    subChanged = sub;
                 }
-            } else if (sub.contains("b") || sub.contains("B")) {
-                mul = " billion";
+            } else if (subLC.endsWith(" mio")) {
+                subChanged = sub.substring(0, sub.length() - 4) + " million";
+                hasChange = true;
+            } else if (subLC.endsWith("b")) {
+                subChanged = sub.substring(0, sub.length() - 1) + " billion";
+                hasChange = true;
+            } else if (subLC.endsWith(" bio")) {
+                subChanged = sub.substring(0, sub.length() - 4) + " billion";
                 hasChange = true;
             }
-            query = query.substring(0, start) + " " + num + mul + " " + query.substring(end);
+            query = query.substring(0, start) + " " + subChanged + " " + query.substring(end);
         } while (hasChange);
 
-        query = query.toLowerCase();
+        query = NLP.stripSentence(query).toLowerCase();
 
         if (query.length() > 0 && Arrays.asList('.', ',', ';', '?').contains(query.charAt(query.length() - 1))) {
             query = query.substring(0, query.length() - 1);
@@ -373,28 +379,28 @@ public class SimpleQueryParser {
     }
 
     public static void main(String[] args) {
-//        String[] files = new String[]{
-//                "eval/text/exp_2/inputs/FINANCE.txt",
-//                "eval/text/exp_2/inputs/SPORTS.txt",
-//                "eval/text/exp_2/inputs/TECHNOLOGY.txt",
-//                "eval/text/exp_2/inputs/TRANSPORT.txt"
-//        };
-//        for (String file : files) {
-//            for (String line : FileUtils.getLineStream(file, "UTF-8")) {
-//                String[] arr = line.split("\t");
-//                Triple<String, String, String> t = parse(arr[0]);
-//                System.out.println(String.format("[Parsed] %s -- %s", arr[0], t));
-//            }
-//        }
-//        System.out.println("--------------------------------------------------------------------------------");
+        String[] files = new String[]{
+                "eval/text/exp_2/inputs/FINANCE.txt",
+                "eval/text/exp_2/inputs/SPORTS.txt",
+                "eval/text/exp_2/inputs/TECHNOLOGY.txt",
+                "eval/text/exp_2/inputs/TRANSPORT.txt"
+        };
+        for (String file : files) {
+            for (String line : FileUtils.getLineStream(file, "UTF-8")) {
+                String[] arr = line.split("\t");
+                Triple<String, String, String> t = parse(arr[0]);
+                System.out.println(String.format("[Parsed] %s -- %s", arr[0], t));
+            }
+        }
+        System.out.println("--------------------------------------------------------------------------------");
 
         System.out.println(parse("technology companies with more than 10M Euro annual profit"));
-//        System.out.println(parse("sprinters who ran 200m in less than 25 s"));
-//        System.out.println(parse("companies with profit in 2018 under 100b usd"));
-//        System.out.println(parse("games with number of players no less than 100 million in 2018"));
-//        System.out.println(parse("technology companies with annual profit from 100 to 200b usd"));
-//        System.out.println(parse("celebrities with worth between 1 and 5b usd"));
-//        System.out.println(parse("cars of germany that costs less than 30 thousand euros"));
-//        System.out.println(parse("Politician with more than 10 million Euros tax evasion charges "));
+        System.out.println(parse("sprinters who ran 200m in less than 25 s"));
+        System.out.println(parse("companies with profit in 2018 under 100b usd"));
+        System.out.println(parse("games with number of players no less than 100 million in 2018"));
+        System.out.println(parse("technology companies with annual profit from 100 to 200b usd"));
+        System.out.println(parse("celebrities with worth between 1 and 5b usd"));
+        System.out.println(parse("cars of germany that costs less than 30 thousand euros"));
+        System.out.println(parse("Politician with more than 10 million Euros tax evasion charges "));
     }
 }
