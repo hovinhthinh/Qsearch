@@ -214,10 +214,12 @@ public class SimpleQueryParser {
                 StringBuilder type = new StringBuilder();
                 boolean hasNoun = false;
 
+                int index = -1;
                 loop:
                 for (PostaggedToken t : tagged) {
-                    if (t.postag().startsWith("VB") || TYPE_SEPARATOR.contains(t.string())
-                            || (hasNoun && (t.postag().startsWith("RB") || t.postag().startsWith("JJ")))) {
+                    ++index;
+                    if (index > 0 && (t.postag().startsWith("VB") || TYPE_SEPARATOR.contains(t.string())
+                            || (hasNoun && (t.postag().startsWith("RB") || t.postag().startsWith("JJ"))))) {
                         if (!hasNoun || type.length() == 0) {
                             return null;
                         }
@@ -243,6 +245,9 @@ public class SimpleQueryParser {
                         result.first = suggestedType;
                     }
                 }
+            }
+            if (typeRawStr == null) {
+                return null;
             }
             // quantity
             // get the last one, or the last one right after a comparison signal.
