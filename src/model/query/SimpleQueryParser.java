@@ -18,9 +18,12 @@ import util.Triple;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SimpleQueryParser {
     public static final Logger LOGGER = Logger.getLogger(SimpleQueryParser.class.getName());
@@ -42,6 +45,13 @@ public class SimpleQueryParser {
 
     private static final Pattern RANGE_OPTIMIZE_PATTERN =
             Pattern.compile("\\d+(\\.\\d+)?-\\d+(\\.\\d+)?");
+
+    public static Map<String, String> TYPE_SUGGESTION_MAP = Stream.of(new Object[][]{ // Domain added for Wikipedia
+            {"cricket player", "cricketer"},
+            {"nba player", "national basketball association player"},
+            {"rail way", "railway"},
+            {"rail station", "railway station"},
+    }).collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
 
     public static String preprocess(String query) {
         query = NLP.stripSentence(query);
@@ -127,9 +137,15 @@ public class SimpleQueryParser {
 
     // find closest related type in the YAGO dictionary, by comparing headword similarity and full string similarity
     public synchronized static String suggestATypeFromRaw(String rawType, int typeSuggestionCode) {
-        String mostSimilarType = null;
         double similarityScore = -1;
         rawType = NLP.fastStemming(rawType.toLowerCase(), Morpha.noun);
+
+        String mostSimilarType = TYPE_SUGGESTION_MAP.get(rawType);
+        if (mostSimilarType != null) {
+            LOGGER.info(String.format("Suggested type: %s --> %s (conf: N/A)", rawType, mostSimilarType));
+            return mostSimilarType;
+        }
+
         ArrayList<String> inputType = NLP.splitSentence(rawType);
         String inputTypeHead = NLP.getHeadWord(rawType, true);
         ArrayList<Pair<String, Integer>> typeToFreq = typeSuggestionCode == SOURCE_CODE_TEXT
