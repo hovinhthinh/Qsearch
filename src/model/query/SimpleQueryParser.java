@@ -51,6 +51,7 @@ public class SimpleQueryParser {
             {"nba player", "national basketball association player"},
             {"rail way", "railway"},
             {"rail station", "railway station"},
+            {"optical telescope", "telescope"},
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
 
     public static String preprocess(String query) {
