@@ -1,9 +1,14 @@
 package eval.table.exp_2.recall;
 
 import model.query.SimpleQueryParser;
+import model.table.Cell;
 import model.table.Table;
 import model.table.link.EntityLink;
 import model.table.link.QuantityLink;
+import nlp.NLP;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import pipeline.table.QuantityTaggingNode;
 import util.FileUtils;
@@ -14,6 +19,63 @@ import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+class WIKIPEDIA_GroundTruth {
+
+    // Input is from "/GW/D5data/hvthinh/TabEL/tables.json.gz"
+    private static Cell parseCellFromJSONObject(JSONObject json) {
+        Cell cell = new Cell();
+        cell.text = String.join(" ", NLP.tokenize(json.getString("text")));
+        JSONArray links = json.getJSONArray("surfaceLinks");
+        cell.entityLinks = new ArrayList<>();
+        cell.timeLinks = new ArrayList<>();
+        cell.quantityLinks = new ArrayList<>();
+
+        for (int i = 0; i < links.length(); ++i) {
+            JSONObject linkI = links.getJSONObject(i);
+            EntityLink el = new EntityLink();
+            el.text = String.join(" ", NLP.tokenize(linkI.getString("surface")));
+            el.target = "<" + StringEscapeUtils.unescapeJava(linkI.getJSONObject("target").getString("title")) + ">";
+            cell.entityLinks.add(el);
+        }
+        return cell;
+    }
+
+    public static Table parseFromJSON(JSONObject json) {
+        try {
+            Table table = new Table();
+
+            table._id = json.getString("_id");
+            table.nColumn = json.getInt("numCols");
+            table.nHeaderRow = json.getInt("numHeaderRows");
+            table.nDataRow = json.getInt("numDataRows");
+
+            table.header = new Cell[table.nHeaderRow][table.nColumn];
+            table.data = new Cell[table.nDataRow][table.nColumn];
+
+            JSONArray headerContent = json.getJSONArray("tableHeaders");
+            JSONArray dataContent = json.getJSONArray("tableData");
+            for (int c = 0; c < table.nColumn; ++c) {
+                for (int r = 0; r < table.nHeaderRow; ++r) {
+                    table.header[r][c] = parseCellFromJSONObject(headerContent.getJSONArray(r).getJSONObject(c));
+                }
+                for (int r = 0; r < table.nDataRow; ++r) {
+                    table.data[r][c] = parseCellFromJSONObject(dataContent.getJSONArray(r).getJSONObject(c));
+                }
+            }
+
+            // Conservative filters.
+            if (table.nHeaderRow == 0) {
+                return null;
+            }
+
+            return table;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
 
 class GroundFact {
     String surface;
