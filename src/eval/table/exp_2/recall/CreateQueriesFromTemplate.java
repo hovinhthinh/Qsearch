@@ -82,6 +82,9 @@ class QueryTemplate {
     }
 
     public Pair<Double, String> textualizeQuantity(double queryQ, String queryQStr, boolean percent) {
+        if (queryQStr.endsWith(".0")) {
+            queryQStr = queryQStr.substring(0, queryQStr.length() - 2);
+        }
         if (Math.abs(queryQ) >= 1e9) {
             queryQStr = String.format("%.1f", queryQ / 1e9);
             queryQ = Double.parseDouble(queryQStr) * 1e9;
