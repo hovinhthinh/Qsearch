@@ -164,7 +164,7 @@ class QueryTemplate {
                     }
                 }
                 Assert.assertTrue(q.groundFacts.size() > 0);
-                if (q.groundFacts.size() <= nResultsLast + 7) {
+                if (q.groundFacts.size() <= nResultsLast + 7 || q.groundFacts.size() > 30) {
                     continue;
                 }
 
@@ -222,7 +222,7 @@ class QueryTemplate {
                     }
                 }
                 Assert.assertTrue(q.groundFacts.size() > 0);
-                if (q.groundFacts.size() <= nResultsLast + 7) {
+                if (q.groundFacts.size() <= nResultsLast + 7 || q.groundFacts.size() > 30) {
                     continue;
                 }
 
