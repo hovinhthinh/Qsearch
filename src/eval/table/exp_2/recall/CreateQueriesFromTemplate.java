@@ -81,11 +81,10 @@ class QueryTemplate {
         return arr[RAND.nextInt(arr.length)];
     }
 
-    public Pair<Double, String> textualizeQuantity(double queryQ, String queryQStr) {
+    public Pair<Double, String> textualizeQuantity(double queryQ, String queryQStr, boolean percent) {
         if (Math.abs(queryQ) >= 1e9) {
             queryQStr = String.format("%.1f", queryQ / 1e9);
             queryQ = Double.parseDouble(queryQStr) * 1e9;
-
             if (queryQStr.endsWith(".0") || queryQ >= 10 * 1e9) {
                 queryQStr = queryQStr.substring(0, queryQStr.length() - 2);
                 queryQ = Double.parseDouble(queryQStr) * 1e9;
@@ -94,12 +93,10 @@ class QueryTemplate {
         } else if (Math.abs(queryQ) >= 1e6) {
             queryQStr = String.format("%.1f", queryQ / 1e6);
             queryQ = Double.parseDouble(queryQStr) * 1e6;
-
             if (queryQStr.endsWith(".0") || queryQ >= 10 * 1e6) {
                 queryQStr = queryQStr.substring(0, queryQStr.length() - 2);
                 queryQ = Double.parseDouble(queryQStr) * 1e6;
             }
-
             queryQStr += chooseRandom("M", " million", " mio");
         } else if (Math.abs(queryQ) >= 1e5) {
             queryQStr = String.format("%.0f", queryQ / 1e3);
@@ -109,6 +106,13 @@ class QueryTemplate {
             queryQStr = String.format("%.0f", queryQ / 1e3);
             queryQ = Double.parseDouble(queryQStr) * 1e3;
             queryQStr += chooseRandom(",000", " thousand", "000");
+        } else if (percent) {
+            queryQStr = String.format("%.1f", queryQ * 100);
+            queryQ = Double.parseDouble(queryQStr) / 100;
+            if (queryQStr.endsWith(".0")) {
+                queryQStr = queryQStr.substring(0, queryQStr.length() - 2);
+                queryQ = Double.parseDouble(queryQStr) / 100;
+            }
         }
 
         return new Pair<>(queryQ, queryQStr);
@@ -147,7 +151,8 @@ class QueryTemplate {
                 Quantity thresholdQ = facts.get(top - 1).q;
                 double queryQ = thresholdQ.value * QuantityDomain.getScale(thresholdQ) / QuantityDomain.getScale(new Quantity(0, quantityUnit, "="));
                 String queryQStr = "" + queryQ;
-                Pair<Double, String> textualized = textualizeQuantity(queryQ, queryQStr);
+                Pair<Double, String> textualized = textualizeQuantity(queryQ, queryQStr,
+                        QuantityDomain.getDomainOfUnit(quantityUnit).equals(QuantityDomain.Domain.PERCENTAGE));
                 queryQ = textualized.first;
                 queryQStr = textualized.second;
                 double factQThreshold = queryQ * QuantityDomain.getScale(new Quantity(0, quantityUnit, "=")) / QuantityDomain.getScale(thresholdQ);
@@ -172,7 +177,7 @@ class QueryTemplate {
                 } else {
                     comparator = chooseRandom("no less than", "at least");
                 }
-                q.full = NLP.stripSentence(full.replace(quantitySpan, " " + comparator + " " +  queryQStr + " " + quantityUnit + " "));
+                q.full = NLP.stripSentence(full.replace(quantitySpan, " " + comparator + " " + queryQStr + " " + quantityUnit + " "));
                 queries.add(q);
                 nResultsLast = q.groundFacts.size();
             }
@@ -207,7 +212,8 @@ class QueryTemplate {
                 Quantity thresholdQ = facts.get(top - 1).q;
                 double queryQ = thresholdQ.value * QuantityDomain.getScale(thresholdQ) / QuantityDomain.getScale(new Quantity(0, quantityUnit, "="));
                 String queryQStr = "" + queryQ;
-                Pair<Double, String> textualized = textualizeQuantity(queryQ, queryQStr);
+                Pair<Double, String> textualized = textualizeQuantity(queryQ, queryQStr,
+                        QuantityDomain.getDomainOfUnit(quantityUnit).equals(QuantityDomain.Domain.PERCENTAGE));
                 queryQ = textualized.first;
                 queryQStr = textualized.second;
                 double factQThreshold = queryQ * QuantityDomain.getScale(new Quantity(0, quantityUnit, "=")) / QuantityDomain.getScale(thresholdQ);
@@ -232,7 +238,7 @@ class QueryTemplate {
                 } else {
                     comparator = chooseRandom("no more than", "at most");
                 }
-                q.full = NLP.stripSentence(full.replace(quantitySpan, " " + comparator + " " +  queryQStr + " " + quantityUnit + " "));
+                q.full = NLP.stripSentence(full.replace(quantitySpan, " " + comparator + " " + queryQStr + " " + quantityUnit + " "));
                 queries.add(q);
                 nResultsLast = q.groundFacts.size();
             }
