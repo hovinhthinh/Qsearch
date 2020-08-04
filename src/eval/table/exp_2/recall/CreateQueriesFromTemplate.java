@@ -110,6 +110,7 @@ class QueryTemplate {
     }
 
     public Pair<Double, String> textualizeQuantity(double queryQ, String queryQStr, boolean percent) {
+        queryQStr = String.format("%.1f", queryQ);
         if (queryQStr.endsWith(".0")) {
             queryQStr = queryQStr.substring(0, queryQStr.length() - 2);
         }
