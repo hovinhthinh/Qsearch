@@ -113,6 +113,7 @@ class GroundTable {
 }
 
 class RecallQueryTemplate {
+    public static final String BEGIN_QUERY = ">>>> BEGIN >>>>", END_QUERY = "<<<< END <<<<";
     String full;
     String quantitySpan, quantityUnit;
     String bound; // LB, UP, LUB
@@ -129,13 +130,13 @@ class RecallQueryTemplate {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(">>>> BEGIN >>>>");
+        StringBuilder sb = new StringBuilder(BEGIN_QUERY);
         sb.append("\n").append(full + "\t" + quantitySpan + "\t" + quantityUnit + "\t" + bound);
         sb.append("\n").append(groundTruthURLFull);
         for (GroundTable t : tables) {
             sb.append("\n").append(t.toString());
         }
-        sb.append("\n").append("<<<< END <<<<");
+        sb.append("\n").append(END_QUERY);
         return sb.toString();
     }
 }
