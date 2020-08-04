@@ -143,11 +143,8 @@ class QueryTemplate {
                 tops.add(30);
             }
 
-            int nResultsLast = 0;
+            int nResultsLast = -100;
             for (int top : tops) {
-                if (top <= nResultsLast) {
-                    continue;
-                }
                 Quantity thresholdQ = facts.get(top - 1).q;
                 double queryQ = thresholdQ.value * QuantityDomain.getScale(thresholdQ) / QuantityDomain.getScale(new Quantity(0, quantityUnit, "="));
                 String queryQStr = "" + queryQ;
@@ -167,7 +164,7 @@ class QueryTemplate {
                     }
                 }
                 Assert.assertTrue(q.groundFacts.size() > 0);
-                if (q.groundFacts.size() <= nResultsLast) {
+                if (q.groundFacts.size() <= nResultsLast + 7) {
                     continue;
                 }
 
@@ -204,11 +201,8 @@ class QueryTemplate {
                 tops.add(30);
             }
 
-            int nResultsLast = 0;
+            int nResultsLast = -100;
             for (int top : tops) {
-                if (top <= nResultsLast) {
-                    continue;
-                }
                 Quantity thresholdQ = facts.get(top - 1).q;
                 double queryQ = thresholdQ.value * QuantityDomain.getScale(thresholdQ) / QuantityDomain.getScale(new Quantity(0, quantityUnit, "="));
                 String queryQStr = "" + queryQ;
@@ -228,7 +222,7 @@ class QueryTemplate {
                     }
                 }
                 Assert.assertTrue(q.groundFacts.size() > 0);
-                if (q.groundFacts.size() <= nResultsLast) {
+                if (q.groundFacts.size() <= nResultsLast + 7) {
                     continue;
                 }
 
