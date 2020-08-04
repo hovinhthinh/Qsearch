@@ -5,7 +5,6 @@ import model.quantity.QuantityDomain;
 import nlp.NLP;
 import org.junit.Assert;
 import util.FileUtils;
-import util.Gson;
 import util.Pair;
 
 import java.io.PrintWriter;
@@ -22,7 +21,7 @@ class RecallQuery {
         sb.append("\n").append(full);
         sb.append("\n").append(sourceURL);
         for (GroundFact f : groundFacts) {
-            sb.append("\n").append(f.entity).append("\t").append(f.quantityStr).append("\t").append(f.q.toString());
+            sb.append("\n").append(f.entity).append("\t").append(f.q.toString());
         }
         sb.append("\n").append("<<<< END <<<<");
         return sb.toString();
@@ -246,7 +245,7 @@ class QueryTemplate {
 }
 
 public class CreateQueriesFromTemplate {
-    public static void main(String[] args) {
+    public static void generate() {
         FileUtils.LineStream stream = FileUtils.getLineStream("eval/table/exp_2/recall/queries_groundtruth_template_curated.tsv");
         PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_2/recall/recall_query.tsv");
 
@@ -255,7 +254,6 @@ public class CreateQueriesFromTemplate {
         QueryTemplate qt;
         while ((qt = QueryTemplate.read(stream)) != null) {
             for (RecallQuery f : qt.generate()) {
-//                out.println(Gson.toJson(f));
                 out.println(f.toString());
                 System.out.println(f.toString());
                 ++cnt;
@@ -263,5 +261,11 @@ public class CreateQueriesFromTemplate {
         }
         out.close();
         System.out.println("total queries: " + cnt);
+    }
+    public static void loadFixedToJson() {
+
+    }
+    public static void main(String[] args) {
+        generate();
     }
 }
