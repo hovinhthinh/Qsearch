@@ -2442,11 +2442,11 @@ Airbus A320-233	199	<Airbus_A320-233>	(199;;=)
 aircrafts that have capacity more than 400 passengers	more than 400		LB
 https://en.wikipedia.org/wiki/List_of_large_aircraft#Fixed-wing			
 ----------------------------------------------------------------	Capacity		
-Airbus A380	Pax: 850	<Airbus_A380>	850
-Boeing 747-8	Pax: 660	<Boeing_747-8>	660
-Boeing 747	Pax: 550/660	<Boeing_747>	660
-Boeing 777X-9	Pax: 550	<Boeing_777X>	550
-Airbus A340-600	Pax: 440	<Airbus_A340>	440
+Airbus A380	Pax: 850	<Airbus_A380>	(850;;=)
+Boeing 747-8	Pax: 660	<Boeing_747-8>	(660;;=)
+Boeing 747	Pax: 550/660	<Boeing_747>	(660;;=)
+Boeing 777X-9	Pax: 550	<Boeing_777X>	(550;;=)
+Airbus A340-600	Pax: 440	<Airbus_A340>	(440;;=)
 <<<< END <<<<			
 			
 >>>> BEGIN >>>>			
