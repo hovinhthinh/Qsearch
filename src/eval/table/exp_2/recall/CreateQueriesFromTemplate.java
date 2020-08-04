@@ -172,8 +172,9 @@ class QueryTemplate {
                 } else {
                     comparator = chooseRandom("no less than", "at least");
                 }
-                q.full = NLP.stripSentence(full.replace(quantitySpan, " " + comparator + queryQStr + " "));
+                q.full = NLP.stripSentence(full.replace(quantitySpan, " " + comparator + " " +  queryQStr + " " + quantityUnit + " "));
                 queries.add(q);
+                nResultsLast = q.groundFacts.size();
             }
         }
         // UB
@@ -231,8 +232,9 @@ class QueryTemplate {
                 } else {
                     comparator = chooseRandom("no more than", "at most");
                 }
-                q.full = NLP.stripSentence(full.replace(quantitySpan, " " + comparator + queryQStr + " "));
+                q.full = NLP.stripSentence(full.replace(quantitySpan, " " + comparator + " " +  queryQStr + " " + quantityUnit + " "));
                 queries.add(q);
+                nResultsLast = q.groundFacts.size();
             }
         }
 
@@ -243,7 +245,7 @@ class QueryTemplate {
 public class CreateQueriesFromTemplate {
     public static void main(String[] args) {
         FileUtils.LineStream stream = FileUtils.getLineStream("eval/table/exp_2/recall/queries_groundtruth_template_curated.tsv");
-        PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_2/recall/recall_query.json");
+        PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_2/recall/recall_query.tsv");
 
         stream.readLine(); // ignore header
         int cnt = 0;
@@ -251,7 +253,8 @@ public class CreateQueriesFromTemplate {
         while ((qt = QueryTemplate.read(stream)) != null) {
             for (RecallQuery f : qt.generate()) {
 //                out.println(Gson.toJson(f));
-                out.println(Gson.toJson(f.toString()));
+                out.println(f.toString());
+                System.out.println(f.toString());
                 ++cnt;
             }
         }
