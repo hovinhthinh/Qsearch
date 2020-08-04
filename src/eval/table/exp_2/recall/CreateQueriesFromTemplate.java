@@ -5,6 +5,7 @@ import model.quantity.QuantityDomain;
 import nlp.NLP;
 import org.junit.Assert;
 import util.FileUtils;
+import util.Gson;
 import util.Pair;
 
 import java.io.PrintWriter;
@@ -25,6 +26,34 @@ class RecallQuery {
         }
         sb.append("\n").append("<<<< END <<<<");
         return sb.toString();
+    }
+
+    public static RecallQuery read(FileUtils.LineStream stream) {
+        String line;
+        while ((line = stream.readLine()) != null) {
+            line = line.trim();
+            if (line.isEmpty()) {
+                continue;
+            }
+            Assert.assertTrue(line.equals(RecallQueryTemplate.BEGIN_QUERY));
+
+            RecallQuery q = new RecallQuery();
+            q.full = stream.readLine().trim();
+            q.sourceURL = stream.readLine().trim();
+
+            // ground truth
+            q.groundFacts = new ArrayList<>();
+            String[] arr;
+            while (!(arr = stream.readLine().split("\t"))[0].equals(RecallQueryTemplate.END_QUERY)) {
+                GroundFact f = new GroundFact(null, null, arr[0], arr[1]);
+                f.q = Quantity.fromQuantityString(arr[1]);
+                Assert.assertTrue(f.q != null);
+                q.groundFacts.add(f);
+            }
+            Assert.assertTrue(q.groundFacts.size() > 0);
+            return q;
+        }
+        return null;
     }
 }
 
@@ -141,7 +170,7 @@ class QueryTemplate {
             if (facts.size() >= 20) {
                 tops.add(20);
             }
-            if (facts.size() >= 30) {
+            if (facts.size() >= 30 && bound.equals("LB")) {
                 tops.add(30);
             }
 
@@ -199,7 +228,7 @@ class QueryTemplate {
             if (facts.size() >= 20) {
                 tops.add(20);
             }
-            if (facts.size() >= 30) {
+            if (facts.size() >= 30 && bound.equals("UB")) {
                 tops.add(30);
             }
 
@@ -262,10 +291,24 @@ public class CreateQueriesFromTemplate {
         out.close();
         System.out.println("total queries: " + cnt);
     }
-    public static void loadFixedToJson() {
 
+    public static void loadFixedToJson() {
+        FileUtils.LineStream stream = FileUtils.getLineStream("eval/table/exp_2/recall/recall_query.tsv");
+        PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_2/recall/recall_query.json");
+
+        int cnt = 0;
+        RecallQuery q;
+        while ((q = RecallQuery.read(stream)) != null) {
+            out.println(Gson.toJson(q));
+            System.out.println(q.full);
+            ++cnt;
+        }
+        out.close();
+        System.out.println("total queries: " + cnt);
     }
+
     public static void main(String[] args) {
         generate();
+        loadFixedToJson();
     }
 }
