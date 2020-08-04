@@ -87,7 +87,7 @@ class QueryTemplate {
             queryQ = Double.parseDouble(queryQStr) * 1e9;
 
             if (queryQStr.endsWith(".0") || queryQ >= 10 * 1e9) {
-                queryQStr = queryQStr.substring(queryQStr.length() - 2);
+                queryQStr = queryQStr.substring(0, queryQStr.length() - 2);
                 queryQ = Double.parseDouble(queryQStr) * 1e9;
             }
             queryQStr += chooseRandom("B", " billion");
@@ -96,7 +96,7 @@ class QueryTemplate {
             queryQ = Double.parseDouble(queryQStr) * 1e6;
 
             if (queryQStr.endsWith(".0") || queryQ >= 10 * 1e6) {
-                queryQStr = queryQStr.substring(queryQStr.length() - 2);
+                queryQStr = queryQStr.substring(0, queryQStr.length() - 2);
                 queryQ = Double.parseDouble(queryQStr) * 1e6;
             }
 
@@ -108,7 +108,7 @@ class QueryTemplate {
         } else if (Math.abs(queryQ) >= 1e4) {
             queryQStr = String.format("%.0f", queryQ / 1e3);
             queryQ = Double.parseDouble(queryQStr) * 1e3;
-            queryQStr += chooseRandom(",000", " thousand");
+            queryQStr += chooseRandom(",000", " thousand", "000");
         }
 
         return new Pair<>(queryQ, queryQStr);
