@@ -233,7 +233,7 @@ class QueryTemplate {
                 }
 
                 String comparator;
-                if (lastGoodVal < factQThreshold + 1e-6 || queryQ >= 1e4) {
+                if (lastGoodVal < factQThreshold - 1e-6 || queryQ >= 1e4) {
                     comparator = chooseRandom("less than", "below", "lower than", "at most", "up to", "under");
                 } else {
                     comparator = chooseRandom("no more than", "at most");
