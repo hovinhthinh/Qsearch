@@ -1,5 +1,6 @@
 package eval.table.exp_2.recall;
 
+import model.quantity.Quantity;
 import model.table.Cell;
 import model.table.Table;
 import model.table.link.EntityLink;
@@ -77,6 +78,7 @@ class WIKIPEDIA_GroundTruth {
 
 class GroundFact {
     public String surface, quantityStr, entity, quantityValue;
+    public Quantity q;
 
     public GroundFact(String surface, String quantityStr, String entity, String quantityValue) {
         this.surface = surface;
@@ -110,7 +112,7 @@ class GroundTable {
     }
 }
 
-class RecallQuery {
+class RecallQueryTemplate {
     String full;
     String quantitySpan, quantityUnit;
     String bound; // LB, UP, LUB
@@ -140,14 +142,14 @@ class RecallQuery {
 
 public class ExtractGroundTruthForQueries {
 
-    public static void filterRelevantTables(ArrayList<RecallQuery> queries) {
+    public static void filterRelevantTables(ArrayList<RecallQueryTemplate> queries) {
         PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_2/recall/relevant_tables", "UTF-8");
         for (String line : FileUtils.getLineStream("/home/hvthinh/datasets/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id.gz", "UTF-8")) {
             JSONObject o = new JSONObject(line);
             String title = o.getString("pgTitle");
             String[] subtitles = o.getString("sectionTitles").split("\r\n");
 
-            for (RecallQuery q : queries) {
+            for (RecallQueryTemplate q : queries) {
                 if (!q.pgTitle.equals(title)) {
                     continue;
                 }
@@ -174,7 +176,7 @@ public class ExtractGroundTruthForQueries {
         QuantityTaggingNode qtn = new QuantityTaggingNode();
         Scanner in = new Scanner(System.in);
         // LOAD QUERIES
-        ArrayList<RecallQuery> queries = new ArrayList<>();
+        ArrayList<RecallQueryTemplate> queries = new ArrayList<>();
         boolean header = true;
         for (String line : FileUtils.getLineStream("eval/table/exp_2/recall/queries_raw.txt", "UTF-8")) {
             if (header) {
@@ -182,7 +184,7 @@ public class ExtractGroundTruthForQueries {
                 continue;
             }
             String[] arr = line.split("\t", -1);
-            RecallQuery query = new RecallQuery();
+            RecallQueryTemplate query = new RecallQueryTemplate();
 
             query.full = arr[0];
 
@@ -204,7 +206,7 @@ public class ExtractGroundTruthForQueries {
         // PROCESS
         PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_2/recall/queries_groundtruth_template.txt", "UTF-8");
         ArrayList<String> tables = FileUtils.getLines("eval/table/exp_2/recall/relevant_tables", "UTF-8");
-        for (RecallQuery q : queries) {
+        for (RecallQueryTemplate q : queries) {
             for (String line : tables) {
                 JSONObject o = new JSONObject(line);
                 String title = o.getString("pgTitle");
