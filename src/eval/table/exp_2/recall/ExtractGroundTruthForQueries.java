@@ -1,6 +1,5 @@
 package eval.table.exp_2.recall;
 
-import model.query.SimpleQueryParser;
 import model.table.Cell;
 import model.table.Table;
 import model.table.link.EntityLink;
@@ -13,7 +12,6 @@ import org.json.JSONObject;
 import pipeline.table.QuantityTaggingNode;
 import util.FileUtils;
 import util.Gson;
-import util.Triple;
 
 import java.io.PrintWriter;
 import java.net.URLDecoder;
@@ -78,10 +76,7 @@ class WIKIPEDIA_GroundTruth {
 }
 
 class GroundFact {
-    String surface;
-    String quantityStr;
-    String entity;
-    String quantityValue;
+    public String surface, quantityStr, entity, quantityValue;
 
     public GroundFact(String surface, String quantityStr, String entity, String quantityValue) {
         this.surface = surface;
@@ -97,8 +92,9 @@ class GroundFact {
 }
 
 class GroundTable {
-    String quantityHeader;
-    ArrayList<GroundFact> facts;
+    public static final String TABLE_START = "----------------------------------------------------------------";
+    public String quantityHeader;
+    public ArrayList<GroundFact> facts;
 
     public GroundTable() {
         facts = new ArrayList<>();
@@ -106,7 +102,7 @@ class GroundTable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("----------------------------------------------------------------" + "\t" + quantityHeader);
+        StringBuilder sb = new StringBuilder(TABLE_START + "\t" + quantityHeader);
         for (GroundFact f : facts) {
             sb.append("\n").append(f.toString());
         }
@@ -116,8 +112,8 @@ class GroundTable {
 
 class RecallQuery {
     String full;
-    String type, context, quantity;
-    boolean isUpperBoundQuery;
+    String quantitySpan, quantityUnit;
+    String bound; // LB, UP, LUB
 
     String groundTruthURLFull;
     String groundTruthURL;
@@ -132,7 +128,7 @@ class RecallQuery {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(">>>> BEGIN >>>>");
-        sb.append("\n").append(full + "\t" + type + "\t" + context + "\t" + quantity + "\t" + (isUpperBoundQuery ? "UB" : " LB"));
+        sb.append("\n").append(full + "\t" + quantitySpan + "\t" + quantityUnit + "\t" + bound);
         sb.append("\n").append(groundTruthURLFull);
         for (GroundTable t : tables) {
             sb.append("\n").append(t.toString());
@@ -175,7 +171,6 @@ public class ExtractGroundTruthForQueries {
     }
 
     public static void main(String[] args) throws Exception {
-
         QuantityTaggingNode qtn = new QuantityTaggingNode();
         Scanner in = new Scanner(System.in);
         // LOAD QUERIES
@@ -190,11 +185,6 @@ public class ExtractGroundTruthForQueries {
             RecallQuery query = new RecallQuery();
 
             query.full = arr[0];
-            Triple<String, String, String> parsed = SimpleQueryParser.parse(query.full);
-            query.type = parsed.first;
-            query.context = parsed.second;
-            query.quantity = parsed.third;
-            query.isUpperBoundQuery = arr.length > 4 && arr[4].trim().equals("1");
 
             query.groundTruthURL = query.groundTruthURLFull = arr[1];
             int refPos = query.groundTruthURL.indexOf("#");
@@ -270,23 +260,6 @@ public class ExtractGroundTruthForQueries {
                             f.surface, f.quantityStr, f.entity, f.quantityValue));
                 }
                 q.tables.add(gt);
-//                if (q.note.isEmpty()) {
-//                    q.tables.add(gt);
-//                    continue;
-//                }
-//                do {
-//                    System.out.print("Option_(y/n)$ ");
-//                    System.out.flush();
-//                    String opt = in.nextLine().trim().toLowerCase();
-//                    if (opt.equals("y")) {
-//                        q.tables.add(gt);
-//                        break;
-//                    } else if (opt.equals("n")) {
-//                        break;
-//                    } else {
-//                        System.out.println("Invalid");
-//                    }
-//                } while (true);
             }
             out.println(q.toString());
             out.println();
