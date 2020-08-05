@@ -14,7 +14,7 @@ public class BatchQueryRunner {
 
     // args: <inputFile> in format query[\tdomain]; <output-folder>
     public static void main(String[] args) throws Exception {
-        args = "eval/table/exp_2/queries_iswc.txt eval/table/exp_2/annotation-iswc".split(" ");
+        args = "eval/table/exp_2/queries_iswc.txt eval/table/exp_2/annotation-iswc-nolt-rescore/template".split(" ");
 
         File outputFolder = new File(args[1]);
         outputFolder.mkdirs();
@@ -36,8 +36,9 @@ public class BatchQueryRunner {
                     URIBuilder b = new URIBuilder(END_POINT + "/search_table");
                     b.addParameter("corpus", "[\"TABLEM:Link\",\"WIKIPEDIA:Link\"]");
                     b.addParameter("ntop", "10");
-                    b.addParameter("linking-threshold", "0.6");
+                    b.addParameter("linking-threshold", "0");
                     b.addParameter("full", arr[0]);
+                    b.addParameter("rescore", "true");
                     String session = new JSONObject(Crawler.getContentFromUrl(b.toString())).getString("s");
 
                     b = new URIBuilder(END_POINT + "/session");
