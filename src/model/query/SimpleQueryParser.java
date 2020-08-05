@@ -225,6 +225,7 @@ public class SimpleQueryParser {
             String rawTokenized = rawTokenizedSb.toString();
 
             String typeRawStr;
+            ArrayList<String> contextTokensFromType = null;
             if (typeFromTypeSuggestionSystem != null) {
                 typeRawStr = result.first = typeFromTypeSuggestionSystem;
             } else {
@@ -259,6 +260,17 @@ public class SimpleQueryParser {
                 if (typeSuggestionCode != 0) {
                     String suggestedType = suggestATypeFromRaw(result.first, typeSuggestionCode);
                     if (suggestedType != null) {
+                        // film music composer --> composer
+                        // fine-grained types cannot be detected, so that these extra tokens are put into context.
+                        // only applied for tables.
+                        if (typeSuggestionCode == SOURCE_CODE_TABLE) {
+                            String remaining = (" " + result.first + " ").replace(" " + suggestedType + " ", " ").trim();
+                            if (!remaining.equals(result.first)) {
+                                contextTokensFromType = NLP.splitSentence(remaining);
+                            }
+
+                        }
+
                         result.first = suggestedType;
                     }
                 }
@@ -380,6 +392,9 @@ public class SimpleQueryParser {
             // context
             ArrayList<String> context = NLP.splitSentence(
                     rawTokenized.replace(typeRawStr, " ").replace(result.third, " "));
+            if (contextTokensFromType != null) {
+                context.addAll(contextTokensFromType);
+            }
             StringBuilder cSb = new StringBuilder();
             for (String s : context) {
                 if (NLP.BLOCKED_STOPWORDS.contains(s) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(s)) {
