@@ -1,8 +1,8 @@
 	QUANTITY_SPAN	UNIT	LB/UB/LUB
->>>> BEGIN >>>>			
+>>>> BEGIN >>>>
 Companies with revenue over 1B USD	over 1B USD	usd	LB
-https://en.wikipedia.org/wiki/List_of_largest_companies_by_revenue#List_of_largest_companies_by_revenue			
-----------------------------------------------------------------	Revenue ( USD millions )		
+https://en.wikipedia.org/wiki/List_of_largest_companies_by_revenue#List_of_largest_companies_by_revenue
+----------------------------------------------------------------	Revenue ( USD millions )
 Walmart	$ 514,405	<Walmart>	(514405000000.000;US$;=)
 Sinopec	$ 414,649	<China_Petrochemical_Corporation>	(414649000000.000;US$;=)
 Royal Dutch Shell	$ 396,556	<Royal_Dutch_Shell>	(396556000000.000;US$;=)
@@ -53,12 +53,12 @@ Kroger	$ 121,162	<Kroger>	(121162000000.000;US$;=)
 General Electric	$ 120,268	<General_Electric>	(120268000000.000;US$;=)
 Fannie Mae	$ 120,101	<Fannie_Mae>	(120101000000.000;US$;=)
 Lukoil	$ 119,145	<Lukoil>	(119145000000.000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 companies in united kingdom with more than 10K employees in 2018	more than 10K		LB
-https://en.wikipedia.org/wiki/List_of_largest_United_Kingdom_employers#Public_sector_employers			
-----------------------------------------------------------------	Employees		
+https://en.wikipedia.org/wiki/List_of_largest_United_Kingdom_employers#Public_sector_employers
+----------------------------------------------------------------	Employees
 NHS ( England )	1,400,000	<NHS_(England)>	(1400000.000;;=)
 NHS Scotland	160,000	<NHS_Scotland>	(160000.000;;=)
 British Army	125,430	<British_Army>	(125430.000;;=)
@@ -77,12 +77,12 @@ Scottish Government	17,000	<Scottish_Government>	(17000.000;;=)
 Department for Transport	17,640	<Department_for_Transport>	(17640.000;;=)
 Welsh Government	5,682	<Welsh_Government>	(5682.000;;=)
 Parliament of the United Kingdom	1,475	<Parliament_of_the_United_Kingdom>	(1475.000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Which corporation have an annual profit of above 50 mio $?	above 50 mio $	$	LB
-https://en.wikipedia.org/wiki/List_of_largest_corporate_profits_and_losses#Largest_corporate_annual_earnings_of_all_time			
-----------------------------------------------------------------	Earnings converted to USD ( billion )		
+https://en.wikipedia.org/wiki/List_of_largest_corporate_profits_and_losses#Largest_corporate_annual_earnings_of_all_time
+----------------------------------------------------------------	Earnings converted to USD ( billion )
 Saudi Aramco	$113.09	<Saudi_Aramco>	(113090000000;US$;=)
 Vodafone	$106.76	<Vodafone>	(106760000000;US$;=)
 Fannie Mae	$92.18	<Fannie_Mae>	(92180000000;US$;=)
@@ -99,12 +99,12 @@ JPMorgan Chase	$33.06	<JPMorgan_Chase>	(33060000000.;US$;=)
 Citigroup	$32.19	<Citigroup>	(32190000000.;US$;=)
 Volkswagen Group	$31.95	<Volkswagen_Group>	(31950000000;US$;=)
 Agricultural Bank of China	$31.5	<Agricultural_Bank_of_China>	(31500000000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 American actors whose annual income is more than 20 million $	more than 20 million $	$	LB
-https://en.wikipedia.org/wiki/List_of_highest_paid_film_actors#Highest_annual_earnings			
-----------------------------------------------------------------	Earnings		
+https://en.wikipedia.org/wiki/List_of_highest_paid_film_actors#Highest_annual_earnings
+----------------------------------------------------------------	Earnings
 Mark Wahlberg	$68 million	<Mark_Wahlberg>	(68000000;US$;=)
 Dwayne Johnson	$65 million	<Dwayne_Johnson>	(65000000;US$;=)
 Vin Diesel	$54.5 million	<Vin_Diesel>	(54500000;US$;=)
@@ -115,7 +115,7 @@ Tom Cruise	$43 million	<Tom_Cruise>	(43000000;US$;=)
 Shah Rukh Khan	$38 million	<Shah_Rukh_Khan>	(38000000;US$;=)
 Salman Khan	$37 million	<Salman_Khan>	(37000000;US$;=)
 Akshay Kumar	$35.5 million	<Akshay_Kumar>	(35500000;US$;=)
-----------------------------------------------------------------	Earnings		
+----------------------------------------------------------------	Earnings
 George Clooney	$239 million[nb 1]	<George_Clooney>	(239000000;US$;=)
 Dwayne Johnson	$124 million	<Dwayne_Johnson>	(124000000;US$;=)
 Robert Downey Jr.	$81 million	<Robert_Downey_Jr.>	(81000000;US$;=)
@@ -126,7 +126,7 @@ Scarlett Johansson	$40.5 million[20]	<Scarlett_Johansson>	(40500000;US$;=)
 Akshay Kumar	$40.5 million	<Akshay_Kumar>	(40500000;US$;=)
 Adam Sandler	$39.5 million	<Adam_Sandler>	(39500000;US$;=)
 Salman Khan	$38.5 million	<Salman_Khan>	(38500000;US$;=)
-----------------------------------------------------------------	Earnings		
+----------------------------------------------------------------	Earnings
 Dwayne Johnson	$89.4 million	<Dwayne_Johnson>	(89400000;US$;=)
 Chris Hemsworth	$76.4 million	<Chris_Hemsworth>	(76400000;US$;=)
 Robert Downey Jr.	$66 million	<Robert_Downey_Jr.>	(66000000;US$;=)
@@ -137,12 +137,12 @@ Adam Sandler	$57 million	<Adam_Sandler>	(57000000;US$;=)
 Scarlett Johansson	$56 million[22]	<Scarlett_Johansson>	(56000000;US$;=)
 Sofia Vergara	$44.1 million[22]	<Sofia_Vergara>	(44100000;US$;=)
 Chris Evans	$43.5 million	<Chris_Evans_(actor)>	(43500000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Companies with value more than 100B us dollars?	more than 100B us dollars	us dollars	LB
-https://en.wikipedia.org/wiki/List_of_wealthiest_organizations#Companies			
-----------------------------------------------------------------	Market capitalization ( billion USD )		
+https://en.wikipedia.org/wiki/List_of_wealthiest_organizations#Companies
+----------------------------------------------------------------	Market capitalization ( billion USD )
 Saudi Aramco	2,100	<Saudi_Aramco>	(2100000000000.000;united states dollar;=)
 Apple Inc .	1,440	<Apple_Inc.>	(1440000000000.000;united states dollar;=)
 Microsoft	1,470	<Microsoft>	(1470000000000.000;united states dollar;=)
@@ -168,12 +168,12 @@ BP	261	<BP>	(261000000000.000;united states dollar;=)
 ONGC	240	<ONGC>	(240000000000.000;united states dollar;=)
 Royal Dutch Shell	236	<Royal_Dutch_Shell>	(236000000000.000;united states dollar;=)
 Total S.A.	224	<Total_S.A.>	(224000000000.000;united states dollar;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Singer with more than 20M record sales	more than 20M		LB
-https://en.wikipedia.org/wiki/List_of_best-selling_music_artists#Artists_by_reputed_sales			
-----------------------------------------------------------------	Claimed sales		
+https://en.wikipedia.org/wiki/List_of_best-selling_music_artists#Artists_by_reputed_sales
+----------------------------------------------------------------	Claimed sales
 The Beatles	600 million	<The_Beatles>	(600000000.000;;=)
 Elvis Presley	600 million	<Elvis_Presley>	(600000000.000;;=)
 Michael Jackson	350 million	<Michael_Jackson>	(350000000.000;;=)
@@ -182,7 +182,7 @@ Madonna	300 million	<Madonna_(entertainer)>	(300000000.000;;=)
 Led Zeppelin	300 million	<Led_Zeppelin>	(300000000.000;;=)
 Rihanna	250 million	<Rihanna>	(250000000.000;;=)
 Pink Floyd	250 million	<Pink_Floyd>	(250000000.000;;=)
-----------------------------------------------------------------	Claimed sales		
+----------------------------------------------------------------	Claimed sales
 Eminem	220 million	<Eminem>	(220000000.000;;=)
 Taylor Swift	200 million	<Taylor_Swift>	(200000000.000;;=)
 Mariah Carey	200 million	<Mariah_Carey>	(200000000.000;;=)
@@ -192,7 +192,7 @@ Whitney Houston	200 million	<Whitney_Houston>	(200000000.000;;=)
 Celine Dion	200 million	<Celine_Dion>	(200000000.000;;=)
 AC / DC	200 million	<AC/DC>	(200000000.000;;=)
 The Rolling Stones	200 million	<The_Rolling_Stones>	(200000000.000;;=)
-----------------------------------------------------------------	Claimed sales		
+----------------------------------------------------------------	Claimed sales
 Garth Brooks	170 million	<Garth_Brooks>	(170000000.000;;=)
 Drake	150 million	<Drake_(musician)>	(150000000.000;;=)
 Ed Sheeran	150 million	<Ed_Sheeran>	(150000000.000;;=)
@@ -217,7 +217,7 @@ Lil Wayne	120 million	<Lil_Wayne>	(120000000.000;;=)
 Fleetwood Mac	120 million	<Fleetwood_Mac>	(120000000.000;;=)
 Rod Stewart	120 million	<Rod_Stewart>	(120000000.000;;=)
 Bee Gees	120 million	<Bee_Gees>	(120000000.000;;=)
-----------------------------------------------------------------	Claimed sales		
+----------------------------------------------------------------	Claimed sales
 Maroon 5	101 million	<Maroon_5>	(101000000.000;;=)
 Beyoncé	100 million	<Beyoncé>	(100000000.000;;=)
 Coldplay	100 million .	<Coldplay>	(100000000.000;;=)
@@ -253,12 +253,12 @@ Donna Summer	100 million	<Donna_Summer>	(100000000.000;;=)
 The Beach Boys	100 million	<The_Beach_Boys>	(100000000.000;;=)
 The Who	100 million	<The_Who>	(100000000.000;;=)
 Barry White	100 million	<Barry_White>	(100000000.000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Bank with more than 1B USD total assets	more than 1B USD	USD	LB
-https://en.wikipedia.org/wiki/List_of_largest_banks#By_total_assets			
-----------------------------------------------------------------	Total assets ( US$ Billion )		
+https://en.wikipedia.org/wiki/List_of_largest_banks#By_total_assets
+----------------------------------------------------------------	Total assets ( US$ Billion )
 Industrial and Commercial Bank of China	4,027.44	<Industrial_and_Commercial_Bank_of_China>	(4027440000000.000;united states dollar;=)
 China Construction Bank	3,376.52	<China_Construction_Bank>	(3376520000000.000;united states dollar;=)
 Agricultural Bank of China	3,287.36	<Agricultural_Bank_of_China>	(3287360000000.000;united states dollar;=)
@@ -334,12 +334,12 @@ Nonghyup Bank	374.58	<Nonghyup_Bank>	(374580000000.000;united states dollar;=)
 Capital One	372.54	<Capital_One>	(372540000000.000;united states dollar;=)
 Bank of Beijing	368.72	<Bank_of_Beijing>	(368720000000.000;united states dollar;=)
 The Bank of New York Mellon	362.87	<The_Bank_of_New_York_Mellon>	(362870000000.000;united states dollar;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Actors earning at least 10 Million Dollar for a single movie	at least 10 Million Dollar	Dollar	LB
-https://en.wikipedia.org/wiki/List_of_highest_paid_film_actors#Highest_earnings_for_a_single_production			
-----------------------------------------------------------------	Total income		
+https://en.wikipedia.org/wiki/List_of_highest_paid_film_actors#Highest_earnings_for_a_single_production
+----------------------------------------------------------------	Total income
 Keanu Reeves	$156,000,000	<Keanu_Reeves>	(156000000;US$;=)
 Bruce Willis	$100,000,000	<Bruce_Willis>	(100000000;US$;=)
 Tom Cruise	$100,000,000	<Tom_Cruise>	(100000000;US$;=)
@@ -357,12 +357,12 @@ Jim Carrey	$35,000,000	<Jim_Carrey>	(35000000;US$;=)
 Arnold Schwarzenegger	$30,000,000+	<Arnold_Schwarzenegger>	(30000000;US$;=)
 Mel Gibson	$30,000,000	<Mel_Gibson>	(30000000;US$;=)
 Brad Pitt	$30,000,000	<Brad_Pitt>	(30000000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Countries with lowest income tax rate more than 20%?	more than 20%	%	LB
-https://en.wikipedia.org/wiki/List_of_countries_by_tax_rates#Tax_rates_by_countries_and_territories			
-----------------------------------------------------------------	Income tax (lowest marginal rate)		
+https://en.wikipedia.org/wiki/List_of_countries_by_tax_rates#Tax_rates_by_countries_and_territories
+----------------------------------------------------------------	Income tax (lowest marginal rate)
 Denmark[74]	39.8596% (34.63% for unemployed; first DKK46,000 / US$7,245 / €6,172 per year is deductible)[75][76]	<Denmark>	(0.398596;percent;=)
 Netherlands	36.55% (first €21,103 per year is deductible)	<Netherlands>	(0.3655;percent;=)
 Eswatini (Swaziland)	33%	<Eswatini>	(0.33;percent;=)
@@ -527,12 +527,12 @@ Saint Kitts and Nevis	0%	<Saint_Kitts_and_Nevis>	(0;percent;=)
 Sark	0%	<Sark>	(0;percent;=)
 United Arab Emirates	0%[185]	<United_Arab_Emirates>	(0;percent;=)
 British Virgin Islands	0%	<British_Virgin_Islands>	(0;percent;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 NBA players who earn more than 30 million USD in 2019 - 2020 season	more than 30 million USD	USD	LB
-https://en.wikipedia.org/wiki/Highest-paid_NBA_players_by_season#2019%E2%80%932020			
-----------------------------------------------------------------	Salary		
+https://en.wikipedia.org/wiki/Highest-paid_NBA_players_by_season#2019%E2%80%932020
+----------------------------------------------------------------	Salary
 Stephen Curry	$ 40,231,758	<Stephen_Curry>	(40231758.000;US$;=)
 Russell Westbrook	$ 38,506,482	<Russell_Westbrook>	(38506482.000;US$;=)
 Chris Paul	$ 38,506,482	<Chris_Paul>	(38506482.000;US$;=)
@@ -543,12 +543,12 @@ LeBron James	$ 37,436,858	<LeBron_James>	(37436858.000;US$;=)
 Kyle Lowry	$ 34,996,296	<Kyle_Lowry>	(34996296.000;US$;=)
 Blake Griffin	$ 34,449,964	<Blake_Griffin>	(34449964.000;US$;=)
 Paul George	$ 33,005,556	<Paul_George>	(33005556.000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 European companies with revenue in 2015 over 1B USD	over 1B USD	USD	LB
-https://en.wikipedia.org/wiki/List_of_largest_European_companies_by_revenue			
-----------------------------------------------------------------	Revenue ( USD Millions of Dollars )		
+https://en.wikipedia.org/wiki/List_of_largest_European_companies_by_revenue
+----------------------------------------------------------------	Revenue ( USD Millions of Dollars )
 Royal Dutch Shell	484,489	<Royal_Dutch_Shell>	(484489000000;US$;=)
 BP	396,183	<BP>	(396183000000;US$;=)
 Total	231,580	<Total_S.A.>	(231580000000;US$;=)
@@ -708,12 +708,12 @@ Bertelsmann	22,427	<Bertelsmann>	(22427000000;US$;=)
 International Airlines Group	22,390	<International_Airlines_Group>	(22390000000;US$;=)
 Sodexo	22,262	<Sodexo>	(22262000000;US$;=)
 National Grid	22,067	<National_Grid_plc>	(22067000000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Technology companies with revenue over 1B USD in 2019	over 1B USD	USD	LB
-https://en.wikipedia.org/wiki/List_of_largest_technology_companies_by_revenue#2019_list			
-----------------------------------------------------------------	Revenue ( $ B ) USD		
+https://en.wikipedia.org/wiki/List_of_largest_technology_companies_by_revenue#2019_list
+----------------------------------------------------------------	Revenue ( $ B ) USD
 Apple Inc .	$ 265.595	<Apple_Inc.>	(265595000000.;US$;=)
 Samsung Electronics	$ 221.579	<Samsung_Electronics>	(221579000000;US$;=)
 Foxconn	$ 175.617	<Foxconn>	(175617000000;US$;=)
@@ -730,12 +730,12 @@ HP Inc .	$ 58.472	<HP_Inc.>	(58472000000;US$;=)
 Facebook	$ 55.838	<Facebook>	(55838000000;US$;=)
 LG Electronics	$ 55.757	<LG_Electronics>	(55757000000;US$;=)
 Lenovo Group	$ 51.037	<Lenovo>	(51037000000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Mining companies with revenue 2019 over 1B USD	over 1B USD	USD	LB
-https://en.wikipedia.org/wiki/List_of_largest_mining_companies_by_revenue			
-----------------------------------------------------------------	Revenue ( billion US dollars )		
+https://en.wikipedia.org/wiki/List_of_largest_mining_companies_by_revenue
+----------------------------------------------------------------	Revenue ( billion US dollars )
 Glencore	220.1	<Glencore>	(220100000000;US$;=)
 BHP Billiton	43.6	<BHP_Billiton>	(43600000000;US$;=)
 Rio Tinto	40.7	<Rio_Tinto_Group>	(40700000000;US$;=)
@@ -746,12 +746,12 @@ China Coal Energy	15.7	<China_Coal_Energy>	(15700000000;US$;=)
 Coal India	14.5	<Coal_India>	(14500000000;US$;=)
 Yanzhou Coal Mining Company	9.8	<Yanzhou_Coal_Mining_Company>	(9800000000;US$;=)
 Shaanxi Coal and Chemical Industry	8.6	<Shaanxi_Coal_and_Chemical_Industry>	(8600000000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 American person whose net worth 2019 is more than 10B USD 	more than 10B USD	USD	LB
-https://en.wikipedia.org/wiki/List_of_Americans_by_net_worth#Top_15_richest_Americans			
-----------------------------------------------------------------	Net worth ( USD )		
+https://en.wikipedia.org/wiki/List_of_Americans_by_net_worth#Top_15_richest_Americans
+----------------------------------------------------------------	Net worth ( USD )
 Jeff Bezos	$ 114 billion	<Jeff_Bezos>	(114000000000.000;US$;=)
 Bill Gates	$ 106 billion	<Bill_Gates>	(106000000000.000;US$;=)
 Warren Buffett	$ 80.8 billion	<Warren_Buffett>	(80800000000.000;US$;=)
@@ -767,12 +767,12 @@ S. Robson Walton	$ 51.3 billion	<S._Robson_Walton>	(51300000000.000;US$;=)
 Charles Koch	$ 41 billion	<Charles_Koch>	(41000000000.000;US$;=)
 Julia Koch	$ 41 billion	<Julia_Koch>	(41000000000.000;US$;=)
 MacKenzie Bezos	$ 36.1 billion	<MacKenzie_Bezos>	(36100000000.000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Pharmaceutical companies with 2018 revenue greater than 1 billion USD	greater than 1 billion USD	USD	LB
-https://en.wikipedia.org/wiki/List_of_largest_biomedical_companies_by_revenue#Top_pharmaceutical_companies_with_revenue_greater_than_$10_billion			
-----------------------------------------------------------------	2018 USD billions		
+https://en.wikipedia.org/wiki/List_of_largest_biomedical_companies_by_revenue#Top_pharmaceutical_companies_with_revenue_greater_than_$10_billion
+----------------------------------------------------------------	2018 USD billions
 Johnson & Johnson	81.60	<Johnson_&_Johnson>	(81600000000;US$;=)
 Roche	56.86	<Hoffmann-La_Roche>	(56860000000;US$;=)
 Pfizer	53.60	<Pfizer>	(53600000000;US$;=)
@@ -803,12 +803,13 @@ Mylan	11.43	<Mylan>	(11430000000;US$;=)
 Labcorp	11.33	<Labcorp>	(11330000000;US$;=)
 Baxter International	11.13	<Baxter_International>	(11130000000;US$;=)
 Boston Scientific	9.82	<Boston_Scientific>	(9820000000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 banks of the united states that has total asset more than 100 billion USD	more than 100 billion USD	USD	LB
-https://en.wikipedia.org/wiki/List_of_largest_banks_in_the_United_States			
-----------------------------------------------------------------	Total assets (billions of US$)[3]		
+https://en.wikipedia.org/wiki/List_of_largest_banks_in_the_United_States
+----------------------------------------------------------------	"Total assets
+(billions of US$)[3]"
 JPMorgan Chase	$2,689	<JPMorgan_Chase>	(2689000000000;US$;=)
 Bank of America	$2,003	<Bank_of_America>	(2003000000000;US$;=)
 Wells Fargo	$1,927+$72,164.88	<Wells_Fargo>	(1927000000000;US$;=)
@@ -908,12 +909,12 @@ Atlantic Union Bank	$17	<Atlantic_Union_Bank>	(17000000000;US$;=)
 Mechanics Bank	$17	<Mechanics_Bank>	(17000000000;US$;=)
 CenterState Bank	$17	<CenterState_Bank>	(17000000000;US$;=)
 Washington Federal	$16	<Washington_Federal>	(16000000000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Albums from the United States which has more than 1 million sales	more than 1 million		LB
-https://en.wikipedia.org/wiki/List_of_best-selling_albums_in_the_United_States			
-----------------------------------------------------------------	Shipments ( Sales )		
+https://en.wikipedia.org/wiki/List_of_best-selling_albums_in_the_United_States
+----------------------------------------------------------------	Shipments ( Sales )
 Appetite for Destruction	18,000,000	<Appetite_for_Destruction>	(18000000.000;;=)
 No Fences	18,000,000	<No_Fences>	(18000000.000;;=)
 Come On Over	( 17,690,000 )	<Come_On_Over>	(17690000.000;;=)
@@ -926,7 +927,7 @@ The Dark Side of the Moon	15,000,000	<The_Dark_Side_of_the_Moon>	(15000000.000;;
 Legend	15,000,000	<Legend_(Bob_Marley_&_The_Wailers_album)>	(15000000.000;;=)
 Born in the U.S.A.	15,000,000	<Born_in_the_U.S.A.>	(15000000.000;;=)
 Greatest Hits	15,000,000	<Greatest_Hits_(Journey_album)>	(15000000.000;;=)
-----------------------------------------------------------------	Shipments ( Sales )		
+----------------------------------------------------------------	Shipments ( Sales )
 Cracked Rear View	( 14,580,000 )	<Cracked_Rear_View>	(14580000.000;;=)
 Simon and Garfunkel 's Greatest Hits	14,000,000	<Simon_and_Garfunkel's_Greatest_Hits>	(14000000.000;;=)
 Bat Out of Hell	14,000,000	<Bat_Out_of_Hell>	(14000000.000;;=)
@@ -972,12 +973,12 @@ Oops !... I Did It Again	( 10,410,000 )	<Oops!..._I_Did_It_Again_(album)>	(10410
 Confessions	( 10,300,000 )	<Confessions_(Usher_album)>	(10300000.000;;=)
 Wide Open Spaces	( 10,121,000 )	<Wide_Open_Spaces>	(10121000.000;;=)
 Ten	( 10,001,000 )	<Ten_(Pearl_Jam_album)>	(10001000.000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Musicians who has sold more than 10 million digital singles	more than 10 million		LB
-https://en.wikipedia.org/wiki/List_of_highest-certified_music_artists_in_the_United_States#Top_50_certified_music_artists_(digital_singles)			
-----------------------------------------------------------------	Units ( millions )		
+https://en.wikipedia.org/wiki/List_of_highest-certified_music_artists_in_the_United_States#Top_50_certified_music_artists_(digital_singles)
+----------------------------------------------------------------	Units ( millions )
 Drake	163.5	<Drake_(musician)>	(163500000.000;;=)
 Rihanna	128	<Rihanna>	(128000000.000;;=)
 Taylor Swift	121	<Taylor_Swift>	(121000000.000;;=)
@@ -1033,12 +1034,12 @@ Fall Out Boy	26	<Fall_Out_Boy>	(26000000.000;;=)
 Future	26	<Future>	(26000000.000;;=)
 Rae Sremmurd	26	<Rae_Sremmurd>	(26000000.000;;=)
 Zac Brown Band	26	<Zac_Brown_Band>	(26000000.000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Albums that has more than 1 million sales in UK	more than 1 million		LB
-https://en.wikipedia.org/wiki/List_of_best-selling_albums_in_the_United_Kingdom#Best-selling_albums			
-----------------------------------------------------------------	Sales ( as of date )		
+https://en.wikipedia.org/wiki/List_of_best-selling_albums_in_the_United_Kingdom#Best-selling_albums
+----------------------------------------------------------------	Sales ( as of date )
 Greatest Hits	6,300,000 ( Dec 2018 )	<Greatest_Hits_(Queen_album)>	(6300000;;=)
 Gold : Greatest Hits	5,580,000 ( Apr 2019 )	<Gold:_Greatest_Hits>	(5580000;;=)
 Sgt. Pepper 's Lonely Hearts Club Band	5,340,000 ( Oct 2018 )	<Sgt._Pepper's_Lonely_Hearts_Club_Band>	(5340000;;=)
@@ -1099,12 +1100,12 @@ Progress	2,360,000+ ( Jul 2016 )	<Progress_(Take_That_album)>	(2360000;;=)
 Eyes Open	2,400,000 ( Mar 2018 )	<Eyes_Open_(album)>	(2400000;;=)
 Never Forget - The Ultimate Collection	2,360,000 ( Jul 2016 )	<Never_Forget_–_The_Ultimate_Collection>	(2360000;;=)
 Automatic for the People	2,350,000 ( Jul 2016 )	<Automatic_for_the_People>	(2350000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Internet companies with more than 1 Billion $ revenue	more than 1 Billion $	$	LB
-https://en.wikipedia.org/wiki/List_of_largest_Internet_companies#List			
-----------------------------------------------------------------	Revenue ( $ B )		
+https://en.wikipedia.org/wiki/List_of_largest_Internet_companies#List
+----------------------------------------------------------------	Revenue ( $ B )
 Amazon	$ 253.9	<Amazon_(company)>	(253900000000.000;US$;=)
 Google	$ 120.8	<Google>	(120800000000.000;US$;=)
 JD.com	$ 67.2	<JD.com>	(67200000000.000;US$;=)
@@ -1159,12 +1160,12 @@ Grubhub	$ 1.1	<Grubhub>	(1100000000.000;US$;=)
 Zillow	$ 1.05	<Zillow>	(1050000000.000;US$;=)
 Overstock	$ 1.4	<Overstock>	(1400000000.000;US$;=)
 Craigslist	$ 1.0	<Craigslist>	(1000000000.000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Electric companies of the united states with more than 1B dollars revenue in 2014	more than 1B dollars	dollars	LB
-https://en.wikipedia.org/wiki/List_of_United_States_electric_companies#Largest_utilities_by_revenue_(2014)			
-----------------------------------------------------------------	Revenue ( 1,000 $ )		
+https://en.wikipedia.org/wiki/List_of_United_States_electric_companies#Largest_utilities_by_revenue_(2014)
+----------------------------------------------------------------	Revenue ( 1,000 $ )
 Pacific Gas & Electric	15,495,425.0	<Pacific_Gas_and_Electric_Company>	(15495425000.000;united states dollar;=)
 Southern California Edison	11,939,729.9	<Southern_California_Edison>	(11939729900.000;united states dollar;=)
 Florida Power & Light	10,526,025.0	<Florida_Power_&_Light>	(10526025000.000;united states dollar;=)
@@ -1175,12 +1176,12 @@ DTE Energy	4,705,304.0	<DTE_Energy>	(4705304000.000;united states dollar;=)
 Public Service Elec & Gas	2,926,821.0	<Public_Service_Enterprise_Group>	(2926821000.000;united states dollar;=)
 Duke Energy Carolinas	4,852,431.3	<Duke_Energy_Carolinas>	(4852431300.000;united states dollar;=)
 Consumers Energy	4,104,009.7	<Consumers_Energy>	(4104009700.000;united states dollar;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Internet companies with more than 10000 employees	more than 10000		LB
-https://en.wikipedia.org/wiki/List_of_largest_Internet_companies#List			
-----------------------------------------------------------------	Employees		
+https://en.wikipedia.org/wiki/List_of_largest_Internet_companies#List
+----------------------------------------------------------------	Employees
 Amazon	647,500	<Amazon_(company)>	(647500.000;;=)
 Google	103,549	<Google>	(103549.000;;=)
 JD.com	178,000	<JD.com>	(178000.000;;=)
@@ -1235,12 +1236,12 @@ Grubhub	2,773	<Grubhub>	(2773.000;;=)
 Zillow	1,700	<Zillow>	(1700.000;;=)
 Overstock	1,800	<Overstock>	(1800.000;;=)
 Craigslist	1,000	<Craigslist>	(1000.000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Oil companies with more than 10 Billion USD revenue in 2018	more than 10 Billion USD	USD	LB
-https://en.wikipedia.org/wiki/List_of_largest_oil_and_gas_companies_by_revenue			
-----------------------------------------------------------------	Revenue 2018 ( US $ billion )		
+https://en.wikipedia.org/wiki/List_of_largest_oil_and_gas_companies_by_revenue
+----------------------------------------------------------------	Revenue 2018 ( US $ billion )
 Saudi Aramco	414.6	<Saudi_Aramco>	(414600000000;US$;=)
 Royal Dutch Shell	396.5	<Royal_Dutch_Shell>	(396500000000;US$;=)
 China National Petroleum Corporation	392.9	<China_National_Petroleum_Corporation>	(392900000000;US$;=)
@@ -1255,12 +1256,12 @@ Rosneft	118.46	<Rosneft>	(118460000000;US$;=)
 Valero Energy	117.033	<Valero_Energy>	(117033000000;US$;=)
 JX Holdings	103.13	<JX_Holdings>	(103130000000;US$;=)
 Phillips 66	102.354	<Phillips_66>	(102354000000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 German companies with revenue in 2019 more than 10 Billion USD	more than 10 Billion USD	USD	LB
-https://en.wikipedia.org/wiki/List_of_largest_German_companies#2019_Fortune_list			
-----------------------------------------------------------------	Revenue ( USD millions )		
+https://en.wikipedia.org/wiki/List_of_largest_German_companies#2019_Fortune_list
+----------------------------------------------------------------	Revenue ( USD millions )
 Volkswagen	278,342	<Volkswagen_AG>	(278342000000.000;united states dollar;=)
 Daimler AG	197,515	<Daimler_AG>	(197515000000.000;united states dollar;=)
 Allianz	126,799	<Allianz>	(126799000000.000;united states dollar;=)
@@ -1290,12 +1291,12 @@ Phoenix Pharmahandel	30,296	<Phoenix_Pharmahandel>	(30296000000.000;united state
 SAP SE	29,159	<SAP_SE>	(29159000000.000;united states dollar;=)
 Ceconomy	26,129	<Ceconomy>	(26129000000.000;united states dollar;=)
 Adidas	25,920	<Adidas>	(25920000000.000;united states dollar;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Films with gross income more than 1B USD	more than 1B USD	USD	LB
-https://en.wikipedia.org/wiki/List_of_highest-grossing_films#Highest-grossing_films			
-----------------------------------------------------------------	Worldwide gross		
+https://en.wikipedia.org/wiki/List_of_highest-grossing_films#Highest-grossing_films
+----------------------------------------------------------------	Worldwide gross
 Avengers : Endgame	$ 2,797,800,564	<Avengers:_Endgame>	(2797800564.000;US$;=)
 Avatar	$ 2,790,439,000	<Avatar_(2009_film)>	(2790439000.000;US$;=)
 Titanic	$ 2,194,439,542	<Titanic_(1997_film)>	(2194439542.000;US$;=)
@@ -1346,12 +1347,12 @@ Harry Potter and the Philosopher 's Stone	$ 975,051,288	<Harry_Potter_and_the_Ph
 Despicable Me 2	$ 970,761,885	<Despicable_Me_2>	(970761885.000;US$;=)
 The Lion King	$ 968,483,777	<The_Lion_King>	(968483777.000;US$;=)
 The Jungle Book	$ 966,550,600	<The_Jungle_Book_(2016_film)>	(966550600.000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Animated films with box-office gross more than 500M USD	more than 500M USD	USD	LB
-https://en.wikipedia.org/wiki/List_of_highest-grossing_animated_films#Highest-grossing_animated_films			
-----------------------------------------------------------------	Worldwide gross		
+https://en.wikipedia.org/wiki/List_of_highest-grossing_animated_films#Highest-grossing_animated_films
+----------------------------------------------------------------	Worldwide gross
 The Lion King (2019 remake)[nb 2]	$1,657,713,458	<The_Lion_King_(2019_film)>	(1657713458;US$;=)
 Frozen II	$1,450,026,933	<Frozen_II>	(1450026933;US$;=)
 Frozen	$1,290,000,000	<Frozen_(2013_film)>	(1290000000;US$;=)
@@ -1402,12 +1403,12 @@ The Boss Baby	$527,965,936	<The_Boss_Baby>	(527965936;US$;=)
 The Simpsons Movie	$527,071,022	<The_Simpsons_Movie>	(527071022;US$;=)
 How to Train Your Dragon: The Hidden World	$521,799,505	<How_to_Train_Your_Dragon:_The_Hidden_World>	(521799505;US$;=)
 Kung Fu Panda 3	$521,170,825	<Kung_Fu_Panda_3>	(521170825;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Companies that annual loss more than 10B USD	more than 10B USD	USD	LB
-https://en.wikipedia.org/wiki/List_of_largest_corporate_profits_and_losses#Largest_corporate_annual_losses_of_all_time			
-----------------------------------------------------------------	USD real loss ( billion )		
+https://en.wikipedia.org/wiki/List_of_largest_corporate_profits_and_losses#Largest_corporate_annual_losses_of_all_time
+----------------------------------------------------------------	USD real loss ( billion )
 AOL Time Warner	$ 123.16	<Time_Warner>	(123160000000;US$;=)
 American International Group ( AIG )	$ 106.62	<American_International_Group>	(106620000000;US$;=)
 Fannie Mae	$ 77.77	<Fannie_Mae>	(77770000000;US$;=)
@@ -1426,12 +1427,12 @@ Vodafone Group	$ 24.38	<Vodafone>	(24380000000;US$;=)
 United Airlines	$ 24.29	<United_Airlines>	(24290000000;US$;=)
 Nakheel	$ 21.79	<Nakheel>	(21790000000;US$;=)
 UBS	$ 20.08	<UBS>	(20080000000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 company of the united states with more than 50K employees	more than 50K		LB
-https://en.wikipedia.org/wiki/List_of_largest_United_States%E2%80%93based_employers_globally#Employment_by_company			
-----------------------------------------------------------------	Global number of Employees		
+https://en.wikipedia.org/wiki/List_of_largest_United_States%E2%80%93based_employers_globally#Employment_by_company
+----------------------------------------------------------------	Global number of Employees
 Walmart	2,300,000	<Walmart>	(2300000;US$;=)
 Amazon	798,000	<Amazon_(company)>	(798000;US$;=)
 DHL	469,018	<Deutsche_Post_DHL>	(469018;US$;=)
@@ -1458,12 +1459,12 @@ TJX	249,000	<TJX>	(249000;US$;=)
 McDonald's	235,000	<McDonald's>	(235000;US$;=)
 HCA Healthcare	221,491	<HCA_Healthcare>	(221491;US$;=)
 Aramark	215,000	<Aramark>	(215000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Airlines with revenue more than 100 Million USD	more than 100 Million USD	USD	LB
-https://en.wikipedia.org/wiki/Largest_airlines_in_the_world#By_revenue			
-----------------------------------------------------------------	Revenue ( US $ billions )		
+https://en.wikipedia.org/wiki/Largest_airlines_in_the_world#By_revenue
+----------------------------------------------------------------	Revenue ( US $ billions )
 Delta Air Lines	44.9	<Delta_Air_Lines>	(44900000000;US$;=)
 American Airlines Group	44.5	<American_Airlines_Group>	(44500000000;US$;=)
 Lufthansa	42.3	<Lufthansa>	(42300000000;US$;=)
@@ -1474,12 +1475,12 @@ Southwest Airlines	22	<Southwest_Airlines>	(22000000000;US$;=)
 China Southern Airlines	21.7	<China_Southern_Airlines>	(21700000000;US$;=)
 All Nippon Airways	18.6	<All_Nippon_Airways>	(18600000000;US$;=)
 China Eastern Airlines	17.3	<China_Eastern_Airlines>	(17300000000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Stadium with capacity of more than 80000 people	more than 80000		LB
-https://en.wikipedia.org/wiki/List_of_stadiums_by_capacity			
-----------------------------------------------------------------	Capacity		
+https://en.wikipedia.org/wiki/List_of_stadiums_by_capacity
+----------------------------------------------------------------	Capacity
 Rungrado 1st of May Stadium	114,000[1]	<Rungrado_1st_of_May_Stadium>	(114000;;=)
 Motera Stadium	110,000[2]	<Motera_Stadium>	(110000;;=)
 Michigan Stadium	107,601[3]	<Michigan_Stadium>	(107601;;=)
@@ -1529,12 +1530,12 @@ Stade des Martyrs	80,000[47]	<Stade_des_Martyrs>	(80000;;=)
 National Stadium	80,000[48]	<Japan_National_Stadium_(2019)>	(80000;;=)
 Doak Campbell Stadium	79,560[49]	<Doak_Campbell_Stadium>	(79560;;=)
 Estádio do Maracanã	78,838[50]	<Maracanã_(stadium)>	(78838;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 female tennis players who won at least 5 grand slams	at least 5		LB
-https://en.wikipedia.org/wiki/List_of_Grand_Slam_women%27s_singles_champions#Most_Grand_Slam_tournament_singles_titles_(5_or_more)			
-----------------------------------------------------------------	Total		
+https://en.wikipedia.org/wiki/List_of_Grand_Slam_women%27s_singles_champions#Most_Grand_Slam_tournament_singles_titles_(5_or_more)
+----------------------------------------------------------------	Total
 Margaret Court	24	<Margaret_Court>	(24.000;;=)
 Serena Williams	23	<Serena_Williams>	(23.000;;=)
 Steffi Graf	22	<Steffi_Graf>	(22.000;;=)
@@ -1565,12 +1566,12 @@ Pauline Betz	5	<Pauline_Betz>	(5.000;;=)
 Althea Gibson	5	<Althea_Gibson>	(5.000;;=)
 Martina Hingis	5	<Martina_Hingis>	(5.000;;=)
 Maria Sharapova	5	<Maria_Sharapova>	(5.000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Stadium that cost more than 1 billion dollar to build	more than 1 billion dollar	dollar	LB
-https://en.wikipedia.org/wiki/List_of_most_expensive_stadiums			
-----------------------------------------------------------------	Total construction cost ( billion US$ )		
+https://en.wikipedia.org/wiki/List_of_most_expensive_stadiums
+----------------------------------------------------------------	Total construction cost ( billion US$ )
 Allegiant Stadium	US$ 1.9 billion	<Allegiant_Stadium>	(1900000000;US$;=)
 MetLife Stadium	US$ 1.7 billion	<MetLife_Stadium>	(1700000000;US$;=)
 Mercedes - Benz Stadium	US$ 1.5 billion	<Mercedes-Benz_Stadium>	(1500000000;US$;=)
@@ -1585,12 +1586,12 @@ U.S. Bank Stadium	US$ 1.1 billion	<U.S._Bank_Stadium>	(1100000000;US$;=)
 Globe Life Field	US$ 1.1 billion	<Globe_Life_Field>	(1100000000;US$;=)
 Estádio Nacional	US$ 0.8 billion	<Estádio_Nacional_Mané_Garrincha>	(800000000;US$;=)
 Emirates Stadium	US$ 0.7 billion = £0.4 billion	<Emirates_Stadium>	(700000000;US$;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 chess player who won Grandmaster title at the age below 15	below 15		UB
-https://en.wikipedia.org/wiki/Chess_prodigy#List_of_youngest_grandmasters			
-----------------------------------------------------------------	Age		
+https://en.wikipedia.org/wiki/Chess_prodigy#List_of_youngest_grandmasters
+----------------------------------------------------------------	Age
 Sergey Karjakin	12 years, 7 months, 0 days	<Sergey_Karjakin>	(12;;=)
 Gukesh D	12 years, 7 months, 17 days	<Gukesh_D>	(12;;=)
 Javokhir Sindarov	12 years, 10 months, 5 days	<Javokhir_Sindarov>	(12;;=)
@@ -1629,12 +1630,12 @@ Daniil Dubov	14 years, 11 months, 14 days[20]	<Daniil_Dubov>	(14;;=)
 Ray Robson	14 years, 11 months, 16 days[21]	<Ray_Robson>	(14;;=)
 Fabiano Caruana	14 years, 11 months, 20 days[22]	<Fabiano_Caruana>	(14;;=)
 Yu Yangyi	14 years, 11 months, 23 days[23]	<Yu_Yangyi>	(14;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 sprinter who ran 100 meter in less than 10 seconds	less than 10 seconds	seconds	UB
-https://en.wikipedia.org/wiki/100_metres#All-time_top_25_men			
-----------------------------------------------------------------	Time		
+https://en.wikipedia.org/wiki/100_metres#All-time_top_25_men
+----------------------------------------------------------------	Time
 Usain Bolt	9.58	<Usain_Bolt>	(9.580;second;=)
 Tyson Gay	9.69	<Tyson_Gay>	(9.690;second;=)
 Yohan Blake	9.69	<Yohan_Blake>	(9.690;second;=)
@@ -1663,12 +1664,12 @@ Divine Oduduru	9.86	<Divine_Oduduru>	(9.860;second;=)
 Linford Christie	9.87	<Linford_Christie>	(9.870;second;=)
 Obadele Thompson	9.87	<Obadele_Thompson>	(9.870;second;=)
 Ronnie Baker	9.87	<Ronnie_Baker_(athlete)>	(9.870;second;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Athletes who threw javelin more than 90 meter distance	more than 90 meter	meter	LB
-https://en.wikipedia.org/wiki/Javelin_throw#All-time_top_25_javelin_throwers_(current_models)			
-----------------------------------------------------------------	Mark		
+https://en.wikipedia.org/wiki/Javelin_throw#All-time_top_25_javelin_throwers_(current_models)
+----------------------------------------------------------------	Mark
 Jan Železný	98.48 m (323 ft 1 in)	<Jan_Železný>	(98.48;m;=)
 Johannes Vetter	94.44 m (309 ft 10 in)	<Johannes_Vetter>	(94.44;m;=)
 Thomas Röhler	93.90 m (308 ft 3 ⁄ 4 in)	<Thomas_Röhler>	(93.90;m;=)
@@ -1694,12 +1695,12 @@ Edis Matusevičius	89.17 m (292 ft 6 1 ⁄ 2 in)	<Edis_Matusevičius>	(89.17;m
 Tom Petranoff	89.16 m (292 ft 6 in) A	<Tom_Petranoff>	(89.16;m;=)
 Zhao Qinggang	89.15 m (292 ft 5 3 ⁄ 4 in)	<Zhao_Qinggang>	(89.15;m;=)
 Patrik Boden	89.10 m (292 ft 3 3 ⁄ 4 in)	<Patrik_Boden>	(89.10;m;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Cricket players scored more than 200 run in ODIs	more than 200		LB
-https://en.wikipedia.org/wiki/List_of_players_who_have_scored_10,000_or_more_runs_in_One_Day_International_cricket#Players_with_10,000_or_more_ODI_runs			
-----------------------------------------------------------------	Runs		
+https://en.wikipedia.org/wiki/List_of_players_who_have_scored_10,000_or_more_runs_in_One_Day_International_cricket#Players_with_10,000_or_more_ODI_runs
+----------------------------------------------------------------	Runs
 Sachin Tendulkar	18,426	<Sachin_Tendulkar>	(18426.000;;=)
 Kumar Sangakkara	14,234	<Kumar_Sangakkara>	(14234.000;;=)
 Ricky Ponting	13,704	<Ricky_Ponting>	(13704.000;;=)
@@ -1714,12 +1715,12 @@ MS Dhoni	10,773	<MS_Dhoni>	(10773.000;;=)
 Chris Gayle	10,480	<Chris_Gayle>	(10480.000;;=)
 Brian Lara	10,405	<Brian_Lara>	(10405.000;;=)
 Tillakaratne Dilshan	10,290	<Tillakaratne_Dilshan>	(10290.000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Football player who played FIFA World Cup for 4 times	4		LB
-https://en.wikipedia.org/wiki/List_of_players_who_have_appeared_in_multiple_FIFA_World_Cups#:~:text=Lothar%20Matth%C3%A4us%20is%20the%20player,field%20in%20five%20different%20tournaments.			
-----------------------------------------------------------------	In squad[n 2]		
+https://en.wikipedia.org/wiki/List_of_players_who_have_appeared_in_multiple_FIFA_World_Cups#:~:text=Lothar%20Matth%C3%A4us%20is%20the%20player,field%20in%20five%20different%20tournaments.
+----------------------------------------------------------------	In squad[n 2]
 Antonio Carbajal	5	<Antonio_Carbajal>	(5;;=)
 Lothar Matthäus	5	<Lothar_Matthäus>	(5;;=)
 Rafael Márquez	5	<Rafael_Márquez>	(5;;=)
@@ -1782,12 +1783,12 @@ Jacques Songo'o	4	<Jacques_Songo'o>	(4;;=)
 Carlos José Castilho	4	<Carlos_José_Castilho>	(4;;=)
 Seigo Narazaki	4	<Seigo_Narazaki>	(4;;=)
 Pepe Reina	4	<Pepe_Reina>	(4;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Footballer who scored at least 600 goals	at least 600		LB
-https://en.wikipedia.org/wiki/List_of_footballers_with_500_or_more_goals			
-----------------------------------------------------------------	Goals		
+https://en.wikipedia.org/wiki/List_of_footballers_with_500_or_more_goals
+----------------------------------------------------------------	Goals
 Josef Bican[2]	805+	<Josef_Bican>	(805;;=)
 Romário[3]	772	<Romário>	(772;;=)
 Pelé[4]	767	<Pelé>	(767;;=)
@@ -1816,12 +1817,12 @@ Gunnar Nordahl[8]	513+	<Gunnar_Nordahl>	(513;;=)
 Roberto Dinamite[8][14]	513	<Roberto_Dinamite>	(513;;=)
 Jimmy Greaves[15]	511	<Jimmy_Greaves>	(511;;=)
 Ferenc Bene[8]	508+	<Ferenc_Bene>	(508;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Swimmers who swam 100 meter track within 55 sec	within 55 sec	sec	UB
-https://en.wikipedia.org/wiki/World_record_progression_100_metres_freestyle#All-time_top_25			
-----------------------------------------------------------------	Time		
+https://en.wikipedia.org/wiki/World_record_progression_100_metres_freestyle#All-time_top_25
+----------------------------------------------------------------	Time
 Cesar Cielo	46.91	<Cesar_Cielo>	(46.910;second;=)
 Alain Bernard	46.94	<Alain_Bernard>	(46.940;second;=)
 Caeleb Dressel	46.96	<Caeleb_Dressel>	(46.960;second;=)
@@ -1847,12 +1848,12 @@ Mehdy Metella	47.65	<Mehdy_Metella>	(47.650;second;=)
 Pieter van den Hoogenband	47.68	<Pieter_van_den_Hoogenband>	(47.680;second;=)
 Marcelo Chierighini	47.68	<Marcelo_Chierighini>	(47.680;second;=)
 Zach Apple	47.69	<Zach_Apple>	(47.690;second;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Tennis players who has won more than 1000 matches	more than 1000		LB
-https://en.wikipedia.org/wiki/List_of_Open_Era_men%27s_singles_tennis_players_by_career_match_wins			
-----------------------------------------------------------------	Wins		
+https://en.wikipedia.org/wiki/List_of_Open_Era_men%27s_singles_tennis_players_by_career_match_wins
+----------------------------------------------------------------	Wins
 Jimmy Connors *	1274	<Jimmy_Connors>	(1274;;=)
 Roger Federer ^	1242	<Roger_Federer>	(1242;;=)
 Ivan Lendl *	1068	<Ivan_Lendl>	(1068;;=)
@@ -1893,24 +1894,13 @@ John Newcombe	549	<John_Newcombe>	(549;;=)
 Raúl Ramírez	546	<Raúl_Ramírez>	(546;;=)
 Richard Gasquet ^	542	<Richard_Gasquet>	(542;;=)
 Ken Rosewall *	540	<Ken_Rosewall>	(540;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
-female athletes who complete IAAF marathon within 3 hours	within 3 hours	hours	UB
-https://en.wikipedia.org/wiki/National_records_in_the_marathon#Marathon_records_by_region			
-----------------------------------------------------------------	Time		
-Brigid Kosgei	2:14:04	<Brigid_Kosgei>	(8044.000;second;=)
-Mizuki Noguchi	2:19:12	<Mizuki_Noguchi>	(8352.000;second;=)
-Paula Radcliffe	2:15:25	<Paula_Radcliffe>	(8125.000;second;=)
-Deena Kastor	2:19:36	<Deena_Kastor>	(8376.000;second;=)
-Benita Willis	2:22:36	<Benita_Willis>	(8556.000;second;=)
-Ines Melchor	2:26:48	<Ines_Melchor>	(8808.000;second;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Football players with transfer fees more than 100 million Euro	more than 100 million Euro	Euro	LB
-https://en.wikipedia.org/wiki/List_of_most_expensive_association_football_transfers#Highest_transfer_payments			
-----------------------------------------------------------------	Fee (€ mln)		
+https://en.wikipedia.org/wiki/List_of_most_expensive_association_football_transfers#Highest_transfer_payments
+----------------------------------------------------------------	"Fee
+(€ mln)"
 Neymar	€222[a]	<Neymar>	(222000000;euro;=)
 Kylian Mbappé	€135[b]	<Kylian_Mbappé>	(135000000;euro;=)
 João Félix	€126[d]	<João_Félix>	(126000000;euro;=)
@@ -1961,12 +1951,12 @@ Fernando Torres	€59	<Fernando_Torres>	(59000000;euro;=)
 Fred	€59	<Fred_(footballer,_born_1993)>	(59000000;euro;=)
 Hernán Crespo	€58.50	<Hernán_Crespo>	(58500000;euro;=)
 Benjamin Mendy	€58.10	<Benjamin_Mendy>	(58100000;euro;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 basketball players with height less than 176 centimeters in National Basketball Association history	less than 176 centimeters	centimeters	UB
-https://en.wikipedia.org/wiki/List_of_shortest_players_in_National_Basketball_Association_history			
-----------------------------------------------------------------	Height		
+https://en.wikipedia.org/wiki/List_of_shortest_players_in_National_Basketball_Association_history
+----------------------------------------------------------------	Height
 Muggsy Bogues	5 ft 3 in (1.60 m)	<Muggsy_Bogues>	(1.60;m;=)
 Earl Boykins	5 ft 5 in (1.65 m)	<Earl_Boykins>	(1.65;m;=)
 Mel Hirsch	5 ft 6 in (1.68 m)	<Mel_Hirsch>	(1.68;m;=)
@@ -1991,12 +1981,12 @@ Gene Rock	5 ft 9 in (1.75 m)	<Gene_Rock>	(1.75;m;=)
 Yuta Tabuse	5 ft 9 in (1.75 m)	<Yuta_Tabuse>	(1.75;m;=)
 Isaiah Thomas ^	5 ft 9 in (1.75 m)	<Isaiah_Thomas_(basketball)>	(1.75;m;=)
 Kay Felder	5 ft 9 in (1.75 m)	<Kay_Felder>	(1.75;m;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 female gymnasts who won at least one gold medal in Olympic	at least one		LB
-https://en.wikipedia.org/wiki/List_of_Olympic_medal_leaders_in_women%27s_gymnastics			
-----------------------------------------------------------------	Gold		
+https://en.wikipedia.org/wiki/List_of_Olympic_medal_leaders_in_women%27s_gymnastics
+----------------------------------------------------------------	Gold
 Larisa Latynina	9	<Larisa_Latynina>	(9.000;;=)
 Věra Čáslavská	7	<Věra_Čáslavská>	(7.000;;=)
 Ágnes Keleti	5	<Ágnes_Keleti>	(5.000;;=)
@@ -2027,12 +2017,12 @@ Nastia Liukin	1	<Nastia_Liukin>	(1.000;;=)
 Mary Lou Retton	1	<Mary_Lou_Retton>	(1.000;;=)
 Erika Zuchold	0	<Erika_Zuchold>	(0.000;;=)
 Gina Gogean	0	<Gina_Gogean>	(0.000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 female sprinters who ran 100 meter under 11 seconds	under 11 seconds	seconds	UB
-https://en.wikipedia.org/wiki/100_metres#All-time_top_25_women			
-----------------------------------------------------------------	Time		
+https://en.wikipedia.org/wiki/100_metres#All-time_top_25_women
+----------------------------------------------------------------	Time
 Florence Griffith - Joyner	10.49	<Florence_Griffith-Joyner>	(10.490;second;=)
 Carmelita Jeter	10.64	<Carmelita_Jeter>	(10.640;second;=)
 Marion Jones	10.65	<Marion_Jones>	(10.650;second;=)
@@ -2064,12 +2054,12 @@ Gwen Torrence	10.82	<Gwen_Torrence>	(10.820;second;=)
 Zhanna Block	10.82	<Zhanna_Block>	(10.820;second;=)
 Sherone Simpson	10.82	<Sherone_Simpson>	(10.820;second;=)
 Michelle - Lee Ahye	10.82	<Michelle-Lee_Ahye>	(10.820;second;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Male tennis players who won more than 5 grand slam	more than 5		LB
-https://en.wikipedia.org/wiki/List_of_Grand_Slam_men%27s_singles_champions#Most_Grand_Slam_singles_titles_(5_or_more)			
-----------------------------------------------------------------	Total		
+https://en.wikipedia.org/wiki/List_of_Grand_Slam_men%27s_singles_champions#Most_Grand_Slam_singles_titles_(5_or_more)
+----------------------------------------------------------------	Total
 Roger Federer	20	<Roger_Federer>	(20.000;;=)
 Rafael Nadal	19	<Rafael_Nadal>	(19.000;;=)
 Novak Djokovic	17	<Novak_Djokovic>	(17.000;;=)
@@ -2099,12 +2089,12 @@ Stefan Edberg	6	<Stefan_Edberg>	(6.000;;=)
 Boris Becker	6	<Boris_Becker>	(6.000;;=)
 Frank Sedgman	5	<Frank_Sedgman>	(5.000;;=)
 Tony Trabert	5	<Tony_Trabert>	(5.000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 swimmers who cross English channel in less than 24 hours	less than 24 hours	hours	UB
-https://en.wikipedia.org/wiki/List_of_successful_English_Channel_swimmers#First_swims			
-----------------------------------------------------------------	Time		
+https://en.wikipedia.org/wiki/List_of_successful_English_Channel_swimmers#First_swims
+----------------------------------------------------------------	Time
 Matthew Webb	21:45	<Matthew_Webb>	(1305;minute;=)
 Thomas William Burgess	22:35	<Thomas_William_Burgess>	(1355;minute;=)
 Henry Sullivan	26:50	<Henry_Sullivan_(swimmer)>	(1610;minute;=)
@@ -2147,12 +2137,12 @@ Leah Chowdhry	14:44	Leah Chowdhry	(884;minute;=)
 Zeina Alsharkas	11:36	Zeina Alsharkas	(696;minute;=)
 Bárbara Hernández	12:13	Bárbara Hernández	(733;minute;=)
 Sarah Thomas	54:10	<Sarah_Thomas_(marathon_swimmer)>	(3250;minute;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Female swimmers who cover 100 meter track within 55 sec	within 55 sec	sec	UB
-https://en.wikipedia.org/wiki/World_record_progression_100_metres_freestyle#Women_2			
-----------------------------------------------------------------	Time		
+https://en.wikipedia.org/wiki/World_record_progression_100_metres_freestyle#Women_2
+----------------------------------------------------------------	Time
 Sarah Sjöström (SWE)	51.71	<Sarah_Sjöström>	(51.71;sec;=)
 Cate Campbell (AUS)	52.03	<Cate_Campbell>	(52.03;sec;=)
 Simone Manuel (USA)	52.04	<Simone_Manuel>	(52.04;sec;=)
@@ -2178,12 +2168,12 @@ Shayna Jack (AUS)	53.18	<Shayna_Jack>	(53.18;sec;=)
 Abbey Weitzeil (USA)	53.18	<Abbey_Weitzeil>	(53.18;sec;=)
 Anna Hopkin (GBR)	53.21	<Anna_Hopkin>	(53.21;sec;=)
 Tang Yi (CHN)	53.28	<Tang_Yi>	(53.28;sec;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Athletes who hold world record for a long jump above 8 meters	above 8 meters	meters	LB
-https://en.wikipedia.org/wiki/Long_jump#All-time_top_25_long_jumpers			
-----------------------------------------------------------------	Mark		
+https://en.wikipedia.org/wiki/Long_jump#All-time_top_25_long_jumpers
+----------------------------------------------------------------	Mark
 Mike Powell (USA)	8.95 m (29 ft 4 1⁄4 in)	<Mike_Powell_(athlete)>	(8.95;m;=)
 Bob Beamon (USA)	8.90 m (29 ft 2 1⁄4 in) A	<Bob_Beamon>	(8.90;m;=)
 Carl Lewis (USA)	8.87 m (29 ft 1 in)	<Carl_Lewis>	(8.87;m;=)
@@ -2209,12 +2199,12 @@ Mitchell Watt (AUS)	8.54 m (28 ft 0 in)	<Mitchell_Watt>	(8.54;m;=)
 Jaime Jefferson (CUB)	8.53 m (27 ft 11 3⁄4 in)	<Jaime_Jefferson>	(8.53;m;=)
 Savanté Stringfellow (USA)	8.52 m (27 ft 11 1⁄4 in)	<Savanté_Stringfellow>	(8.52;m;=)
 Jeff Henderson (USA)	8.52 m (27 ft 11 1⁄4 in)	<Jeff_Henderson_(athlete)>	(8.52;m;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 female athletes who hold world record for a long jump above 7 meters	above 7 meters	meters	LB
-https://en.wikipedia.org/wiki/Long_jump#Women			
-----------------------------------------------------------------	Mark		
+https://en.wikipedia.org/wiki/Long_jump#Women
+----------------------------------------------------------------	Mark
 Galina Chistyakova	7.52 m (24 ft 8 in)	<Galina_Chistyakova>	(7.52;m;=)
 Jackie Joyner - Kersee	7.49 m (24 ft 6 3 ⁄ 4 in)	<Jackie_Joyner-Kersee>	(7.49;m;=)
 Heike Drechsler	7.48 m (24 ft 6 1 ⁄ 4 in)	<Heike_Drechsler>	(7.48;m;=)
@@ -2242,12 +2232,12 @@ Tianna Bartoletta	7.17 m (23 ft 6 1 ⁄ 4 in)	<Tianna_Bartoletta>	(7.17;m;=)
 Iolanda Chen	7.16 m (23 ft 5 3 ⁄ 4 in)	<Iolanda_Chen>	(7.16;m;=)
 Elva Goulbourne	7.16 m (23 ft 5 3 ⁄ 4 in) A	<Elva_Goulbourne>	(7.16;m;=)
 Sosthene Moguenara	7.16 m (23 ft 5 3 ⁄ 4 in)	<Sosthene_Moguenara>	(7.16;m;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
-NBA players with total scored points above 20 points	above 20		LB
-https://en.wikipedia.org/wiki/List_of_National_Basketball_Association_career_scoring_leaders#Scoring_leaders			
-----------------------------------------------------------------	Total points		
+<<<< END <<<<
+
+>>>> BEGIN >>>>
+NBA players with total scored points above 20	above 20		LB
+https://en.wikipedia.org/wiki/List_of_National_Basketball_Association_career_scoring_leaders#Scoring_leaders
+----------------------------------------------------------------	Total points
 Kareem Abdul - Jabbar *	38,387	<Kareem_Abdul-Jabbar>	(38387.000;;=)
 Karl Malone *	36,928	<Karl_Malone>	(36928.000;;=)
 LeBron James ^	33,937	<LeBron_James>	(33937.000;;=)
@@ -2298,12 +2288,12 @@ John Stockton *	19,711	<John_Stockton>	(19711.000;;=)
 Bernard King *	19,655	<Bernard_King>	(19655.000;;=)
 Clifford Robinson	19,591	<Cliff_Robinson_(basketball,_born_1966)>	(19591.000;;=)
 LaMarcus Aldridge ^	19,575	<LaMarcus_Aldridge>	(19575.000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 male sprinters who ran 400 meter under 50 seconds	under 50 seconds	seconds	UB
-https://en.wikipedia.org/wiki/400_metres#Men			
-----------------------------------------------------------------	Time		
+https://en.wikipedia.org/wiki/400_metres#Men
+----------------------------------------------------------------	Time
 Wayde van Niekerk	43.03	<Wayde_van_Niekerk>	(43.030;second;=)
 Michael Johnson	43.18	<Michael_Johnson_(athlete)>	(43.180;second;=)
 Harry ' Butch ' Reynolds	43.29	<Butch_Reynolds>	(43.290;second;=)
@@ -2329,12 +2319,12 @@ Abdalleleh Haroun	44.07	<Abdalleleh_Haroun>	(44.070;second;=)
 Alvin Harrison	44.09	<Alvin_Harrison>	(44.090;second;=)
 Jerome Young	44.09	<Jerome_Young>	(44.090;second;=)
 Gary Kikaya	44.10	<Gary_Kikaya>	(44.100;second;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 female sprinters who ran 400 meter under 50 seconds	under 50 seconds	seconds	UB
-https://en.wikipedia.org/wiki/400_metres#Women			
-----------------------------------------------------------------	Time		
+https://en.wikipedia.org/wiki/400_metres#Women
+----------------------------------------------------------------	Time
 Marita Koch	47.60	<Marita_Koch>	(47.600;second;=)
 Jarmila Kratochvílová	47.99	<Jarmila_Kratochvílová>	(47.990;second;=)
 Salwa Eid Naser	48.14	<Salwa_Eid_Naser>	(48.140;second;=)
@@ -2361,12 +2351,12 @@ Irena Szewinska	49.29	<Irena_Szewinska>	(49.290;second;=)
 Charity Opara	49.29	<Charity_Opara>	(49.290;second;=)
 Petra Müller	49.30	<Petra_Müller>	(49.300;second;=)
 Lorraine Fenton	49.30	<Lorraine_Fenton>	(49.300;second;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Rail stations with altitude more than 1000 meter	more than 1000 meter	meter	LB
-https://en.wikipedia.org/wiki/List_of_highest_railways#List_of_highest_railway_stations_in_the_world			
-----------------------------------------------------------------	Highest elevation		
+https://en.wikipedia.org/wiki/List_of_highest_railways#List_of_highest_railway_stations_in_the_world
+----------------------------------------------------------------	Highest elevation
 Taglang La	5,328 m (17,480 ft)[2]	<Taglang_La>	(5328;m;=)
 Tanggula	5,068 m (16,627 ft)[3]	<Tanggula_railway_station>	(5068;m;=)
 Ticlio	4,829 m (15,843 ft)[4][5]	<Ticlio>	(4829;m;=)
@@ -2400,12 +2390,12 @@ Shimla	2,186 m (7,172 ft)[13]	<Shimla>	(2186;m;=)
 Pilatus	2,073 m (6,801 ft)	<Pilatus_(mountain)>	(2073;m;=)
 Oberalp Pass	2,043 m (6,703 ft)	<Oberalp_Pass>	(2043;m;=)
 Qazigund	2,025 m (6,644 ft)[15]	<Qazigund>	(2025;m;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 aircrafts that got accidents resulted in at least 200 fatalities	at least 200		LB
-https://en.wikipedia.org/wiki/List_of_aircraft_accidents_and_incidents_resulting_in_at_least_50_fatalities#Table			
-----------------------------------------------------------------	Deaths Tot		
+https://en.wikipedia.org/wiki/List_of_aircraft_accidents_and_incidents_resulting_in_at_least_50_fatalities#Table
+----------------------------------------------------------------	Deaths Tot
 Boeing 767-223ER	est. 1,700	<Boeing_767>	(1700;;=)
 Boeing 747SR-46	520	<Boeing_747SR-46>	(520;;=)
 Boeing 747-168B and Ilyushin Il-76TD	349	<Boeing_747-168B>	(349;;=)
@@ -2436,71 +2426,71 @@ Boeing 767-3Z9ER	223	<Boeing_767-3Z9ER>	(223;;=)
 Boeing 767-366ER	217	<Boeing_767-366ER>	(217;;=)
 Tupolev Tu-154B-2	200	<Tupolev_Tu-154B-2>	(200;;=)
 Airbus A320-233	199	<Airbus_A320-233>	(199;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 aircrafts that have capacity more than 400 passengers	more than 400		LB
-https://en.wikipedia.org/wiki/List_of_large_aircraft#Fixed-wing			
-----------------------------------------------------------------	Capacity		
+https://en.wikipedia.org/wiki/List_of_large_aircraft#Fixed-wing
+----------------------------------------------------------------	Capacity
 Airbus A380	Pax: 850	<Airbus_A380>	(850;;=)
 Boeing 747-8	Pax: 660	<Boeing_747-8>	(660;;=)
 Boeing 747	Pax: 550/660	<Boeing_747>	(660;;=)
 Boeing 777X-9	Pax: 550	<Boeing_777X>	(550;;=)
 Airbus A340-600	Pax: 440	<Airbus_A340>	(440;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 trains with speed more than 300 km/hour	more than 300 km/hour	km / h	LB
-https://en.wikipedia.org/wiki/List_of_high-speed_trains#Conventional_wheeled_multiple-unit			
-----------------------------------------------------------------	Maximum speed (km/h)		
-CR400BF, -A & -B	400	<Fuxing_(train)>	(400;;=)
-ETR 400 (Frecciarossa 1000)	400	<Frecciarossa_1000>	(400;;=)
-CRH380A & AL	380	<China_Railway_CRH380A>	(380;;=)
-CRH380B, BL & CL	380	<BL>	(380;;=)
-CRH380D & DL	380	<Bombardier_Zefiro>	(380;;=)
-AGV 575	360	<AGV_(train)>	(360;;=)
-N700S Series Shinkansen	360	<N700S_Series_Shinkansen>	(360;;=)
-Avelia Liberty	350[1]	<Avelia_Liberty>	(350;;=)
-Avelia Horizon	350[2]	<Avelia_Horizon>	(350;;=)
-AVE Class 102, 112	350	<AVE_Class_102>	(350;;=)
-AVE Class 103	350	<AVE_Class_103>	(350;;=)
-AVE Class 105	350	<AVE>	(350;;=)
-CRH2C	350	<China_Railway_CRH2>	(350;;=)
-CRH3C	350	<China_Railway_CRH3>	(350;;=)
-Talgo 350 SRO	350	<AVE_Class_102>	(350;;=)
-Velaro RUS	350	<Siemens_Velaro>	(350;;=)
-ICE 3 Class 403, 406	330	<ICE_3>	(330;;=)
-KTX-I	330	<KTX-I>	(330;;=)
-KTX-Sancheon	330	<KTX-Sancheon>	(330;;=)
-SRT	330	<Super_Rapid_Train>	(330;;=)
-Acela	320	<Acela>	(320;;=)
-EMU-320	320	<EMU-320>	(320;;=)
-Eurostar e320	320	<British_Rail_Class_374>	(320;;=)
-ICE 3 Class 407	320	<ICE_3>	(320;;=)
-500 Series Shinkansen	320	<500_Series_Shinkansen>	(320;;=)
-E5 Series Shinkansen	320	<E5_Series_Shinkansen>	(320;;=)
-H5 Series Shinkansen	320	<H5_Series_Shinkansen>	(320;;=)
-E6 Series Shinkansen	320	<E6_Series_Shinkansen>	(320;;=)
-TGV Réseau	320	<SNCF_TGV_Réseau>	(320;;=)
-TGV Duplex	320	<SNCF_TGV_Duplex>	(320;;=)
-TGV POS	320	<SNCF_TGV_POS>	(320;;=)
-TGV Euroduplex	320	<Euroduplex>	(320;;=)
-Thalys PBA	320	<SNCF_TGV_Réseau>	(320;;=)
-Thalys PBKA	320	<SNCF_TGV_Thalys_PBKA>	(320;;=)
-AVE Class 100	300	<AVE_Class_100>	(300;;=)
-ETR 500 (2nd gen)	300	<FS_Class_ETR_500#Second_generation>	(300;;=)
-Eurostar e300 (initially known as Class 373 or TGV TMST)	300	<British_Rail_Class_373>	(300;;=)
-N700 Series Shinkansen / N700A Series Shinkansen	300	<N700_Series_Shinkansen>	(300;;=)
-E8 Series Shinkansen	300	<E8_Series_Shinkansen>	(300;;=)
-TCDD HT80000	300	<TCDD_HT80000>	(300;;=)
-TGV Atlantique	300	<SNCF_TGV_Atlantique>	(300;;=)
-THSR 700T	300	<THSR_700T>	(300;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+https://en.wikipedia.org/wiki/List_of_high-speed_trains#Conventional_wheeled_multiple-unit
+----------------------------------------------------------------	Maximum speed (km/h)
+CR400BF, -A & -B	400	<Fuxing_(train)>	(400;km / h;=)
+ETR 400 (Frecciarossa 1000)	400	<Frecciarossa_1000>	(400;km / h;=)
+CRH380A & AL	380	<China_Railway_CRH380A>	(380;km / h;=)
+CRH380B, BL & CL	380	<BL>	(380;km / h;=)
+CRH380D & DL	380	<Bombardier_Zefiro>	(380;km / h;=)
+AGV 575	360	<AGV_(train)>	(360;km / h;=)
+N700S Series Shinkansen	360	<N700S_Series_Shinkansen>	(360;km / h;=)
+Avelia Liberty	350[1]	<Avelia_Liberty>	(350;km / h;=)
+Avelia Horizon	350[2]	<Avelia_Horizon>	(350;km / h;=)
+AVE Class 102, 112	350	<AVE_Class_102>	(350;km / h;=)
+AVE Class 103	350	<AVE_Class_103>	(350;km / h;=)
+AVE Class 105	350	<AVE>	(350;km / h;=)
+CRH2C	350	<China_Railway_CRH2>	(350;km / h;=)
+CRH3C	350	<China_Railway_CRH3>	(350;km / h;=)
+Talgo 350 SRO	350	<AVE_Class_102>	(350;km / h;=)
+Velaro RUS	350	<Siemens_Velaro>	(350;km / h;=)
+ICE 3 Class 403, 406	330	<ICE_3>	(330;km / h;=)
+KTX-I	330	<KTX-I>	(330;km / h;=)
+KTX-Sancheon	330	<KTX-Sancheon>	(330;km / h;=)
+SRT	330	<Super_Rapid_Train>	(330;km / h;=)
+Acela	320	<Acela>	(320;km / h;=)
+EMU-320	320	<EMU-320>	(320;km / h;=)
+Eurostar e320	320	<British_Rail_Class_374>	(320;km / h;=)
+ICE 3 Class 407	320	<ICE_3>	(320;km / h;=)
+500 Series Shinkansen	320	<500_Series_Shinkansen>	(320;km / h;=)
+E5 Series Shinkansen	320	<E5_Series_Shinkansen>	(320;km / h;=)
+H5 Series Shinkansen	320	<H5_Series_Shinkansen>	(320;km / h;=)
+E6 Series Shinkansen	320	<E6_Series_Shinkansen>	(320;km / h;=)
+TGV Réseau	320	<SNCF_TGV_Réseau>	(320;km / h;=)
+TGV Duplex	320	<SNCF_TGV_Duplex>	(320;km / h;=)
+TGV POS	320	<SNCF_TGV_POS>	(320;km / h;=)
+TGV Euroduplex	320	<Euroduplex>	(320;km / h;=)
+Thalys PBA	320	<SNCF_TGV_Réseau>	(320;km / h;=)
+Thalys PBKA	320	<SNCF_TGV_Thalys_PBKA>	(320;km / h;=)
+AVE Class 100	300	<AVE_Class_100>	(300;km / h;=)
+ETR 500 (2nd gen)	300	<FS_Class_ETR_500#Second_generation>	(300;km / h;=)
+Eurostar e300 (initially known as Class 373 or TGV TMST)	300	<British_Rail_Class_373>	(300;km / h;=)
+N700 Series Shinkansen / N700A Series Shinkansen	300	<N700_Series_Shinkansen>	(300;km / h;=)
+E8 Series Shinkansen	300	<E8_Series_Shinkansen>	(300;km / h;=)
+TCDD HT80000	300	<TCDD_HT80000>	(300;km / h;=)
+TGV Atlantique	300	<SNCF_TGV_Atlantique>	(300;km / h;=)
+THSR 700T	300	<THSR_700T>	(300;km / h;=)
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 cruise that can carry more than 800 passengers	more than 800		LB
-https://en.wikipedia.org/wiki/List_of_largest_cruise_ships#In_service			
-----------------------------------------------------------------	Maximum[j]		
+https://en.wikipedia.org/wiki/List_of_largest_cruise_ships#In_service
+----------------------------------------------------------------	Maximum[j]
 Oasis of the Seas	6,780[34]	<Oasis_of_the_Seas>	(6780;;=)
 Allure of the Seas	6,780[36]	<Allure_of_the_Seas>	(6780;;=)
 MSC Grandiosa[42]	6,761[43]	<MSC_Grandiosa>	(6761;;=)
@@ -2555,12 +2545,12 @@ Celebrity Solstice	3,148[150]	<Celebrity_Solstice>	(3148;;=)
 Celebrity Equinox	3,148[150]	<Celebrity_Equinox>	(3148;;=)
 Celebrity Eclipse	3,148[150]	<Celebrity_Eclipse>	(3148;;=)
 Queen Mary 2	3,090[83]	<RMS_Queen_Mary_2>	(3090;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Tunnels more than 30 km long	more than 30 km	km	LB
-https://en.wikipedia.org/wiki/List_of_longest_tunnels			
-----------------------------------------------------------------	Length		
+https://en.wikipedia.org/wiki/List_of_longest_tunnels
+----------------------------------------------------------------	Length
 Delaware Aqueduct	137,000 m (85.1 mi)	<Delaware_Aqueduct>	(137000;m;=)
 Päijänne Water Tunnel	120,000 m (74.6 mi)	<Päijänne_Water_Tunnel>	(120000;m;=)
 Dahuofang Water Tunnel	85,320 m (53.0 mi)	<Dahuofang_Water_Tunnel>	(85320;m;=)
@@ -2598,7 +2588,7 @@ Busan Metro: Line 2 (Dongwon-Jangsan)	35,500 m (22.1 mi)	<Busan_Metro>	(35500;m;
 Songshan Lake Tunnel	35,391 m (22.0 mi)	Songshan Lake Tunnel	(35391;m;=)
 Seoul Subway: Line 6	35,100 m (21.8 mi)	<Seoul_Metropolitan_Subway>	(35100;m;=)
 Lötschberg Base Tunnel	34,577 m (21.5 mi)	<Lötschberg_Base_Tunnel>	(34577;m;=)
-----------------------------------------------------------------	Length		
+----------------------------------------------------------------	Length
 Yunnan - Guizhou Water Tunnel	661,000 m	<Yunnan–Guizhou_Water_Tunnel>	(661000.000;m;=)
 New York City Water Tunnel No. 3	96560 m	<New_York_City_Water_Tunnel_No._3>	(96560.000;m;=)
 Paris Metro Line 15	75000 m	<Paris_Metro_Line_15>	(75000.000;m;=)
@@ -2623,7 +2613,7 @@ Ceneri Base Tunnel	15400 m	<Ceneri_Base_Tunnel>	(15400.000;m;=)
 New Mount Zigana Tunnel	14481 m	<New_Mount_Zigana_Tunnel>	(14481.000;m;=)
 Zoji - la Tunnel	14200 m	<Zoji-la_Tunnel>	(14200.000;m;=)
 MRT Orange Line	13770 m	<MRT_Orange_Line>	(13770.000;m;=)
-----------------------------------------------------------------	Length		
+----------------------------------------------------------------	Length
 Taiwan Strait Tunnel	150,000 m ( 93.2 mi )	<Taiwan_Strait_Tunnel_Project>	(150000.000;m;=)
 Bohai Strait tunnel	123000 m	<Bohai_Strait_tunnel>	(123000.000;m;=)
 Talsinki	100000 m	<Helsinki_to_Tallinn_Tunnel>	(100000.000;m;=)
@@ -2636,25 +2626,39 @@ Fehmarn Belt Fixed Link	17600 m	<Fehmarn_Belt_Fixed_Link>	(17600.000;m;=)
 Kresna Gorge Tunnel	15400 m	<Kresna_Gorge_Tunnel>	(15400.000;m;=)
 Agua Negra Tunnel	14000 m	<Agua_Negra_Pass>	(14000.000;m;=)
 Stad Ship Tunnel	1700 m	<Stad_Ship_Tunnel>	(1700.000;m;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Bridges more than 20 miles long	more than 20 miles	miles	LB
-https://en.wikipedia.org/wiki/List_of_longest_bridges			
-----------------------------------------------------------------	Length m		
-Danyang–Kunshan Grand Bridge Beijing–Shanghai High-Speed Railway Guinness: Longest bridge (any type), 2011[1]	164,800	<Danyang–Kunshan_Grand_Bridge>	(164800;m;=)
-Changhua–Kaohsiung Viaduct[2] Taiwan High Speed Rail	157,317	<Changhua–Kaohsiung_Viaduct>	(157317;m;=)
-Cangde Grand Bridge[4][5] Beijing–Shanghai High-Speed Railway	115,900	<Cangde_Grand_Bridge>	(115900;m;=)
-Tianjin Grand Bridge[3] Beijing–Shanghai High-Speed Railway Guinness: Second longest bridge (any type), 2011[1]	113,700	<Tianjin_Grand_Bridge>	(113700;m;=)
-Weinan Weihe Grand Bridge Zhengzhou–Xi'an High-Speed Railway	79,732	<Weinan_Weihe_Grand_Bridge>	(79732;m;=)
-Bang Na Expressway Guinness: Longest Road Bridge, 2000[6]	54,000	<Bang_Na_Expressway>	(54000;m;=)
-Beijing Grand Bridge Beijing–Shanghai High-Speed Railway	48,153	<Beijing_Grand_Bridge>	(48153;m;=)
-Lake Pontchartrain Causeway (across Lake Pontchartrain in Louisiana) Guinness: Longest bridge over water (continuous), 1969[7]	38,442	<Lake_Pontchartrain_Causeway>	(38442;m;=)
-Line 1, Wuhan Metro Bridge Wuhan Metro	37,788	<Line_1,_Wuhan_Metro>	(37788;m;=)
-Manchac Swamp Bridge (I-55/US 51 across Manchac Swamp in Louisiana)	36,710	<Manchac_Swamp_Bridge>	(36710;m;=)
+https://en.wikipedia.org/wiki/List_of_longest_bridges
+----------------------------------------------------------------	Length m
+"Danyang–Kunshan Grand Bridge
+Beijing–Shanghai High-Speed Railway
+Guinness: Longest bridge (any type), 2011[1]"	164,800	<Danyang–Kunshan_Grand_Bridge>	(164800;m;=)
+"Changhua–Kaohsiung Viaduct[2]
+Taiwan High Speed Rail"	157,317	<Changhua–Kaohsiung_Viaduct>	(157317;m;=)
+"Cangde Grand Bridge[4][5]
+Beijing–Shanghai High-Speed Railway"	115,900	<Cangde_Grand_Bridge>	(115900;m;=)
+"Tianjin Grand Bridge[3]
+Beijing–Shanghai High-Speed Railway
+Guinness: Second longest bridge (any type), 2011[1]"	113,700	<Tianjin_Grand_Bridge>	(113700;m;=)
+"Weinan Weihe Grand Bridge
+Zhengzhou–Xi'an High-Speed Railway"	79,732	<Weinan_Weihe_Grand_Bridge>	(79732;m;=)
+"Bang Na Expressway
+Guinness: Longest Road Bridge, 2000[6]"	54,000	<Bang_Na_Expressway>	(54000;m;=)
+"Beijing Grand Bridge
+Beijing–Shanghai High-Speed Railway"	48,153	<Beijing_Grand_Bridge>	(48153;m;=)
+"Lake Pontchartrain Causeway
+(across Lake Pontchartrain in Louisiana)
+Guinness: Longest bridge over water (continuous), 1969[7]"	38,442	<Lake_Pontchartrain_Causeway>	(38442;m;=)
+"Line 1, Wuhan Metro Bridge
+Wuhan Metro"	37,788	<Line_1,_Wuhan_Metro>	(37788;m;=)
+"Manchac Swamp Bridge
+(I-55/US 51 across Manchac Swamp in Louisiana)"	36,710	<Manchac_Swamp_Bridge>	(36710;m;=)
 Jakarta-Cikampek Elevated Toll Road	36,400	<Jakarta-Cikampek_Elevated_Toll_Road>	(36400;m;=)
 Sheikh Jaber Al-Ahmad Al-Sabah Causeway Main Link	36,140	<Sheikh_Jaber_Al-Ahmad_Al-Sabah_Causeway>	(36140;m;=)
-Yangcun Bridge[11] Beijing-Tianjin Intercity Railway	35,812	<Yangcun_Bridge>	(35812;m;=)
+"Yangcun Bridge[11]
+Beijing-Tianjin Intercity Railway"	35,812	<Yangcun_Bridge>	(35812;m;=)
 Hangzhou Bay Bridge	35,673	<Hangzhou_Bay_Bridge>	(35673;m;=)
 Runyang Bridge	35,660	<Runyang_Bridge>	(35660;m;=)
 Lima Metro Line 1[citation needed]	33,000	<Lima_Metro>	(33000;m;=)
@@ -2662,23 +2666,32 @@ Donghai Bridge	32,500	<Donghai_Bridge>	(32500;m;=)
 Temburong Bridge	30,000	<Temburong_Bridge>	(30000;m;=)
 Shanghai Maglev line	29,908	<Shanghai_Maglev_Train>	(29908;m;=)
 Dwarka Sector 8 Metro Station-Rama Krishna Ashram Marg Metro Station	29,808	<Blue_Line_(Delhi_Metro)>	(29808;m;=)
-Atchafalaya Basin Bridge (I-10 across Atchafalaya Basin in Louisiana)	29,290	<Atchafalaya_Basin_Bridge>	(29290;m;=)
-Yanshi Bridge[4] Zhengzhou–Xi'an High-Speed Railway	28,543	Yanshi Bridge	(28543;m;=)
+"Atchafalaya Basin Bridge
+(I-10 across Atchafalaya Basin in Louisiana)"	29,290	<Atchafalaya_Basin_Bridge>	(29290;m;=)
+"Yanshi Bridge[4]
+Zhengzhou–Xi'an High-Speed Railway"	28,543	Yanshi Bridge	(28543;m;=)
 Jiaozhou Bay Bridge	26,707	<Jiaozhou_Bay_Bridge>	(26707;m;=)
 Jintang Bridge	26,540	<Jintang_Bridge>	(26540;m;=)
-Jinbin Light Rail No. 1 Bridge[citation needed](Guanghualu – Babaocun) Tianjin Binhai Mass Transit	25,800	Jinbin Light Rail No. 1 Bridge	(25800;m;=)
-East West MRT Line (Redhill - Tuas Link) Mass Rapid Transit (Singapore)	25,700	<East_West_MRT_Line>	(25700;m;=)
+"Jinbin Light Rail No. 1 Bridge[citation needed](Guanghualu – Babaocun)
+Tianjin Binhai Mass Transit"	25,800	Jinbin Light Rail No. 1 Bridge	(25800;m;=)
+"East West MRT Line (Redhill - Tuas Link)
+Mass Rapid Transit (Singapore)"	25,700	<East_West_MRT_Line>	(25700;m;=)
 King Fahd Causeway Bridge I	25,000	<King_Fahd_Causeway>	(25000;m;=)
 Suvarnabhumi Airport Link	24,500	<Suvarnabhumi_Airport_Link>	(24500;m;=)
-Chesapeake Bay Bridge-Tunnel (US 13 across Chesapeake Bay in Virginia)	24,140	<Chesapeake_Bay_Bridge-Tunnel>	(24140;m;=)
-Sultan Abdul Halim Muadzam Shah Bridge Penang Second Bridge	24,000	<Sultan_Abdul_Halim_Muadzam_Shah_Bridge>	(24000;m;=)
+"Chesapeake Bay Bridge-Tunnel
+(US 13 across Chesapeake Bay in Virginia)"	24,140	<Chesapeake_Bay_Bridge-Tunnel>	(24140;m;=)
+"Sultan Abdul Halim Muadzam Shah Bridge
+Penang Second Bridge"	24,000	<Sultan_Abdul_Halim_Muadzam_Shah_Bridge>	(24000;m;=)
 MRT Sungai Buloh-Kajang Line Northern Elevated Section	23,100	<MRT_Sungai_Buloh-Kajang_Line>	(23100;m;=)
-Bridge section of Hong Kong–Zhuhai–Macau Bridge Guinness: Longest bridge over water (aggregate), October 2018[20]	22,900	<Hong_Kong–Zhuhai–Macau_Bridge>	(22900;m;=)
-Liangshui River Bridge Beijing-Tianjin Intercity Railway	21,563	Liangshui River Bridge	(21563;m;=)
+"Bridge section of Hong Kong–Zhuhai–Macau Bridge
+Guinness: Longest bridge over water (aggregate), October 2018[20]"	22,900	<Hong_Kong–Zhuhai–Macau_Bridge>	(22900;m;=)
+"Liangshui River Bridge
+Beijing-Tianjin Intercity Railway"	21,563	Liangshui River Bridge	(21563;m;=)
 Incheon Bridge	21,380	<Incheon_Bridge>	(21380;m;=)
-Yongding New River Bridge Beijing-Tianjin Intercity Railway	21,133	<Beijing-Tianjin_Intercity_Railway>	(21133;m;=)
+"Yongding New River Bridge
+Beijing-Tianjin Intercity Railway"	21,133	<Beijing-Tianjin_Intercity_Railway>	(21133;m;=)
 6th October Bridge	20,500	<6th_October_Bridge>	(20500;m;=)
-----------------------------------------------------------------	Length m		
+----------------------------------------------------------------	Length m
 Zhoushan Yangshan Bridge	130000 m		(130000.000;m;=)
 2nd Hangzhou Bay Bridge	66000 m		(66000.000;m;=)
 Dhaka Elevated Expressway	46730 m	<Dhaka_Elevated_Expressway>	(46730.000;m;=)
@@ -2687,12 +2700,12 @@ Temburong Bridge	30000 m	<Temburong_Bridge>	(30000.000;m;=)
 Kolkata Metro Line 6	29870 m	<Kolkata_Metro_Line_6>	(29870.000;m;=)
 Mumbai Trans Harbour Link	21800 m	<Mumbai_Trans_Harbour_Link>	(21800.000;m;=)
 MRT Line 6	20100 m	<Dhaka_Metro_Rail>	(20100.000;m;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 power stations with electricity generation above 10000 MW	above 10000 MV	megawatt	LB
-https://en.wikipedia.org/wiki/List_of_largest_power_stations#Top_20_largest_power_producing_facilities			
-----------------------------------------------------------------	Installed capacity ( MW )		
+https://en.wikipedia.org/wiki/List_of_largest_power_stations#Top_20_largest_power_producing_facilities
+----------------------------------------------------------------	Installed capacity ( MW )
 Three Gorges Dam	22,500	<Three_Gorges_Dam>	(22500.000;megawatt;=)
 Itaipu Dam	14,000	<Itaipu_Dam>	(14000.000;megawatt;=)
 Xiluodu	13,860	<Xiluodu_Dam>	(13860.000;megawatt;=)
@@ -2714,12 +2727,12 @@ Hanul	5,928	<Hanul_Nuclear_Power_Plant>	(5928.000;megawatt;=)
 Hanbit	5,875	<Hanbit_Nuclear_Power_Plant>	(5875.000;megawatt;=)
 Zaporizhia	5,700	<Zaporizhia_Nuclear_Power_Plant>	(5700.000;megawatt;=)
 Robert - Bourassa	5,616	<Robert-Bourassa_generating_station>	(5616.000;megawatt;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 countries with amount of fossil co2 emission more than 100 ton in 2017	more than 100 ton	ton	LB
-https://en.wikipedia.org/wiki/List_of_countries_by_carbon_dioxide_emissions#Fossil_CO2_emissions_by_country/region			
-----------------------------------------------------------------	Fossil CO2 Emissions (Mt CO2/yr) 2017		
+https://en.wikipedia.org/wiki/List_of_countries_by_carbon_dioxide_emissions#Fossil_CO2_emissions_by_country/region
+----------------------------------------------------------------	Fossil CO2 Emissions (Mt CO2/yr) 2017
 China	10,877.22	<China>	(10877218000;ton;=)
 United States	5,107.39	<United_States>	(5107393000;ton;=)
 European Union	3,548.35	<European_Union>	(3548345000;ton;=)
@@ -2738,10 +2751,14 @@ South Africa	467.654	<South_Africa>	(467654000;ton;=)
 Turkey	429.563	<Turkey>	(429563000;ton;=)
 Australia	402.253	<Australia>	(402253000;ton;=)
 United Kingdom	379.15	<United_Kingdom>	(379150000;ton;=)
-Italy  San Marino  Vatican City	361.176	<Italy>	(361176000;ton;=)
-France  Monaco	338.193	<France>	(338193000;ton;=)
+"Italy
+ San Marino
+ Vatican City"	361.176	<Italy>	(361176000;ton;=)
+"France
+ Monaco"	338.193	<France>	(338193000;ton;=)
 Poland	319.028	<Poland>	(319028000;ton;=)
-Spain  Andorra	282.364	<Spain>	(282364000;ton;=)
+"Spain
+ Andorra"	282.364	<Spain>	(282364000;ton;=)
 Taiwan	279.74	<Taiwan>	(279740000;ton;=)
 Thailand	279.296	<Thailand>	(279296000;ton;=)
 Kazakhstan	266.207	<Kazakhstan>	(266207000;ton;=)
@@ -2785,7 +2802,8 @@ Hungary	50.856	<Hungary>	(50856000;ton;=)
 Bulgaria	49.568	<Bulgaria>	(49568000;ton;=)
 Finland	46.846	<Finland>	(46846000;ton;=)
 Hong Kong	44.715	<Hong_Kong>	(44715000;ton;=)
-Switzerland  Liechtenstein	39.738	<Switzerland>	(39738000;ton;=)
+"Switzerland
+ Liechtenstein"	39.738	<Switzerland>	(39738000;ton;=)
 Ecuador	39.507	<Ecuador>	(39507000;ton;=)
 Ireland	38.914	<Republic_of_Ireland>	(38914000;ton;=)
 Slovakia	37.855	<Slovakia>	(37855000;ton;=)
@@ -2806,7 +2824,8 @@ Jordan	24.565	<Jordan>	(24565000;ton;=)
 Sri Lanka	23.978	<Sri_Lanka>	(23978000;ton;=)
 Dominican Republic	23.111	<Dominican_Republic>	(23111000;ton;=)
 Lebanon	23.102	<Lebanon>	(23102000;ton;=)
-Sudan  South Sudan	21.056	<Sudan>	(21056000;ton;=)
+"Sudan
+ South Sudan"	21.056	<Sudan>	(21056000;ton;=)
 Bolivia	20.462	<Bolivia>	(20462000;ton;=)
 Ghana	18.626	<Ghana>	(18626000;ton;=)
 Kenya	18.594	<Kenya>	(18594000;ton;=)
@@ -2929,12 +2948,12 @@ Kiribati	0.03	<Kiribati>	(30000;ton;=)
 Anguilla	0.028	<Anguilla>	(28000;ton;=)
 Saint Helena, Ascension and Tristan da Cunha	0.015	<Saint_Helena,_Ascension_and_Tristan_da_Cunha>	(15000;ton;=)
 Faroe Islands	0.002	<Faroe_Islands>	(2000;ton;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 computer game with number monthly players of more than 1 million	more than 1 million		LB
-https://en.wikipedia.org/wiki/List_of_video_games_by_monthly_active_player_count			
-----------------------------------------------------------------	Monthly players		
+https://en.wikipedia.org/wiki/List_of_video_games_by_monthly_active_player_count
+----------------------------------------------------------------	Monthly players
 CrossFire	240 million	<CrossFire_(video_game)>	(240000000;;=)
 PlayerUnknown's Battlegrounds	227 million	<PlayerUnknown's_Battlegrounds>	(227000000;;=)
 Honor of Kings	200 million	<Honor_of_Kings>	(200000000;;=)
@@ -2963,12 +2982,12 @@ Heroes of the Storm	6.5 million	<Heroes_of_the_Storm>	(6500000;;=)
 Rocket League	6.5 million	<Rocket_League>	(6500000;;=)
 Café World	6.4 million	<Café_World>	(6400000;;=)
 Smite	2.5 million	<Smite_(video_game)>	(2500000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 optical telescope with aperture more than 5 meters	more than 5 meters	meters	LB
-https://en.wikipedia.org/wiki/List_of_largest_optical_reflecting_telescopes#Table_of_reflecting_telescopes			
-----------------------------------------------------------------	Effective aperture		
+https://en.wikipedia.org/wiki/List_of_largest_optical_reflecting_telescopes#Table_of_reflecting_telescopes
+----------------------------------------------------------------	Effective aperture
 Large Binocular Telescope (LBT)	11.9 m (469 in) (combined)[1]	<Large_Binocular_Telescope>	(11.9;m;=)
 Gran Telescopio Canarias (GTC)	10.4 m (409 in)	<Gran_Telescopio_Canarias>	(10.4;m;=)
 Hobby-Eberly Telescope (HET)	10 m (394 in) (effective) [2]	<Hobby-Eberly_Telescope>	(10;m;=)
@@ -3006,12 +3025,12 @@ Astrophysical Research Consortium (ARC)	3.48 m (137 in)	<Astrophysical_Research_
 Shane Telescope	3.05 m (120 in)	<C._Donald_Shane_telescope>	(3.05;m;=)
 NASA Infrared Telescope Facility	3.0 m (118 in)	<NASA_Infrared_Telescope_Facility>	(3.0;m;=)
 NASA-LMT	3 m (118 in)	<NASA_Orbital_Debris_Observatory>	(3;m;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Supercomputers with energy consumption more than 10 Gigaflops/watt	more than 10		LB
-https://en.wikipedia.org/wiki/Performance_per_watt#Green500_List			
-----------------------------------------------------------------	Performance per Watt ( GFLOPS / Watt )		
+https://en.wikipedia.org/wiki/Performance_per_watt#Green500_List
+----------------------------------------------------------------	Performance per Watt ( GFLOPS / Watt )
 A64FX prototype	16.876	A64FX prototype	(16.876;GFLOPS / Watt;=)
 NA - 1	16.256	NA - 1	(16.256;GFLOPS / Watt;=)
 AiMOS	15.771	AiMOS	(15.771;GFLOPS / Watt;=)
@@ -3022,12 +3041,12 @@ MareNostrum P9 CTE	14.131	<MareNostrum>	(14.131;GFLOPS / Watt;=)
 TSUBAME3.0	13.704	<Tsubame_(supercomputer)>	(13.704;GFLOPS / Watt;=)
 PANGEA III	13.065	PANGEA III	(13.065;GFLOPS / Watt;=)
 Sierra	12.723	<Sierra_(supercomputer)>	(12.723;GFLOPS / Watt;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Supercomputers that has more than 20 petaflops	more than 20		LB
-https://en.wikipedia.org/wiki/TOP500#TOP_500			
-----------------------------------------------------------------	Rmax Rpeak ( P FLOPS )		
+https://en.wikipedia.org/wiki/TOP500#TOP_500
+----------------------------------------------------------------	Rmax Rpeak ( P FLOPS )
 Fugaku	415.530 513.855	<Fugaku_(supercomputer)>	(415.530;;=)
 Summit	148.600 200.795	<Summit_(supercomputer)>	(148.600;;=)
 Sierra	94.640 125.712	<Sierra_(supercomputer)>	(94.640;;=)
@@ -3041,12 +3060,12 @@ Piz Daint	21.230 27.154	<Piz_Daint_(supercomputer)>	(21.230;;=)
 Trinity	20.159 41.461	<Trinity_(supercomputer)>	(20.159;;=)
 AI Bridging Cloud Infrastructure	19.880 32.577	<AI_Bridging_Cloud_Infrastructure>	(19.880;;=)
 SuperMUC - NG	19.477 26.874	<SuperMUC>	(19.477;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 countries that has more than 1000 Watt average power consumption per capita	more than 1000 Watt	watt	LB
-https://en.wikipedia.org/wiki/List_of_countries_by_electricity_consumption			
-----------------------------------------------------------------	Average power per capita ( watt per person )		
+https://en.wikipedia.org/wiki/List_of_countries_by_electricity_consumption
+----------------------------------------------------------------	Average power per capita ( watt per person )
 China	510	<China>	(510;watt;=)
 United States	1,377	<United_States>	(1377;watt;=)
 India	140	<India>	(140;watt;=)
@@ -3265,12 +3284,12 @@ Falkland Islands	543	<Falkland_Islands>	(543;watt;=)
 Saint Helena, Ascension and Tristan da Cunha	136	<Saint_Helena,_Ascension_and_Tristan_da_Cunha>	(136;watt;=)
 Niue	356	<Niue>	(356;watt;=)
 Gaza Strip	0.01	<Gaza_Strip>	(0.01;watt;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Countries whose renewable energy production is more than 50% of total energy production	more than 50%	%	LB
-https://en.wikipedia.org/wiki/List_of_countries_by_renewable_electricity_production			
-----------------------------------------------------------------	RE % of total		
+https://en.wikipedia.org/wiki/List_of_countries_by_renewable_electricity_production
+----------------------------------------------------------------	RE % of total
 Albania	100%	<Albania>	(1;percent;=)
 Democratic Republic of the Congo	100%	<Democratic_Republic_of_the_Congo>	(1;percent;=)
 Iceland	100.00%	<Iceland>	(1;percent;=)
@@ -3412,12 +3431,12 @@ Oman	0.00%	<Oman>	(0;percent;=)
 Saudi Arabia	0.00%	<Saudi_Arabia>	(0;percent;=)
 Trinidad and Tobago	0.00%	<Trinidad_and_Tobago>	(0;percent;=)
 Turkmenistan	0.00%	<Turkmenistan>	(0;percent;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Wind power station which generates more than 500 MW electricity	more than 500 MW	megawatt	LB
-https://en.wikipedia.org/wiki/List_of_largest_power_stations#Wind			
-----------------------------------------------------------------	Capacity ( MW )		
+https://en.wikipedia.org/wiki/List_of_largest_power_stations#Wind
+----------------------------------------------------------------	Capacity ( MW )
 Gansu	7,965	<Gansu_Wind_Farm>	(7965.000;megawatt;=)
 Alta	1,548	<Alta_Wind_Energy_Center>	(1548.000;megawatt;=)
 Muppandal Wind Farm	1,500	<Muppandal_Wind_Farm>	(1500.000;megawatt;=)
@@ -3428,7 +3447,7 @@ Meadow Lake Wind Farm	801	<Meadow_Lake_Wind_Farm>	(801.000;megawatt;=)
 Roscoe	782	<Roscoe_Wind_Farm>	(782.000;megawatt;=)
 Horse Hollow	736	<Horse_Hollow_Wind_Energy_Center>	(736.000;megawatt;=)
 Tehachapi Pass Wind Farm	705	<Tehachapi_Pass_Wind_Farm>	(705.000;megawatt;=)
-----------------------------------------------------------------	Capacity ( MW )		
+----------------------------------------------------------------	Capacity ( MW )
 Hornsea 1	1,218	<Hornsea_Wind_Farm>	(1218.000;megawatt;=)
 Walney Extension	659	<Walney_Extension>	(659.000;megawatt;=)
 London Array	630	<London_Array>	(630.000;megawatt;=)
@@ -3439,12 +3458,12 @@ Gwynt y Môr	576	<Gwynt_y_Môr>	(576.000;megawatt;=)
 Race Bank	573	<Race_Bank_wind_farm>	(573.000;megawatt;=)
 Greater Gabbard	504	<Greater_Gabbard_wind_farm>	(504.000;megawatt;=)
 Hohe See	504	<Hohe_See>	(504.000;megawatt;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Coal power stations which generates more than 1000 MW electricity	more than 1000 MW	MW	LB
-https://en.wikipedia.org/wiki/List_of_largest_power_stations#Coal			
-----------------------------------------------------------------	Capacity ( MW )		
+https://en.wikipedia.org/wiki/List_of_largest_power_stations#Coal
+----------------------------------------------------------------	Capacity ( MW )
 Tuoketuo	6,720	<Tuoketuo_Power_Station>	(6720.000;megawatt;=)
 Dangjin	6,040	<Dangjin_Power_Station>	(6040.000;megawatt;=)
 Taichung	5,500	<Taichung_Power_Plant>	(5500.000;megawatt;=)
@@ -3455,12 +3474,12 @@ Guodian Beilun	5,000	<Guodian_Beilun_Power_Station>	(5000.000;megawatt;=)
 Waigaoqiao	5,000	<Waigaoqiao_Power_Station>	(5000.000;megawatt;=)
 Guohua Taishan	5,000	<Guohua_Taishan_Power_Station>	(5000.000;megawatt;=)
 Jiaxing	5,000	<Jiaxing_Power_Station>	(5000.000;megawatt;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Nuclear power stations which generates more than 5000 MW electricity	more than 5000 MW	Megawatt	LB
-https://en.wikipedia.org/wiki/List_of_largest_power_stations#Nuclear			
-----------------------------------------------------------------	Capacity ( MW )		
+https://en.wikipedia.org/wiki/List_of_largest_power_stations#Nuclear
+----------------------------------------------------------------	Capacity ( MW )
 Kashiwazaki - Kariwa	7,965 ( out of service since 2011 )	<Kashiwazaki-Kariwa_Nuclear_Power_Plant>	(7965.000;megawatt;=)
 Kori	7,411	<Kori_Nuclear_Power_Plant>	(7411.000;megawatt;=)
 Yangjiang	6,480	<Yangjiang_Nuclear_Power_Plant>	(6480.000;megawatt;=)
@@ -3471,12 +3490,12 @@ Zaporizhia	5,700	<Zaporizhia_Nuclear_Power_Plant>	(5700.000;megawatt;=)
 Gravelines	5,460	<Gravelines_Nuclear_Power_Plant>	(5460.000;megawatt;=)
 Paluel	5,320	<Paluel_Nuclear_Power_Plant>	(5320.000;megawatt;=)
 Cattenom	5,200	<Cattenom_Nuclear_Power_Plant>	(5200.000;megawatt;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Solar power stations which generates more than 500 MW electricity	more than 500 MW	Megawatt	LB
-https://en.wikipedia.org/wiki/List_of_largest_power_stations#Solar_power			
-----------------------------------------------------------------	Capacity ( MW )		
+https://en.wikipedia.org/wiki/List_of_largest_power_stations#Solar_power
+----------------------------------------------------------------	Capacity ( MW )
 Pavagada Solar Park	2050	<Pavagada_Solar_Park>	(2050.000;megawatt;=)
 Benban Solar Park	1,650	<Benban_Solar_Park>	(1650.000;megawatt;=)
 Tengger Desert Solar Park	1547	<Tengger_Desert_Solar_Park>	(1547.000;megawatt;=)
@@ -3487,7 +3506,7 @@ Kurnool Ultra Mega Solar Park	1000	<Kurnool_Ultra_Mega_Solar_Park>	(1000.000;meg
 Longyangxia Dam Solar Park	850	<Longyangxia_Dam>	(850.000;megawatt;=)
 Villanueva Solar Park	828	<Villanueva_Solar_Park>	(828.000;megawatt;=)
 Rewa Ultra Mega Solar	750	<Rewa_Ultra_Mega_Solar>	(750.000;megawatt;=)
-----------------------------------------------------------------	Capacity ( MW )		
+----------------------------------------------------------------	Capacity ( MW )
 Golmud ( 1 and 2 )	110	<Golmud_CPV_Solar_Park>	(110.000;megawatt;=)
 Touwsrivier	36	<Touwsrivier_CPV_Solar_Project>	(36.000;megawatt;=)
 Alamosa	30	<Alamosa_Solar_Generating_Project>	(30.000;megawatt;=)
@@ -3499,7 +3518,7 @@ Tucson	2	<University_of_Arizona_CPV_Array>	(2.000;megawatt;=)
 Murcia	2	<Murcia_CPV_Plant>	(2.000;megawatt;=)
 Newberry	1.5	<Newberry_Springs_CPV_Power_Plant>	(1.500;megawatt;=)
 Sevilla	1.2	<Sevilla_Photovoltaic_Power_Plant>	(1.200;megawatt;=)
-----------------------------------------------------------------	Capacity ( MW )		
+----------------------------------------------------------------	Capacity ( MW )
 Ouarzazate	510	<Ouarzazate_Solar_Power_Station>	(510.000;megawatt;=)
 Ivanpah	392	<Ivanpah_Solar_Power_Facility>	(392.000;megawatt;=)
 SEGS	310	<Solar_Energy_Generating_Systems>	(310.000;megawatt;=)
@@ -3510,29 +3529,30 @@ Solaben	200	<Solaben_Solar_Power_Station>	(200.000;megawatt;=)
 Solnova	150	<Solnova_Solar_Power_Station>	(150.000;megawatt;=)
 Andasol	150	<Andasol_Solar_Power_Station>	(150.000;megawatt;=)
 Extresol	150	<Extresol_Solar_Power_Station>	(150.000;megawatt;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
-Roller coaster with height more than 75 meters	more than 75 meters	meters	LB
-https://en.wikipedia.org/wiki/List_of_roller_coaster_rankings#Height_rankings			
-----------------------------------------------------------------	Height		
-Kingda Ka	on 456	<Kingda_Ka>	(456;m;=)
-Top Thrill Dragster	on 420	<Top_Thrill_Dragster>	(420;m;=)
-Superman : Escape from Krypton	on 415	<Superman:_Escape_from_Krypton>	(415;m;=)
-Red Force	on 367.4	<Red_Force_(roller_coaster)>	(367.4;m;=)
-Fury 325	on 325	<Fury_325>	(325;m;=)
-Steel Dragon 2000	on 318.3	<Steel_Dragon_2000>	(318.3;m;=)
-Millennium Force	on 310	<Millennium_Force>	(310;m;=)
-Leviathan	on 306	<Leviathan_(roller_coaster)>	(306;m;=)
-Intimidator 305	on 305	<Intimidator_305>	(305;m;=)
-Orion	on 287	<Orion_(roller_coaster)>	(287;m;=)
-Thunder Dolphin	on 262.5	<Thunder_Dolphin>	(262.5;m;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
+Roller coaster with height more than 75 meters	more than 75 meters	ft	LB
+https://en.wikipedia.org/wiki/List_of_roller_coaster_rankings#Height_rankings
+----------------------------------------------------------------	Height
+Kingda Ka	on 456	<Kingda_Ka>	(456;ft;=)
+Top Thrill Dragster	on 420	<Top_Thrill_Dragster>	(420;ft;=)
+Superman : Escape from Krypton	on 415	<Superman:_Escape_from_Krypton>	(415;ft;=)
+Red Force	on 367.4	<Red_Force_(roller_coaster)>	(367.4;ft;=)
+Fury 325	on 325	<Fury_325>	(325;ft;=)
+Steel Dragon 2000	on 318.3	<Steel_Dragon_2000>	(318.3;ft;=)
+Millennium Force	on 310	<Millennium_Force>	(310;ft;=)
+Leviathan	on 306	<Leviathan_(roller_coaster)>	(306;ft;=)
+Intimidator 305	on 305	<Intimidator_305>	(305;ft;=)
+Orion	on 287	<Orion_(roller_coaster)>	(287;ft;=)
+Thunder Dolphin	on 262.5	<Thunder_Dolphin>	(262.5;ft;=)
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Cities in Germany with more than 1M inhabitants in 2015	more than 1M		LB
-https://en.wikipedia.org/wiki/List_of_cities_in_Germany_by_population#List			
-----------------------------------------------------------------	2015 estimate		
+https://en.wikipedia.org/wiki/List_of_cities_in_Germany_by_population#List
+----------------------------------------------------------------	"2015
+estimate"
 Berlin	3,520,031	<Berlin>	(3520031;;=)
 Hamburg	1,787,408	<Hamburg>	(1787408;;=)
 Munich (München)	1,450,381	<Munich>	(1450381;;=)
@@ -3612,12 +3632,12 @@ Moers	104,529	<Moers>	(104529;;=)
 Siegen	102,355	<Siegen>	(102355;;=)
 Hildesheim	101,667	<Hildesheim>	(101667;;=)
 Salzgitter	101,079	<Salzgitter>	(101079;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Countries with more than 30 percent immigrants in 2019?	more than 30 percent	percent	LB
-https://en.wikipedia.org/wiki/List_of_sovereign_states_and_dependent_territories_by_immigrant_population#UN_2019_report:_immigrant_population			
-----------------------------------------------------------------	International migrant stock as a percentage of the total population (both sexes) 2019		
+https://en.wikipedia.org/wiki/List_of_sovereign_states_and_dependent_territories_by_immigrant_population#UN_2019_report:_immigrant_population
+----------------------------------------------------------------	International migrant stock as a percentage of the total population (both sexes) 2019
 Holy See	100	<Holy_See>	(1;percent;=)
 United Arab Emirates	88	<United_Arab_Emirates>	(0.879;percent;=)
 Qatar	79	<Qatar>	(0.787;percent;=)
@@ -3852,12 +3872,12 @@ Indonesia	0.1	<Indonesia>	(0.001;percent;=)
 Myanmar	0.1	<Myanmar>	(0.001;percent;=)
 Viet Nam	0.1	<Vietnam>	(0.001;percent;=)
 Cuba	0	<Cuba>	(0;percent;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Natural disasters that caused more than 2,000 deaths	more than 2,000		LB
-https://en.wikipedia.org/wiki/List_of_natural_disasters_by_death_toll#Ten_deadliest_natural_disasters_excluding_epidemics_and_famines			
-----------------------------------------------------------------	Death toll (Highest estimate)	Date	
+https://en.wikipedia.org/wiki/List_of_natural_disasters_by_death_toll#Ten_deadliest_natural_disasters_excluding_epidemics_and_famines
+----------------------------------------------------------------	Death toll (Highest estimate)	Date
 1931 China floods	4,000,000[2][nb 1]	<1931_China_floods>	(4000000;;=)
 1887 Yellow River flood	2,000,000[3][4][5]	<1887_Yellow_River_flood>	(2000000;;=)
 1556 Shaanxi earthquake	830,000[6]	<1556_Shaanxi_earthquake>	(830000;;=)
@@ -3868,16 +3888,12 @@ https://en.wikipedia.org/wiki/List_of_natural_disasters_by_death_toll#Ten_deadli
 1881 Haiphong typhoon	300,000[9]	<1881_Haiphong_typhoon>	(300000;;=)
 1920 Haiyuan earthquake	273,400[10]	<1920_Haiyuan_earthquake>	(273400;;=)
 Typhoon Nina	229,000	<Typhoon_Nina_(1975)>	(229000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Volcano with more than 3000 m height	more than 3000 m	m	LB
-https://en.wikipedia.org/wiki/List_of_volcanoes_by_elevation			
-----------------------------------------------------------------	Metres		
-Mauna Kea	10,203	<Mauna_Kea>	(10203;m;=)
-Mauna Loa	9,170	<Mauna_Loa>	(9170;m;=)
-Haleakalā	9,144	<Haleakalā>	(9144;m;=)
-Piton des Neiges	7,071	<Piton_des_Neiges>	(7071;m;=)
+https://en.wikipedia.org/wiki/List_of_volcanoes_by_elevation
+----------------------------------------------------------------	Metres
 Ojos del Salado	6,893	<Ojos_del_Salado>	(6893;m;=)
 Monte Pissis	6,793	<Monte_Pissis>	(6793;m;=)
 Nevado Tres Cruces	6,748	<Nevado_Tres_Cruces>	(6748;m;=)
@@ -3955,12 +3971,13 @@ Mount Kazbek	5,047	<Mount_Kazbek>	(5047;m;=)
 Tungurahua	5,023	<Tungurahua>	(5023;m;=)
 Carihuairazo	5,018	<Carihuairazo>	(5018;m;=)
 Mount Bona	5,005	<Mount_Bona>	(5005;m;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Countries with population in 2019 less than 10M	less than 10M		LUB
-https://en.wikipedia.org/wiki/List_of_countries_by_population_(United_Nations)#List			
-----------------------------------------------------------------	Population (1 July 2019)		
+https://en.wikipedia.org/wiki/List_of_countries_by_population_(United_Nations)#List
+----------------------------------------------------------------	"Population
+(1 July 2019)"
 China[a]	1,433,783,686	<China>	(1433783686;;=)
 India	1,366,417,754	<India>	(1366417754;;=)
 United States	329,064,917	<United_States>	(329064917;;=)
@@ -4194,12 +4211,12 @@ Falkland Islands (United Kingdom)	3,377	<Falkland_Islands>	(3377;;=)
 Niue (New Zealand)	1,615	<Niue>	(1615;;=)
 Tokelau (New Zealand)	1,340	<Tokelau>	(1340;;=)
 Vatican City[z]	799	<Vatican_City>	(799;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Cities in Turkey with more than 2M population in 2015	more than 2M		LB
-https://en.wikipedia.org/wiki/List_of_largest_cities_and_towns_in_Turkey			
-----------------------------------------------------------------	2015 Estimate		
+https://en.wikipedia.org/wiki/List_of_largest_cities_and_towns_in_Turkey
+----------------------------------------------------------------	2015 Estimate
 Istanbul	14,025,646	<Istanbul>	(14025646.000;;=)
 Ankara	4,587,558	<Ankara>	(4587558.000;;=)
 İzmir	2,847,691	<İzmir>	(2847691.000;;=)
@@ -4267,12 +4284,12 @@ Karabük	103,302	<Karabük>	(103302.000;;=)
 Siverek	102,856	<Siverek>	(102856.000;;=)
 Akhisar	102,453	<Akhisar>	(102453.000;;=)
 Lüleburgaz	100,790	<Lüleburgaz>	(100790.000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 countries with area more than 100 km2	more than 100 km2	km2	LUB
-https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_area			
-----------------------------------------------------------------	Total in km 2 ( mi 2 )		
+https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_area
+----------------------------------------------------------------	Total in km 2 ( mi 2 )
 Russia	17,098,246 (6,601,670)	<Russia>	(17098246;km2;=)
 Canada	9,984,670 (3,855,100)	<Canada>	(9984670;km2;=)
 China	9,596,961 (3,705,407)	<China>	(9596961;km2;=)
@@ -4531,16 +4548,18 @@ Tokelau (New Zealand)	12 (4.6)	<Tokelau>	(12;km2;=)
 Gibraltar (United Kingdom)	6 (2.3)	<Gibraltar>	(6;km2;=)
 Clipperton Island (France)	6 (2.3)	<Clipperton_Island>	(6;km2;=)
 Ashmore and Cartier Islands (Australia)	5 (1.9)	<Ashmore_and_Cartier_Islands>	(5;km2;=)
-Spratly Islands (disputed)	< 5 (< 1.9)	<Spratly_Islands>	(5;km2;=)
-Coral Sea Islands (Australia)	< 3 (< 1.2)	<Coral_Sea_Islands>	(3;km2;=)
+Spratly Islands (disputed)	"< 5
+(< 1.9)"	<Spratly_Islands>	(5;km2;=)
+Coral Sea Islands (Australia)	"< 3
+(< 1.2)"	<Coral_Sea_Islands>	(3;km2;=)
 Monaco	2.02 (0.78)	<Monaco>	(2.02;km2;=)
 Vatican City	0.49 (0.19)	<Vatican_City>	(0.49;km2;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 mountain in Switzerland with height more than 3000 meters	more than 3000 meters	meters	LB
-https://en.wikipedia.org/wiki/List_of_mountains_of_Switzerland_above_3000_m#List			
-----------------------------------------------------------------	Height (m)		
+https://en.wikipedia.org/wiki/List_of_mountains_of_Switzerland_above_3000_m#List
+----------------------------------------------------------------	Height (m)
 Monte Rosa ( Dufourspitze )	4634	<Monte_Rosa>	(4634.000;metre;=)
 Dom	4545	<Dom_(mountain)>	(4545.000;metre;=)
 Lyskamm	4527	<Lyskamm>	(4527.000;metre;=)
@@ -4978,12 +4997,12 @@ Reissend Nollen	3003	<Reissend_Nollen>	(3003.000;metre;=)
 Pizzas d'Anarosa / Grauhörner	3002	<Pizzas_d'Anarosa>	(3002.000;metre;=)
 Mittlere Lohner	3002	<Gross_Lohner>	(3002.000;metre;=)
 Piz Mezzaun	3000	<Piz_Mezzaun>	(3000.000;metre;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 Libraries with more than 500,000 books?	more than 500,000		LB
-https://en.wikipedia.org/wiki/List_of_largest_libraries			
-----------------------------------------------------------------	Catalogued size ( number of items )		
+https://en.wikipedia.org/wiki/List_of_largest_libraries
+----------------------------------------------------------------	Catalogued size ( number of items )
 British Library	_0180000000 170-200 million	<British_Library>	(200000000;;=)
 Library of Congress	_0168000000 168 million+	<Library_of_Congress>	(168000000;;=)
 New York Public Library	_005500000 55 million	<New_York_Public_Library>	(55000000;;=)
@@ -5006,12 +5025,12 @@ National Library of Sweden	_0018000000 18 million	<National_Library_of_Sweden>	(
 Vernadsky National Library of Ukraine	_0015000000 15.5 million	<Vernadsky_National_Library_of_Ukraine>	(15500000;;=)
 Yale Library	_0015200000 15.2 million	<Yale_Library>	(15200000;;=)
 National Library of Iran	_0015000000 15 million	<National_Library_of_Iran>	(15000000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 skyscrapers over 300 meters	over 300 meters	meters	LB
-https://en.wikipedia.org/wiki/List_of_tallest_buildings#Tallest_buildings_in_the_world			
-----------------------------------------------------------------	Height m		
+https://en.wikipedia.org/wiki/List_of_tallest_buildings#Tallest_buildings_in_the_world
+----------------------------------------------------------------	Height m
 Burj Khalifa	828	<Burj_Khalifa>	(828.000;metre;=)
 Shanghai Tower	632	<Shanghai_Tower>	(632.000;metre;=)
 Abraj Al - Bait Clock Tower	601	<Abraj_Al_Bait>	(601.000;metre;=)
@@ -5084,12 +5103,13 @@ The Marina Torch	352	<The_Marina_Torch>	(352.000;metre;=)
 Forum 66 Tower 1	350.6	<Forum_66>	(350.600;metre;=)
 The Pinnacle	350.3	<The_Pinnacle_(Guangzhou)>	(350.300;metre;=)
 Xi An Glory International Financial Center	350	<Xi_An_Glory_International_Financial_Center>	(350.000;metre;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 skyscrapers in the United States over 300 meters	over 300 meters	meters	LB
-https://en.wikipedia.org/wiki/List_of_tallest_buildings_in_the_United_States#Tallest_buildings			
-----------------------------------------------------------------	Height ft (m)		
+https://en.wikipedia.org/wiki/List_of_tallest_buildings_in_the_United_States#Tallest_buildings
+----------------------------------------------------------------	"Height
+ft (m)"
 One World Trade Center	1,776 ft (541 m)	<One_World_Trade_Center>	(1776;ft;=)
 Central Park Tower	1,550 ft (472 m)	<Central_Park_Tower>	(1550;ft;=)
 Willis Tower †	1,451 ft (442 m)	<Willis_Tower>	(1451;ft;=)
@@ -5256,12 +5276,12 @@ One Thousand Museum	709 ft (216 m)	<One_Thousand_Museum>	(709;ft;=)
 General Motors Building	705 ft (215 m)	<General_Motors_Building_(Manhattan)>	(705;ft;=)
 25 Park Row*	702 ft (214 m)	25 Park Row*	(702;ft;=)
 Metropolitan Life Insurance Company Tower †	700 ft (213 m)	<Metropolitan_Life_Insurance_Company_Tower>	(700;ft;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 countries with literacy rate less than 75%	less than 75%	%	UB
-https://en.wikipedia.org/wiki/List_of_countries_by_literacy_rate#List_of_UN_member_and_observer_states_by_adult_literacy_rate			
-----------------------------------------------------------------	Literacy rate (all)		
+https://en.wikipedia.org/wiki/List_of_countries_by_literacy_rate#List_of_UN_member_and_observer_states_by_adult_literacy_rate
+----------------------------------------------------------------	Literacy rate (all)
 Niger	19.10%	<Niger>	(0.191;percent;=)
 South Sudan	26.80%	<South_Sudan>	(0.268;percent;=)
 Guinea	30.40%	<Guinea>	(0.304;percent;=)
@@ -5314,12 +5334,12 @@ Guatemala	79.30%	<Guatemala>	(0.793;percent;=)
 Congo	79.30%	<Republic_of_the_Congo>	(0.793;percent;=)
 Lesotho	79.40%	<Lesotho>	(0.794;percent;=)
 Laos	79.90%	<Laos>	(0.799;percent;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 cities with more than 5 million visitors in 2018	more than 5 million		LB
-https://en.wikipedia.org/wiki/List_of_cities_by_international_visitors			
-----------------------------------------------------------------	Arrivals 2018 ( Euromonitor )		
+https://en.wikipedia.org/wiki/List_of_cities_by_international_visitors
+----------------------------------------------------------------	Arrivals 2018 ( Euromonitor )
 Hong Kong	29,262,700	<Hong_Kong>	(29262700.000;;=)
 Bangkok	24,177,500	<Bangkok>	(24177500.000;;=)
 London	19,233,000	<London>	(19233000.000;;=)
@@ -5420,12 +5440,12 @@ Rhodes	2,337,700	<Rhodes_(city)>	(2337700.000;;=)
 Rio de Janeiro	2,278,300	<Rio_de_Janeiro>	(2278300.000;;=)
 Krabi	2,255,300	<Krabi>	(2255300.000;;=)
 Bangalore	2,239,200	<Bangalore>	(2239200.000;;=)
-<<<< END <<<<			
-			
->>>> BEGIN >>>>			
+<<<< END <<<<
+
+>>>> BEGIN >>>>
 mountains over 8000 meter in height	over 8000 meter	meter	LB
-https://en.wikipedia.org/wiki/Eight-thousander#List_of_14			
-----------------------------------------------------------------	Mountain Height		
+https://en.wikipedia.org/wiki/Eight-thousander#List_of_14
+----------------------------------------------------------------	Mountain Height
 Everest	8848 m	<Mount_Everest>	(8848.000;m;=)
 K2	8614 m	<K2>	(8614.000;m;=)
 Kangchenjunga	8586 m	<Kangchenjunga>	(8586.000;m;=)
