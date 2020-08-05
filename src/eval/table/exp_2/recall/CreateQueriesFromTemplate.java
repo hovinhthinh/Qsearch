@@ -294,17 +294,21 @@ public class CreateQueriesFromTemplate {
 
     public static void loadFixedToJson() {
         FileUtils.LineStream stream = FileUtils.getLineStream("eval/table/exp_2/recall/recall_query.tsv");
-        PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_2/recall/recall_query.json");
-
+        ArrayList<String> jsons = new ArrayList<>();
         int cnt = 0;
         RecallQuery q;
         while ((q = RecallQuery.read(stream)) != null) {
-            out.println(Gson.toJson(q));
+            jsons.add(Gson.toJson(q));
             System.out.println(q.full);
             ++cnt;
         }
-        out.close();
         System.out.println("total queries: " + cnt);
+        Collections.shuffle(jsons);
+        PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_2/recall/recall_query.json");
+        for (String s : jsons) {
+            out.println(s);
+        }
+        out.close();
     }
 
     public static void main(String[] args) {
