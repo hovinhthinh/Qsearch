@@ -109,11 +109,12 @@ class QueryTemplate {
         return arr[RAND.nextInt(arr.length)];
     }
 
-    public Pair<Double, String> textualizeQuantity(double queryQ, String queryQStr, boolean percent) {
-        queryQStr = String.format("%.1f", queryQ);
+    public Pair<Double, String> textualizeQuantity(double queryQ, boolean percent) {
+        String queryQStr = String.format("%.1f", queryQ);
         if (queryQStr.endsWith(".0")) {
             queryQStr = queryQStr.substring(0, queryQStr.length() - 2);
         }
+        queryQ = Double.parseDouble(queryQStr);
         if (Math.abs(queryQ) >= 1e9) {
             queryQStr = String.format("%.1f", queryQ / 1e9);
             queryQ = Double.parseDouble(queryQStr) * 1e9;
@@ -179,11 +180,10 @@ class QueryTemplate {
             for (int top : tops) {
                 Quantity thresholdQ = facts.get(top - 1).q;
                 double queryQ = thresholdQ.value * QuantityDomain.getScale(thresholdQ) / QuantityDomain.getScale(new Quantity(0, quantityUnit, "="));
-                String queryQStr = "" + queryQ;
-                Pair<Double, String> textualized = textualizeQuantity(queryQ, queryQStr,
+                Pair<Double, String> textualized = textualizeQuantity(queryQ,
                         QuantityDomain.getDomainOfUnit(quantityUnit).equals(QuantityDomain.Domain.PERCENTAGE));
                 queryQ = textualized.first;
-                queryQStr = textualized.second;
+                String queryQStr = textualized.second;
                 double factQThreshold = queryQ * QuantityDomain.getScale(new Quantity(0, quantityUnit, "=")) / QuantityDomain.getScale(thresholdQ);
                 RecallQuery q = new RecallQuery();
                 q.sourceURL = sourceURL;
@@ -237,11 +237,10 @@ class QueryTemplate {
             for (int top : tops) {
                 Quantity thresholdQ = facts.get(top - 1).q;
                 double queryQ = thresholdQ.value * QuantityDomain.getScale(thresholdQ) / QuantityDomain.getScale(new Quantity(0, quantityUnit, "="));
-                String queryQStr = "" + queryQ;
-                Pair<Double, String> textualized = textualizeQuantity(queryQ, queryQStr,
+                Pair<Double, String> textualized = textualizeQuantity(queryQ,
                         QuantityDomain.getDomainOfUnit(quantityUnit).equals(QuantityDomain.Domain.PERCENTAGE));
                 queryQ = textualized.first;
-                queryQStr = textualized.second;
+                String queryQStr = textualized.second;
                 double factQThreshold = queryQ * QuantityDomain.getScale(new Quantity(0, quantityUnit, "=")) / QuantityDomain.getScale(thresholdQ);
                 RecallQuery q = new RecallQuery();
                 q.sourceURL = sourceURL;
@@ -309,7 +308,7 @@ public class CreateQueriesFromTemplate {
     }
 
     public static void main(String[] args) {
-        generate();
+//        generate();
         loadFixedToJson();
     }
 }
