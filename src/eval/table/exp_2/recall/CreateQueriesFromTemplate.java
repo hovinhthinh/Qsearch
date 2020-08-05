@@ -82,7 +82,7 @@ class QueryTemplate {
 
             String[] arr = stream.readLine().split("\t");
             qt.full = arr[0];
-            qt.quantitySpan = arr[1];
+            qt.quantitySpan = arr[1].toLowerCase();
             qt.quantityUnit = arr[2];
             qt.bound = arr[3];
             Assert.assertTrue(qt.bound.equals("LB") || qt.bound.equals("UB") || qt.bound.equals("LUB"));
