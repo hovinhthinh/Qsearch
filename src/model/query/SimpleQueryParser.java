@@ -107,6 +107,21 @@ public class SimpleQueryParser {
 
         query = NLP.stripSentence(query).toLowerCase();
 
+        // RULE HERE. TODO (Use comparative adjective dictionary instead)
+        if (query.contains(" taller than ")) {
+            query = query.replace(" taller than ", " more than ") + " in height";
+        }
+        if (query.contains(" longer than ")) {
+            query = query.replace(" longer than ", " more than ") + " in length";
+        }
+        if (query.contains(" faster than ")) {
+            query = query.replace(" faster than ", " more than ") + " in speed";
+        }
+        if (query.contains(" slower than ")) {
+            query = query.replace(" slower than ", " less than ") + " in speed";
+        }
+        //
+
         if (query.length() > 0 && Arrays.asList('.', ',', ';', '?').contains(query.charAt(query.length() - 1))) {
             query = query.substring(0, query.length() - 1);
         }
@@ -185,12 +200,13 @@ public class SimpleQueryParser {
 
     // suggestion code = 0 means no suggestion.
     public synchronized static Triple<String, String, String> parse(String rawQuery, int typeSuggestionCode) {
-        rawQuery = preprocess(rawQuery);
-        LOGGER.info("Preprocessed_query: " + rawQuery);
+        rawQuery = NLP.stripSentence(rawQuery);
+        String preprocessedQuery = preprocess(rawQuery);
+        LOGGER.info("Preprocessed_query: " + preprocessedQuery);
         Triple<String, String, String> result = new Triple<>();
         try {
             ArrayList<PostaggedToken> tagged = new ArrayList<>(JavaConversions.seqAsJavaList(Static.getOpenIe().postagger().postagTokenized(
-                    Static.getOpenIe().tokenizer().tokenize(rawQuery))));
+                    Static.getOpenIe().tokenizer().tokenize(preprocessedQuery))));
             // type
             String typeFromTypeSuggestionSystem = null;
 
@@ -404,6 +420,12 @@ public class SimpleQueryParser {
                 }
                 cSb.append(" ").append(s);
             }
+
+            // RULE HERE. TODO (Use comparative adjective dictionary instead)
+            if (cSb.length() == 0 && rawQuery.toLowerCase().contains(" higher than ")) {
+                cSb.append("height");
+            }
+
             result.second = cSb.toString().trim();
 
             return result;
@@ -418,29 +440,32 @@ public class SimpleQueryParser {
     }
 
     public static void main(String[] args) {
-//        String[] files = new String[]{
-//                "eval/text/exp_2/inputs/FINANCE.txt",
-//                "eval/text/exp_2/inputs/SPORTS.txt",
-//                "eval/text/exp_2/inputs/TECHNOLOGY.txt",
-//                "eval/text/exp_2/inputs/TRANSPORT.txt"
-//        };
-//        for (String file : files) {
-//            for (String line : FileUtils.getLineStream(file, "UTF-8")) {
-//                String[] arr = line.split("\t");
-//                Triple<String, String, String> t = parse(arr[0]);
-//                System.out.println(String.format("[Parsed] %s -- %s", arr[0], t));
-//            }
-//        }
-//        System.out.println("--------------------------------------------------------------------------------");
-//
-//        System.out.println(parse("technology companies with more than 10M Euro annual profit"));
-//        System.out.println(parse("sprinters who ran 200m in less than 25 s"));
-//        System.out.println(parse("companies with profit in 2018 under 100b usd"));
-//        System.out.println(parse("games with number of players no less than 100 million in 2018"));
-//        System.out.println(parse("technology companies with annual profit from 100 to 200b usd"));
-//        System.out.println(parse("celebrities with worth between 1 and 5b usd"));
-//        System.out.println(parse("cars of germany that costs less than 30 thousand euros"));
-//        System.out.println(parse("Politician with more than 10 million Euros tax evasion charges "));
-        System.out.println(suggestATypeFromRaw("american companies", 2));
+        String[] files = new String[]{
+                "eval/text/exp_2/inputs/FINANCE.txt",
+                "eval/text/exp_2/inputs/SPORTS.txt",
+                "eval/text/exp_2/inputs/TECHNOLOGY.txt",
+                "eval/text/exp_2/inputs/TRANSPORT.txt"
+        };
+        for (String file : files) {
+            for (String line : FileUtils.getLineStream(file, "UTF-8")) {
+                String[] arr = line.split("\t");
+                Triple<String, String, String> t = parse(arr[0]);
+                System.out.println(String.format("[Parsed] %s -- %s", arr[0], t));
+            }
+        }
+        System.out.println("--------------------------------------------------------------------------------");
+
+        System.out.println(parse("technology companies with more than 10M Euro annual profit"));
+        System.out.println(parse("sprinters who ran 200m in less than 25 s"));
+        System.out.println(parse("companies with profit in 2018 under 100b usd"));
+        System.out.println(parse("games with number of players no less than 100 million in 2018"));
+        System.out.println(parse("technology companies with annual profit from 100 to 200b usd"));
+        System.out.println(parse("celebrities with worth between 1 and 5b usd"));
+        System.out.println(parse("cars of germany that costs less than 30 thousand euros"));
+        System.out.println(parse("Politician with more than 10 million Euros tax evasion charges "));
+        System.out.println(parse("skyscraper higher than 100m"));
+        System.out.println(parse("skyscraper taller than 100m"));
+        System.out.println(parse("bridges longer than 100m"));
+        System.out.println(parse("skyscraper with cost higher than 100m$"));
     }
 }
