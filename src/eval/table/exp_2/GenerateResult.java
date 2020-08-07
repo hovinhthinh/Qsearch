@@ -64,7 +64,7 @@ public class GenerateResult {
                 return;
             }
             tuples.add(new Tuple(
-                    "GOOGLE", arr[6], Integer.parseInt(arr[0]), Integer.parseInt(arr[5]), x.equals("yes")
+                    "Q-100-GG", arr[6], Integer.parseInt(arr[0]), Integer.parseInt(arr[5]), x.equals("yes")
             ));
         }
         count = 0;
@@ -75,26 +75,59 @@ public class GenerateResult {
             }
             String[] arr = line.split("\t");
             tuples.add(new Tuple(
-                    "EMBEDDING", arr[8], Integer.parseInt(arr[12]), Integer.parseInt(arr[14]), arr[5].endsWith(
+                    "Q-100-Qs", arr[8], Integer.parseInt(arr[12]), Integer.parseInt(arr[14]), arr[5].endsWith(
                     "_relevant")
             ));
         }
 
         int query = 0;
-        for (File f : new File("eval/table/exp_2/annotation").listFiles()) {
+        for (File f : new File("eval/table/exp_2/annotation-iswc-nolt/evaluator-1").listFiles()) {
             ++query;
             SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), SearchResult.class);
             int pos = 0;
             for (ResultInstance ri : r.topResults) {
                 ++pos;
                 tuples.add(new Tuple(
-                        "TABQS", f.getName().substring(0, f.getName().indexOf("_")),
+                        "Q-100-TabQs", f.getName().substring(0, f.getName().indexOf("_")),
                         query, pos, ri.eval.equals("true")
                 ));
             }
         }
 
+        query = 0;
+        for (File f : new File("eval/table/exp_2/annotation-recall-qsearch").listFiles()) {
+            ++query;
+            server.text.handler.search.SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), server.text.handler.search.SearchResult.class);
+            int pos = 0;
+            for (server.text.handler.search.SearchResult.ResultInstance ri : r.topResults) {
+                ++pos;
+                if (pos <= 10) {
+                    tuples.add(new Tuple(
+                            "Rec-Qs", "none",
+                            query, pos, ri.eval.equals("true")
+                    ));
+                }
+            }
+        }
+
+        query = 0;
+        for (File f : new File("eval/table/exp_2/annotation-recall-nolt/template").listFiles()) {
+            ++query;
+            SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), SearchResult.class);
+            int pos = 0;
+            for (ResultInstance ri : r.topResults) {
+                ++pos;
+                if (pos <= 10) {
+                    tuples.add(new Tuple(
+                            "Rec-TabQs", "none",
+                            query, pos, ri.eval.equals("true")
+                    ));
+                }
+            }
+        }
+
         // process.
+        /*
         Map<String, List<Tuple>> groupByDomain = tuples.stream().collect(Collectors.groupingBy(t -> t.domain));
         for (String domain : groupByDomain.keySet()) {
             System.out.println("-----" + domain + "-----");
@@ -145,6 +178,7 @@ public class GenerateResult {
             }
             System.out.println();
         }
+        */
         System.out.println("-----" + "ALL" + "-----");
         Map<String, List<Tuple>> groupByModel =
                 tuples.stream().collect(Collectors.groupingBy(t -> t.model));
