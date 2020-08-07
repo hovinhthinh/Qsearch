@@ -26,4 +26,7 @@ public class SearchResult {
                 + "_" + contextConstraint.replace(' ', '-')
                 + "_" + quantityConstraint.phrase.replace(' ', '-')).replace('/', '-');
     }
+
+    // below are recall-based metrics computed in case groundtruth is provided.
+    public Double RR, AP, RECALL;
 }

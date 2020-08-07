@@ -40,4 +40,7 @@ public class SearchResult {
 
         public String eval; // For evaluation
     }
+
+    // below are recall-based metrics computed in case groundtruth is provided.
+    public Double RR, AP, RECALL;
 }
