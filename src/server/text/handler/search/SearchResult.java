@@ -23,8 +23,10 @@ public class SearchResult {
                 + "_" + quantityConstraint.phrase.replace(' ', '-')).replace('/', '-');
     }
 
-    public static class ResultInstance {
+    public static class ResultInstance implements Comparable<ResultInstance> {
         public String entity;
+        public int estimatedPopularity; // this is estimated based on the number of Qfacts extracted, not the real popularity.
+
         public double score;
         public String quantity;
         public double quantityStandardValue;
@@ -39,6 +41,15 @@ public class SearchResult {
         public String quantityConvertedStr;
 
         public String eval; // For evaluation
+
+        @Override
+        public int compareTo(ResultInstance o) {
+            if (Math.abs(this.score - o.score) > 1e-6) {
+                return Double.compare(this.score, o.score);
+            }
+            // Entities with same score are ordered by estimated popularity.
+            return Integer.compare(o.estimatedPopularity, this.estimatedPopularity);
+        }
     }
 
     // below are recall-based metrics computed in case groundtruth is provided.
