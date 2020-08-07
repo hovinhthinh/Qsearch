@@ -339,6 +339,7 @@ public class ElasticSearchQuery {
                 SearchResult.ResultInstance r = new SearchResult.ResultInstance();
                 r.score = minDist;
                 r.entity = o.getString("_id");
+                r.estimatedPopularity = facts.length();
                 r.entityStr = matchEntityStr;
 
                 r.quantity = matchQuantity;
@@ -357,7 +358,7 @@ public class ElasticSearchQuery {
                 result.second = null;
                 return result;
             }
-            Collections.sort(scoredInstances, Comparator.comparingDouble(o -> o.score));
+            Collections.sort(scoredInstances);
 
             result.second = scoredInstances;
             return result;
