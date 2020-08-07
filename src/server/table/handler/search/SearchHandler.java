@@ -20,9 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class SearchHandler extends HttpServlet {
@@ -54,8 +52,15 @@ public class SearchHandler extends HttpServlet {
 
         String rescore = request.getParameter("rescore");
 
+        Set<String> groundtruth = null;
+        try {
+            String gt = request.getParameter("groundtruth");
+            groundtruth = new HashSet<>(Gson.fromJson(gt, new ArrayList<String>().getClass()));
+        } catch (Exception e) {
+        }
+
         String sessionKey = search(nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint,
-                rescore != null && rescore.equals("true"), additionalParams);
+                rescore != null && rescore.equals("true"), additionalParams, groundtruth);
 
         httpServletResponse.getWriter().print(new JSONObject().put("s", sessionKey).toString());
 
@@ -66,7 +71,7 @@ public class SearchHandler extends HttpServlet {
     public static String search(int nTopResult, String fullConstraint,
                                 String typeConstraint, String contextConstraint, String quantityConstraint,
                                 boolean performConsistencyRescoring,
-                                Map additionalParameters) {
+                                Map additionalParameters, Set<String> groundtruth) {
         // Optimize
         if (typeConstraint != null) {
             typeConstraint = NLP.stripSentence(typeConstraint);
@@ -119,6 +124,37 @@ public class SearchHandler extends HttpServlet {
                     response.contextConstraint = contextConstraint;
                     response.quantityConstraint = result.first;
                     response.numResults = result.second.size();
+
+                    // Compute recall-based metrics from groundtruth
+                    if (groundtruth != null) {
+                        response.AP = 0.0;
+                        response.RR = 0.0;
+                        response.RECALL = 0.0;
+                        int nTrue = 0;
+                        for (int i = 0; i < result.second.size(); ++i) {
+                            ResultInstance ri = result.second.get(i);
+                            if (i < nTopResult) {
+                                ri.eval = "false";
+                            }
+                            if (groundtruth.contains(ri.entity)) {
+                                if (i < nTopResult) {
+                                    ri.eval = "true";
+                                }
+                                if (response.RR == 0.0) {
+                                    response.RR = ((double) 1) / (i + 1);
+                                }
+                                ++nTrue;
+                                response.AP += (nTrue) / (i + 1);
+                                if (i < groundtruth.size()) {
+                                    response.RECALL += 1;
+                                }
+                            }
+                        }
+                        if (groundtruth.size() > 0) {
+                            response.AP /= groundtruth.size();
+                            response.RECALL /= groundtruth.size();
+                        }
+                    }
 
                     if (result.second.size() > nTopResult) {
                         result.second.subList(nTopResult, result.second.size()).clear();

@@ -12,6 +12,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import server.text.handler.search.SearchResult;
 import storage.StreamedIterable;
 import uk.ac.susx.informatics.Morpha;
 import util.Constants;
@@ -23,7 +24,6 @@ import util.headword.StringUtils;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class ElasticSearchQuery {
     public static final Logger LOGGER = Logger.getLogger(ElasticSearchQuery.class.getName());
@@ -175,13 +175,13 @@ public class ElasticSearchQuery {
         };
     }
 
-    public static Pair<QuantityConstraint, ArrayList<JSONObject>> search(String queryType, String queryContext,
-                                                                         String quantityConstraint,
-                                                                         ContextMatcher matcher, Map additionalParameters) {
+    public static Pair<QuantityConstraint, ArrayList<SearchResult.ResultInstance>> search(String queryType, String queryContext,
+                                                                                          String quantityConstraint,
+                                                                                          ContextMatcher matcher, Map additionalParameters) {
         queryType = queryType.toLowerCase();
         queryContext = queryContext.toLowerCase();
 
-        Pair<QuantityConstraint, ArrayList<JSONObject>> result = new Pair<>();
+        Pair<QuantityConstraint, ArrayList<SearchResult.ResultInstance>> result = new Pair<>();
 
         QuantityConstraint constraint = QuantityConstraint.parseFromString(quantityConstraint);
         result.first = constraint;
@@ -203,7 +203,7 @@ public class ElasticSearchQuery {
         }
         ArrayList<String> queryContextTerms = NLP.splitSentence(queryContext);
 
-        ArrayList<Pair<JSONObject, Double>> scoredInstances = new ArrayList<>();
+        ArrayList<SearchResult.ResultInstance> scoredInstances = new ArrayList<>();
         int lastPercent = 0;
 
         // retrieve additional parameters
@@ -238,7 +238,7 @@ public class ElasticSearchQuery {
                         }
                     }
                 }
-                String matchContext = "null";
+//                ArrayList<String> matchContext = new ArrayList<>();
                 String matchQuantity = "null";
                 double matchQuantityStandardValue = 0;
                 String matchSentence = "null";
@@ -246,7 +246,7 @@ public class ElasticSearchQuery {
                 String matchEntityStr = "null";
                 String matchQuantityStr = "null";
                 String matchQuantityConvertedStr = "null";
-                String matchContextStr = "[]";
+                ArrayList<String> matchContextVerbose = new ArrayList<>();
 
                 // computer score
                 double minDist = Constants.MAX_DOUBLE;
@@ -287,9 +287,8 @@ public class ElasticSearchQuery {
                             X.add(ct);
                         }
                     }
-                    String contextVerbose;
 
-                    contextVerbose = Gson.toJson(X);
+                    ArrayList<String> contextVerbose = new ArrayList<>(X);
 
                     if (QuantityDomain.quantityMatchesDomain(qt, QuantityDomain.Domain.DIMENSIONLESS)) {
                         X.addAll(NLP.splitSentence(qt.unit));
@@ -305,14 +304,7 @@ public class ElasticSearchQuery {
 
                     if (dist < minDist) {
                         minDist = dist;
-                        StringBuilder contextString = new StringBuilder();
-                        X.forEach(e -> {
-                            if (contextString.length() > 0) {
-                                contextString.append(" ");
-                            }
-                            contextString.append(e);
-                        });
-                        matchContext = contextString.toString();
+//                        matchContext = new ArrayList<>(X);
                         matchQuantity = qt.toString(1);
                         matchQuantityStandardValue = qt.value * QuantityDomain.getScale(qt);
                         matchSentence = facts.getJSONObject(i).getString("sentence");
@@ -320,7 +312,7 @@ public class ElasticSearchQuery {
 
                         matchEntityStr = facts.getJSONObject(i).getString("entityStr");
                         matchQuantityStr = facts.getJSONObject(i).getString("quantityStr");
-                        matchContextStr = contextVerbose;
+                        matchContextVerbose = contextVerbose;
 
                         // Get quantity converted string.
                         double scale = QuantityDomain.getScale(qt) / QuantityDomain.getScale(constraint.quantity);
@@ -344,26 +336,30 @@ public class ElasticSearchQuery {
                 if (matchQuantity.equals("null")) {
                     continue;
                 }
-                o.put("match_score", minDist);
-                o.put("match_context", matchContext);
-                o.put("match_quantity", matchQuantity);
-                o.put("match_quantity_standard_value", matchQuantityStandardValue);
-                o.put("match_sentence", matchSentence);
-                o.put("match_source", matchSource);
+                SearchResult.ResultInstance r = new SearchResult.ResultInstance();
+                r.score = minDist;
+                r.entity = o.getString("_id");
+                r.entityStr = matchEntityStr;
 
-                o.put("match_entity_str", matchEntityStr);
-                o.put("match_quantity_str", matchQuantityStr);
-                o.put("match_quantity_converted_str", matchQuantityConvertedStr);
-                o.put("match_context_str", matchContextStr);
+                r.quantity = matchQuantity;
+                r.quantityStr = matchQuantityStr;
+                r.quantityStandardValue = matchQuantityStandardValue;
+                r.quantityConvertedStr = matchQuantityConvertedStr;
 
-                scoredInstances.add(new Pair<>(o, minDist));
+                r.contextStr = matchContextVerbose;
+
+                r.sentence = matchSentence;
+                r.source = matchSource;
+
+                scoredInstances.add(r);
             }
             if (instances.error) {
                 result.second = null;
                 return result;
             }
-            Collections.sort(scoredInstances, (o1, o2) -> o1.second.compareTo(o2.second));
-            result.second = scoredInstances.stream().map(o -> o.first).collect(Collectors.toCollection(ArrayList::new));
+            Collections.sort(scoredInstances, Comparator.comparingDouble(o -> o.score));
+
+            result.second = scoredInstances;
             return result;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -371,32 +367,29 @@ public class ElasticSearchQuery {
         }
     }
 
-    public static Pair<QuantityConstraint, ArrayList<JSONObject>> search(String queryType, String queryContext,
-                                                                         String quantityConstraint,
-                                                                         ContextMatcher matcher) {
+    public static Pair<QuantityConstraint, ArrayList<SearchResult.ResultInstance>> search(String queryType, String queryContext,
+                                                                                          String quantityConstraint,
+                                                                                          ContextMatcher matcher) {
         return search(queryType, queryContext, quantityConstraint, matcher, null);
     }
 
-    public static Pair<QuantityConstraint, ArrayList<JSONObject>> search(String queryType, String queryContext,
-                                                                         String quantityConstraint) {
+    public static Pair<QuantityConstraint, ArrayList<SearchResult.ResultInstance>> search(String queryType, String queryContext,
+                                                                                          String quantityConstraint) {
         return search(queryType, queryContext, quantityConstraint, DEFAULT_MATCHER);
     }
 
     public static void main(String[] args) {
-        ArrayList<JSONObject> result =
+        ArrayList<SearchResult.ResultInstance> result =
                 search("car",
                         "consumption",
                         "more than 0 mpg").second;
 
         int nPrinted = 0;
-        for (JSONObject o : result) {
+        for (SearchResult.ResultInstance o : result) {
             try {
                 if (nPrinted < 20) {
-                    System.out.println(String.format("%30s\t%10.3f\t%50s\t%20s\t%s\t%s", o.getString("_id"),
-                            o.getDouble(
-                                    "match_score"),
-                            o.getString("match_context"), o.getString("match_quantity"),
-                            o.getString("match_sentence"), o.getString("match_source")));
+                    System.out.println(String.format("%30s\t%10.3f\t%50s\t%20s\t%s\t%s", o.entity,
+                            o.score, Gson.toJson(o.contextStr), o.quantity, o.sentence, o.source));
                     ++nPrinted;
                 }
             } catch (JSONException e) {

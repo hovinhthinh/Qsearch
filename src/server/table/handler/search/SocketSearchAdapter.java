@@ -52,7 +52,7 @@ public class SocketSearchAdapter extends WebSocketAdapter {
         int nResult = o.has("ntop") ? Integer.parseInt(o.getString("ntop")) : 10;
 
         String sessionKey = SearchHandler.search(nResult, fullConstraint,
-                typeConstraint, contextConstraint, quantityConstraint, performConsistencyRescoring, additionalParams);
+                typeConstraint, contextConstraint, quantityConstraint, performConsistencyRescoring, additionalParams, null);
 
         try {
             session.getRemote().sendString(new JSONObject().put("s", sessionKey).toString());
