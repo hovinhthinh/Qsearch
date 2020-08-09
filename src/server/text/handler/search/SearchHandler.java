@@ -154,7 +154,7 @@ public class SearchHandler extends HttpServlet {
                                     response.RR = ((double) 1) / (i + 1);
                                 }
                                 ++nTrue;
-                                response.AP += (nTrue) / (i + 1);
+                                response.AP += ((double) nTrue) / (i + 1);
                                 if (i < groundtruth.size()) {
                                     response.RECALL += 1;
                                 }
