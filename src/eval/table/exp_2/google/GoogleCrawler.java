@@ -17,7 +17,9 @@ import java.util.Arrays;
 public class GoogleCrawler {
     static ArrayList<String> KEYS = new ArrayList<>(Arrays.asList(
             "AIzaSyDzMkMyxiRvFC8grHH9GTgUepMmysL-e-g",
-            "AIzaSyBlYSw_13wDdDXtZmRmBkYZXQlwftP7Xmw"
+            "AIzaSyBlYSw_13wDdDXtZmRmBkYZXQlwftP7Xmw",
+            "AIzaSyCjlVwWA95UC-KDylTwhgd-fGIlU1RAzIk",
+            "AIzaSyANfb7eo_XccvkLgRkuwytojB668tt8dG8"
     ));
 
     public static final String PREFIX = "https://www.googleapis.com/customsearch/v1?key={KEY}"
