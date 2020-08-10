@@ -110,6 +110,7 @@ public class EvaluateHandler extends HttpServlet {
             response.put("verdict", "OK");
             response.put("data", new JSONArray(arr));
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 response.put("verdict", "Unknown error occurred.");
             } catch (Exception ep) {
