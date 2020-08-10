@@ -196,8 +196,14 @@ public class QfactLightConsistencyRescoringEngine {
             }
         }
 
+        double sum = 0;
+        for (Double tf : termTfidfMap.values()) {
+            sum += tf;
+        }
+        final double fSum = sum;
+
         // normalize tf, and multiply with idf
-        termTfidfMap.replaceAll((k, v) -> Math.log(1 + v) * IDF.getRobertsonIdf(k));
+        termTfidfMap.replaceAll((k, v) -> (fSum == 0 ? 0 : v / fSum) * IDF.getRobertsonIdf(k));
         return termTfidfMap;
     }
 
