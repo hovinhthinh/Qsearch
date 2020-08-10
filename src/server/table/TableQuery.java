@@ -30,7 +30,7 @@ public class TableQuery {
     public static double CAPTION_MATCH_WEIGHT = 0.9;
     public static double TITLE_MATCH_WEIGHT = 0.85;
     public static double SAME_ROW_MATCH_WEIGHT = 0.85;
-    public static double RELATED_TEXT_MATCH_WEIGHT = 0.75; // TODO: implement
+    public static double RELATED_TEXT_MATCH_WEIGHT = 0.8;
 
     public static final int N_TOP_ENTITY_CONSISTENCY_RESCORING = 200;
 
@@ -62,28 +62,14 @@ public class TableQuery {
                     trace.score = sim;
                     trace.token = fX;
                     trace.place = "HEADER";
+                    if (trace.score >= HEADER_MATCH_WEIGHT) {
+                        break;
+                    }
                 }
             }
             // CAPTION
-            for (String fX : NLP.splitSentence(ti.caption.toLowerCase())) {
-                if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
-                    continue;
-                }
-                double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
-                if (sim == -1) {
-                    continue;
-                }
-                sim = (1 - sim) * CAPTION_MATCH_WEIGHT;
-
-                if (trace.score < sim) {
-                    trace.score = sim;
-                    trace.token = fX;
-                    trace.place = "CAPTION";
-                }
-            }
-            // TITLE
-            for (String title : Arrays.asList(ti.pageTitle, ti.sectionTitles)) {
-                for (String fX : NLP.splitSentence(title.toLowerCase())) {
+            if (trace.score < CAPTION_MATCH_WEIGHT) {
+                for (String fX : NLP.splitSentence(ti.caption.toLowerCase())) {
                     if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
                         continue;
                     }
@@ -91,21 +77,75 @@ public class TableQuery {
                     if (sim == -1) {
                         continue;
                     }
-                    sim = (1 - sim) * TITLE_MATCH_WEIGHT;
+                    sim = (1 - sim) * CAPTION_MATCH_WEIGHT;
 
                     if (trace.score < sim) {
                         trace.score = sim;
                         trace.token = fX;
-                        trace.place = "TITLE";
+                        trace.place = "CAPTION";
+                        if (trace.score >= CAPTION_MATCH_WEIGHT) {
+                            break;
+                        }
+                    }
+                }
+            }
+            // TITLE
+            if (trace.score < TITLE_MATCH_WEIGHT) {
+                loop:
+                for (String title : Arrays.asList(ti.pageTitle, ti.sectionTitles)) {
+                    for (String fX : NLP.splitSentence(title.toLowerCase())) {
+                        if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                            continue;
+                        }
+                        double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
+                        if (sim == -1) {
+                            continue;
+                        }
+                        sim = (1 - sim) * TITLE_MATCH_WEIGHT;
+
+                        if (trace.score < sim) {
+                            trace.score = sim;
+                            trace.token = fX;
+                            trace.place = "TITLE";
+                            if (trace.score >= TITLE_MATCH_WEIGHT) {
+                                break loop;
+                            }
+                        }
                     }
                 }
             }
             // SAME ROW
-            for (int c = 0; c < ti.table.nColumn; ++c) {
-                if (c == f.eCol || c == f.qCol) {
-                    continue;
+            if (trace.score < SAME_ROW_MATCH_WEIGHT) {
+                loop:
+                for (int c = 0; c < ti.table.nColumn; ++c) {
+                    if (c == f.eCol || c == f.qCol) {
+                        continue;
+                    }
+                    for (String fX : NLP.splitSentence(ti.table.data[f.row][c].text.toLowerCase())) {
+                        if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                            continue;
+                        }
+                        double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
+                        if (sim == -1) {
+                            continue;
+                        }
+                        sim = (1 - sim) * SAME_ROW_MATCH_WEIGHT;
+
+                        if (trace.score < sim) {
+                            trace.score = sim;
+                            trace.token = fX;
+                            trace.place = "SAME_ROW";
+                            if (trace.score >= SAME_ROW_MATCH_WEIGHT) {
+                                break loop;
+                            }
+                        }
+                    }
                 }
-                for (String fX : NLP.splitSentence(ti.table.data[f.row][c].text.toLowerCase())) {
+            }
+
+            // RELATED_TEXT
+            if (trace.score < RELATED_TEXT_MATCH_WEIGHT) {
+                for (String fX : NLP.splitSentence(ti.pageContent.toLowerCase())) {
                     if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
                         continue;
                     }
@@ -113,12 +153,15 @@ public class TableQuery {
                     if (sim == -1) {
                         continue;
                     }
-                    sim = (1 - sim) * SAME_ROW_MATCH_WEIGHT;
+                    sim = (1 - sim) * RELATED_TEXT_MATCH_WEIGHT;
 
                     if (trace.score < sim) {
                         trace.score = sim;
                         trace.token = fX;
-                        trace.place = "SAME_ROW";
+                        trace.place = "RELATED_TEXT";
+                        if (trace.score >= RELATED_TEXT_MATCH_WEIGHT) {
+                            break;
+                        }
                     }
                 }
             }
