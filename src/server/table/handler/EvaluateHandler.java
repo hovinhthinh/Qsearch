@@ -105,7 +105,7 @@ public class EvaluateHandler extends HttpServlet {
             for (File f : new File(annotationPath).listFiles()) {
                 arr.add(new JSONObject(FileUtils.getContent(f, StandardCharsets.UTF_8)));
             }
-            Collections.sort(arr, Comparator.comparing(a -> a.getString("evalDomain")));
+            Collections.sort(arr, Comparator.comparing(a -> a.has("evalDomain") ? a.getString("evalDomain") : null));
 
             response.put("verdict", "OK");
             response.put("data", new JSONArray(arr));
