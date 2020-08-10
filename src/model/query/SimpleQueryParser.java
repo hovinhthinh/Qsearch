@@ -15,10 +15,7 @@ import util.FileUtils;
 import util.Pair;
 import util.Triple;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,7 +35,7 @@ public class SimpleQueryParser {
 
     private static final int SUGGESTING_THRESHOLD = 20;
     private static final double MIN_SUGGESTING_CONF = 0.85;
-    private static final double MIN_SUGGESTING_HEADWORD_CONF = 0.9;
+    private static final double MIN_SUGGESTING_HEADWORD_CONF = 0.85;
 
     private static final Pattern MULTIPLIER_OPTIMIZE_PATTERN =
             Pattern.compile("(?i)(\\$\\s*|\\b)\\d+(\\.\\d+)?(k|m|b| bio| mio)(\\s*\\$|\\b)");
@@ -46,14 +43,17 @@ public class SimpleQueryParser {
     private static final Pattern RANGE_OPTIMIZE_PATTERN =
             Pattern.compile("\\d+(\\.\\d+)?-\\d+(\\.\\d+)?");
 
-    public static Map<String, String> TYPE_SUGGESTION_MAP = Stream.of(new Object[][]{ // Domain added for Wikipedia
+    public static Map<String, String> TYPE_SUGGESTION_MAP = Stream.of(new Object[][]{
             {"cricket player", "cricketer"},
             {"nba player", "national basketball association player"},
             {"rail way", "railway"},
             {"rail station", "railway station"},
             {"optical telescope", "telescope"},
-            {"american company", "company of the united state"},
-            {"british company", "company of the united kingdom"},
+    }).collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
+
+    public static Map<String, String> TYPE_SUGGESTION_EXPAND_MAP = Stream.of(new Object[][]{
+            {"british", "the united kingdom"},
+            {"american", "the united state"},
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
 
     public static String preprocess(String query) {
@@ -153,6 +153,29 @@ public class SimpleQueryParser {
         return NLP.stripSentence(query);
     }
 
+    // rule-based, because the fast stemming might return head with 2 words. The good stemming is too slow to use.
+    public static String fixHeadWord(String head) {
+        if (head.equals("football team")) {
+            return "team";
+        }
+        return head;
+    }
+
+    public static List<ArrayList<String>> expandRawType(String rawType) {
+        List<String> types = new ArrayList<>();
+        types.add(rawType);
+
+        rawType = " " + rawType + " ";
+        for (Map.Entry<String, String> e : TYPE_SUGGESTION_EXPAND_MAP.entrySet()) {
+            String t = " " + e.getKey() + " ";
+            if (rawType.contains(t)) {
+                types.add(rawType.replace(t, " " + e.getValue() + " "));
+            }
+        }
+
+        return types.stream().map(t -> NLP.splitSentence(t)).collect(Collectors.toList());
+    }
+
     // find closest related type in the YAGO dictionary, by comparing headword similarity and full string similarity
     public synchronized static String suggestATypeFromRaw(String rawType, int typeSuggestionCode) {
         double similarityScore = -1;
@@ -164,8 +187,8 @@ public class SimpleQueryParser {
             return mostSimilarType;
         }
 
-        ArrayList<String> inputType = NLP.splitSentence(rawType);
-        String inputTypeHead = NLP.getHeadWord(rawType, true);
+        List<ArrayList<String>> inputType = expandRawType(rawType);
+        String inputTypeHead = fixHeadWord(NLP.getHeadWord(rawType, true));
         ArrayList<Pair<String, Integer>> typeToFreq = typeSuggestionCode == SOURCE_CODE_TEXT
                 ? server.text.handler.TypeSuggestionHandler.typeToFreq
                 : (typeSuggestionCode == SOURCE_CODE_TABLE ? server.table.handler.TypeSuggestionHandler.typeToFreq : null);
@@ -173,7 +196,7 @@ public class SimpleQueryParser {
             if (p.second < SUGGESTING_THRESHOLD) {
                 continue;
             }
-            String suggestTypeHead = NLP.getHeadWord(p.first, true);
+            String suggestTypeHead = fixHeadWord(NLP.getHeadWord(p.first, true));
             double headDist = Glove.cosineDistance(suggestTypeHead, inputTypeHead);
             if (headDist < 0 || headDist > 1 - MIN_SUGGESTING_HEADWORD_CONF) {
                 continue;
@@ -184,8 +207,11 @@ public class SimpleQueryParser {
 //            if (Math.abs(inputType.size() - suggestType.size()) > 1) {
 //                continue;
 //            }
-            double sim = ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(inputType, suggestType)
-                    * ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(suggestType, inputType);
+            double sim = -1;
+            for (ArrayList<String> t : inputType) {
+                sim = Math.max(sim, ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(t, suggestType)
+                        * ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(suggestType, t));
+            }
             if (sim > similarityScore) {
                 similarityScore = sim;
                 mostSimilarType = p.first;
