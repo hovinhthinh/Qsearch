@@ -53,5 +53,5 @@ public class SearchResult {
     }
 
     // below are recall-based metrics computed in case groundtruth is provided.
-    public Double RR, AP, RECALL;
+    public Double RR, AP, RECALL, RECALL_10;
 }
