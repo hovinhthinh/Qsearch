@@ -126,6 +126,22 @@ public class GenerateResult {
             }
         }
 
+        query = 0;
+        for (File f : new File("eval/table/exp_2/annotation-recall-nolt-RT/template").listFiles()) {
+            ++query;
+            SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), SearchResult.class);
+            int pos = 0;
+            for (ResultInstance ri : r.topResults) {
+                ++pos;
+                if (pos <= 10) {
+                    tuples.add(new Tuple(
+                            "Rec-TabQs-RS", "none",
+                            query, pos, ri.eval.equals("true")
+                    ));
+                }
+            }
+        }
+
         // process.
         /*
         Map<String, List<Tuple>> groupByDomain = tuples.stream().collect(Collectors.groupingBy(t -> t.domain));
