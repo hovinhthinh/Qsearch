@@ -106,9 +106,9 @@ public class SearchHandler extends HttpServlet {
                             "\"; Quantity: \"" + quantityConstraint + "\"}");
                 }
             } else if (typeConstraint != null) {
-                String suggestedType = SimpleQueryParser.suggestATypeFromRaw(typeConstraint, SimpleQueryParser.SOURCE_CODE_TABLE);
+                Pair<String, String> suggestedType = SimpleQueryParser.suggestATypeFromRaw(typeConstraint, SimpleQueryParser.SOURCE_CODE_TABLE);
                 if (suggestedType != null) {
-                    typeConstraint = suggestedType;
+                    typeConstraint = suggestedType.first;
                 }
             }
             if (response.verdict == null) {
