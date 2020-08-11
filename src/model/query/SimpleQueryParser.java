@@ -49,6 +49,7 @@ public class SimpleQueryParser {
             {"rail way", "railway"},
             {"rail station", "railway station"},
             {"optical telescope", "telescope"},
+            {"football club", "football club"},
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
 
     public static Map<String, String> TYPE_SUGGESTION_EXPAND_MAP = Stream.of(new Object[][]{
