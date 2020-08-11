@@ -84,8 +84,12 @@ public class QuantityDomain {
     public static final Map<String, Double> MONEY_DOMAIN = Stream.of(new Object[][]{
             {"usd", 1.0},
             {"US$", 1.0}, // this is the standard
-            {"euros", 1.13},
-            {"euro", 1.13},
+            {"euros", 1.15},
+            {"euro", 1.15},
+            {"eur", 1.15},
+            {"pound", 1.3},
+            {"pounds", 1.3},
+            {"gbp", 1.3},
             {"yen", 0.009},
             {"yuan", 0.15}
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
