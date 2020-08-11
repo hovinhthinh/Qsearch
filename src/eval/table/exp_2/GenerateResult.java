@@ -95,6 +95,20 @@ public class GenerateResult {
         }
 
         query = 0;
+        for (File f : new File("eval/table/exp_2/annotation-iswc-nolt-RT/evaluator-1").listFiles()) {
+            ++query;
+            SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), SearchResult.class);
+            int pos = 0;
+            for (ResultInstance ri : r.topResults) {
+                ++pos;
+                tuples.add(new Tuple(
+                        "Q-100-TabQs-RS", f.getName().substring(0, f.getName().indexOf("_")),
+                        query, pos, ri.eval.equals("true")
+                ));
+            }
+        }
+
+        query = 0;
         for (File f : new File("eval/table/exp_2/annotation-recall-qsearch").listFiles()) {
             ++query;
             server.text.handler.search.SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), server.text.handler.search.SearchResult.class);
