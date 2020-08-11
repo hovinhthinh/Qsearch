@@ -25,7 +25,10 @@ public class BatchQueryRunnerRecallQsearch {
         SelfMonitor monitor = new SelfMonitor(BatchQueryRunnerRecallQsearch.class.getName(), -1, 30);
         monitor.start();
         Crawler.READ_TIME_OUT = 3000 * 1000;
-        final AtomicDouble map = new AtomicDouble(0), mrr = new AtomicDouble(0), recall = new AtomicDouble(0);
+        final AtomicDouble map = new AtomicDouble(0),
+                mrr = new AtomicDouble(0),
+                recall = new AtomicDouble(0),
+                recall_10 = new AtomicDouble(0);
         final AtomicInteger cnt = new AtomicInteger(0);
         Concurrent.runAndWait(() -> {
             while (true) {
@@ -60,6 +63,7 @@ public class BatchQueryRunnerRecallQsearch {
                     map.addAndGet(r.AP);
                     mrr.addAndGet(r.RR);
                     recall.addAndGet(r.RECALL);
+                    recall_10.addAndGet(r.RECALL_10);
                     cnt.incrementAndGet();
                     if (outputFolder != null) {
                         PrintWriter out = FileUtils.getPrintWriter(new File(outputFolder, r.encode()), StandardCharsets.UTF_8);
@@ -75,8 +79,8 @@ public class BatchQueryRunnerRecallQsearch {
         }, 6);
 
         monitor.forceShutdown();
-        System.out.println(String.format("MAP: %.3f    MRR: %.3f    RECALL: %.3f",
-                map.get() / cnt.get(), mrr.get() / cnt.get(), recall.get() / cnt.get()));
+        System.out.println(String.format("MAP: %.3f    MRR: %.3f    RECALL_10: %.3f    RECALL: %.3f",
+                map.get() / cnt.get(), mrr.get() / cnt.get(), recall_10.get() / cnt.get(), recall.get() / cnt.get()));
         System.out.flush();
 
     }
