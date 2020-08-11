@@ -177,18 +177,19 @@ public class SimpleQueryParser {
     }
 
     // find closest related type in the YAGO dictionary, by comparing headword similarity and full string similarity
-    public synchronized static String suggestATypeFromRaw(String rawType, int typeSuggestionCode) {
+    // returns Pair<suggestType, typeContext>
+    public synchronized static Pair<String, String> suggestATypeFromRaw(String rawType, int typeSuggestionCode) {
         double similarityScore = -1;
-        rawType = NLP.fastStemming(rawType.toLowerCase(), Morpha.noun);
+        String stemmedRawType = NLP.fastStemming(rawType.toLowerCase(), Morpha.noun);
 
-        String mostSimilarType = TYPE_SUGGESTION_MAP.get(rawType);
+        String mostSimilarType = TYPE_SUGGESTION_MAP.get(stemmedRawType);
         if (mostSimilarType != null) {
-            LOGGER.info(String.format("Suggested type: %s --> %s (conf: N/A)", rawType, mostSimilarType));
-            return mostSimilarType;
+            LOGGER.info(String.format("Suggested type: %s --> %s (conf: N/A)", stemmedRawType, mostSimilarType));
+            return new Pair<>(mostSimilarType, "");
         }
 
-        List<ArrayList<String>> inputType = expandRawType(rawType);
-        String inputTypeHead = fixHeadWord(NLP.getHeadWord(rawType, true));
+        List<ArrayList<String>> inputType = expandRawType(stemmedRawType);
+        String inputTypeHead = fixHeadWord(NLP.getHeadWord(stemmedRawType, true));
         ArrayList<Pair<String, Integer>> typeToFreq = typeSuggestionCode == SOURCE_CODE_TEXT
                 ? server.text.handler.TypeSuggestionHandler.typeToFreq
                 : (typeSuggestionCode == SOURCE_CODE_TABLE ? server.table.handler.TypeSuggestionHandler.typeToFreq : null);
@@ -218,8 +219,18 @@ public class SimpleQueryParser {
             }
         }
         if (similarityScore >= MIN_SUGGESTING_CONF) {
-            LOGGER.info(String.format("Suggested type: %s --> %s (conf: %.3f)", rawType, mostSimilarType, similarityScore));
-            return mostSimilarType;
+            LOGGER.info(String.format("Suggested type: %s --> %s (conf: %.3f)", stemmedRawType, mostSimilarType, similarityScore));
+            String typeContext = "";
+            // film music composer --> composer
+            // fine-grained types cannot be detected, so that these extra tokens are put into context.
+            // only applied for tables.
+            if (typeSuggestionCode == SOURCE_CODE_TABLE) {
+                String remaining = (" " + stemmedRawType + " ").replace(" " + mostSimilarType + " ", " ").trim();
+                if (!remaining.equals(stemmedRawType)) {
+                    typeContext = remaining;
+                }
+            }
+            return new Pair<>(mostSimilarType, typeContext);
         }
         return null;
     }
@@ -302,20 +313,10 @@ public class SimpleQueryParser {
                 typeRawStr = result.first;
                 // find the most similar type in the type suggestion system.
                 if (typeSuggestionCode != 0) {
-                    String suggestedType = suggestATypeFromRaw(result.first, typeSuggestionCode);
+                    Pair<String, String> suggestedType = suggestATypeFromRaw(result.first, typeSuggestionCode);
                     if (suggestedType != null) {
-                        // film music composer --> composer
-                        // fine-grained types cannot be detected, so that these extra tokens are put into context.
-                        // only applied for tables.
-                        if (typeSuggestionCode == SOURCE_CODE_TABLE) {
-                            String remaining = (" " + result.first + " ").replace(" " + suggestedType + " ", " ").trim();
-                            if (!remaining.equals(result.first)) {
-                                contextTokensFromType = NLP.splitSentence(remaining);
-                            }
-
-                        }
-
-                        result.first = suggestedType;
+                        result.first = suggestedType.first;
+                        contextTokensFromType = NLP.splitSentence(suggestedType.second);
                     }
                 }
             }
