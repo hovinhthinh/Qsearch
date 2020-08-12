@@ -85,6 +85,12 @@ public class GenerateResult {
             ++query;
             SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), SearchResult.class);
             int pos = 0;
+            if (r.topResults.isEmpty()) {
+                tuples.add(new Tuple(
+                        "Q-100-TabQs", f.getName().substring(0, f.getName().indexOf("_")),
+                        query, pos, false
+                ));
+            }
             for (ResultInstance ri : r.topResults) {
                 ++pos;
                 tuples.add(new Tuple(
@@ -95,15 +101,41 @@ public class GenerateResult {
         }
 
         query = 0;
+        for (File f : new File("eval/table/exp_2/annotation-iswc-nolt-RT/evaluator-1").listFiles()) {
+            ++query;
+            SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), SearchResult.class);
+            int pos = 0;
+            if (r.topResults.isEmpty()) {
+                tuples.add(new Tuple(
+                        "Q-100-TabQs-RS", f.getName().substring(0, f.getName().indexOf("_")),
+                        query, pos, false
+                ));
+            }
+            for (ResultInstance ri : r.topResults) {
+                ++pos;
+                tuples.add(new Tuple(
+                        "Q-100-TabQs-RS", f.getName().substring(0, f.getName().indexOf("_")),
+                        query, pos, ri.eval.equals("true")
+                ));
+            }
+        }
+
+        query = 0;
         for (File f : new File("eval/table/exp_2/annotation-recall-qsearch").listFiles()) {
             ++query;
             server.text.handler.search.SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), server.text.handler.search.SearchResult.class);
             int pos = 0;
+            if (r.topResults.isEmpty()) {
+                tuples.add(new Tuple(
+                        "Recall-Qs", "none",
+                        query, pos, false
+                ));
+            }
             for (server.text.handler.search.SearchResult.ResultInstance ri : r.topResults) {
                 ++pos;
                 if (pos <= 10) {
                     tuples.add(new Tuple(
-                            "Rec-Qs", "none",
+                            "Recall-Qs", "none",
                             query, pos, ri.eval.equals("true")
                     ));
                 }
@@ -115,11 +147,39 @@ public class GenerateResult {
             ++query;
             SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), SearchResult.class);
             int pos = 0;
+            if (r.topResults.isEmpty()) {
+                tuples.add(new Tuple(
+                        "Recall-TabQs", "none",
+                        query, pos, false
+                ));
+            }
             for (ResultInstance ri : r.topResults) {
                 ++pos;
                 if (pos <= 10) {
                     tuples.add(new Tuple(
-                            "Rec-TabQs", "none",
+                            "Recall-TabQs", "none",
+                            query, pos, ri.eval.equals("true")
+                    ));
+                }
+            }
+        }
+
+        query = 0;
+        for (File f : new File("eval/table/exp_2/annotation-recall-nolt-RT/template").listFiles()) {
+            ++query;
+            SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), SearchResult.class);
+            int pos = 0;
+            if (r.topResults.isEmpty()) {
+                tuples.add(new Tuple(
+                        "Recall-TabQs-RS", "none",
+                        query, pos, false
+                ));
+            }
+            for (ResultInstance ri : r.topResults) {
+                ++pos;
+                if (pos <= 10) {
+                    tuples.add(new Tuple(
+                            "Recall-TabQs-RS", "none",
                             query, pos, ri.eval.equals("true")
                     ));
                 }
