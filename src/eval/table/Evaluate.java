@@ -105,6 +105,7 @@ public class Evaluate {
             double precCAFirstColumn = table.getAlignmentPrecisionFromFirstColumn();
             double precCAFirstEntityColumn = table.getAlignmentPrecisionFromFirstEntityColumn();
             double precCAMostUniqueColumn = table.getAlignmentPrecisionFromMostUniqueColumnFromTheLeft();
+            double precCAClosestEntityColumn = table.getAlignmentPrecisionFromClosetEntityColumnToTheLeft();
             double precCAMostUniqueEntityColumn = table.getAlignmentPrecisionFromMostUniqueEntityColumnFromTheLeft();
 
             pipeline.tag(table);
@@ -153,6 +154,7 @@ public class Evaluate {
             reporter.recordAverage("macroPrecEDOurs", precEDOurs);
             reporter.recordAverage("macroPrecCAFirstColumn", precCAFirstColumn);
             reporter.recordAverage("macroPrecCAFirstEntityColumn", precCAFirstEntityColumn);
+            reporter.recordAverage("macroPrecCAClosestEntityColumn", precCAClosestEntityColumn);
             reporter.recordAverage("macroPrecCAMostUniqueColumn", precCAMostUniqueColumn);
             reporter.recordAverage("macroPrecCAMostUniqueEntityColumn", precCAMostUniqueEntityColumn);
             reporter.recordAverage("macroPrecCAOurs", precCAOurs);

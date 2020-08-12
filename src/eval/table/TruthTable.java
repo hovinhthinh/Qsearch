@@ -210,6 +210,31 @@ public class TruthTable extends Table {
     }
 
     // return -1 means there is no alignment.
+    public double getAlignmentPrecisionFromClosetEntityColumnToTheLeft() {
+        int total = 0;
+        int nTrue = 0;
+        for (int i = 0; i < nColumn; ++i) {
+
+            // ignore evaluating index column.
+            if (quantityToEntityColumnGroundTruth[i] != -1) {
+                ++total;
+                for (int j = i - 1; j >= 0; --j) {
+                    if (isEntityColumn[j]) {
+                        if (j == quantityToEntityColumnGroundTruth[i]) {
+                            ++nTrue;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        if (total == 0) {
+            return -1;
+        }
+        return ((double) nTrue) / total;
+    }
+
+    // return -1 means there is no alignment.
     public double getAlignmentPrecisionFromMostUniqueColumnFromTheLeft() {
         int total = 0;
         int nTrue = 0;
