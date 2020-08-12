@@ -106,9 +106,9 @@ public class SearchHandler extends HttpServlet {
                             "\"; Quantity: \"" + quantityConstraint + "\"}");
                 }
             } else if (typeConstraint != null) {
-                String suggestedType = SimpleQueryParser.suggestATypeFromRaw(typeConstraint, SimpleQueryParser.SOURCE_CODE_TABLE);
+                Pair<String, String> suggestedType = SimpleQueryParser.suggestATypeFromRaw(typeConstraint, SimpleQueryParser.SOURCE_CODE_TABLE);
                 if (suggestedType != null) {
-                    typeConstraint = suggestedType;
+                    typeConstraint = suggestedType.first;
                 }
             }
             if (response.verdict == null) {
@@ -130,6 +130,7 @@ public class SearchHandler extends HttpServlet {
                         response.AP = 0.0;
                         response.RR = 0.0;
                         response.RECALL = 0.0;
+                        response.RECALL_10 = 0.0;
                         int nTrue = 0;
                         for (int i = 0; i < result.second.size(); ++i) {
                             ResultInstance ri = result.second.get(i);
@@ -148,11 +149,15 @@ public class SearchHandler extends HttpServlet {
                                 if (i < groundtruth.size()) {
                                     response.RECALL += 1;
                                 }
+                                if (i < 10) {
+                                    response.RECALL_10 += 1;
+                                }
                             }
                         }
                         if (groundtruth.size() > 0) {
                             response.AP /= groundtruth.size();
                             response.RECALL /= groundtruth.size();
+                            response.RECALL_10 /= groundtruth.size();
                         }
                     }
 

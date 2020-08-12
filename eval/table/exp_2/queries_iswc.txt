@@ -63,7 +63,7 @@ aircrafts that have capacity more than 400 passengers	TRANSPORT
 aircrafts with speed more than 1000 km/h	TRANSPORT
 airplanes with speed more than 400 mph	TRANSPORT
 Railways more than 2500 km long	TRANSPORT
-trains with speed more than 300 km per hour	TRANSPORT
+trains with speed more than 300 km/h	TRANSPORT
 cruises that travel around the world in 100 days or less	TRANSPORT
 cruise got accidents resulted in more than 1000 deaths	TRANSPORT
 cruise that can carry more than 800 passengers	TRANSPORT
