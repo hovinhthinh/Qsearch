@@ -68,15 +68,14 @@ public class GenerateResult {
             ));
         }
         count = 0;
-
         for (String line : FileUtils.getLineStream("./eval/table/exp_2/recall/recall_baseline_google_top10_annotation_normal-mode.tsv", "UTF-8")) {
             ++count;
             if (count == 1) {
                 continue;
             }
             String[] arr = line.split("\t");
-            String x = arr[7];
-            if (!x.trim().equalsIgnoreCase("yes") && !x.trim().equalsIgnoreCase("no")) {
+            String x = arr[8];
+            if (!x.trim().equalsIgnoreCase("1") && !x.trim().equalsIgnoreCase("0")) {
                 System.out.println("ERROR");
                 return;
             }
