@@ -59,12 +59,34 @@ public class GenerateResult {
                 System.out.println(line);
             }
             String x = arr[7];
-            if (!x.equals("yes") & !x.equals("no")) {
+            if (!x.equals("yes") && !x.equals("no")) {
                 System.out.println("ERROR");
                 return;
             }
             tuples.add(new Tuple(
                     "Q-100-GG", arr[6], Integer.parseInt(arr[0]), Integer.parseInt(arr[5]), x.equals("yes")
+            ));
+        }
+        count = 0;
+
+        for (String line : FileUtils.getLineStream("./eval/table/exp_2/recall/recall_baseline_google_top10_annotation_normal-mode.tsv", "UTF-8")) {
+            ++count;
+            if (count == 1) {
+                continue;
+            }
+            String[] arr = line.split("\t");
+            String x = arr[7];
+            if (!x.trim().equalsIgnoreCase("yes") && !x.trim().equalsIgnoreCase("no")) {
+                System.out.println("ERROR");
+                return;
+            }
+            x = arr[6];
+            if (!x.trim().equalsIgnoreCase("yes") && !x.trim().equalsIgnoreCase("no")) {
+                System.out.println("ERROR");
+                return;
+            }
+            tuples.add(new Tuple(
+                    "Recall-GG-Prec", "null", Integer.parseInt(arr[0]), Integer.parseInt(arr[5]), x.trim().equalsIgnoreCase("yes")
             ));
         }
         count = 0;
