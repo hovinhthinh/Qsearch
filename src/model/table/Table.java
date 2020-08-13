@@ -29,12 +29,6 @@ public class Table implements Serializable {
     public transient String[] cachedQuantityDescriptionFromCombinedHeader = null;
     public transient String[] cachedQuantityDescriptionFromLastHeader = null;
 
-    @Deprecated
-    public int keyColumn = -1; // computed based on the average linking scores from quantity columns
-
-    @Deprecated
-    public double keyColumnScore = -1.0;
-
     public String surroundingText;
     public String caption;
     public String pageTitle;
