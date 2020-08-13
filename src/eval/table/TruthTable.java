@@ -11,6 +11,9 @@ import java.util.HashSet;
 
 // For ground truth of column linkings.
 public class TruthTable extends Table {
+    @Deprecated
+    public int keyColumnGroundTruth = -1;
+
     public int[] quantityToEntityColumnGroundTruth; // -1 means there is no connection.
 
     public String[][] bodyEntityTarget; // e.g. <Cristiano_Ronaldo> (with < and > )
