@@ -56,7 +56,7 @@ public class GenerateResult {
         ArrayList<Tuple> tuples = new ArrayList<>();
         // read tuples.
         int count = 0;
-        for (String line : FileUtils.getLineStream("./eval/text/exp_2/outputs/baseline_google_top10_output.txt", "UTF-8")) {
+        for (String line : FileUtils.getLineStream("eval/table/exp_2/iswc_baseline_google_top10_annotation_snippet-mode.tsv", "UTF-8")) {
             ++count;
             if (count == 1) {
                 continue;
@@ -71,11 +71,11 @@ public class GenerateResult {
                 return;
             }
             tuples.add(new Tuple(
-                    "Q-100-GG", arr[6], Integer.parseInt(arr[0]), Integer.parseInt(arr[5]), x.equals("yes")
+                    "Q-100-GG-snippet", arr[6], Integer.parseInt(arr[0]), Integer.parseInt(arr[5]), x.equals("yes")
             ));
         }
         count = 0;
-        for (String line : FileUtils.getLineStream("./eval/table/exp_2/recall/recall_baseline_google_top10_annotation_normal-mode.tsv", "UTF-8")) {
+        for (String line : FileUtils.getLineStream("eval/table/exp_2/recall_150/recall_baseline_google_top10_annotation_normal-mode.tsv", "UTF-8")) {
             ++count;
             if (count == 1) {
                 continue;
@@ -92,11 +92,11 @@ public class GenerateResult {
                 return;
             }
             tuples.add(new Tuple(
-                    "Recall-GG-Prec", "null", Integer.parseInt(arr[0]), Integer.parseInt(arr[5]), x.trim().equalsIgnoreCase("yes")
+                    "Recall-GG-Prec-snippet", "null", Integer.parseInt(arr[0]), Integer.parseInt(arr[5]), x.trim().equalsIgnoreCase("yes")
             ));
         }
         count = 0;
-        for (String line : FileUtils.getLineStream("./eval/text/exp_2/outputs/EMBEDDING.txt", "UTF-8")) {
+        for (String line : FileUtils.getLineStream("eval/table/exp_2/iswc-qsearch-adjusted.txt", "UTF-8")) {
             ++count;
             if (count == 1) {
                 continue;
@@ -149,7 +149,7 @@ public class GenerateResult {
         }
 
         query = 0;
-        for (File f : new File("eval/table/exp_2/annotation-recall-qsearch").listFiles()) {
+        for (File f : new File("eval/table/exp_2/recall_150/annotation-recall-qsearch").listFiles()) {
             ++query;
             server.text.handler.search.SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), server.text.handler.search.SearchResult.class);
             int pos = 0;
@@ -171,7 +171,7 @@ public class GenerateResult {
         }
 
         query = 0;
-        for (File f : new File("eval/table/exp_2/annotation-recall-nolt/template").listFiles()) {
+        for (File f : new File("eval/table/exp_2/recall_150/annotation-recall-nolt").listFiles()) {
             ++query;
             SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), SearchResult.class);
             int pos = 0;
@@ -193,7 +193,7 @@ public class GenerateResult {
         }
 
         query = 0;
-        for (File f : new File("eval/table/exp_2/annotation-recall-nolt-RT/template").listFiles()) {
+        for (File f : new File("eval/table/exp_2/recall_150/annotation-recall-nolt-RT").listFiles()) {
             ++query;
             SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), SearchResult.class);
             int pos = 0;
