@@ -29,6 +29,11 @@ public class GenerateResult {
         Assert.assertTrue(y - x + 1 == tuples.size());
 
         for (Tuple t : tuples) {
+            r.mrr = t.rr;
+            r.map = t.ap;
+            r.rec = t.rec;
+            r.rec_10 = t.rec_10;
+
             if (t.result_pos <= k) {
                 ++n;
                 if (t.ok) {
@@ -41,7 +46,9 @@ public class GenerateResult {
         }
         r.precision = ((double) n_true) / n;
         r.hit = n_true > 0 ? 1 : 0;
-        r.mrr = minGoodPos == -1 ? 0 : ((double) 1 / minGoodPos);
+        if (r.mrr == null) {
+            r.mrr = minGoodPos == -1 ? 0 : ((double) 1 / minGoodPos);
+        }
         return r;
     }
 
@@ -311,7 +318,8 @@ public class GenerateResult {
     }
 
     static class Result {
-        double precision, hit, mrr;
+        double precision, hit;
+        Double mrr, map, rec, rec_10;
     }
 
     static class Tuple {
@@ -319,13 +327,24 @@ public class GenerateResult {
         public int query;
         public int result_pos; // 1-based index
         public boolean ok;
+        public Double rr, ap, rec, rec_10;
 
-        public Tuple(String model, String domain, int query, int result_pos, boolean ok) {
+        public Tuple(String model, String domain, int query, int result_pos, boolean ok,
+                     Double rr, Double ap, Double rec, Double rec_10) {
             this.model = model;
             this.domain = domain;
             this.query = query;
             this.result_pos = result_pos;
             this.ok = ok;
+
+            this.rr = rr;
+            this.ap = ap;
+            this.rec = rec;
+            this.rec_10 = rec_10;
+        }
+
+        public Tuple(String model, String domain, int query, int result_pos, boolean ok) {
+            this(model, domain, query, result_pos, ok, null, null, null, null);
         }
     }
 }
