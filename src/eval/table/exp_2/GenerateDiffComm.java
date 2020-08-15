@@ -8,6 +8,7 @@ import server.table.ResultInstance;
 import server.table.handler.search.SearchResult;
 import util.FileUtils;
 import util.Gson;
+import util.Pair;
 import util.Triple;
 
 import java.io.File;
@@ -16,40 +17,38 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class GenerateDiffComm {
-    public static void compare(Map<String, Set<String>> tabqsMap, Map<String, Set<String>> qsMap) {
-        double comm = 0;
-        double qsDiff = 0, tabqsDiff = 0;
+    public static void compare(Map<String, Pair<Set<String>, Integer>> tabqsMap, Map<String, Pair<Set<String>, Integer>> qsMap) {
+        double qsDiff = 0, tabqsDiff = 0, qsDiffT = 0, tabqsDiffT = 0;
         Assert.assertTrue(tabqsMap.size() == qsMap.size());
         for (String key : tabqsMap.keySet()) {
-            Set<String> a = tabqsMap.get(key), b = qsMap.get(key);
-            if (b == null) {
-                System.out.println(key);
-            }
+            Set<String> a = tabqsMap.get(key).first, b = qsMap.get(key).first;
+            int ca = 0, cb = 0;
             for (String x : a) {
-                if (b.contains(x)) {
-                    comm++;
-                } else {
-                    tabqsDiff++;
+                if (!b.contains(x)) {
+                    ca++;
                 }
             }
             for (String x : b) {
                 if (!a.contains(x)) {
-                    qsDiff++;
+                    cb++;
                 }
             }
+            tabqsDiffT += ca;
+            tabqsDiff += tabqsMap.get(key).second;
+            qsDiffT += cb;
+            qsDiff += qsMap.get(key).second;
         }
-        System.out.println(String.format("comm: %.3f diffQs: %.3f diffTabQs: %.3f",
-                comm / tabqsMap.size(),
-                qsDiff / tabqsMap.size(),
-                tabqsDiff / tabqsMap.size()
+        System.out.println(String.format("diffQs: %.3f diffTabQs: %.3f",
+                qsDiffT / qsDiff,
+                tabqsDiffT / tabqsDiff
         ));
     }
 
     public static void run_1() {
-        String qsFolder = "eval/table/exp_2/annotation-recall-qsearch";
-        String tabqsFolder = "eval/table/exp_2/annotation-recall-nolt-RT/template";
+        String qsFolder = "/home/hvthinh/TabQs/eval/table/exp_2/recall_150/annotation-recall-qsearch";
+        String tabqsFolder = "/home/hvthinh/TabQs/eval/table/exp_2/recall_150/annotation-recall-nolt-RT";
 
-        Map<String, Set<String>> qsMap = new HashMap<>(), tabqsMap = new HashMap<>();
+        Map<String, Pair<Set<String>, Integer>> qsMap = new HashMap<>(), tabqsMap = new HashMap<>();
 
         for (File f : new File(tabqsFolder).listFiles()) {
             SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), SearchResult.class);
@@ -61,7 +60,7 @@ public class GenerateDiffComm {
                     res.add(ri.entity);
                 }
             }
-            tabqsMap.put(r.fullQuery, res);
+            tabqsMap.put(r.fullQuery, new Pair<>(res, r.topResults.size()));
         }
 
         for (File f : new File(qsFolder).listFiles()) {
@@ -74,7 +73,7 @@ public class GenerateDiffComm {
                     res.add(ri.entity);
                 }
             }
-            qsMap.put(r.fullQuery, res);
+            qsMap.put(r.fullQuery, new Pair<>(res, r.topResults.size()));
         }
 
         compare(tabqsMap, qsMap);
@@ -84,8 +83,7 @@ public class GenerateDiffComm {
     public static void run_2() {
         String tabqsFolder = "/home/hvthinh/TabQs/eval/table/exp_2/annotation-iswc-nolt-RT/evaluator-1";
 
-        Map<String, Set<String>> qsMap = new HashMap<>(), tabqsMap = new HashMap<>();
-
+        Map<String, Pair<Set<String>, Integer>> qsMap = new HashMap<>(), tabqsMap = new HashMap<>();
 
         for (File f : new File(tabqsFolder).listFiles()) {
             SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), SearchResult.class);
@@ -98,7 +96,7 @@ public class GenerateDiffComm {
                 }
             }
             r.evalDomain = null;
-            tabqsMap.put(r.fullQuery, res);
+            tabqsMap.put(r.fullQuery, new Pair<>(res, r.topResults.size()));
         }
 
         ArrayList<String> lines = FileUtils.getLines("eval/table/exp_2/iswc-qsearch-adjusted.txt", "UTF-8");
@@ -113,7 +111,7 @@ public class GenerateDiffComm {
                     res.add("<" + NLP.stripSentence(arr[13]).replace(' ', '_') + ">");
                 }
             }
-            qsMap.put(key, res);
+            qsMap.put(key, new Pair<>(res, queries.get(key).size()));
         }
         compare(tabqsMap, qsMap);
 
