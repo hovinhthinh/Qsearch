@@ -240,10 +240,10 @@ public class ElasticSearchQuery {
                 }
 //                ArrayList<String> matchContext = new ArrayList<>();
 
-                // save space.
-                o.put("_source", "<OMITTED>");
                 // computer score
                 JSONArray facts = o.getJSONObject("_source").getJSONArray("facts");
+                // save space.
+                o.put("_source", "<OMITTED>");
                 SearchResult.ResultInstance r = new SearchResult.ResultInstance();
                 r.score = Constants.MAX_DOUBLE;
                 r.entity = o.getString("_id");
