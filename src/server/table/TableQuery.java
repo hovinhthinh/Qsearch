@@ -309,26 +309,10 @@ public class TableQuery {
 //                if (matchScore.first < 0.7) {
 //                    continue;
 //                }
-                //
-                double quantityStandardValue = qt.value * QuantityDomain.getScale(qt);
-                // quantity convert str
-                String matchQuantityConvertedStr = null;
-                double scale = QuantityDomain.getScale(qt) / QuantityDomain.getScale(constraint.quantity);
-                if (Math.abs(scale - 1.0) >= 1e-6) {
-                    double convertedValue = scale * qt.value;
-                    if (Math.abs(convertedValue) >= 1e9) {
-                        matchQuantityConvertedStr = String.format("%.1f", convertedValue / 1e9) + " billion";
-                    } else if (convertedValue >= 1e6) {
-                        matchQuantityConvertedStr = String.format("%.1f", convertedValue / 1e6) + " million";
-                    } else if (convertedValue >= 1e5) {
-                        matchQuantityConvertedStr = String.format("%.0f", convertedValue / 1e3) + " thousand";
-                    } else {
-                        matchQuantityConvertedStr = String.format("%.2f", convertedValue);
-                    }
-                    matchQuantityConvertedStr += " (" + constraint.quantity.unit + ")";
-                }
 
-                inst.addSubInstance(new ResultInstance.SubInstance(f, matchScore.first, quantityStandardValue, matchQuantityConvertedStr, matchScore.second));
+                inst.addSubInstance(new ResultInstance.SubInstance(f, matchScore.first,
+                        qt.value * QuantityDomain.getScale(qt), qt.getQuantityConvertedStr(constraint.quantity),
+                        matchScore.second));
             }
 
             if (inst.subInstances.size() > 0) {

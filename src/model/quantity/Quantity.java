@@ -6,7 +6,7 @@ import nlp.NLP;
 // These are extracted from IllinoisQuantifier.
 public class Quantity {
     public double value;
-    public Double value2; // value2 is used for range [value-value2]
+    public Double value2; // value2 is used for range [value-value2], used in quantity constraint
     public String unit;
     public String resolution;
 
@@ -83,6 +83,30 @@ public class Quantity {
         double maxDiff = Math.max(Math.abs(thisConvertedValue), Math.abs(otherConvertedValue)) * 0.01;
         double diff = Math.abs(thisConvertedValue - otherConvertedValue);
         return diff <= maxDiff ? 0 : (thisConvertedValue < otherConvertedValue ? -1 : 1);
+    }
+
+    // get the string representation after converting to unit of target quantity
+    // assume that the two quantities are of the same concept
+    // return null if no conversion is required
+    public String getQuantityConvertedStr(Quantity targetQuantity) {
+        if (!QuantityDomain.getDomain(this).equals(QuantityDomain.getDomain(targetQuantity))) {
+            throw new RuntimeException("Two quantities are of different concepts");
+        }
+        double scale = QuantityDomain.getScale(this) / QuantityDomain.getScale(targetQuantity);
+        if (Math.abs(scale - 1.0) <= 1e-6) {
+            return null;
+        }
+        String suffix = " (" + targetQuantity.unit + ")";
+        double convertedValue = scale * value;
+        if (Math.abs(convertedValue) >= 1e9) {
+            return String.format("%.1f", convertedValue / 1e9) + " billion" + suffix;
+        } else if (convertedValue >= 1e6) {
+            return String.format("%.1f", convertedValue / 1e6) + " million" + suffix;
+        } else if (convertedValue >= 1e5) {
+            return String.format("%.0f", convertedValue / 1e3) + " thousand" + suffix;
+        } else {
+            return String.format("%.2f", convertedValue) + suffix;
+        }
     }
 
     public static boolean fixQuantityFromIllinois(QuantSpan span, String tokenizedText) {
