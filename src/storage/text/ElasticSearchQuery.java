@@ -239,20 +239,15 @@ public class ElasticSearchQuery {
                     }
                 }
 //                ArrayList<String> matchContext = new ArrayList<>();
-                String matchQuantity = "null";
-                double matchQuantityStandardValue = 0;
-                String matchSentence = "null";
-                String matchSource = "null";
-                String matchEntityStr = "null";
-                String matchQuantityStr = "null";
-                String matchQuantityConvertedStr = "null";
-                ArrayList<String> matchContextVerbose = new ArrayList<>();
 
-                // computer score
-                double minDist = Constants.MAX_DOUBLE;
-                JSONArray facts = o.getJSONObject("_source").getJSONArray("facts");
                 // save space.
                 o.put("_source", "<OMITTED>");
+                // computer score
+                JSONArray facts = o.getJSONObject("_source").getJSONArray("facts");
+                SearchResult.ResultInstance r = new SearchResult.ResultInstance();
+                r.score = Constants.MAX_DOUBLE;
+                r.entity = o.getString("_id");
+                r.estimatedPopularity = facts.length();
                 for (int i = 0; i < facts.length(); ++i) {
                     // check corpus target
                     if (corpusConstraint != null) {
@@ -302,57 +297,25 @@ public class ElasticSearchQuery {
                     // use explicit matcher if given.
                     double dist = explicitMatcher != null ? explicitMatcher.match(queryContextTerms, X) : matcher.match(queryContextTerms, X);
 
-                    if (dist < minDist) {
-                        minDist = dist;
+                    if (dist < r.score) {
+                        r.score = dist;
+                        r.quantity = qt.toString(1);
+                        r.quantityStandardValue = qt.value * QuantityDomain.getScale(qt);
+                        r.quantityStr = facts.getJSONObject(i).getString("quantityStr");
+                        r.quantityConvertedStr = qt.getQuantityConvertedStr(constraint.quantity);
+
+                        r.entityStr = facts.getJSONObject(i).getString("entityStr");
+
+                        r.contextStr = contextVerbose;
 //                        matchContext = new ArrayList<>(X);
-                        matchQuantity = qt.toString(1);
-                        matchQuantityStandardValue = qt.value * QuantityDomain.getScale(qt);
-                        matchSentence = facts.getJSONObject(i).getString("sentence");
-                        matchSource = facts.getJSONObject(i).getString("source");
 
-                        matchEntityStr = facts.getJSONObject(i).getString("entityStr");
-                        matchQuantityStr = facts.getJSONObject(i).getString("quantityStr");
-                        matchContextVerbose = contextVerbose;
-
-                        // Get quantity converted string.
-                        double scale = QuantityDomain.getScale(qt) / QuantityDomain.getScale(constraint.quantity);
-                        if (Math.abs(scale - 1.0) >= 1e-6) {
-                            double convertedValue = scale * qt.value;
-                            if (Math.abs(convertedValue) >= 1e9) {
-                                matchQuantityConvertedStr = String.format("%.1f", convertedValue / 1e9) + " billion";
-                            } else if (convertedValue >= 1e6) {
-                                matchQuantityConvertedStr = String.format("%.1f", convertedValue / 1e6) + " million";
-                            } else if (convertedValue >= 1e5) {
-                                matchQuantityConvertedStr = String.format("%.0f", convertedValue / 1e3) + " thousand";
-                            } else {
-                                matchQuantityConvertedStr = String.format("%.2f", convertedValue);
-                            }
-                            matchQuantityConvertedStr += " (" + constraint.quantity.unit + ")";
-                        } else {
-                            matchQuantityConvertedStr = "null";
-                        }
+                        r.sentence = facts.getJSONObject(i).getString("sentence");
+                        r.source = facts.getJSONObject(i).getString("source");
                     }
                 }
-                if (matchQuantity.equals("null")) {
-                    continue;
+                if (r.quantity != null) {
+                    scoredInstances.add(r);
                 }
-                SearchResult.ResultInstance r = new SearchResult.ResultInstance();
-                r.score = minDist;
-                r.entity = o.getString("_id");
-                r.estimatedPopularity = facts.length();
-                r.entityStr = matchEntityStr;
-
-                r.quantity = matchQuantity;
-                r.quantityStr = matchQuantityStr;
-                r.quantityStandardValue = matchQuantityStandardValue;
-                r.quantityConvertedStr = matchQuantityConvertedStr;
-
-                r.contextStr = matchContextVerbose;
-
-                r.sentence = matchSentence;
-                r.source = matchSource;
-
-                scoredInstances.add(r);
             }
             if (instances.error) {
                 result.second = null;

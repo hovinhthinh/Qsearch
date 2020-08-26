@@ -21,7 +21,8 @@
     <div class="row">
         <a href="/" class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <br/>
-            <img style="object-fit: contain; height:75px" src="img/logo2.png" class="img-responsive img-fluid ml-2 mr-2">
+            <img style="object-fit: contain; height:75px" src="img/logo2.png"
+                 class="img-responsive img-fluid ml-2 mr-2">
         </a>
         <div class="col-xs-7 col-sm-7 col-md-7 col-lg-5 mt-2">
             <br/>
@@ -173,7 +174,8 @@
         </tr>
     </table>
 </footer>
-<img hidden id="loading" src="img/loading.gif" style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"/>
+<img hidden id="loading" src="img/loading.gif"
+     style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"/>
 <script src="js/local.js" crossorigin="anonymous"></script>
 
 <script>
@@ -272,7 +274,9 @@
             if (pQ != -1) {
                 value = value.replace(qStr, '<span class="quantity-box converted-quantity"' +
                     ' data-animation="true" data-placement="top" data-trigger="hover" data-html="true"' +
-                    ' data-content="Equals: ' + sentenceContent['quantityConvertedStr'] + '">' + qStr + '</span>');
+                    ' data-content="Equals: ' +
+                    (sentenceContent.quantityConvertedStr == null ? "null" : sentenceContent.quantityConvertedStr) +
+                    '">' + qStr + '</span>');
             }
         }
         return "<td>" + value + "</td>";
