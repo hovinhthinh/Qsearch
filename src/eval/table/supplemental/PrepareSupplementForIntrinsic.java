@@ -41,9 +41,9 @@ public class PrepareSupplementForIntrinsic {
 
     public static void main(String[] args) {
         Map<String, String> files = Stream.of(new Object[][]{
-                {"eval/table/wiki_random/wiki_random_annotation_linking.json", "Wiki_Links-Random_Qt.json"},
-                {"eval/table/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation_linking.json", "Equity_Qt"},
-                {"eval/table/wiki_diff/table_ground_annotation_linking.gz", "Wiki_Diff"},
+                {"eval/table/exp_1/wiki_random/wiki_random_annotation_linking.json", "Wiki_Links-Random_Qt.json"},
+                {"eval/table/exp_1/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation_linking.json", "Equity_Qt"},
+                {"eval/table/exp_1/wiki_diff/table_ground_annotation_linking.gz", "Wiki_Diff"},
         }).collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
         File outputFolder = new File("eval/table/supplemental_materials/intrinsic_eval");
 

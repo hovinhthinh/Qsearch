@@ -50,7 +50,7 @@ public class Evaluate {
             in.close();
         } else {
             TextBasedColumnScoringNode.JOINT_MAX_NUM_COLUMN_LINKING = -1;
-            String inputFile = "eval/table/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation_linking.json";
+            String inputFile = "eval/table/exp_1/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation_linking.json";
             columnScoringNode.inferenceMode = TextBasedColumnScoringNode.INDEPENDENT_INFERENCE;
             columnScoringNode.homogeneityWeight = 1;
             evaluateWithConfig(inputFile, null);
