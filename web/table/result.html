@@ -237,7 +237,7 @@
         var preTables = $('<div class="container-fluid"><div class="row"><div class="col-auto p-0" style="max-width: 40%"></div><div class="col p-0"></div><div class="ml-2 p-0 text-right"></div></div></div>');
 
         // titles
-        var title = $('<div>');
+        var title = $('<div class="mb-1">');
         var titleText = escapeText(si.qfact.tableIndex.pageTitle);
         for (var i = 0; i < si.traces.length; ++i) {
             if (si.traces[i].place != "TITLE") {
@@ -331,7 +331,7 @@
 
                 if (table.header[i][j].text == table.header[table.header.length - 1][si.qfact.eCol].text
                     && si.qfact.eCol >= j && si.qfact.eCol <= temp_1 && temp_2 == table.header.length - 1) {
-                    text += ' <span class="badge badge-pill badge-secondary">LScore: ' + si.qfact.linkingScore.toFixed(3) + '</span>';
+                    // text += ' <span class="badge badge-pill badge-secondary">LScore: ' + si.qfact.linkingScore.toFixed(3) + '</span>';
                 }
                 c.html(text);
                 headRow.append(c);
