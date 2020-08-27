@@ -21,7 +21,8 @@
     <div class="row">
         <a href="/table/index.html" class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <br/>
-            <img style="object-fit: contain; height:75px" src="img/logo2.png" class="img-responsive img-fluid ml-2 mr-2">
+            <img style="object-fit: contain; height:75px" src="img/logo2.png"
+                 class="img-responsive img-fluid ml-2 mr-2">
         </a>
         <div class="col-xs-7 col-sm-7 col-md-7 col-lg-5 mt-2">
             <br/>
@@ -216,7 +217,7 @@
             + encodeURI(value.substring(1, value.length - 1)) + '" target="_blank" referrerpolicy="no-referrer">'
             + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
             + '</a>';
-        return $("<td style='width: auto !important;'>" + value + "</td>");
+        return $("<td style='width: auto !important; border-top: 1px solid gray;'>" + value + "</td>");
     }
 
     function source(value) {
@@ -449,12 +450,12 @@
     }
 
     function encodeEntityResultAsHtml(index, instance) {
-        var line = "<tr style='border-top:2px solid gray'>";
-        line += "<td style='width: auto !important;'>" + (index + 1) + "</td>";
+        var line = "<tr>";
+        line += "<td style='width: auto !important; border-top: 1px solid gray;'>" + (index + 1) + "</td>";
         var eCel = entityCell(instance);
         line += eCel.wrapAll('<div>').parent().html();
 
-        var tCel = $('<td>');
+        var tCel = $('<td style="border-top: 1px solid gray;">');
         tCel.append(drawCollapsedTable(index, 0, instance.subInstances[0]));
 
         if (instance.subInstances.length > 1) {
