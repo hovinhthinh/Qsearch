@@ -372,54 +372,14 @@ public class QuantityDomain {
     }
 
     public static String getDomainOfUnit(String unit) {
-        unit = untokenizeUnit(unit);
-        if (LENGTH_DOMAIN.containsKey(unit)) {
-            return Domain.LENGTH;
+        String domain = getFineGrainedDomainOfUnit(unit);
+        if (domain.equals(Domain.LENGTH) || domain.equals(Domain.MONEY) || domain.equals(Domain.TIME) ||
+                domain.equals(Domain.PERCENTAGE) || domain.equals(Domain.MASS) || domain.equals(Domain.AREA) ||
+                domain.equals(Domain.SPEED) || domain.equals(Domain.POWER) || domain.equals(Domain.VOLUME)) {
+            return domain;
+        } else {
+            return Domain.DIMENSIONLESS;
         }
-        if (MONEY_DOMAIN.containsKey(unit)) {
-            return Domain.MONEY;
-        }
-        if (TIME_DOMAIN.containsKey(unit)) {
-            return Domain.TIME;
-        }
-        if (MASS_DOMAIN.containsKey(unit)) {
-            return Domain.MASS;
-        }
-        if (PERCENTAGE_DOMAIN.containsKey(unit)) {
-            return Domain.PERCENTAGE;
-        }
-        if (AREA_DOMAIN.containsKey(unit)) {
-            return Domain.AREA;
-        }
-        if (VOLUME_DOMAIN.containsKey(unit)) {
-            return Domain.VOLUME;
-        }
-        // Now use QuTree.
-        try {
-            Unit u = unit.isEmpty() ? null : QUANTITY_CATALOG.getUnitFromBaseName(unit);
-            if (u == null) {
-                List<Unit> units = SURFACE_UNITS_MAP.get(unit);
-                u = units == null ? null : units.get(0);
-            }
-            if (u != null) {
-                String domain = u.getParentQuantity().getConcept();
-                // allows only these specific domains
-                if (domain.equals(Domain.LENGTH) ||
-                        domain.equals(Domain.MONEY) ||
-                        domain.equals(Domain.TIME) ||
-                        domain.equals(Domain.PERCENTAGE) ||
-                        domain.equals(Domain.MASS) ||
-                        domain.equals(Domain.AREA) ||
-                        domain.equals(Domain.SPEED) ||
-                        domain.equals(Domain.POWER) ||
-                        domain.equals(Domain.VOLUME)
-                ) {
-                    return domain;
-                }
-            }
-        } catch (Exception e) {
-        }
-        return Domain.DIMENSIONLESS;
     }
 
     public static boolean quantityMatchesDomain(Quantity quantity, String domain) {
