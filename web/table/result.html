@@ -247,7 +247,7 @@
             titleText = wrapContextBox(titleText, token);
         }
         titleText = titleText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
-        title.html('<span class="badge badge-pill badge-warning">Pg-Title</span> <span class="font-weight-bold small">'
+        title.html('<span class="badge badge-pill badge-warning">Pg-Title</span><span class="font-weight-bold small ml-1">'
             + titleText + '</span>');
         preTables.eq(0).children().eq(0).children().eq(0).append(title);
 
