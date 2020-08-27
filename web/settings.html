@@ -1,0 +1,66 @@
+<div class="card-header" style="background-color: #dff0d8; border-color: #d6e9c6">
+    <a id='setting-toggle' data-toggle="collapse" href="#setting-body" style="text-decoration: none;">
+        <span style="color: #3c763d">
+            <strong>Settings</strong>&nbsp;&nbsp;<i class="float-right fa fa-chevron-up"></i>
+        </span>
+    </a>
+</div>
+<div id="setting-body" class="collapse show">
+    <div class="card-body">
+        <table>
+            <tr>
+                <td>Input corpus:&nbsp;</td>
+                <td>
+                    <select class="custom-select" multiple id="corpus">
+                        <option value="STICS" selected>Stics</option>
+                        <option value="NYT" selected>New York Times</option>
+                        <option value="WIKIPEDIA" selected>Wikipedia</option>
+                    </select>
+                </td>
+                <td>&nbsp;&nbsp;nTop:&nbsp;</td>
+                <td>
+                    <select class="custom-select" id="ntop">
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-top: 5px;">Ranking model:&nbsp;</td>
+                <td style="padding-top: 5px;" colspan="3">
+                    <select class="custom-select" id="model">
+                        <option value="EMBEDDING" selected>Context Embedding Distance (ced)</option>
+                        <option value="KL">Kullback-Leibler Divergence (KL)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr id="alpha-option">
+                <td style="padding-top: 10px;">Penalty (&alpha;):&nbsp;</td>
+                <td style="padding-top: 10px;" colspan="3">
+                    <table style="width: 100%">
+                        <tr>
+                            <td><input type="range" value="3" class="slider" step="0.1" min="0" max="10" id="alpha"
+                                       oninput="$('#alpha-value').text(parseFloat(this.value).toFixed(1));"></td>
+                            <td id="alpha-value" align="right" style="width: 2.5em">3.0</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr id="lambda-option">
+                <td style="padding-top: 10px;">Smoothing (&lambda;):&nbsp;</td>
+                <td style="padding-top: 10px;" colspan="3">
+                    <table style="width: 100%">
+                        <tr>
+                            <td><input type="range" value="0.1" class="slider" step="0.1" min="0" max="1" id="lambda"
+                                       oninput="$('#lambda-value').text(parseFloat(this.value).toFixed(1));"></td>
+                            <td id="lambda-value" align="right" style="width: 2.5em">0.1</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
