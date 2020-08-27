@@ -455,7 +455,7 @@
         var eCel = entityCell(instance);
         line += eCel.wrapAll('<div>').parent().html();
 
-        var tCel = $('<td style="border-top: 1px solid gray;">');
+        var tCel = $('<td style="border-top: 1px solid gray;" class="pb-2">');
         tCel.append(drawCollapsedTable(index, 0, instance.subInstances[0]));
 
         if (instance.subInstances.length > 1) {
@@ -464,7 +464,7 @@
             tCel.append(wrapper);
             var moreTCel = $('<div class="collapse">');
             for (var i = 1; i < instance.subInstances.length; ++i) {
-                moreTCel.append($('<hr style="border-color: gray;">'));
+                moreTCel.append($('<hr style="border-color: gray;" class="mt-2">'));
                 moreTCel.append(drawCollapsedTable(index, i, instance.subInstances[i]));
             }
             tCel.append(moreTCel);
