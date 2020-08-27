@@ -69,6 +69,12 @@
     padding: 2px 4px;
 }
 
+.result-img {
+    max-height: 100px;
+    height: auto;
+    width: auto;
+}
+
 .card-header .collapsed .fa {
     transform: rotate(180deg);
 }

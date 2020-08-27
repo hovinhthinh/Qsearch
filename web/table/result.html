@@ -3,19 +3,19 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>TabQs</title>
-    <link href="/fontawesome_5.10.1/css/all.css" rel="stylesheet" crossorigin="anonymous">
-    <link href="/css/bootstrap_4.0.0.min.css" rel="stylesheet" crossorigin="anonymous">
-    <link href="css/local.css" rel="stylesheet" crossorigin="anonymous">
-    <link href="/css/bootstrap-multiselect.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="/fontawesome_5.10.1/css/all.css" rel="stylesheet">
+    <link href="/css/bootstrap_4.0.0.min.css" rel="stylesheet">
+    <link href="css/local.css" rel="stylesheet">
+    <link href="/css/bootstrap-multiselect.css" rel="stylesheet">
 </head>
 
 <body>
-<script src="/js/jquery_3.2.1.min.js" crossorigin="anonymous"></script>
-<script src="/js/jquery.cookie_1.4.1.js" crossorigin="anonymous"></script>
-<script src="/js/popper_1.12.9.min.js" crossorigin="anonymous"></script>
-<script src="/js/bootstrap_4.0.0.min.js" crossorigin="anonymous"></script>
-<script src="/js/nanobar_0.4.2.min.js" crossorigin="anonymous"></script>
-<script src="/js/bootstrap-multiselect.js" crossorigin="anonymous"></script>
+<script src="/js/jquery_3.2.1.min.js"></script>
+<script src="/js/jquery.cookie_1.4.1.js"></script>
+<script src="/js/popper_1.12.9.min.js"></script>
+<script src="/js/bootstrap_4.0.0.min.js"></script>
+<script src="/js/nanobar_0.4.2.min.js"></script>
+<script src="/js/bootstrap-multiselect.js"></script>
 
 <div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12 offset-xs-0 offset-sm-0 offset-md-0 offset-lg-0">
     <div class="row">
@@ -39,52 +39,7 @@
             <div id="parsed" class="mb-3" style="white-space:nowrap;"></div>
         </div>
         <div class="col-xs-3 col-sm-3 col-md-3 col-lg-5" style="margin-top: 15px">
-            <div class="float-right card" style="border-color: #B8D2FA">
-                <div class="card-header" style="background-color: #DAE6F8; border-color: #B8D2FA">
-                    <a id='setting-toggle' data-toggle="collapse" href="#setting-body" style="text-decoration: none;">
-                        <span style="color: #3c78d8">
-                            <strong>Settings</strong>&nbsp;&nbsp;<i class="float-right fa fa-chevron-up"></i>
-                        </span>
-                    </a>
-                </div>
-                <div id="setting-body" class="collapse show">
-                    <div class="card-body">
-                        <table>
-                            <tr>
-                                <td>Input corpus:&nbsp;</td>
-                                <td>
-                                    <select class="custom-select" multiple id="corpus">
-                                        <option value="TABLEM:Link" selected>TableL</option>
-                                        <option value="WIKIPEDIA:Link" selected>Wikipedia</option>
-                                    </select>
-                                </td>
-                                <td>&nbsp;&nbsp;nTop:&nbsp;</td>
-                                <td>
-                                    <select class="custom-select" id="ntop">
-                                        <option value="10">10</option>
-                                        <option value="20" selected>20</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-top: 10px;">Linking threshold:&nbsp;</td>
-                                <td style="padding-top: 10px;" colspan="3">
-                                    <table style="width: 100%">
-                                        <tr>
-                                            <td><input type="range" value="0.6" class="slider" step="0.1" min="0"
-                                                       max="1" id="linking-threshold"
-                                                       oninput="$('#linking-threshold-value').text(parseFloat(this.value).toFixed(1));">
-                                            </td>
-                                            <td id="linking-threshold-value" align="right" style="width: 2.5em">0.6</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+            <div class="float-right card" style="border-color: #B8D2FA" id="settings">
             </div>
         </div>
     </div>
@@ -179,14 +134,12 @@
 </div>
 <img hidden id="loading" src="/img/loading.gif"
      style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"/>
-<script src="js/local.js" crossorigin="anonymous"></script>
-<style>
-    .result-img {
-        max-height: 100px;
-        height: auto;
-        width: auto;
-    }
-</style>
+
+<script>
+    $("#settings").load("settings.html");
+    $.getScript("js/local.js");
+</script>
+
 <script>
     var showTimeOut = 30000;
     var nanobar = new Nanobar();
