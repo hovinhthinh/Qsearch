@@ -1,4 +1,4 @@
-package eval.table.wiki_diff;
+package eval.table.exp_1.wiki_diff;
 
 import model.table.Table;
 import util.FileUtils;
@@ -12,11 +12,11 @@ import java.util.Set;
 public class GenerateFromIds {
     public static void main(String[] args) {
         Set<String> idSet = new HashSet<>();
-        for (String line : FileUtils.getLineStream("eval/table/wiki_diff/table.id.txt")) {
+        for (String line : FileUtils.getLineStream("eval/table/exp_1/wiki_diff/table.id.txt")) {
             idSet.add(line);
         }
 
-        PrintWriter out = FileUtils.getPrintWriter("eval/table/wiki_diff/table.txt", "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_1/wiki_diff/table.txt", "UTF-8");
         for (String line : FileUtils.getLineStream("data/wiki+tablem_annotation+linking.gz")) {
             Table t = Gson.fromJson(line, Table.class);
             if (!idSet.contains(t._id)) {

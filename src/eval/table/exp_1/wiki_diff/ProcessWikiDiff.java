@@ -1,4 +1,4 @@
-package eval.table.wiki_diff;
+package eval.table.exp_1.wiki_diff;
 
 import data.table.background.mention2entity.Mention2EntityPrior;
 import eval.table.TruthTable;
@@ -28,9 +28,9 @@ public class ProcessWikiDiff {
 
         Mention2EntityPrior mention2EntityPrior = new Mention2EntityPrior(1, 10);
 
-        PrintWriter out = FileUtils.getPrintWriter("eval/table/wiki_diff/table_ground_annotation.gz", "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_1/wiki_diff/table_ground_annotation.gz", "UTF-8");
         int nGood = 0;
-        for (String line : FileUtils.getLineStream("eval/table/wiki_diff/table_ground.gz", "UTF-8")) {
+        for (String line : FileUtils.getLineStream("eval/table/exp_1/wiki_diff/table_ground.gz", "UTF-8")) {
 
             TruthTable t;
             t = Gson.fromJson(line, TruthTable.class);

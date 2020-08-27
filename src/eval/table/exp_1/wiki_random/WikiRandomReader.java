@@ -1,4 +1,4 @@
-package eval.table.wiki_random;
+package eval.table.exp_1.wiki_random;
 
 import eval.table.TruthTable;
 import model.table.Cell;
@@ -103,8 +103,8 @@ public class WikiRandomReader {
     }
 
     public static void main(String[] args) {
-        PrintWriter out = FileUtils.getPrintWriter("eval/table/wiki_random/wiki_random_ground.gz", "UTF-8");
-        FileUtils.LineStream stream = FileUtils.getLineStream("eval/table/wiki_random/wiki_random_data.gz", "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_1/wiki_random/wiki_random_ground.gz", "UTF-8");
+        FileUtils.LineStream stream = FileUtils.getLineStream("eval/table/exp_1/wiki_random/wiki_random_data.gz", "UTF-8");
 
         SelfMonitor m = new SelfMonitor(WikiRandomReader.class.getName(), -1, 60);
         m.start();

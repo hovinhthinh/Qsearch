@@ -1,4 +1,4 @@
-package eval.table.equity;
+package eval.table.exp_1.equity;
 
 import eval.table.TruthTable;
 import model.table.Cell;
@@ -46,9 +46,9 @@ public class EquityReader {
             yusraValue.put(r.get(1) + "@" + r.get(9) + "@" + r.get(10) + "@" + r.get(11) + "@" + r.get(12), r.get(4));
         }
 
-        PrintWriter out = FileUtils.getPrintWriter("eval/table/equity/dataset/AnnotatedTables-19092016/dataset_ground.json", "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_1/equity/dataset/AnnotatedTables-19092016/dataset_ground.json", "UTF-8");
 
-        JSONObject o = new JSONObject(FileUtils.getContent("eval/table/equity/dataset/AnnotatedTables-19092016/dataset_original_yibrahim.json", "UTF-8"));
+        JSONObject o = new JSONObject(FileUtils.getContent("eval/table/exp_1/equity/dataset/AnnotatedTables-19092016/dataset_original_yibrahim.json", "UTF-8"));
 
         HashMap<String, String> contentMap = getContentMap();
 

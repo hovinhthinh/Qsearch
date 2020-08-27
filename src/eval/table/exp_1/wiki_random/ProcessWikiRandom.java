@@ -1,4 +1,4 @@
-package eval.table.equity;
+package eval.table.exp_1.wiki_random;
 
 import data.table.background.mention2entity.Mention2EntityPrior;
 import eval.table.TruthTable;
@@ -7,19 +7,17 @@ import pipeline.table.*;
 import util.FileUtils;
 import util.Gson;
 
-import java.io.FileInputStream;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
-public class ProcessEquity {
+public class ProcessWikiRandom {
     // Just the annotations of entities and quantities, there is no linking.
     public static TaggingPipeline getPipeline() {
         return new TaggingPipeline(
                 new TablePrefilteringNode(),
                 TimeTaggingNode.getDefaultInstance(),
                 new QuantityTaggingNode(),
-                new ColumnTypeTaggingNode(0.25, 0.25)
+                new ColumnTypeTaggingNode(0.3, 0.3)
         );
     }
 
@@ -30,13 +28,9 @@ public class ProcessEquity {
 
         Mention2EntityPrior mention2EntityPrior = new Mention2EntityPrior(1, 10);
 
-        PrintWriter out = FileUtils.getPrintWriter("eval/table/equity/dataset/AnnotatedTables-19092016/dataset_ground_annotation.json", "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_1/wiki_random/wiki_random_annotation.gz", "UTF-8");
         int nGood = 0;
-        for (String line : new FileUtils.LineStream(
-//                new GzipCompressorInputStream(
-//                JSchUtils.getFileInputStreamFromServer
-                new FileInputStream
-                        ("eval/table/equity/dataset/AnnotatedTables-19092016/dataset_ground.json"), StandardCharsets.UTF_8)) {
+        for (String line : FileUtils.getLineStream("eval/table/exp_1/wiki_random/wiki_random_ground.gz", "UTF-8")) {
 
             TruthTable t;
             t = Gson.fromJson(line, TruthTable.class);
@@ -48,7 +42,6 @@ public class ProcessEquity {
                         el.candidates = mention2EntityPrior.getCanditateEntitiesForMention(el.text);
                         if (el.candidates == null) {
                             t.data[i][j].entityLinks.clear();
-                            t.yusraBodyEntityTarget[i][j] = 0;
                             t.bodyEntityTarget[i][j] = null;
                             t.data[i][j].resetCachedRepresentativeLink();
                         }

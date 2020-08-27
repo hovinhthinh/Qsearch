@@ -120,12 +120,12 @@ public class BatchEvaluate {
 
 
     public static void main(String[] args) throws Exception {
-        String inputFile = "eval/table/wiki_random/wiki_random_annotation_linking.json";
+        String inputFile = "eval/table/exp_1/wiki_random/wiki_random_annotation_linking.json";
         int nClients = 32;
 
         MultiThreadedEvaluateClient client = new MultiThreadedEvaluateClient(inputFile, nClients);
         ExecutorService executorService = Executors.newFixedThreadPool(nClients);
-        PrintWriter out = new PrintWriter("eval/table/wiki_random/tmp_tune_results_ED+CA_indep_fixing_dynamic_type_penalty_qfact_coref.tsv", "UTF-8");
+        PrintWriter out = new PrintWriter("eval/table/exp_1/wiki_random/tmp_tune_results_ED+CA_indep_fixing_dynamic_type_penalty_qfact_coref.tsv", "UTF-8");
         out.println(header);
         ArrayList<Future> futures = new ArrayList<>();
 

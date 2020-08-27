@@ -1,4 +1,4 @@
-package eval.table.wiki_diff;
+package eval.table.exp_1.wiki_diff;
 
 import eval.table.TruthTable;
 import model.table.Cell;
@@ -103,8 +103,8 @@ public class WikiDiffReader {
     }
 
     public static void main(String[] args) {
-        PrintWriter out = FileUtils.getPrintWriter("eval/table/wiki_diff/table_ground.gz", "UTF-8");
-        FileUtils.LineStream stream = FileUtils.getLineStream("eval/table/wiki_diff/table_data.gz", "UTF-8");
+        PrintWriter out = FileUtils.getPrintWriter("eval/table/exp_1/wiki_diff/table_ground.gz", "UTF-8");
+        FileUtils.LineStream stream = FileUtils.getLineStream("eval/table/exp_1/wiki_diff/table_data.gz", "UTF-8");
 
         SelfMonitor m = new SelfMonitor(WikiDiffReader.class.getName(), -1, 60);
         m.start();
