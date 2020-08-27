@@ -1,0 +1,45 @@
+<div class="card-header" style="background-color: #DAE6F8; border-color: #B8D2FA">
+    <a id='setting-toggle' data-toggle="collapse" href="#setting-body" style="text-decoration: none;">
+            <span style="color: #3c78d8">
+                <strong>Settings</strong>&nbsp;&nbsp;<i class="float-right fa fa-chevron-up"></i>
+            </span>
+    </a>
+</div>
+<div id="setting-body" class="collapse show">
+    <div class="card-body">
+        <table>
+            <tr>
+                <td>Input corpus:&nbsp;</td>
+                <td>
+                    <select class="custom-select" multiple id="corpus">
+                        <option value="TABLEM:Link" selected>TableL</option>
+                        <option value="WIKIPEDIA:Link" selected>Wikipedia</option>
+                    </select>
+                </td>
+                <td>&nbsp;&nbsp;nTop:&nbsp;</td>
+                <td>
+                    <select class="custom-select" id="ntop">
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-top: 10px;">Linking threshold:&nbsp;</td>
+                <td style="padding-top: 10px;" colspan="3">
+                    <table style="width: 100%">
+                        <tr>
+                            <td><input type="range" value="0.6" class="slider" step="0.1" min="0" max="1"
+                                       id="linking-threshold"
+                                       oninput="$('#linking-threshold-value').text(parseFloat(this.value).toFixed(1));">
+                            </td>
+                            <td id="linking-threshold-value" align="right" style="width: 2.5em">0.6</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
