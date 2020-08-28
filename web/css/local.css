@@ -156,3 +156,8 @@ body {
 .popover {
     z-index: 1 !important;
 }
+
+.quantity-constraint-detail .alert {
+    padding: 0px 3px;
+    color: black;
+}
