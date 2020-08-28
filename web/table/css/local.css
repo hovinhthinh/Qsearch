@@ -171,3 +171,13 @@ body {
     padding: 0px 3px;
     color: black;
 }
+
+.entity-box, .quantity-box, .context-box, .popover-body, [class^="badge-"], [class*=" badge-"] {
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+    /*box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;*/
+}
+
+.autocomplete-items, .shadow-2 {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+    /*box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15) !important;*/
+}
