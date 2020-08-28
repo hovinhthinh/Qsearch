@@ -145,7 +145,7 @@ function autocomplete(inp) {
 // settings.
 $('#corpus').multiselect({
     templates: {
-        button: '<button style="width: 15em" type="button" class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown"><span class="multiselect-selected-text"></span></button>',
+        button: '<button style="width: 10em" type="button" class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown"><span class="multiselect-selected-text"></span></button>',
         li: '<li><a><label class="pl-3 pt-1 pb-1" style="color: #495057"></label></a></li>'
     }
 });
@@ -177,6 +177,10 @@ if (linkingThreshold != null) {
     $("#linking-threshold").val(linkingThreshold);
     $("#linking-threshold").trigger('input');
 }
+var rescore = $.cookie('rescore_table');
+if (rescore != null && rescore == 'true') {
+    $("#rescore").prop('checked', true);
+}
 
 $("#corpus").on('change', function () {
     $.cookie('corpus_table', JSON.stringify($(this).val()));
@@ -186,6 +190,9 @@ $("#ntop").on('change', function () {
 });
 $("#linking-threshold").on('input', function () {
     $.cookie('linking-threshold', this.value);
+});
+$("#rescore").on('change', function () {
+    $.cookie('rescore_table', $(this).is(':checked'));
 });
 
 // search mode.
@@ -217,3 +224,8 @@ function changeSearchMode() {
 }
 
 $("#change-mode").click(changeSearchMode);
+
+// FIX BOOTSTRAP TOGGLE HEIGHT
+$(document).ready(function () {
+    $('input[type="checkbox"][data-toggle="toggle"]').parent().css('height', '');
+});
