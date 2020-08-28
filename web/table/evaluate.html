@@ -113,9 +113,14 @@
      hidden/>
 
 <script>
-    $("#settings").load("settings.html");
-    $.getScript("js/local.js");
+    $('#settings').html($.ajax({
+        type: "GET",
+        url: "settings.html",
+        async: false
+    }).responseText);
 </script>
+
+<script src="js/local.js"></script>
 
 <script>
     var showTimeOut = 30000;
