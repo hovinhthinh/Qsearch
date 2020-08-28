@@ -7,6 +7,7 @@
     <link href="/css/bootstrap_4.0.0.min.css" rel="stylesheet">
     <link href="css/local.css" rel="stylesheet">
     <link href="/css/bootstrap-multiselect.css" rel="stylesheet">
+    <link href="/css/bootstrap4-toggle_3.6.1.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -17,6 +18,7 @@
 <script src="/js/nanobar_0.4.2.min.js"></script>
 <script src="/js/bootstrap-multiselect.js"></script>
 <script src="/js/particles_2.0.0.min.js"></script>
+<script src="/js/bootstrap4-toggle_3.6.1.min.js"></script>
 
 <div id="particles-bg"></div>
 
@@ -93,6 +95,7 @@
         var params = {
             corpus: JSON.stringify($("#corpus").val()),
             ntop: $("#ntop").val(),
+            rescore: $("#rescore").is(':checked').toString(),
             'linking-threshold': $("#linking-threshold").val()
         };
         if ($.cookie('part_search_table') != "1") {

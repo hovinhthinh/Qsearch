@@ -7,39 +7,31 @@
 </div>
 <div id="setting-body" class="collapse show">
     <div class="card-body">
-        <table>
-            <tr>
-                <td>Input corpus:&nbsp;</td>
-                <td>
-                    <select class="custom-select" multiple id="corpus">
-                        <option value="TABLEM:Link" selected>TableL</option>
-                        <option value="WIKIPEDIA:Link" selected>Wikipedia</option>
-                    </select>
-                </td>
-                <td>&nbsp;&nbsp;nTop:&nbsp;</td>
-                <td>
-                    <select class="custom-select" id="ntop">
-                        <option value="10">10</option>
-                        <option value="20" selected>20</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td style="padding-top: 10px;">Linking threshold:&nbsp;</td>
-                <td style="padding-top: 10px;" colspan="3">
-                    <table style="width: 100%">
-                        <tr>
-                            <td><input type="range" value="0.6" class="slider" step="0.1" min="0" max="1"
-                                       id="linking-threshold"
-                                       oninput="$('#linking-threshold-value').text(parseFloat(this.value).toFixed(1));">
-                            </td>
-                            <td id="linking-threshold-value" align="right" style="width: 2.5em">0.6</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
+        <div class="d-flex justify-content-between" style="align-items: center;">
+            <span class="text-nowrap mr-2">Input corpus:</span>
+            <select class="custom-select" multiple id="corpus">
+                <option value="TABLEM:Link" selected>TableL</option>
+                <option value="WIKIPEDIA:Link" selected>Wikipedia</option>
+            </select>
+            <span class="ml-3 mr-2">nTop:</span>
+            <select class="custom-select" id="ntop">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+        <div class="d-flex justify-content-between" style="align-items: center; padding-top: 10px;">
+            <span class="text-nowrap mr-2">Linking threshold:</span>
+            <input type="range" value="0.6" class="slider" step="0.1" min="0" max="1"
+                   id="linking-threshold"
+                   oninput="$('#linking-threshold-value').text(parseFloat(this.value).toFixed(1));">
+            <span id="linking-threshold-value" class="ml-2" style="width: 2.5em">0.6</span>
+        </div>
+        <div class="d-flex justify-content-between" style="align-items: center; padding-top: 10px;">
+            <span class="text-nowrap mr-2">Inter-fact Consistency-based Rescoring:</span>
+            <input id="rescore" type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled"
+                   data-width="100">
+        </div>
     </div>
 </div>
