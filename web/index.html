@@ -16,6 +16,9 @@
 <script src="js/bootstrap_4.0.0.min.js"></script>
 <script src="js/nanobar_0.4.2.min.js"></script>
 <script src="js/bootstrap-multiselect.js"></script>
+<script src="js/particles_2.0.0.min.js"></script>
+
+<div id="particles-bg"></div>
 
 <div class="container col-xs-12 col-sm-12 col-md-7 col-lg-5 centered">
     <div class="container col-xs-12 col-sm-12 col-md-7 col-lg-7">
@@ -196,6 +199,8 @@
     if ($.cookie('part_search') == null) {
         // changeSearchMode();
     }
+
+    particlesJS.load('particles-bg', 'js/particles.json');
 </script>
 
 </body>
