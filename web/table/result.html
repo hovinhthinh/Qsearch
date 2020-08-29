@@ -353,7 +353,7 @@
             scoreToShow += ' (<span class="text-danger">' + rescoreDiff.toFixed(3) + '</span>)';
         }
         // caption & score
-        var wrapper = $('<div class="row"><div style="text-align:left" class="pl-3 col-2"></div><div style="text-align: left;" class="col-10 pl-0 t-caption"></div></div>');
+        var wrapper = $('<div class="row"><div style="text-align:left" class="pl-3 col-3"></div><div style="text-align: left;" class="col-9 pl-0 t-caption"></div></div>');
         wrapper.eq(0).children().eq(0).html('<span class="font-weight-bold" style="font-size: 12px" style="background-color:white;">&nbsp;<u>Score:</u> ' + scoreToShow + '&nbsp;</span>');
         if (si.qfact.tableIndex.caption != "") {
             var captionText = escapeText(si.qfact.tableIndex.caption);
