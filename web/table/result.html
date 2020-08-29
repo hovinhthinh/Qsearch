@@ -31,11 +31,15 @@
             <div class="input-group">
                 <button id="change-mode" class="btn"><i class="fas fa-sync-alt"></i></button>
                 <input autocomplete="off" hidden type="text" class="form-control shadow-2" placeholder="type" id="type">
-                <input autocomplete="off" hidden type="text" class="form-control shadow-2" placeholder="context" id="context">
-                <input autocomplete="off" hidden type="text" class="form-control shadow-2" placeholder="quantity" id="quantity">
+                <input autocomplete="off" hidden type="text" class="form-control shadow-2" placeholder="context"
+                       id="context">
+                <input autocomplete="off" hidden type="text" class="form-control shadow-2" placeholder="quantity"
+                       id="quantity">
                 <input autocomplete="off" style="height: 40px;" type="text" class="form-control shadow-2"
                        placeholder="what do you want to search for?" id="full">
-                <button style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; height: 40px;" type="button" class="btn btn-primary shadow-2" id="search">Search</button>
+                <button style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; height: 40px;" type="button"
+                        class="btn btn-primary shadow-2" id="search">Search
+                </button>
             </div>
             <br/>
             <div id="parsed" class="mb-3" style="white-space:nowrap;"></div>
@@ -248,7 +252,7 @@
                 pg.append($('<button class="btn btn-sm btn-link p-0 border-0 ml-1" onclick="showMoreText($(this).children().eq(0))"><u>...more</u></button>'));
             }
         } else {
-            pg.html('<span class="badge badge-pill badge-secondary">No Related Text</span>');
+            // pg.html('<span class="badge badge-pill badge-secondary">No Related Text</span>');
         }
         escapeText(si.qfact.tableIndex.pageContent);
         preTables.eq(0).children().eq(0).children().eq(1).append(pg);
@@ -349,7 +353,7 @@
             scoreToShow += ' (<span class="text-danger">' + rescoreDiff.toFixed(3) + '</span>)';
         }
         // caption & score
-        var wrapper = $('<div class="row"><div style="text-align:left" class="pl-3"></div><div style="text-align: center;" class="col-10 pl-0"></div></div>');
+        var wrapper = $('<div class="row"><div style="text-align:left" class="pl-3 col-2"></div><div style="text-align: left;" class="col-10 pl-0 t-caption"></div></div>');
         wrapper.eq(0).children().eq(0).html('<span class="font-weight-bold" style="font-size: 12px" style="background-color:white;">&nbsp;<u>Score:</u> ' + scoreToShow + '&nbsp;</span>');
         if (si.qfact.tableIndex.caption != "") {
             var captionText = escapeText(si.qfact.tableIndex.caption);
@@ -363,7 +367,7 @@
             captionText = captionText.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
             wrapper.eq(0).children().eq(1).html('<span class="badge badge-pill badge-success">Caption</span> <span class="font-weight-bold small">' + captionText + '</span>');
         } else {
-            wrapper.eq(0).children().eq(1).html('<span class="badge badge-pill badge-secondary">No Caption</span>&nbsp;');
+            // wrapper.eq(0).children().eq(1).html('<span class="badge badge-pill badge-secondary">No Caption</span>&nbsp;');
         }
         cell.append(wrapper);
 
@@ -416,10 +420,20 @@
         line += eCel.wrapAll('<div>').parent().html();
 
         var tCel = $('<td style="border-top: 1px solid gray;" class="pb-2">');
-        tCel.append(drawCollapsedTable(index, 0, instance.subInstances[0]));
 
+        var firstTable = drawCollapsedTable(index, 0, instance.subInstances[0]);
+
+        var firstTableHasCaption = firstTable.find('.t-caption').eq(0).html() != '';
+        if (!firstTableHasCaption) {
+            firstTable.find('.t-caption').remove();
+        }
+
+        tCel.append(firstTable);
         if (instance.subInstances.length > 1) {
             var wrapper = $('<div style="text-align: center;"><div style="display: inline-block;"></div></div>');
+            if (!firstTableHasCaption) {
+                wrapper.css('margin-top', '-1em');
+            }
             wrapper.eq(0).children().eq(0).html('<button class="border-0 btn btn-link p-0" onclick="showMoreTables(' + index + ', this)">Show more</button>');
             tCel.append(wrapper);
             var moreTCel = $('<div class="collapse">');
