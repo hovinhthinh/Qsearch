@@ -105,6 +105,24 @@ body {
     filter: brightness(0.9);
 }
 
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+}
+
 .line-surround {
     position: relative;
     text-align: center;
@@ -120,6 +138,7 @@ body {
     border-top: solid 1px lightgray;
     z-index: -1;
 }
+
 
 .dropdown-item-checked::after {
     position: absolute;
