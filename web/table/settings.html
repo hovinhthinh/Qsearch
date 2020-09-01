@@ -1,4 +1,5 @@
-<div class="card-header" style="background-color: #DAE6F8; border-color: #B8D2FA; border: 0px; border-radius: calc(.25rem - 1px);">
+<div class="card-header"
+     style="background-color: #DAE6F8; border-color: #B8D2FA; border: 0px; border-radius: calc(.25rem - 1px);">
     <a id='setting-toggle' data-toggle="collapse" href="#setting-body" style="text-decoration: none;">
             <span style="color: #3c78d8">
                 <strong>Settings</strong>&nbsp;&nbsp;<i class="float-right fa fa-chevron-up"></i>
@@ -7,7 +8,7 @@
 </div>
 <div id="setting-body" class="collapse show">
     <div class="card-body">
-        <div class="d-flex justify-content-between" style="align-items: center;">
+        <div class="d-flex" style="align-items: center;">
             <span class="text-nowrap mr-2">Input corpus:</span>
             <select class="custom-select" multiple id="corpus">
                 <option value="TABLEM:Link" selected>TableL</option>
@@ -21,7 +22,7 @@
                 <option value="100">100</option>
             </select>
         </div>
-        <div class="d-flex justify-content-between" style="align-items: center; padding-top: 10px;">
+        <div class="d-flex" style="align-items: center; padding-top: 10px;">
             <span class="text-nowrap mr-2">Linking threshold:</span>
             <input type="range" value="0.6" class="slider" step="0.1" min="0" max="1"
                    id="linking-threshold"
@@ -29,9 +30,115 @@
             <span id="linking-threshold-value" class="ml-2" style="width: 2.5em">0.6</span>
         </div>
         <div class="d-flex justify-content-between" style="align-items: center; padding-top: 10px;">
-            <span class="text-nowrap mr-2">Inter-fact Consistency-based Rescoring:</span>
+            <span class="text-nowrap mr-2">Inter-fact consistency-based rescoring:</span>
             <input id="rescore" type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled"
                    data-width="80" data-size="small">
         </div>
+        <div id="consistency-param" style="padding-top: 10px;" hidden>
+            <div class="line-surround">
+            <span style="background-color: #ffffff" class="pl-2 pr-2">
+                Consistency-learning parameters
+            </span>
+            </div>
+            <div class="row">
+                <div class="col-1 p-0"></div>
+                <div class="col-4 p-0">N-sampling:</div>
+                <div class="col-7 p-0 d-flex" style="align-items: center;">
+                    <input type="range" value="100" class="slider" step="50" min="50" max="500"
+                           id="consistency-param-nfold"
+                           oninput="$('#consistency-param-nfold-value').text(this.value);">
+                    <span id="consistency-param-nfold-value" class="ml-2" style="width: 3.5em">100</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 p-0"></div>
+                <div class="col-4 p-0">Probe rate:</div>
+                <div class="col-7 p-0 d-flex" style="align-items: center;">
+                    <input type="range" value="0.3" class="slider" step="0.1" min="0" max="0.9"
+                           id="consistency-param-prate"
+                           oninput="$('#consistency-param-prate-value').text(parseFloat(this.value).toFixed(1));">
+                    <span id="consistency-param-prate-value" class="ml-2" style="width: 3.5em">0.3</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 p-0"></div>
+                <div class="col-4 p-0">kNN-k:</div>
+                <div class="col-7 p-0 d-flex" style="align-items: center;">
+                    <input type="range" value="3" class="slider" step="1" min="1" max="10"
+                           id="consistency-param-k"
+                           oninput="$('#consistency-param-k-value').text(this.value);">
+                    <span id="consistency-param-k-value" class="ml-2" style="width: 3.5em">3</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 p-0"></div>
+                <div class="col-4 p-0">Interpolation (&rho;):</div>
+                <div class="col-7 p-0 d-flex" style="align-items: center;">
+                    <input type="range" value="0.1" class="slider" step="0.1" min="0" max="1"
+                           id="consistency-param-rho"
+                           oninput="$('#consistency-param-rho-value').text(parseFloat(this.value).toFixed(1));">
+                    <span id="consistency-param-rho-value" class="ml-2" style="width: 3.5em">0.1</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="rescore-weight" style="padding-top: 10px;" hidden>
+            <div class="line-surround">
+            <span style="background-color: #ffffff" class="pl-2 pr-2">
+                Component weights
+            </span>
+            </div>
+            <div class="row">
+                <div class="col-1 p-0"></div>
+                <div class="col-4 p-0">Q-column header:</div>
+                <div class="col-7 p-0 d-flex" style="align-items: center;">
+                    <input type="range" value="1.0" class="slider" step="0.05" min="0" max="1"
+                           id="rescore-weight-header"
+                           oninput="$('#rescore-weight-header-value').text(parseFloat(this.value).toFixed(2));">
+                    <span id="rescore-weight-header-value" class="ml-2" style="width: 3.5em">1.00</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 p-0"></div>
+                <div class="col-4 p-0">Table caption:</div>
+                <div class="col-7 p-0 d-flex" style="align-items: center;">
+                    <input type="range" value="0.9" class="slider" step="0.05" min="0" max="1"
+                           id="rescore-weight-caption"
+                           oninput="$('#rescore-weight-caption-value').text(parseFloat(this.value).toFixed(2));">
+                    <span id="rescore-weight-caption-value" class="ml-2" style="width: 3.5em">0.90</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 p-0"></div>
+                <div class="col-4 p-0">Same row cell:</div>
+                <div class="col-7 p-0 d-flex" style="align-items: center;">
+                    <input type="range" value="0.85" class="slider" step="0.05" min="0" max="1"
+                           id="rescore-weight-samerow"
+                           oninput="$('#rescore-weight-samerow-value').text(parseFloat(this.value).toFixed(2));">
+                    <span id="rescore-weight-samerow-value" class="ml-2" style="width: 3.5em">0.85</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 p-0"></div>
+                <div class="col-4 p-0">Page/Section title:</div>
+                <div class="col-7 p-0 d-flex" style="align-items: center;">
+                    <input type="range" value="0.85" class="slider" step="0.05" min="0" max="1"
+                           id="rescore-weight-title"
+                           oninput="$('#rescore-weight-title-value').text(parseFloat(this.value).toFixed(2));">
+                    <span id="rescore-weight-title-value" class="ml-2" style="width: 3.5em">0.85</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 p-0"></div>
+                <div class="col-4 p-0">Text in proximity:</div>
+                <div class="col-7 p-0 d-flex" style="align-items: center;">
+                    <input type="range" value="0.1" class="slider" step="0.05" min="0" max="1"
+                           id="rescore-weight-related-text"
+                           oninput="$('#rescore-weight-related-text-value').text(parseFloat(this.value).toFixed(2));">
+                    <span id="rescore-weight-related-text-value" class="ml-2" style="width: 3.5em">0.10</span>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

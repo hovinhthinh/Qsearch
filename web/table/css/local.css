@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;1,300&display=swap');
+
 body {
     font-family: Roboto !important;
 }
@@ -114,22 +115,20 @@ body {
     filter: brightness(0.9);
 }
 
-.slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background: #007bff;
-    cursor: pointer;
+.line-surround {
+    position: relative;
+    text-align: center;
 }
 
-.slider::-moz-range-thumb {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background: #007bff;
-    cursor: pointer;
+.line-surround:after {
+    display: inline-block;
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    border-top: solid 1px lightgray;
+    z-index: -1;
 }
 
 .dropdown-item-checked::after {
