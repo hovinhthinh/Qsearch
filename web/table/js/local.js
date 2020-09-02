@@ -172,28 +172,52 @@ var ntop = $.cookie('ntop_table');
 if (ntop != null) {
     $("#ntop option[value=" + ntop + "]").prop('selected', true);
 }
-var linkingThreshold = $.cookie('linking-threshold');
-if (linkingThreshold != null) {
-    $("#linking-threshold").val(linkingThreshold);
-    $("#linking-threshold").trigger('input');
-}
-var rescore = $.cookie('rescore_table');
-if (rescore != null && rescore == 'true') {
-    $("#rescore").prop('checked', true);
-}
-
 $("#corpus").on('change', function () {
     $.cookie('corpus_table', JSON.stringify($(this).val()));
 });
 $("#ntop").on('change', function () {
     $.cookie('ntop_table', this.value);
 });
-$("#linking-threshold").on('input', function () {
-    $.cookie('linking-threshold', this.value);
-});
+
+// consistency params
+$('#consistency-param').on('shown.bs.collapse', function (event) {
+    event.stopPropagation();
+})
+$('#consistency-param').on('hidden.bs.collapse', function (event) {
+    event.stopPropagation();
+})
+
+function hideParameter() {
+    if ($("#rescore").is(':checked')) {
+        $('#consistency-param').collapse('show');
+    } else {
+        $('#consistency-param').collapse('hide');
+    }
+}
+
 $("#rescore").on('change', function () {
     $.cookie('rescore_table', $(this).is(':checked'));
+    hideParameter();
 });
+
+var rescore = $.cookie('rescore_table');
+if (rescore != null && rescore == 'true') {
+    $("#rescore").prop('checked', true);
+    $('#consistency-param').addClass('show');
+}
+
+["linking-threshold",
+    "consistency-param-nfold", "consistency-param-prate", "consistency-param-k", "consistency-param-rho"]
+    .forEach(function (o) {
+        $("#" + o).on('input', function () {
+            $.cookie(o, this.value);
+        });
+
+        var value = $.cookie(o);
+        if (value != null) {
+            $("#" + o).val(value).trigger('input');
+        }
+    });
 
 // search mode.
 // load
