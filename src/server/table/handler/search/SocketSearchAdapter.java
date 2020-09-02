@@ -49,6 +49,37 @@ public class SocketSearchAdapter extends WebSocketAdapter {
 
         additionalParams.put("session", session);
 
+        // consistency params:
+        if (o.has("HEADER_TF_WEIGHT")) {
+            additionalParams.put("HEADER_TF_WEIGHT", Float.parseFloat(o.getString("HEADER_TF_WEIGHT")));
+        }
+        if (o.has("CAPTION_TF_WEIGHT")) {
+            additionalParams.put("CAPTION_TF_WEIGHT", Float.parseFloat(o.getString("CAPTION_TF_WEIGHT")));
+        }
+        if (o.has("TITLE_TF_WEIGHT")) {
+            additionalParams.put("TITLE_TF_WEIGHT", Float.parseFloat(o.getString("TITLE_TF_WEIGHT")));
+        }
+        if (o.has("SAME_ROW_TF_WEIGHT")) {
+            additionalParams.put("SAME_ROW_TF_WEIGHT", Float.parseFloat(o.getString("SAME_ROW_TF_WEIGHT")));
+        }
+        if (o.has("RELATED_TEXT_TF_WEIGHT")) {
+            additionalParams.put("RELATED_TEXT_TF_WEIGHT", Float.parseFloat(o.getString("RELATED_TEXT_TF_WEIGHT")));
+        }
+
+        if (o.has("CONSISTENCY_LEARNING_N_FOLD")) {
+            additionalParams.put("CONSISTENCY_LEARNING_N_FOLD", Integer.parseInt(o.getString("CONSISTENCY_LEARNING_N_FOLD")));
+        }
+        if (o.has("CONSISTENCY_LEARNING_PROBE_RATE")) {
+            additionalParams.put("CONSISTENCY_LEARNING_PROBE_RATE", Float.parseFloat(o.getString("CONSISTENCY_LEARNING_PROBE_RATE")));
+        }
+        if (o.has("KNN_ESTIMATOR_K")) {
+            additionalParams.put("KNN_ESTIMATOR_K", Integer.parseInt(o.getString("KNN_ESTIMATOR_K")));
+        }
+        if (o.has("INTERPOLATION_WEIGHT")) {
+            additionalParams.put("INTERPOLATION_WEIGHT", Float.parseFloat(o.getString("INTERPOLATION_WEIGHT")));
+        }
+        // end
+
         int nResult = o.has("ntop") ? Integer.parseInt(o.getString("ntop")) : 10;
 
         String sessionKey = SearchHandler.search(nResult, fullConstraint,
