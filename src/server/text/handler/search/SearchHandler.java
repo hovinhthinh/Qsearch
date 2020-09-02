@@ -43,10 +43,10 @@ public class SearchHandler extends HttpServlet {
             additionalParams.put("model", request.getParameter("model")); // EMBEDDING || KL
         }
         if (request.getParameter("alpha") != null) {
-            additionalParams.put("alpha", Float.parseFloat(request.getParameter("alpha")));
+            additionalParams.put("alpha", Double.parseDouble(request.getParameter("alpha")));
         }
         if (request.getParameter("lambda") != null) {
-            additionalParams.put("lambda", Float.parseFloat(request.getParameter("lambda")));
+            additionalParams.put("lambda", Double.parseDouble(request.getParameter("lambda")));
         }
 
         String ntop = request.getParameter("ntop");

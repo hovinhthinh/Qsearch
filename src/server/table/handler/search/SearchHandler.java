@@ -43,37 +43,37 @@ public class SearchHandler extends HttpServlet {
         }
 
         if ((v = request.getParameter("linking-threshold")) != null) {
-            additionalParams.put("linking-threshold", Float.parseFloat(v));
+            additionalParams.put("linking-threshold", Double.parseDouble(v));
         }
         
         // consistency params:
         if ((v = request.getParameter("HEADER_TF_WEIGHT")) != null) {
-            additionalParams.put("HEADER_TF_WEIGHT", Float.parseFloat(v));
+            additionalParams.put("HEADER_TF_WEIGHT", Double.parseDouble(v));
         }
         if ((v = request.getParameter("CAPTION_TF_WEIGHT")) != null) {
-            additionalParams.put("CAPTION_TF_WEIGHT", Float.parseFloat(v));
+            additionalParams.put("CAPTION_TF_WEIGHT", Double.parseDouble(v));
         }
         if ((v = request.getParameter("TITLE_TF_WEIGHT")) != null) {
-            additionalParams.put("TITLE_TF_WEIGHT", Float.parseFloat(v));
+            additionalParams.put("TITLE_TF_WEIGHT", Double.parseDouble(v));
         }
         if ((v = request.getParameter("SAME_ROW_TF_WEIGHT")) != null) {
-            additionalParams.put("SAME_ROW_TF_WEIGHT", Float.parseFloat(v));
+            additionalParams.put("SAME_ROW_TF_WEIGHT", Double.parseDouble(v));
         }
         if ((v = request.getParameter("RELATED_TEXT_TF_WEIGHT")) != null) {
-            additionalParams.put("RELATED_TEXT_TF_WEIGHT", Float.parseFloat(v));
+            additionalParams.put("RELATED_TEXT_TF_WEIGHT", Double.parseDouble(v));
         }
 
         if ((v = request.getParameter("CONSISTENCY_LEARNING_N_FOLD")) != null) {
             additionalParams.put("CONSISTENCY_LEARNING_N_FOLD", Integer.parseInt(v));
         }
         if ((v = request.getParameter("CONSISTENCY_LEARNING_PROBE_RATE")) != null) {
-            additionalParams.put("CONSISTENCY_LEARNING_PROBE_RATE", Float.parseFloat(v));
+            additionalParams.put("CONSISTENCY_LEARNING_PROBE_RATE", Double.parseDouble(v));
         }
         if ((v = request.getParameter("KNN_ESTIMATOR_K")) != null) {
             additionalParams.put("KNN_ESTIMATOR_K", Integer.parseInt(v));
         }
         if ((v = request.getParameter("INTERPOLATION_WEIGHT")) != null) {
-            additionalParams.put("INTERPOLATION_WEIGHT", Float.parseFloat(v));
+            additionalParams.put("INTERPOLATION_WEIGHT", Double.parseDouble(v));
         }
         // end
 
