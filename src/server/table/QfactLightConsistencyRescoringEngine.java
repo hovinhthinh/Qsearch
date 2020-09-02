@@ -3,12 +3,14 @@ package server.table;
 import model.context.IDF;
 import model.quantity.Quantity;
 import model.quantity.QuantityDomain;
+import nlp.Glove;
 import nlp.NLP;
 import org.eclipse.jetty.websocket.api.Session;
 import storage.table.index.TableIndex;
 import storage.table.index.TableIndexStorage;
 import uk.ac.susx.informatics.Morpha;
 import util.Pair;
+import util.Vectors;
 import util.headword.StringUtils;
 
 import java.io.IOException;
@@ -26,15 +28,33 @@ class KNNEstimator {
         public double consistencyScr;
         public int nProbeTimes;
 
+        public double[] vector;
+
         public DataPoint(ResultInstance.SubInstance si, HashMap<String, Double> termTfidfMap) {
             this.si = si;
             this.termTfidfMap = termTfidfMap;
             this.consistencyScr = 0;
             this.nProbeTimes = 0;
+
+            // init vector
+            this.vector = new double[Glove.DIM];
+
+            double sumIdf = 0;
+            for (Map.Entry<String, Double> e : termTfidfMap.entrySet()) {
+                double[] emb = Glove.getEmbedding(e.getKey());
+                if (emb == null) {
+                    continue;
+                }
+                sumIdf += e.getValue();
+                this.vector = Vectors.sum(this.vector, Vectors.multiply(emb, e.getValue()));
+            }
+            if (sumIdf != 0) {
+                this.vector = Vectors.multiply(this.vector, 1 / sumIdf);
+            }
         }
 
         // using Vector Space Model here, computing Cosine similarity
-        public double dist(DataPoint o, double quantityMeanValue) {
+        public double distOld(DataPoint o, double quantityMeanValue) {
             double dotProd = 0;
             double length = 0, oLength = 0;
 
@@ -63,6 +83,23 @@ class KNNEstimator {
             oLength += oQValue * oQValue;
 
             return 0.5 - dotProd / Math.sqrt(length) / Math.sqrt(oLength) / 2;
+        }
+
+        // using Vector Space Model here, computing Cosine similarity
+        public double dist(DataPoint o, double quantityMeanValue) {
+            double termDist = Vectors.cosineD(vector, o.vector);
+
+            // TODO: Alternative: compute log version of quantity values, that would make the relative distance less sensitive for bigger numbers.
+            // quantity values
+            Quantity q = Quantity.fromQuantityString(si.qfact.quantity);
+            Quantity oQ = Quantity.fromQuantityString(o.si.qfact.quantity);
+
+            double qValue = q.value * QuantityDomain.getScale(q);
+            double oQValue = oQ.value * QuantityDomain.getScale(oQ);
+
+            double quantityRelDist = Math.min(Math.abs(qValue - oQValue) / Math.max(Math.abs(qValue), Math.abs(oQValue)), 1);
+            return (1 - QfactLightConsistencyRescoringEngine.QUANTITY_FEATURE_BOOST) * termDist
+                    + QfactLightConsistencyRescoringEngine.QUANTITY_FEATURE_BOOST * quantityRelDist;
         }
     }
 
@@ -134,8 +171,8 @@ public class QfactLightConsistencyRescoringEngine {
     public static double CAPTION_TF_WEIGHT = TableQuery.CAPTION_MATCH_WEIGHT;
     public static double TITLE_TF_WEIGHT = TableQuery.TITLE_MATCH_WEIGHT;
     public static double SAME_ROW_TF_WEIGHT = TableQuery.SAME_ROW_MATCH_WEIGHT;
-    public static double RELATED_TEXT_TF_WEIGHT = 0;
-    public static double QUANTITY_FEATURE_BOOST = 10;
+    public static double RELATED_TEXT_TF_WEIGHT = 0.1;
+    public static double QUANTITY_FEATURE_BOOST = 0.1;
 
     // params for consistency learning
     public static int CONSISTENCY_LEARNING_N_FOLD = 100;
