@@ -42,7 +42,7 @@ public class SocketSearchAdapter extends WebSocketAdapter {
         }
 
         if (o.has("linking-threshold")) {
-            additionalParams.put("linking-threshold", Float.parseFloat(o.getString("linking-threshold")));
+            additionalParams.put("linking-threshold", Double.parseDouble(o.getString("linking-threshold")));
         }
 
         boolean performConsistencyRescoring = o.has("rescore") && o.getString("rescore").equals("true");
@@ -51,32 +51,32 @@ public class SocketSearchAdapter extends WebSocketAdapter {
 
         // consistency params:
         if (o.has("HEADER_TF_WEIGHT")) {
-            additionalParams.put("HEADER_TF_WEIGHT", Float.parseFloat(o.getString("HEADER_TF_WEIGHT")));
+            additionalParams.put("HEADER_TF_WEIGHT", Double.parseDouble(o.getString("HEADER_TF_WEIGHT")));
         }
         if (o.has("CAPTION_TF_WEIGHT")) {
-            additionalParams.put("CAPTION_TF_WEIGHT", Float.parseFloat(o.getString("CAPTION_TF_WEIGHT")));
+            additionalParams.put("CAPTION_TF_WEIGHT", Double.parseDouble(o.getString("CAPTION_TF_WEIGHT")));
         }
         if (o.has("TITLE_TF_WEIGHT")) {
-            additionalParams.put("TITLE_TF_WEIGHT", Float.parseFloat(o.getString("TITLE_TF_WEIGHT")));
+            additionalParams.put("TITLE_TF_WEIGHT", Double.parseDouble(o.getString("TITLE_TF_WEIGHT")));
         }
         if (o.has("SAME_ROW_TF_WEIGHT")) {
-            additionalParams.put("SAME_ROW_TF_WEIGHT", Float.parseFloat(o.getString("SAME_ROW_TF_WEIGHT")));
+            additionalParams.put("SAME_ROW_TF_WEIGHT", Double.parseDouble(o.getString("SAME_ROW_TF_WEIGHT")));
         }
         if (o.has("RELATED_TEXT_TF_WEIGHT")) {
-            additionalParams.put("RELATED_TEXT_TF_WEIGHT", Float.parseFloat(o.getString("RELATED_TEXT_TF_WEIGHT")));
+            additionalParams.put("RELATED_TEXT_TF_WEIGHT", Double.parseDouble(o.getString("RELATED_TEXT_TF_WEIGHT")));
         }
 
         if (o.has("CONSISTENCY_LEARNING_N_FOLD")) {
             additionalParams.put("CONSISTENCY_LEARNING_N_FOLD", Integer.parseInt(o.getString("CONSISTENCY_LEARNING_N_FOLD")));
         }
         if (o.has("CONSISTENCY_LEARNING_PROBE_RATE")) {
-            additionalParams.put("CONSISTENCY_LEARNING_PROBE_RATE", Float.parseFloat(o.getString("CONSISTENCY_LEARNING_PROBE_RATE")));
+            additionalParams.put("CONSISTENCY_LEARNING_PROBE_RATE", Double.parseDouble(o.getString("CONSISTENCY_LEARNING_PROBE_RATE")));
         }
         if (o.has("KNN_ESTIMATOR_K")) {
             additionalParams.put("KNN_ESTIMATOR_K", Integer.parseInt(o.getString("KNN_ESTIMATOR_K")));
         }
         if (o.has("INTERPOLATION_WEIGHT")) {
-            additionalParams.put("INTERPOLATION_WEIGHT", Float.parseFloat(o.getString("INTERPOLATION_WEIGHT")));
+            additionalParams.put("INTERPOLATION_WEIGHT", Double.parseDouble(o.getString("INTERPOLATION_WEIGHT")));
         }
         // end
 

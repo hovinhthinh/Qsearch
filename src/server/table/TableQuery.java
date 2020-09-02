@@ -224,7 +224,7 @@ public class TableQuery {
 
         // linking threshold
         double linkingThreshold = additionalParameters != null && additionalParameters.containsKey("linking-threshold")
-                ? (float) additionalParameters.get("linking-threshold") : -1; // default is no-threshold
+                ? (double) additionalParameters.get("linking-threshold") : -1; // default is no-threshold
 
         // retrieve additional parameters
         Session session = additionalParameters == null ? null : (Session) additionalParameters.get("session");

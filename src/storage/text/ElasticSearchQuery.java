@@ -217,9 +217,9 @@ public class ElasticSearchQuery {
         ContextMatcher explicitMatcher = null;
         if (explicitMatchingModel != null) {
             if (explicitMatchingModel.equals("EMBEDDING")) {
-                explicitMatcher = new ContextEmbeddingMatcher((float) additionalParameters.get("alpha"));
+                explicitMatcher = new ContextEmbeddingMatcher((double) additionalParameters.get("alpha"));
             } else {
-                explicitMatcher = new KullBackLeiblerMatcher((float) additionalParameters.get("lambda"));
+                explicitMatcher = new KullBackLeiblerMatcher((double) additionalParameters.get("lambda"));
             }
             LOGGER.info("Using explicitly given matcher: " + explicitMatchingModel);
         }

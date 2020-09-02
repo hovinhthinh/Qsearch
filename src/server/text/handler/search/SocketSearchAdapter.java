@@ -46,10 +46,10 @@ public class SocketSearchAdapter extends WebSocketAdapter {
             additionalParams.put("model", o.getString("model")); // EMBEDDING || KL
         }
         if (o.has("alpha")) {
-            additionalParams.put("alpha", Float.parseFloat(o.getString("alpha")));
+            additionalParams.put("alpha", Double.parseDouble(o.getString("alpha")));
         }
         if (o.has("lambda")) {
-            additionalParams.put("lambda", Float.parseFloat(o.getString("lambda")));
+            additionalParams.put("lambda", Double.parseDouble(o.getString("lambda")));
         }
 
         additionalParams.put("session", session);
