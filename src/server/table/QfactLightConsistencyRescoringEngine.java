@@ -172,6 +172,7 @@ public class QfactLightConsistencyRescoringEngine {
     public static double TITLE_TF_WEIGHT = TableQuery.TITLE_MATCH_WEIGHT;
     public static double SAME_ROW_TF_WEIGHT = TableQuery.SAME_ROW_MATCH_WEIGHT;
     public static double RELATED_TEXT_TF_WEIGHT = 0.1;
+
     public static double QUANTITY_FEATURE_BOOST = 0.1;
 
     // params for consistency learning
@@ -180,8 +181,12 @@ public class QfactLightConsistencyRescoringEngine {
     public static int KNN_ESTIMATOR_K = 3;
     public static double INTERPOLATION_WEIGHT = 0.1;
 
-    private static HashMap<String, Double> qfactLight2TermTfidfMap(QfactLight f, TableIndex ti) {
+    private static HashMap<String, Double> qfactLight2TermTfidfMap(QfactLight f, TableIndex ti, Map weightMap) {
         HashMap<String, Double> termTfidfMap = new HashMap<>();
+
+        if (weightMap == null) {
+            weightMap = new HashMap<>();
+        }
 
         // HEADER
         for (String fX : NLP.splitSentence(f.headerContext.toLowerCase())) {
@@ -189,7 +194,7 @@ public class QfactLightConsistencyRescoringEngine {
                 continue;
             }
             fX = StringUtils.stem(fX, Morpha.any);
-            termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + HEADER_TF_WEIGHT);
+            termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + (double) weightMap.getOrDefault("HEADER_TF_WEIGHT", HEADER_TF_WEIGHT));
         }
         // CAPTION
         for (String fX : NLP.splitSentence(ti.caption.toLowerCase())) {
@@ -197,7 +202,7 @@ public class QfactLightConsistencyRescoringEngine {
                 continue;
             }
             fX = StringUtils.stem(fX, Morpha.any);
-            termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + CAPTION_TF_WEIGHT);
+            termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + (double) weightMap.getOrDefault("CAPTION_TF_WEIGHT", CAPTION_TF_WEIGHT));
         }
         // TITLES
         for (String title : Arrays.asList(ti.pageTitle, ti.sectionTitles)) {
@@ -206,7 +211,7 @@ public class QfactLightConsistencyRescoringEngine {
                     continue;
                 }
                 fX = StringUtils.stem(fX, Morpha.any);
-                termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + TITLE_TF_WEIGHT);
+                termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + (double) weightMap.getOrDefault("TITLE_TF_WEIGHT", TITLE_TF_WEIGHT));
             }
         }
         // SAME ROW
@@ -219,7 +224,7 @@ public class QfactLightConsistencyRescoringEngine {
                     continue;
                 }
                 fX = StringUtils.stem(fX, Morpha.any);
-                termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + SAME_ROW_TF_WEIGHT);
+                termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + (double) weightMap.getOrDefault("SAME_ROW_TF_WEIGHT", SAME_ROW_TF_WEIGHT));
             }
         }
         // PAGE CONTENT
@@ -229,7 +234,7 @@ public class QfactLightConsistencyRescoringEngine {
                     continue;
                 }
                 fX = StringUtils.stem(fX, Morpha.any);
-                termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + RELATED_TEXT_TF_WEIGHT);
+                termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + (double) weightMap.getOrDefault("RELATED_TEXT_TF_WEIGHT", RELATED_TEXT_TF_WEIGHT));
             }
         }
 
@@ -244,25 +249,31 @@ public class QfactLightConsistencyRescoringEngine {
         return termTfidfMap;
     }
 
-    public static void consistencyBasedRescore(ArrayList<ResultInstance.SubInstance> priorScoredQfacts, Session session) {
+    public static void consistencyBasedRescore(ArrayList<ResultInstance.SubInstance> priorScoredQfacts, Map params, Session session) {
+        if (params == null) {
+            params = new HashMap<>();
+        }
         ArrayList<KNNEstimator.DataPoint> candidates = new ArrayList<>();
 
         for (int i = 0; i < priorScoredQfacts.size(); ++i) {
             ResultInstance.SubInstance si = priorScoredQfacts.get(i);
             si.rescore = si.score;
-            candidates.add(new KNNEstimator.DataPoint(si, qfactLight2TermTfidfMap(si.qfact, TableIndexStorage.get(si.qfact.tableId))));
+            candidates.add(new KNNEstimator.DataPoint(si, qfactLight2TermTfidfMap(si.qfact, TableIndexStorage.get(si.qfact.tableId), params)));
         }
 
         // Now perform consistency-based re-scoring.
-        int nProbe = (int) (candidates.size() * CONSISTENCY_LEARNING_PROBE_RATE + 1e-6);
+        int nProbe = (int) (candidates.size() * (double) params.getOrDefault("CONSISTENCY_LEARNING_PROBE_RATE", CONSISTENCY_LEARNING_PROBE_RATE) + 1e-6);
         if (nProbe == 0) {
             return;
         }
 
+        int kNN_k = (int) params.getOrDefault("KNN_ESTIMATOR_K", KNN_ESTIMATOR_K);
+        int nFold = (int) params.getOrDefault("CONSISTENCY_LEARNING_N_FOLD", CONSISTENCY_LEARNING_N_FOLD);
         int lastPercent = 0;
-        for (int i = 0; i < CONSISTENCY_LEARNING_N_FOLD; ++i) {
+
+        for (int i = 0; i < nFold; ++i) {
             Collections.shuffle(candidates);
-            KNNEstimator estimator = new KNNEstimator(candidates.subList(nProbe, candidates.size()), KNN_ESTIMATOR_K);
+            KNNEstimator estimator = new KNNEstimator(candidates.subList(nProbe, candidates.size()), kNN_k);
             for (int j = 0; j < nProbe; ++j) {
                 KNNEstimator.DataPoint p = candidates.get(j);
                 p.consistencyScr += estimator.estimate(p);
@@ -271,7 +282,7 @@ public class QfactLightConsistencyRescoringEngine {
 
             // log progress
             if (session != null) {
-                int currentPercent = (int) ((double) (i + 1) * 100 / CONSISTENCY_LEARNING_N_FOLD);
+                int currentPercent = (int) ((double) (i + 1) * 100 / nFold);
                 if (currentPercent > lastPercent) {
                     lastPercent = currentPercent;
                     try {
@@ -287,7 +298,7 @@ public class QfactLightConsistencyRescoringEngine {
         for (int i = 0; i < candidates.size(); ++i) {
             KNNEstimator.DataPoint p = candidates.get(i);
             if (p.nProbeTimes > 0) {
-                p.si.rescore = p.si.score + INTERPOLATION_WEIGHT * (p.consistencyScr / p.nProbeTimes - p.si.score);
+                p.si.rescore = p.si.score + (double) params.getOrDefault("INTERPOLATION_WEIGHT", INTERPOLATION_WEIGHT) * (p.consistencyScr / p.nProbeTimes - p.si.score);
             }
         }
     }

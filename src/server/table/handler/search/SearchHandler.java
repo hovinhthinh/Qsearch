@@ -37,30 +37,58 @@ public class SearchHandler extends HttpServlet {
         String fullConstraint = request.getParameter("full");
 
         Map additionalParams = new HashMap();
-        if (request.getParameter("corpus") != null) {
-            additionalParams.put("corpus", request.getParameter("corpus"));
+        String v;
+        if ((v = request.getParameter("corpus")) != null) {
+            additionalParams.put("corpus", v);
         }
 
-        if (request.getParameter("linking-threshold") != null) {
-            additionalParams.put("linking-threshold", Float.parseFloat(request.getParameter("linking-threshold")));
+        if ((v = request.getParameter("linking-threshold")) != null) {
+            additionalParams.put("linking-threshold", Float.parseFloat(v));
+        }
+        
+        // consistency params:
+        if ((v = request.getParameter("HEADER_TF_WEIGHT")) != null) {
+            additionalParams.put("HEADER_TF_WEIGHT", Float.parseFloat(v));
+        }
+        if ((v = request.getParameter("CAPTION_TF_WEIGHT")) != null) {
+            additionalParams.put("CAPTION_TF_WEIGHT", Float.parseFloat(v));
+        }
+        if ((v = request.getParameter("TITLE_TF_WEIGHT")) != null) {
+            additionalParams.put("TITLE_TF_WEIGHT", Float.parseFloat(v));
+        }
+        if ((v = request.getParameter("SAME_ROW_TF_WEIGHT")) != null) {
+            additionalParams.put("SAME_ROW_TF_WEIGHT", Float.parseFloat(v));
+        }
+        if ((v = request.getParameter("RELATED_TEXT_TF_WEIGHT")) != null) {
+            additionalParams.put("RELATED_TEXT_TF_WEIGHT", Float.parseFloat(v));
         }
 
-        String ntop = request.getParameter("ntop");
-        int nResult = ntop != null ? Integer.parseInt(ntop) : 10;
+        if ((v = request.getParameter("CONSISTENCY_LEARNING_N_FOLD")) != null) {
+            additionalParams.put("CONSISTENCY_LEARNING_N_FOLD", Integer.parseInt(v));
+        }
+        if ((v = request.getParameter("CONSISTENCY_LEARNING_PROBE_RATE")) != null) {
+            additionalParams.put("CONSISTENCY_LEARNING_PROBE_RATE", Float.parseFloat(v));
+        }
+        if ((v = request.getParameter("KNN_ESTIMATOR_K")) != null) {
+            additionalParams.put("KNN_ESTIMATOR_K", Integer.parseInt(v));
+        }
+        if ((v = request.getParameter("INTERPOLATION_WEIGHT")) != null) {
+            additionalParams.put("INTERPOLATION_WEIGHT", Float.parseFloat(v));
+        }
+        // end
+
+        int nResult = (v = request.getParameter("ntop")) != null ? Integer.parseInt(v) : 10;
 
         httpServletResponse.setCharacterEncoding("utf-8");
 
-        String rescore = request.getParameter("rescore");
-
         Set<String> groundtruth = null;
         try {
-            String gt = request.getParameter("groundtruth");
-            groundtruth = new HashSet<>(Gson.fromJson(gt, new ArrayList<String>().getClass()));
+            groundtruth = new HashSet<>(Gson.fromJson(request.getParameter("groundtruth"), new ArrayList<String>().getClass()));
         } catch (Exception e) {
         }
 
         String sessionKey = search(nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint,
-                rescore != null && rescore.equals("true"), additionalParams, groundtruth);
+                (v = request.getParameter("rescore")) != null && v.equals("true"), additionalParams, groundtruth);
 
         httpServletResponse.getWriter().print(new JSONObject().put("s", sessionKey).toString());
 
