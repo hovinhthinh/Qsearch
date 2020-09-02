@@ -628,7 +628,13 @@
             corpus: JSON.stringify($("#corpus").val()),
             ntop: $("#ntop").val(),
             rescore: $("#rescore").is(':checked').toString(),
-            'linking-threshold': $("#linking-threshold").val()
+            'linking-threshold': $("#linking-threshold").val(),
+
+            // for consistency learning:
+            CONSISTENCY_LEARNING_N_FOLD: $('#consistency-param-nfold').val(),
+            CONSISTENCY_LEARNING_PROBE_RATE: $('#consistency-param-prate').val(),
+            KNN_ESTIMATOR_K: $('#consistency-param-k').val(),
+            INTERPOLATION_WEIGHT: $('#consistency-param-rho').val()
         };
         if ($.cookie('part_search_table') != "1") {
             if ($("#full").val().trim() == "") {
