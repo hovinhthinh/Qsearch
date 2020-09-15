@@ -25,10 +25,14 @@ public class ResultCacheHandler extends HttpServlet {
         return key;
     }
 
+    public static String getResultFromSession(String s) {
+        return CACHE.getIfPresent(s);
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         httpServletResponse.setCharacterEncoding("utf-8");
-        String r = CACHE.getIfPresent(request.getParameter("s"));
+        String r = getResultFromSession(request.getParameter("s"));
         if (r != null) {
             httpServletResponse.getWriter().print(r);
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);
