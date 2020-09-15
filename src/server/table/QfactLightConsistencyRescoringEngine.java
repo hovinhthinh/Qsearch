@@ -228,14 +228,12 @@ public class QfactLightConsistencyRescoringEngine {
             }
         }
         // PAGE CONTENT
-        if (RELATED_TEXT_TF_WEIGHT > 0) {
-            for (String fX : NLP.splitSentence(ti.pageContent.toLowerCase())) {
-                if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
-                    continue;
-                }
-                fX = StringUtils.stem(fX, Morpha.any);
-                termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + (double) weightMap.getOrDefault("RELATED_TEXT_TF_WEIGHT", RELATED_TEXT_TF_WEIGHT));
+        for (String fX : NLP.splitSentence(ti.pageContent.toLowerCase())) {
+            if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                continue;
             }
+            fX = StringUtils.stem(fX, Morpha.any);
+            termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + (double) weightMap.getOrDefault("RELATED_TEXT_TF_WEIGHT", RELATED_TEXT_TF_WEIGHT));
         }
 
         double sum = 0;
