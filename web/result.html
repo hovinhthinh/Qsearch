@@ -29,17 +29,22 @@
             <div class="input-group">
                 <button id="change-mode" class="btn"><i class="fas fa-sync-alt"></i></button>
                 <input autocomplete="off" hidden type="text" class="form-control shadow-2" placeholder="type" id="type">
-                <input autocomplete="off" hidden type="text" class="form-control shadow-2" placeholder="context" id="context">
-                <input autocomplete="off" hidden type="text" class="form-control shadow-2" placeholder="quantity" id="quantity">
+                <input autocomplete="off" hidden type="text" class="form-control shadow-2" placeholder="context"
+                       id="context">
+                <input autocomplete="off" hidden type="text" class="form-control shadow-2" placeholder="quantity"
+                       id="quantity">
                 <input autocomplete="off" style="height: 40px;" type="text" class="form-control shadow-2"
                        placeholder="what do you want to search for?" id="full">
-                <button style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; height: 40px;" type="button" class="btn btn-success shadow-2" id="search">Search</button>
+                <button style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; height: 40px;" type="button"
+                        class="btn btn-success shadow-2" id="search">Search
+                </button>
             </div>
             <br/>
             <div id="parsed" class="mb-3" style="white-space:nowrap;"></div>
         </div>
         <div class="col-xs-3 col-sm-3 col-md-3 col-lg-5" style="margin-top: 15px">
-            <div class="float-right card shadow-2" style="border-color: #d6e9c6; border: 0px; z-index: 10 !important;" id="settings">
+            <div class="float-right card shadow-2" style="border-color: #d6e9c6; border: 0px; z-index: 10 !important;"
+                 id="settings">
             </div>
         </div>
     </div>
@@ -336,6 +341,7 @@
 
     function search() {
         var params = {
+            cache: 'true', // this is only effective for AJAX call
             corpus: JSON.stringify($("#corpus").val()),
             model: $("#model").val(),
             lambda: $("#lambda").val(),

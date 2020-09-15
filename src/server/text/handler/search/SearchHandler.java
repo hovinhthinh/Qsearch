@@ -35,18 +35,19 @@ public class SearchHandler extends HttpServlet {
         String quantityConstraint = request.getParameter("quantity");
         String fullConstraint = request.getParameter("full");
 
+        String s;
         Map additionalParams = new HashMap();
-        if (request.getParameter("corpus") != null) {
-            additionalParams.put("corpus", request.getParameter("corpus")); // ANY || STICS || NYT
+        if ((s = request.getParameter("corpus")) != null) {
+            additionalParams.put("corpus", s); // ANY || STICS || NYT
         }
-        if (request.getParameter("model") != null) {
-            additionalParams.put("model", request.getParameter("model")); // EMBEDDING || KL
+        if ((s = request.getParameter("model")) != null) {
+            additionalParams.put("model", s); // EMBEDDING || KL
         }
-        if (request.getParameter("alpha") != null) {
-            additionalParams.put("alpha", Double.parseDouble(request.getParameter("alpha")));
+        if ((s = request.getParameter("alpha")) != null) {
+            additionalParams.put("alpha", Double.parseDouble(s));
         }
-        if (request.getParameter("lambda") != null) {
-            additionalParams.put("lambda", Double.parseDouble(request.getParameter("lambda")));
+        if ((s = request.getParameter("lambda")) != null) {
+            additionalParams.put("lambda", Double.parseDouble(s));
         }
 
         String ntop = request.getParameter("ntop");
@@ -63,7 +64,11 @@ public class SearchHandler extends HttpServlet {
 
         String sessionKey = search(null, nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint, additionalParams, groundtruth);
 
-        httpServletResponse.getWriter().print(new JSONObject().put("s", sessionKey).toString());
+        if ((s = request.getParameter("cache")) != null && s.equals("true")) {
+            httpServletResponse.getWriter().print(new JSONObject().put("s", sessionKey).toString());
+        } else {
+            httpServletResponse.getWriter().print(ResultCacheHandler.getResultFromSession(sessionKey));
+        }
 
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
