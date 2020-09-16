@@ -30,6 +30,15 @@ class KNNEstimator {
 
         public double[] vector;
 
+        private Quantity siQuantity = null;
+
+        private Quantity getQuantity() {
+            if (siQuantity != null) {
+                return siQuantity;
+            }
+            return siQuantity = Quantity.fromQuantityString(si.qfact.quantity);
+        }
+
         public DataPoint(ResultInstance.SubInstance si, HashMap<String, Double> termTfidfMap) {
             this.si = si;
             this.termTfidfMap = termTfidfMap;
@@ -73,8 +82,8 @@ class KNNEstimator {
             }
 
             // quantity values
-            Quantity q = Quantity.fromQuantityString(si.qfact.quantity);
-            Quantity oQ = Quantity.fromQuantityString(o.si.qfact.quantity);
+            Quantity q = getQuantity();
+            Quantity oQ = o.getQuantity();
 
             double qValue = q.value * QuantityDomain.getScale(q) / quantityMeanValue * QfactLightConsistencyRescoringEngine.QUANTITY_FEATURE_BOOST;
             double oQValue = oQ.value * QuantityDomain.getScale(oQ) / quantityMeanValue * QfactLightConsistencyRescoringEngine.QUANTITY_FEATURE_BOOST;
@@ -91,8 +100,8 @@ class KNNEstimator {
 
             // TODO: Alternative: compute log version of quantity values, that would make the relative distance less sensitive for bigger numbers.
             // quantity values
-            Quantity q = Quantity.fromQuantityString(si.qfact.quantity);
-            Quantity oQ = Quantity.fromQuantityString(o.si.qfact.quantity);
+            Quantity q = getQuantity();
+            Quantity oQ = o.getQuantity();
 
             double qValue = q.value * QuantityDomain.getScale(q);
             double oQValue = oQ.value * QuantityDomain.getScale(oQ);
