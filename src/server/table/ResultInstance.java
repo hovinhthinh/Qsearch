@@ -14,13 +14,12 @@ public class ResultInstance implements Comparable<ResultInstance> {
         public QfactLight qfact;
         public double score;
 
-        // EXPERIMENTAL
         public Double rescore; // this is after applying consistency-based rescoring
 
         public static class ContextMatchTrace {
             public String token;
             public double score;
-            public String place; // HEADER, CAPTION, TITLE, (maybe more...)
+            public String place; // HEADER, CAPTION, TITLE, SAME_ROW, RELATED_TEXT
 
             public ContextMatchTrace(String token, double score, String place) {
                 this.token = token;
