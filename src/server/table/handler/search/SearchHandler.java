@@ -90,7 +90,11 @@ public class SearchHandler extends HttpServlet {
         String sessionKey = search(nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint,
                 (v = request.getParameter("rescore")) != null && v.equals("true"), additionalParams, groundtruth);
 
-        httpServletResponse.getWriter().print(new JSONObject().put("s", sessionKey).toString());
+        if ((v = request.getParameter("cache")) != null && v.equals("true")) {
+            httpServletResponse.getWriter().print(new JSONObject().put("s", sessionKey).toString());
+        } else {
+            httpServletResponse.getWriter().print(ResultCacheHandler.getResultFromSession(sessionKey));
+        }
 
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }

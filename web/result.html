@@ -341,7 +341,6 @@
 
     function search() {
         var params = {
-            cache: 'true', // this is only effective for AJAX call
             corpus: JSON.stringify($("#corpus").val()),
             model: $("#model").val(),
             lambda: $("#lambda").val(),
@@ -396,6 +395,7 @@
                 $("#quantity").removeAttr('disabled');
             };
         } else {
+            params['cache'] = 'true'; // this is only effective for AJAX call
             $.ajax({
                 type: "GET",
                 url: "/search",

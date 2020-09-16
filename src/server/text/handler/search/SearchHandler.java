@@ -35,36 +35,34 @@ public class SearchHandler extends HttpServlet {
         String quantityConstraint = request.getParameter("quantity");
         String fullConstraint = request.getParameter("full");
 
-        String s;
+        String v;
         Map additionalParams = new HashMap();
-        if ((s = request.getParameter("corpus")) != null) {
-            additionalParams.put("corpus", s); // ANY || STICS || NYT
+        if ((v = request.getParameter("corpus")) != null) {
+            additionalParams.put("corpus", v); // ANY || STICS || NYT
         }
-        if ((s = request.getParameter("model")) != null) {
-            additionalParams.put("model", s); // EMBEDDING || KL
+        if ((v = request.getParameter("model")) != null) {
+            additionalParams.put("model", v); // EMBEDDING || KL
         }
-        if ((s = request.getParameter("alpha")) != null) {
-            additionalParams.put("alpha", Double.parseDouble(s));
+        if ((v = request.getParameter("alpha")) != null) {
+            additionalParams.put("alpha", Double.parseDouble(v));
         }
-        if ((s = request.getParameter("lambda")) != null) {
-            additionalParams.put("lambda", Double.parseDouble(s));
+        if ((v = request.getParameter("lambda")) != null) {
+            additionalParams.put("lambda", Double.parseDouble(v));
         }
 
-        String ntop = request.getParameter("ntop");
-        int nResult = ntop != null ? Integer.parseInt(ntop) : 10;
+        int nResult = (v = request.getParameter("ntop")) != null ? Integer.parseInt(v) : 10;
 
         httpServletResponse.setCharacterEncoding("utf-8");
 
         Set<String> groundtruth = null;
         try {
-            String gt = request.getParameter("groundtruth");
-            groundtruth = new HashSet<>(Gson.fromJson(gt, new ArrayList<String>().getClass()));
+            groundtruth = new HashSet<>(Gson.fromJson(request.getParameter("groundtruth"), new ArrayList<String>().getClass()));
         } catch (Exception e) {
         }
 
         String sessionKey = search(null, nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint, additionalParams, groundtruth);
 
-        if ((s = request.getParameter("cache")) != null && s.equals("true")) {
+        if ((v = request.getParameter("cache")) != null && v.equals("true")) {
             httpServletResponse.getWriter().print(new JSONObject().put("s", sessionKey).toString());
         } else {
             httpServletResponse.getWriter().print(ResultCacheHandler.getResultFromSession(sessionKey));
