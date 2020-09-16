@@ -16,8 +16,9 @@ public class Glove {
     private static Object2IntOpenHashMap<String> EMBEDDING_ID = null;
     private static ArrayList<double[]> EMBEDDING_VALUE = null;
 
+    public static final boolean USE_CACHE = true;
     private static final int CACHE_COSINE_SIZE = 10000000;
-    private static Long2DoubleLinkedOpenHashMap CACHE_COSINE = new Long2DoubleLinkedOpenHashMap(CACHE_COSINE_SIZE);
+    private static Long2DoubleLinkedOpenHashMap CACHE_COSINE = USE_CACHE ? new Long2DoubleLinkedOpenHashMap(CACHE_COSINE_SIZE) : null;
 
     private synchronized static void init() {
         if (EMBEDDING_ID != null) {
@@ -67,16 +68,19 @@ public class Glove {
             return -1;
         }
 
-        long key = aId < bId
-                ? ((long) aId) * EMBEDDING_VALUE.size() + bId
-                : ((long) bId) * EMBEDDING_VALUE.size() + aId;
+        long key;
+        if (USE_CACHE) {
+            key = aId < bId
+                    ? ((long) aId) * EMBEDDING_VALUE.size() + bId
+                    : ((long) bId) * EMBEDDING_VALUE.size() + aId;
 
-        double r;
-        synchronized (CACHE_COSINE) {
-            r = CACHE_COSINE.getAndMoveToFirst(key);
-        }
-        if (r != -1.0) {
-            return r;
+            double r;
+            synchronized (CACHE_COSINE) {
+                r = CACHE_COSINE.getAndMoveToFirst(key);
+            }
+            if (r != -1.0) {
+                return r;
+            }
         }
 
         double[] aEmbedding = EMBEDDING_VALUE.get(aId);
@@ -93,10 +97,12 @@ public class Glove {
         // Normalize.
         double cosine = 0.5 - dotProduct / Math.sqrt(aLength) / Math.sqrt(bLength) / 2;
 
-        synchronized (CACHE_COSINE) {
-            CACHE_COSINE.putAndMoveToFirst(key, cosine);
-            if (CACHE_COSINE.size() > CACHE_COSINE_SIZE) {
-                CACHE_COSINE.removeLastDouble();
+        if (USE_CACHE) {
+            synchronized (CACHE_COSINE) {
+                CACHE_COSINE.putAndMoveToFirst(key, cosine);
+                if (CACHE_COSINE.size() > CACHE_COSINE_SIZE) {
+                    CACHE_COSINE.removeLastDouble();
+                }
             }
         }
         return cosine;
