@@ -42,7 +42,9 @@ public class Glove {
         EMBEDDING_VALUE = tempValue;
         EMBEDDING_VALUE.trimToSize();
 
-        CACHE_COSINE.defaultReturnValue(-1.0);
+        if (USE_CACHE) {
+            CACHE_COSINE.defaultReturnValue(-1.0);
+        }
     }
 
     // Normally cosine gives a value from -1 to 1. However, we normalize this value to 0 -> 1
