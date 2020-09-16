@@ -44,17 +44,17 @@
                 <div class="col-1 p-0"></div>
                 <div class="col-4 p-0">N-sampling:</div>
                 <div class="col-7 p-0 d-flex" style="align-items: center;">
-                    <input type="range" value="100" class="slider" step="50" min="50" max="500"
+                    <input type="range" value="200" class="slider" step="50" min="50" max="500"
                            id="consistency-param-nfold"
                            oninput="$('#consistency-param-nfold-value').text(this.value);">
-                    <span id="consistency-param-nfold-value" class="ml-2" style="width: 3.5em">100</span>
+                    <span id="consistency-param-nfold-value" class="ml-2" style="width: 3.5em">200</span>
                 </div>
             </div>
             <div class="row">
                 <div class="col-1 p-0"></div>
                 <div class="col-4 p-0">Probe rate:</div>
                 <div class="col-7 p-0 d-flex" style="align-items: center;">
-                    <input type="range" value="0.3" class="slider" step="0.1" min="0" max="0.9"
+                    <input type="range" value="0.3" class="slider" step="0.1" min="0.1" max="0.9"
                            id="consistency-param-prate"
                            oninput="$('#consistency-param-prate-value').text(parseFloat(this.value).toFixed(1));">
                     <span id="consistency-param-prate-value" class="ml-2" style="width: 3.5em">0.3</span>
