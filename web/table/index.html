@@ -163,6 +163,7 @@
                 $("#quantity").removeAttr('disabled');
             };
         } else {
+            params['cache'] = 'true'; // this is only effective for AJAX call
             $.ajax({
                 type: "GET",
                 url: "/search_table",
