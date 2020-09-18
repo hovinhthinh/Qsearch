@@ -39,10 +39,7 @@ public class BatchQueryRunner {
                     b.addParameter("linking-threshold", "0");
                     b.addParameter("full", arr[0]);
                     b.addParameter("rescore", "true");
-                    String session = new JSONObject(Crawler.getContentFromUrl(b.toString())).getString("s");
 
-                    b = new URIBuilder(END_POINT + "/session");
-                    b.addParameter("s", session);
                     SearchResult r = Gson.fromJson(Crawler.getContentFromUrl(b.toString()), SearchResult.class);
 
                     if (arr.length > 1) {
