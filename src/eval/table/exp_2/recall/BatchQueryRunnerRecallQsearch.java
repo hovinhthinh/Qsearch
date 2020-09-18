@@ -54,10 +54,6 @@ public class BatchQueryRunnerRecallQsearch {
                     b.addParameter("alpha", "3");
                     b.addParameter("groundtruth", Gson.toJson(groundtruth));
 
-                    String session = new JSONObject(Crawler.getContentFromUrl(b.toString())).getString("s");
-
-                    b = new URIBuilder(END_POINT + "/session");
-                    b.addParameter("s", session);
                     SearchResult r = Gson.fromJson(Crawler.getContentFromUrl(b.toString()), SearchResult.class);
 
                     map.addAndGet(r.AP);
