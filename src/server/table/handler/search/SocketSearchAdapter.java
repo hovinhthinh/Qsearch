@@ -49,6 +49,23 @@ public class SocketSearchAdapter extends WebSocketAdapter {
 
         additionalParams.put("session", session);
 
+        // locational params:
+        if (o.has("HEADER_MATCH_WEIGHT")) {
+            additionalParams.put("HEADER_MATCH_WEIGHT", Double.parseDouble(o.getString("HEADER_MATCH_WEIGHT")));
+        }
+        if (o.has("CAPTION_MATCH_WEIGHT")) {
+            additionalParams.put("CAPTION_MATCH_WEIGHT", Double.parseDouble(o.getString("CAPTION_MATCH_WEIGHT")));
+        }
+        if (o.has("TITLE_MATCH_WEIGHT")) {
+            additionalParams.put("TITLE_MATCH_WEIGHT", Double.parseDouble(o.getString("TITLE_MATCH_WEIGHT")));
+        }
+        if (o.has("SAME_ROW_MATCH_WEIGHT")) {
+            additionalParams.put("SAME_ROW_MATCH_WEIGHT", Double.parseDouble(o.getString("SAME_ROW_MATCH_WEIGHT")));
+        }
+        if (o.has("RELATED_TEXT_MATCH_WEIGHT")) {
+            additionalParams.put("RELATED_TEXT_MATCH_WEIGHT", Double.parseDouble(o.getString("RELATED_TEXT_MATCH_WEIGHT")));
+        }
+
         // consistency params:
         if (o.has("HEADER_TF_WEIGHT")) {
             additionalParams.put("HEADER_TF_WEIGHT", Double.parseDouble(o.getString("HEADER_TF_WEIGHT")));
