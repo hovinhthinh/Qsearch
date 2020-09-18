@@ -82,6 +82,9 @@ public class SocketSearchAdapter extends WebSocketAdapter {
         if (o.has("RELATED_TEXT_TF_WEIGHT")) {
             additionalParams.put("RELATED_TEXT_TF_WEIGHT", Double.parseDouble(o.getString("RELATED_TEXT_TF_WEIGHT")));
         }
+        if (o.has("QUANTITY_FEATURE_BOOST")) {
+            additionalParams.put("QUANTITY_FEATURE_BOOST", Double.parseDouble(o.getString("QUANTITY_FEATURE_BOOST")));
+        }
 
         if (o.has("CONSISTENCY_LEARNING_N_FOLD")) {
             additionalParams.put("CONSISTENCY_LEARNING_N_FOLD", Integer.parseInt(o.getString("CONSISTENCY_LEARNING_N_FOLD")));

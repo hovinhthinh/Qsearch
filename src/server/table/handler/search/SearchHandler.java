@@ -79,6 +79,9 @@ public class SearchHandler extends HttpServlet {
         if ((v = request.getParameter("RELATED_TEXT_TF_WEIGHT")) != null) {
             additionalParams.put("RELATED_TEXT_TF_WEIGHT", Double.parseDouble(v));
         }
+        if ((v = request.getParameter("QUANTITY_FEATURE_BOOST")) != null) {
+            additionalParams.put("QUANTITY_FEATURE_BOOST", Double.parseDouble(v));
+        }
 
         if ((v = request.getParameter("CONSISTENCY_LEARNING_N_FOLD")) != null) {
             additionalParams.put("CONSISTENCY_LEARNING_N_FOLD", Integer.parseInt(v));

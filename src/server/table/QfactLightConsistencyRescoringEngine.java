@@ -20,7 +20,11 @@ import java.util.logging.Logger;
 class KNNEstimator {
     public List<DataPoint> training;
     public int k;
+
+    @Deprecated
     private double quantityMeanNormalizeValue;
+
+    private double quantityFeatureBoost;
 
     public static class DataPoint {
         public ResultInstance.SubInstance si;
@@ -62,7 +66,8 @@ class KNNEstimator {
             }
         }
 
-        // using Vector Space Model here, computing Cosine similarity
+        // using tf-idf Vector Space Model here, computing Cosine similarity
+        @Deprecated
         public double distOld(DataPoint o, double quantityMeanValue) {
             double dotProd = 0;
             double length = 0, oLength = 0;
@@ -94,8 +99,8 @@ class KNNEstimator {
             return 0.5 - dotProd / Math.sqrt(length) / Math.sqrt(oLength) / 2;
         }
 
-        // using Vector Space Model here, computing Cosine similarity
-        public double dist(DataPoint o, double quantityMeanValue) {
+        // using Embedding Vector Space Model here, computing Cosine similarity
+        public double dist(DataPoint o, double quantityFeatureBoost) {
             double termDist = Vectors.cosineD(vector, o.vector);
 
             // TODO: Alternative: compute log version of quantity values, that would make the relative distance less sensitive for bigger numbers.
@@ -107,14 +112,14 @@ class KNNEstimator {
             double oQValue = oQ.value * QuantityDomain.getScale(oQ);
 
             double quantityRelDist = Math.min(Math.abs(qValue - oQValue) / Math.max(Math.abs(qValue), Math.abs(oQValue)), 1);
-            return (1 - QfactLightConsistencyRescoringEngine.QUANTITY_FEATURE_BOOST) * termDist
-                    + QfactLightConsistencyRescoringEngine.QUANTITY_FEATURE_BOOST * quantityRelDist;
+            return (1 - quantityFeatureBoost) * termDist + quantityFeatureBoost * quantityRelDist;
         }
     }
 
-    public KNNEstimator(List<DataPoint> training, int k) {
+    public KNNEstimator(List<DataPoint> training, int k, double quantityFeatureBoost) {
         this.training = training;
         this.k = k;
+        this.quantityFeatureBoost = quantityFeatureBoost;
         this.quantityMeanNormalizeValue = 0;
         for (DataPoint p : training) {
             Quantity q = Quantity.fromQuantityString(p.si.qfact.quantity);
@@ -131,7 +136,7 @@ class KNNEstimator {
             if (p.si.qfact.tableId.equals(t.si.qfact.tableId)) {
                 continue;
             }
-            Pair<Double, DataPoint> dist2Point = new Pair<>(p.dist(t, quantityMeanNormalizeValue), t);
+            Pair<Double, DataPoint> dist2Point = new Pair<>(p.dist(t, quantityFeatureBoost), t);
 
             // update if there is a worse fact of the same table in queue.
             for (int i = 0; i < queue.size(); ++i) {
@@ -276,11 +281,12 @@ public class QfactLightConsistencyRescoringEngine {
 
         int kNN_k = (int) params.getOrDefault("KNN_ESTIMATOR_K", KNN_ESTIMATOR_K);
         int nFold = (int) params.getOrDefault("CONSISTENCY_LEARNING_N_FOLD", CONSISTENCY_LEARNING_N_FOLD);
+        double qBoost =  (double) params.getOrDefault("QUANTITY_FEATURE_BOOST", QUANTITY_FEATURE_BOOST);
         int lastPercent = 0;
 
         for (int i = 0; i < nFold; ++i) {
             Collections.shuffle(candidates);
-            KNNEstimator estimator = new KNNEstimator(candidates.subList(nProbe, candidates.size()), kNN_k);
+            KNNEstimator estimator = new KNNEstimator(candidates.subList(nProbe, candidates.size()), kNN_k, qBoost);
             for (int j = 0; j < nProbe; ++j) {
                 KNNEstimator.DataPoint p = candidates.get(j);
                 p.consistencyScr += estimator.estimate(p);
