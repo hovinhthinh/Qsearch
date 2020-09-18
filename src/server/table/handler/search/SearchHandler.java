@@ -45,7 +45,24 @@ public class SearchHandler extends HttpServlet {
         if ((v = request.getParameter("linking-threshold")) != null) {
             additionalParams.put("linking-threshold", Double.parseDouble(v));
         }
-        
+
+        // locational params:
+        if ((v = request.getParameter("HEADER_MATCH_WEIGHT")) != null) {
+            additionalParams.put("HEADER_MATCH_WEIGHT", Double.parseDouble(v));
+        }
+        if ((v = request.getParameter("CAPTION_MATCH_WEIGHT")) != null) {
+            additionalParams.put("CAPTION_MATCH_WEIGHT", Double.parseDouble(v));
+        }
+        if ((v = request.getParameter("TITLE_MATCH_WEIGHT")) != null) {
+            additionalParams.put("TITLE_MATCH_WEIGHT", Double.parseDouble(v));
+        }
+        if ((v = request.getParameter("SAME_ROW_MATCH_WEIGHT")) != null) {
+            additionalParams.put("SAME_ROW_MATCH_WEIGHT", Double.parseDouble(v));
+        }
+        if ((v = request.getParameter("RELATED_TEXT_MATCH_WEIGHT")) != null) {
+            additionalParams.put("RELATED_TEXT_MATCH_WEIGHT", Double.parseDouble(v));
+        }
+
         // consistency params:
         if ((v = request.getParameter("HEADER_TF_WEIGHT")) != null) {
             additionalParams.put("HEADER_TF_WEIGHT", Double.parseDouble(v));
