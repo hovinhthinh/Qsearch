@@ -17,10 +17,7 @@ import util.headword.StringUtils;
 import yago.TaxonomyGraph;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 
@@ -37,7 +34,17 @@ public class TableQuery {
     private static ArrayList<QfactLight> QFACTS = TableQfactLoader.load();
     private static TaxonomyGraph TAXONOMY = TaxonomyGraph.getDefaultGraphInstance();
 
-    public static Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> match(ArrayList<String> queryX, QfactLight f, TableIndex ti) {
+    public static Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> match(ArrayList<String> queryX, QfactLight f, TableIndex ti, Map params) {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+
+        double headerWeight = (double) params.getOrDefault("HEADER_MATCH_WEIGHT", HEADER_MATCH_WEIGHT);
+        double captionWeight = (double) params.getOrDefault("CAPTION_MATCH_WEIGHT", CAPTION_MATCH_WEIGHT);
+        double titleWeight = (double) params.getOrDefault("TITLE_MATCH_WEIGHT", TITLE_MATCH_WEIGHT);
+        double sameRowWeight = (double) params.getOrDefault("SAME_ROW_MATCH_WEIGHT", SAME_ROW_MATCH_WEIGHT);
+        double relatedTextWeight = (double) params.getOrDefault("RELATED_TEXT_MATCH_WEIGHT", RELATED_TEXT_MATCH_WEIGHT);
+
         double score = 0;
         ArrayList<ResultInstance.SubInstance.ContextMatchTrace> traces = new ArrayList<>();
         double totalIdf = 0;
@@ -56,16 +63,19 @@ public class TableQuery {
                 if (sim == -1) {
                     continue;
                 }
-                sim = (1 - sim) * HEADER_MATCH_WEIGHT;
+                sim = (1 - sim) * headerWeight;
 
                 if (trace.score < sim) {
                     trace.score = sim;
                     trace.token = fX;
                     trace.place = "HEADER";
+                    if (trace.score >= headerWeight) {
+                        break;
+                    }
                 }
             }
             // CAPTION
-            if (trace.score < CAPTION_MATCH_WEIGHT) {
+            if (trace.score < captionWeight) {
                 for (String fX : NLP.splitSentence(ti.caption.toLowerCase())) {
                     if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
                         continue;
@@ -74,20 +84,20 @@ public class TableQuery {
                     if (sim == -1) {
                         continue;
                     }
-                    sim = (1 - sim) * CAPTION_MATCH_WEIGHT;
+                    sim = (1 - sim) * captionWeight;
 
                     if (trace.score < sim) {
                         trace.score = sim;
                         trace.token = fX;
                         trace.place = "CAPTION";
-                        if (trace.score >= CAPTION_MATCH_WEIGHT) {
+                        if (trace.score >= captionWeight) {
                             break;
                         }
                     }
                 }
             }
             // TITLE
-            if (trace.score < TITLE_MATCH_WEIGHT) {
+            if (trace.score < titleWeight) {
                 loop:
                 for (String title : Arrays.asList(ti.pageTitle, ti.sectionTitles)) {
                     for (String fX : NLP.splitSentence(title.toLowerCase())) {
@@ -98,13 +108,13 @@ public class TableQuery {
                         if (sim == -1) {
                             continue;
                         }
-                        sim = (1 - sim) * TITLE_MATCH_WEIGHT;
+                        sim = (1 - sim) * titleWeight;
 
                         if (trace.score < sim) {
                             trace.score = sim;
                             trace.token = fX;
                             trace.place = "TITLE";
-                            if (trace.score >= TITLE_MATCH_WEIGHT) {
+                            if (trace.score >= titleWeight) {
                                 break loop;
                             }
                         }
@@ -112,7 +122,7 @@ public class TableQuery {
                 }
             }
             // SAME ROW
-            if (trace.score < SAME_ROW_MATCH_WEIGHT) {
+            if (trace.score < sameRowWeight) {
                 loop:
                 for (int c = 0; c < ti.table.nColumn; ++c) {
                     if (c == f.eCol || c == f.qCol) {
@@ -126,13 +136,13 @@ public class TableQuery {
                         if (sim == -1) {
                             continue;
                         }
-                        sim = (1 - sim) * SAME_ROW_MATCH_WEIGHT;
+                        sim = (1 - sim) * sameRowWeight;
 
                         if (trace.score < sim) {
                             trace.score = sim;
                             trace.token = fX;
                             trace.place = "SAME_ROW";
-                            if (trace.score >= SAME_ROW_MATCH_WEIGHT) {
+                            if (trace.score >= sameRowWeight) {
                                 break loop;
                             }
                         }
@@ -141,7 +151,7 @@ public class TableQuery {
             }
 
             // RELATED_TEXT
-            if (trace.score < RELATED_TEXT_MATCH_WEIGHT) {
+            if (trace.score < relatedTextWeight) {
                 for (String fX : NLP.splitSentence(ti.pageContent.toLowerCase())) {
                     if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
                         continue;
@@ -150,13 +160,13 @@ public class TableQuery {
                     if (sim == -1) {
                         continue;
                     }
-                    sim = (1 - sim) * RELATED_TEXT_MATCH_WEIGHT;
+                    sim = (1 - sim) * relatedTextWeight;
 
                     if (trace.score < sim) {
                         trace.score = sim;
                         trace.token = fX;
                         trace.place = "RELATED_TEXT";
-                        if (trace.score >= RELATED_TEXT_MATCH_WEIGHT) {
+                        if (trace.score >= relatedTextWeight) {
                             break;
                         }
                     }
@@ -304,7 +314,7 @@ public class TableQuery {
                     }
                 }
 
-                Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> matchScore = match(queryContextTerms, f, ti);
+                Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> matchScore = match(queryContextTerms, f, ti, additionalParameters);
 
 //                if (matchScore.first < 0.7) {
 //                    continue;
