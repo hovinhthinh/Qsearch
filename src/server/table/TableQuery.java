@@ -69,9 +69,6 @@ public class TableQuery {
                     trace.score = sim;
                     trace.token = fX;
                     trace.place = "HEADER";
-                    if (trace.score >= headerWeight) {
-                        break;
-                    }
                 }
             }
             // CAPTION
