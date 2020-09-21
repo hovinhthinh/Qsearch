@@ -493,7 +493,7 @@
                 str += encodeEntityResultAsHtml(i, instance);
             }
             if (data.numResults > topResults.length)
-                str += '<tr style="border-top:2px solid gray"><td></td><td>More ' + (data.numResults - topResults.length) + ' results</td><td colspan="2"></td></tr>';
+                str += '<tr><td style="border-top: 1px solid gray;"></td><td style="border-top: 1px solid gray;">More ' + (data.numResults - topResults.length) + ' results</td><td colspan="2" style="border-top: 1px solid gray;"></td></tr>';
             $("#data").html(str);
             $("#sort-dropdown").removeAttr('hidden');
         }
