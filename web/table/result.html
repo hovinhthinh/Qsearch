@@ -243,7 +243,7 @@
         // pageContent
         var pg = $('<div class="small ml-3">');
         if (si.qfact.tableIndex.pageContent != "") {
-            pg.html('<span class="badge badge-pill badge-info">Related Text</span> ');
+            pg.html('<span class="badge badge-pill badge-info">Surrounding Text</span> ');
             var lim = st.length > 1 ? 400 : 300;
             if (si.qfact.tableIndex.pageContent.length < lim) {
                 pg.append($('<span>').text(si.qfact.tableIndex.pageContent));
@@ -253,7 +253,7 @@
                 pg.append($('<button class="btn btn-sm btn-link p-0 border-0 ml-1" onclick="showMoreText($(this).children().eq(0))"><u>...more</u></button>'));
             }
         } else {
-            // pg.html('<span class="badge badge-pill badge-secondary">No Related Text</span>');
+            // pg.html('<span class="badge badge-pill badge-secondary">No Surrounding Text</span>');
         }
         escapeText(si.qfact.tableIndex.pageContent);
         preTables.eq(0).children().eq(0).children().eq(1).append(pg);
