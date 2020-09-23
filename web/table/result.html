@@ -199,10 +199,10 @@
 
         var table = si.qfact.tableIndex.table;
 
-        var preTables = $('<div class="container-fluid"><div class="row"><div class="col-auto p-0" style="max-width: 40%"></div><div class="col p-0"></div><div class="ml-2 p-0 text-right"></div></div></div>');
+        var preTables = $('<div class="container-fluid"><div class="row"><div class="col-auto p-0 mb-1" style="max-width: 40%"></div><div class="col p-0"></div><div class="ml-2 p-0 text-right"></div></div></div>');
 
         // titles
-        var title = $('<div class="mb-1">');
+        var title = $('<div>');
         var titleText = escapeText(si.qfact.tableIndex.pageTitle);
         for (var i = 0; i < si.traces.length; ++i) {
             if (si.traces[i].place != "TITLE") {
