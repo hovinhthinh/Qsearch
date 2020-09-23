@@ -29,7 +29,7 @@ public class TableQuery {
     public static double SAME_ROW_MATCH_WEIGHT = 0.9; // old: 0.85
     public static double RELATED_TEXT_MATCH_WEIGHT = 0.8;
 
-    public static double QUANTITY_MATCH_WEIGHT = 0.1;
+    public static double QUANTITY_MATCH_WEIGHT = 0.075;
 
     public static final int N_TOP_ENTITY_CONSISTENCY_RESCORING = 200;
 
