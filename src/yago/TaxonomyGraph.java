@@ -6,6 +6,7 @@ import nlp.NLP;
 import org.apache.commons.lang.StringEscapeUtils;
 import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
+import util.Pair;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -358,9 +359,38 @@ public class TaxonomyGraph {
         this(YAGO_TAXONOMY_FILE, YAGO_TYPE_FILE);
     }
 
+    public void printTypeHierarchyForEntity(String entity) {
+        System.out.println(entity);
+
+        Integer eId = entity2Id.get(entity);
+        if (eId == null) {
+            return;
+        }
+        HashSet<Integer> visitedTypeIds = new HashSet<>();
+        Stack<Pair<Integer, Integer>> typeId2Dist = new Stack<>();
+        for (int v : entityTypeLists.get(eId)) {
+            typeId2Dist.push(new Pair(v, 1));
+            visitedTypeIds.add(v);
+        }
+        while (!typeId2Dist.isEmpty()) {
+            Pair<Integer, Integer> t = typeId2Dist.pop();
+            for (int i = 0; i < t.second - 1; ++i) {
+                System.out.print("    ");
+            }
+            System.out.print("----");
+            System.out.println(id2Type.get(t.first));
+            for (int v : typeDadLists.get(t.first)) {
+                if (!visitedTypeIds.contains(v)) {
+                    typeId2Dist.push(new Pair<>(v, t.second + 1));
+                    visitedTypeIds.add(v);
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         long time = System.currentTimeMillis();
-        getDefaultGraphInstance();
+        getDefaultGraphInstance().printTypeHierarchyForEntity("<China_Construction_Bank>");
         System.out.println(System.currentTimeMillis() - time);
     }
 }
