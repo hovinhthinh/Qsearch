@@ -63,6 +63,10 @@ public class SearchHandler extends HttpServlet {
             additionalParams.put("RELATED_TEXT_MATCH_WEIGHT", Double.parseDouble(v));
         }
 
+        if ((v = request.getParameter("QUANTITY_MATCH_WEIGHT")) != null) {
+            additionalParams.put("QUANTITY_MATCH_WEIGHT", Double.parseDouble(v));
+        }
+
         // consistency params:
         if ((v = request.getParameter("HEADER_TF_WEIGHT")) != null) {
             additionalParams.put("HEADER_TF_WEIGHT", Double.parseDouble(v));

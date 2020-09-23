@@ -29,6 +29,8 @@ public class TableQuery {
     public static double SAME_ROW_MATCH_WEIGHT = 0.9; // old: 0.85
     public static double RELATED_TEXT_MATCH_WEIGHT = 0.8;
 
+    public static double QUANTITY_MATCH_WEIGHT = 0.1;
+
     public static final int N_TOP_ENTITY_CONSISTENCY_RESCORING = 200;
 
     private static ArrayList<QfactLight> QFACTS = TableQfactLoader.load();
@@ -202,20 +204,23 @@ public class TableQuery {
                                                                              Map additionalParameters) {
         Pair<QuantityConstraint, ArrayList<ResultInstance>> result = new Pair<>();
 
-        QuantityConstraint constraint = QuantityConstraint.parseFromString(quantityConstraint);
-        result.first = constraint;
-        if (constraint == null) {
+        QuantityConstraint qtConstraint = QuantityConstraint.parseFromString(quantityConstraint);
+        result.first = qtConstraint;
+        if (qtConstraint == null) {
             return result;
         }
+        double qtConstraintStandardValue = qtConstraint.quantity.value * QuantityDomain.getScale(qtConstraint.quantity);
+        Double qtConstraintStandardValue2 = qtConstraint.quantity.value2 == null ? null :
+                qtConstraint.quantity.value2 * QuantityDomain.getScale(qtConstraint.quantity);
 
         // Build query head word and query type set
         queryType = NLP.stripSentence(NLP.fastStemming(queryType.toLowerCase(), Morpha.noun));
         String queryHeadWord = NLP.getHeadWord(queryType, true);
 
         // Process query context terms
-        String domain = QuantityDomain.getDomain(constraint.quantity);
+        String domain = QuantityDomain.getDomain(qtConstraint.quantity);
         if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
-            queryContext += " " + constraint.quantity.unit;
+            queryContext += " " + qtConstraint.quantity.unit;
         }
         queryContext = NLP.fastStemming(queryContext.toLowerCase(), Morpha.any);
         // expand with domain name if empty
@@ -235,6 +240,9 @@ public class TableQuery {
 
         // retrieve additional parameters
         Session session = additionalParameters == null ? null : (Session) additionalParameters.get("session");
+        double qtMatchWeight = additionalParameters == null ? QUANTITY_MATCH_WEIGHT :
+                (double) additionalParameters.getOrDefault("QUANTITY_MATCH_WEIGHT", QUANTITY_MATCH_WEIGHT);
+
         int lastPercent = 0;
 
         result.second = new ArrayList<>();
@@ -292,7 +300,7 @@ public class TableQuery {
                 }
                 // quantity
                 Quantity qt = Quantity.fromQuantityString(f.quantity);
-                if (!constraint.match(qt)) {
+                if (!qtConstraint.match(qt)) {
                     continue;
                 }
 
@@ -313,13 +321,28 @@ public class TableQuery {
 
                 Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> matchScore = match(queryContextTerms, f, ti, additionalParameters);
 
+                double qtStandardValue = qt.value * QuantityDomain.getScale(qt);
+
+                // compute quantity distance to query
+                double qtRelativeDist = Math.min(1,
+                        Math.abs(qtStandardValue - qtConstraintStandardValue)
+                                / Math.max(Math.abs(qtStandardValue), Math.abs(qtConstraintStandardValue))
+                );
+                if (qtConstraintStandardValue2 != null) {
+                    qtRelativeDist = Math.min(qtRelativeDist,
+                            Math.abs(qtStandardValue - qtConstraintStandardValue2)
+                                    / Math.max(Math.abs(qtStandardValue), Math.abs(qtConstraintStandardValue2))
+                    );
+                }
+
+                matchScore.first = qtMatchWeight * (1 - qtRelativeDist) + (1 - qtMatchWeight) * matchScore.first;
+
 //                if (matchScore.first < 0.7) {
 //                    continue;
 //                }
 
                 inst.addSubInstance(new ResultInstance.SubInstance(f, matchScore.first,
-                        qt.value * QuantityDomain.getScale(qt), qt.getQuantityConvertedStr(constraint.quantity),
-                        matchScore.second));
+                        qtStandardValue, qt.getQuantityConvertedStr(qtConstraint.quantity), matchScore.second));
             }
 
             if (inst.subInstances.size() > 0) {
