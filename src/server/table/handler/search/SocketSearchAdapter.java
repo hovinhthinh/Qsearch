@@ -70,6 +70,10 @@ public class SocketSearchAdapter extends WebSocketAdapter {
             additionalParams.put("QUANTITY_MATCH_WEIGHT", Double.parseDouble(o.getString("QUANTITY_MATCH_WEIGHT")));
         }
 
+        if (o.has("ENTITY_POPULARITY_WEIGHT")) {
+            additionalParams.put("ENTITY_POPULARITY_WEIGHT", Double.parseDouble(o.getString("ENTITY_POPULARITY_WEIGHT")));
+        }
+
         // consistency params:
         if (o.has("HEADER_TF_WEIGHT")) {
             additionalParams.put("HEADER_TF_WEIGHT", Double.parseDouble(o.getString("HEADER_TF_WEIGHT")));

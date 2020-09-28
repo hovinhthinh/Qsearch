@@ -29,7 +29,8 @@ public class TableQuery {
     public static double SAME_ROW_MATCH_WEIGHT = 0.9; // old: 0.85
     public static double RELATED_TEXT_MATCH_WEIGHT = 0.8;
 
-    public static double QUANTITY_MATCH_WEIGHT = 0.075; // old: 0.025
+    public static double QUANTITY_MATCH_WEIGHT = 0.01; // old: 0.025
+    public static double ENTITY_POPULARITY_WEIGHT = 0.01; // old: 0.025
 
     public static final int N_TOP_ENTITY_CONSISTENCY_RESCORING = 200;
 
@@ -242,6 +243,8 @@ public class TableQuery {
         Session session = additionalParameters == null ? null : (Session) additionalParameters.get("session");
         double qtMatchWeight = additionalParameters == null ? QUANTITY_MATCH_WEIGHT :
                 (double) additionalParameters.getOrDefault("QUANTITY_MATCH_WEIGHT", QUANTITY_MATCH_WEIGHT);
+        double entityPopularityWeight = additionalParameters == null ? ENTITY_POPULARITY_WEIGHT :
+                (double) additionalParameters.getOrDefault("ENTITY_POPULARITY_WEIGHT", ENTITY_POPULARITY_WEIGHT);
 
         int lastPercent = 0;
 
@@ -335,7 +338,9 @@ public class TableQuery {
                     );
                 }
 
-                matchScore.first = qtMatchWeight * (1 - qtRelativeDist) + (1 - qtMatchWeight) * matchScore.first;
+                matchScore.first = qtMatchWeight * (1 - qtRelativeDist)
+                        + entityPopularityWeight * (Math.min(100, f.estimatedPopularity) / 100.0)
+                        + (1 - qtMatchWeight - entityPopularityWeight) * matchScore.first;
 
 //                if (matchScore.first < 0.7) {
 //                    continue;
