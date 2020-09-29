@@ -40,6 +40,7 @@ public class WikipediaView {
     public static void main(String[] args) {
         TaxonomyGraph graph = TaxonomyGraph.getDefaultGraphInstance();
 
+        load();
         PrintWriter out = FileUtils.getPrintWriter(ENTITY_VIEW_FILE, StandardCharsets.UTF_8);
         for (Map.Entry<String, Integer> e : e2V.entrySet()) {
             out.println(e.getKey() + "\t" + e.getValue());
