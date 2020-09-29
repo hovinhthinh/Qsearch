@@ -96,7 +96,7 @@ public class WikipediaView {
                     countErr.incrementAndGet();
                 }
             } while (true);
-        }, 512);
+        }, 16);
 
         m.forceShutdown();
         out.close();
