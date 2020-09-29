@@ -4,22 +4,71 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.zip.GZIPInputStream;
 
+class ProxyCollection {
+    private static final int PROXY_LIST_REFRESH_INTERVAL = 300 * 1000;
+    private static long LAST_PROXY_LIST_REFRESH_TIMESTAMP = -1;
+    private static ArrayList<Proxy> PROXY_LIST = new ArrayList<>();
+    private static Random RAND = new Random();
+
+    public static synchronized Proxy getRandomProxy() {
+        if (LAST_PROXY_LIST_REFRESH_TIMESTAMP + PROXY_LIST_REFRESH_INTERVAL <= System.currentTimeMillis()) {
+            PROXY_LIST = getProxiesFromFreeProxyNet();
+            LAST_PROXY_LIST_REFRESH_TIMESTAMP = System.currentTimeMillis();
+        }
+        return PROXY_LIST.isEmpty() ? null : PROXY_LIST.get(RAND.nextInt(PROXY_LIST.size()));
+    }
+
+    public static ArrayList<Proxy> getProxiesFromFreeProxyNet() {
+        return getProxiesFromFreeProxyNet(-1);
+    }
+
+    public static ArrayList<Proxy> getProxiesFromFreeProxyNet(int limit) {
+        String content = Crawler.getContentFromUrl("https://free-proxy-list.net/", Proxy.NO_PROXY);
+        ArrayList<Proxy> res = new ArrayList<>();
+        if (content == null) {
+            return res;
+        }
+        String tbody = TParser.getContent(content, "<tbody>", "</tbody>");
+        ArrayList<String> trs = TParser.getContentList(tbody, "<tr[^>]*+>", "</tr>");
+
+        for (String tr : trs) {
+            try {
+                ArrayList<String> tds = TParser.getContentList(tr, "<td[^>]*+>", "</td>");
+                if (tds.get(6).equals("no")) { // only HTTPS
+                    continue;
+                }
+                res.add(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(tds.get(0), Integer.parseInt(tds.get(1)))));
+            } catch (Exception ex) {
+            }
+            if (res.size() == limit) {
+                break;
+            }
+        }
+        return res;
+    }
+}
+
 public class Crawler {
-    // These could be set for flexibility.
+    // These params could be set for flexibility.
     public static int CONNECT_TIME_OUT = 10 * 1000;
     public static int READ_TIME_OUT = 300 * 1000;
+    public static int NUM_RETRY_CONNECTION = 3;
 
-    public static final int MAX_CONTENT_LENGTH = 1024 * 1024 * 1024; // 1G
-    public static final int BUFFER_SIZE = 8 * 1024; // 8K
+    public static boolean USE_RANDOM_PROXY = false;
+    public static int NUM_RETRY_RANDOM_PROXY_CONNECTION = 5;
+
+    private static final int MAX_CONTENT_LENGTH = 1024 * 1024 * 1024; // 1G
+    private static final int BUFFER_SIZE = 8 * 1024; // 8K
 
     //	If content length < MIN_CONTENT_LENGTH then page is redirected or error.
     //	public static final int MIN_CONTENT_LENGTH = 512; // 512B
+
     //	Allow redirecting.
-    public static final boolean FOLLOW_REDIRECT = true;
+    private static final boolean FOLLOW_REDIRECT = true;
 
     private static final String J_CONNECTION = "close";
     private static final String J_USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like " +
@@ -29,14 +78,15 @@ public class Crawler {
     private static final String J_ACCEPT_ENCODING = "gzip,deflate,sdch";
     private static final String J_ACCEPT_LANGUAGE = "vi-VN,vi;q=0.8,fr-FR;q=0.6,fr;q=0.4,en-US;q=0.2,en;q=0.2";
 
-    private static final int NUM_RETRY_CONNECTION = 3;
-
-
     private static HttpURLConnection connect(URL url, Map<String, String> extendedHeader, Proxy proxy, String method) {
         try {
             URLConnection ucon;
             if (proxy == null) {
-                ucon = url.openConnection();
+                if (USE_RANDOM_PROXY) {
+                    ucon = url.openConnection(ProxyCollection.getRandomProxy());
+                } else {
+                    ucon = url.openConnection();
+                }
             } else {
                 ucon = url.openConnection(proxy);
             }
@@ -78,7 +128,7 @@ public class Crawler {
         }
     }
 
-    /* Use for download file */
+    /* Use for download file, no proxy supported */
     public static byte[] getContentBytesFromUrl(String url) {
         for (int i = 0; i < NUM_RETRY_CONNECTION; i++) {
             try {
@@ -108,9 +158,6 @@ public class Crawler {
                 return data;
             } catch (Exception ex) {
 //				ex.printStackTrace();
-                if (i == NUM_RETRY_CONNECTION - 1) {
-                    return null;
-                }
             }
         }
         return null;
@@ -128,9 +175,11 @@ public class Crawler {
         return getContentFromUrl(url, extendedHeader, method, body, proxy, false);
     }
 
+    // proxy = null means using the global setting stated by USE_RANDOM_PROXY variables.
     public static String getContentFromUrl(String url, Map<String, String> extendedHeader, String method, String body, Proxy proxy, boolean forceOnBadResponseCode) {
         boolean useGZip = false;
-        for (int i = 0; i < NUM_RETRY_CONNECTION; i++) {
+        int nRetry = (proxy == null && USE_RANDOM_PROXY) ? NUM_RETRY_RANDOM_PROXY_CONNECTION : NUM_RETRY_CONNECTION;
+        for (int i = 0; i < nRetry; i++) {
             try {
                 HttpURLConnection hc = connect(new URL(url), extendedHeader, proxy, method);
                 if (body != null) {
@@ -184,36 +233,5 @@ public class Crawler {
             }
         }
         return null;
-    }
-
-    @Deprecated
-    public static List<Proxy> getProxiesFromFreeProxyNet() {
-        return getProxiesFromFreeProxyNet(-1);
-    }
-
-    @Deprecated
-    public static List<Proxy> getProxiesFromFreeProxyNet(int limit) {
-        String content = getContentFromUrl("https://free-proxy-list.net/");
-        List<Proxy> res = new ArrayList<Proxy>();
-        if (content == null) {
-            return res;
-        }
-        String tbody = TParser.getContent(content, "<tbody>", "</tbody>");
-        List<String> trs = TParser.getContentList(tbody, "<tr[^>]*+>", "</tr>");
-
-        for (String tr : trs) {
-            try {
-                List<String> tds = TParser.getContentList(tr, "<td[^>]*+>", "</td>");
-                if (tds.get(6).equals("no")) { // only HTTPS
-                    continue;
-                }
-                res.add(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(tds.get(0), Integer.parseInt(tds.get(1)))));
-            } catch (Exception ex) {
-            }
-            if (res.size() == limit) {
-                break;
-            }
-        }
-        return res;
     }
 }
