@@ -40,18 +40,18 @@ public class WikipediaView {
     public static void main(String[] args) {
         TaxonomyGraph graph = TaxonomyGraph.getDefaultGraphInstance();
 
+        AtomicInteger count = new AtomicInteger(0),
+                countOut = new AtomicInteger(0),
+                countErr = new AtomicInteger(0),
+                countForeLang = new AtomicInteger(0);
+
         load();
         PrintWriter out = FileUtils.getPrintWriter(ENTITY_VIEW_FILE, StandardCharsets.UTF_8);
         for (Map.Entry<String, Integer> e : e2V.entrySet()) {
             out.println(e.getKey() + "\t" + e.getValue());
+            countOut.incrementAndGet();
         }
         out.flush();
-
-        AtomicInteger count = new AtomicInteger(0);
-
-        AtomicInteger countOut = new AtomicInteger(0),
-                countErr = new AtomicInteger(0),
-                countForeLang = new AtomicInteger(0);
 
         SelfMonitor m = new SelfMonitor("ExtractEntityView-2019", graph.nEntities, 10) {
             @Override
@@ -64,19 +64,21 @@ public class WikipediaView {
         };
         m.start();
 
+        m.incAndGet(null, countOut.get());
+
         Concurrent.runAndWait(() -> {
             do {
                 int id = count.getAndIncrement();
                 if (id >= graph.nEntities) {
                     break;
                 }
-                m.incAndGet();
-                String entity = graph.id2Entity.get(id);
 
+                String entity = graph.id2Entity.get(id);
                 if (e2V.containsKey(entity)) {
-                    countOut.incrementAndGet();
                     continue;
                 }
+
+                m.incAndGet();
 
                 if (!entity.replaceFirst("^<[a-z]{2}/", "").equals(entity)) {
                     countForeLang.incrementAndGet();
@@ -94,7 +96,7 @@ public class WikipediaView {
                     countErr.incrementAndGet();
                 }
             } while (true);
-        }, 16);
+        }, 512);
 
         m.forceShutdown();
         out.close();
