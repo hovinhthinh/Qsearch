@@ -193,7 +193,7 @@ public class Crawler {
 
     @Deprecated
     public static List<Proxy> getProxiesFromFreeProxyNet(int limit) {
-        String content = getContentFromUrl("http://www.us-proxy.org/");
+        String content = getContentFromUrl("https://www.us-proxy.org/");
         List<Proxy> res = new ArrayList<Proxy>();
         if (content == null) {
             return res;
