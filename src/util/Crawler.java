@@ -193,7 +193,7 @@ public class Crawler {
 
     @Deprecated
     public static List<Proxy> getProxiesFromFreeProxyNet(int limit) {
-        String content = getContentFromUrl("https://www.us-proxy.org/");
+        String content = getContentFromUrl("https://free-proxy-list.net/");
         List<Proxy> res = new ArrayList<Proxy>();
         if (content == null) {
             return res;
@@ -204,6 +204,9 @@ public class Crawler {
         for (String tr : trs) {
             try {
                 List<String> tds = TParser.getContentList(tr, "<td[^>]*+>", "</td>");
+                if (tds.get(6).equals("no")) { // only HTTPS
+                    continue;
+                }
                 res.add(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(tds.get(0), Integer.parseInt(tds.get(1)))));
             } catch (Exception ex) {
             }
