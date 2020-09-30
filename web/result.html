@@ -469,7 +469,7 @@
                         dataType: "json",
                         success: function (response) {
                             o['view'] = response['view'];
-                            if (response['view'] == -1) {
+                            if (response['view'] < 0) {
                                 wikiViewUnavailable = true;
                             }
                             --wikiViewCountLeft;
