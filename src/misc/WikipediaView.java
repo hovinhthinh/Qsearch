@@ -43,13 +43,18 @@ public class WikipediaView {
         AtomicInteger count = new AtomicInteger(0),
                 countOut = new AtomicInteger(0),
                 countErr = new AtomicInteger(0),
+                countNotFound = new AtomicInteger(0),
                 countForeLang = new AtomicInteger(0);
 
         load();
         PrintWriter out = FileUtils.getPrintWriter(ENTITY_VIEW_FILE, StandardCharsets.UTF_8);
         for (Map.Entry<String, Integer> e : e2V.entrySet()) {
             out.println(e.getKey() + "\t" + e.getValue());
-            countOut.incrementAndGet();
+            if (e.getValue() >= 0) {
+                countOut.incrementAndGet();
+            } else {
+                countNotFound.incrementAndGet();
+            }
         }
         out.flush();
 
@@ -58,6 +63,7 @@ public class WikipediaView {
             public void logProgress(Progress progress) {
                 super.logProgress(progress);
                 System.out.println("Good: " + countOut.get()
+                        + "    NotFound: " + countNotFound.get()
                         + "    Bad: " + countErr.get()
                         + "    ForeLang: " + countForeLang.get());
             }
@@ -65,6 +71,7 @@ public class WikipediaView {
         m.start();
 
         m.incAndGet(null, countOut.get());
+        m.incAndGet(null, countNotFound.get());
 
         Concurrent.runAndWait(() -> {
             do {
@@ -87,7 +94,11 @@ public class WikipediaView {
 
                 int v = WikiViewHandler.getView(entity);
                 if (v != -1) {
-                    countOut.incrementAndGet();
+                    if (v >= 0) {
+                        countOut.incrementAndGet();
+                    } else {
+                        countNotFound.incrementAndGet();
+                    }
                     synchronized (out) {
                         out.println(entity + "\t" + v);
                         out.flush();
