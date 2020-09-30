@@ -41,7 +41,7 @@ public class WikipediaView {
         }
     }
 
-    public static final File ENTITY_VIEW_FILE = new File("./resources/entityView-2019.tsv");
+    public static final File ENTITY_VIEW_FILE = new File("./resources/entityView-2019.gz");
     public static HashMap<String, Integer> e2V = null;
 
     public static synchronized void load(boolean loadNotFound) {
@@ -73,7 +73,6 @@ public class WikipediaView {
 
         AtomicInteger count = new AtomicInteger(0),
                 countOut = new AtomicInteger(0),
-                countErr = new AtomicInteger(0),
                 countNotFound = new AtomicInteger(0),
                 countForeLang = new AtomicInteger(0);
 
@@ -95,7 +94,6 @@ public class WikipediaView {
                 super.logProgress(progress);
                 System.out.println("Good: " + countOut.get()
                         + "    NotFound: " + countNotFound.get()
-                        + "    Bad: " + countErr.get()
                         + "    ForeLang: " + countForeLang.get());
             }
         };
@@ -123,19 +121,20 @@ public class WikipediaView {
                     continue;
                 }
 
-                int v = getViewFromOnlineAPI(entity);
-                if (v != -1) {
-                    if (v >= 0) {
-                        countOut.incrementAndGet();
-                    } else {
-                        countNotFound.incrementAndGet();
-                    }
-                    synchronized (out) {
-                        out.println(entity + "\t" + v);
-                        out.flush();
-                    }
+                int v;
+                do {
+                    v = getViewFromOnlineAPI(entity);
+                } while (v == -1);
+
+                synchronized (out) {
+                    out.println(entity + "\t" + v);
+                    out.flush();
+                }
+
+                if (v >= 0) {
+                    countOut.incrementAndGet();
                 } else {
-                    countErr.incrementAndGet();
+                    countNotFound.incrementAndGet();
                 }
             } while (true);
         }, 16);
