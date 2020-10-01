@@ -198,9 +198,11 @@ public class TableQuery {
             score /= totalIdf;
         }
 
-        // Penalty by difference between header & query
-        score *= Math.pow(ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(header, queryX),
-                (double) params.getOrDefault("TOPIC_DRIFT_PENALTY", TOPIC_DRIFT_PENALTY));
+        // Penalty by topic drift between header & query
+        double topicDriftWeight = (double) params.getOrDefault("TOPIC_DRIFT_PENALTY", TOPIC_DRIFT_PENALTY);
+        if (topicDriftWeight != 0.0) {
+            score *= Math.pow(ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(header, queryX), topicDriftWeight);
+        }
         return new Pair<>(score, traces);
     }
 
