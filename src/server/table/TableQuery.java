@@ -340,8 +340,8 @@ public class TableQuery {
                     );
                 }
 
+                // entity popularity would be added later
                 matchScore.first = qtMatchWeight * (1 - qtRelativeDist)
-                        + entityPopularityWeight * (Math.min(1000000, Math.max(0, inst.popularity)) / 1000000.0)
                         + (1 - qtMatchWeight - entityPopularityWeight) * matchScore.first;
 
 //                if (matchScore.first < 0.7) {
@@ -358,6 +358,19 @@ public class TableQuery {
             }
 
             i = j;
+        }
+
+        // add entity popularity
+        int maxPopularity = 1;
+        for (ResultInstance ri : result.second) {
+            maxPopularity = Math.max(maxPopularity, ri.popularity);
+        }
+        for (ResultInstance ri : result.second) {
+            double entityPopularityContribution = Math.max(1.0 * ri.popularity, 0.0) / maxPopularity;
+            ri.score += entityPopularityWeight * entityPopularityContribution;
+            for (ResultInstance.SubInstance si : ri.subInstances) {
+                si.score += entityPopularityWeight * entityPopularityContribution;
+            }
         }
 
         Collections.sort(result.second);
