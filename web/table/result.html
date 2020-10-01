@@ -72,7 +72,7 @@
                             <a class="dropdown-item dropdown-item-checked sort-option" href='#' id="sort-default">Default</a>
                             <a class="dropdown-item sort-option" href='#' id="sort-quantity-asc">Quantity (ASC)</a>
                             <a class="dropdown-item sort-option" href='#' id="sort-quantity-desc">Quantity (DESC)</a>
-                            <a class="dropdown-item sort-option" href='#' id="sort-entity" hidden>Entity</a>
+                            <a class="dropdown-item sort-option" href='#' id="sort-entity">Entity</a>
                         </div>
                     </div>
                 </div>
@@ -729,9 +729,6 @@
         }
     }
     var data = null;
-    var resultsForWikiView = null;
-    var wikiViewCountLeft = 0;
-    var wikiViewUnavailable = false;
     if (urlParams.has("s")) {
         $.ajax({
             type: "GET",
@@ -753,34 +750,13 @@
                 if (!show(data)) {
                     return;
                 }
-                // now trigger wikiview.
-                resultsForWikiView = data['topResults'];
-                wikiViewCountLeft = resultsForWikiView.length;
-                resultsForWikiView.forEach(function (o) {
-                    $.ajax({
-                        type: "GET",
-                        url: "/wikiview",
-                        data: {"entity": o['entity']},
-                        contentType: 'application/json; charset=utf-8',
-                        dataType: "json",
-                        success: function (response) {
-                            o['view'] = response['view'];
-                            if (response['view'] < 0) {
-                                wikiViewUnavailable = true;
-                            }
-                            --wikiViewCountLeft;
-                            if (wikiViewCountLeft == 0) {
-                                data['topResults'] = resultsForWikiView;
-                                $('#sort-entity').removeAttr('hidden');
-                                if (wikiViewUnavailable) {
-                                    $('#sort-entity').append(' <i class="fas fa-exclamation-circle" style="color: red"></i>')
-                                        .attr('title', 'Wikiview is not available for all entities.');
-                                }
-                            }
-                        }
-                    });
-                });
-
+                for (var i = 0; i < data.topResults.length; ++i) {
+                    if (data.topResults[i].estimatedPopularity < 0) {
+                        $('#sort-entity').append(' <i class="fas fa-exclamation-circle" style="color: red"></i>')
+                            .attr('title', 'Wikiview is not available for all entities.');
+                        break;
+                    }
+                }
             },
             error: function () {
                 alert("Invalid session.");
@@ -798,12 +774,10 @@
     }
 
     $('#sort-default').click(function () {
-        var topResults = data['topResults'];
-        topResults.sort(function (a, b) {
+        data.topResults.sort(function (a, b) {
             var av = a['score'], bv = b['score'];
             return av < bv ? 1 : (av > bv ? -1 : 0);
         });
-        data['topResults'] = topResults;
         clearTimeout(convertedQuantityShowingTimeout);
         convertedQuantity2ShowingTimeout.forEach(function (t) {
             try {
@@ -822,12 +796,10 @@
             .parent().removeAttr('title');
     });
     $('#sort-entity').click(function () {
-        var topResults = data['topResults'];
-        topResults.sort(function (a, b) {
-            var av = a['view'], bv = b['view'];
+        data.topResults.sort(function (a, b) {
+            var av = a.estimatedPopularity, bv = b.estimatedPopularity;
             return av < bv ? 1 : (av > bv ? -1 : 0);
         });
-        data['topResults'] = topResults;
         clearTimeout(convertedQuantityShowingTimeout);
         convertedQuantity2ShowingTimeout.forEach(function (t) {
             try {
@@ -846,13 +818,11 @@
             .parent().attr('title', $('#sort-entity').attr('title'));
     });
     $('#sort-quantity-asc').click(function () {
-        var topResults = data['topResults'];
-        topResults.sort(function (a, b) {
+        data.topResults.sort(function (a, b) {
             var av = a.subInstances[0].quantityStandardValue, bv = b.subInstances[0].quantityStandardValue;
             var c = av < bv ? -1 : (av > bv ? 1 : 0);
             return c;
         });
-        data['topResults'] = topResults;
         clearTimeout(convertedQuantityShowingTimeout);
         convertedQuantity2ShowingTimeout.forEach(function (t) {
             try {
@@ -871,13 +841,11 @@
             .parent().removeAttr('title');
     });
     $('#sort-quantity-desc').click(function () {
-        var topResults = data['topResults'];
-        topResults.sort(function (a, b) {
+        data.topResults.sort(function (a, b) {
             var av = a.subInstances[0].quantityStandardValue, bv = b.subInstances[0].quantityStandardValue;
             var c = av < bv ? -1 : (av > bv ? 1 : 0);
             return c * -1;
         });
-        data['topResults'] = topResults;
         clearTimeout(convertedQuantityShowingTimeout);
         convertedQuantity2ShowingTimeout.forEach(function (t) {
             try {

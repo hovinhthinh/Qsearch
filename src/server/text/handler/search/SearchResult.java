@@ -25,7 +25,7 @@ public class SearchResult {
 
     public static class ResultInstance implements Comparable<ResultInstance> {
         public String entity;
-        public int estimatedPopularity; // this is estimated based on the number of Qfacts extracted, not the real popularity.
+        public int estimatedPopularity;
 
         public double score;
         public String quantity;
