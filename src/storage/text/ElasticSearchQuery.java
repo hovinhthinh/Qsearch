@@ -248,7 +248,7 @@ public class ElasticSearchQuery {
                 SearchResult.ResultInstance r = new SearchResult.ResultInstance();
                 r.score = Constants.MAX_DOUBLE;
                 r.entity = o.getString("_id");
-                r.estimatedPopularity = WikipediaView.getView(r.entity);
+                r.popularity = WikipediaView.getView(r.entity);
                 for (int i = 0; i < facts.length(); ++i) {
                     // check corpus target
                     if (corpusConstraint != null) {
