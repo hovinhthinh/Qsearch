@@ -77,6 +77,10 @@ public class SocketSearchHandler extends WebSocketServlet {
                 additionalParams.put("RELATED_TEXT_MATCH_WEIGHT", Double.parseDouble(o.getString("RELATED_TEXT_MATCH_WEIGHT")));
             }
 
+            if (o.has("TOPIC_DRIFT_PENALTY")) {
+                additionalParams.put("TOPIC_DRIFT_PENALTY", Double.parseDouble(o.getString("TOPIC_DRIFT_PENALTY")));
+            }
+
             if (o.has("QUANTITY_MATCH_WEIGHT")) {
                 additionalParams.put("QUANTITY_MATCH_WEIGHT", Double.parseDouble(o.getString("QUANTITY_MATCH_WEIGHT")));
             }

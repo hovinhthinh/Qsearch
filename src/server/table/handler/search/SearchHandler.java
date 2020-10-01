@@ -63,6 +63,10 @@ public class SearchHandler extends HttpServlet {
             additionalParams.put("RELATED_TEXT_MATCH_WEIGHT", Double.parseDouble(v));
         }
 
+        if ((v = request.getParameter("TOPIC_DRIFT_PENALTY")) != null) {
+            additionalParams.put("TOPIC_DRIFT_PENALTY", Double.parseDouble(v));
+        }
+
         if ((v = request.getParameter("QUANTITY_MATCH_WEIGHT")) != null) {
             additionalParams.put("QUANTITY_MATCH_WEIGHT", Double.parseDouble(v));
         }
