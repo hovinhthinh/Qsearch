@@ -20,7 +20,7 @@ public class ResultCacheHandler extends HttpServlet {
 
     // return session key
     public static String addResult(String r) {
-        String key = RandomStringUtils.randomAlphanumeric(1024);
+        String key = RandomStringUtils.randomAlphanumeric(256);
         CACHE.put(key, r);
         return key;
     }
