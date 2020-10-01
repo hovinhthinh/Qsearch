@@ -29,7 +29,7 @@
     <!-- Text -->
     <servlet>
         <servlet-name>SearchSocket</servlet-name>
-        <servlet-class>server.text.handler.search.SocketSearchServlet</servlet-class>
+        <servlet-class>server.text.handler.search.SocketSearchHandler</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SearchSocket</servlet-name>
@@ -57,7 +57,7 @@
     <!-- Table -->
     <servlet>
         <servlet-name>TableSearchSocket</servlet-name>
-        <servlet-class>server.table.handler.search.SocketSearchServlet</servlet-class>
+        <servlet-class>server.table.handler.search.SocketSearchHandler</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>TableSearchSocket</servlet-name>
