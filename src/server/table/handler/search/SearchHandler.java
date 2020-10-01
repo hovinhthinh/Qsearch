@@ -63,6 +63,10 @@ public class SearchHandler extends HttpServlet {
             additionalParams.put("RELATED_TEXT_MATCH_WEIGHT", Double.parseDouble(v));
         }
 
+        if ((v = request.getParameter("TYPE_IDF_SCALE")) != null) {
+            additionalParams.put("TYPE_IDF_SCALE", Double.parseDouble(v));
+        }
+
         if ((v = request.getParameter("TOPIC_DRIFT_PENALTY")) != null) {
             additionalParams.put("TOPIC_DRIFT_PENALTY", Double.parseDouble(v));
         }
