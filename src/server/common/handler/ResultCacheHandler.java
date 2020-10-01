@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class ResultCacheHandler extends HttpServlet {
     private static Cache<String, String> CACHE = CacheBuilder.newBuilder()
             .maximumSize(100)
-            .expireAfterWrite(10, TimeUnit.MINUTES)
+            .expireAfterWrite(15, TimeUnit.MINUTES)
             .concurrencyLevel(Runtime.getRuntime().availableProcessors())
             .build();
 
