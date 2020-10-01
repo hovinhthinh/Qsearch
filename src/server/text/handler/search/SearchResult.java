@@ -1,7 +1,6 @@
 package server.text.handler.search;
 
 import model.quantity.QuantityConstraint;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 
@@ -17,7 +16,6 @@ public class SearchResult {
     public ArrayList<ResultInstance> topResults = new ArrayList<>();
 
     public String encode() {
-//        return DigestUtils.md5Hex(typeConstraint + "\t" + contextConstraint + "\t" + quantityConstraint.toString());
         return evalDomain + "_" + (typeConstraint.replace(' ', '-')
                 + "_" + contextConstraint.replace(' ', '-')
                 + "_" + quantityConstraint.phrase.replace(' ', '-')).replace('/', '-');

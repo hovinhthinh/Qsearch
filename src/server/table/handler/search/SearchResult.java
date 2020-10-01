@@ -1,7 +1,6 @@
 package server.table.handler.search;
 
 import model.quantity.QuantityConstraint;
-import org.apache.commons.codec.digest.DigestUtils;
 import server.table.ResultInstance;
 import storage.table.index.TableIndex;
 
@@ -21,7 +20,6 @@ public class SearchResult {
     public HashMap<String, TableIndex> tableId2Index;
 
     public String encode() {
-//        return DigestUtils.md5Hex(typeConstraint + "\t" + contextConstraint + "\t" + quantityConstraint.toString());
         return evalDomain + "_" + (typeConstraint.replace(' ', '-')
                 + "_" + contextConstraint.replace(' ', '-')
                 + "_" + quantityConstraint.phrase.replace(' ', '-')).replace('/', '-');
