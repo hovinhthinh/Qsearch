@@ -36,7 +36,9 @@ public class SocketSearchHandler extends WebSocketServlet {
 
         @Override
         public void onWebSocketText(String queryDescription) {
-            LOGGER.info("FROM: " + session.getRemoteAddress().getAddress() + " : " + queryDescription);
+            LOGGER.info("FROM: " + session.getRemoteAddress().getAddress()
+                    + "  X-Forwarded-For: " + session.getUpgradeRequest().getHeader("X-Forwarded-For")
+                    + "  | " + queryDescription);
             JSONObject o = new JSONObject(queryDescription);
             // Get parameters
             String typeConstraint = o.has("type") ? o.getString("type") : null;
