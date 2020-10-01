@@ -30,7 +30,7 @@ public class TableQuery {
     public static double SAME_ROW_MATCH_WEIGHT = 0.9; // old: 0.85
     public static double RELATED_TEXT_MATCH_WEIGHT = 0.8;
 
-    public static double TYPE_IDF_SCALE = 0.5;
+    public static double TYPE_IDF_SCALE = 0.25;
 
     public static double TOPIC_DRIFT_PENALTY = 0.2;
 
