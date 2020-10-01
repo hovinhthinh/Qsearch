@@ -751,7 +751,7 @@
                     return;
                 }
                 for (var i = 0; i < data.topResults.length; ++i) {
-                    if (data.topResults[i].estimatedPopularity < 0) {
+                    if (data.topResults[i].popularity < 0) {
                         $('#sort-entity').append(' <i class="fas fa-exclamation-circle" style="color: red"></i>')
                             .attr('title', 'Wikiview is not available for all entities.');
                         break;
@@ -797,7 +797,7 @@
     });
     $('#sort-entity').click(function () {
         data.topResults.sort(function (a, b) {
-            var av = a.estimatedPopularity, bv = b.estimatedPopularity;
+            var av = a.popularity, bv = b.popularity;
             return av < bv ? 1 : (av > bv ? -1 : 0);
         });
         clearTimeout(convertedQuantityShowingTimeout);

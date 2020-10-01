@@ -25,7 +25,7 @@ public class SearchResult {
 
     public static class ResultInstance implements Comparable<ResultInstance> {
         public String entity;
-        public int estimatedPopularity;
+        public int popularity; // based on wikipedia page view
 
         public double score;
         public String quantity;
@@ -48,7 +48,7 @@ public class SearchResult {
                 return Double.compare(this.score, o.score);
             }
             // Entities with same score are ordered by estimated popularity.
-            return Integer.compare(o.estimatedPopularity, this.estimatedPopularity);
+            return Integer.compare(o.popularity, this.popularity);
         }
     }
 
