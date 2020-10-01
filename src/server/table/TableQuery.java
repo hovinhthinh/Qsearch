@@ -30,6 +30,8 @@ public class TableQuery {
     public static double SAME_ROW_MATCH_WEIGHT = 0.9; // old: 0.85
     public static double RELATED_TEXT_MATCH_WEIGHT = 0.8;
 
+    public static double TYPE_IDF_SCALE = 0.5;
+
     public static double TOPIC_DRIFT_PENALTY = 0.2;
 
     public static double QUANTITY_MATCH_WEIGHT = 0.03;
@@ -40,7 +42,7 @@ public class TableQuery {
     private static ArrayList<QfactLight> QFACTS = TableQfactLoader.load();
     private static TaxonomyGraph TAXONOMY = TaxonomyGraph.getDefaultGraphInstance();
 
-    public static Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> match(ArrayList<String> queryX, QfactLight f, TableIndex ti, Map params) {
+    public static Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> match(ArrayList<String> queryTypeX, ArrayList<String> queryX, QfactLight f, TableIndex ti, Map params) {
         if (params == null) {
             params = new HashMap<>();
         }
@@ -55,7 +57,55 @@ public class TableQuery {
         ArrayList<ResultInstance.SubInstance.ContextMatchTrace> traces = new ArrayList<>();
         double totalIdf = 0;
 
+        // matching queryType
+        double typeIdfScale = (double) params.getOrDefault("TYPE_IDF_SCALE", TYPE_IDF_SCALE);
+
+        for (String qT : queryTypeX) {
+            double matchScore = 0;
+            // CAPTION
+            if (matchScore < captionWeight) {
+                for (String fX : NLP.splitSentence(ti.caption.toLowerCase())) {
+                    if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                        continue;
+                    }
+                    double sim = Glove.cosineDistance(qT, StringUtils.stem(fX, Morpha.any));
+                    if (sim == -1) {
+                        continue;
+                    }
+                    sim = (1 - sim) * captionWeight;
+
+                    matchScore = Math.max(matchScore, sim);
+                    if (matchScore >= captionWeight) {
+                        break;
+                    }
+                }
+            }
+            // TITLE
+            if (matchScore < titleWeight) {
+                for (String fX : NLP.splitSentence(ti.pageTitle.toLowerCase())) {
+                    if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                        continue;
+                    }
+                    double sim = Glove.cosineDistance(qT, StringUtils.stem(fX, Morpha.any));
+                    if (sim == -1) {
+                        continue;
+                    }
+                    sim = (1 - sim) * titleWeight;
+
+                    matchScore = Math.max(matchScore, sim);
+                    if (matchScore >= titleWeight) {
+                        break;
+                    }
+                }
+            }
+
+            double idf = IDF.getRobertsonIdf(qT) * typeIdfScale;
+            score += matchScore * idf;
+            totalIdf += idf;
+        }
+
         ArrayList<String> header = new ArrayList<>();
+        // matching contextX
         for (String qX : queryX) {
             ResultInstance.SubInstance.ContextMatchTrace trace = new ResultInstance.SubInstance.ContextMatchTrace(null, 0, null);
             // HEADER
@@ -99,7 +149,7 @@ public class TableQuery {
                     }
                 }
             }
-            // TITLE
+            // TITLE + DOM HEADINGs
             if (trace.score < titleWeight) {
                 loop:
                 for (String title : Arrays.asList(ti.pageTitle, ti.sectionTitles)) {
@@ -224,6 +274,14 @@ public class TableQuery {
         queryType = NLP.stripSentence(NLP.fastStemming(queryType.toLowerCase(), Morpha.noun));
         String queryHeadWord = NLP.getHeadWord(queryType, true);
 
+        ArrayList<String> queryTypeTerms = NLP.splitSentence(queryType);
+        for (int i = queryTypeTerms.size() - 1; i >= 0; --i) {
+            String t = queryTypeTerms.get(i);
+            if (NLP.BLOCKED_STOPWORDS.contains(t) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(t)) {
+                queryTypeTerms.remove(i);
+            }
+        }
+
         // Process query context terms
         String domain = QuantityDomain.getDomain(qtConstraint.quantity);
         if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
@@ -329,7 +387,7 @@ public class TableQuery {
                     }
                 }
 
-                Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> matchScore = match(queryContextTerms, f, ti, additionalParameters);
+                Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> matchScore = match(queryTypeTerms, queryContextTerms, f, ti, additionalParameters);
 
                 double qtStandardValue = qt.value * QuantityDomain.getScale(qt);
 
