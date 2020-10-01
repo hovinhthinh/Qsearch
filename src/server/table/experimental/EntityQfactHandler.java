@@ -75,7 +75,7 @@ public class EntityQfactHandler extends HttpServlet {
 
         for (int i = 0; i < r.result.size(); ++i) {
             r.result.set(i, r.result.get(i).stream()
-                    .map(f -> new Pair<>(f, TableQuery.match(contextConstraint, f, r.tableId2Index.get(f.tableId), null).first))
+                    .map(f -> new Pair<>(f, TableQuery.match(new ArrayList<>(), contextConstraint, f, r.tableId2Index.get(f.tableId), null).first))
                     .sorted((a, b) -> b.second.compareTo(a.second))
                     .map(o -> o.first)
                     .collect(Collectors.toCollection(ArrayList::new))
