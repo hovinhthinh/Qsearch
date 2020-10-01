@@ -38,7 +38,7 @@ public class SocketSearchHandler extends WebSocketServlet {
         // 'full' : <fullQuery>, 'model': 'KL|EMBEDDING'
         @Override
         public void onWebSocketText(String queryDescription) {
-            LOGGER.info(queryDescription);
+            LOGGER.info("FROM: " + session.getRemoteAddress().getAddress() + " : " + queryDescription);
             JSONObject o = new JSONObject(queryDescription);
             // Get parameters
             String typeConstraint = o.has("type") ? o.getString("type") : null;
