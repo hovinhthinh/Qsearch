@@ -1,5 +1,6 @@
 package server.table;
 
+import misc.WikipediaView;
 import model.context.ContextEmbeddingMatcher;
 import model.context.IDF;
 import model.quantity.Quantity;
@@ -295,6 +296,7 @@ public class TableQuery {
 
             ResultInstance inst = new ResultInstance();
             inst.entity = "<" + entity.substring(5) + ">";
+            inst.estimatedPopularity = WikipediaView.getView(inst.entity);
 
             for (int k = i; k <= j; ++k) {
                 QfactLight f = QFACTS.get(k);
@@ -339,7 +341,7 @@ public class TableQuery {
                 }
 
                 matchScore.first = qtMatchWeight * (1 - qtRelativeDist)
-                        + entityPopularityWeight * (Math.min(100, f.estimatedPopularity) / 100.0)
+                        + entityPopularityWeight * (Math.min(1000000, Math.max(0, inst.estimatedPopularity)) / 1000000.0)
                         + (1 - qtMatchWeight - entityPopularityWeight) * matchScore.first;
 
 //                if (matchScore.first < 0.7) {

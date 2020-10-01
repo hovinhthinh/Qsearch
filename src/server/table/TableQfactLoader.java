@@ -11,7 +11,6 @@ import java.util.*;
 
 public class TableQfactLoader {
     public static final double LINKING_THRESHOLD = -1; // 0.70;
-    public static final double LINKING_THRESHOLD_FOR_ESTIMATED_POPULARITY = 0.8;
 
     private static boolean LOADED = false;
     private static ArrayList<QfactLight> QFACTS;
@@ -27,8 +26,6 @@ public class TableQfactLoader {
         QFACTS = new ArrayList<>();
         String wikiFile = "/GW/D5data-13/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id_annotation+linking_new.gz";
         String tablemFile = "/GW/D5data-13/hvthinh/TABLEM/all/all+id.annotation+linking_new.gz";
-
-        HashMap<String, Integer> popularityMap = new HashMap<>();
 
         for (String file : Arrays.asList(tablemFile, wikiFile))
             for (String line : FileUtils.getLineStream(file, "UTF-8")) {
@@ -71,16 +68,9 @@ public class TableQfactLoader {
                         }
 
                         QFACTS.add(f);
-
-                        if (f.linkingScore >= LINKING_THRESHOLD_FOR_ESTIMATED_POPULARITY) {
-                            popularityMap.put(f.entity, popularityMap.getOrDefault(f.entity, 0) + 1);
-                        }
                     }
                 }
             }
-        for (QfactLight f : QFACTS) {
-            f.estimatedPopularity = popularityMap.getOrDefault(f.entity, 0);
-        }
         Collections.sort(QFACTS, (o1, o2) -> o1.entity.compareTo(o2.entity));
         LOADED = true;
         return QFACTS;

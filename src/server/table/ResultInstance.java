@@ -6,6 +6,8 @@ public class ResultInstance implements Comparable<ResultInstance> {
     public static transient final int TOP_KEEP_SUBINSTANCES = 10;
 
     public String entity;
+    public int estimatedPopularity;
+
     public double score;
 
     public String eval; // For evaluation
@@ -80,6 +82,6 @@ public class ResultInstance implements Comparable<ResultInstance> {
             return Double.compare(o.score, this.score);
         }
         // Entities with same score are ordered by estimated popularity.
-        return Integer.compare(o.subInstances.get(0).qfact.estimatedPopularity, this.subInstances.get(0).qfact.estimatedPopularity);
+        return Integer.compare(o.estimatedPopularity, this.estimatedPopularity);
     }
 }
