@@ -270,17 +270,17 @@ public class TableQuery {
         Double qtConstraintStandardValue2 = qtConstraint.quantity.value2 == null ? null :
                 qtConstraint.quantity.value2 * QuantityDomain.getScale(qtConstraint.quantity);
 
-        // Build query head word and query type set
-        queryType = NLP.stripSentence(NLP.fastStemming(queryType.toLowerCase(), Morpha.noun));
-        String queryHeadWord = NLP.getHeadWord(queryType, true);
-
-        ArrayList<String> queryTypeTerms = NLP.splitSentence(queryType);
+        // Build query type-context terms, head word and query type set
+        ArrayList<String> queryTypeTerms = NLP.splitSentence(NLP.fastStemming(queryType.toLowerCase(), Morpha.any));
         for (int i = queryTypeTerms.size() - 1; i >= 0; --i) {
             String t = queryTypeTerms.get(i);
             if (NLP.BLOCKED_STOPWORDS.contains(t) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(t)) {
                 queryTypeTerms.remove(i);
             }
         }
+
+        queryType = NLP.stripSentence(NLP.fastStemming(queryType.toLowerCase(), Morpha.noun));
+        String queryHeadWord = NLP.getHeadWord(queryType, true);
 
         // Process query context terms
         String domain = QuantityDomain.getDomain(qtConstraint.quantity);
