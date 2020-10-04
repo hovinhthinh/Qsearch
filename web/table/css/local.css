@@ -61,10 +61,6 @@ body, .popover {
     background: #ffffcc;
 }
 
-.popover-converted-quantity .popover-body {
-    padding: 5px 10px;
-}
-
 .entity-box {
     border-radius: 4px;
     background: #e6ffcc;
