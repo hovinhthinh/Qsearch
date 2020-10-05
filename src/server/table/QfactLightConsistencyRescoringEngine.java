@@ -184,6 +184,7 @@ public class QfactLightConsistencyRescoringEngine {
     public static double HEADER_TF_WEIGHT = 1;
     public static double CAPTION_TF_WEIGHT = 0.9;
     public static double TITLE_TF_WEIGHT = 0.3;
+    public static double DOM_HEADING_TF_WEIGHT = 0.3;
     public static double SAME_ROW_TF_WEIGHT = 0.1;
     public static double RELATED_TEXT_TF_WEIGHT = 0.1;
 
@@ -218,15 +219,21 @@ public class QfactLightConsistencyRescoringEngine {
             fX = StringUtils.stem(fX, Morpha.any);
             termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + (double) weightMap.getOrDefault("CAPTION_TF_WEIGHT", CAPTION_TF_WEIGHT));
         }
-        // TITLES
-        for (String title : Arrays.asList(ti.pageTitle, ti.sectionTitles)) {
-            for (String fX : NLP.splitSentence(title)) {
-                if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
-                    continue;
-                }
-                fX = StringUtils.stem(fX, Morpha.any);
-                termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + (double) weightMap.getOrDefault("TITLE_TF_WEIGHT", TITLE_TF_WEIGHT));
+        // TITLE
+        for (String fX : NLP.splitSentence(ti.pageTitle)) {
+            if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                continue;
             }
+            fX = StringUtils.stem(fX, Morpha.any);
+            termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + (double) weightMap.getOrDefault("TITLE_TF_WEIGHT", TITLE_TF_WEIGHT));
+        }
+        // DOM HEADINGs
+        for (String fX : NLP.splitSentence(ti.sectionTitles)) {
+            if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                continue;
+            }
+            fX = StringUtils.stem(fX, Morpha.any);
+            termTfidfMap.put(fX, termTfidfMap.getOrDefault(fX, 0.0) + (double) weightMap.getOrDefault("DOM_HEADING_TF_WEIGHT", DOM_HEADING_TF_WEIGHT));
         }
         // SAME ROW
         for (int c = 0; c < ti.table.nColumn; ++c) {
@@ -281,7 +288,7 @@ public class QfactLightConsistencyRescoringEngine {
 
         int kNN_k = (int) params.getOrDefault("KNN_ESTIMATOR_K", KNN_ESTIMATOR_K);
         int nFold = (int) params.getOrDefault("CONSISTENCY_LEARNING_N_FOLD", CONSISTENCY_LEARNING_N_FOLD);
-        double qBoost =  (double) params.getOrDefault("QUANTITY_FEATURE_BOOST", QUANTITY_FEATURE_BOOST);
+        double qBoost = (double) params.getOrDefault("QUANTITY_FEATURE_BOOST", QUANTITY_FEATURE_BOOST);
         int lastPercent = 0;
 
         for (int i = 0; i < nFold; ++i) {
