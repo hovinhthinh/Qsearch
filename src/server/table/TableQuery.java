@@ -27,6 +27,7 @@ public class TableQuery {
     public static double HEADER_MATCH_WEIGHT = 1;
     public static double CAPTION_MATCH_WEIGHT = 1; // old: 0.9
     public static double TITLE_MATCH_WEIGHT = 0.9; // old: 0.85
+    public static double DOM_HEADING_MATCH_WEIGHT = 0.9; // old: 0.85
     public static double SAME_ROW_MATCH_WEIGHT = 0.9; // old: 0.85
     public static double RELATED_TEXT_MATCH_WEIGHT = 0.8;
 
@@ -50,6 +51,7 @@ public class TableQuery {
         double headerWeight = (double) params.getOrDefault("HEADER_MATCH_WEIGHT", HEADER_MATCH_WEIGHT);
         double captionWeight = (double) params.getOrDefault("CAPTION_MATCH_WEIGHT", CAPTION_MATCH_WEIGHT);
         double titleWeight = (double) params.getOrDefault("TITLE_MATCH_WEIGHT", TITLE_MATCH_WEIGHT);
+        double domHeadingWeight = (double) params.getOrDefault("DOM_HEADING_MATCH_WEIGHT", DOM_HEADING_MATCH_WEIGHT);
         double sameRowWeight = (double) params.getOrDefault("SAME_ROW_MATCH_WEIGHT", SAME_ROW_MATCH_WEIGHT);
         double relatedTextWeight = (double) params.getOrDefault("RELATED_TEXT_MATCH_WEIGHT", RELATED_TEXT_MATCH_WEIGHT);
 
@@ -149,27 +151,46 @@ public class TableQuery {
                     }
                 }
             }
-            // TITLE + DOM HEADINGs
+            // TITLE
             if (trace.score < titleWeight) {
-                loop:
-                for (String title : Arrays.asList(ti.pageTitle, ti.sectionTitles)) {
-                    for (String fX : NLP.splitSentence(title.toLowerCase())) {
-                        if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
-                            continue;
-                        }
-                        double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
-                        if (sim == -1) {
-                            continue;
-                        }
-                        sim = (1 - sim) * titleWeight;
+                for (String fX : NLP.splitSentence(ti.pageTitle.toLowerCase())) {
+                    if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                        continue;
+                    }
+                    double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
+                    if (sim == -1) {
+                        continue;
+                    }
+                    sim = (1 - sim) * titleWeight;
 
-                        if (trace.score < sim) {
-                            trace.score = sim;
-                            trace.token = fX;
-                            trace.place = "TITLE";
-                            if (trace.score >= titleWeight) {
-                                break loop;
-                            }
+                    if (trace.score < sim) {
+                        trace.score = sim;
+                        trace.token = fX;
+                        trace.place = "TITLE";
+                        if (trace.score >= titleWeight) {
+                            break;
+                        }
+                    }
+                }
+            }
+            // DOM HEADINGs
+            if (trace.score < domHeadingWeight) {
+                for (String fX : NLP.splitSentence(ti.sectionTitles.toLowerCase())) {
+                    if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                        continue;
+                    }
+                    double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
+                    if (sim == -1) {
+                        continue;
+                    }
+                    sim = (1 - sim) * domHeadingWeight;
+
+                    if (trace.score < sim) {
+                        trace.score = sim;
+                        trace.token = fX;
+                        trace.place = "DOM_HEADING";
+                        if (trace.score >= domHeadingWeight) {
+                            break;
                         }
                     }
                 }

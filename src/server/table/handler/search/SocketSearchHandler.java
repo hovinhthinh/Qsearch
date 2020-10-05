@@ -70,6 +70,9 @@ public class SocketSearchHandler extends WebSocketServlet {
             if (o.has("TITLE_MATCH_WEIGHT")) {
                 additionalParams.put("TITLE_MATCH_WEIGHT", Double.parseDouble(o.getString("TITLE_MATCH_WEIGHT")));
             }
+            if (o.has("DOM_HEADING_MATCH_WEIGHT")) {
+                additionalParams.put("DOM_HEADING_MATCH_WEIGHT", Double.parseDouble(o.getString("DOM_HEADING_MATCH_WEIGHT")));
+            }
             if (o.has("SAME_ROW_MATCH_WEIGHT")) {
                 additionalParams.put("SAME_ROW_MATCH_WEIGHT", Double.parseDouble(o.getString("SAME_ROW_MATCH_WEIGHT")));
             }
@@ -102,6 +105,9 @@ public class SocketSearchHandler extends WebSocketServlet {
             }
             if (o.has("TITLE_TF_WEIGHT")) {
                 additionalParams.put("TITLE_TF_WEIGHT", Double.parseDouble(o.getString("TITLE_TF_WEIGHT")));
+            }
+            if (o.has("DOM_HEADING_TF_WEIGHT")) {
+                additionalParams.put("DOM_HEADING_TF_WEIGHT", Double.parseDouble(o.getString("DOM_HEADING_TF_WEIGHT")));
             }
             if (o.has("SAME_ROW_TF_WEIGHT")) {
                 additionalParams.put("SAME_ROW_TF_WEIGHT", Double.parseDouble(o.getString("SAME_ROW_TF_WEIGHT")));

@@ -56,6 +56,9 @@ public class SearchHandler extends HttpServlet {
         if ((v = request.getParameter("TITLE_MATCH_WEIGHT")) != null) {
             additionalParams.put("TITLE_MATCH_WEIGHT", Double.parseDouble(v));
         }
+        if ((v = request.getParameter("DOM_HEADING_MATCH_WEIGHT")) != null) {
+            additionalParams.put("DOM_HEADING_MATCH_WEIGHT", Double.parseDouble(v));
+        }
         if ((v = request.getParameter("SAME_ROW_MATCH_WEIGHT")) != null) {
             additionalParams.put("SAME_ROW_MATCH_WEIGHT", Double.parseDouble(v));
         }
@@ -88,6 +91,9 @@ public class SearchHandler extends HttpServlet {
         }
         if ((v = request.getParameter("TITLE_TF_WEIGHT")) != null) {
             additionalParams.put("TITLE_TF_WEIGHT", Double.parseDouble(v));
+        }
+        if ((v = request.getParameter("DOM_HEADING_TF_WEIGHT")) != null) {
+            additionalParams.put("DOM_HEADING_TF_WEIGHT", Double.parseDouble(v));
         }
         if ((v = request.getParameter("SAME_ROW_TF_WEIGHT")) != null) {
             additionalParams.put("SAME_ROW_TF_WEIGHT", Double.parseDouble(v));
