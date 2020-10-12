@@ -18,7 +18,10 @@ import util.headword.StringUtils;
 import yago.TaxonomyGraph;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 
@@ -43,7 +46,10 @@ public class TableQuery {
     private static ArrayList<QfactLight> QFACTS = TableQfactLoader.load();
     private static TaxonomyGraph TAXONOMY = TaxonomyGraph.getDefaultGraphInstance();
 
-    public static Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> match(ArrayList<String> queryTypeX, ArrayList<String> queryX, QfactLight f, TableIndex ti, Map params) {
+    public static Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> match(
+            ArrayList<String> queryTypeX, ArrayList<String> queryX,
+            QfactLight f, TableIndex ti,
+            Map params, Map<String, Object> matchCache) {
         if (params == null) {
             params = new HashMap<>();
         }
@@ -62,76 +68,68 @@ public class TableQuery {
         // matching queryType
         double typeIdfScale = (double) params.getOrDefault("TYPE_IDF_SCALE", TYPE_IDF_SCALE);
 
-        for (String qT : queryTypeX) {
-            double matchScore = 0;
-            // CAPTION
-            if (matchScore < captionWeight) {
-                for (String fX : NLP.splitSentence(ti.caption.toLowerCase())) {
-                    if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
-                        continue;
-                    }
-                    double sim = Glove.cosineDistance(qT, StringUtils.stem(fX, Morpha.any));
-                    if (sim == -1) {
-                        continue;
-                    }
-                    sim = (1 - sim) * captionWeight;
+        String cacheKey = String.format("tX-%s", f.tableId);
+        Object cacheValue;
+        if ((cacheValue = matchCache.get(cacheKey)) != null) {
+            Pair<Double, Double> p = (Pair<Double, Double>) cacheValue;
+            score = p.first;
+            totalIdf = p.second;
+        } else {
+            for (String qT : queryTypeX) {
+                double matchScore = 0;
+                // CAPTION
+                if (matchScore < captionWeight) {
+                    for (String fX : NLP.splitSentence(ti.caption.toLowerCase())) {
+                        if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                            continue;
+                        }
+                        double sim = Glove.cosineDistance(qT, StringUtils.stem(fX, Morpha.any));
+                        if (sim == -1) {
+                            continue;
+                        }
+                        sim = (1 - sim) * captionWeight;
 
-                    matchScore = Math.max(matchScore, sim);
-                    if (matchScore >= captionWeight) {
-                        break;
+                        matchScore = Math.max(matchScore, sim);
+                        if (matchScore >= captionWeight) {
+                            break;
+                        }
                     }
                 }
-            }
-            // TITLE
-            if (matchScore < titleWeight) {
-                for (String fX : NLP.splitSentence(ti.pageTitle.toLowerCase())) {
-                    if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
-                        continue;
-                    }
-                    double sim = Glove.cosineDistance(qT, StringUtils.stem(fX, Morpha.any));
-                    if (sim == -1) {
-                        continue;
-                    }
-                    sim = (1 - sim) * titleWeight;
+                // TITLE
+                if (matchScore < titleWeight) {
+                    for (String fX : NLP.splitSentence(ti.pageTitle.toLowerCase())) {
+                        if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                            continue;
+                        }
+                        double sim = Glove.cosineDistance(qT, StringUtils.stem(fX, Morpha.any));
+                        if (sim == -1) {
+                            continue;
+                        }
+                        sim = (1 - sim) * titleWeight;
 
-                    matchScore = Math.max(matchScore, sim);
-                    if (matchScore >= titleWeight) {
-                        break;
+                        matchScore = Math.max(matchScore, sim);
+                        if (matchScore >= titleWeight) {
+                            break;
+                        }
                     }
                 }
-            }
 
-            double idf = IDF.getRobertsonIdf(qT) * typeIdfScale;
-            score += matchScore * idf;
-            totalIdf += idf;
+                double idf = IDF.getRobertsonIdf(qT) * typeIdfScale;
+                score += matchScore * idf;
+                totalIdf += idf;
+            }
+            matchCache.put(cacheKey, new Pair<>(score, totalIdf));
         }
 
-        ArrayList<String> header = new ArrayList<>();
         // matching contextX
         for (String qX : queryX) {
-            ResultInstance.SubInstance.ContextMatchTrace trace = new ResultInstance.SubInstance.ContextMatchTrace(null, 0, null);
+            ResultInstance.SubInstance.ContextMatchTrace traceCache, trace;
+
             // HEADER
-            for (String fX : NLP.splitSentence(f.headerContext.toLowerCase())) {
-                if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
-                    continue;
-                }
-                fX = StringUtils.stem(fX, Morpha.any);
-                header.add(fX);
-                double sim = Glove.cosineDistance(qX, fX);
-                if (sim == -1) {
-                    continue;
-                }
-                sim = (1 - sim) * headerWeight;
-
-                if (trace.score < sim) {
-                    trace.score = sim;
-                    trace.token = fX;
-                    trace.place = "HEADER";
-                }
-            }
-            // CAPTION
-            if (trace.score < captionWeight) {
-                for (String fX : NLP.splitSentence(ti.caption.toLowerCase())) {
+            cacheKey = String.format("X_hd-%s-%d@%s", qX, f.qCol, f.tableId);
+            if ((cacheValue = matchCache.get(cacheKey)) == null) {
+                trace = new ResultInstance.SubInstance.ContextMatchTrace(null, 0, null);
+                for (String fX : NLP.splitSentence(f.headerContext.toLowerCase())) {
                     if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
                         continue;
                     }
@@ -139,64 +137,127 @@ public class TableQuery {
                     if (sim == -1) {
                         continue;
                     }
-                    sim = (1 - sim) * captionWeight;
-
+                    sim = (1 - sim) * headerWeight;
                     if (trace.score < sim) {
                         trace.score = sim;
                         trace.token = fX;
-                        trace.place = "CAPTION";
-                        if (trace.score >= captionWeight) {
+                        trace.place = "HEADER";
+                        if (trace.score >= headerWeight) {
                             break;
                         }
                     }
                 }
+                matchCache.put(cacheKey, trace);
+            } else {
+                trace = (ResultInstance.SubInstance.ContextMatchTrace) cacheValue;
             }
-            // TITLE
-            if (trace.score < titleWeight) {
-                for (String fX : NLP.splitSentence(ti.pageTitle.toLowerCase())) {
-                    if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
-                        continue;
-                    }
-                    double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
-                    if (sim == -1) {
-                        continue;
-                    }
-                    sim = (1 - sim) * titleWeight;
 
-                    if (trace.score < sim) {
-                        trace.score = sim;
-                        trace.token = fX;
-                        trace.place = "TITLE";
-                        if (trace.score >= titleWeight) {
-                            break;
+            if (trace.score < captionWeight
+                    || trace.score < titleWeight
+                    || trace.score < domHeadingWeight
+                    || trace.score < relatedTextWeight) {
+                cacheKey = String.format("X_ct_tt_dh_rt-%s-%s", qX, f.tableId);
+                if (!matchCache.containsKey(cacheKey)) {
+                    traceCache = new ResultInstance.SubInstance.ContextMatchTrace(null, 0, null);
+                    // CAPTION
+                    if (traceCache.score < captionWeight) {
+                        for (String fX : NLP.splitSentence(ti.caption.toLowerCase())) {
+                            if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                                continue;
+                            }
+                            double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
+                            if (sim == -1) {
+                                continue;
+                            }
+                            sim = (1 - sim) * captionWeight;
+
+                            if (traceCache.score < sim) {
+                                traceCache.score = sim;
+                                traceCache.token = fX;
+                                traceCache.place = "CAPTION";
+                                if (traceCache.score >= captionWeight) {
+                                    break;
+                                }
+                            }
                         }
                     }
-                }
-            }
-            // DOM HEADINGs
-            if (trace.score < domHeadingWeight) {
-                for (String fX : NLP.splitSentence(ti.sectionTitles.toLowerCase())) {
-                    if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
-                        continue;
-                    }
-                    double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
-                    if (sim == -1) {
-                        continue;
-                    }
-                    sim = (1 - sim) * domHeadingWeight;
+                    // TITLE
+                    if (traceCache.score < titleWeight) {
+                        for (String fX : NLP.splitSentence(ti.pageTitle.toLowerCase())) {
+                            if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                                continue;
+                            }
+                            double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
+                            if (sim == -1) {
+                                continue;
+                            }
+                            sim = (1 - sim) * titleWeight;
 
-                    if (trace.score < sim) {
-                        trace.score = sim;
-                        trace.token = fX;
-                        trace.place = "DOM_HEADING";
-                        if (trace.score >= domHeadingWeight) {
-                            break;
+                            if (traceCache.score < sim) {
+                                traceCache.score = sim;
+                                traceCache.token = fX;
+                                traceCache.place = "TITLE";
+                                if (traceCache.score >= titleWeight) {
+                                    break;
+                                }
+                            }
                         }
                     }
+                    // DOM HEADINGs
+                    if (traceCache.score < domHeadingWeight) {
+                        for (String fX : NLP.splitSentence(ti.sectionTitles.toLowerCase())) {
+                            if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                                continue;
+                            }
+                            double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
+                            if (sim == -1) {
+                                continue;
+                            }
+                            sim = (1 - sim) * domHeadingWeight;
+
+                            if (traceCache.score < sim) {
+                                traceCache.score = sim;
+                                traceCache.token = fX;
+                                traceCache.place = "DOM_HEADING";
+                                if (traceCache.score >= domHeadingWeight) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    // RELATED_TEXT
+                    if (traceCache.score < relatedTextWeight) {
+                        for (String fX : NLP.splitSentence(ti.pageContent.toLowerCase())) {
+                            if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                                continue;
+                            }
+                            double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
+                            if (sim == -1) {
+                                continue;
+                            }
+                            sim = (1 - sim) * relatedTextWeight;
+
+                            if (traceCache.score < sim) {
+                                traceCache.score = sim;
+                                traceCache.token = fX;
+                                traceCache.place = "RELATED_TEXT";
+                                if (traceCache.score >= relatedTextWeight) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    matchCache.put(cacheKey, traceCache);
+                }
+                traceCache = (ResultInstance.SubInstance.ContextMatchTrace) matchCache.get(cacheKey);
+                if (trace.score < traceCache.score) {
+                    trace = traceCache;
                 }
             }
+
             // SAME ROW
             if (trace.score < sameRowWeight) {
+                traceCache = new ResultInstance.SubInstance.ContextMatchTrace(null, 0, null);
                 loop:
                 for (int c = 0; c < ti.table.nColumn; ++c) {
                     if (c == f.eCol || c == f.qCol) {
@@ -212,47 +273,30 @@ public class TableQuery {
                         }
                         sim = (1 - sim) * sameRowWeight;
 
-                        if (trace.score < sim) {
-                            trace.score = sim;
-                            trace.token = fX;
-                            trace.place = "SAME_ROW";
-                            if (trace.score >= sameRowWeight) {
+                        if (traceCache.score < sim) {
+                            traceCache.score = sim;
+                            traceCache.token = fX;
+                            traceCache.place = "SAME_ROW";
+                            if (traceCache.score >= sameRowWeight) {
                                 break loop;
                             }
                         }
                     }
                 }
-            }
-
-            // RELATED_TEXT
-            if (trace.score < relatedTextWeight) {
-                for (String fX : NLP.splitSentence(ti.pageContent.toLowerCase())) {
-                    if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
-                        continue;
-                    }
-                    double sim = Glove.cosineDistance(qX, StringUtils.stem(fX, Morpha.any));
-                    if (sim == -1) {
-                        continue;
-                    }
-                    sim = (1 - sim) * relatedTextWeight;
-
-                    if (trace.score < sim) {
-                        trace.score = sim;
-                        trace.token = fX;
-                        trace.place = "RELATED_TEXT";
-                        if (trace.score >= relatedTextWeight) {
-                            break;
-                        }
-                    }
+                if (trace.score < traceCache.score) {
+                    trace = traceCache;
                 }
             }
 
             if (trace.score > 0) {
                 boolean toBeAdded = true;
-                for (ResultInstance.SubInstance.ContextMatchTrace t : traces) {
+                for (int i = 0; i < traces.size(); ++i) {
+                    ResultInstance.SubInstance.ContextMatchTrace t = traces.get(i);
                     if (t.token.equals(trace.token) && t.place.equals(trace.place)) {
+                        if (t.score < trace.score) {
+                            traces.set(i, trace);
+                        }
                         toBeAdded = false;
-                        t.score = Math.max(t.score, trace.score);
                         break;
                     }
                 }
@@ -265,6 +309,7 @@ public class TableQuery {
             score += trace.score * idf;
             totalIdf += idf;
         }
+
         if (totalIdf > 0) {
             score /= totalIdf;
         }
@@ -272,7 +317,19 @@ public class TableQuery {
         // Penalty by topic drift between header & query
         double topicDriftWeight = (double) params.getOrDefault("TOPIC_DRIFT_PENALTY", TOPIC_DRIFT_PENALTY);
         if (topicDriftWeight != 0.0) {
-            score *= Math.pow(ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(header, queryX), topicDriftWeight);
+            cacheKey = String.format("td-%d@%s", f.qCol, f.tableId);
+            if ((cacheValue = matchCache.get(cacheKey)) == null) {
+                ArrayList<String> header = new ArrayList<>();
+                for (String fX : NLP.splitSentence(f.headerContext.toLowerCase())) {
+                    if (NLP.BLOCKED_STOPWORDS.contains(fX) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(fX)) {
+                        continue;
+                    }
+                    header.add(StringUtils.stem(fX, Morpha.any));
+                }
+                matchCache.put(cacheKey, cacheValue =
+                        Math.pow(ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(header, queryX), topicDriftWeight));
+            }
+            score *= (double) cacheValue;
         }
         return new Pair<>(score, traces);
     }
@@ -333,6 +390,7 @@ public class TableQuery {
 
         int lastPercent = 0;
 
+        HashMap<String, Object> matchCache = new HashMap<>(1000000);
         result.second = new ArrayList<>();
         for (int i = 0; i < QFACTS.size(); ++i) {
             // log progress
@@ -408,7 +466,8 @@ public class TableQuery {
                     }
                 }
 
-                Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> matchScore = match(queryTypeTerms, queryContextTerms, f, ti, additionalParameters);
+                Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> matchScore =
+                        match(queryTypeTerms, queryContextTerms, f, ti, additionalParameters, matchCache);
 
                 double qtStandardValue = qt.value * QuantityDomain.getScale(qt);
 
