@@ -3,14 +3,10 @@ package server.table.handler.search;
 import model.quantity.QuantityConstraint;
 import model.query.SimpleQueryParser;
 import nlp.NLP;
-import org.json.JSONArray;
 import org.json.JSONObject;
-import pipeline.table.QfactTaxonomyGraph;
 import server.common.handler.ResultCacheHandler;
-import server.table.QfactLight;
 import server.table.ResultInstance;
 import server.table.TableQuery;
-import storage.table.index.TableIndexStorage;
 import util.Gson;
 import util.Pair;
 import util.Triple;
@@ -25,8 +21,6 @@ import java.util.logging.Logger;
 
 public class SearchHandler extends HttpServlet {
     public static final Logger LOGGER = Logger.getLogger(SearchHandler.class.getName());
-
-    public static final HashMap<Integer, QfactTaxonomyGraph.EntityTextQfact> BG_TEXT_QFACT_MAP = QfactTaxonomyGraph.loadBackgroundTextQfactMap();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws ServletException, IOException {
@@ -129,6 +123,10 @@ public class SearchHandler extends HttpServlet {
         } catch (Exception e) {
         }
 
+        if ((v = request.getParameter("nResultsPerPage")) != null) {
+            additionalParams.put("nResultsPerPage", Integer.parseInt(v));
+        }
+
         String sessionKey = search(nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint,
                 (v = request.getParameter("rescore")) != null && v.equals("true"), additionalParams, groundtruth);
 
@@ -142,10 +140,14 @@ public class SearchHandler extends HttpServlet {
     }
 
     // return session key
+    // if nTopResult == -1, cache the whole SearchResult to enable pagination function.
     public static String search(int nTopResult, String fullConstraint,
                                 String typeConstraint, String contextConstraint, String quantityConstraint,
                                 boolean performConsistencyRescoring,
                                 Map additionalParameters, Set<String> groundtruth) {
+        if (additionalParameters == null) {
+            additionalParameters = new HashMap();
+        }
         // Optimize
         if (typeConstraint != null) {
             typeConstraint = NLP.stripSentence(typeConstraint);
@@ -235,33 +237,17 @@ public class SearchHandler extends HttpServlet {
                         }
                     }
 
-                    if (result.second.size() > nTopResult) {
-                        result.second.subList(nTopResult, result.second.size()).clear();
-                    }
                     response.topResults = result.second;
                     response.verdict = "OK";
 
-                    // group table indexes to reduce size
-                    response.tableId2Index = new HashMap<>();
-                    for (ResultInstance ri : response.topResults) {
-                        for (ResultInstance.SubInstance si : ri.subInstances) {
-                            if (!response.tableId2Index.containsKey(si.qfact.tableId)) {
-                                response.tableId2Index.put(si.qfact.tableId, TableIndexStorage.get(si.qfact.tableId));
-                            }
-                            if (si.qfact.explainQfactIds != null && !si.qfact.explainQfactIds.equals("null")) {
-                                si.qfact = (QfactLight) si.qfact.clone(); // IMPORTANT!
-
-                                JSONArray bgQfactIds = new JSONArray(si.qfact.explainQfactIds);
-                                StringBuilder sb = new StringBuilder();
-                                for (int i = 0; i < bgQfactIds.length(); ++i) {
-                                    if (sb.length() > 0) {
-                                        sb.append("\r\n");
-                                    }
-                                    sb.append(BG_TEXT_QFACT_MAP.get(bgQfactIds.getInt(i)).toString());
-                                }
-                                si.qfact.explainStr = sb.toString();
-                            }
+                    if (nTopResult == -1) { // enable pagination
+                        response.nResultsPerPage = (int) additionalParameters.getOrDefault("nResultsPerPage", 50);
+                        response.nPage = (response.topResults.size() - 1) / response.nResultsPerPage + 1;
+                    } else {
+                        if (response.topResults.size() > nTopResult) {
+                            response.topResults.subList(nTopResult, response.topResults.size()).clear();
                         }
+                        response.populateTableIndexesFromTopResults();
                     }
                 }
             }
@@ -270,6 +256,6 @@ public class SearchHandler extends HttpServlet {
             response = new SearchResult();
             response.verdict = "Unknown error occurred.";
         }
-        return ResultCacheHandler.addResult(Gson.toJson(response));
+        return ResultCacheHandler.addResult(response.verdict.equals("OK") && nTopResult == -1 ? response : Gson.toJson(response));
     }
 }

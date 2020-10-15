@@ -168,15 +168,15 @@ if (corpus != null) {
     $('#corpus').multiselect('deselectAll', false);
     $('#corpus').multiselect('select', JSON.parse(corpus));
 }
-var ntop = $.cookie('ntop_table');
-if (ntop != null) {
-    $("#ntop option[value=" + ntop + "]").prop('selected', true);
+var pgSize = $.cookie('pg_size_table');
+if (pgSize != null) {
+    $("#pgSize option[value=" + pgSize + "]").prop('selected', true);
 }
 $("#corpus").on('change', function () {
     $.cookie('corpus_table', JSON.stringify($(this).val()));
 });
-$("#ntop").on('change', function () {
-    $.cookie('ntop_table', this.value);
+$("#pgSize").on('change', function () {
+    $.cookie('pg_size_table', this.value);
 });
 
 // consistency params

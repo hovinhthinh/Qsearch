@@ -98,7 +98,8 @@
     function search() {
         var params = {
             corpus: JSON.stringify($("#corpus").val()),
-            ntop: $("#ntop").val(),
+            ntop: "-1",
+            nResultsPerPage: $("#pgSize").val(),
             rescore: $("#rescore").is(':checked').toString(),
             'linking-threshold': $("#linking-threshold").val(),
 
@@ -148,7 +149,7 @@
                         startRescore = true;
                     }
                 } else {
-                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
+                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 }
             };
             ws.onerror = function () {
@@ -171,7 +172,7 @@
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
                 success: function (data) {
-                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
+                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 },
                 error: function () {
                     alert("An error occurred.");
