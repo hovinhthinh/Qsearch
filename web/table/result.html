@@ -420,9 +420,9 @@
         }
     }
 
-    function encodeEntityResultAsHtml(index, instance) {
+    function encodeEntityResultAsHtml(index, instance, startIndex) {
         var line = "<tr>";
-        line += "<td style='width: auto !important; border-top: 1px solid gray;'>" + (index + 1) + "</td>";
+        line += "<td style='width: auto !important; border-top: 1px solid gray;'>" + (index + startIndex + 1) + "</td>";
         var eCel = entityCell(instance);
         line += eCel.wrapAll('<div>').parent().html();
 
@@ -495,7 +495,7 @@
                     instance.subInstances[j].qfact.tableIndex = data.tableId2Index[instance.subInstances[j].qfact.tableId];
                 }
 
-                str += encodeEntityResultAsHtml(i + data.startIdx, instance);
+                str += encodeEntityResultAsHtml(i, instance, data.startIdx);
             }
 
             // now adding pagination
