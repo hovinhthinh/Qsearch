@@ -495,14 +495,42 @@
                     instance.subInstances[j].qfact.tableIndex = data.tableId2Index[instance.subInstances[j].qfact.tableId];
                 }
 
-                $("#data").append();
-                str += encodeEntityResultAsHtml(i, instance);
+                str += encodeEntityResultAsHtml(i + data.startIdx, instance);
             }
-            if (data.numResults > topResults.length)
-                str += '<tr><td style="border-top: 1px solid gray;"></td><td style="border-top: 1px solid gray;">More ' + (data.numResults - topResults.length) + ' results</td><td colspan="2" style="border-top: 1px solid gray;"></td></tr>';
+
+            // now adding pagination
+            if (data.nPage > 1) {
+                str += '<tr><td style="border-top: 1px solid gray;"></td>';
+
+                var pgCel = $('<td style="border-top: 1px solid gray;" colspan="3">');
+                if (data.pageIdx > 0) {
+                    pgCel.append($('<a href="#" pg="' + (data.pageIdx - 1) + '" class="ml-1 mr-3 pgn">&lt; Prev</a>'));
+                }
+                for (var i = data.pageIdx - 5; i < data.pageIdx; ++i) {
+                    if (i >= 0) {
+                        pgCel.append($('<a href="#" pg="' + i + '" class="ml-1 mr-1 badge badge-light pgn">' + (i + 1) + '</a>'));
+                    }
+                }
+                pgCel.append($('<a href="#" class="ml-1 mr-1 badge badge-primary">' + (data.pageIdx + 1) + '</a>'));
+                for (var i = data.pageIdx + 1; i < Math.max(10, data.pageIdx + 5); ++i) {
+                    if (i < data.nPage) {
+                        pgCel.append($('<a href="#" pg="' + i + '" class="ml-1 mr-1 badge badge-light pgn">' + (i + 1) + '</a>'));
+                    }
+                }
+                if (data.pageIdx < data.nPage - 1) {
+                    pgCel.append($('<a href="#" pg="' + (data.pageIdx + 1) + '" class="mt-1 ml-3 mr-1 pgn">Next &gt;</a>'));
+                }
+                str += pgCel.wrapAll('<div>').parent().html();
+                str += '</tr>';
+            }
+
             $("#data").html(str);
             $("#sort-dropdown").removeAttr('hidden');
         }
+
+        $('.pgn').each(function () {
+            $(this).attr('href', "/table/result.html?s=" + urlParams.get('s') + "&q=" + urlParams.get('q') + "&p=" + $(this).attr('pg'));
+        });
 
         $('.converted-quantity').each(function () {
             var current = this;
@@ -632,7 +660,8 @@
     function search() {
         var params = {
             corpus: JSON.stringify($("#corpus").val()),
-            ntop: $("#ntop").val(),
+            ntop: "-1",
+            nResultsPerPage: $("#pgSize").val(),
             rescore: $("#rescore").is(':checked').toString(),
             'linking-threshold': $("#linking-threshold").val(),
 
@@ -682,7 +711,7 @@
                         startRescore = true;
                     }
                 } else {
-                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
+                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 }
             };
             ws.onerror = function () {
@@ -705,7 +734,7 @@
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
                 success: function (data) {
-                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
+                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 },
                 error: function () {
                     alert("An error occurred.");
@@ -739,7 +768,7 @@
         $.ajax({
             type: "GET",
             url: "/session",
-            data: {"s": urlParams.get('s')},
+            data: {"s": urlParams.get('s'), "p": urlParams.get('p')},
             contentType: 'application/json; charset=utf-8',
             dataType: "json",
             beforeSend: function () {
