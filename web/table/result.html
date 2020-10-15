@@ -508,13 +508,13 @@
                 }
                 for (var i = data.pageIdx - 5; i < data.pageIdx; ++i) {
                     if (i >= 0) {
-                        pgCel.append($('<a href="#" pg="' + i + '" class="ml-1 mr-1 badge badge-light pgn">' + (i + 1) + '</a>'));
+                        pgCel.append($('<a href="#" pg="' + i + '" class="ml-1 mr-1 badge badge-pill badge-light pgn">' + (i + 1) + '</a>'));
                     }
                 }
-                pgCel.append($('<a href="#" class="ml-1 mr-1 badge badge-primary">' + (data.pageIdx + 1) + '</a>'));
+                pgCel.append($('<a href="#" class="ml-1 mr-1 badge badge-pill badge-primary">' + (data.pageIdx + 1) + '</a>'));
                 for (var i = data.pageIdx + 1; i < Math.max(10, data.pageIdx + 5); ++i) {
                     if (i < data.nPage) {
-                        pgCel.append($('<a href="#" pg="' + i + '" class="ml-1 mr-1 badge badge-light pgn">' + (i + 1) + '</a>'));
+                        pgCel.append($('<a href="#" pg="' + i + '" class="ml-1 mr-1 badge badge-pill badge-light pgn">' + (i + 1) + '</a>'));
                     }
                 }
                 if (data.pageIdx < data.nPage - 1) {
