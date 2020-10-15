@@ -464,15 +464,15 @@
             : ("[" + quantity.quantity.value.toLocaleString('en-US') + " - " + quantity.quantity.value2.toLocaleString('en-US') + "]"));
         var quantityConstraintDetail = '( <span class="alert alert-danger">' + escapeText(operator.substring(9)) + '</span>'
             + ", " + '<span class="alert alert-danger">' + escapeText(value) + '</span>';
-        if (quantity.quantity.unit != '') {
-            quantityConstraintDetail += ", " + '<span class="alert alert-danger">' + escapeText(quantity.quantity.unit) + '</span>';
-        }
+
+        quantityConstraintDetail += ", " + '<span class="alert alert-danger">' + escapeText(quantity.quantity.unit)
+            + ' (' + escapeText(quantity['fineGrainedDomain']) + ')</span>';
         quantityConstraintDetail += " )";
 
         $('#parsed').html('Parsed:&nbsp;&nbsp;&nbsp;' + '<span class="entity-box">' + escapeText(type) + '</span>'
             + " - " + '<span class="context-box">' + escapeText(context) + '</span>'
-            + " - " + '<span id="quantity-constraint" class="quantity-box" data-animation="true" data-placement="bottom" data-html="true">' + escapeText(quantity['phrase']) + '</span>'
-            + ' <span class="badge badge-pill badge-danger">Domain: ' + escapeText(quantity['fineGrainedDomain']) + '</span>');
+            + " - " + '<span id="quantity-constraint" class="quantity-box" data-animation="true" data-placement="bottom" data-html="true">' + escapeText(quantity['phrase']) + '</span>');
+
         $('#quantity-constraint').attr('data-content', quantityConstraintDetail);
     }
 
