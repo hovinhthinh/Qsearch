@@ -120,7 +120,7 @@
     <div class="modal-dialog mw-100" style="width: 70%;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Explanation for <a id='explain-entity' target="_blank" href="#">ENTITY</a></h5>
+                <h5 class="modal-title font-weight-bold">Explanation for <a id='explain-entity' target="_blank" href="#">ENTITY</a></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -136,7 +136,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rdsh;
                         <span class="badge badge-pill explain-type">TYPE</span>
-                        <span class="h6 explain-related-entity">
+                        <span class="h6 explain-related-entity font-weight-bold">
                             <a target="_blank" href="#">RELATED_ENTITY</a></span>
                     </div>
                     <div class="mt-2 explain-content">CONTENT</div>
@@ -204,7 +204,7 @@
 
     function entityCell(inst) {
         var value = inst.entity;
-        value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result mr-1" href="https://www.wikipedia.org/wiki/'
+        value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result mr-1 font-weight-bold" href="https://www.wikipedia.org/wiki/'
             + encodeURI(value.substring(1, value.length - 1)) + '" target="_blank" referrerpolicy="no-referrer">'
             + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
             + '</a>';
@@ -609,7 +609,7 @@
                     explainEvi.find('.explain-type').text("Exact-Entity").addClass('badge-primary');
                     explainEvi.find('.explain-related-entity').attr('hidden', 'hidden');
                 } else {
-                    explainEvi.find('.explain-type').text("Type-Related").addClass('badge-secondary');
+                    explainEvi.find('.explain-type').text("Type-Based").addClass('badge-secondary');
                     explainEvi.find('.explain-related-entity').removeAttr('hidden');
                     explainEvi.find('.explain-related-entity a')
                         .html(escapeText(relatedEntity.substring(1, relatedEntity.length - 1)).replace(/_/g, '&nbsp;'))
