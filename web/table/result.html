@@ -202,6 +202,37 @@
         return result;
     }
 
+    function wrapHeaderUnitSpan(input, unitSpan) {
+        var units = unitSpan.split(' ');
+        for (var i = 0; i < units.length; ++i) {
+            units[i] = units[i].toLowerCase();
+        }
+
+        var result = '';
+        input.replace('(', ' ( ').replace(')', ' ) ').replace(/\s+/g, ' ').trim()
+            .split(' ').forEach(function (t) {
+            if (result != '') {
+                result += ' ';
+            }
+            var wrap = false;
+            var lc = t.toLowerCase();
+            for (var j = 0; j < units.length; ++j) {
+                if (lc == units[j] || lc == units[j] + 's' || lc == '1,' + units[j]
+                    || (j < units.length - 1 && lc == units[j] + units[j + 1])) {
+                    wrap = true;
+                    break;
+                }
+            }
+            if (wrap) {
+                result += '<span class="quantity-box">' + t + '</span>'
+            } else {
+                result += t;
+            }
+        });
+        result = result.replace(/<\/span> <span class="quantity-box">/g, '&nbsp;');
+        return result;
+    }
+
     function entityCell(inst) {
         var value = inst.entity;
         value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result mr-1 font-weight-bold" href="https://www.wikipedia.org/wiki/'
@@ -317,7 +348,8 @@
                 if (si.qfact.headerUnitSpan != null && table.header[i][j].text == table.header[table.header.length - 1][si.qfact.qCol].text
                     && si.qfact.qCol >= j && si.qfact.qCol <= temp_1 && temp_2 == table.header.length - 1) {
                     var unitSpan = escapeText(si.qfact.headerUnitSpan);
-                    text += ' <span class="badge badge-pill badge-secondary">Unit/Scale: ' + unitSpan + '</span>';
+                    text = wrapHeaderUnitSpan(text, unitSpan);
+                    // text += ' <span class="badge badge-pill badge-secondary">Unit/Scale: ' + unitSpan + '</span>';
                 }
 
                 if (table.header[i][j].text == table.header[table.header.length - 1][si.qfact.eCol].text
@@ -923,16 +955,16 @@
     autocomplete(document.getElementById("type"));
 
     // back to top
-    $(window).scroll(function() {
+    $(window).scroll(function () {
         if ($(window).scrollTop() > 300) {
             $('#back-to-top').addClass('show');
         } else {
             $('#back-to-top').removeClass('show');
         }
     });
-    $('#back-to-top').on('click', function(e) {
+    $('#back-to-top').on('click', function (e) {
         e.preventDefault();
-        $('html, body').animate({scrollTop:0}, '300');
+        $('html, body').animate({scrollTop: 0}, '300');
     });
 </script>
 </body>
