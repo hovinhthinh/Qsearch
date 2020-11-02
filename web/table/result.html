@@ -345,15 +345,15 @@
                 }
 
                 var text = escapeText(table.header[i][j].text);
-                if (si.qfact.headerUnitSpan != null && table.header[i][j].text == table.header[table.header.length - 1][si.qfact.qCol].text
-                    && si.qfact.qCol >= j && si.qfact.qCol <= temp_1 && temp_2 == table.header.length - 1) {
+                if (si.qfact.headerUnitSpan != null && si.qfact.qCol >= j && si.qfact.qCol <= temp_1) {
                     var unitSpan = escapeText(si.qfact.headerUnitSpan);
                     text = wrapHeaderUnitSpan(text, unitSpan);
-                    // text += ' <span class="badge badge-pill badge-secondary">Unit/Scale: ' + unitSpan + '</span>';
+                    if (temp_2 == table.header.length - 1) {
+                        // text += ' <span class="badge badge-pill badge-secondary">Unit/Scale: ' + unitSpan + '</span>';
+                    }
                 }
 
-                if (table.header[i][j].text == table.header[table.header.length - 1][si.qfact.eCol].text
-                    && si.qfact.eCol >= j && si.qfact.eCol <= temp_1 && temp_2 == table.header.length - 1) {
+                if (si.qfact.eCol >= j && si.qfact.eCol <= temp_1 && temp_2 == table.header.length - 1) {
                     // text += ' <span class="badge badge-pill badge-secondary">LScore: ' + si.qfact.linkingScore.toFixed(3) + '</span>';
                 }
                 c.html(text);
