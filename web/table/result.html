@@ -187,13 +187,15 @@
         return $('<div>').text(text).html();
     }
 
-    function wrapContextBox(input, token) {
+    function wrapContextBox(input, token, header = false) {
+        token = token.toLowerCase();
         var result = '';
         input.split(' ').forEach(function (t) {
             if (result != '') {
                 result += ' ';
             }
-            if (t.toLowerCase() == token.toLowerCase()) {
+            var tLc = t.toLowerCase();
+            if (tLc == token || (header && tLc == token + 's')) {
                 result += '<span class="context-box">' + t + '</span>'
             } else {
                 result += t;
@@ -356,7 +358,7 @@
                             continue;
                         }
                         var token = escapeText(si.traces[k].token);
-                        text = wrapContextBox(text, token);
+                        text = wrapContextBox(text, token, true);
                     }
                     text = text.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
 
