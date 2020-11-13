@@ -7,7 +7,10 @@
     <groupId>de.mpii</groupId>
     <artifactId>tabqs</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+<!-- to build WAR, change below to 'war' and remove maven-shade-plugin,
+ as it does not work with WAR, basically because it copies shaded classes to ROOT,
+ instead of WEB-INF/classes. So, relocation does not work for WAR // TODO -->
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>1.9</maven.compiler.source>
