@@ -19,17 +19,20 @@ public class Server {
         connector.getConnectionFactory(HttpConnectionFactory.class).getHttpConfiguration().setRequestHeaderSize(1024 * 1024 * 10);
         server.addConnector(connector);
 
-        ResourceHandler resourceHandler = new ResourceHandler();
-        resourceHandler.setDirectoriesListed(true);
+//        ResourceHandler resourceHandler = new ResourceHandler();
+//        resourceHandler.setDirectoriesListed(true);
 
         WebAppContext ctx = new WebAppContext();
         ctx.setContextPath("/");
         ctx.setResourceBase("./web");
+
+        // support JSP in embedded mode
         ctx.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern", ".*/[^/]*jstl.*\\.jar$");
         org.eclipse.jetty.webapp.Configuration.ClassList classlist = org.eclipse.jetty.webapp.Configuration.ClassList.setServerDefault(server);
         classlist.addAfter("org.eclipse.jetty.webapp.FragmentConfiguration", "org.eclipse.jetty.plus.webapp.EnvConfiguration", "org.eclipse.jetty.plus.webapp.PlusConfiguration");
         classlist.addBefore("org.eclipse.jetty.webapp.JettyWebXmlConfiguration", "org.eclipse.jetty.annotations.AnnotationConfiguration");
 
+        // wrap with GZIP handler
         GzipHandler gzipHandler = new GzipHandler();
         gzipHandler.setHandler(ctx);
 
