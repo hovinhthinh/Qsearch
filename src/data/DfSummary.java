@@ -1,5 +1,6 @@
 package data;
 
+import model.context.IDF;
 import util.FileUtils;
 
 import java.io.PrintWriter;
@@ -7,8 +8,6 @@ import java.util.*;
 
 @Deprecated
 public class DfSummary {
-    public static String _N_DOC = "_N_DOC";
-
     public static void main(String[] args) {
         args = "/home/hvthinh/datasets/STICS/df.gz /home/hvthinh/datasets/NYT/df.gz ./data/df_stics+nyt.gz".split(
                 " ");
@@ -19,7 +18,7 @@ public class DfSummary {
                 word2doc.put(arr[0], word2doc.getOrDefault(arr[0], 0) + Integer.parseInt(arr[1]));
             }
         }
-        double nDoc = word2doc.get(_N_DOC);
+        double nDoc = word2doc.get(IDF._N_DOC_NAME);
         ArrayList<Map.Entry<String, Integer>> arr = new ArrayList<>(word2doc.entrySet());
         Collections.sort(arr, new Comparator<Map.Entry<String, Integer>>() {
             @Override
