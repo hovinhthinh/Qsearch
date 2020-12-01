@@ -2,7 +2,6 @@ package server.common.handler;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.RandomStringUtils;
 import util.Gson;
 
@@ -44,8 +43,23 @@ public class ResultCacheHandler extends HttpServlet {
         if (r instanceof String) {
             httpServletResponse.getWriter().print(r);
         } else if (r instanceof server.text.handler.search.SearchResult) {
-            // TODO: pagination for text-based search
-            throw new NotImplementedException();
+            try {
+                server.text.handler.search.SearchResult result = (server.text.handler.search.SearchResult) r;
+
+                result = (server.text.handler.search.SearchResult) result.clone(); // IMPORTANT!
+
+                result.pageIdx = Integer.parseInt(request.getParameter("p"));
+                result.startIdx = result.pageIdx * result.nResultsPerPage;
+                result.topResults = new ArrayList<>(result.topResults.subList(
+                        result.startIdx, Math.min(result.startIdx + result.nResultsPerPage, result.topResults.size())
+                ));
+                httpServletResponse.getWriter().print(Gson.toJson(result));
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+                httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
+
         } else if (r instanceof server.table.handler.search.SearchResult) {
             try {
                 server.table.handler.search.SearchResult result = (server.table.handler.search.SearchResult) r;

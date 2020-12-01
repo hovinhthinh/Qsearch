@@ -60,6 +60,10 @@ public class SearchHandler extends HttpServlet {
         } catch (Exception e) {
         }
 
+        if ((v = request.getParameter("nResultsPerPage")) != null) {
+            additionalParams.put("nResultsPerPage", Integer.parseInt(v));
+        }
+
         String sessionKey = search(null, nResult, fullConstraint, typeConstraint, contextConstraint, quantityConstraint, additionalParams, groundtruth);
 
         if ((v = request.getParameter("cache")) != null && v.equals("true")) {
@@ -174,11 +178,17 @@ public class SearchHandler extends HttpServlet {
                         }
                     }
 
-                    if (result.second.size() > nTopResult) {
-                        result.second.subList(nTopResult, result.second.size()).clear();
-                    }
                     response.topResults = result.second;
                     response.verdict = "OK";
+
+                    if (nTopResult == -1) { // enable pagination
+                        response.nResultsPerPage = (int) additionalParameters.getOrDefault("nResultsPerPage", 20);
+                        response.nPage = (response.topResults.size() - 1) / response.nResultsPerPage + 1;
+                    } else {
+                        if (response.topResults.size() > nTopResult) {
+                            response.topResults.subList(nTopResult, response.topResults.size()).clear();
+                        }
+                    }
                 }
             }
         } catch (Exception e) {
@@ -186,6 +196,6 @@ public class SearchHandler extends HttpServlet {
             response = new SearchResult();
             response.verdict = "Unknown error occurred.";
         }
-        return ResultCacheHandler.addResult(Gson.toJson(response));
+        return ResultCacheHandler.addResult(response.verdict.equals("OK") && nTopResult == -1 ? response : Gson.toJson(response));
     }
 }

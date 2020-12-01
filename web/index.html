@@ -98,7 +98,8 @@
             model: $("#model").val(),
             lambda: $("#lambda").val(),
             alpha: $("#alpha").val(),
-            ntop: $("#ntop").val()
+            ntop: "-1",
+            nResultsPerPage: $("#pgSize").val()
         };
         if ($.cookie('part_search') != "1") {
             if ($("#full").val().trim() == "") {
@@ -133,7 +134,7 @@
                 if ("progress" in data) {
                     nanobar.go(data["progress"]);
                 } else {
-                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
+                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 }
             };
             ws.onerror = function () {
@@ -156,7 +157,7 @@
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
                 success: function (data) {
-                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
+                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 },
                 error: function () {
                     alert("An error occurred.");

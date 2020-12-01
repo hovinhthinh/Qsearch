@@ -4,6 +4,26 @@ body, .popover {
     font-family: Roboto !important;
 }
 
+#back-to-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    transition: background-color .5s, opacity .5s, visibility .5s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 10000;
+}
+
+#back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+}
+
 #particles-bg {
     position: absolute;
     width: 100%;
