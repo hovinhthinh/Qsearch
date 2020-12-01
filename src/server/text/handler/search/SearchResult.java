@@ -4,7 +4,7 @@ import model.quantity.QuantityConstraint;
 
 import java.util.ArrayList;
 
-public class SearchResult {
+public class SearchResult implements Cloneable {
     public String verdict; // "OK" is good, otherwise the error message.
     public String fullQuery; // optional
     public String typeConstraint;
@@ -52,4 +52,15 @@ public class SearchResult {
 
     // below are recall-based metrics computed in case groundtruth is provided.
     public Double RR, AP, RECALL, RECALL_10;
+
+    // below are pagination-info
+    public int nResultsPerPage;
+    public int nPage;
+
+    public int pageIdx, startIdx; // 0-based index
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

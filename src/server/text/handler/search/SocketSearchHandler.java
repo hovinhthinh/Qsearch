@@ -66,6 +66,11 @@ public class SocketSearchHandler extends WebSocketServlet {
             additionalParams.put("session", session);
 
             int nResult = o.has("ntop") ? Integer.parseInt(o.getString("ntop")) : 20;
+
+            if (o.has("nResultsPerPage")) {
+                additionalParams.put("nResultsPerPage", Integer.parseInt(o.getString("nResultsPerPage")));
+            }
+
             String sessionKey = SearchHandler.search(null, nResult, fullConstraint,
                     typeConstraint, contextConstraint, quantityConstraint, additionalParams, null);
             try {

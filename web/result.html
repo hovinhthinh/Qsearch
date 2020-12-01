@@ -107,7 +107,8 @@
         </tr>
     </table>
 </footer>
-<img hidden id="loading" src="img/loading.gif" style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"/>
+<img hidden id="loading" src="img/loading.gif"
+     style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"/>
 <!--
 <div hidden id="loading">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#fff;display:block;" width="100px" height="100px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
@@ -126,6 +127,11 @@
     }
 </style>
 -->
+
+<div id="back-to-top" class="btn btn-outline-success shadow-2">
+    <i class="fa fa-chevron-up"></i>
+</div>
+
 <script>
     $('#settings').html($.ajax({
         type: "GET",
@@ -284,7 +290,7 @@
             var str = "";
             for (var i = 0; i < topResults.length; ++i) {
                 var instance = topResults[i];
-                str += encode(i + 1, instance["score"].toFixed(3), instance["entity"], instance["quantity"],
+                str += encode(i + 1 + data.startIdx, instance["score"].toFixed(3), instance["entity"], instance["quantity"],
                     {
                         'value': instance["sentence"],
                         'entityStr': instance["entityStr"],
@@ -294,11 +300,40 @@
                     },
                     instance["source"]);
             }
-            if (data["numResults"] > topResults.length)
-                str += encode("", "", "More " + (data["numResults"] - topResults.length) + " results", "", {'value': ""}, "");
+
+            // now adding pagination
+            if (data.nPage > 1) {
+                str += '<tr><td></td>';
+
+                var pgCel = $('<td colspan="3">');
+                if (data.pageIdx > 0) {
+                    pgCel.append($('<a href="#" pg="' + (data.pageIdx - 1) + '" class="ml-1 mr-3 pgn">&lt; Prev</a>'));
+                }
+                for (var i = data.pageIdx - 5; i < data.pageIdx; ++i) {
+                    if (i >= 0) {
+                        pgCel.append($('<a href="#" pg="' + i + '" class="ml-1 mr-1 badge badge-pill badge-light pgn">' + (i + 1) + '</a>'));
+                    }
+                }
+                pgCel.append($('<a href="#" class="ml-1 mr-1 badge badge-pill badge-primary">' + (data.pageIdx + 1) + '</a>'));
+                for (var i = data.pageIdx + 1; i < Math.max(10, data.pageIdx + 5); ++i) {
+                    if (i < data.nPage) {
+                        pgCel.append($('<a href="#" pg="' + i + '" class="ml-1 mr-1 badge badge-pill badge-light pgn">' + (i + 1) + '</a>'));
+                    }
+                }
+                if (data.pageIdx < data.nPage - 1) {
+                    pgCel.append($('<a href="#" pg="' + (data.pageIdx + 1) + '" class="mt-1 ml-3 mr-1 pgn">Next &gt;</a>'));
+                }
+                str += pgCel.wrapAll('<div>').parent().html();
+                str += '</tr>';
+            }
+
             $("#data").html(str);
             $("#sort-dropdown").removeAttr('hidden');
         }
+
+        $('.pgn').each(function () {
+            $(this).attr('href', "/result.html?s=" + urlParams.get('s') + "&q=" + urlParams.get('q') + "&p=" + $(this).attr('pg'));
+        });
 
         $('.converted-quantity').each(function () {
             var current = this;
@@ -361,7 +396,8 @@
             model: $("#model").val(),
             lambda: $("#lambda").val(),
             alpha: $("#alpha").val(),
-            ntop: $("#ntop").val()
+            ntop: "-1",
+            nResultsPerPage: $("#pgSize").val()
         };
         if ($.cookie('part_search') != "1") {
             if ($("#full").val().trim() == "") {
@@ -396,7 +432,7 @@
                 if ("progress" in data) {
                     nanobar.go(data["progress"]);
                 } else {
-                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
+                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 }
             };
             ws.onerror = function () {
@@ -419,7 +455,7 @@
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
                 success: function (data) {
-                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))));
+                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 },
                 error: function () {
                     alert("An error occurred.");
@@ -453,7 +489,7 @@
         $.ajax({
             type: "GET",
             url: "/session",
-            data: {"s": urlParams.get('s')},
+            data: {"s": urlParams.get('s'), "p": urlParams.get('p')},
             contentType: 'application/json; charset=utf-8',
             dataType: "json",
             beforeSend: function () {
@@ -561,6 +597,19 @@
     });
     autocomplete(document.getElementById("full"));
     autocomplete(document.getElementById("type"));
+
+    // back to top
+    $(window).scroll(function () {
+        if ($(window).scrollTop() > 300) {
+            $('#back-to-top').addClass('show');
+        } else {
+            $('#back-to-top').removeClass('show');
+        }
+    });
+    $('#back-to-top').on('click', function (e) {
+        e.preventDefault();
+        $('html, body').animate({scrollTop: 0}, '300');
+    });
 </script>
 </body>
 </html>

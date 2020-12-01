@@ -168,9 +168,9 @@ if (corpus != null) {
     $('#corpus').multiselect('deselectAll', false);
     $('#corpus').multiselect('select', JSON.parse(corpus));
 }
-var ntop = $.cookie('ntop');
-if (ntop != null) {
-    $("#ntop option[value=" + ntop + "]").prop('selected', true);
+var pgSize = $.cookie('pg_size');
+if (pgSize != null) {
+    $("#pgSize option[value=" + pgSize + "]").prop('selected', true);
 }
 var model = $.cookie('model');
 if (model != null) {
@@ -207,8 +207,8 @@ hideParameter();
 $("#corpus").on('change', function () {
     $.cookie('corpus', JSON.stringify($(this).val()));
 });
-$("#ntop").on('change', function () {
-    $.cookie('ntop', this.value);
+$("#pgSize").on('change', function () {
+    $.cookie('pg_size', this.value);
 });
 $("#model").on('change', function () {
     $.cookie('model', this.value);
