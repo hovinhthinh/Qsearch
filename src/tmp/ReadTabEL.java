@@ -9,7 +9,6 @@ import nlp.NLP;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
-import util.JSchUtils;
 
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
@@ -79,6 +78,5 @@ public class ReadTabEL {
                 }
             }
         }
-        JSchUtils.stop();
     }
 }
