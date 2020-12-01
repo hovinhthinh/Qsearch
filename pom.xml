@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.mpii</groupId>
-    <artifactId>tabqs</artifactId>
+    <artifactId>qsearch</artifactId>
     <version>1.0-SNAPSHOT</version>
 <!-- to build WAR, change below to 'war' and remove maven-shade-plugin,
  as it does not work with WAR, basically because it copies shaded classes to ROOT,
