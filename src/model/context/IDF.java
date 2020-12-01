@@ -1,12 +1,13 @@
 package model.context;
 
-import data.DfSummary;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import util.FileUtils;
 
 // Computed from STIC+NYT corpus.
 // TODO: Compute from WIKIPEDIA AS WELL ??
 public class IDF {
+    public static String _N_DOC_NAME = "_N_DOC";
+
     private static Object2DoubleOpenHashMap<String> DEFAULT_IDF;
     private static Object2DoubleOpenHashMap<String> ROBERTSON_IDF;
     private static double N_DOC;
@@ -20,7 +21,7 @@ public class IDF {
         // first line is N_DOC
         for (String line : FileUtils.getLineStream("./data/df_stics+nyt.gz", "UTF-8")) {
             String[] arr = line.split("\t");
-            if (arr[0].equals(DfSummary._N_DOC)) {
+            if (arr[0].equals(_N_DOC_NAME)) {
                 N_DOC = Double.parseDouble(arr[1]);
             } else {
                 double df = Double.parseDouble(arr[1]);

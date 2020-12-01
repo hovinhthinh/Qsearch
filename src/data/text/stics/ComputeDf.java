@@ -1,6 +1,6 @@
 package data.text.stics;
 
-import data.DfSummary;
+import model.context.IDF;
 import nlp.NLP;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +43,7 @@ public class ComputeDf {
             }
         }
         PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
-        out.println(DfSummary._N_DOC + " " + nDoc);
+        out.println(IDF._N_DOC_NAME + " " + nDoc);
         for (Map.Entry<String, Integer> e : word2doc.entrySet()) {
             out.println(e.getKey() + " " + e.getValue());
         }
