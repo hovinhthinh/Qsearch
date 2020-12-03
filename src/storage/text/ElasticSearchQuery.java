@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
+@Deprecated
 public class ElasticSearchQuery {
     public static final Logger LOGGER = Logger.getLogger(ElasticSearchQuery.class.getName());
 
