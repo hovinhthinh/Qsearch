@@ -26,6 +26,7 @@ public class TableIndexStorage {
                     .entries(3500000)
                     .createPersistedTo(new File(TABLE_INDEX_FILE));
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
