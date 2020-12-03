@@ -24,7 +24,7 @@ public class TableIndexStorage {
                     .averageKeySize(20)
                     .averageValueSize(3000)
                     .entries(3500000)
-                    .createOrRecoverPersistedTo(new File(TABLE_INDEX_FILE));
+                    .createPersistedTo(new File(TABLE_INDEX_FILE));
         } catch (IOException e) {
             e.printStackTrace();
         }
