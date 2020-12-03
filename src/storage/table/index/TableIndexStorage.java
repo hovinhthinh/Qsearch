@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class TableIndexStorage {
-    public static final String TABLE_INDEX_FILE = "/GW/D5data-12/hvthinh/TabQs/to_be_indexed/table.index";
+    public static final String TABLE_INDEX_FILE = "/GW/D5data-13/hvthinh/TabQs/to_be_indexed/table.index";
 
     private static ChronicleMap<String, TableIndex> INDEX = null;
 
