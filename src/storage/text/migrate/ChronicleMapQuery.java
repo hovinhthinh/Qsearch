@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 public class ChronicleMapQuery {
-    public static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(ChronicleMapQuery.class.getName());
 
     public static ContextMatcher DEFAULT_MATCHER = new ContextEmbeddingMatcher(3);
 
