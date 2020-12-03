@@ -11,11 +11,11 @@ import nlp.NLP;
 import org.eclipse.jetty.websocket.api.Session;
 import storage.table.index.TableIndex;
 import storage.table.index.TableIndexStorage;
+import storage.text.migrate.TypeMatcher;
 import uk.ac.susx.informatics.Morpha;
 import util.Gson;
 import util.Pair;
 import util.headword.StringUtils;
-import yago.TaxonomyGraph;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +44,6 @@ public class TableQuery {
     public static final int N_TOP_ENTITY_CONSISTENCY_RESCORING = 200;
 
     private static ArrayList<QfactLight> QFACTS = TableQfactLoader.load();
-    private static TaxonomyGraph TAXONOMY = TaxonomyGraph.getDefaultGraphInstance();
 
     public static Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> match(
             ArrayList<String> queryTypeX, ArrayList<String> queryX,
@@ -357,8 +356,7 @@ public class TableQuery {
             }
         }
 
-        queryType = NLP.stripSentence(NLP.fastStemming(queryType.toLowerCase(), Morpha.noun));
-        String queryHeadWord = NLP.getHeadWord(queryType, true);
+        TypeMatcher typeMatcher = new TypeMatcher(queryType);
 
         // Process query context terms
         String domain = QuantityDomain.getDomain(qtConstraint.quantity);
@@ -424,14 +422,7 @@ public class TableQuery {
             }
 
             // process type
-            boolean entityIsOfCorrectType = false;
-            for (String type : TAXONOMY.getTextualizedTypes("<" + entity.substring(5) + ">", true)) {
-                if (type.contains(queryType) && queryHeadWord.equals(NLP.getHeadWord(type, true))) {
-                    entityIsOfCorrectType = true;
-                    break;
-                }
-            }
-            if (!entityIsOfCorrectType) {
+            if (!typeMatcher.match("<" + entity.substring(5) + ">")) {
                 i = j;
                 continue;
             }
