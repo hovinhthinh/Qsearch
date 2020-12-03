@@ -7,7 +7,7 @@ import model.query.SimpleQueryParser;
 import nlp.NLP;
 import org.json.JSONObject;
 import server.common.handler.ResultCacheHandler;
-import storage.text.ElasticSearchQuery;
+import storage.text.migrate.ChronicleMapQuery;
 import util.Gson;
 import util.Pair;
 import util.Triple;
@@ -108,7 +108,7 @@ public class SearchHandler extends HttpServlet {
                 matcher = KULLBACK_LEIBLER_MATCHER;
             } else {
                 model = EMBEDDING_MODEL_STRING;
-                matcher = ElasticSearchQuery.DEFAULT_MATCHER;
+                matcher = ChronicleMapQuery.DEFAULT_MATCHER;
             }
             if (fullConstraint != null) {
                 Triple<String, String, String> parsed = SimpleQueryParser.parse(fullConstraint, SimpleQueryParser.SOURCE_CODE_TEXT);
@@ -129,11 +129,12 @@ public class SearchHandler extends HttpServlet {
             }
             if (response.verdict == null) {
                 Pair<QuantityConstraint, ArrayList<SearchResult.ResultInstance>> result =
-                        ElasticSearchQuery.search(typeConstraint, contextConstraint, quantityConstraint, matcher, additionalParameters);
+                        ChronicleMapQuery.search(typeConstraint, contextConstraint, quantityConstraint, matcher, additionalParameters);
                 if (result.first == null) {
                     response.verdict = "Cannot detect quantity constraint.";
                 } else if (result.second == null) {
-                    response.verdict = "Elasticsearch error.";
+                    // would not happen for ChronicleMap
+//                    response.verdict = "Elasticsearch error.";
                 } else {
                     response.matchingModel = model;
                     response.fullQuery = fullConstraint;

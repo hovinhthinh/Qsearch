@@ -12,13 +12,11 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONArray;
 import org.json.JSONException;
 import server.text.handler.search.SearchResult;
-
 import uk.ac.susx.informatics.Morpha;
 import util.Constants;
 import util.Gson;
 import util.Pair;
 import util.headword.StringUtils;
-import yago.TaxonomyGraph;
 
 import java.io.IOException;
 import java.util.*;
@@ -28,9 +26,6 @@ public class ChronicleMapQuery {
     public static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
     public static ContextMatcher DEFAULT_MATCHER = new ContextEmbeddingMatcher(3);
-
-
-    private static TaxonomyGraph TAXONOMY = TaxonomyGraph.getDefaultGraphInstance();
 
     public static Pair<QuantityConstraint, ArrayList<SearchResult.ResultInstance>> search(String queryType, String queryContext,
                                                                                           String quantityConstraint,
@@ -43,8 +38,7 @@ public class ChronicleMapQuery {
             return result;
         }
 
-        queryType = NLP.stripSentence(NLP.fastStemming(queryType.toLowerCase(), Morpha.noun));
-        String queryHeadWord = NLP.getHeadWord(queryType, true);
+        TypeMatcher typeMatcher = new TypeMatcher(queryType);
 
         // Process query context terms
         queryContext = queryContext.toLowerCase();
@@ -99,14 +93,7 @@ public class ChronicleMapQuery {
                 String entity = ChronicleMapQfactStorage.SEARCHABLE_ENTITIES.get(it);
 
                 // process type
-                boolean entityIsOfCorrectType = false;
-                for (String type : TAXONOMY.getTextualizedTypes(entity, true)) {
-                    if (type.contains(queryType) && queryHeadWord.equals(NLP.getHeadWord(type, true))) {
-                        entityIsOfCorrectType = true;
-                        break;
-                    }
-                }
-                if (!entityIsOfCorrectType) {
+                if (!typeMatcher.match(entity)) {
                     continue;
                 }
 
