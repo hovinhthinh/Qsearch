@@ -76,6 +76,24 @@
 <div class="card float-right shadow-2" style="margin-top: 15px; margin-right: 15px; border-color: #d6e9c6; border: 0px;"
      id="settings">
 </div>
+
+<div aria-live="polite" aria-atomic="true">
+    <div class="toast" data-autohide="false"  style="position: absolute; bottom: 100px; right: 75px;">
+        <div class="toast-header">
+            <i class="fas fa-bell mr-2 text-primary"></i>
+            <strong class="mr-auto">Qsearch2</strong>
+            <small>just now</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            Qsearch on Web Tables is available.
+            <a href="/table/" class="font-weight-bold">Try now!</a>
+        </div>
+    </div>
+</div>
+
 <script>
     $('#settings').html($.ajax({
         type: "GET",
@@ -207,6 +225,10 @@
     }
 
     particlesJS.load('particles-bg', 'js/particles.json');
+
+    setTimeout(function() {
+        $('.toast').toast('show');
+    }, 1000);
 </script>
 
 </body>
