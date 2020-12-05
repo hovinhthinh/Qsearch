@@ -7,23 +7,25 @@ import model.table.link.QuantityLink;
 import util.FileUtils;
 import util.Gson;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class TableQfactLoader {
     public static final double LINKING_THRESHOLD = -1; // 0.70;
 
     private static boolean LOADED = false;
-    private static ArrayList<QfactLight> QFACTS;
+    private static ArrayList<QfactLight[]> QFACTS;
 
-    public static ArrayList<QfactLight> load() {
+    public static ArrayList<QfactLight[]> load() {
         return load(true);
     }
 
-    public static synchronized ArrayList<QfactLight> load(boolean loadExplainStr) {
+    public static synchronized ArrayList<QfactLight[]> load(boolean loadExplainStr) {
         if (LOADED) {
             return QFACTS;
         }
-        QFACTS = new ArrayList<>();
+        ArrayList<QfactLight> qFacts = new ArrayList<>();
         String wikiFile = "/GW/D5data-13/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id_annotation+linking_new.gz";
         String tablemFile = "/GW/D5data-13/hvthinh/TABLEM/all/all+id.annotation+linking_new.gz";
 
@@ -67,11 +69,22 @@ public class TableQfactLoader {
                             f.explainQfactIds = table.QfactMatchingStr[row][qCol];
                         }
 
-                        QFACTS.add(f);
+                        qFacts.add(f);
                     }
                 }
             }
-        Collections.sort(QFACTS, (o1, o2) -> o1.entity.compareTo(o2.entity));
+        Collections.sort(qFacts, (o1, o2) -> o1.entity.compareTo(o2.entity));
+
+        QFACTS = new ArrayList<>();
+        for (int i = 0; i < qFacts.size(); ++i) {
+            String entity = qFacts.get(i).entity;
+            int j = i;
+            while (j < qFacts.size() - 1 && (qFacts.get(j + 1)).entity.equals(entity)) {
+                ++j;
+            }
+            QFACTS.add(qFacts.subList(i, j + 1).toArray(new QfactLight[0]));
+            i = j;
+        }
         LOADED = true;
         return QFACTS;
     }

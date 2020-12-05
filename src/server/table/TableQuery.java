@@ -43,7 +43,7 @@ public class TableQuery {
 
     public static final int N_TOP_ENTITY_CONSISTENCY_RESCORING = 200;
 
-    private static ArrayList<QfactLight> QFACTS = TableQfactLoader.load();
+    private static ArrayList<QfactLight[]> QFACTS = TableQfactLoader.load();
 
     public static Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> match(
             ArrayList<String> queryTypeX, ArrayList<String> queryX,
@@ -404,35 +404,19 @@ public class TableQuery {
                 }
             }
 
-            String entity = QFACTS.get(i).entity;
-
-            boolean hasQfactWithGoodLinkingThreshold = false;
-            int j = i - 1;
-            QfactLight tempQfact;
-            while (j < QFACTS.size() - 1 && (tempQfact = QFACTS.get(j + 1)).entity.equals(entity)) {
-                ++j;
-                if (linkingThreshold == -1 || tempQfact.linkingScore >= linkingThreshold) {
-                    hasQfactWithGoodLinkingThreshold = true;
-                }
-            }
-
-            if (!hasQfactWithGoodLinkingThreshold) {
-                i = j;
-                continue;
-            }
-
-            // process type
-            if (!typeMatcher.match("<" + entity.substring(5) + ">")) {
-                i = j;
-                continue;
-            }
+            QfactLight[] entityQFacts = QFACTS.get(i);
 
             ResultInstance inst = new ResultInstance();
-            inst.entity = "<" + entity.substring(5) + ">";
+            inst.entity = "<" + entityQFacts[0].entity.substring(5) + ">";
+
+            // process type
+            if (!typeMatcher.match(inst.entity)) {
+                continue;
+            }
+
             inst.popularity = WikipediaView.getView(inst.entity);
 
-            for (int k = i; k <= j; ++k) {
-                QfactLight f = QFACTS.get(k);
+            for (QfactLight f : entityQFacts) {
                 if (linkingThreshold != -1 && f.linkingScore < linkingThreshold) {
                     continue;
                 }
@@ -490,8 +474,6 @@ public class TableQuery {
                 Collections.sort(inst.subInstances, (o1, o2) -> Double.compare(o2.score, o1.score));
                 result.second.add(inst);
             }
-
-            i = j;
         }
 
         // add entity popularity

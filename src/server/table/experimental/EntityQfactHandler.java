@@ -16,10 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -31,7 +28,7 @@ class BrowsingResult {
 public class EntityQfactHandler extends HttpServlet {
     public static final Logger LOGGER = Logger.getLogger(EntityQfactHandler.class.getName());
 
-    static ArrayList<QfactLight> qfacts = TableQfactLoader.load();
+    static ArrayList<QfactLight[]> qfacts = TableQfactLoader.load();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws ServletException, IOException {
@@ -44,12 +41,8 @@ public class EntityQfactHandler extends HttpServlet {
         BrowsingResult r = new BrowsingResult();
         if (!entityConstraint.isEmpty()) {
             for (int i = 0; i < qfacts.size(); ++i) {
-                if (qfacts.get(i).entity.substring(5).replace('_', ' ').toLowerCase().contains(entityConstraint)) {
-                    int j = i;
-                    while (j < qfacts.size() - 1 && qfacts.get(j + 1).entity.equals(qfacts.get(j).entity)) {
-                        ++j;
-                    }
-                    r.result.add(qfacts.subList(i, j + 1));
+                if (qfacts.get(i)[0].entity.substring(5).replace('_', ' ').toLowerCase().contains(entityConstraint)) {
+                    r.result.add(Arrays.asList(qfacts.get(i)));
                     int pivot = 0;
                     if (r.result.size() > 100) {
                         for (int k = 1; k < r.result.size(); ++k) {
@@ -60,7 +53,6 @@ public class EntityQfactHandler extends HttpServlet {
                         r.result.set(pivot, r.result.get(r.result.size() - 1));
                         r.result.remove(r.result.size() - 1);
                     }
-                    i = j;
                 }
             }
         }

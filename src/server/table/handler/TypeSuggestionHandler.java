@@ -32,23 +32,13 @@ public class TypeSuggestionHandler extends HttpServlet {
     private static void analyzeAndSaveToFile() {
         HashMap<String, Integer> specificTypeStats = new HashMap<>();
 
-        ArrayList<QfactLight> qfacts = TableQfactLoader.load();
+        ArrayList<QfactLight[]> qfacts = TableQfactLoader.load();
         for (int i = 0; i < qfacts.size(); ++i) {
-            if (i > 0 && qfacts.get(i).entity.equals(qfacts.get(i - 1).entity)) {
-                continue;
-            }
-            String entity = qfacts.get(i).entity;
-
-            int j = i;
-            while (j < qfacts.size() - 1 && qfacts.get(j + 1).entity.equals(entity)) {
-                ++j;
-            }
+            String entity = qfacts.get(i)[0].entity;
             // process type
             for (String type : TaxonomyGraph.getDefaultGraphInstance().getTextualizedTypes("<" + entity.substring(5) + ">", true)) {
                 specificTypeStats.put(type, specificTypeStats.getOrDefault(type, 0) + 1);
             }
-            // done processing
-            i = j;
         }
 
         ArrayList<Pair<String, Integer>> type2freq = new ArrayList<>();
