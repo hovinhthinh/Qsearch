@@ -1,9 +1,6 @@
 package storage.text.migrate;
 
-import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.ints.Int2IntMap;
-import it.unimi.dsi.fastutil.ints.Int2IntMaps;
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.*;
 import nlp.NLP;
 import uk.ac.susx.informatics.Morpha;
 import yago.TaxonomyGraph;
@@ -14,11 +11,14 @@ public class TypeMatcher {
 
     private String queryType, queryHeadWord;
 
+    private IntOpenHashSet possibleValidEntities;
+
     private Int2IntOpenHashMap matchCache;
 
     public TypeMatcher(String queryType) {
         this.queryType = NLP.stripSentence(NLP.fastStemming(queryType.toLowerCase(), Morpha.noun));
         this.queryHeadWord = NLP.getHeadWord(this.queryType, true);
+        this.possibleValidEntities = TAXONOMY.typeHeadWord2EntityIds.get(queryHeadWord);
 
         matchCache = new Int2IntOpenHashMap(TAXONOMY.nTypes);
         matchCache.defaultReturnValue(-1);
@@ -26,7 +26,7 @@ public class TypeMatcher {
 
     public boolean match(String entity) {
         Integer eId = TAXONOMY.entity2Id.get(entity);
-        if (eId == null) {
+        if (eId == null || possibleValidEntities == null || !possibleValidEntities.contains((int) eId)) {
             return false;
         }
         Int2IntLinkedOpenHashMap t2d = TAXONOMY.getType2DistanceMapForEntity(eId);

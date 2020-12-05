@@ -19,6 +19,9 @@ public class TaxonomyGraph {
     public HashMap<String, Integer> type2Id;
     public ArrayList<String> id2Type;
     public ArrayList<String> id2TextualizedType;
+    public ArrayList<String> id2TextualizedTypeHeadWord;
+    public HashMap<String, IntOpenHashSet> typeHeadWord2EntityIds;
+
     public int[] type2nEntities;
     public double[] type2Itf;
     public ArrayList<IntArrayList> typeDadLists;
@@ -130,10 +133,14 @@ public class TaxonomyGraph {
 
         // Textualized types
         id2TextualizedType = new ArrayList<>(nTypes);
+        id2TextualizedTypeHeadWord = new ArrayList<>(nTypes);
         for (String t : id2Type) {
-            id2TextualizedType.add(textualize(t));
+            String textualized = textualize(t);
+            id2TextualizedType.add(textualized);
+            id2TextualizedTypeHeadWord.add(NLP.getHeadWord(textualized, true));
         }
         id2TextualizedType.trimToSize();
+        id2TextualizedTypeHeadWord.trimToSize();
 
         // Load entity types
         entity2Id = new HashMap<>();
@@ -197,6 +204,23 @@ public class TaxonomyGraph {
         // common type cache
         cachedEntityTypeAgreement = new Long2DoubleLinkedOpenHashMap();
         cachedEntityTypeAgreement.defaultReturnValue(-1);
+
+        // typeHeadWord2EntityIds
+        typeHeadWord2EntityIds = new HashMap<>();
+        HashSet<String> typeHeadWordSet = new HashSet<>();
+        for (int i = 0; i < nEntities; ++i) {
+            typeHeadWordSet.clear();
+            for (Int2IntMap.Entry t : Int2IntMaps.fastIterable(getType2DistanceMapForEntity(i))) {
+                typeHeadWordSet.add(id2TextualizedTypeHeadWord.get(t.getIntKey()));
+            }
+            for (String hw : typeHeadWordSet) {
+                typeHeadWord2EntityIds.putIfAbsent(hw, new IntOpenHashSet());
+                typeHeadWord2EntityIds.get(hw).add(i);
+            }
+        }
+        for (Map.Entry<String, IntOpenHashSet> e : typeHeadWord2EntityIds.entrySet()) {
+            e.getValue().trim();
+        }
     }
 
     // ordered by increasing distance
