@@ -4,7 +4,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Qsearch</title>
     <link href="fontawesome_5.10.1/css/all.css" rel="stylesheet">
-    <link href="/css/bootstrap_4.3.1.min.css" rel="stylesheet">
+    <link href="css/bootstrap_4.3.1.min.css" rel="stylesheet">
     <link href="css/local.css" rel="stylesheet">
     <link href="css/bootstrap-multiselect.css" rel="stylesheet">
 </head>
@@ -12,14 +12,14 @@
 <body>
 <script src="js/jquery_3.2.1.min.js"></script>
 <script src="js/jquery.cookie_1.4.1.js"></script>
-<!--<script src="/js/popper_1.12.9.min.js"></script>-->
-<script src="/js/bootstrap_bundle_4.3.1.min.js"></script>
+<!--<script src="js/popper_1.12.9.min.js"></script>-->
+<script src="js/bootstrap_bundle_4.3.1.min.js"></script>
 <script src="js/nanobar_0.4.2.min.js"></script>
 <script src="js/bootstrap-multiselect.js"></script>
 
 <div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12 offset-xs-0 offset-sm-0 offset-md-0 offset-lg-0">
     <div class="row">
-        <a href="/" class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        <a href="index.html" class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
             <br/>
             <img style="object-fit: contain; height:75px" src="img/logo2.png"
                  class="img-responsive img-fluid ml-2 mr-2">
@@ -332,7 +332,7 @@
         }
 
         $('.pgn').each(function () {
-            $(this).attr('href', "/result.html?s=" + urlParams.get('s') + "&q=" + urlParams.get('q') + "&p=" + $(this).attr('pg'));
+            $(this).attr('href', "result.html?s=" + urlParams.get('s') + "&q=" + urlParams.get('q') + "&p=" + $(this).attr('pg'));
         });
 
         $('.converted-quantity').each(function () {
@@ -366,7 +366,7 @@
             } else {
                 $.ajax({
                     type: "GET",
-                    url: "/wikilink",
+                    url: "wikilink",
                     data: {"link": $(current).attr("href")},
                     contentType: 'application/json; charset=utf-8',
                     dataType: "json",
@@ -421,7 +421,9 @@
         $("#quantity").attr('disabled', 'disabled');
 
         if ("WebSocket" in window) {
-            var ws = new WebSocket(location.protocol.replace("http", "ws") + "//" + location.host + "/search_socket");
+            var url = new URL('search_socket', location.href);
+            url.protocol = url.protocol.replace('http', 'ws');
+            var ws = new WebSocket(url);
             ws.onopen = function () {
                 ws.send(JSON.stringify(params));
             };
@@ -432,7 +434,7 @@
                 if ("progress" in data) {
                     nanobar.go(data["progress"]);
                 } else {
-                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
+                    window.location.replace("result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 }
             };
             ws.onerror = function () {
@@ -450,12 +452,12 @@
             params['cache'] = 'true'; // this is only effective for AJAX call
             $.ajax({
                 type: "GET",
-                url: "/search",
+                url: "search",
                 data: params,
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
                 success: function (data) {
-                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
+                    window.location.replace("result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 },
                 error: function () {
                     alert("An error occurred.");
@@ -488,7 +490,7 @@
     if (urlParams.has("s")) {
         $.ajax({
             type: "GET",
-            url: "/session",
+            url: "session",
             data: {"s": urlParams.get('s'), "p": urlParams.get('p')},
             contentType: 'application/json; charset=utf-8',
             dataType: "json",

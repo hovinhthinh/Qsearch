@@ -4,7 +4,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Qsearch</title>
     <link href="fontawesome_5.10.1/css/all.css" rel="stylesheet">
-    <link href="/css/bootstrap_4.3.1.min.css" rel="stylesheet">
+    <link href="css/bootstrap_4.3.1.min.css" rel="stylesheet">
     <link href="css/local.css" rel="stylesheet">
     <link href="css/bootstrap-multiselect.css" rel="stylesheet">
 </head>
@@ -12,8 +12,8 @@
 <body>
 <script src="js/jquery_3.2.1.min.js"></script>
 <script src="js/jquery.cookie_1.4.1.js"></script>
-<!--<script src="/js/popper_1.12.9.min.js"></script>-->
-<script src="/js/bootstrap_bundle_4.3.1.min.js"></script>
+<!--<script src="js/popper_1.12.9.min.js"></script>-->
+<script src="js/bootstrap_bundle_4.3.1.min.js"></script>
 <script src="js/nanobar_0.4.2.min.js"></script>
 <script src="js/bootstrap-multiselect.js"></script>
 <script src="js/particles_2.0.0.min.js"></script>
@@ -89,7 +89,7 @@
         </div>
         <div class="toast-body">
             Qsearch on Web Tables is available.
-            <a href="/table/" class="font-weight-bold">Try now!</a>
+            <a href="table/" class="font-weight-bold">Try now!</a>
         </div>
     </div>
 </div>
@@ -141,7 +141,9 @@
         $("#quantity").attr('disabled', 'disabled');
 
         if ("WebSocket" in window) {
-            var ws = new WebSocket(location.protocol.replace("http", "ws") + "//" + location.host + "/search_socket");
+            var url = new URL('search_socket', location.href);
+            url.protocol = url.protocol.replace('http', 'ws');
+            var ws = new WebSocket(url);
             ws.onopen = function () {
                 ws.send(JSON.stringify(params));
             };
@@ -152,7 +154,7 @@
                 if ("progress" in data) {
                     nanobar.go(data["progress"]);
                 } else {
-                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
+                    window.location.replace("result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 }
             };
             ws.onerror = function () {
@@ -170,12 +172,12 @@
             params['cache'] = 'true'; // this is only effective for AJAX call
             $.ajax({
                 type: "GET",
-                url: "/search",
+                url: "search",
                 data: params,
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
                 success: function (data) {
-                    window.location.replace("/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
+                    window.location.replace("result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 },
                 error: function () {
                     alert("An error occurred.");

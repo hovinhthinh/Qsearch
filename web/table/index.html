@@ -3,22 +3,22 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>TabQs</title>
-    <link href="/fontawesome_5.10.1/css/all.css" rel="stylesheet">
-    <link href="/css/bootstrap_4.3.1.min.css" rel="stylesheet">
+    <link href="../fontawesome_5.10.1/css/all.css" rel="stylesheet">
+    <link href="../css/bootstrap_4.3.1.min.css" rel="stylesheet">
     <link href="css/local.css" rel="stylesheet">
-    <link href="/css/bootstrap-multiselect.css" rel="stylesheet">
-    <link href="/css/bootstrap4-toggle_3.6.1.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-multiselect.css" rel="stylesheet">
+    <link href="../css/bootstrap4-toggle_3.6.1.min.css" rel="stylesheet">
 </head>
 
 <body>
-<script src="/js/jquery_3.2.1.min.js"></script>
-<script src="/js/jquery.cookie_1.4.1.js"></script>
-<!--<script src="/js/popper_1.12.9.min.js"></script>-->
-<script src="/js/bootstrap_bundle_4.3.1.min.js"></script>
-<script src="/js/nanobar_0.4.2.min.js"></script>
-<script src="/js/bootstrap-multiselect.js"></script>
-<script src="/js/particles_2.0.0.min.js"></script>
-<script src="/js/bootstrap4-toggle_3.6.1.min.js"></script>
+<script src="../js/jquery_3.2.1.min.js"></script>
+<script src="../js/jquery.cookie_1.4.1.js"></script>
+<!--<script src="../js/popper_1.12.9.min.js"></script>-->
+<script src="../js/bootstrap_bundle_4.3.1.min.js"></script>
+<script src="../js/nanobar_0.4.2.min.js"></script>
+<script src="../js/bootstrap-multiselect.js"></script>
+<script src="../js/particles_2.0.0.min.js"></script>
+<script src="../js/bootstrap4-toggle_3.6.1.min.js"></script>
 
 <div id="particles-bg"></div>
 
@@ -69,7 +69,7 @@
             </td>
             <td style="width: 50px"></td>
             <td>
-                <img style="height: 60px" src="/img/mpi.png" class="img-fluid" alt="logo">
+                <img style="height: 60px" src="../img/mpi.png" class="img-fluid" alt="logo">
             </td>
         </tr>
     </table>
@@ -132,7 +132,9 @@
 
         var startRescore = false;
         if ("WebSocket" in window) {
-            var ws = new WebSocket(location.protocol.replace("http", "ws") + "//" + location.host + "/search_socket_table");
+            var url = new URL('../search_socket_table', location.href);
+            url.protocol = url.protocol.replace('http', 'ws');
+            var ws = new WebSocket(url);
             ws.onopen = function () {
                 ws.send(JSON.stringify(params));
             };
@@ -149,7 +151,7 @@
                         startRescore = true;
                     }
                 } else {
-                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
+                    window.location.replace("result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 }
             };
             ws.onerror = function () {
@@ -167,12 +169,12 @@
             params['cache'] = 'true'; // this is only effective for AJAX call
             $.ajax({
                 type: "GET",
-                url: "/search_table",
+                url: "../search_table",
                 data: params,
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
                 success: function (data) {
-                    window.location.replace("/table/result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
+                    window.location.replace("result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
                 },
                 error: function () {
                     alert("An error occurred.");
@@ -223,7 +225,7 @@
         // changeSearchMode();
     }
 
-    particlesJS.load('particles-bg', '/js/particles.json');
+    particlesJS.load('particles-bg', '../js/particles.json');
 </script>
 
 </body>
