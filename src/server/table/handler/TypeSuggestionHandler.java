@@ -28,43 +28,25 @@ public class TypeSuggestionHandler extends HttpServlet {
         load(10);
     }
 
-    // Use for analyzing.
-    private static void analyzeAndSaveToFile() {
+    public static void load(int nEntityThreshold) {
         HashMap<String, Integer> specificTypeStats = new HashMap<>();
 
-        ArrayList<QfactLight[]> qfacts = TableQfactLoader.load();
-        for (int i = 0; i < qfacts.size(); ++i) {
-            String entity = qfacts.get(i)[0].entity;
+        for (QfactLight[] qfacts : TableQfactLoader.load()) {
             // process type
-            for (String type : TaxonomyGraph.getDefaultGraphInstance().getTextualizedTypes("<" + entity.substring(5) + ">", true)) {
+            for (String type : TaxonomyGraph.getDefaultGraphInstance().getTextualizedTypes("<" + qfacts[0].entity.substring(5) + ">", true)) {
                 specificTypeStats.put(type, specificTypeStats.getOrDefault(type, 0) + 1);
             }
         }
 
-        ArrayList<Pair<String, Integer>> type2freq = new ArrayList<>();
         for (Map.Entry<String, Integer> e : specificTypeStats.entrySet()) {
-            type2freq.add(new Pair(e.getKey(), e.getValue()));
-        }
-        Collections.sort(type2freq, (a, b) -> b.second.compareTo(a.second));
-
-        PrintWriter out = FileUtils.getPrintWriter("data/table/type_wiki+tablem.gz", "UTF-8");
-        for (Pair<String, Integer> p : type2freq) {
-            out.println(p.first + "\t" + p.second);
-        }
-        out.close();
-    }
-
-    public static void load(int nEntityThreshold) {
-        for (String line : FileUtils.getLineStream("data/table/type_wiki+tablem.gz", "UTF-8")) {
-            String[] arr = line.split("\t");
-            int freq = Integer.parseInt(arr[1]);
-            if (freq >= nEntityThreshold) {
-                typeToFreq.add(new Pair(arr[0], freq));
+            if (e.getValue() >= nEntityThreshold) {
+                typeToFreq.add(new Pair(e.getKey(), e.getValue()));
             }
         }
+
         Collections.sort(typeToFreq, (a, b) -> a.first.compareTo(b.first));
 
-        LOGGER.info("loading type suggestion done. total " + typeToFreq.size() + " types.");
+        LOGGER.info("loading type suggestion for tables done. total " + typeToFreq.size() + " types.");
     }
 
     public static List<Pair<String, Integer>> suggest(String prefix, int nTopSuggestion) {
@@ -124,7 +106,6 @@ public class TypeSuggestionHandler extends HttpServlet {
     }
 
     public static void main(String[] args) {
-        analyzeAndSaveToFile();
-//        System.out.println(new Gson().toJson(TypeSuggestionHandler.suggest("business", 7)));
+        System.out.println(new Gson().toJson(TypeSuggestionHandler.suggest("business", 7)));
     }
 }

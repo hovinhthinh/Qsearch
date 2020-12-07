@@ -46,7 +46,11 @@ public class TaxonomyGraph {
 
     public static TaxonomyGraph getDefaultGraphInstance() {
         if (DEFAULT_GRAPH == null) {
-            DEFAULT_GRAPH = new TaxonomyGraph();
+            synchronized (TaxonomyGraph.class) {
+                if (DEFAULT_GRAPH == null) {
+                    DEFAULT_GRAPH = new TaxonomyGraph();
+                }
+            }
         }
         return DEFAULT_GRAPH;
     }
