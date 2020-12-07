@@ -1,5 +1,6 @@
 package pipeline.table;
 
+import config.Configuration;
 import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMaps;
@@ -22,7 +23,7 @@ public class QfactTaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(QfactTaxonomyGraph.class.getName());
 
     // The order of the lines are important (they are IDs).
-    public static final String QFACT_FILE = "table-non-deep/qfact_text_coref.gz";
+    public static final String QFACT_FILE = Configuration.get("ca.bg_qfact_file");
 
     public static int DEFAULT_RELATED_ENTITY_DIST_LIM = 4;
     public static int NTOP_RELATED_ENTITY = 5;

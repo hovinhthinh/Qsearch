@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
 
 @Deprecated
 public class ElasticSearchDataImport {
-    public static final String PROTOCOL = Configuration.get("storage.elasticsearch.protocol");
-    public static final String ES_HOST = Configuration.get("storage.elasticsearch.address");
-    public static final String INDEX = Configuration.get("storage.elasticsearch.text_index");
-    public static final String TYPE = Configuration.get("storage.elasticsearch.text_type");
+    public static final String PROTOCOL = Configuration.get("elasticsearch.protocol");
+    public static final String ES_HOST = Configuration.get("elasticsearch.address");
+    public static final String INDEX = Configuration.get("elasticsearch.text.index");
+    public static final String TYPE = Configuration.get("elasticsearch.text.type");
     public static final int BATCH_SIZE = 1024 * 8;
     public static ArrayList<String> bulks = new ArrayList<>();
     static AtomicInteger updated = new AtomicInteger(0), threw = new AtomicInteger(0);

@@ -9,13 +9,15 @@ import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public class Server {
-    public static final int DEFAULT_PORT = Integer.parseInt(Configuration.get("search.server.default-port"));
+    public static final int PORT = Integer.parseInt(Configuration.get("server.port"));
+    public static final int MAX_NTHREADS = Integer.parseInt(Configuration.get("server.max_nthreads"));
+    public static final int MIN_NTHREADS = Integer.parseInt(Configuration.get("server.min_nthreads"));
 
     public static void main(String[] args) throws Exception {
-        org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(new QueuedThreadPool(128, 64));
+        org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(new QueuedThreadPool(MAX_NTHREADS, MIN_NTHREADS));
 
         ServerConnector connector = new ServerConnector(server, new HttpConnectionFactory());
-        connector.setPort(DEFAULT_PORT);
+        connector.setPort(PORT);
         connector.getConnectionFactory(HttpConnectionFactory.class).getHttpConfiguration().setRequestHeaderSize(1024 * 1024 * 10);
         server.addConnector(connector);
 
