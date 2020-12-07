@@ -5,9 +5,6 @@
     <entry key="storage.elasticsearch.protocol">http</entry>
     <entry key="storage.elasticsearch.address">localhost:9200</entry>
 
-    <entry key="storage.elasticsearch.table_index">tabqs</entry>
-    <entry key="storage.elasticsearch.table_type">table</entry>
-
     <entry key="storage.elasticsearch.text_index">yago</entry>
     <entry key="storage.elasticsearch.text_type">entity</entry>
 
