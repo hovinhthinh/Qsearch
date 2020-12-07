@@ -32,7 +32,7 @@ public class KullBackLeiblerMatcher implements ContextMatcher {
             WN_DICT.open();
 
             BLM = new HashMap<>();
-            for (String line : FileUtils.getLineStream("./data/blm_stics+nyt/all.gz", "UTF-8")) {
+            for (String line : FileUtils.getLineStream("./data/text/blm_stics+nyt.gz", "UTF-8")) {
                 int pos = line.indexOf("\t");
                 BLM.put(line.substring(0, pos), Integer.parseInt(line.substring(pos + 1)));
             }
