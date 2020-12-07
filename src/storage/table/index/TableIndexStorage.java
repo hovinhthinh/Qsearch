@@ -1,5 +1,6 @@
 package storage.table.index;
 
+import config.Configuration;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.openhft.chronicle.map.ChronicleMap;
 import util.FileUtils;
@@ -10,7 +11,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class TableIndexStorage {
-    public static final String TABLE_INDEX_FILE = "/GW/D5data-13/hvthinh/TabQs/to_be_indexed/table.index";
+    public static final String TABLE_INDEX_FILE = Configuration.get("chroniclemap.table.index_file");
 
     private static ChronicleMap<String, TableIndex> INDEX = null;
 

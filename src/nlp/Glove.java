@@ -1,5 +1,6 @@
 package nlp;
 
+import config.Configuration;
 import it.unimi.dsi.fastutil.longs.Long2DoubleLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import util.FileUtils;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 // A value of -1 means that similarity cannot be computed (embedding is unavailable).
 //@SuppressWarnings("The caching mechanism is not thread safe")
 public class Glove {
-    public static final String DATA_DIR = "./resources/glove/";
+    public static final String DATA_DIR = Configuration.get("glove.folder_path");
     public static final int DIM = 100; // 50, 100, 200 or 300.
 
     private static Object2IntOpenHashMap<String> EMBEDDING_ID = null;

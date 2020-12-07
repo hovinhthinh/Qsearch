@@ -1,5 +1,6 @@
 package data.table.background.mention2entity;
 
+import config.Configuration;
 import nlp.NLP;
 import util.FileUtils;
 import util.Triple;
@@ -11,7 +12,7 @@ import java.util.logging.Logger;
 
 // Sensitive
 public class Mention2EntityPrior {
-    private static final String PRIOR_PATH = "./resources/m2ePrior_wikipages+wikitables+wikilinks.case-sensitive_tokenized.gz";
+    private static final String PRIOR_PATH = Configuration.get("el.prior_distribution_file");
     private HashMap<String, List<Triple<String, Integer, Double>>> mention2Entity;
     private static final Logger LOGGER = Logger.getLogger(Mention2EntityPrior.class.getName());
 

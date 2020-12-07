@@ -1,5 +1,6 @@
 package misc;
 
+import config.Configuration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import util.Concurrent;
@@ -41,7 +42,7 @@ public class WikipediaView {
         }
     }
 
-    public static final File ENTITY_VIEW_FILE = new File("./resources/entityView-2019.gz");
+    public static final File ENTITY_VIEW_FILE = new File(Configuration.get("yago.file_path.entity_view"));
     public static HashMap<String, Integer> e2V = null;
 
     public static synchronized void load(boolean loadNotFound) {

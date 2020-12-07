@@ -1,5 +1,6 @@
 package server.table;
 
+import config.Configuration;
 import model.quantity.QuantityDomain;
 import model.table.Table;
 import model.table.link.EntityLink;
@@ -26,8 +27,8 @@ public class TableQfactLoader {
             return QFACTS;
         }
         ArrayList<QfactLight> qFacts = new ArrayList<>();
-        String wikiFile = "/GW/D5data-13/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id_annotation+linking_new.gz";
-        String tablemFile = "/GW/D5data-13/hvthinh/TABLEM/all/all+id.annotation+linking_new.gz";
+        String wikiFile = Configuration.get("chroniclemap.table.annotation_file.wikipedia");
+        String tablemFile = Configuration.get("chroniclemap.table.annotation_file.tablem");
 
         for (String file : Arrays.asList(tablemFile, wikiFile))
             for (String line : FileUtils.getLineStream(file, "UTF-8")) {

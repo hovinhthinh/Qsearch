@@ -1,5 +1,6 @@
 package util.wordnet;
 
+import config.Configuration;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
 import edu.mit.jwi.item.*;
@@ -13,10 +14,11 @@ import java.util.*;
 @Deprecated
 public class WordNetUtils {
     private static IDictionary dict;
+    private static final String WORDNET_PATH = Configuration.get("wordnet.folder_path");
 
     static {
         try {
-            dict = new Dictionary(new File("./resources/WordNet-3.0/dict/"));
+            dict = new Dictionary(new File(WORDNET_PATH, "dict"));
             dict.open();
         } catch (IOException e) {
             throw new RuntimeException(e);

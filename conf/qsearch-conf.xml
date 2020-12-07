@@ -2,11 +2,31 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 
 <properties>
-    <entry key="storage.elasticsearch.protocol">http</entry>
-    <entry key="storage.elasticsearch.address">localhost:9200</entry>
+    <!-- Elasticsearch server address -->
+    <entry key="elasticsearch.protocol">http</entry>
+    <entry key="elasticsearch.address">localhost:9200</entry>
 
-    <entry key="storage.elasticsearch.text_index">yago</entry>
-    <entry key="storage.elasticsearch.text_type">entity</entry>
+    <!-- Deprecated: Qsearch on text is migrated to ChronicleMap -->
+    <entry key="elasticsearch.text.index">yago</entry>
+    <entry key="elasticsearch.text.type">entity</entry>
 
-    <entry key="search.server.default-port">6993</entry>
+    <!-- Resources path -->
+    <entry key="yago.file_path.taxonomy">/GW/D5data-11/hvthinh/yago-taxonomy/yagoTaxonomy.tsv.gz</entry>
+    <entry key="yago.file_path.type">/GW/D5data-11/hvthinh/yago-taxonomy/yagoTypes.tsv.gz</entry>
+    <entry key="yago.file_path.entity_view">./resources/entityView-2019.gz</entry>
+    <entry key="glove.folder_path">./resources/glove/</entry>
+    <entry key="wordnet.folder_path">./resources/WordNet-3.0/</entry>
+    <entry key="el.prior_distribution_file">./resources/m2ePrior_wikipages+wikitables+wikilinks.case-sensitive_tokenized.gz</entry>
+    <entry key="ca.bg_qfact_file">./table-non-deep/qfact_text_coref.gz</entry>
+
+    <!-- Index files -->
+    <entry key="chroniclemap.table.index_file">/GW/D5data-13/hvthinh/TabQs/to_be_indexed/table.index</entry>
+    <entry key="chroniclemap.table.annotation_file.wikipedia">/GW/D5data-13/hvthinh/wikipedia_dump/enwiki-20200301-pages-articles-multistream.xml.bz2.tables+id_annotation+linking_new.gz</entry>
+    <entry key="chroniclemap.table.annotation_file.tablem">/GW/D5data-13/hvthinh/TABLEM/all/all+id.annotation+linking_new.gz</entry>
+    <entry key="chroniclemap.text.index_file">/GW/D5data-13/hvthinh/Qsearch/qfact.index</entry>
+
+    <!-- Server config -->
+    <entry key="server.port">6993</entry>
+    <entry key="server.max_nthreads">128</entry>
+    <entry key="server.min_nthreads">64</entry>
 </properties>

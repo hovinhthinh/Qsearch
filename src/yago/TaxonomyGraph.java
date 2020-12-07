@@ -1,5 +1,6 @@
 package yago;
 
+import config.Configuration;
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.longs.Long2DoubleLinkedOpenHashMap;
 import nlp.NLP;
@@ -13,8 +14,8 @@ import java.util.logging.Logger;
 
 public class TaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(TaxonomyGraph.class.getName());
-    public static final String YAGO_TAXONOMY_FILE = "/GW/D5data-11/hvthinh/yago-taxonomy/yagoTaxonomy.tsv.gz";
-    public static final String YAGO_TYPE_FILE = "/GW/D5data-11/hvthinh/yago-taxonomy/yagoTypes.tsv.gz";
+    public static final String YAGO_TAXONOMY_FILE = Configuration.get("yago.file_path.taxonomy");
+    public static final String YAGO_TYPE_FILE = Configuration.get("yago.file_path.type");
 
     public HashMap<String, Integer> type2Id;
     public ArrayList<String> id2Type;

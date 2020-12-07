@@ -1,5 +1,6 @@
 package storage.text.migrate;
 
+import config.Configuration;
 import net.openhft.chronicle.map.ChronicleMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ChronicleMapQfactStorage {
-    public static final String QFACT_INDEX_FILE = "/GW/D5data-13/hvthinh/Qsearch/qfact.index";
+    public static final String QFACT_INDEX_FILE = Configuration.get("chroniclemap.text.index_file");
 
     private static ChronicleMap<String, String> INDEX = null;
 

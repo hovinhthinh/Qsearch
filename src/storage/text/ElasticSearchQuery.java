@@ -30,10 +30,10 @@ import java.util.logging.Logger;
 public class ElasticSearchQuery {
     public static final Logger LOGGER = Logger.getLogger(ElasticSearchQuery.class.getName());
 
-    public static final String PROTOCOL = Configuration.get("storage.elasticsearch.protocol");
-    public static final String ES_HOST = Configuration.get("storage.elasticsearch.address");
-    public static final String INDEX = Configuration.get("storage.elasticsearch.text_index");
-    public static final String TYPE = Configuration.get("storage.elasticsearch.text_type");
+    public static final String PROTOCOL = Configuration.get("elasticsearch.protocol");
+    public static final String ES_HOST = Configuration.get("elasticsearch.address");
+    public static final String INDEX = Configuration.get("elasticsearch.text.index");
+    public static final String TYPE = Configuration.get("elasticsearch.text.type");
 
     public static ContextMatcher DEFAULT_MATCHER = new ContextEmbeddingMatcher(3);
 

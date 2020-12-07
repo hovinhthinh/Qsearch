@@ -1,5 +1,6 @@
 package model.context;
 
+import config.Configuration;
 import edu.knowitall.openie.OpenIE;
 import edu.knowitall.tool.postag.PostaggedToken;
 import edu.mit.jwi.Dictionary;
@@ -19,13 +20,15 @@ import java.util.HashSet;
 import java.util.List;
 
 public class KullBackLeiblerMatcher implements ContextMatcher {
+    private static final String WORDNET_PATH = Configuration.get("wordnet.folder_path");
+
     private static final double MIN_BLM_COUNT = 0.0001;
     private static IDictionary WN_DICT;
     private static HashMap<String, Integer> BLM;
 
     static {
         try {
-            WN_DICT = new Dictionary(new File("./resources/WordNet-3.0/dict/"));
+            WN_DICT = new Dictionary(new File(WORDNET_PATH, "dict"));
             WN_DICT.open();
 
             BLM = new HashMap<>();
