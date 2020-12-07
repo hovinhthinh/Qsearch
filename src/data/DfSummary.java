@@ -9,7 +9,7 @@ import java.util.*;
 @Deprecated
 public class DfSummary {
     public static void main(String[] args) {
-        args = "/home/hvthinh/datasets/STICS/df.gz /home/hvthinh/datasets/NYT/df.gz ./data/df_stics+nyt.gz".split(
+        args = "/home/hvthinh/datasets/STICS/df.gz /home/hvthinh/datasets/NYT/df.gz ./data/text/df_stics+nyt.gz".split(
                 " ");
         HashMap<String, Integer> word2doc = new HashMap<>();
         for (int i = 0; i < args.length - 1; ++i) {
