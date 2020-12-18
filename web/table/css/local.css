@@ -205,7 +205,7 @@ body, .popover {
     color: black;
 }
 
-.entity-box, .quantity-box, .context-box, .popover-body, [class^="badge-"], [class*=" badge-"] {
+.shadow-1, .entity-box, .quantity-box, .context-box, .popover-body, [class^="badge-"], [class*=" badge-"] {
     box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
     /*box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;*/
 }
