@@ -26,7 +26,7 @@ public class ChronicleMapQfactStorage {
                     .averageKeySize(30)
                     .averageValueSize(7000)
                     .actualSegments(32)
-                    .entriesPerSegment(45000)
+                    .entriesPerSegment(60000)
                     .createPersistedTo(new File(QFACT_INDEX_FILE));
             SEARCHABLE_ENTITIES = new ArrayList<>();
             INDEX.forEachEntry(e -> {
