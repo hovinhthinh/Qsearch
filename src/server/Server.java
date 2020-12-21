@@ -97,5 +97,7 @@ public class Server {
         });
 
         executor.joinAndShutdown(Integer.MAX_VALUE);
+
+        LOGGER.info("__SERVER_STARTED__");
     }
 }
