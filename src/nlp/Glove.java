@@ -4,6 +4,7 @@ import config.Configuration;
 import it.unimi.dsi.fastutil.longs.Long2DoubleLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import util.FileUtils;
+import util.Vectors;
 
 import java.util.ArrayList;
 
@@ -86,19 +87,7 @@ public class Glove {
             }
         }
 
-        double[] aEmbedding = EMBEDDING_VALUE.get(aId);
-        double[] bEmbedding = EMBEDDING_VALUE.get(bId);
-
-        double dotProduct = 0;
-        double aLength = 0, bLength = 0;
-        for (int i = 0; i < DIM; ++i) {
-            dotProduct += aEmbedding[i] * bEmbedding[i];
-            aLength += aEmbedding[i] * aEmbedding[i];
-            bLength += bEmbedding[i] * bEmbedding[i];
-        }
-
-        // Normalize.
-        double cosine = 0.5 - dotProduct / Math.sqrt(aLength) / Math.sqrt(bLength) / 2;
+        double cosine = Vectors.cosineD(EMBEDDING_VALUE.get(aId), EMBEDDING_VALUE.get(bId));
 
         if (USE_CACHE) {
             synchronized (CACHE_COSINE) {
