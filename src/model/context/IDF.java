@@ -19,7 +19,7 @@ public class IDF {
         DEFAULT_IDF = new Object2DoubleOpenHashMap<>();
         ROBERTSON_IDF = new Object2DoubleOpenHashMap<>();
         // first line is N_DOC
-        for (String line : FileUtils.getLineStream("./data/text/df_stics+nyt.gz", "UTF-8")) {
+        for (String line : FileUtils.getLineStream("./resources/bow/df_stics+nyt.gz", "UTF-8")) {
             String[] arr = line.split("\t");
             if (arr[0].equals(_N_DOC_NAME)) {
                 N_DOC = Double.parseDouble(arr[1]);
