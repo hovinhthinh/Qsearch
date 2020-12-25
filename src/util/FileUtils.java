@@ -1,5 +1,7 @@
 package util;
 
+import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
+import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -27,6 +29,18 @@ public class FileUtils {
                     continue;
                 }
                 return zipInput;
+            }
+            return null;
+        }
+
+        // Handle .7z, read only the first file entry of 7z file.
+        if (file.getName().toLowerCase().endsWith(".7z")) {
+            SevenZFile sevenZFile = new SevenZFile(file);
+            for (SevenZArchiveEntry entry : sevenZFile.getEntries()) {
+                if (entry.isDirectory()) {
+                    continue;
+                }
+                return sevenZFile.getInputStream(entry);
             }
             return null;
         }
@@ -285,6 +299,7 @@ public class FileUtils {
         }
     }
 
+    // Not support 7z yet
     public static LineStream getResourceLineStream(String file, String charset) {
         try {
             return new LineStream(getResourceDecodedStream(file), Charset.forName(charset));

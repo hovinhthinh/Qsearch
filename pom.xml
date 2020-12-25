@@ -214,7 +214,12 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.18</version>
+            <version>1.20</version>
+        </dependency>
+        <dependency> <!-- For support 7z -->
+            <groupId>org.tukaani</groupId>
+            <artifactId>xz</artifactId>
+            <version>1.8</version>
         </dependency>
         <!-- Java json-->
         <dependency>

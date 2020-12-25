@@ -11,8 +11,8 @@
     <entry key="elasticsearch.text.type">entity</entry>
 
     <!-- Resources path -->
-    <entry key="yago.file_path.taxonomy">/GW/D5data-11/hvthinh/yago-taxonomy/yagoTaxonomy.tsv.gz</entry>
-    <entry key="yago.file_path.type">/GW/D5data-11/hvthinh/yago-taxonomy/yagoTypes.tsv.gz</entry>
+    <entry key="yago.file_path.taxonomy">./resources/yago/yagoTaxonomy.tsv.7z</entry>
+    <entry key="yago.file_path.type">./resources/yago/yagoTypes.tsv.7z</entry>
     <entry key="yago.file_path.entity_view">./resources/entityView-2019.gz</entry>
     <entry key="glove.folder_path">./resources/glove/</entry>
     <entry key="wordnet.folder_path">./resources/WordNet-3.0/</entry>
