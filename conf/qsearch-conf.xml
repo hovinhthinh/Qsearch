@@ -17,7 +17,7 @@
     <entry key="glove.folder_path">./resources/glove/</entry>
     <entry key="wordnet.folder_path">./resources/WordNet-3.0/</entry>
     <entry key="el.prior_distribution_file">./resources/m2ePrior_wikipages+wikitables+wikilinks.case-sensitive_tokenized.gz</entry>
-    <entry key="ca.bg_qfact_file">./table-non-deep/qfact_text_coref.gz</entry>
+    <entry key="ca.bg_qfact_file">./table-non-deep/bg_qfact_text_coref.gz</entry>
 
     <!-- Index files -->
     <entry key="chroniclemap.table.index_file">/GW/D5data-13/hvthinh/TabQs/to_be_indexed/table.index</entry>
