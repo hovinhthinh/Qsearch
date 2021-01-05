@@ -13,3 +13,11 @@ rm ./resources/glove.6B.zip
 echo "Download Yago3 Taxonomy"
 wget http://resources.mpi-inf.mpg.de/yago-naga/yago3.1/yagoTaxonomy.tsv.7z -P ./resources/yago/
 wget http://resources.mpi-inf.mpg.de/yago-naga/yago3.1/yagoTypes.tsv.7z -P ./resources/yago/
+
+echo "Download treeTagger"
+mkdir -p ./lib/treeTagger
+wget https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/tree-tagger-linux-3.2.3.tar.gz -P ./lib/treeTagger/
+wget https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/tagger-scripts.tar.gz -P ./lib/treeTagger/
+wget https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/install-tagger.sh -P ./lib/treeTagger/
+wget https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/english-bnc.par.gz -P ./lib/treeTagger/
+(cd ./lib/treeTagger && sh install-tagger.sh)
