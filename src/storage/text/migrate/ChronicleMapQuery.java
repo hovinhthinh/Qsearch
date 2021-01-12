@@ -32,11 +32,16 @@ public class ChronicleMapQuery {
     public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String queryType, String queryContext,
                                                                              String quantityConstraint,
                                                                              ContextMatcher matcher, Map additionalParameters) {
+        return search(queryType, queryContext, QuantityConstraint.parseFromString(quantityConstraint), matcher, additionalParameters);
+    }
+
+    public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String queryType, String queryContext,
+                                                                             QuantityConstraint quantityConstraint,
+                                                                             ContextMatcher matcher, Map additionalParameters) {
         Pair<QuantityConstraint, ArrayList<ResultInstance>> result = new Pair<>();
 
-        QuantityConstraint constraint = QuantityConstraint.parseFromString(quantityConstraint);
-        result.first = constraint;
-        if (constraint == null) {
+        result.first = quantityConstraint;
+        if (quantityConstraint == null) {
             return result;
         }
 
@@ -44,9 +49,9 @@ public class ChronicleMapQuery {
 
         // Process query context terms
         queryContext = queryContext.toLowerCase();
-        String domain = QuantityDomain.getDomain(constraint.quantity);
+        String domain = QuantityDomain.getDomain(quantityConstraint.quantity);
         if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
-            queryContext += " " + constraint.quantity.unit;
+            queryContext += " " + quantityConstraint.quantity.unit;
         }
         queryContext = NLP.fastStemming(queryContext.toLowerCase(), Morpha.any);
         // expand with domain name if empty
@@ -125,7 +130,7 @@ public class ChronicleMapQuery {
 
                     String Q = facts.getJSONObject(i).getString("quantity");
                     Quantity qt = Quantity.fromQuantityString(Q);
-                    if (!constraint.match(qt)) {
+                    if (!quantityConstraint.match(qt)) {
                         continue;
                     }
 
@@ -162,7 +167,7 @@ public class ChronicleMapQuery {
                     si.quantity = qt.toString(1);
                     si.quantityStandardValue = qt.value * QuantityDomain.getScale(qt);
                     si.quantityStr = facts.getJSONObject(i).getString("quantityStr");
-                    si.quantityConvertedStr = qt.getQuantityConvertedStr(constraint.quantity);
+                    si.quantityConvertedStr = qt.getQuantityConvertedStr(quantityConstraint.quantity);
 
                     si.entityStr = facts.getJSONObject(i).getString("entityStr");
 

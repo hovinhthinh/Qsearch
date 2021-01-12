@@ -176,6 +176,11 @@ public class QuantityConstraint {
         if (!domain.equals(QuantityDomain.getDomain(q))) {
             return false;
         }
+
+        if (resolutionCode == QuantityResolution.Value.DOMAIN_ONLY) {
+            return true;
+        }
+
         double qValue = q.value * QuantityDomain.getScale(q);
         double thisQValue = quantity.value * QuantityDomain.getScale(quantity);
         if (resolutionCode == QuantityResolution.Value.UPPER_BOUND) {
@@ -266,7 +271,8 @@ public class QuantityConstraint {
 
         // Now handle only these resolutions.
         public enum Value {
-            LOWER_BOUND, UPPER_BOUND, EXACT, APPROXIMATE, RANGE
+            LOWER_BOUND, UPPER_BOUND, EXACT, APPROXIMATE, RANGE,
+            DOMAIN_ONLY // This a special constraint, which matches only the domain.
         }
     }
 }
