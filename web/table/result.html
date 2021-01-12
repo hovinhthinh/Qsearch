@@ -736,12 +736,14 @@
                 var params = {
                     type: data.typeConstraint,
                     context: data.contextConstraint,
-                    quantity: data.quantityConstraint.phrase,
+                    alteredQuantityStr: data.topResults[eIndex].subInstances[siIndex].qfact.quantity,
                     ntop: "10",
+
                     entity: entity,
+                    'TYPE_LIFTING_DIST_LIM': 4,
+
                     'QUANTITY_MATCH_WEIGHT': '0.1',
-                    'ENTITY_POPULARITY_WEIGHT': '0.1',
-                    'TYPE_LIFTING_DIST_LIM': 4
+                    'ENTITY_POPULARITY_WEIGHT': '0.1'
                 };
 
                 $.ajax({
@@ -769,7 +771,7 @@
                             explainEvi.find('.explain-content').empty();
                             for (var j = 0; j < eInfo.subInstances.length; ++j) {
                                 // show only 1 if duplicated from many sources;
-                                if (j > 0 && eInfo.subInstances[j]["sentence"] == eInfo.subInstances[j - 1]["sentence"]) {
+                                if (j > 0 && eInfo.subInstances[j]["sentence"].toLowerCase() == eInfo.subInstances[j - 1]["sentence"].toLowerCase()) {
                                     continue;
                                 }
                                 var esi = $("<li class='mt-1'></li>");

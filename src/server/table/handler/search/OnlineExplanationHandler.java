@@ -1,7 +1,9 @@
 package server.table.handler.search;
 
 import model.context.ContextMatcher;
+import model.quantity.Quantity;
 import model.quantity.QuantityConstraint;
+import model.quantity.QuantityDomain;
 import model.query.SimpleQueryParser;
 import nlp.NLP;
 import server.table.explain.TypeLiftingRestrictor;
@@ -26,7 +28,7 @@ public class OnlineExplanationHandler extends HttpServlet {
         // Get parameters
         String typeConstraint = request.getParameter("type");
         String contextConstraint = request.getParameter("context");
-        String quantityConstraint = request.getParameter("quantity");
+        String alteredQuantityStr = request.getParameter("alteredQuantityStr");
 
         String v;
         Map additionalParams = new HashMap();
@@ -64,7 +66,7 @@ public class OnlineExplanationHandler extends HttpServlet {
 
         httpServletResponse.setCharacterEncoding("utf-8");
 
-        server.text.handler.search.SearchResult result = search(null, nResult, typeConstraint, contextConstraint, quantityConstraint, entity, additionalParams);
+        server.text.handler.search.SearchResult result = search(null, nResult, typeConstraint, contextConstraint, alteredQuantityStr, entity, additionalParams);
 
         httpServletResponse.getWriter().print(Gson.toJson(result));
 
@@ -72,13 +74,18 @@ public class OnlineExplanationHandler extends HttpServlet {
     }
 
     public static server.text.handler.search.SearchResult search(String model, int nTopResult,
-                                                                 String typeConstraint, String contextConstraint, String quantityConstraint,
+                                                                 String typeConstraint, String contextConstraint, String alteredQuantityStr,
                                                                  String entity,
                                                                  Map additionalParameters) {
         // Optimize
         typeConstraint = NLP.stripSentence(typeConstraint);
         contextConstraint = NLP.stripSentence(contextConstraint);
-        quantityConstraint = NLP.stripSentence(quantityConstraint);
+        // handcraft quantity constraint
+        QuantityConstraint qc = new QuantityConstraint();
+        qc.quantity = Quantity.fromQuantityString(alteredQuantityStr);
+        qc.resolutionCode = QuantityConstraint.QuantityResolution.Value.DOMAIN_ONLY; // important!
+        qc.domain = QuantityDomain.getDomain(qc.quantity);
+        qc.fineGrainedDomain = QuantityDomain.getFineGrainedDomain(qc.quantity);
 
         server.text.handler.search.SearchResult response = new server.text.handler.search.SearchResult();
         try {
@@ -94,9 +101,6 @@ public class OnlineExplanationHandler extends HttpServlet {
             if (suggestedType != null) {
                 typeConstraint = suggestedType.first;
             }
-
-            QuantityConstraint qc = QuantityConstraint.parseFromString(quantityConstraint);
-            qc.resolutionCode = QuantityConstraint.QuantityResolution.Value.DOMAIN_ONLY; // important!
 
             Pair<QuantityConstraint, ArrayList<ResultInstance>> result =
                     ChronicleMapQuery.search(typeConstraint, contextConstraint, qc, matcher, additionalParameters);
