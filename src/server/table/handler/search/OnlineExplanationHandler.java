@@ -19,10 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class OnlineExplanationHandler extends HttpServlet {
+    public static final double EXACT_ENTITY_BOOST = 1.1;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         // Get parameters
@@ -51,6 +54,10 @@ public class OnlineExplanationHandler extends HttpServlet {
 
         if ((v = request.getParameter("ENTITY_POPULARITY_WEIGHT")) != null) {
             additionalParams.put("ENTITY_POPULARITY_WEIGHT", Double.parseDouble(v));
+        }
+
+        if ((v = request.getParameter("EXACT_ENTITY_BOOST")) != null) {
+            additionalParams.put("EXACT_ENTITY_BOOST", Double.parseDouble(v));
         }
 
         String entity = request.getParameter("entity");
@@ -126,11 +133,20 @@ public class OnlineExplanationHandler extends HttpServlet {
                 }
                 if (pos >= nTopResult) {
                     response.topResults.set(nTopResult - 1, response.topResults.get(pos));
+                    pos = nTopResult - 1;
                 }
 
                 // trim results
                 if (response.topResults.size() > nTopResult) {
                     response.topResults.subList(nTopResult, response.topResults.size()).clear();
+                }
+
+                // boost exact entity
+                if (pos != -1) {
+                    double eeBoost = additionalParameters == null ? EXACT_ENTITY_BOOST :
+                            (double) additionalParameters.getOrDefault("EXACT_ENTITY_BOOST", EXACT_ENTITY_BOOST);
+                    response.topResults.get(pos).score /= eeBoost;
+                    Collections.sort(response.topResults);
                 }
             }
 
