@@ -7,6 +7,7 @@ import model.query.SimpleQueryParser;
 import nlp.NLP;
 import org.json.JSONObject;
 import server.common.handler.ResultCacheHandler;
+import server.text.ResultInstance;
 import storage.text.migrate.ChronicleMapQuery;
 import util.Gson;
 import util.Pair;
@@ -128,7 +129,7 @@ public class SearchHandler extends HttpServlet {
                 }
             }
             if (response.verdict == null) {
-                Pair<QuantityConstraint, ArrayList<SearchResult.ResultInstance>> result =
+                Pair<QuantityConstraint, ArrayList<ResultInstance>> result =
                         ChronicleMapQuery.search(typeConstraint, contextConstraint, quantityConstraint, matcher, additionalParameters);
                 if (result.first == null) {
                     response.verdict = "Cannot detect quantity constraint.";
@@ -151,7 +152,7 @@ public class SearchHandler extends HttpServlet {
                         response.RECALL_10 = 0.0;
                         int nTrue = 0;
                         for (int i = 0; i < result.second.size(); ++i) {
-                            SearchResult.ResultInstance ri = result.second.get(i);
+                            ResultInstance ri = result.second.get(i);
                             if (i < nTopResult) {
                                 ri.eval = "false";
                             }

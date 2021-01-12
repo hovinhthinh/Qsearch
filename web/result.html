@@ -290,15 +290,15 @@
             var str = "";
             for (var i = 0; i < topResults.length; ++i) {
                 var instance = topResults[i];
-                str += encode(i + 1 + data.startIdx, instance["score"].toFixed(3), instance["entity"], instance["quantity"],
+                str += encode(i + 1 + data.startIdx, instance.subInstances[0]["score"].toFixed(3), instance["entity"], instance["quantity"],
                     {
-                        'value': instance["sentence"],
-                        'entityStr': instance["entityStr"],
-                        'quantityStr': instance["quantityStr"],
-                        'quantityConvertedStr': instance["quantityConvertedStr"],
-                        'contextStr': instance["contextStr"]
+                        'value': instance.subInstances[0]["sentence"],
+                        'entityStr': instance.subInstances[0]["entityStr"],
+                        'quantityStr': instance.subInstances[0]["quantityStr"],
+                        'quantityConvertedStr': instance.subInstances[0]["quantityConvertedStr"],
+                        'contextStr': instance.subInstances[0]["contextStr"]
                     },
-                    instance["source"]);
+                    instance.subInstances[0]["source"]);
             }
 
             // now adding pagination
@@ -565,7 +565,7 @@
     });
     $('#sort-quantity-asc').click(function () {
         data.topResults.sort(function (a, b) {
-            var av = a['quantityStandardValue'], bv = b['quantityStandardValue'];
+            var av = a.subInstances[0]['quantityStandardValue'], bv = b.subInstances[0]['quantityStandardValue'];
             var c = av < bv ? -1 : (av > bv ? 1 : 0);
             return c;
         });
@@ -582,7 +582,7 @@
     });
     $('#sort-quantity-desc').click(function () {
         data.topResults.sort(function (a, b) {
-            var av = a['quantityStandardValue'], bv = b['quantityStandardValue'];
+            var av = a.subInstances[0]['quantityStandardValue'], bv = b.subInstances[0]['quantityStandardValue'];
             var c = av < bv ? -1 : (av > bv ? 1 : 0);
             return c * -1;
         });

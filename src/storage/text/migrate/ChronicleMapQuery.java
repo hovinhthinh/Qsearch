@@ -11,7 +11,7 @@ import nlp.NLP;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONArray;
 import org.json.JSONException;
-import server.text.handler.search.SearchResult;
+import server.text.ResultInstance;
 import uk.ac.susx.informatics.Morpha;
 import util.Constants;
 import util.Gson;
@@ -19,7 +19,9 @@ import util.Pair;
 import util.headword.StringUtils;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class ChronicleMapQuery {
@@ -27,10 +29,10 @@ public class ChronicleMapQuery {
 
     public static ContextMatcher DEFAULT_MATCHER = new ContextEmbeddingMatcher(3);
 
-    public static Pair<QuantityConstraint, ArrayList<SearchResult.ResultInstance>> search(String queryType, String queryContext,
-                                                                                          String quantityConstraint,
-                                                                                          ContextMatcher matcher, Map additionalParameters) {
-        Pair<QuantityConstraint, ArrayList<SearchResult.ResultInstance>> result = new Pair<>();
+    public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String queryType, String queryContext,
+                                                                             String quantityConstraint,
+                                                                             ContextMatcher matcher, Map additionalParameters) {
+        Pair<QuantityConstraint, ArrayList<ResultInstance>> result = new Pair<>();
 
         QuantityConstraint constraint = QuantityConstraint.parseFromString(quantityConstraint);
         result.first = constraint;
@@ -53,7 +55,7 @@ public class ChronicleMapQuery {
         }
         ArrayList<String> queryContextTerms = NLP.splitSentence(queryContext);
 
-        ArrayList<SearchResult.ResultInstance> scoredInstances = new ArrayList<>();
+        ArrayList<ResultInstance> scoredInstances = new ArrayList<>();
         int lastPercent = 0;
 
         // retrieve additional parameters
@@ -102,7 +104,7 @@ public class ChronicleMapQuery {
                 // computer score
                 JSONArray facts = ChronicleMapQfactStorage.get(entity);
                 // save space.
-                SearchResult.ResultInstance r = new SearchResult.ResultInstance();
+                ResultInstance r = new ResultInstance();
                 r.score = Constants.MAX_DOUBLE;
                 r.entity = entity;
                 r.popularity = WikipediaView.getView(r.entity);
@@ -155,23 +157,25 @@ public class ChronicleMapQuery {
                     // use explicit matcher if given.
                     double dist = explicitMatcher != null ? explicitMatcher.match(queryContextTerms, X) : matcher.match(queryContextTerms, X);
 
-                    if (dist < r.score) {
-                        r.score = dist;
-                        r.quantity = qt.toString(1);
-                        r.quantityStandardValue = qt.value * QuantityDomain.getScale(qt);
-                        r.quantityStr = facts.getJSONObject(i).getString("quantityStr");
-                        r.quantityConvertedStr = qt.getQuantityConvertedStr(constraint.quantity);
+                    ResultInstance.SubInstance si = new ResultInstance.SubInstance();
+                    si.score = dist;
+                    si.quantity = qt.toString(1);
+                    si.quantityStandardValue = qt.value * QuantityDomain.getScale(qt);
+                    si.quantityStr = facts.getJSONObject(i).getString("quantityStr");
+                    si.quantityConvertedStr = qt.getQuantityConvertedStr(constraint.quantity);
 
-                        r.entityStr = facts.getJSONObject(i).getString("entityStr");
+                    si.entityStr = facts.getJSONObject(i).getString("entityStr");
 
-                        r.contextStr = contextVerbose;
+                    si.contextStr = contextVerbose;
 //                        matchContext = new ArrayList<>(X);
 
-                        r.sentence = facts.getJSONObject(i).getString("sentence");
-                        r.source = facts.getJSONObject(i).getString("source");
-                    }
+                    si.sentence = facts.getJSONObject(i).getString("sentence");
+                    si.source = facts.getJSONObject(i).getString("source");
+
+                    r.addSubInstance(si);
                 }
-                if (r.quantity != null) {
+                if (r.subInstances.size() > 0) {
+                    Collections.sort(r.subInstances, (o1, o2) -> Double.compare(o1.score, o2.score));
                     scoredInstances.add(r);
                 }
             }
@@ -186,29 +190,30 @@ public class ChronicleMapQuery {
         }
     }
 
-    public static Pair<QuantityConstraint, ArrayList<SearchResult.ResultInstance>> search(String queryType, String queryContext,
-                                                                                          String quantityConstraint,
-                                                                                          ContextMatcher matcher) {
+    public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String queryType, String queryContext,
+                                                                             String quantityConstraint,
+                                                                             ContextMatcher matcher) {
         return search(queryType, queryContext, quantityConstraint, matcher, null);
     }
 
-    public static Pair<QuantityConstraint, ArrayList<SearchResult.ResultInstance>> search(String queryType, String queryContext,
-                                                                                          String quantityConstraint) {
+    public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String queryType, String queryContext,
+                                                                             String quantityConstraint) {
         return search(queryType, queryContext, quantityConstraint, DEFAULT_MATCHER);
     }
 
     public static void main(String[] args) {
-        ArrayList<SearchResult.ResultInstance> result =
+        ArrayList<ResultInstance> result =
                 search("car",
                         "consumption",
                         "more than 0 mpg").second;
 
         int nPrinted = 0;
-        for (SearchResult.ResultInstance o : result) {
+        for (ResultInstance o : result) {
+            ResultInstance.SubInstance si = o.subInstances.get(0);
             try {
                 if (nPrinted < 20) {
                     System.out.println(String.format("%30s\t%10.3f\t%50s\t%20s\t%s\t%s", o.entity,
-                            o.score, Gson.toJson(o.contextStr), o.quantity, o.sentence, o.source));
+                            si.score, Gson.toJson(si.contextStr), si.quantity, si.sentence, si.source));
                     ++nPrinted;
                 }
             } catch (JSONException e) {

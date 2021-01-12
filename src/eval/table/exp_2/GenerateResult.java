@@ -159,7 +159,7 @@ public class GenerateResult {
                         query, pos, false
                 ));
             }
-            for (server.text.handler.search.SearchResult.ResultInstance ri : r.topResults) {
+            for (server.text.ResultInstance ri : r.topResults) {
                 ++pos;
                 if (pos <= 10) {
                     tuples.add(new Tuple(

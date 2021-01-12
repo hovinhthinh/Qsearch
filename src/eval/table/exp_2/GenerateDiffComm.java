@@ -67,7 +67,7 @@ public class GenerateDiffComm {
             server.text.handler.search.SearchResult r = Gson.fromJson(FileUtils.getContent(f, StandardCharsets.UTF_8), server.text.handler.search.SearchResult.class);
             int pos = 0;
             Set<String> res = new HashSet<>();
-            for (server.text.handler.search.SearchResult.ResultInstance ri : r.topResults) {
+            for (server.text.ResultInstance ri : r.topResults) {
                 ++pos;
                 if (pos <= 10 && ri.eval.equals("true")) {
                     res.add(ri.entity);
