@@ -120,7 +120,8 @@
     <div class="modal-dialog mw-100" style="width: 70%;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title font-weight-bold">Explanation for <a id='explain-entity' target="_blank" href="#">ENTITY</a></h5>
+                <h5 class="modal-title font-weight-bold">Explanation for <a id='explain-entity' target="_blank"
+                                                                            href="#">ENTITY</a></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -145,7 +146,34 @@
         </div>
     </div>
 </div>
-<img hidden id="loading" src="../img/loading.gif" style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"/>
+
+<div id="online-explain-info" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog mw-100" style="width: 70%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold">Explanation for <a id='online-explain-entity' target="_blank"
+                                                                            href="#">ENTITY</a></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="online-explain-table">TABLE</div>
+                <div id="online-explain-text">TEXT</div>
+                <li hidden id="online-explain-template">
+                    <hr/>
+                    <span class="h6 explain-related-entity font-weight-bold"><a target="_blank"
+                                                                                href="#">RELATED_ENTITY</a></span>
+                    <sup><span class="badge explain-type">TYPE</span></sup>
+                    <ul class="explain-content">CONTENT</ul>
+                </li>
+            </div>
+        </div>
+    </div>
+</div>
+
+<img hidden id="loading" src="../img/loading.gif"
+     style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;"/>
 <!--
 <div hidden id="loading">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#fff;display:block;" width="100px" height="100px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
@@ -179,6 +207,9 @@
 <script src="js/local.js"></script>
 
 <script>
+    var ONLINE_EXPLANATION = true;
+    var VERBOSE = true;
+
     var showTimeOut = 30000;
     var nanobar = new Nanobar();
     document.getElementById('nanobarcss').innerHTML += '.nanobar .bar { background: #3c78d8;  box-shadow: 0 0 10px #3c78d8; border-radius: 4px; }';
@@ -542,6 +573,75 @@
         $('#quantity-constraint').attr('data-content', quantityConstraintDetail);
     }
 
+    function onlineExplainContent(sentenceContent) {
+        var value = escapeText(sentenceContent['value']);
+        if (VERBOSE) {
+            var pE = -1, pQ = -1;
+            var eStr = null, qStr = null;
+
+            if ('entityStr' in sentenceContent) {
+                eStr = escapeText(sentenceContent['entityStr']);
+                pE = value.indexOf(eStr);
+            }
+            if ('quantityStr' in sentenceContent) {
+                qStr = escapeText(sentenceContent['quantityStr']);
+                pQ = value.indexOf(qStr);
+            }
+            if ('contextStr' in sentenceContent) {
+                var context = sentenceContent['contextStr'];
+                context = context.filter(function (value, index, self) {
+                    return self.indexOf(value) === index;
+                });
+                var processedContext = [];
+                for (var i = 0; i < context.length; ++i) {
+                    var contextToken = escapeText(context[i]);
+                    var optimalCursor = 0, currentCursor = 0, optimalDist = 1e9;
+                    var nextPosition = -1;
+                    do {
+                        nextPosition = value.indexOf(contextToken, nextPosition + 1);
+                        if ((nextPosition > 0 && value.charAt(nextPosition - 1) != ' ') ||
+                            (nextPosition + contextToken.length < value.length && value.charAt(nextPosition + contextToken.length) != ' ')) {
+                            continue;
+                        }
+                        if (nextPosition != -1) {
+                            ++currentCursor;
+                            var currentDist = (pE == -1 ? 0 : Math.abs(pE - nextPosition)) + (pQ == -1 ? 0 : Math.abs(pQ - nextPosition));
+                            if (currentDist < optimalDist) {
+                                optimalDist = currentDist;
+                                optimalCursor = currentCursor;
+                            }
+                        }
+                    } while (nextPosition != -1);
+
+                    if (optimalCursor > 0) {
+                        processedContext.push([contextToken, optimalCursor]);
+                    }
+                }
+                processedContext.forEach(function (o) {
+                    var nextPosition = -1;
+                    for (var i = 0; i < o[1]; ++i) {
+                        nextPosition = value.indexOf(o[0], nextPosition + 1);
+                        if ((nextPosition > 0 && value.charAt(nextPosition - 1) != ' ') ||
+                            (nextPosition + o[0].length < value.length && value.charAt(nextPosition + o[0].length) != ' ')) {
+                            --i;
+                        }
+                    }
+                    value = value.substring(0, nextPosition)
+                        + '<span class="context-box">' + o[0] + '</span>'
+                        + value.substring(nextPosition + o[0].length);
+                });
+                value = value.replace(/<\/span> <span class="context-box">/g, '&nbsp;'); // remove verbose space between consecutive context tokens.
+            }
+            if (pE != -1) {
+                value = value.replace(eStr, '<span class="entity-box">' + eStr + '</span>');
+            }
+            if (pQ != -1) {
+                value = value.replace(qStr, '<span class="quantity-box">' + qStr + '</span>');
+            }
+        }
+        return value;
+    }
+
     function show(data) {
         if (data["verdict"] != "OK") {
             $("#data").html(data["verdict"]);
@@ -620,9 +720,95 @@
             e.preventDefault();
             var eIndex = parseInt($(this).attr('eindex'));
             var siIndex = parseInt($(this).attr('siindex'));
-
             var entity = data.topResults[eIndex].entity;
 
+            if (ONLINE_EXPLANATION) {
+                var table = $(this).closest('.collapsed-table').clone();
+                table.find('.explain-info').remove();
+                $('#online-explain-table').html(table.html());
+
+                $('#online-explain-entity')
+                    .html(escapeText(entity.substring(1, entity.length - 1)).replace(/_/g, '&nbsp;'))
+                    .attr('href', 'https://www.wikipedia.org/wiki/' + encodeURI(entity.substring(1, entity.length - 1)));
+                $('#online-explain-text').html('<img src="../img/loading.gif" style="display: block; margin:auto;"/>');
+                $('#online-explain-info').modal('show');
+
+                var params = {
+                    type: data.typeConstraint,
+                    context: data.contextConstraint,
+                    quantity: data.quantityConstraint.phrase,
+                    ntop: "10",
+                    entity: entity,
+                    'QUANTITY_MATCH_WEIGHT': '0.1',
+                    'ENTITY_POPULARITY_WEIGHT': '0.1',
+                    'TYPE_LIFTING_DIST_LIM': 4
+                };
+
+                $.ajax({
+                    type: "GET",
+                    url: "../explain_table",
+                    data: params,
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(JSON.stringify(data));
+                        var explainContent = $("<ul class='pl-3'></ul>");
+                        for (var i = 0; i < data.topResults.length; ++i) {
+                            var explainEvi = $('#online-explain-template').clone().removeAttr('id').removeAttr('hidden');
+                            var eInfo = data.topResults[i];
+
+                            if (eInfo.entity == entity) {
+                                explainEvi.find('.explain-type').text("Exact-Entity").addClass('badge-primary');
+                            } else {
+                                explainEvi.find('.explain-type').text("Type-Lifted").addClass('badge-secondary');
+                            }
+                            explainEvi.find('.explain-related-entity a')
+                                .html(escapeText(eInfo.entity.substring(1, eInfo.entity.length - 1)).replace(/_/g, '&nbsp;'))
+                                .attr('href', 'https://www.wikipedia.org/wiki/' + encodeURI(eInfo.entity.substring(1, eInfo.entity.length - 1)));
+
+                            explainEvi.find('.explain-content').empty();
+                            for (var j = 0; j < eInfo.subInstances.length; ++j) {
+                                // show only 1 if duplicated from many sources;
+                                if (j > 0 && eInfo.subInstances[j]["sentence"] == eInfo.subInstances[j - 1]["sentence"]) {
+                                    continue;
+                                }
+                                var esi = $("<li class='mt-1'></li>");
+
+                                esi.html(onlineExplainContent({
+                                    'value': eInfo.subInstances[j]["sentence"],
+                                    'entityStr': eInfo.subInstances[j]["entityStr"],
+                                    'quantityStr': eInfo.subInstances[j]["quantityStr"],
+                                    'quantityConvertedStr': eInfo.subInstances[j]["quantityConvertedStr"],
+                                    'contextStr': eInfo.subInstances[j]["contextStr"]
+                                }));
+
+                                var explainLink = eInfo.subInstances[j]["source"];
+                                if (explainLink.startsWith("STICS:Link:")) {
+                                    explainLink = explainLink.substr(11);
+                                } else if (explainLink.startsWith("NYT:Link:")) {
+                                    explainLink = explainLink.substr(9);
+                                } else if (explainLink.startsWith("WIKIPEDIA:Link:")) {
+                                    explainLink = explainLink.substr(15);
+                                }
+
+                                esi.append($('<a target="_blank" referrerpolicy="no-referrer" class="ml-2"><i class="fas fa-external-link-alt text-secondary fa-xs"></i></a>').attr('href', explainLink));
+
+                                explainEvi.find('.explain-content').append(esi);
+                            }
+                            explainContent.append(explainEvi);
+                        }
+                        $('#online-explain-text').empty().append(explainContent);
+                    },
+                    error: function () {
+                        alert("An error occurred.");
+                        $('#online-explain-text').html('An error occurred.');
+                    }
+                });
+
+                return;
+            }
+
+            // Below is offline explanation (from column alignment);
             var table = $(this).closest('.collapsed-table').clone();
             table.find('.explain-info').remove();
             $('#explain-table').html(table.html());
