@@ -11,6 +11,7 @@ import nlp.NLP;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONArray;
 import org.json.JSONException;
+import server.table.explain.TypeLiftingRestrictor;
 import server.text.ResultInstance;
 import uk.ac.susx.informatics.Morpha;
 import util.Constants;
@@ -75,6 +76,9 @@ public class ChronicleMapQuery {
                 (double) additionalParameters.getOrDefault("QUANTITY_MATCH_WEIGHT", QUANTITY_MATCH_WEIGHT);
         double entityPopularityWeight = additionalParameters == null ? ENTITY_POPULARITY_WEIGHT :
                 (double) additionalParameters.getOrDefault("ENTITY_POPULARITY_WEIGHT", ENTITY_POPULARITY_WEIGHT);
+        // support explaining in tables.
+        TypeLiftingRestrictor typeLiftingRestrictor = additionalParameters == null ? null :
+                (TypeLiftingRestrictor) additionalParameters.getOrDefault("TYPE_LIFTING_RESTRICTOR", null);
 
         ArrayList<String> corpusConstraint = new ArrayList<>();
         corpusConstraint = additionalParameters == null ? null :
@@ -111,6 +115,10 @@ public class ChronicleMapQuery {
 
                 // process type
                 if (!typeMatcher.match(entity)) {
+                    continue;
+                }
+
+                if (typeLiftingRestrictor != null && !typeLiftingRestrictor.entityIsInProximity(entity)) {
                     continue;
                 }
 

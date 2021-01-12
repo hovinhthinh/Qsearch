@@ -74,6 +74,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>TableOnlineExplanation</servlet-name>
+        <servlet-class>server.table.handler.search.OnlineExplanationHandler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TableOnlineExplanation</servlet-name>
+        <url-pattern>/explain_table</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>TypeSuggestTable</servlet-name>
         <servlet-class>server.table.handler.TypeSuggestionHandler</servlet-class>
     </servlet>
