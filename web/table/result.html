@@ -735,7 +735,7 @@
 
                 var params = {
                     type: data.typeConstraint,
-                    context: data.contextConstraint,
+                    context: data.contextConstraint + " " + data.topResults[eIndex].subInstances[siIndex].qfact.headerContext,
                     alteredQuantityStr: data.topResults[eIndex].subInstances[siIndex].qfact.quantity,
                     ntop: "10",
 
