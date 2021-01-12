@@ -28,6 +28,13 @@ public class SearchHandler extends HttpServlet {
 
     private static ContextMatcher KULLBACK_LEIBLER_MATCHER = null;
 
+    public static ContextMatcher getKLMatcher() {
+        if (KULLBACK_LEIBLER_MATCHER == null) {
+            KULLBACK_LEIBLER_MATCHER = new KullBackLeiblerMatcher(0.1);
+        }
+        return KULLBACK_LEIBLER_MATCHER;
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         // Get parameters
@@ -103,10 +110,7 @@ public class SearchHandler extends HttpServlet {
         try {
             ContextMatcher matcher;
             if (model != null && model.equals(KL_MODEL_STRING)) {
-                if (KULLBACK_LEIBLER_MATCHER == null) {
-                    KULLBACK_LEIBLER_MATCHER = new KullBackLeiblerMatcher(0.1);
-                }
-                matcher = KULLBACK_LEIBLER_MATCHER;
+                matcher = getKLMatcher();
             } else {
                 model = EMBEDDING_MODEL_STRING;
                 matcher = ChronicleMapQuery.DEFAULT_MATCHER;
