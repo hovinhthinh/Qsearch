@@ -31,9 +31,6 @@ public class ResultInstance implements Comparable<ResultInstance> {
     }
 
     public void addSubInstance(SubInstance si) {
-        if (si.score >= Constants.MAX_DOUBLE) {
-            return;
-        }
         score = Math.min(score, si.score);
 
         subInstances.add(si);

@@ -29,6 +29,9 @@ public class ChronicleMapQuery {
 
     public static ContextMatcher DEFAULT_MATCHER = new ContextEmbeddingMatcher(3);
 
+    public static double QUANTITY_MATCH_WEIGHT = 0.0;
+    public static double ENTITY_POPULARITY_WEIGHT = 0.0;
+
     public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String queryType, String queryContext,
                                                                              String quantityConstraint,
                                                                              ContextMatcher matcher, Map additionalParameters) {
@@ -44,6 +47,9 @@ public class ChronicleMapQuery {
         if (quantityConstraint == null) {
             return result;
         }
+        double qtConstraintStandardValue = quantityConstraint.quantity.value * QuantityDomain.getScale(quantityConstraint.quantity);
+        Double qtConstraintStandardValue2 = quantityConstraint.quantity.value2 == null ? null :
+                quantityConstraint.quantity.value2 * QuantityDomain.getScale(quantityConstraint.quantity);
 
         TypeMatcher typeMatcher = new TypeMatcher(queryType);
 
@@ -65,6 +71,10 @@ public class ChronicleMapQuery {
 
         // retrieve additional parameters
         Session session = additionalParameters == null ? null : (Session) additionalParameters.get("session");
+        double qtMatchWeight = additionalParameters == null ? QUANTITY_MATCH_WEIGHT :
+                (double) additionalParameters.getOrDefault("QUANTITY_MATCH_WEIGHT", QUANTITY_MATCH_WEIGHT);
+        double entityPopularityWeight = additionalParameters == null ? ENTITY_POPULARITY_WEIGHT :
+                (double) additionalParameters.getOrDefault("ENTITY_POPULARITY_WEIGHT", ENTITY_POPULARITY_WEIGHT);
 
         ArrayList<String> corpusConstraint = new ArrayList<>();
         corpusConstraint = additionalParameters == null ? null :
@@ -162,8 +172,11 @@ public class ChronicleMapQuery {
                     // use explicit matcher if given.
                     double dist = explicitMatcher != null ? explicitMatcher.match(queryContextTerms, X) : matcher.match(queryContextTerms, X);
 
+                    if (dist >= Constants.MAX_DOUBLE) {
+                        continue;
+                    }
+
                     ResultInstance.SubInstance si = new ResultInstance.SubInstance();
-                    si.score = dist;
                     si.quantity = qt.toString(1);
                     si.quantityStandardValue = qt.value * QuantityDomain.getScale(qt);
                     si.quantityStr = facts.getJSONObject(i).getString("quantityStr");
@@ -177,11 +190,40 @@ public class ChronicleMapQuery {
                     si.sentence = facts.getJSONObject(i).getString("sentence");
                     si.source = facts.getJSONObject(i).getString("source");
 
+                    // compute quantity distance to query
+                    double qtRelativeDist = Math.min(1,
+                            Math.abs(si.quantityStandardValue - qtConstraintStandardValue)
+                                    / Math.max(Math.abs(si.quantityStandardValue), Math.abs(qtConstraintStandardValue))
+                    );
+                    if (qtConstraintStandardValue2 != null) {
+                        qtRelativeDist = Math.min(qtRelativeDist,
+                                Math.abs(si.quantityStandardValue - qtConstraintStandardValue2)
+                                        / Math.max(Math.abs(si.quantityStandardValue), Math.abs(qtConstraintStandardValue2))
+                        );
+                    }
+
+                    // entity popularity would be added later
+                    si.score = qtMatchWeight * qtRelativeDist
+                            + (1 - qtMatchWeight - entityPopularityWeight) * dist;
+
                     r.addSubInstance(si);
                 }
                 if (r.subInstances.size() > 0) {
                     Collections.sort(r.subInstances, (o1, o2) -> Double.compare(o1.score, o2.score));
                     scoredInstances.add(r);
+                }
+            }
+
+            // add entity popularity
+            int maxPopularity = 1;
+            for (ResultInstance ri : scoredInstances) {
+                maxPopularity = Math.max(maxPopularity, ri.popularity);
+            }
+            for (ResultInstance ri : scoredInstances) {
+                double entityPopularityContribution = Math.max(1.0 * ri.popularity, 0.0) / maxPopularity;
+                ri.score += entityPopularityWeight * (1 - entityPopularityContribution);
+                for (ResultInstance.SubInstance si : ri.subInstances) {
+                    si.score += entityPopularityWeight * (1 - entityPopularityContribution);
                 }
             }
 

@@ -299,6 +299,10 @@ public class ElasticSearchQuery {
                     // use explicit matcher if given.
                     double dist = explicitMatcher != null ? explicitMatcher.match(queryContextTerms, X) : matcher.match(queryContextTerms, X);
 
+                    if (dist >= Constants.MAX_DOUBLE) {
+                        continue;
+                    }
+
                     ResultInstance.SubInstance si = new ResultInstance.SubInstance();
                     si.score = dist;
                     si.quantity = qt.toString(1);
