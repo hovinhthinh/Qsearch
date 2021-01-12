@@ -5,7 +5,7 @@ import util.Constants;
 import java.util.ArrayList;
 
 public class ResultInstance implements Comparable<ResultInstance> {
-    public static transient final int TOP_KEEP_SUBINSTANCES = 10;
+    public static transient final int TOP_KEEP_SUBINSTANCES = 5;
 
     public String entity;
     public int popularity; // based on wikipedia page view
