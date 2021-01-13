@@ -730,7 +730,7 @@
                 $('#online-explain-entity')
                     .html(escapeText(entity.substring(1, entity.length - 1)).replace(/_/g, '&nbsp;'))
                     .attr('href', 'https://www.wikipedia.org/wiki/' + encodeURI(entity.substring(1, entity.length - 1)));
-                $('#online-explain-text').html('Fetching evidence for this fact...<img src="../img/loading.gif" style="display: block; margin:auto;"/>');
+                $('#online-explain-text').html('<br/>Fetching evidence for this fact...<img src="../img/loading.gif" style="display: block; margin:auto;"/>');
                 $('#online-explain-info').modal('show');
 
                 var params = {
