@@ -120,7 +120,7 @@
     <div class="modal-dialog mw-100" style="width: 70%;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title font-weight-bold">Explanation for <a id='explain-entity' target="_blank"
+                <h5 class="modal-title font-weight-bold">Evidence for <a id='explain-entity' target="_blank"
                                                                             href="#">ENTITY</a></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -151,7 +151,7 @@
     <div class="modal-dialog mw-100" style="width: 70%;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title font-weight-bold">Explanation for <a id='online-explain-entity' target="_blank"
+                <h5 class="modal-title font-weight-bold">Evidence for <a id='online-explain-entity' target="_blank"
                                                                             href="#">ENTITY</a></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -418,7 +418,7 @@
                     var entitySpan = escapeText(si.qfact.entitySpan);
                     text = text.replace(entitySpan, '<span class="entity-box">' + entitySpan + '</span>');
                     if (si.qfact.explainStr != null && si.qfact.explainStr != "null") {
-                        text += '<a class="explain-info badge" eindex="' + entityIndex + '" siindex="' + subInstanceIndex + '"href="#"><i class="fas fa-info-circle"></i> Info</a>'
+                        text += '<a class="explain-info badge" style="font-size: 80%;" eindex="' + entityIndex + '" siindex="' + subInstanceIndex + '"href="#"><i class="fas fa-eye"></i> Evidence</a>'
                     }
                 } else if (j == si.qfact.qCol) {
                     var quantitySpan = escapeText(si.qfact.quantitySpan);
@@ -730,7 +730,7 @@
                 $('#online-explain-entity')
                     .html(escapeText(entity.substring(1, entity.length - 1)).replace(/_/g, '&nbsp;'))
                     .attr('href', 'https://www.wikipedia.org/wiki/' + encodeURI(entity.substring(1, entity.length - 1)));
-                $('#online-explain-text').html('Fetching explanation for this fact...<img src="../img/loading.gif" style="display: block; margin:auto;"/>');
+                $('#online-explain-text').html('Fetching evidence for this fact...<img src="../img/loading.gif" style="display: block; margin:auto;"/>');
                 $('#online-explain-info').modal('show');
 
                 var params = {
