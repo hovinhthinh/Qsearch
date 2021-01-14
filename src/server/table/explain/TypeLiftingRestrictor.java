@@ -8,21 +8,25 @@ public class TypeLiftingRestrictor {
     private static final TaxonomyGraph GRAPH = TaxonomyGraph.getDefaultGraphInstance();
 
     private int distLimit;
+    private int centralEId;
     private Int2IntLinkedOpenHashMap centralType2Distance;
 
     public TypeLiftingRestrictor(String centralEntity, int distLimit) {
         this.distLimit = distLimit;
-        int eId = GRAPH.getEntityId(centralEntity);
-        if (eId == -1) {
+        this.centralEId = GRAPH.getEntityId(centralEntity);
+        if (centralEId == -1) {
             throw new RuntimeException("Invalid runtime entity");
         }
-        this.centralType2Distance = GRAPH.getType2DistanceMapForEntity(eId);
+        this.centralType2Distance = GRAPH.getType2DistanceMapForEntity(centralEId);
     }
 
     public boolean entityIsInProximity(String targetEntity) {
         int eId = GRAPH.getEntityId(targetEntity);
         if (eId == -1) {
             throw new RuntimeException("Invalid target entity");
+        }
+        if (eId == centralEId) {
+            return true;
         }
         Int2IntLinkedOpenHashMap tt2d = GRAPH.getType2DistanceMapForEntity(eId);
         for (Int2IntMap.Entry e : tt2d.int2IntEntrySet()) {
