@@ -118,7 +118,7 @@ public class ChronicleMapQuery {
                     continue;
                 }
 
-                if (typeLiftingRestrictor != null && !typeLiftingRestrictor.entityIsInProximity(entity)) {
+                if (typeLiftingRestrictor != null && !typeLiftingRestrictor.entityIsInProximity(typeMatcher.type2DistanceMapForLastCheckedValidEntity)) {
                     continue;
                 }
 

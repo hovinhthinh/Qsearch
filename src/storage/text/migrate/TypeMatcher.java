@@ -24,14 +24,16 @@ public class TypeMatcher {
         matchCache.defaultReturnValue(-1);
     }
 
+    public Int2IntLinkedOpenHashMap type2DistanceMapForLastCheckedValidEntity;
+
     public boolean match(String entity) {
         Integer eId = TAXONOMY.entity2Id.get(entity);
         if (eId == null || possibleValidEntities == null || !possibleValidEntities.contains((int) eId)) {
             return false;
         }
-        Int2IntLinkedOpenHashMap t2d = TAXONOMY.getType2DistanceMapForEntity(eId);
+        type2DistanceMapForLastCheckedValidEntity = TAXONOMY.getType2DistanceMapForEntity(eId);
 
-        for (Int2IntMap.Entry e : Int2IntMaps.fastIterable(t2d)) {
+        for (Int2IntMap.Entry e : Int2IntMaps.fastIterable(type2DistanceMapForLastCheckedValidEntity)) {
             int valid = matchCache.get(e.getIntKey());
             if (valid == -1) {
                 String type = TAXONOMY.id2TextualizedType.get(e.getIntKey());
