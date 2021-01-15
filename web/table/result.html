@@ -121,7 +121,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title font-weight-bold">Evidence for <a id='explain-entity' target="_blank"
-                                                                            href="#">ENTITY</a></h5>
+                                                                         href="#">ENTITY</a></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -152,7 +152,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title font-weight-bold">Evidence for <a id='online-explain-entity' target="_blank"
-                                                                            href="#">ENTITY</a></h5>
+                                                                         href="#">ENTITY</a></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -773,11 +773,14 @@
                                 .attr('href', 'https://www.wikipedia.org/wiki/' + encodeURI(eInfo.entity.substring(1, eInfo.entity.length - 1)));
 
                             explainEvi.find('.explain-content').empty();
+                            var sentSet = new Set();
                             for (var j = 0; j < eInfo.subInstances.length; ++j) {
+                                var lc = eInfo.subInstances[j]["sentence"].toLowerCase();
                                 // show only 1 if duplicated from many sources;
-                                if (j > 0 && eInfo.subInstances[j]["sentence"].toLowerCase() == eInfo.subInstances[j - 1]["sentence"].toLowerCase()) {
+                                if (sentSet.has(lc)) {
                                     continue;
                                 }
+                                sentSet.add(lc);
                                 var esi = $("<li class='mt-1'></li>");
 
                                 esi.html(onlineExplainContent({
