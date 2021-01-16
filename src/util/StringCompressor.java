@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 public class StringCompressor {
     private static final int MAX_N_COMPRESSOR = 1;
-    private static final int MAX_N_DECOMPRESSOR = 8;
+    private static final int MAX_N_DECOMPRESSOR = 4;
     private static final int MAX_OUTPUT_SIZE = 100000000;
 
     private static class CompressorInstance {
