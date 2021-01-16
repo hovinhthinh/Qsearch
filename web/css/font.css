@@ -1,7 +1,10 @@
 /*@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');*/
-@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
 body, .popover {
-    /*font-family: 'Roboto', sans-serif !important;;*/
-    font-family: 'Rubik', sans-serif !important;;
+    /*font-family: 'Roboto', sans-serif !important;*/
+    /*font-family: 'Rubik', sans-serif !important;*/
+    font-family: 'Open Sans', sans-serif !important;
+
 }
