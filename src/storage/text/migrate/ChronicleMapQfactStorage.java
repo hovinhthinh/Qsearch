@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import storage.text.ElasticSearchDataImport;
 import util.HTTPRequest;
 import util.SelfMonitor;
+import util.StringCompressor;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,16 +16,16 @@ import java.util.ArrayList;
 public class ChronicleMapQfactStorage {
     public static final String QFACT_INDEX_FILE = Configuration.get("chroniclemap.text.index_file");
 
-    private static ChronicleMap<String, String> INDEX = null;
+    private static ChronicleMap<String, byte[]> INDEX = null;
 
     public static ArrayList<String> SEARCHABLE_ENTITIES = null;
 
     static {
         try {
             INDEX = ChronicleMap
-                    .of(String.class, String.class)
+                    .of(String.class, byte[].class)
                     .averageKeySize(30)
-                    .averageValueSize(7000)
+                    .averageValueSize(1500)
                     .actualSegments(32)
                     .entriesPerSegment(60000)
                     .createPersistedTo(new File(QFACT_INDEX_FILE));
@@ -61,7 +62,7 @@ public class ChronicleMapQfactStorage {
                 String entity = entityFacts.getString("_id");
                 JSONArray facts = entityFacts.getJSONObject("_source").getJSONArray("facts");
                 String value = facts.toString();
-                INDEX.put(entity, value);
+                INDEX.put(entity, StringCompressor.compressStringIntoByteArray(value));
                 m.incAndGet();
             }
 
@@ -79,7 +80,7 @@ public class ChronicleMapQfactStorage {
                     String entity = entityFacts.getString("_id");
                     JSONArray facts = entityFacts.getJSONObject("_source").getJSONArray("facts");
                     String value = facts.toString();
-                    INDEX.put(entity, value);
+                    INDEX.put(entity, StringCompressor.compressStringIntoByteArray(value));
                     m.incAndGet();
                 }
             } while (arr.length() > 0);
@@ -93,7 +94,7 @@ public class ChronicleMapQfactStorage {
     }
 
     public static JSONArray get(String entity) {
-        return new JSONArray(INDEX.get(entity));
+        return new JSONArray(StringCompressor.decompressByteArrayIntoString(INDEX.get(entity)));
     }
 
     public static void main(String[] args) {
