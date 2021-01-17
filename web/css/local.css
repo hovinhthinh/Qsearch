@@ -208,4 +208,5 @@
 
 .sample-query {
     margin-left: 44px;
+    white-space: nowrap;
 }
