@@ -140,6 +140,7 @@
     }).responseText);
 </script>
 
+<script src="js/common.js"></script>
 <script src="js/local.js"></script>
 
 <script>
@@ -597,8 +598,8 @@
         $('#sort-by-text').text('Sort by: Quantity (DESC)')
             .parent().removeAttr('title');
     });
-    autocomplete(document.getElementById("full"));
-    autocomplete(document.getElementById("type"));
+    autocomplete(document.getElementById("full"), "/type_suggest");
+    autocomplete(document.getElementById("type"), "/type_suggest");
 
     // back to top
     $(window).scroll(function () {

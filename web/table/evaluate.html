@@ -122,6 +122,7 @@
     }).responseText);
 </script>
 
+<script src="../js/common.js"></script>
 <script src="js/local.js"></script>
 
 <script>
@@ -677,8 +678,8 @@
         });
     }
 
-    autocomplete(document.getElementById("full"));
-    autocomplete(document.getElementById("type"));
+    autocomplete(document.getElementById("full"), "/type_suggest_table");
+    autocomplete(document.getElementById("type"), "/type_suggest_table");
 
     function submit(remove) {
         if (data == null) {
