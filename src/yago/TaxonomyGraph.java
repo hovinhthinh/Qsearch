@@ -9,13 +9,19 @@ import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 import util.Pair;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
+// Incorporate both YAGO3 and YAGO4 taxonomy, from english Wikipedia only
 public class TaxonomyGraph {
     public static final Logger LOGGER = Logger.getLogger(TaxonomyGraph.class.getName());
-    public static final String YAGO_TAXONOMY_FILE = Configuration.get("yago.file_path.taxonomy");
-    public static final String YAGO_TYPE_FILE = Configuration.get("yago.file_path.type");
+    public static final String YAGO3_TAXONOMY_FILE = Configuration.get("yago3.file_path.taxonomy");
+    public static final String YAGO3_TYPE_FILE = Configuration.get("yago3.file_path.type");
+    public static final String YAGO4_TAXONOMY_FILE = Configuration.get("yago4.file_path.taxonomy");
+    public static final String YAGO4_TYPE_FILE = Configuration.get("yago4.file_path.type");
 
     public HashMap<String, Integer> type2Id;
     public ArrayList<String> id2Type;
@@ -94,34 +100,70 @@ public class TaxonomyGraph {
     }
 
     public static String textualize(String type) {
-        type = NLP.fastStemming(NLP.stripSentence(type.replaceAll("[^A-Za-z0-9]", " ")).toLowerCase(), Morpha.noun);
-        if (type.startsWith("wikicat ")) {
-            type = type.substring(8);
+        // YAGO4 types
+        if (type.startsWith("<http://yago-knowledge.org/resource/")) {
+            try {
+                type = URLDecoder.decode(type.substring(36, type.length() - 1), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (type.startsWith("<http://schema.org/")) {
+            type = type.substring(19, type.length() - 1);
+            StringBuilder sb = new StringBuilder();
+            int last = 0;
+            for (int i = 0; i <= type.length(); ++i) {
+                if (i == type.length() || Character.isUpperCase(type.charAt(i))) {
+                    if (sb.length() > 0) {
+                        sb.append(" ");
+                    }
+                    sb.append(type, last, i);
+                    last = i;
+                }
+            }
+            type = sb.toString();
         }
-        if (type.startsWith("wordnet ")) {
-            type = type.substring(type.indexOf(" ") + 1, type.lastIndexOf(" "));
+        // YAGO3 types
+        else if (type.startsWith("<wikicat_")) {
+            type = type.substring(9, type.length() - 1);
+        } else if (type.startsWith("<wordnet_")) {
+            type = type.substring(9, type.lastIndexOf("_"));
         }
-        return type;
+        return NLP.fastStemming(NLP.stripSentence(type.replaceAll("[_\\W]", " ")).toLowerCase(), Morpha.noun);
     }
 
-    public TaxonomyGraph(String yagoTaxonomyFile, String yagoTypeFile) {
+    public TaxonomyGraph(String yago3TaxonomyFile, String yago3TypeFile,
+                         String yago4TaxonomyFile, String yago4TypeFile) {
         LOGGER.info("Loading YAGO taxonomy graph");
-        // Load taxonomy
         type2Id = new HashMap<>();
         id2Type = new ArrayList<>();
         typeDadLists = new ArrayList<>();
         typeChildLists = new ArrayList<>();
         typeEntityLists = new ArrayList<>();
-        for (String line : FileUtils.getLineStream(yagoTaxonomyFile, "UTF-8")) {
-            String[] arr = line.split("\t");
-            if (arr.length != 4 || !arr[2].equals("rdfs:subClassOf")) {
-                continue;
+        // Load taxonomy from YAGO3
+        if (yago3TaxonomyFile != null)
+            for (String line : FileUtils.getLineStream(yago3TaxonomyFile, "UTF-8")) {
+                String[] arr = line.split("\t");
+                if (arr.length != 4 || !arr[2].equals("rdfs:subClassOf")) {
+                    continue;
+                }
+                String childType = arr[1], parentType = arr[3];
+                int childId = getTypeId(childType, true), dadId = getTypeId(parentType, true);
+                typeDadLists.get(childId).add(dadId);
+                typeChildLists.get(dadId).add(childId);
             }
-            String childType = arr[1], parentType = arr[3];
-            int childId = getTypeId(childType, true), dadId = getTypeId(parentType, true);
-            typeDadLists.get(childId).add(dadId);
-            typeChildLists.get(dadId).add(childId);
-        }
+        // Load taxonomy from YAGO4
+        if (yago4TaxonomyFile != null)
+            for (String line : FileUtils.getLineStream(yago4TaxonomyFile, "UTF-8")) {
+                String[] arr = line.split("\t");
+                if (arr.length != 4 || !arr[1].equals("<http://www.w3.org/2000/01/rdf-schema#subClassOf>")) {
+                    continue;
+                }
+                String childType = arr[0], parentType = arr[2];
+                int childId = getTypeId(childType, true), dadId = getTypeId(parentType, true);
+                typeDadLists.get(childId).add(dadId);
+                typeChildLists.get(dadId).add(childId);
+            }
+
         id2Type.trimToSize();
         typeDadLists.trimToSize();
         for (IntArrayList l : typeDadLists) {
@@ -147,24 +189,57 @@ public class TaxonomyGraph {
         id2TextualizedType.trimToSize();
         id2TextualizedTypeHeadWord.trimToSize();
 
-        // Load entity types
         entity2Id = new HashMap<>();
         id2Entity = new ArrayList<>();
         entityTypeLists = new ArrayList<>();
-        for (String line : FileUtils.getLineStream(yagoTypeFile, "UTF-8")) {
-            String[] arr = line.split("\t");
-            if (arr.length != 4 || !arr[2].equals("rdf:type")) {
-                continue;
-            }
-            String entity = StringEscapeUtils.unescapeJava(arr[1]), type = arr[3];
+        // Load entity types from YAGO3
+        Pattern nonEngEntPt = Pattern.compile("^<[a-z]{2}/");
+        if (yago3TypeFile != null)
+            for (String line : FileUtils.getLineStream(yago3TypeFile, "UTF-8")) {
+                String[] arr = line.split("\t");
+                if (arr.length != 4 || !arr[2].equals("rdf:type")) {
+                    continue;
+                }
+                String entity = StringEscapeUtils.unescapeJava(arr[1]), type = arr[3];
 
-            int entityId = getEntityId(entity, true), typeId = getTypeId(type, false);
-            if (typeId == -1) {
-                throw new RuntimeException("type not found");
+                // exclude non-english entities in YAGO3, e.g., <de/Barack_Osama>
+                if (nonEngEntPt.matcher(entity).find()) {
+                    continue;
+                }
+
+                int entityId = getEntityId(entity, true), typeId = getTypeId(type, false);
+                if (typeId == -1) {
+                    throw new RuntimeException("type not found");
+                }
+                entityTypeLists.get(entityId).add(typeId);
+                typeEntityLists.get(typeId).add(entityId);
             }
-            entityTypeLists.get(entityId).add(typeId);
-            typeEntityLists.get(typeId).add(entityId);
-        }
+        // Load entity types from YAGO4
+        if (yago4TypeFile != null)
+            for (String line : FileUtils.getLineStream(yago4TypeFile, "UTF-8")) {
+                String[] arr = line.split("\t");
+                if (arr.length != 4 || !arr[1].equals("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>")) {
+                    continue;
+                }
+                String entity = arr[0], type = arr[2];
+
+                // Unify with YAGO3 entities
+                if (!entity.startsWith("<http://yago-knowledge.org/resource/")) {
+                    throw new RuntimeException("Invalid entity: " + entity);
+                }
+                try {
+                    entity = "<" + URLDecoder.decode(entity.substring(36, entity.length() - 1), "UTF-8") + ">";
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
+
+                int entityId = getEntityId(entity, true), typeId = getTypeId(type, false);
+                if (typeId == -1) {
+                    throw new RuntimeException("type not found");
+                }
+                entityTypeLists.get(entityId).add(typeId);
+                typeEntityLists.get(typeId).add(entityId);
+            }
         id2Entity.trimToSize();
         entityTypeLists.trimToSize();
         typeEntityLists.trimToSize();
@@ -345,7 +420,8 @@ public class TaxonomyGraph {
         return entitySet;
     }
 
-    // These types have more than 1M entities in YAGO, however some of them are good, so being excluded from the list.
+    // These types have more than 1M entities in YAGO3, however some of them are good, so being excluded from the list.
+    // TODO: ADD YAGO4
     private static final HashSet<String> BLOCKED_GENERAL_TEXTUALIZED_TYPES = new HashSet<>(Arrays.asList(
             "owl thing",
             "physical entity",
@@ -385,7 +461,7 @@ public class TaxonomyGraph {
     }
 
     public TaxonomyGraph() {
-        this(YAGO_TAXONOMY_FILE, YAGO_TYPE_FILE);
+        this(YAGO3_TAXONOMY_FILE, YAGO3_TYPE_FILE, YAGO4_TAXONOMY_FILE, YAGO4_TYPE_FILE);
     }
 
     public void printTypeHierarchyForEntity(String entity) {
