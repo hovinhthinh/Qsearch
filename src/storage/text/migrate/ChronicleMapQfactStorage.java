@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import storage.text.ElasticSearchDataImport;
 import util.HTTPRequest;
 import util.SelfMonitor;
-import util.StringCompressor;
+import util.ObjectCompressor;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,7 +62,7 @@ public class ChronicleMapQfactStorage {
                 String entity = entityFacts.getString("_id");
                 JSONArray facts = entityFacts.getJSONObject("_source").getJSONArray("facts");
                 String value = facts.toString();
-                INDEX.put(entity, StringCompressor.compressStringIntoByteArray(value));
+                INDEX.put(entity, ObjectCompressor.compressStringIntoByteArray(value));
                 m.incAndGet();
             }
 
@@ -80,7 +80,7 @@ public class ChronicleMapQfactStorage {
                     String entity = entityFacts.getString("_id");
                     JSONArray facts = entityFacts.getJSONObject("_source").getJSONArray("facts");
                     String value = facts.toString();
-                    INDEX.put(entity, StringCompressor.compressStringIntoByteArray(value));
+                    INDEX.put(entity, ObjectCompressor.compressStringIntoByteArray(value));
                     m.incAndGet();
                 }
             } while (arr.length() > 0);
@@ -94,7 +94,7 @@ public class ChronicleMapQfactStorage {
     }
 
     public static JSONArray get(String entity) {
-        return new JSONArray(StringCompressor.decompressByteArrayIntoString(INDEX.get(entity)));
+        return new JSONArray(ObjectCompressor.decompressByteArrayIntoString(INDEX.get(entity)));
     }
 
     public static void main(String[] args) {

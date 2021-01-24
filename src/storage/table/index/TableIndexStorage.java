@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.openhft.chronicle.map.ChronicleMap;
 import util.FileUtils;
 import util.Gson;
+import util.ObjectCompressor;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +14,7 @@ import java.util.Arrays;
 public class TableIndexStorage {
     public static final String TABLE_INDEX_FILE = Configuration.get("chroniclemap.table.index_file");
 
-    private static ChronicleMap<String, TableIndex> INDEX = null;
+    private static ChronicleMap<String, byte[]> INDEX = null;
 
     private static final int TABLE_INDEX_CACHE_SIZE = 10000;
     private static final Object2ObjectLinkedOpenHashMap<String, TableIndex> TABLE_INDEX_CACHE = new Object2ObjectLinkedOpenHashMap<>(TABLE_INDEX_CACHE_SIZE);
@@ -21,10 +22,10 @@ public class TableIndexStorage {
     static {
         try {
             INDEX = ChronicleMap
-                    .of(String.class, TableIndex.class)
+                    .of(String.class, byte[].class)
                     .averageKeySize(20)
-                    .averageValueSize(3000)
-                    .entries(3500000)
+                    .averageValueSize(1500)
+                    .entries(3000000)
                     .createPersistedTo(new File(TABLE_INDEX_FILE));
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,7 +41,7 @@ public class TableIndexStorage {
                 TableIndex ti = Gson.fromJson(line, TableIndex.class);
                 // omit some information
                 ti.tableText = null;
-                INDEX.put(ti.table._id, ti);
+                INDEX.put(ti.table._id, ObjectCompressor.compressSerializableIntoByteArray(ti));
             }
         INDEX.close();
     }
@@ -58,7 +59,7 @@ public class TableIndexStorage {
             return ti;
         }
 
-        ti = INDEX.get(tableId);
+        ti = ObjectCompressor.decompressByteArrayIntoSerializable(INDEX.get(tableId), TableIndex.class);
         if (ti != null) {
             synchronized (TABLE_INDEX_CACHE) {
                 TABLE_INDEX_CACHE.putAndMoveToFirst(tableId, ti);
