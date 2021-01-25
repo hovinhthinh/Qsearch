@@ -5,15 +5,20 @@ import nlp.NLP;
 import uk.ac.susx.informatics.Morpha;
 import yago.TaxonomyGraph;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TypeMatcher {
     private static TaxonomyGraph TAXONOMY = TaxonomyGraph.getDefaultGraphInstance();
 
+    // For raw query type
     private String queryType, queryHeadWord;
-
     private IntOpenHashSet possibleValidEntities;
-
     private Int2IntOpenHashMap matchCache;
+
+    // For query type in the form of yago ids
+    private IntOpenHashSet validDirectTypeIds;
 
     public TypeMatcher(String queryType) {
         this.queryType = NLP.stripSentence(NLP.fastStemming(queryType.toLowerCase(), Morpha.noun));
@@ -24,11 +29,48 @@ public class TypeMatcher {
         matchCache.defaultReturnValue(-1);
     }
 
+    public TypeMatcher(int yagoTypeId) {
+        this(Arrays.asList(yagoTypeId));
+    }
+
+    public TypeMatcher(List<Integer> yagoTypeIds) {
+        validDirectTypeIds = new IntOpenHashSet();
+        LinkedList<Integer> queue = new LinkedList<>();
+        for (int id : yagoTypeIds) {
+            validDirectTypeIds.add(id);
+            queue.addLast(id);
+        }
+        while (!queue.isEmpty()) {
+            int t = queue.removeFirst();
+            for (int v : TAXONOMY.typeChildLists.get(t)) {
+                if (validDirectTypeIds.contains(v)) {
+                    continue;
+                }
+                validDirectTypeIds.add(v);
+                queue.addLast(v);
+            }
+        }
+    }
+
     public Int2IntLinkedOpenHashMap type2DistanceMapForLastCheckedValidEntity;
 
     public boolean match(String entity) {
         Integer eId = TAXONOMY.entity2Id.get(entity);
-        if (eId == null || possibleValidEntities == null || !possibleValidEntities.contains((int) eId)) {
+        if (eId == null) {
+            return false;
+        }
+        // query type in the form of yago ids
+        if (validDirectTypeIds != null) {
+            for (int v : TAXONOMY.entityTypeLists.get(eId)) {
+                if (validDirectTypeIds.contains(v)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // raw query type
+        if (possibleValidEntities == null || !possibleValidEntities.contains((int) eId)) {
             return false;
         }
         type2DistanceMapForLastCheckedValidEntity = TAXONOMY.getType2DistanceMapForEntity(eId);
