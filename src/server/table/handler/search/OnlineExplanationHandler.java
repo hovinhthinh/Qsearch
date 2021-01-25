@@ -36,7 +36,7 @@ public class OnlineExplanationHandler extends HttpServlet {
         String v;
         Map additionalParams = new HashMap();
         if ((v = request.getParameter("corpus")) != null) {
-            additionalParams.put("corpus", v); // ANY || STICS || NYT
+            additionalParams.put("corpus", v);
         }
         if ((v = request.getParameter("model")) != null) {
             additionalParams.put("model", v); // EMBEDDING || KL

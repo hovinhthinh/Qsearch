@@ -46,7 +46,7 @@ public class SearchHandler extends HttpServlet {
         String v;
         Map additionalParams = new HashMap();
         if ((v = request.getParameter("corpus")) != null) {
-            additionalParams.put("corpus", v); // ANY || STICS || NYT
+            additionalParams.put("corpus", v);
         }
         if ((v = request.getParameter("model")) != null) {
             additionalParams.put("model", v); // EMBEDDING || KL
@@ -56,6 +56,14 @@ public class SearchHandler extends HttpServlet {
         }
         if ((v = request.getParameter("lambda")) != null) {
             additionalParams.put("lambda", Double.parseDouble(v));
+        }
+
+        if ((v = request.getParameter("QUANTITY_MATCH_WEIGHT")) != null) {
+            additionalParams.put("QUANTITY_MATCH_WEIGHT", Double.parseDouble(v));
+        }
+
+        if ((v = request.getParameter("ENTITY_POPULARITY_WEIGHT")) != null) {
+            additionalParams.put("ENTITY_POPULARITY_WEIGHT", Double.parseDouble(v));
         }
 
         int nResult = (v = request.getParameter("ntop")) != null ? Integer.parseInt(v) : 10;

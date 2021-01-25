@@ -51,7 +51,7 @@ public class SocketSearchHandler extends WebSocketServlet {
             Map additionalParams = new HashMap();
 
             if (o.has("corpus")) {
-                additionalParams.put("corpus", o.getString("corpus")); // ANY || STICS || NYT
+                additionalParams.put("corpus", o.getString("corpus"));
             }
             if (o.has("model")) {
                 additionalParams.put("model", o.getString("model")); // EMBEDDING || KL
@@ -61,6 +61,14 @@ public class SocketSearchHandler extends WebSocketServlet {
             }
             if (o.has("lambda")) {
                 additionalParams.put("lambda", Double.parseDouble(o.getString("lambda")));
+            }
+
+            if (o.has("QUANTITY_MATCH_WEIGHT")) {
+                additionalParams.put("QUANTITY_MATCH_WEIGHT", Double.parseDouble(o.getString("QUANTITY_MATCH_WEIGHT")));
+            }
+
+            if (o.has("ENTITY_POPULARITY_WEIGHT")) {
+                additionalParams.put("ENTITY_POPULARITY_WEIGHT", Double.parseDouble(o.getString("ENTITY_POPULARITY_WEIGHT")));
             }
 
             additionalParams.put("session", session);
