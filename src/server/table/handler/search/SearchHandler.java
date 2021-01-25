@@ -10,6 +10,7 @@ import server.table.TableQuery;
 import util.Gson;
 import util.Pair;
 import util.Triple;
+import yago.TaxonomyGraph;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -181,7 +182,7 @@ public class SearchHandler extends HttpServlet {
                     LOGGER.info("Parsed query: {Type: \"" + typeConstraint + "\"; Context: \"" + contextConstraint +
                             "\"; Quantity: \"" + quantityConstraint + "\"}");
                 }
-            } else if (typeConstraint != null) {
+            } else if (typeConstraint != null && !TaxonomyGraph.getDefaultGraphInstance().type2Id.containsKey(typeConstraint)) {
                 Pair<String, String> suggestedType = SimpleQueryParser.suggestATypeFromRaw(typeConstraint, SimpleQueryParser.SOURCE_CODE_TABLE);
                 if (suggestedType != null) {
                     typeConstraint = suggestedType.first;

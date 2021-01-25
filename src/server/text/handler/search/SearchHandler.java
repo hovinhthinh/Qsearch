@@ -12,6 +12,7 @@ import storage.text.migrate.ChronicleMapQuery;
 import util.Gson;
 import util.Pair;
 import util.Triple;
+import yago.TaxonomyGraph;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -94,6 +95,9 @@ public class SearchHandler extends HttpServlet {
     public static String search(String model, int nTopResult, String fullConstraint,
                                 String typeConstraint, String contextConstraint, String quantityConstraint,
                                 Map additionalParameters, Set<String> groundtruth) {
+        if (additionalParameters == null) {
+            additionalParameters = new HashMap();
+        }
         // Optimize
         if (typeConstraint != null) {
             typeConstraint = NLP.stripSentence(typeConstraint);
@@ -134,7 +138,7 @@ public class SearchHandler extends HttpServlet {
                     LOGGER.info("Parsed query: {Type: \"" + typeConstraint + "\"; Context: \"" + contextConstraint +
                             "\"; Quantity: \"" + quantityConstraint + "\"}");
                 }
-            } else if (typeConstraint != null) {
+            } else if (typeConstraint != null && !TaxonomyGraph.getDefaultGraphInstance().type2Id.containsKey(typeConstraint)) {
                 Pair<String, String> suggestedType = SimpleQueryParser.suggestATypeFromRaw(typeConstraint, SimpleQueryParser.SOURCE_CODE_TEXT);
                 if (suggestedType != null) {
                     typeConstraint = suggestedType.first;
