@@ -16,6 +16,7 @@ import uk.ac.susx.informatics.Morpha;
 import util.Gson;
 import util.Pair;
 import util.headword.StringUtils;
+import yago.TaxonomyGraph;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -336,9 +337,15 @@ public class TableQuery {
     public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String queryType, String queryContext, String quantityConstraint,
                                                                              boolean performConsistencyRescoring,
                                                                              Map additionalParameters) {
+
+        return search(queryType, queryContext, QuantityConstraint.parseFromString(quantityConstraint), performConsistencyRescoring, additionalParameters);
+    }
+
+    public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String queryType, String queryContext, QuantityConstraint qtConstraint,
+                                                                             boolean performConsistencyRescoring,
+                                                                             Map additionalParameters) {
         Pair<QuantityConstraint, ArrayList<ResultInstance>> result = new Pair<>();
 
-        QuantityConstraint qtConstraint = QuantityConstraint.parseFromString(quantityConstraint);
         result.first = qtConstraint;
         if (qtConstraint == null) {
             return result;
@@ -347,16 +354,18 @@ public class TableQuery {
         Double qtConstraintStandardValue2 = qtConstraint.quantity.value2 == null ? null :
                 qtConstraint.quantity.value2 * QuantityDomain.getScale(qtConstraint.quantity);
 
+        TypeMatcher typeMatcher = new TypeMatcher(queryType);
+
         // Build query type-context terms, head word and query type set
-        ArrayList<String> queryTypeTerms = NLP.splitSentence(NLP.fastStemming(queryType.toLowerCase(), Morpha.any));
+        ArrayList<String> queryTypeTerms = NLP.splitSentence(NLP.fastStemming(typeMatcher.queryYagoTypeId != null
+                ? TaxonomyGraph.getDefaultGraphInstance().id2TextualizedType.get(typeMatcher.queryYagoTypeId) // using id
+                : queryType.toLowerCase(), Morpha.any)); // raw type
         for (int i = queryTypeTerms.size() - 1; i >= 0; --i) {
             String t = queryTypeTerms.get(i);
             if (NLP.BLOCKED_STOPWORDS.contains(t) || NLP.BLOCKED_SPECIAL_CONTEXT_CHARS.contains(t)) {
                 queryTypeTerms.remove(i);
             }
         }
-
-        TypeMatcher typeMatcher = new TypeMatcher(queryType);
 
         // Process query context terms
         String domain = QuantityDomain.getDomain(qtConstraint.quantity);

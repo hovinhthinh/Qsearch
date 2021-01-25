@@ -5,9 +5,7 @@ import nlp.NLP;
 import uk.ac.susx.informatics.Morpha;
 import yago.TaxonomyGraph;
 
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 
 public class TypeMatcher {
     private static TaxonomyGraph TAXONOMY = TaxonomyGraph.getDefaultGraphInstance();
@@ -19,8 +17,17 @@ public class TypeMatcher {
 
     // For query type in the form of yago ids
     private IntOpenHashSet validDirectTypeIds;
+    public Integer queryYagoTypeId;
 
     public TypeMatcher(String queryType) {
+        // check if it is a string of a type in yago.
+        Integer yagoTypeId = TAXONOMY.type2Id.get(queryType);
+        if (yagoTypeId != null) {
+            initWithYagoTypeId(yagoTypeId);
+            return;
+        }
+
+        // otherwise it is a raw type
         this.queryType = NLP.stripSentence(NLP.fastStemming(queryType.toLowerCase(), Morpha.noun));
         this.queryHeadWord = NLP.getHeadWord(this.queryType, true);
         this.possibleValidEntities = TAXONOMY.typeHeadWord2EntityIds.get(queryHeadWord);
@@ -29,17 +36,16 @@ public class TypeMatcher {
         matchCache.defaultReturnValue(-1);
     }
 
-    public TypeMatcher(Integer yagoTypeId) {
-        this(Arrays.asList(yagoTypeId));
+    public TypeMatcher(int yagoTypeId) {
+        initWithYagoTypeId(yagoTypeId);
     }
 
-    public TypeMatcher(List<Integer> yagoTypeIds) {
+    private void initWithYagoTypeId(int yagoTypeId) {
+        queryYagoTypeId = yagoTypeId;
         validDirectTypeIds = new IntOpenHashSet();
         LinkedList<Integer> queue = new LinkedList<>();
-        for (int id : yagoTypeIds) {
-            validDirectTypeIds.add(id);
-            queue.addLast(id);
-        }
+        validDirectTypeIds.add(yagoTypeId);
+        queue.addLast(yagoTypeId);
         while (!queue.isEmpty()) {
             int t = queue.removeFirst();
             for (int v : TAXONOMY.typeChildLists.get(t)) {
