@@ -269,7 +269,7 @@
 
     function entityCell(inst) {
         var value = inst.entity;
-        value = '<a data-animation="true" data-placement="auto" data-trigger="hover" data-html="true" class="result mr-1 font-weight-bold" href="https://www.wikipedia.org/wiki/'
+        value = '<a class="result font-weight-bold" href="https://www.wikipedia.org/wiki/'
             + encodeURI(value.substring(1, value.length - 1)) + '" target="_blank" referrerpolicy="no-referrer">'
             + escapeText(value.substring(1, value.length - 1)).replace(/_/g, '&nbsp;')
             + '</a>';
