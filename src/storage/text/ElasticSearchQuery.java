@@ -35,7 +35,7 @@ public class ElasticSearchQuery {
     public static final String INDEX = Configuration.get("elasticsearch.text.index");
     public static final String TYPE = Configuration.get("elasticsearch.text.type");
 
-    public static ContextMatcher DEFAULT_MATCHER = new ContextEmbeddingMatcher(3);
+    public static ContextMatcher DEFAULT_MATCHER = new ContextEmbeddingMatcher(0.5);
 
     private static StreamedIterable<JSONObject> searchRawES(String queryType) {
         // remove stopwords

@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 public class ChronicleMapQuery {
     public static final Logger LOGGER = Logger.getLogger(ChronicleMapQuery.class.getName());
 
-    public static ContextMatcher DEFAULT_MATCHER = new ContextEmbeddingMatcher(3);
+    public static ContextMatcher DEFAULT_MATCHER = new ContextEmbeddingMatcher(0.5);
 
     public static double QUANTITY_MATCH_WEIGHT = 0.0;
     public static double ENTITY_POPULARITY_WEIGHT = 0.0;
