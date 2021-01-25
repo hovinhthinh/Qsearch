@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OnlineExplanationHandler extends HttpServlet {
-    public static final double EXACT_ENTITY_BOOST = 1.1;
+    public static final double EXACT_ENTITY_BOOST = 1.25;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws ServletException, IOException {
