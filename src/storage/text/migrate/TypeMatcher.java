@@ -29,7 +29,7 @@ public class TypeMatcher {
         matchCache.defaultReturnValue(-1);
     }
 
-    public TypeMatcher(int yagoTypeId) {
+    public TypeMatcher(Integer yagoTypeId) {
         this(Arrays.asList(yagoTypeId));
     }
 

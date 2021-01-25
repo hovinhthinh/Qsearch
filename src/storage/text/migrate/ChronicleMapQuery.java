@@ -22,6 +22,7 @@ import util.headword.StringUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -39,7 +40,7 @@ public class ChronicleMapQuery {
         return search(queryType, queryContext, QuantityConstraint.parseFromString(quantityConstraint), matcher, additionalParameters);
     }
 
-    public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(String queryType, String queryContext,
+    public static Pair<QuantityConstraint, ArrayList<ResultInstance>> search(Object queryType, String queryContext,
                                                                              QuantityConstraint quantityConstraint,
                                                                              ContextMatcher matcher, Map additionalParameters) {
         Pair<QuantityConstraint, ArrayList<ResultInstance>> result = new Pair<>();
@@ -52,7 +53,16 @@ public class ChronicleMapQuery {
         Double qtConstraintStandardValue2 = quantityConstraint.quantity.value2 == null ? null :
                 quantityConstraint.quantity.value2 * QuantityDomain.getScale(quantityConstraint.quantity);
 
-        TypeMatcher typeMatcher = new TypeMatcher(queryType);
+        TypeMatcher typeMatcher;
+        if (queryType instanceof String) {
+            typeMatcher = new TypeMatcher((String) queryType);
+        } else if (queryType instanceof List) {
+            typeMatcher = new TypeMatcher((List) queryType);
+        } else if (queryType instanceof Integer) {
+            typeMatcher = new TypeMatcher((Integer) queryType);
+        } else {
+            throw new RuntimeException("Query type not supported.");
+        }
 
         // Process query context terms
         queryContext = queryContext.toLowerCase();
