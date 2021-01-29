@@ -1,1 +1,5015 @@
-[{"entity":"\u003cPercentage\u003e","wdEntry":"Q11229","measuredConcepts":["\u003cDimensionless_quantity\u003e"],"symbols":["%"],"siUnit":"\u003c1\u003e","conversionToSI":0.01,"isCurrency":false},{"entity":"\u003cBasis_point\u003e","wdEntry":"Q750178","measuredConcepts":["\u003cDimensionless_quantity\u003e"],"symbols":["‱"],"siUnit":"\u003c1\u003e","conversionToSI":1.0E-4,"isCurrency":false},{"entity":"\u003cPer_mille\u003e","wdEntry":"Q181011","measuredConcepts":["\u003cDimensionless_quantity\u003e"],"symbols":["‰"],"siUnit":"\u003c1\u003e","conversionToSI":0.001,"isCurrency":false},{"entity":"\u003cVolume_percent\u003e","wdEntry":"Q2080811","measuredConcepts":["\u003cVolume_fraction\u003e"],"symbols":["vol%","% (V/V)"],"siUnit":"\u003c1\u003e","conversionToSI":0.01,"isCurrency":false},{"entity":"\u003cCarat_(purity)\u003e","wdEntry":"Q1072404","measuredConcepts":["\u003cMass_fraction_(chemistry)\u003e","\u003cFineness\u003e"],"symbols":["kt","K"],"siUnit":"\u003c1\u003e","conversionToSI":0.04166666667,"isCurrency":false},{"entity":"\u003c1\u003e","wdEntry":"Q199","measuredConcepts":["\u003cDimensionless_quantity\u003e"],"symbols":["1","1"],"siUnit":"\u003c1\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cDozen\u003e","wdEntry":"Q605704","measuredConcepts":["\u003cDimensionless_quantity\u003e"],"symbols":["doz","dz"],"siUnit":"\u003c1\u003e","conversionToSI":12.0,"isCurrency":false},{"entity":"\u003cStatampere\u003e","wdEntry":"Q25559952","measuredConcepts":["\u003cElectric_current_intensity\u003e"],"symbols":["statA"],"siUnit":"\u003cAmpere\u003e","conversionToSI":3.33564E-10,"isCurrency":false},{"entity":"\u003cPlanck_current\u003e","wdEntry":"Q1196846","measuredConcepts":["\u003cElectric_current_intensity\u003e"],"symbols":["I_P"],"siUnit":"\u003cAmpere\u003e","conversionToSI":3.479E25,"isCurrency":false},{"entity":"\u003cAbampere\u003e","wdEntry":"Q864818","measuredConcepts":["\u003cElectric_current_intensity\u003e"],"symbols":["abA"],"siUnit":"\u003cAmpere\u003e","conversionToSI":10.0,"isCurrency":false},{"entity":"\u003cAmpere\u003e","wdEntry":"Q25272","measuredConcepts":["\u003cElectric_current_intensity\u003e","\u003cMagnetic_scalar_potential\u003e","\u003cMagnetomotive_force\u003e"],"symbols":["A"],"siUnit":"\u003cAmpere\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cCurie_(unit)\u003e","wdEntry":"Q229354","measuredConcepts":["\u003cTotal_activity\u003e"],"symbols":["Ci"],"siUnit":"\u003cBecquerel\u003e","conversionToSI":3.7E10,"isCurrency":false},{"entity":"\u003cRutherford_(unit)\u003e","wdEntry":"Q267637","measuredConcepts":["\u003cTotal_activity\u003e"],"symbols":["Rd"],"siUnit":"\u003cBecquerel\u003e","conversionToSI":1000000.0,"isCurrency":false},{"entity":"\u003cBecquerel\u003e","wdEntry":"Q102573","measuredConcepts":["\u003cTotal_activity\u003e"],"symbols":["Bq"],"siUnit":"\u003cBecquerel\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cCandlepower\u003e","wdEntry":"Q902274","measuredConcepts":["\u003cLuminous_intensity\u003e"],"symbols":["cp"],"siUnit":"\u003cCandela\u003e","conversionToSI":0.981,"isCurrency":false},{"entity":"\u003cHefner_candle\u003e","wdEntry":"Q21282180","measuredConcepts":["\u003cLuminous_intensity\u003e"],"symbols":["HK"],"siUnit":"\u003cCandela\u003e","conversionToSI":0.903,"isCurrency":false},{"entity":"\u003cCandela\u003e","wdEntry":"Q83216","measuredConcepts":["\u003cLuminous_intensity\u003e"],"symbols":["cd"],"siUnit":"\u003cCandela\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cBril_(unit)\u003e","wdEntry":"Q4968003","measuredConcepts":["\u003cLuminance\u003e"],"symbols":["bril"],"siUnit":"\u003cCandela_per_square_metre\u003e","conversionToSI":3.183098861837907E-8,"isCurrency":false},{"entity":"\u003cSkot_(unit)\u003e","wdEntry":"Q1417229","measuredConcepts":["\u003cLuminance\u003e"],"symbols":["sk"],"siUnit":"\u003cCandela_per_square_metre\u003e","conversionToSI":3.1830988618379065E-4,"isCurrency":false},{"entity":"\u003cFoot-lambert\u003e","wdEntry":"Q5465726","measuredConcepts":["\u003cLuminance\u003e"],"symbols":["fL"],"siUnit":"\u003cCandela_per_square_metre\u003e","conversionToSI":3.4262590996353905,"isCurrency":false},{"entity":"\u003cStilb_(unit)\u003e","wdEntry":"Q640907","measuredConcepts":["\u003cLuminance\u003e"],"symbols":["sb"],"siUnit":"\u003cCandela_per_square_metre\u003e","conversionToSI":10000.0,"isCurrency":false},{"entity":"\u003cLambert_(unit)\u003e","wdEntry":"Q905912","measuredConcepts":["\u003cLuminance\u003e"],"symbols":["L"],"siUnit":"\u003cCandela_per_square_metre\u003e","conversionToSI":3183.0988618379065,"isCurrency":false},{"entity":"\u003cApostilb\u003e","wdEntry":"Q619941","measuredConcepts":["\u003cLuminance\u003e"],"symbols":["asb"],"siUnit":"\u003cCandela_per_square_metre\u003e","conversionToSI":0.3183098861837907,"isCurrency":false},{"entity":"\u003cCandela_per_square_metre\u003e","wdEntry":"Q281096","measuredConcepts":["\u003cLuminance\u003e"],"symbols":["cd/m²"],"siUnit":"\u003cCandela_per_square_metre\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cStatcoulomb\u003e","wdEntry":"Q21131","measuredConcepts":["\u003cElectric_charge\u003e","\u003cElectric_flux\u003e"],"symbols":["statC"],"siUnit":"\u003cCoulomb\u003e","conversionToSI":3.3356409519815207E-10,"isCurrency":false},{"entity":"\u003cPlanck_charge\u003e","wdEntry":"Q249439","measuredConcepts":["\u003cElectric_charge\u003e"],"symbols":["q_P"],"siUnit":"\u003cCoulomb\u003e","conversionToSI":1.87554603778E-18,"isCurrency":false},{"entity":"\u003cElementary_charge\u003e","wdEntry":"Q2101","measuredConcepts":["\u003cElectric_charge\u003e"],"symbols":["e"],"siUnit":"\u003cCoulomb\u003e","conversionToSI":1.602176634E-19,"isCurrency":false},{"entity":"\u003cAbcoulomb\u003e","wdEntry":"Q4176683","measuredConcepts":["\u003cElectric_charge\u003e"],"symbols":["abC","aC"],"siUnit":"\u003cCoulomb\u003e","conversionToSI":10.0,"isCurrency":false},{"entity":"\u003cAmpere_hour\u003e","wdEntry":"Q212120","measuredConcepts":["\u003cElectric_charge\u003e"],"symbols":["A h"],"siUnit":"\u003cCoulomb\u003e","conversionToSI":3600.0,"isCurrency":false},{"entity":"\u003cCoulomb\u003e","wdEntry":"Q25406","measuredConcepts":["\u003cElectric_charge\u003e","\u003cElectric_flux\u003e"],"symbols":["C"],"siUnit":"\u003cCoulomb\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cLitre\u003e","wdEntry":"Q11582","measuredConcepts":["\u003cVolume\u003e"],"symbols":["l","L"],"siUnit":"\u003cCubic_metre\u003e","conversionToSI":0.001,"isCurrency":false},{"entity":"\u003cFemtolitre\u003e","wdEntry":"Q3312063","measuredConcepts":["\u003cVolume\u003e"],"symbols":["fL","fl"],"siUnit":"\u003cCubic_metre\u003e","conversionToSI":1.0E-18,"isCurrency":false},{"entity":"\u003cCubic_inch\u003e","wdEntry":"Q2140397","measuredConcepts":["\u003cVolume\u003e"],"symbols":["in³"],"siUnit":"\u003cCubic_metre\u003e","conversionToSI":1.6387064E-5,"isCurrency":false},{"entity":"\u003cCubic_centimetre\u003e","wdEntry":"Q1022113","measuredConcepts":["\u003cVolume\u003e"],"symbols":["cm³"],"siUnit":"\u003cCubic_metre\u003e","conversionToSI":1.0E-6,"isCurrency":false},{"entity":"\u003cDecaliter\u003e","wdEntry":"Q2637946","measuredConcepts":["\u003cVolume\u003e"],"symbols":["dal"],"siUnit":"\u003cCubic_metre\u003e","conversionToSI":0.01,"isCurrency":false},{"entity":"\u003cImperial_gallon\u003e","wdEntry":"Q23925410","measuredConcepts":["\u003cVolume\u003e"],"symbols":["gal (UK)"],"siUnit":"\u003cCubic_metre\u003e","conversionToSI":0.004546099,"isCurrency":false},{"entity":"\u003cUS_gallon\u003e","wdEntry":"Q23925413","measuredConcepts":["\u003cVolume\u003e"],"symbols":["gal (US)"],"siUnit":"\u003cCubic_metre\u003e","conversionToSI":0.003785412,"isCurrency":false},{"entity":"\u003cGross_register_tonnage\u003e","wdEntry":"Q752079","measuredConcepts":["\u003cVolume\u003e"],"symbols":["RT"],"siUnit":"\u003cCubic_metre\u003e","conversionToSI":2.83,"isCurrency":false},{"entity":"\u003cCubic_foot\u003e","wdEntry":"Q1545979","measuredConcepts":["\u003cVolume\u003e"],"symbols":["ft³"],"siUnit":"\u003cCubic_metre\u003e","conversionToSI":0.02831685,"isCurrency":false},{"entity":"\u003cCubic_yard\u003e","wdEntry":"Q2165290","measuredConcepts":["\u003cVolume\u003e"],"symbols":["yd³"],"siUnit":"\u003cCubic_metre\u003e","conversionToSI":0.7645549,"isCurrency":false},{"entity":"\u003cCubic_metre\u003e","wdEntry":"Q25517","measuredConcepts":["\u003cVolume\u003e","\u003cSection_modulus\u003e"],"symbols":["m³"],"siUnit":"\u003cCubic_metre\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cCusec\u003e","wdEntry":"Q5196162","measuredConcepts":["\u003cVolumetric_flow_rate\u003e"],"symbols":["ft³/s"],"siUnit":"\u003cCubic_metre_per_second\u003e","conversionToSI":0.028316847,"isCurrency":false},{"entity":"\u003cSverdrup\u003e","wdEntry":"Q39274","measuredConcepts":["\u003cVolumetric_flow_rate\u003e"],"symbols":["Sv"],"siUnit":"\u003cCubic_metre_per_second\u003e","conversionToSI":1000000.0,"isCurrency":false},{"entity":"\u003cCubic_metre_per_second\u003e","wdEntry":"Q794261","measuredConcepts":["\u003cVolumetric_flow_rate\u003e"],"symbols":["m³/s"],"siUnit":"\u003cCubic_metre_per_second\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cFarad\u003e","wdEntry":"Q131255","measuredConcepts":["\u003cCapacitance\u003e"],"symbols":["F"],"siUnit":"\u003cFarad\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cRad_(unit)\u003e","wdEntry":"Q1052397","measuredConcepts":["\u003cAbsorbed_dose\u003e","\u003cKerma_(physics)\u003e"],"symbols":["rad"],"siUnit":"\u003cGray_(unit)\u003e","conversionToSI":0.01,"isCurrency":false},{"entity":"\u003cGray_(unit)\u003e","wdEntry":"Q190095","measuredConcepts":["\u003cAbsorbed_dose\u003e","\u003cKerma_(physics)\u003e"],"symbols":["Gy"],"siUnit":"\u003cGray_(unit)\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cAbhenry\u003e","wdEntry":"Q4667368","measuredConcepts":["\u003cInductance\u003e"],"symbols":["abH"],"siUnit":"\u003cHenry_(unit)\u003e","conversionToSI":1.0E-9,"isCurrency":false},{"entity":"\u003cHenry_(unit)\u003e","wdEntry":"Q163354","measuredConcepts":["\u003cInductance\u003e"],"symbols":["H"],"siUnit":"\u003cHenry_(unit)\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cBeats_per_minute\u003e","wdEntry":"Q743895","measuredConcepts":["\u003cFrequency\u003e"],"symbols":["bpm"],"siUnit":"\u003cHertz\u003e","conversionToSI":0.016666666666666666,"isCurrency":false},{"entity":"\u003cHertz\u003e","wdEntry":"Q39369","measuredConcepts":["\u003cFrequency\u003e"],"symbols":["Hz"],"siUnit":"\u003cHertz\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cRevolutions_per_minute\u003e","wdEntry":"Q206037","measuredConcepts":["\u003cRotational_speed\u003e"],"symbols":["rev/min"],"siUnit":"\u003cInverse_second\u003e","conversionToSI":0.0166667,"isCurrency":false},{"entity":"\u003cInverse_second\u003e","wdEntry":"Q6137407","measuredConcepts":["\u003cFrequency\u003e","\u003cAngular_frequency\u003e","\u003cStrain-rate_tensor\u003e"],"symbols":["s⁻¹"],"siUnit":"\u003cInverse_second\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cJoule-second\u003e","wdEntry":"Q1709783","measuredConcepts":["\u003cAction_(physics)\u003e","\u003cAngular_momentum\u003e"],"symbols":["J s"],"siUnit":"\u003cJoule-second\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cHartree\u003e","wdEntry":"Q476572","measuredConcepts":["\u003cEnergy\u003e"],"symbols":["Ha"],"siUnit":"\u003cJoule\u003e","conversionToSI":4.35974434E-18,"isCurrency":false},{"entity":"\u003cErg\u003e","wdEntry":"Q185153","measuredConcepts":["\u003cEnergy\u003e"],"symbols":["erg"],"siUnit":"\u003cJoule\u003e","conversionToSI":1.0E-7,"isCurrency":false},{"entity":"\u003cElectronvolt\u003e","wdEntry":"Q83327","measuredConcepts":["\u003cEnergy\u003e"],"symbols":["eV"],"siUnit":"\u003cJoule\u003e","conversionToSI":1.60217656535E-19,"isCurrency":false},{"entity":"\u003cQuad_(unit)\u003e","wdEntry":"Q2029156","measuredConcepts":["\u003cEnergy\u003e"],"symbols":["quad"],"siUnit":"\u003cJoule\u003e","conversionToSI":1.055E18,"isCurrency":false},{"entity":"\u003cFoe_(unit)\u003e","wdEntry":"Q2619500","measuredConcepts":["\u003cEnergy\u003e"],"symbols":["foe"],"siUnit":"\u003cJoule\u003e","conversionToSI":1.0E44,"isCurrency":false},{"entity":"\u003cTeraton\u003e","wdEntry":"Q5263280","measuredConcepts":["\u003cNuclear_weapon_yield\u003e"],"symbols":["Tt"],"siUnit":"\u003cJoule\u003e","conversionToSI":4.184E21,"isCurrency":false},{"entity":"\u003cTonne_of_oil_equivalent\u003e","wdEntry":"Q296936","measuredConcepts":["\u003cEnergy\u003e"],"symbols":["toe"],"siUnit":"\u003cJoule\u003e","conversionToSI":4.1868E10,"isCurrency":false},{"entity":"\u003cCalorie\u003e","wdEntry":"Q130964","measuredConcepts":["\u003cEnergy\u003e"],"symbols":["cal"],"siUnit":"\u003cJoule\u003e","conversionToSI":4.184,"isCurrency":false},{"entity":"\u003cFoot-poundal\u003e","wdEntry":"Q5465723","measuredConcepts":["\u003cEnergy\u003e"],"symbols":["ft-pdl"],"siUnit":"\u003cJoule\u003e","conversionToSI":0.0421401100938048,"isCurrency":false},{"entity":"\u003cKiloton\u003e","wdEntry":"Q4992853","measuredConcepts":["\u003cNuclear_weapon_yield\u003e","\u003cEnergy\u003e"],"symbols":["kt"],"siUnit":"\u003cJoule\u003e","conversionToSI":4.184E12,"isCurrency":false},{"entity":"\u003cKilojoule\u003e","wdEntry":"Q4989854","measuredConcepts":["\u003cEnergy\u003e"],"symbols":["kJ"],"siUnit":"\u003cJoule\u003e","conversionToSI":1000.0,"isCurrency":false},{"entity":"\u003cBritish_thermal_unit\u003e","wdEntry":"Q211580","measuredConcepts":["\u003cEnergy\u003e"],"symbols":["BTU (th)"],"siUnit":"\u003cJoule\u003e","conversionToSI":1054.35026444,"isCurrency":false},{"entity":"\u003cTherm\u003e","wdEntry":"Q842981","measuredConcepts":["\u003cEnergy\u003e"],"symbols":["thm (US)"],"siUnit":"\u003cJoule\u003e","conversionToSI":1.054804E8,"isCurrency":false},{"entity":"\u003cKilowatt-hour\u003e","wdEntry":"Q182098","measuredConcepts":["\u003cEnergy\u003e"],"symbols":["kWh","kWh","kWh"],"siUnit":"\u003cJoule\u003e","conversionToSI":3600000.0,"isCurrency":false},{"entity":"\u003cJoule\u003e","wdEntry":"Q25269","measuredConcepts":["\u003cEnergy\u003e","\u003cWork_(physics)\u003e","\u003cHeat\u003e"],"symbols":["J"],"siUnit":"\u003cJoule\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cFoot-pound_(energy)\u003e","wdEntry":"Q730251","measuredConcepts":["\u003cEnergy\u003e"],"symbols":["ft·lbf"],"siUnit":"\u003cJoule\u003e","conversionToSI":1.3558179483314003,"isCurrency":false},{"entity":"\u003cJoule_per_mole\u003e","wdEntry":"Q13035094","measuredConcepts":["\u003cChemical_affinity\u003e"],"symbols":["J/mol"],"siUnit":"\u003cJoule_per_mole\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cKelvin\u003e","wdEntry":"Q11579","measuredConcepts":["\u003cThermodynamic_temperature\u003e","\u003cColor_temperature\u003e"],"symbols":["K"],"siUnit":"\u003cKelvin\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cDalton_(unit)\u003e","wdEntry":"Q483261","measuredConcepts":["\u003cMass\u003e"],"symbols":["u","Da"],"siUnit":"\u003cKilogram\u003e","conversionToSI":1.66053904E-27,"isCurrency":false},{"entity":"\u003cMilligram\u003e","wdEntry":"Q3241121","measuredConcepts":["\u003cMass\u003e"],"symbols":["mg"],"siUnit":"\u003cKilogram\u003e","conversionToSI":1.0E-6,"isCurrency":false},{"entity":"\u003cGram\u003e","wdEntry":"Q41803","measuredConcepts":["\u003cMass\u003e"],"symbols":["g"],"siUnit":"\u003cKilogram\u003e","conversionToSI":0.001,"isCurrency":false},{"entity":"\u003cJupiter_mass\u003e","wdEntry":"Q651336","measuredConcepts":["\u003cMass\u003e"],"symbols":["M_J"],"siUnit":"\u003cKilogram\u003e","conversionToSI":1.89813E27,"isCurrency":false},{"entity":"\u003cSolar_mass\u003e","wdEntry":"Q180892","measuredConcepts":["\u003cMass\u003e"],"symbols":["M☉","M☉"],"siUnit":"\u003cKilogram\u003e","conversionToSI":1.98855E30,"isCurrency":false},{"entity":"\u003cEarth_mass\u003e","wdEntry":"Q681996","measuredConcepts":["\u003cMass\u003e"],"symbols":["M⊕"],"siUnit":"\u003cKilogram\u003e","conversionToSI":5.97219E24,"isCurrency":false},{"entity":"\u003cOunce\u003e","wdEntry":"Q48013","measuredConcepts":["\u003cMass\u003e"],"symbols":["oz","℥"],"siUnit":"\u003cKilogram\u003e","conversionToSI":0.028349523125,"isCurrency":false},{"entity":"\u003cGrain_(unit)\u003e","wdEntry":"Q693944","measuredConcepts":["\u003cMass\u003e"],"symbols":["gr"],"siUnit":"\u003cKilogram\u003e","conversionToSI":6.479891E-5,"isCurrency":false},{"entity":"\u003cMicrogram\u003e","wdEntry":"Q1645498","measuredConcepts":["\u003cMass\u003e"],"symbols":["μg"],"siUnit":"\u003cKilogram\u003e","conversionToSI":1.0E-9,"isCurrency":false},{"entity":"\u003cPennyweight\u003e","wdEntry":"Q1361854","measuredConcepts":["\u003cMass\u003e"],"symbols":["dwt"],"siUnit":"\u003cKilogram\u003e","conversionToSI":0.00155517384,"isCurrency":false},{"entity":"\u003cCarat_(mass)\u003e","wdEntry":"Q261247","measuredConcepts":["\u003cMass\u003e"],"symbols":["ct"],"siUnit":"\u003cKilogram\u003e","conversionToSI":2.0E-4,"isCurrency":false},{"entity":"\u003cApothecaries\u0027_ounce\u003e","wdEntry":"Q23808021","measuredConcepts":["\u003cMass\u003e"],"symbols":["oz (ap.)"],"siUnit":"\u003cKilogram\u003e","conversionToSI":0.03110348,"isCurrency":false},{"entity":"\u003cTonne\u003e","wdEntry":"Q191118","measuredConcepts":["\u003cMass\u003e"],"symbols":["t"],"siUnit":"\u003cKilogram\u003e","conversionToSI":1000.0,"isCurrency":false},{"entity":"\u003cKilogram\u003e","wdEntry":"Q11570","measuredConcepts":["\u003cMass\u003e"],"symbols":["kg"],"siUnit":"\u003cKilogram\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cTroy_ounce\u003e","wdEntry":"Q1323615","measuredConcepts":["\u003cMass\u003e"],"symbols":["oz t"],"siUnit":"\u003cKilogram\u003e","conversionToSI":0.0311034768,"isCurrency":false},{"entity":"\u003cShort_ton\u003e","wdEntry":"Q469356","measuredConcepts":["\u003cMass\u003e"],"symbols":["tn. sh.","T"],"siUnit":"\u003cKilogram\u003e","conversionToSI":907.18474,"isCurrency":false},{"entity":"\u003cStone_(unit)\u003e","wdEntry":"Q1131660","measuredConcepts":["\u003cMass\u003e"],"symbols":["st"],"siUnit":"\u003cKilogram\u003e","conversionToSI":6.35029318,"isCurrency":false},{"entity":"\u003cMyriagram\u003e","wdEntry":"Q2151240","measuredConcepts":["\u003cMass\u003e"],"symbols":["mag"],"siUnit":"\u003cKilogram\u003e","conversionToSI":10.0,"isCurrency":false},{"entity":"\u003cSlug_(unit)\u003e","wdEntry":"Q1363007","measuredConcepts":["\u003cMass\u003e"],"symbols":["slug"],"siUnit":"\u003cKilogram\u003e","conversionToSI":14.593903,"isCurrency":false},{"entity":"\u003cQuintal\u003e","wdEntry":"Q940052","measuredConcepts":["\u003cMass\u003e"],"symbols":["q"],"siUnit":"\u003cKilogram\u003e","conversionToSI":100.0,"isCurrency":false},{"entity":"\u003cLong_ton\u003e","wdEntry":"Q667419","measuredConcepts":["\u003cMass\u003e"],"symbols":["UK t"],"siUnit":"\u003cKilogram\u003e","conversionToSI":1016.0469088,"isCurrency":false},{"entity":"\u003cPound_(mass)\u003e","wdEntry":"Q100995","measuredConcepts":["\u003cMass\u003e"],"symbols":["lb","#"],"siUnit":"\u003cKilogram\u003e","conversionToSI":0.45359237,"isCurrency":false},{"entity":"\u003cPlanck_density\u003e","wdEntry":"Q536785","measuredConcepts":["\u003cDensity\u003e"],"symbols":["ρ_P"],"siUnit":"\u003cKilogram_per_cubic_metre\u003e","conversionToSI":5.155E96,"isCurrency":false},{"entity":"\u003cMilligram_per_cent\u003e","wdEntry":"Q11781239","measuredConcepts":["\u003cMass_concentration_(chemistry)\u003e"],"symbols":["mg%"],"siUnit":"\u003cKilogram_per_cubic_metre\u003e","conversionToSI":0.01,"isCurrency":false},{"entity":"\u003cGram_per_cubic_centimetre\u003e","wdEntry":"Q13147228","measuredConcepts":["\u003cDensity\u003e"],"symbols":["g/cm³"],"siUnit":"\u003cKilogram_per_cubic_metre\u003e","conversionToSI":1000.0,"isCurrency":false},{"entity":"\u003cGram_per_litre\u003e","wdEntry":"Q834105","measuredConcepts":["\u003cMass_concentration_(chemistry)\u003e","\u003cDensity\u003e"],"symbols":["g/L","g/l","g/dm³"],"siUnit":"\u003cKilogram_per_cubic_metre\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cKilogram_per_cubic_metre\u003e","wdEntry":"Q844211","measuredConcepts":["\u003cDensity\u003e","\u003cMass_concentration_(chemistry)\u003e"],"symbols":["kg/m³"],"siUnit":"\u003cKilogram_per_cubic_metre\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cLumen_(unit)\u003e","wdEntry":"Q484092","measuredConcepts":["\u003cLuminous_flux\u003e"],"symbols":["lm"],"siUnit":"\u003cLumen_(unit)\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cLumen_second\u003e","wdEntry":"Q910311","measuredConcepts":["\u003cLuminous_energy\u003e"],"symbols":["lm s"],"siUnit":"\u003cLumen_second\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cFoot-candle\u003e","wdEntry":"Q2064166","measuredConcepts":["\u003cIlluminance\u003e"],"symbols":["fc"],"siUnit":"\u003cLux\u003e","conversionToSI":10.764,"isCurrency":false},{"entity":"\u003cPhot\u003e","wdEntry":"Q901492","measuredConcepts":["\u003cIlluminance\u003e"],"symbols":["ph"],"siUnit":"\u003cLux\u003e","conversionToSI":10000.0,"isCurrency":false},{"entity":"\u003cLux\u003e","wdEntry":"Q179836","measuredConcepts":["\u003cIlluminance\u003e"],"symbols":["lx"],"siUnit":"\u003cLux\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cMicrometre\u003e","wdEntry":"Q175821","measuredConcepts":["\u003cLength\u003e"],"symbols":["μm"],"siUnit":"\u003cMetre\u003e","conversionToSI":1.0E-6,"isCurrency":false},{"entity":"\u003cFemtometre\u003e","wdEntry":"Q208788","measuredConcepts":["\u003cLength\u003e"],"symbols":["fm"],"siUnit":"\u003cMetre\u003e","conversionToSI":1.0E-15,"isCurrency":false},{"entity":"\u003cNanometre\u003e","wdEntry":"Q178674","measuredConcepts":["\u003cLength\u003e"],"symbols":["nm"],"siUnit":"\u003cMetre\u003e","conversionToSI":1.0E-9,"isCurrency":false},{"entity":"\u003cAngstrom\u003e","wdEntry":"Q81454","measuredConcepts":["\u003cLength\u003e"],"symbols":["Å"],"siUnit":"\u003cMetre\u003e","conversionToSI":1.0E-10,"isCurrency":false},{"entity":"\u003cParsec\u003e","wdEntry":"Q12129","measuredConcepts":["\u003cLength\u003e"],"symbols":["pc"],"siUnit":"\u003cMetre\u003e","conversionToSI":3.08567758149137E16,"isCurrency":false},{"entity":"\u003cLight-year\u003e","wdEntry":"Q531","measuredConcepts":["\u003cLength\u003e"],"symbols":["ly","l.y."],"siUnit":"\u003cMetre\u003e","conversionToSI":9.4608E15,"isCurrency":false},{"entity":"\u003cCentimetre\u003e","wdEntry":"Q174728","measuredConcepts":["\u003cLength\u003e"],"symbols":["cm"],"siUnit":"\u003cMetre\u003e","conversionToSI":0.01,"isCurrency":false},{"entity":"\u003cMillimetre\u003e","wdEntry":"Q174789","measuredConcepts":["\u003cLength\u003e"],"symbols":["mm"],"siUnit":"\u003cMetre\u003e","conversionToSI":0.001,"isCurrency":false},{"entity":"\u003cPicometre\u003e","wdEntry":"Q192274","measuredConcepts":["\u003cLength\u003e"],"symbols":["pm"],"siUnit":"\u003cMetre\u003e","conversionToSI":1.0E-12,"isCurrency":false},{"entity":"\u003cThousandth_of_an_inch\u003e","wdEntry":"Q1165799","measuredConcepts":["\u003cLength\u003e"],"symbols":["mil"],"siUnit":"\u003cMetre\u003e","conversionToSI":2.54E-5,"isCurrency":false},{"entity":"\u003cBohr_radius\u003e","wdEntry":"Q652571","measuredConcepts":["\u003cLength\u003e"],"symbols":["a₀"],"siUnit":"\u003cMetre\u003e","conversionToSI":5.29177E-11,"isCurrency":false},{"entity":"\u003cYoctometre\u003e","wdEntry":"Q3221356","measuredConcepts":["\u003cLength\u003e"],"symbols":["ym"],"siUnit":"\u003cMetre\u003e","conversionToSI":1.0E-24,"isCurrency":false},{"entity":"\u003cDecimetre\u003e","wdEntry":"Q200323","measuredConcepts":["\u003cLength\u003e"],"symbols":["dm"],"siUnit":"\u003cMetre\u003e","conversionToSI":0.1,"isCurrency":false},{"entity":"\u003cFrench_catheter_scale\u003e","wdEntry":"Q1067722","measuredConcepts":["\u003cLength\u003e"],"symbols":["Fg"],"siUnit":"\u003cMetre\u003e","conversionToSI":3.33E-4,"isCurrency":false},{"entity":"\u003cFoot_(unit)\u003e","wdEntry":"Q3710","measuredConcepts":["\u003cLength\u003e"],"symbols":["ft"],"siUnit":"\u003cMetre\u003e","conversionToSI":0.3048006,"isCurrency":false},{"entity":"\u003cBarleycorn_(unit)\u003e","wdEntry":"Q4861171","measuredConcepts":["\u003cLength\u003e"],"symbols":["H"],"siUnit":"\u003cMetre\u003e","conversionToSI":0.0085,"isCurrency":false},{"entity":"\u003cAstronomical_unit\u003e","wdEntry":"Q1811","measuredConcepts":["\u003cLength\u003e"],"symbols":["AU","ua","au"],"siUnit":"\u003cMetre\u003e","conversionToSI":1.495978707E11,"isCurrency":false},{"entity":"\u003cInch\u003e","wdEntry":"Q218593","measuredConcepts":["\u003cLength\u003e"],"symbols":["in","″"],"siUnit":"\u003cMetre\u003e","conversionToSI":0.0254,"isCurrency":false},{"entity":"\u003cDecametre\u003e","wdEntry":"Q848856","measuredConcepts":["\u003cLength\u003e"],"symbols":["dam"],"siUnit":"\u003cMetre\u003e","conversionToSI":10.0,"isCurrency":false},{"entity":"\u003cKilometre\u003e","wdEntry":"Q828224","measuredConcepts":["\u003cLength\u003e"],"symbols":["km"],"siUnit":"\u003cMetre\u003e","conversionToSI":1000.0,"isCurrency":false},{"entity":"\u003cFurlong\u003e","wdEntry":"Q494083","measuredConcepts":["\u003cLength\u003e"],"symbols":["fur"],"siUnit":"\u003cMetre\u003e","conversionToSI":201.168,"isCurrency":false},{"entity":"\u003cChain_(unit)\u003e","wdEntry":"Q552299","measuredConcepts":["\u003cLength\u003e"],"symbols":["ch"],"siUnit":"\u003cMetre\u003e","conversionToSI":20.11684,"isCurrency":false},{"entity":"\u003cMetre\u003e","wdEntry":"Q11573","measuredConcepts":["\u003cLength\u003e","\u003cDistance\u003e","\u003cPosition_(geometry)\u003e","\u003cProper_length\u003e"],"symbols":["m"],"siUnit":"\u003cMetre\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cHectometre\u003e","wdEntry":"Q844338","measuredConcepts":["\u003cLength\u003e"],"symbols":["hm"],"siUnit":"\u003cMetre\u003e","conversionToSI":100.0,"isCurrency":false},{"entity":"\u003cNautical_mile\u003e","wdEntry":"Q93318","measuredConcepts":["\u003cLength\u003e"],"symbols":["nmi","NM","M"],"siUnit":"\u003cMetre\u003e","conversionToSI":1852.0,"isCurrency":false},{"entity":"\u003cSolar_radius\u003e","wdEntry":"Q48440","measuredConcepts":["\u003cDistance\u003e"],"symbols":[],"siUnit":"\u003cMetre\u003e","conversionToSI":6.957E8,"isCurrency":false},{"entity":"\u003cMile\u003e","wdEntry":"Q253276","measuredConcepts":["\u003cLength\u003e"],"symbols":["mi"],"siUnit":"\u003cMetre\u003e","conversionToSI":1609.344,"isCurrency":false},{"entity":"\u003cNalva\u003e","wdEntry":"Q6961037","measuredConcepts":["\u003cLength\u003e"],"symbols":[],"siUnit":"\u003cMetre\u003e","conversionToSI":180.0,"isCurrency":false},{"entity":"\u003cGigametre\u003e","wdEntry":"Q854546","measuredConcepts":["\u003cLength\u003e"],"symbols":["Gm"],"siUnit":"\u003cMetre\u003e","conversionToSI":1.0E9,"isCurrency":false},{"entity":"\u003cMegametre\u003e","wdEntry":"Q1054140","measuredConcepts":["\u003cLength\u003e"],"symbols":["Mm"],"siUnit":"\u003cMetre\u003e","conversionToSI":1000000.0,"isCurrency":false},{"entity":"\u003cJupiter_radius\u003e","wdEntry":"Q3421309","measuredConcepts":["\u003cLength\u003e"],"symbols":["R_J"],"siUnit":"\u003cMetre\u003e","conversionToSI":6.9911E7,"isCurrency":false},{"entity":"\u003cYard\u003e","wdEntry":"Q482798","measuredConcepts":["\u003cLength\u003e"],"symbols":["yd"],"siUnit":"\u003cMetre\u003e","conversionToSI":0.9144,"isCurrency":false},{"entity":"\u003cSpan_(unit)\u003e","wdEntry":"Q185759","measuredConcepts":["\u003cLength\u003e"],"symbols":["span"],"siUnit":"\u003cMetre\u003e","conversionToSI":0.2286,"isCurrency":false},{"entity":"\u003cInternational_yard\u003e","wdEntry":"Q61756607","measuredConcepts":["\u003cLength\u003e"],"symbols":["yd"],"siUnit":"\u003cMetre\u003e","conversionToSI":0.9144,"isCurrency":false},{"entity":"\u003cInternational_foot\u003e","wdEntry":"Q61771602","measuredConcepts":["\u003cLength\u003e"],"symbols":["ft"],"siUnit":"\u003cMetre\u003e","conversionToSI":0.3048,"isCurrency":false},{"entity":"\u003cMetre_per_hour\u003e","wdEntry":"Q17093295","measuredConcepts":["\u003cSpeed\u003e"],"symbols":["m/h"],"siUnit":"\u003cMetre_per_second\u003e","conversionToSI":2.77778E-4,"isCurrency":false},{"entity":"\u003cInch_per_second\u003e","wdEntry":"Q6014364","measuredConcepts":["\u003cVelocity\u003e"],"symbols":["in/s"],"siUnit":"\u003cMetre_per_second\u003e","conversionToSI":0.0254,"isCurrency":false},{"entity":"\u003cSpeed_of_light\u003e","wdEntry":"Q2111","measuredConcepts":["\u003cSpeed\u003e"],"symbols":["c"],"siUnit":"\u003cMetre_per_second\u003e","conversionToSI":2.99792458E8,"isCurrency":false},{"entity":"\u003cKilometres_per_hour\u003e","wdEntry":"Q180154","measuredConcepts":["\u003cSpeed\u003e"],"symbols":["km/h","kmph"],"siUnit":"\u003cMetre_per_second\u003e","conversionToSI":0.2777777777777778,"isCurrency":false},{"entity":"\u003cMiles_per_hour\u003e","wdEntry":"Q211256","measuredConcepts":["\u003cVelocity\u003e","\u003cSpeed\u003e"],"symbols":["mph","mi/h"],"siUnit":"\u003cMetre_per_second\u003e","conversionToSI":0.44704,"isCurrency":false},{"entity":"\u003cKnot_(unit)\u003e","wdEntry":"Q128822","measuredConcepts":["\u003cSpeed\u003e"],"symbols":["kn"],"siUnit":"\u003cMetre_per_second\u003e","conversionToSI":0.5144444444444445,"isCurrency":false},{"entity":"\u003cFoot_per_second\u003e","wdEntry":"Q748716","measuredConcepts":["\u003cSpeed\u003e","\u003cVelocity\u003e"],"symbols":["ft/s"],"siUnit":"\u003cMetre_per_second\u003e","conversionToSI":0.3048,"isCurrency":false},{"entity":"\u003cMetre_per_second\u003e","wdEntry":"Q182429","measuredConcepts":["\u003cSpeed\u003e","\u003cVelocity\u003e"],"symbols":["m/s"],"siUnit":"\u003cMetre_per_second\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cGal_(unit)\u003e","wdEntry":"Q500515","measuredConcepts":["\u003cAcceleration\u003e"],"symbols":["Gal"],"siUnit":"\u003cMetre_per_second_squared\u003e","conversionToSI":0.01,"isCurrency":false},{"entity":"\u003cStandard_gravity\u003e","wdEntry":"Q13400897","measuredConcepts":["\u003cAcceleration\u003e"],"symbols":["g"],"siUnit":"\u003cMetre_per_second_squared\u003e","conversionToSI":9.80665,"isCurrency":false},{"entity":"\u003cFoot_per_second_squared\u003e","wdEntry":"Q3867152","measuredConcepts":["\u003cAcceleration\u003e"],"symbols":["ft/s²"],"siUnit":"\u003cMetre_per_second_squared\u003e","conversionToSI":0.3048,"isCurrency":false},{"entity":"\u003cMetre_per_second_squared\u003e","wdEntry":"Q1051665","measuredConcepts":["\u003cAcceleration\u003e"],"symbols":["m/s²"],"siUnit":"\u003cMetre_per_second_squared\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cMetre_squared_per_second\u003e","wdEntry":"Q3332099","measuredConcepts":["\u003cThermal_diffusivity\u003e","\u003cMass_diffusivity\u003e","\u003cMagnetic_diffusivity\u003e"],"symbols":["m²/s"],"siUnit":"\u003cMetre_squared_per_second\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cEquivalent_(chemistry)\u003e","wdEntry":"Q36384","measuredConcepts":["\u003cAmount_of_substance\u003e"],"symbols":["equiv","Eq"],"siUnit":"\u003cMole_(unit)\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cMole_(unit)\u003e","wdEntry":"Q41509","measuredConcepts":["\u003cAmount_of_substance\u003e","\u003cExtent_of_reaction\u003e"],"symbols":["mol"],"siUnit":"\u003cMole_(unit)\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cPound-foot_(torque)\u003e","wdEntry":"Q16859309","measuredConcepts":["\u003cTorque\u003e"],"symbols":["lb·ft","lb ft"],"siUnit":"\u003cNewton-metre\u003e","conversionToSI":1.355818,"isCurrency":false},{"entity":"\u003cKilopondmetre\u003e","wdEntry":"Q1741429","measuredConcepts":["\u003cTorque\u003e","\u003cEnergy\u003e"],"symbols":["kpm"],"siUnit":"\u003cNewton-metre\u003e","conversionToSI":9.80665,"isCurrency":false},{"entity":"\u003cNewton-metre\u003e","wdEntry":"Q215571","measuredConcepts":["\u003cTorque\u003e","\u003cBending_moment\u003e"],"symbols":["N m"],"siUnit":"\u003cNewton-metre\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cPlanck_momentum\u003e","wdEntry":"Q239830","measuredConcepts":["\u003cMomentum\u003e"],"symbols":["p_P","m_Pc"],"siUnit":"\u003cNewton-second\u003e","conversionToSI":6.525,"isCurrency":false},{"entity":"\u003cNewton-second\u003e","wdEntry":"Q3395194","measuredConcepts":["\u003cImpulse_(physics)\u003e"],"symbols":["N s"],"siUnit":"\u003cNewton-second\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cDyne\u003e","wdEntry":"Q201933","measuredConcepts":["\u003cForce\u003e"],"symbols":["dyn"],"siUnit":"\u003cNewton_(unit)\u003e","conversionToSI":1.0E-5,"isCurrency":false},{"entity":"\u003cPlanck_force\u003e","wdEntry":"Q915169","measuredConcepts":["\u003cForce\u003e"],"symbols":["F_P"],"siUnit":"\u003cNewton_(unit)\u003e","conversionToSI":1.21027E44,"isCurrency":false},{"entity":"\u003cKilogram-force\u003e","wdEntry":"Q216880","measuredConcepts":["\u003cForce\u003e"],"symbols":["kgf","kp"],"siUnit":"\u003cNewton_(unit)\u003e","conversionToSI":9.80665,"isCurrency":false},{"entity":"\u003cPoundal\u003e","wdEntry":"Q1972579","measuredConcepts":["\u003cForce\u003e"],"symbols":["pdl"],"siUnit":"\u003cNewton_(unit)\u003e","conversionToSI":0.138254954376,"isCurrency":false},{"entity":"\u003cPound_(force)\u003e","wdEntry":"Q1194225","measuredConcepts":["\u003cForce\u003e"],"symbols":["lbf"],"siUnit":"\u003cNewton_(unit)\u003e","conversionToSI":4.4482216152605,"isCurrency":false},{"entity":"\u003cSthène\u003e","wdEntry":"Q1793863","measuredConcepts":["\u003cForce\u003e"],"symbols":["sn"],"siUnit":"\u003cNewton_(unit)\u003e","conversionToSI":1000.0,"isCurrency":false},{"entity":"\u003cKip_(unit)\u003e","wdEntry":"Q6414556","measuredConcepts":["\u003cForce\u003e"],"symbols":["kip"],"siUnit":"\u003cNewton_(unit)\u003e","conversionToSI":4448.2216,"isCurrency":false},{"entity":"\u003cNewton_(unit)\u003e","wdEntry":"Q12438","measuredConcepts":["\u003cForce\u003e"],"symbols":["N"],"siUnit":"\u003cNewton_(unit)\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cAbohm\u003e","wdEntry":"Q1091059","measuredConcepts":["\u003cElectrical_resistance_and_conductance\u003e"],"symbols":["abohm"],"siUnit":"\u003cOhm\u003e","conversionToSI":1.0E-9,"isCurrency":false},{"entity":"\u003cStatohm\u003e","wdEntry":"Q25303759","measuredConcepts":["\u003cElectrical_resistance_and_conductance\u003e"],"symbols":["statΩ"],"siUnit":"\u003cOhm\u003e","conversionToSI":8.987551787E11,"isCurrency":false},{"entity":"\u003cPlanck_impedance\u003e","wdEntry":"Q1323237","measuredConcepts":["\u003cElectrical_impedance\u003e"],"symbols":["Z_P"],"siUnit":"\u003cOhm\u003e","conversionToSI":29.9792458,"isCurrency":false},{"entity":"\u003cOhm\u003e","wdEntry":"Q47083","measuredConcepts":["\u003cElectrical_resistance_and_conductance\u003e","\u003cElectrical_impedance\u003e","\u003cElectrical_reactance\u003e"],"symbols":["Ω"],"siUnit":"\u003cOhm\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cPlanck_pressure\u003e","wdEntry":"Q685662","measuredConcepts":["\u003cPressure\u003e"],"symbols":["p_P"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":4.633E113,"isCurrency":false},{"entity":"\u003cBarye\u003e","wdEntry":"Q809678","measuredConcepts":["\u003cPressure\u003e"],"symbols":["Ba"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":0.1,"isCurrency":false},{"entity":"\u003cPièze\u003e","wdEntry":"Q514845","measuredConcepts":["\u003cPressure\u003e"],"symbols":["pz"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":1000.0,"isCurrency":false},{"entity":"\u003cTorr\u003e","wdEntry":"Q185648","measuredConcepts":["\u003cPressure\u003e"],"symbols":["Torr"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":133.3223684211,"isCurrency":false},{"entity":"\u003cMillimeters,_water_gauge\u003e","wdEntry":"Q13479685","measuredConcepts":["\u003cPressure\u003e"],"symbols":["mm wg","mm H2O","mm wc"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":9.80638,"isCurrency":false},{"entity":"\u003cInch_of_water\u003e","wdEntry":"Q4041686","measuredConcepts":["\u003cPressure\u003e"],"symbols":["iwc","iwg","in H20"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":248.84,"isCurrency":false},{"entity":"\u003cPounds_per_square_inch\u003e","wdEntry":"Q626299","measuredConcepts":["\u003cPressure\u003e"],"symbols":["psi"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":6894.757,"isCurrency":false},{"entity":"\u003cBar_(unit)\u003e","wdEntry":"Q103510","measuredConcepts":["\u003cPressure\u003e"],"symbols":["bar"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":100000.0,"isCurrency":false},{"entity":"\u003cMillimetre_of_mercury\u003e","wdEntry":"Q6859652","measuredConcepts":["\u003cPressure\u003e"],"symbols":["mmHg","mm Hg"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":133.3223684211,"isCurrency":false},{"entity":"\u003cTechnical_atmosphere\u003e","wdEntry":"Q909066","measuredConcepts":["\u003cPressure\u003e"],"symbols":["at"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":98066.5,"isCurrency":false},{"entity":"\u003cStandard_atmosphere_(unit)\u003e","wdEntry":"Q177974","measuredConcepts":["\u003cPressure\u003e"],"symbols":["atm"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":101325.0,"isCurrency":false},{"entity":"\u003cInch_of_mercury\u003e","wdEntry":"Q1050958","measuredConcepts":["\u003cPressure\u003e"],"symbols":["inHg"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":3386.389,"isCurrency":false},{"entity":"\u003cKilogram-force_per_square_centimetre\u003e","wdEntry":"Q13582667","measuredConcepts":["\u003cPressure\u003e"],"symbols":["kgf/cm²"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":98066.5,"isCurrency":false},{"entity":"\u003cPascal_(unit)\u003e","wdEntry":"Q44395","measuredConcepts":["\u003cPressure\u003e","\u003cStress_(mechanics)\u003e","\u003cShear_modulus\u003e","\u003cBulk_modulus\u003e","\u003cYoung\u0027s_modulus\u003e"],"symbols":["Pa"],"siUnit":"\u003cPascal_(unit)\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cX_unit\u003e","wdEntry":"Q1542309","measuredConcepts":["\u003cLength\u003e"],"symbols":["xu"],"siUnit":"\u003cPicometre\u003e","conversionToSI":0.100207697,"isCurrency":false},{"entity":"\u003cDegree_(angle)\u003e","wdEntry":"Q28390","measuredConcepts":["\u003cAngular_distance\u003e"],"symbols":["°"],"siUnit":"\u003cRadian\u003e","conversionToSI":0.017453292519943295,"isCurrency":false},{"entity":"\u003cArcsecond\u003e","wdEntry":"Q829073","measuredConcepts":["\u003cAngle\u003e"],"symbols":["″","\""],"siUnit":"\u003cRadian\u003e","conversionToSI":4.8481368110954E-6,"isCurrency":false},{"entity":"\u003cMilliradian\u003e","wdEntry":"Q1065153","measuredConcepts":["\u003cAngular_distance\u003e"],"symbols":["mrad"],"siUnit":"\u003cRadian\u003e","conversionToSI":0.001,"isCurrency":false},{"entity":"\u003cGradian\u003e","wdEntry":"Q208528","measuredConcepts":["\u003cAngular_distance\u003e"],"symbols":["gon"],"siUnit":"\u003cRadian\u003e","conversionToSI":0.015707963267949,"isCurrency":false},{"entity":"\u003cArcminute\u003e","wdEntry":"Q209426","measuredConcepts":["\u003cAngular_distance\u003e"],"symbols":["′","′"],"siUnit":"\u003cRadian\u003e","conversionToSI":2.908882086657216E-4,"isCurrency":false},{"entity":"\u003cDecimal_degrees\u003e","wdEntry":"Q1798227","measuredConcepts":["\u003cAngle\u003e"],"symbols":["°"],"siUnit":"\u003cRadian\u003e","conversionToSI":0.017453292519943295,"isCurrency":false},{"entity":"\u003cTurn_(angle)\u003e","wdEntry":"Q304479","measuredConcepts":["\u003cDimensionless_quantity\u003e","\u003cAngular_distance\u003e"],"symbols":["tr"],"siUnit":"\u003cRadian\u003e","conversionToSI":6.283185307179586,"isCurrency":false},{"entity":"\u003cRadian\u003e","wdEntry":"Q33680","measuredConcepts":["\u003cAngular_distance\u003e"],"symbols":["rad"],"siUnit":"\u003cRadian\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cPlanck_angular_frequency\u003e","wdEntry":"Q1196837","measuredConcepts":["\u003cAngular_frequency\u003e"],"symbols":["ω_P"],"siUnit":"\u003cRadian_per_second\u003e","conversionToSI":1.8549E43,"isCurrency":false},{"entity":"\u003cRadian_per_second\u003e","wdEntry":"Q1063756","measuredConcepts":["\u003cAngular_velocity\u003e","\u003cAngular_frequency\u003e"],"symbols":["rad/s"],"siUnit":"\u003cRadian_per_second\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cStatmho\u003e","wdEntry":"Q25098783","measuredConcepts":["\u003cElectrical_conductance\u003e"],"symbols":["statmho"],"siUnit":"\u003cSiemens_(unit)\u003e","conversionToSI":1.11265E-12,"isCurrency":false},{"entity":"\u003cAbmho\u003e","wdEntry":"Q4668106","measuredConcepts":["\u003cElectrical_conductance\u003e"],"symbols":["ab℧"],"siUnit":"\u003cSiemens_(unit)\u003e","conversionToSI":1.0E9,"isCurrency":false},{"entity":"\u003cSiemens_(unit)\u003e","wdEntry":"Q169893","measuredConcepts":["\u003cElectrical_conductance\u003e","\u003cAdmittance\u003e","\u003cSusceptance\u003e"],"symbols":["S","℧"],"siUnit":"\u003cSiemens_(unit)\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cRoentgen_equivalent_man\u003e","wdEntry":"Q260126","measuredConcepts":["\u003cEquivalent_dose\u003e"],"symbols":["rem"],"siUnit":"\u003cSievert\u003e","conversionToSI":0.01,"isCurrency":false},{"entity":"\u003cSievert\u003e","wdEntry":"Q103246","measuredConcepts":["\u003cEquivalent_dose\u003e"],"symbols":["Sv"],"siUnit":"\u003cSievert\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cBarn_(unit)\u003e","wdEntry":"Q209351","measuredConcepts":["\u003cCross_section_(physics)\u003e"],"symbols":["b"],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":1.0E-28,"isCurrency":false},{"entity":"\u003cDarcy_(unit)\u003e","wdEntry":"Q1165725","measuredConcepts":["\u003cPermeability_(Earth_sciences)\u003e"],"symbols":["D","d"],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":9.869E-13,"isCurrency":false},{"entity":"\u003cSquare_centimetre\u003e","wdEntry":"Q2489298","measuredConcepts":["\u003cArea\u003e"],"symbols":["cm²"],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":1.0E-4,"isCurrency":false},{"entity":"\u003cSquare_inch\u003e","wdEntry":"Q1063786","measuredConcepts":["\u003cArea\u003e"],"symbols":["in²"],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":6.4516E-4,"isCurrency":false},{"entity":"\u003cSquare_foot\u003e","wdEntry":"Q857027","measuredConcepts":["\u003cArea\u003e"],"symbols":["ft²"],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":0.09290304,"isCurrency":false},{"entity":"\u003cAre_(unit)\u003e","wdEntry":"Q185078","measuredConcepts":["\u003cArea\u003e"],"symbols":["a"],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":100.0,"isCurrency":false},{"entity":"\u003cDunam\u003e","wdEntry":"Q216795","measuredConcepts":["\u003cArea\u003e"],"symbols":[],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":1000.0,"isCurrency":false},{"entity":"\u003cAcre\u003e","wdEntry":"Q81292","measuredConcepts":["\u003cArea\u003e"],"symbols":["acre"],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":4046.8564224,"isCurrency":false},{"entity":"\u003cHectare\u003e","wdEntry":"Q35852","measuredConcepts":["\u003cArea\u003e"],"symbols":["ha"],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":10000.0,"isCurrency":false},{"entity":"\u003cSquare_kilometre\u003e","wdEntry":"Q712226","measuredConcepts":["\u003cArea\u003e"],"symbols":["km²"],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":1000000.0,"isCurrency":false},{"entity":"\u003cDessiatin\u003e","wdEntry":"Q669931","measuredConcepts":["\u003cArea\u003e"],"symbols":[],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":10926.512,"isCurrency":false},{"entity":"\u003cSquare_mile\u003e","wdEntry":"Q232291","measuredConcepts":["\u003cArea\u003e"],"symbols":["mi²"],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":2589988.110336,"isCurrency":false},{"entity":"\u003cMorgen\u003e","wdEntry":"Q717310","measuredConcepts":["\u003cArea\u003e"],"symbols":["Mg"],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":2500.0,"isCurrency":false},{"entity":"\u003cRai_(unit)\u003e","wdEntry":"Q935614","measuredConcepts":["\u003cArea\u003e"],"symbols":[],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":1600.0,"isCurrency":false},{"entity":"\u003cSquare_yard\u003e","wdEntry":"Q1550511","measuredConcepts":["\u003cArea\u003e"],"symbols":["yd²"],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":0.8361274,"isCurrency":false},{"entity":"\u003cSquare_metre\u003e","wdEntry":"Q25343","measuredConcepts":["\u003cArea\u003e"],"symbols":["m²"],"siUnit":"\u003cSquare_metre\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cSquare_degree\u003e","wdEntry":"Q254532","measuredConcepts":["\u003cSolid_angle\u003e"],"symbols":["°²","deg²"],"siUnit":"\u003cSteradian\u003e","conversionToSI":3.046174197867086E-4,"isCurrency":false},{"entity":"\u003cSpat_(unit)\u003e","wdEntry":"Q7574000","measuredConcepts":["\u003cSolid_angle\u003e"],"symbols":["sp"],"siUnit":"\u003cSteradian\u003e","conversionToSI":12.5664,"isCurrency":false},{"entity":"\u003cSteradian\u003e","wdEntry":"Q177612","measuredConcepts":["\u003cSolid_angle\u003e"],"symbols":["sr"],"siUnit":"\u003cSteradian\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cGauss_(unit)\u003e","wdEntry":"Q177493","measuredConcepts":["\u003cMagnetic_flux_density\u003e"],"symbols":["Gs"],"siUnit":"\u003cTesla_(unit)\u003e","conversionToSI":1.0E-4,"isCurrency":false},{"entity":"\u003cTesla_(unit)\u003e","wdEntry":"Q163343","measuredConcepts":["\u003cMagnetic_flux_density\u003e"],"symbols":["T"],"siUnit":"\u003cTesla_(unit)\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cVolt-ampere\u003e","wdEntry":"Q550341","measuredConcepts":["\u003cAC_power\u003e","\u003cElectric_power\u003e"],"symbols":["V A"],"siUnit":"\u003cVolt-ampere\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cPlanck_voltage\u003e","wdEntry":"Q1377741","measuredConcepts":["\u003cVoltage\u003e"],"symbols":["V_P"],"siUnit":"\u003cVolt\u003e","conversionToSI":1.0429E27,"isCurrency":false},{"entity":"\u003cIRE_(unit)\u003e","wdEntry":"Q1654435","measuredConcepts":["\u003cVoltage\u003e"],"symbols":["IRE"],"siUnit":"\u003cVolt\u003e","conversionToSI":0.00714,"isCurrency":false},{"entity":"\u003cStatvolt\u003e","wdEntry":"Q2066484","measuredConcepts":["\u003cVoltage\u003e"],"symbols":["statV"],"siUnit":"\u003cVolt\u003e","conversionToSI":299.792,"isCurrency":false},{"entity":"\u003cVolt\u003e","wdEntry":"Q25250","measuredConcepts":["\u003cVoltage\u003e","\u003cElectromotive_force\u003e","\u003cElectric_potential\u003e","\u003cMembrane_potential\u003e"],"symbols":["V"],"siUnit":"\u003cVolt\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cSolar_luminosity\u003e","wdEntry":"Q843877","measuredConcepts":["\u003cLuminosity\u003e"],"symbols":["L☉"],"siUnit":"\u003cWatt\u003e","conversionToSI":3.828E26,"isCurrency":false},{"entity":"\u003cPlanck_power\u003e","wdEntry":"Q914151","measuredConcepts":["\u003cPower_(physics)\u003e"],"symbols":["P_P"],"siUnit":"\u003cWatt\u003e","conversionToSI":3.62831E52,"isCurrency":false},{"entity":"\u003cMetric_horsepower\u003e","wdEntry":"Q160857","measuredConcepts":["\u003cPower_(physics)\u003e"],"symbols":["hp"],"siUnit":"\u003cWatt\u003e","conversionToSI":735.49875,"isCurrency":false},{"entity":"\u003cPoncelet\u003e","wdEntry":"Q1768929","measuredConcepts":["\u003cPower_(physics)\u003e"],"symbols":["p"],"siUnit":"\u003cWatt\u003e","conversionToSI":980.665,"isCurrency":false},{"entity":"\u003cHorsepower\u003e","wdEntry":"Q2276380","measuredConcepts":["\u003cPower_(physics)\u003e"],"symbols":[],"siUnit":"\u003cWatt\u003e","conversionToSI":745.7,"isCurrency":false},{"entity":"\u003cKilowatt\u003e","wdEntry":"Q3320608","measuredConcepts":["\u003cPower_(physics)\u003e"],"symbols":["kW"],"siUnit":"\u003cWatt\u003e","conversionToSI":1000.0,"isCurrency":false},{"entity":"\u003cTon_of_refrigeration\u003e","wdEntry":"Q3332689","measuredConcepts":["\u003cPower_(physics)\u003e"],"symbols":["ToR","RT","TR"],"siUnit":"\u003cWatt\u003e","conversionToSI":3517.0,"isCurrency":false},{"entity":"\u003cWatt\u003e","wdEntry":"Q25236","measuredConcepts":["\u003cRadiant_flux\u003e","\u003cPower_(physics)\u003e"],"symbols":["W"],"siUnit":"\u003cWatt\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cWatt_second\u003e","wdEntry":"Q7974920","measuredConcepts":["\u003cEnergy\u003e","\u003cWork_(physics)\u003e","\u003cHeat\u003e","\u003cElectrical_energy\u003e"],"symbols":["W s"],"siUnit":"\u003cWatt_second\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cMaxwell_(unit)\u003e","wdEntry":"Q608697","measuredConcepts":["\u003cMagnetic_flux\u003e"],"symbols":["Mx"],"siUnit":"\u003cWeber_(unit)\u003e","conversionToSI":1.0E-8,"isCurrency":false},{"entity":"\u003cWeber_(unit)\u003e","wdEntry":"Q170804","measuredConcepts":["\u003cMagnetic_flux\u003e","\u003cFlux_linkage\u003e"],"symbols":["Wb"],"siUnit":"\u003cWeber_(unit)\u003e","conversionToSI":1.0,"isCurrency":false},{"entity":"\u003cLivre_tournois\u003e","wdEntry":"Q2670039","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₶"],"isCurrency":true},{"entity":"\u003cMoroccan_dirham\u003e","wdEntry":"Q200192","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["DH"],"isCurrency":true},{"entity":"\u003cUnited_Arab_Emirates_dirham\u003e","wdEntry":"Q200294","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["DH"],"isCurrency":true},{"entity":"\u003cAngolan_kwanza\u003e","wdEntry":"Q200337","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Kz","Kz"],"isCurrency":true},{"entity":"\u003cBolivian_boliviano\u003e","wdEntry":"Q200737","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Bs"],"isCurrency":true},{"entity":"\u003cMozambican_metical\u003e","wdEntry":"Q200753","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["MT"],"isCurrency":true},{"entity":"\u003cPapua_New_Guinean_kina\u003e","wdEntry":"Q200759","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["K"],"isCurrency":true},{"entity":"\u003cCuban_peso\u003e","wdEntry":"Q201505","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["$MN"],"isCurrency":true},{"entity":"\u003cBhutanese_ngultrum\u003e","wdEntry":"Q201799","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Nu"],"isCurrency":true},{"entity":"\u003cBahraini_dinar\u003e","wdEntry":"Q201871","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["BD"],"isCurrency":true},{"entity":"\u003cBurmese_kyat\u003e","wdEntry":"Q201875","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["K"],"isCurrency":true},{"entity":"\u003cLebanese_pound\u003e","wdEntry":"Q201880","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["LL","LL"],"isCurrency":true},{"entity":"\u003cSurinamese_dollar\u003e","wdEntry":"Q202036","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["$"],"isCurrency":true},{"entity":"\u003cSouth_Korean_won\u003e","wdEntry":"Q202040","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₩"],"isCurrency":true},{"entity":"\u003cNamibian_dollar\u003e","wdEntry":"Q202462","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["N$"],"isCurrency":true},{"entity":"\u003cKenyan_shilling\u003e","wdEntry":"Q202882","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Ksh"],"isCurrency":true},{"entity":"\u003cGambian_dalasi\u003e","wdEntry":"Q202885","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["D"],"isCurrency":true},{"entity":"\u003cNepalese_rupee\u003e","wdEntry":"Q202895","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["N₨"],"isCurrency":true},{"entity":"\u003cNigerian_naira\u003e","wdEntry":"Q203567","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₦","₦"],"isCurrency":true},{"entity":"\u003cJordanian_dinar\u003e","wdEntry":"Q203722","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["JD"],"isCurrency":true},{"entity":"\u003cHaitian_gourde\u003e","wdEntry":"Q203955","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["G"],"isCurrency":true},{"entity":"\u003cPeruvian_sol\u003e","wdEntry":"Q204656","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["S/."],"isCurrency":true},{"entity":"\u003cCambodian_riel\u003e","wdEntry":"Q204737","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["៛"],"isCurrency":true},{"entity":"\u003cEthiopian_birr\u003e","wdEntry":"Q206243","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Br"],"isCurrency":true},{"entity":"\u003cBrunei_dollar\u003e","wdEntry":"Q206319","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["B$"],"isCurrency":true},{"entity":"\u003cQatari_riyal\u003e","wdEntry":"Q206386","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["QR"],"isCurrency":true},{"entity":"\u003cMaldivian_rufiyaa\u003e","wdEntry":"Q206600","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Rf","ރ","MRF"],"isCurrency":true},{"entity":"\u003cNicaraguan_córdoba\u003e","wdEntry":"Q207312","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["C$"],"isCurrency":true},{"entity":"\u003cGuatemalan_quetzal\u003e","wdEntry":"Q207396","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Q"],"isCurrency":true},{"entity":"\u003cParaguayan_guaraní\u003e","wdEntry":"Q207514","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₲"],"isCurrency":true},{"entity":"\u003cVanuatu_vatu\u003e","wdEntry":"Q207523","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["VT"],"isCurrency":true},{"entity":"\u003cLesotho_loti\u003e","wdEntry":"Q208039","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["M"],"isCurrency":true},{"entity":"\u003cNew_Taiwan_dollar\u003e","wdEntry":"Q208526","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["NT$","NT$"],"isCurrency":true},{"entity":"\u003cUruguayan_peso\u003e","wdEntry":"Q209272","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["$U"],"isCurrency":true},{"entity":"\u003cJamaican_dollar\u003e","wdEntry":"Q209792","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["J$"],"isCurrency":true},{"entity":"\u003cPanamanian_balboa\u003e","wdEntry":"Q210472","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["B/.","B/."],"isCurrency":true},{"entity":"\u003cBermudian_dollar\u003e","wdEntry":"Q210478","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["BD$"],"isCurrency":true},{"entity":"\u003cMalawian_kwacha\u003e","wdEntry":"Q211694","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["MK"],"isCurrency":true},{"entity":"\u003cMauritian_rupee\u003e","wdEntry":"Q212967","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₨"],"isCurrency":true},{"entity":"\u003cGuyanese_dollar\u003e","wdEntry":"Q213005","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["G$","GY$"],"isCurrency":true},{"entity":"\u003cGuinean_franc\u003e","wdEntry":"Q213311","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["FG"],"isCurrency":true},{"entity":"\u003cCFP_franc\u003e","wdEntry":"Q214393","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₣"],"isCurrency":true},{"entity":"\u003cAruban_florin\u003e","wdEntry":"Q232270","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["ƒ"],"isCurrency":true},{"entity":"\u003cBurundian_franc\u003e","wdEntry":"Q238007","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["FBu"],"isCurrency":true},{"entity":"\u003cSyrian_pound\u003e","wdEntry":"Q240468","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["LS","syr£"],"isCurrency":true},{"entity":"\u003cYemeni_rial\u003e","wdEntry":"Q240512","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["﷼\u0027"],"isCurrency":true},{"entity":"\u003cMacanese_pataca\u003e","wdEntry":"Q241214","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["MOP$"],"isCurrency":true},{"entity":"\u003cTrinidad_and_Tobago_dollar\u003e","wdEntry":"Q242890","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["TT$"],"isCurrency":true},{"entity":"\u003cCosta_Rican_colón\u003e","wdEntry":"Q242915","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₡"],"isCurrency":true},{"entity":"\u003cDominican_peso\u003e","wdEntry":"Q242922","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["RD$"],"isCurrency":true},{"entity":"\u003cLiberian_dollar\u003e","wdEntry":"Q242988","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Lib$","L$"],"isCurrency":true},{"entity":"\u003cSouth_Sudanese_pound\u003e","wdEntry":"Q244366","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Db"],"isCurrency":true},{"entity":"\u003cColombian_peso\u003e","wdEntry":"Q244819","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["COL$"],"isCurrency":true},{"entity":"\u003cAustralian_dollar\u003e","wdEntry":"Q259502","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["AU$","A$","A$"],"isCurrency":true},{"entity":"\u003cComorian_franc\u003e","wdEntry":"Q267264","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["CF"],"isCurrency":true},{"entity":"\u003cJersey_pound\u003e","wdEntry":"Q270744","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["JE£"],"isCurrency":true},{"entity":"\u003cSudanese_pound\u003e","wdEntry":"Q271206","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["sud£"],"isCurrency":true},{"entity":"\u003cOmani_rial\u003e","wdEntry":"Q272290","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["ر.ع."],"isCurrency":true},{"entity":"\u003cBelize_dollar\u003e","wdEntry":"Q275112","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Bz$","Bz$"],"isCurrency":true},{"entity":"\u003cCayman_Islands_dollar\u003e","wdEntry":"Q319885","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["CI$"],"isCurrency":true},{"entity":"\u003cFalkland_Islands_pound\u003e","wdEntry":"Q330044","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["FK£"],"isCurrency":true},{"entity":"\u003cSaint_Helena_pound\u003e","wdEntry":"Q374453","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["£"],"isCurrency":true},{"entity":"\u003cAs_(Roman_coin)\u003e","wdEntry":"Q376895","measuredConcepts":["\u003cCurrency\u003e"],"symbols":[],"isCurrency":true},{"entity":"\u003cAzerbaijani_manat\u003e","wdEntry":"Q483725","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["A.M.","₼"],"isCurrency":true},{"entity":"\u003cTurkmenistan_manat\u003e","wdEntry":"Q486637","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["T"],"isCurrency":true},{"entity":"\u003cUzbekistani_soʻm\u003e","wdEntry":"Q487888","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["So\u0027m"],"isCurrency":true},{"entity":"\u003cNetherlands_Antillean_guilder\u003e","wdEntry":"Q522701","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["NAƒ"],"isCurrency":true},{"entity":"\u003cHungarian_adópengő\u003e","wdEntry":"Q722411","measuredConcepts":["\u003cCurrency\u003e"],"symbols":[],"isCurrency":true},{"entity":"\u003cCuban_convertible_peso\u003e","wdEntry":"Q731350","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["$"],"isCurrency":true},{"entity":"\u003cCaribbean_guilder\u003e","wdEntry":"Q737779","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["CMg"],"isCurrency":true},{"entity":"\u003cWest_African_CFA_franc\u003e","wdEntry":"Q861690","measuredConcepts":["\u003cCurrency\u003e"],"symbols":[],"isCurrency":true},{"entity":"\u003cCanadian_dollar\u003e","wdEntry":"Q1104069","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["$","C$","CAD$","¢","C$"],"isCurrency":true},{"entity":"\u003cDupondius\u003e","wdEntry":"Q1127799","measuredConcepts":["\u003cCurrency\u003e"],"symbols":[],"isCurrency":true},{"entity":"\u003cSUCRE\u003e","wdEntry":"Q1148329","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Sucre"],"isCurrency":true},{"entity":"\u003cQuinarius\u003e","wdEntry":"Q1249084","measuredConcepts":["\u003cCurrency\u003e"],"symbols":[],"isCurrency":true},{"entity":"\u003cNew_Zealand_dollar\u003e","wdEntry":"Q1472704","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["NZ$"],"isCurrency":true},{"entity":"\u003cStelo\u003e","wdEntry":"Q1918077","measuredConcepts":["\u003cCurrency\u003e"],"symbols":[],"isCurrency":true},{"entity":"\u003cAbkhazian_apsar\u003e","wdEntry":"Q1983857","measuredConcepts":["\u003cCurrency\u003e"],"symbols":[],"isCurrency":true},{"entity":"\u003cZambian_kwacha\u003e","wdEntry":"Q73408","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["K","ZK"],"isCurrency":true},{"entity":"\u003cIndian_rupee\u003e","wdEntry":"Q80524","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₹"],"isCurrency":true},{"entity":"\u003cUkrainian_hryvnia\u003e","wdEntry":"Q81893","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₴"],"isCurrency":true},{"entity":"\u003cNorth_Korean_won\u003e","wdEntry":"Q106720","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₩"],"isCurrency":true},{"entity":"\u003cSwedish_krona\u003e","wdEntry":"Q122922","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["kr"],"isCurrency":true},{"entity":"\u003cPolish_złoty\u003e","wdEntry":"Q123213","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["zł"],"isCurrency":true},{"entity":"\u003cAlbanian_lek\u003e","wdEntry":"Q125999","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["L"],"isCurrency":true},{"entity":"\u003cArmenian_dram\u003e","wdEntry":"Q130498","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["֏"],"isCurrency":true},{"entity":"\u003cCzech_koruna\u003e","wdEntry":"Q131016","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Kč"],"isCurrency":true},{"entity":"\u003cIsraeli_new_shekel\u003e","wdEntry":"Q131309","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₪"],"isCurrency":true},{"entity":"\u003cIcelandic_króna\u003e","wdEntry":"Q131473","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["kr"],"isCurrency":true},{"entity":"\u003cRomanian_leu\u003e","wdEntry":"Q131645","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["lei"],"isCurrency":true},{"entity":"\u003cNorwegian_krone\u003e","wdEntry":"Q132643","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["kr","kr"],"isCurrency":true},{"entity":"\u003cBelarusian_ruble\u003e","wdEntry":"Q160680","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Br","Br"],"isCurrency":true},{"entity":"\u003cMalaysian_ringgit\u003e","wdEntry":"Q163712","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["RM"],"isCurrency":true},{"entity":"\u003cEritrean_nakfa\u003e","wdEntry":"Q171503","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Nfk"],"isCurrency":true},{"entity":"\u003cSerbian_dinar\u003e","wdEntry":"Q172524","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["din"],"isCurrency":true},{"entity":"\u003cBulgarian_lev\u003e","wdEntry":"Q172540","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["лв"],"isCurrency":true},{"entity":"\u003cTurkish_lira\u003e","wdEntry":"Q172872","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₺"],"isCurrency":true},{"entity":"\u003cBrazilian_real\u003e","wdEntry":"Q173117","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["R$","R$"],"isCurrency":true},{"entity":"\u003cKazakhstani_tenge\u003e","wdEntry":"Q173751","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₸"],"isCurrency":true},{"entity":"\u003cMacedonian_denar\u003e","wdEntry":"Q177875","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["DEN"],"isCurrency":true},{"entity":"\u003cThai_baht\u003e","wdEntry":"Q177882","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["฿"],"isCurrency":true},{"entity":"\u003cBosnia_and_Herzegovina_convertible_mark\u003e","wdEntry":"Q179620","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["KM"],"isCurrency":true},{"entity":"\u003cMoldovan_leu\u003e","wdEntry":"Q181129","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["L"],"isCurrency":true},{"entity":"\u003cSouth_African_rand\u003e","wdEntry":"Q181907","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["R"],"isCurrency":true},{"entity":"\u003cMongolian_tögrög\u003e","wdEntry":"Q183435","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₮"],"isCurrency":true},{"entity":"\u003cGhanaian_cedi\u003e","wdEntry":"Q183530","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["GH₵"],"isCurrency":true},{"entity":"\u003cBotswana_pula\u003e","wdEntry":"Q186794","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["P"],"isCurrency":true},{"entity":"\u003cPakistani_rupee\u003e","wdEntry":"Q188289","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₨"],"isCurrency":true},{"entity":"\u003cIranian_rial\u003e","wdEntry":"Q188608","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["﷼"],"isCurrency":true},{"entity":"\u003cLibyan_dinar\u003e","wdEntry":"Q190699","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["LD"],"isCurrency":true},{"entity":"\u003cSingapore_dollar\u003e","wdEntry":"Q190951","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["S$","S$"],"isCurrency":true},{"entity":"\u003cFaroese_króna\u003e","wdEntry":"Q191068","measuredConcepts":["\u003cCurrency\u003e"],"symbols":[],"isCurrency":true},{"entity":"\u003cCFA_franc\u003e","wdEntry":"Q191511","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["FCFA"],"isCurrency":true},{"entity":"\u003cVietnamese_đồng\u003e","wdEntry":"Q192090","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₫"],"isCurrency":true},{"entity":"\u003cIraqi_dinar\u003e","wdEntry":"Q193094","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["د.ع"],"isCurrency":true},{"entity":"\u003cKuwaiti_dinar\u003e","wdEntry":"Q193098","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["د.ك","KD"],"isCurrency":true},{"entity":"\u003cSão_Tomé_and_Príncipe_dobra\u003e","wdEntry":"Q193712","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₡"],"isCurrency":true},{"entity":"\u003cBahamian_dollar\u003e","wdEntry":"Q194339","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["B$","B$"],"isCurrency":true},{"entity":"\u003cBarbadian_dollar\u003e","wdEntry":"Q194351","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Bds$"],"isCurrency":true},{"entity":"\u003cBangladeshi_taka\u003e","wdEntry":"Q194453","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["৳"],"isCurrency":true},{"entity":"\u003cEgyptian_pound\u003e","wdEntry":"Q199462","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["LE","£E","LE"],"isCurrency":true},{"entity":"\u003cAfghan_afghani\u003e","wdEntry":"Q199471","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Afs","؋"],"isCurrency":true},{"entity":"\u003cArgentine_peso\u003e","wdEntry":"Q199578","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["$"],"isCurrency":true},{"entity":"\u003cAlgerian_dinar\u003e","wdEntry":"Q199674","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["DA"],"isCurrency":true},{"entity":"\u003cSaudi_riyal\u003e","wdEntry":"Q199857","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["SR"],"isCurrency":true},{"entity":"\u003cTajikistani_somoni\u003e","wdEntry":"Q199886","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["SM"],"isCurrency":true},{"entity":"\u003cChilean_peso\u003e","wdEntry":"Q200050","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["CLP$"],"isCurrency":true},{"entity":"\u003cLao_kip\u003e","wdEntry":"Q200055","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₭"],"isCurrency":true},{"entity":"\u003cSovereign_Bolivar\u003e","wdEntry":"Q56349362","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Bs.S"],"isCurrency":true},{"entity":"\u003cTuvaluan_dollar\u003e","wdEntry":"Q4406","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["$T","TV$"],"isCurrency":true},{"entity":"\u003cSierra_Leonean_leone\u003e","wdEntry":"Q4587","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Le"],"isCurrency":true},{"entity":"\u003cMalagasy_ariary\u003e","wdEntry":"Q4584","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Ar"],"isCurrency":true},{"entity":"\u003cSamoan_tālā\u003e","wdEntry":"Q4588","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["WS$","WS$"],"isCurrency":true},{"entity":"\u003cTanzanian_shilling\u003e","wdEntry":"Q4589","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["TSh"],"isCurrency":true},{"entity":"\u003cDjiboutian_franc\u003e","wdEntry":"Q4594","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Fdj"],"isCurrency":true},{"entity":"\u003cSeychellois_rupee\u003e","wdEntry":"Q4595","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["SRe"],"isCurrency":true},{"entity":"\u003cFijian_dollar\u003e","wdEntry":"Q4592","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["F$","FJ$"],"isCurrency":true},{"entity":"\u003cUgandan_shilling\u003e","wdEntry":"Q4598","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Ush"],"isCurrency":true},{"entity":"\u003cSri_Lankan_rupee\u003e","wdEntry":"Q4596","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Rs","Rs"],"isCurrency":true},{"entity":"\u003cSolomon_Islands_dollar\u003e","wdEntry":"Q4597","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["$","SI$"],"isCurrency":true},{"entity":"\u003cTunisian_dinar\u003e","wdEntry":"Q4602","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["DT"],"isCurrency":true},{"entity":"\u003cSomali_shilling\u003e","wdEntry":"Q4603","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Sh.So."],"isCurrency":true},{"entity":"\u003cGeorgian_lari\u003e","wdEntry":"Q4608","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₾"],"isCurrency":true},{"entity":"\u003cTongan_paʻanga\u003e","wdEntry":"Q4613","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["T$"],"isCurrency":true},{"entity":"\u003cHonduran_lempira\u003e","wdEntry":"Q4719","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["L"],"isCurrency":true},{"entity":"\u003cMexican_peso\u003e","wdEntry":"Q4730","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["$"],"isCurrency":true},{"entity":"\u003cCongolese_franc\u003e","wdEntry":"Q4734","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["CF"],"isCurrency":true},{"entity":"\u003cRwandan_franc\u003e","wdEntry":"Q4741","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["FRw"],"isCurrency":true},{"entity":"\u003cSwazi_lilangeni\u003e","wdEntry":"Q4823","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["E"],"isCurrency":true},{"entity":"\u003cEuro\u003e","wdEntry":"Q4916","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["€"],"isCurrency":true},{"entity":"\u003cUnited_States_dollar\u003e","wdEntry":"Q4917","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["$","US$"],"isCurrency":true},{"entity":"\u003cJapanese_yen\u003e","wdEntry":"Q8146","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["¥"],"isCurrency":true},{"entity":"\u003cPhilippine_peso\u003e","wdEntry":"Q17193","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₱"],"isCurrency":true},{"entity":"\u003cPound_sterling\u003e","wdEntry":"Q25224","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["£"],"isCurrency":true},{"entity":"\u003cSwiss_franc\u003e","wdEntry":"Q25344","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Fr"],"isCurrency":true},{"entity":"\u003cDanish_krone\u003e","wdEntry":"Q25417","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["kr"],"isCurrency":true},{"entity":"\u003cCroatian_kuna\u003e","wdEntry":"Q26360","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["kn"],"isCurrency":true},{"entity":"\u003cEastern_Caribbean_dollar\u003e","wdEntry":"Q26365","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["EC$"],"isCurrency":true},{"entity":"\u003cManx_pound\u003e","wdEntry":"Q27614","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["IM£"],"isCurrency":true},{"entity":"\u003cHong_Kong_dollar\u003e","wdEntry":"Q31015","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["HK$"],"isCurrency":true},{"entity":"\u003cKyrgyzstani_som\u003e","wdEntry":"Q35881","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["сом"],"isCurrency":true},{"entity":"\u003cRenminbi\u003e","wdEntry":"Q39099","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["¥"],"isCurrency":true},{"entity":"\u003cRussian_ruble\u003e","wdEntry":"Q41044","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["₽"],"isCurrency":true},{"entity":"\u003cGibraltar_pound\u003e","wdEntry":"Q41429","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["£"],"isCurrency":true},{"entity":"\u003cIndonesian_rupiah\u003e","wdEntry":"Q41588","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Rp"],"isCurrency":true},{"entity":"\u003cHungarian_forint\u003e","wdEntry":"Q47190","measuredConcepts":["\u003cCurrency\u003e"],"symbols":["Ft"],"isCurrency":true}]
+[
+  {
+    "entity": "<Percentage>",
+    "wdEntry": "Q11229",
+    "measuredConcepts": [
+      "<Dimensionless_quantity>"
+    ],
+    "symbols": [
+      "%"
+    ],
+    "siUnit": "<1>",
+    "conversionToSI": 0.01,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Basis_point>",
+    "wdEntry": "Q750178",
+    "measuredConcepts": [
+      "<Dimensionless_quantity>"
+    ],
+    "symbols": [
+      "‱"
+    ],
+    "siUnit": "<1>",
+    "conversionToSI": 0.0001,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Per_mille>",
+    "wdEntry": "Q181011",
+    "measuredConcepts": [
+      "<Dimensionless_quantity>"
+    ],
+    "symbols": [
+      "‰"
+    ],
+    "siUnit": "<1>",
+    "conversionToSI": 0.001,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Volume_percent>",
+    "wdEntry": "Q2080811",
+    "measuredConcepts": [
+      "<Volume_fraction>"
+    ],
+    "symbols": [
+      "vol%",
+      "% (V/V)"
+    ],
+    "siUnit": "<1>",
+    "conversionToSI": 0.01,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Carat_(purity)>",
+    "wdEntry": "Q1072404",
+    "measuredConcepts": [
+      "<Mass_fraction_(chemistry)>",
+      "<Fineness>"
+    ],
+    "symbols": [
+      "kt",
+      "K"
+    ],
+    "siUnit": "<1>",
+    "conversionToSI": 0.04166666667,
+    "isCurrency": false
+  },
+  {
+    "entity": "<1>",
+    "wdEntry": "Q199",
+    "measuredConcepts": [
+      "<Dimensionless_quantity>"
+    ],
+    "symbols": [
+      "1",
+      "1"
+    ],
+    "siUnit": "<1>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Dozen>",
+    "wdEntry": "Q605704",
+    "measuredConcepts": [
+      "<Dimensionless_quantity>"
+    ],
+    "symbols": [
+      "doz",
+      "dz"
+    ],
+    "siUnit": "<1>",
+    "conversionToSI": 12,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Statampere>",
+    "wdEntry": "Q25559952",
+    "measuredConcepts": [
+      "<Electric_current_intensity>"
+    ],
+    "symbols": [
+      "statA"
+    ],
+    "siUnit": "<Ampere>",
+    "conversionToSI": 3.33564e-10,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Planck_current>",
+    "wdEntry": "Q1196846",
+    "measuredConcepts": [
+      "<Electric_current_intensity>"
+    ],
+    "symbols": [
+      "I_P"
+    ],
+    "siUnit": "<Ampere>",
+    "conversionToSI": 3.479e+25,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Abampere>",
+    "wdEntry": "Q864818",
+    "measuredConcepts": [
+      "<Electric_current_intensity>"
+    ],
+    "symbols": [
+      "abA"
+    ],
+    "siUnit": "<Ampere>",
+    "conversionToSI": 10,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Ampere>",
+    "wdEntry": "Q25272",
+    "measuredConcepts": [
+      "<Electric_current_intensity>",
+      "<Magnetic_scalar_potential>",
+      "<Magnetomotive_force>"
+    ],
+    "symbols": [
+      "A"
+    ],
+    "siUnit": "<Ampere>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Curie_(unit)>",
+    "wdEntry": "Q229354",
+    "measuredConcepts": [
+      "<Total_activity>"
+    ],
+    "symbols": [
+      "Ci"
+    ],
+    "siUnit": "<Becquerel>",
+    "conversionToSI": 37000000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Rutherford_(unit)>",
+    "wdEntry": "Q267637",
+    "measuredConcepts": [
+      "<Total_activity>"
+    ],
+    "symbols": [
+      "Rd"
+    ],
+    "siUnit": "<Becquerel>",
+    "conversionToSI": 1000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Becquerel>",
+    "wdEntry": "Q102573",
+    "measuredConcepts": [
+      "<Total_activity>"
+    ],
+    "symbols": [
+      "Bq"
+    ],
+    "siUnit": "<Becquerel>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Candlepower>",
+    "wdEntry": "Q902274",
+    "measuredConcepts": [
+      "<Luminous_intensity>"
+    ],
+    "symbols": [
+      "cp"
+    ],
+    "siUnit": "<Candela>",
+    "conversionToSI": 0.981,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Hefner_candle>",
+    "wdEntry": "Q21282180",
+    "measuredConcepts": [
+      "<Luminous_intensity>"
+    ],
+    "symbols": [
+      "HK"
+    ],
+    "siUnit": "<Candela>",
+    "conversionToSI": 0.903,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Candela>",
+    "wdEntry": "Q83216",
+    "measuredConcepts": [
+      "<Luminous_intensity>"
+    ],
+    "symbols": [
+      "cd"
+    ],
+    "siUnit": "<Candela>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Bril_(unit)>",
+    "wdEntry": "Q4968003",
+    "measuredConcepts": [
+      "<Luminance>"
+    ],
+    "symbols": [
+      "bril"
+    ],
+    "siUnit": "<Candela_per_square_metre>",
+    "conversionToSI": 3.183098861837907e-8,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Skot_(unit)>",
+    "wdEntry": "Q1417229",
+    "measuredConcepts": [
+      "<Luminance>"
+    ],
+    "symbols": [
+      "sk"
+    ],
+    "siUnit": "<Candela_per_square_metre>",
+    "conversionToSI": 0.00031830988618379065,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Foot-lambert>",
+    "wdEntry": "Q5465726",
+    "measuredConcepts": [
+      "<Luminance>"
+    ],
+    "symbols": [
+      "fL"
+    ],
+    "siUnit": "<Candela_per_square_metre>",
+    "conversionToSI": 3.4262590996353905,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Stilb_(unit)>",
+    "wdEntry": "Q640907",
+    "measuredConcepts": [
+      "<Luminance>"
+    ],
+    "symbols": [
+      "sb"
+    ],
+    "siUnit": "<Candela_per_square_metre>",
+    "conversionToSI": 10000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Lambert_(unit)>",
+    "wdEntry": "Q905912",
+    "measuredConcepts": [
+      "<Luminance>"
+    ],
+    "symbols": [
+      "L"
+    ],
+    "siUnit": "<Candela_per_square_metre>",
+    "conversionToSI": 3183.0988618379065,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Apostilb>",
+    "wdEntry": "Q619941",
+    "measuredConcepts": [
+      "<Luminance>"
+    ],
+    "symbols": [
+      "asb"
+    ],
+    "siUnit": "<Candela_per_square_metre>",
+    "conversionToSI": 0.3183098861837907,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Candela_per_square_metre>",
+    "wdEntry": "Q281096",
+    "measuredConcepts": [
+      "<Luminance>"
+    ],
+    "symbols": [
+      "cd/m²"
+    ],
+    "siUnit": "<Candela_per_square_metre>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Statcoulomb>",
+    "wdEntry": "Q21131",
+    "measuredConcepts": [
+      "<Electric_charge>",
+      "<Electric_flux>"
+    ],
+    "symbols": [
+      "statC"
+    ],
+    "siUnit": "<Coulomb>",
+    "conversionToSI": 3.3356409519815207e-10,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Planck_charge>",
+    "wdEntry": "Q249439",
+    "measuredConcepts": [
+      "<Electric_charge>"
+    ],
+    "symbols": [
+      "q_P"
+    ],
+    "siUnit": "<Coulomb>",
+    "conversionToSI": 1.87554603778e-18,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Elementary_charge>",
+    "wdEntry": "Q2101",
+    "measuredConcepts": [
+      "<Electric_charge>"
+    ],
+    "symbols": [
+      "e"
+    ],
+    "siUnit": "<Coulomb>",
+    "conversionToSI": 1.602176634e-19,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Abcoulomb>",
+    "wdEntry": "Q4176683",
+    "measuredConcepts": [
+      "<Electric_charge>"
+    ],
+    "symbols": [
+      "abC",
+      "aC"
+    ],
+    "siUnit": "<Coulomb>",
+    "conversionToSI": 10,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Ampere_hour>",
+    "wdEntry": "Q212120",
+    "measuredConcepts": [
+      "<Electric_charge>"
+    ],
+    "symbols": [
+      "A h"
+    ],
+    "siUnit": "<Coulomb>",
+    "conversionToSI": 3600,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Coulomb>",
+    "wdEntry": "Q25406",
+    "measuredConcepts": [
+      "<Electric_charge>",
+      "<Electric_flux>"
+    ],
+    "symbols": [
+      "C"
+    ],
+    "siUnit": "<Coulomb>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Litre>",
+    "wdEntry": "Q11582",
+    "measuredConcepts": [
+      "<Volume>"
+    ],
+    "symbols": [
+      "l",
+      "L"
+    ],
+    "siUnit": "<Cubic_metre>",
+    "conversionToSI": 0.001,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Femtolitre>",
+    "wdEntry": "Q3312063",
+    "measuredConcepts": [
+      "<Volume>"
+    ],
+    "symbols": [
+      "fL",
+      "fl"
+    ],
+    "siUnit": "<Cubic_metre>",
+    "conversionToSI": 1e-18,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Cubic_inch>",
+    "wdEntry": "Q2140397",
+    "measuredConcepts": [
+      "<Volume>"
+    ],
+    "symbols": [
+      "in³"
+    ],
+    "siUnit": "<Cubic_metre>",
+    "conversionToSI": 0.000016387064,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Cubic_centimetre>",
+    "wdEntry": "Q1022113",
+    "measuredConcepts": [
+      "<Volume>"
+    ],
+    "symbols": [
+      "cm³"
+    ],
+    "siUnit": "<Cubic_metre>",
+    "conversionToSI": 0.000001,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Decaliter>",
+    "wdEntry": "Q2637946",
+    "measuredConcepts": [
+      "<Volume>"
+    ],
+    "symbols": [
+      "dal"
+    ],
+    "siUnit": "<Cubic_metre>",
+    "conversionToSI": 0.01,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Imperial_gallon>",
+    "wdEntry": "Q23925410",
+    "measuredConcepts": [
+      "<Volume>"
+    ],
+    "symbols": [
+      "gal (UK)"
+    ],
+    "siUnit": "<Cubic_metre>",
+    "conversionToSI": 0.004546099,
+    "isCurrency": false
+  },
+  {
+    "entity": "<US_gallon>",
+    "wdEntry": "Q23925413",
+    "measuredConcepts": [
+      "<Volume>"
+    ],
+    "symbols": [
+      "gal (US)"
+    ],
+    "siUnit": "<Cubic_metre>",
+    "conversionToSI": 0.003785412,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Gross_register_tonnage>",
+    "wdEntry": "Q752079",
+    "measuredConcepts": [
+      "<Volume>"
+    ],
+    "symbols": [
+      "RT"
+    ],
+    "siUnit": "<Cubic_metre>",
+    "conversionToSI": 2.83,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Cubic_foot>",
+    "wdEntry": "Q1545979",
+    "measuredConcepts": [
+      "<Volume>"
+    ],
+    "symbols": [
+      "ft³"
+    ],
+    "siUnit": "<Cubic_metre>",
+    "conversionToSI": 0.02831685,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Cubic_yard>",
+    "wdEntry": "Q2165290",
+    "measuredConcepts": [
+      "<Volume>"
+    ],
+    "symbols": [
+      "yd³"
+    ],
+    "siUnit": "<Cubic_metre>",
+    "conversionToSI": 0.7645549,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Cubic_metre>",
+    "wdEntry": "Q25517",
+    "measuredConcepts": [
+      "<Volume>",
+      "<Section_modulus>"
+    ],
+    "symbols": [
+      "m³"
+    ],
+    "siUnit": "<Cubic_metre>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Cusec>",
+    "wdEntry": "Q5196162",
+    "measuredConcepts": [
+      "<Volumetric_flow_rate>"
+    ],
+    "symbols": [
+      "ft³/s"
+    ],
+    "siUnit": "<Cubic_metre_per_second>",
+    "conversionToSI": 0.028316847,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Sverdrup>",
+    "wdEntry": "Q39274",
+    "measuredConcepts": [
+      "<Volumetric_flow_rate>"
+    ],
+    "symbols": [
+      "Sv"
+    ],
+    "siUnit": "<Cubic_metre_per_second>",
+    "conversionToSI": 1000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Cubic_metre_per_second>",
+    "wdEntry": "Q794261",
+    "measuredConcepts": [
+      "<Volumetric_flow_rate>"
+    ],
+    "symbols": [
+      "m³/s"
+    ],
+    "siUnit": "<Cubic_metre_per_second>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Farad>",
+    "wdEntry": "Q131255",
+    "measuredConcepts": [
+      "<Capacitance>"
+    ],
+    "symbols": [
+      "F"
+    ],
+    "siUnit": "<Farad>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Rad_(unit)>",
+    "wdEntry": "Q1052397",
+    "measuredConcepts": [
+      "<Absorbed_dose>",
+      "<Kerma_(physics)>"
+    ],
+    "symbols": [
+      "rad"
+    ],
+    "siUnit": "<Gray_(unit)>",
+    "conversionToSI": 0.01,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Gray_(unit)>",
+    "wdEntry": "Q190095",
+    "measuredConcepts": [
+      "<Absorbed_dose>",
+      "<Kerma_(physics)>"
+    ],
+    "symbols": [
+      "Gy"
+    ],
+    "siUnit": "<Gray_(unit)>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Abhenry>",
+    "wdEntry": "Q4667368",
+    "measuredConcepts": [
+      "<Inductance>"
+    ],
+    "symbols": [
+      "abH"
+    ],
+    "siUnit": "<Henry_(unit)>",
+    "conversionToSI": 1e-9,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Henry_(unit)>",
+    "wdEntry": "Q163354",
+    "measuredConcepts": [
+      "<Inductance>"
+    ],
+    "symbols": [
+      "H"
+    ],
+    "siUnit": "<Henry_(unit)>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Beats_per_minute>",
+    "wdEntry": "Q743895",
+    "measuredConcepts": [
+      "<Frequency>"
+    ],
+    "symbols": [
+      "bpm"
+    ],
+    "siUnit": "<Hertz>",
+    "conversionToSI": 0.016666666666666666,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Hertz>",
+    "wdEntry": "Q39369",
+    "measuredConcepts": [
+      "<Frequency>"
+    ],
+    "symbols": [
+      "Hz"
+    ],
+    "siUnit": "<Hertz>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Revolutions_per_minute>",
+    "wdEntry": "Q206037",
+    "measuredConcepts": [
+      "<Rotational_speed>"
+    ],
+    "symbols": [
+      "rev/min"
+    ],
+    "siUnit": "<Inverse_second>",
+    "conversionToSI": 0.0166667,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Inverse_second>",
+    "wdEntry": "Q6137407",
+    "measuredConcepts": [
+      "<Frequency>",
+      "<Angular_frequency>",
+      "<Strain-rate_tensor>"
+    ],
+    "symbols": [
+      "s⁻¹"
+    ],
+    "siUnit": "<Inverse_second>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Joule-second>",
+    "wdEntry": "Q1709783",
+    "measuredConcepts": [
+      "<Action_(physics)>",
+      "<Angular_momentum>"
+    ],
+    "symbols": [
+      "J s"
+    ],
+    "siUnit": "<Joule-second>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Hartree>",
+    "wdEntry": "Q476572",
+    "measuredConcepts": [
+      "<Energy>"
+    ],
+    "symbols": [
+      "Ha"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 4.35974434e-18,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Erg>",
+    "wdEntry": "Q185153",
+    "measuredConcepts": [
+      "<Energy>"
+    ],
+    "symbols": [
+      "erg"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 1e-7,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Electronvolt>",
+    "wdEntry": "Q83327",
+    "measuredConcepts": [
+      "<Energy>"
+    ],
+    "symbols": [
+      "eV"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 1.60217656535e-19,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Quad_(unit)>",
+    "wdEntry": "Q2029156",
+    "measuredConcepts": [
+      "<Energy>"
+    ],
+    "symbols": [
+      "quad"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 1055000000000000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Foe_(unit)>",
+    "wdEntry": "Q2619500",
+    "measuredConcepts": [
+      "<Energy>"
+    ],
+    "symbols": [
+      "foe"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 1e+44,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Teraton>",
+    "wdEntry": "Q5263280",
+    "measuredConcepts": [
+      "<Nuclear_weapon_yield>"
+    ],
+    "symbols": [
+      "Tt"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 4.184e+21,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Tonne_of_oil_equivalent>",
+    "wdEntry": "Q296936",
+    "measuredConcepts": [
+      "<Energy>"
+    ],
+    "symbols": [
+      "toe"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 41868000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Calorie>",
+    "wdEntry": "Q130964",
+    "measuredConcepts": [
+      "<Energy>"
+    ],
+    "symbols": [
+      "cal"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 4.184,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Foot-poundal>",
+    "wdEntry": "Q5465723",
+    "measuredConcepts": [
+      "<Energy>"
+    ],
+    "symbols": [
+      "ft-pdl"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 0.0421401100938048,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kiloton>",
+    "wdEntry": "Q4992853",
+    "measuredConcepts": [
+      "<Nuclear_weapon_yield>",
+      "<Energy>"
+    ],
+    "symbols": [
+      "kt"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 4184000000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kilojoule>",
+    "wdEntry": "Q4989854",
+    "measuredConcepts": [
+      "<Energy>"
+    ],
+    "symbols": [
+      "kJ"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 1000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<British_thermal_unit>",
+    "wdEntry": "Q211580",
+    "measuredConcepts": [
+      "<Energy>"
+    ],
+    "symbols": [
+      "BTU (th)"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 1054.35026444,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Therm>",
+    "wdEntry": "Q842981",
+    "measuredConcepts": [
+      "<Energy>"
+    ],
+    "symbols": [
+      "thm (US)"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 105480400,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kilowatt-hour>",
+    "wdEntry": "Q182098",
+    "measuredConcepts": [
+      "<Energy>"
+    ],
+    "symbols": [
+      "kWh",
+      "kWh",
+      "kWh"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 3600000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Joule>",
+    "wdEntry": "Q25269",
+    "measuredConcepts": [
+      "<Energy>",
+      "<Work_(physics)>",
+      "<Heat>"
+    ],
+    "symbols": [
+      "J"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Foot-pound_(energy)>",
+    "wdEntry": "Q730251",
+    "measuredConcepts": [
+      "<Energy>"
+    ],
+    "symbols": [
+      "ft·lbf"
+    ],
+    "siUnit": "<Joule>",
+    "conversionToSI": 1.3558179483314003,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Joule_per_mole>",
+    "wdEntry": "Q13035094",
+    "measuredConcepts": [
+      "<Chemical_affinity>"
+    ],
+    "symbols": [
+      "J/mol"
+    ],
+    "siUnit": "<Joule_per_mole>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kelvin>",
+    "wdEntry": "Q11579",
+    "measuredConcepts": [
+      "<Thermodynamic_temperature>",
+      "<Color_temperature>"
+    ],
+    "symbols": [
+      "K"
+    ],
+    "siUnit": "<Kelvin>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Dalton_(unit)>",
+    "wdEntry": "Q483261",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "u",
+      "Da"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 1.66053904e-27,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Milligram>",
+    "wdEntry": "Q3241121",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "mg"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 0.000001,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Gram>",
+    "wdEntry": "Q41803",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "g"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 0.001,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Jupiter_mass>",
+    "wdEntry": "Q651336",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "M_J"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 1.89813e+27,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Solar_mass>",
+    "wdEntry": "Q180892",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "M☉",
+      "M☉"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 1.98855e+30,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Earth_mass>",
+    "wdEntry": "Q681996",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "M⊕"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 5.97219e+24,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Ounce>",
+    "wdEntry": "Q48013",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "oz",
+      "℥"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 0.028349523125,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Grain_(unit)>",
+    "wdEntry": "Q693944",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "gr"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 0.00006479891,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Microgram>",
+    "wdEntry": "Q1645498",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "μg"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 1e-9,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Pennyweight>",
+    "wdEntry": "Q1361854",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "dwt"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 0.00155517384,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Carat_(mass)>",
+    "wdEntry": "Q261247",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "ct"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 0.0002,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Apothecaries'_ounce>",
+    "wdEntry": "Q23808021",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "oz (ap.)"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 0.03110348,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Tonne>",
+    "wdEntry": "Q191118",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "t"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 1000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kilogram>",
+    "wdEntry": "Q11570",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "kg"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Troy_ounce>",
+    "wdEntry": "Q1323615",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "oz t"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 0.0311034768,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Short_ton>",
+    "wdEntry": "Q469356",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "tn. sh.",
+      "T"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 907.18474,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Stone_(unit)>",
+    "wdEntry": "Q1131660",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "st"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 6.35029318,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Myriagram>",
+    "wdEntry": "Q2151240",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "mag"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 10,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Slug_(unit)>",
+    "wdEntry": "Q1363007",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "slug"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 14.593903,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Quintal>",
+    "wdEntry": "Q940052",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "q"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 100,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Long_ton>",
+    "wdEntry": "Q667419",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "UK t"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 1016.0469088,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Pound_(mass)>",
+    "wdEntry": "Q100995",
+    "measuredConcepts": [
+      "<Mass>"
+    ],
+    "symbols": [
+      "lb",
+      "#"
+    ],
+    "siUnit": "<Kilogram>",
+    "conversionToSI": 0.45359237,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Planck_density>",
+    "wdEntry": "Q536785",
+    "measuredConcepts": [
+      "<Density>"
+    ],
+    "symbols": [
+      "ρ_P"
+    ],
+    "siUnit": "<Kilogram_per_cubic_metre>",
+    "conversionToSI": 5.155e+96,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Milligram_per_cent>",
+    "wdEntry": "Q11781239",
+    "measuredConcepts": [
+      "<Mass_concentration_(chemistry)>"
+    ],
+    "symbols": [
+      "mg%"
+    ],
+    "siUnit": "<Kilogram_per_cubic_metre>",
+    "conversionToSI": 0.01,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Gram_per_cubic_centimetre>",
+    "wdEntry": "Q13147228",
+    "measuredConcepts": [
+      "<Density>"
+    ],
+    "symbols": [
+      "g/cm³"
+    ],
+    "siUnit": "<Kilogram_per_cubic_metre>",
+    "conversionToSI": 1000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Gram_per_litre>",
+    "wdEntry": "Q834105",
+    "measuredConcepts": [
+      "<Mass_concentration_(chemistry)>",
+      "<Density>"
+    ],
+    "symbols": [
+      "g/L",
+      "g/l",
+      "g/dm³"
+    ],
+    "siUnit": "<Kilogram_per_cubic_metre>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kilogram_per_cubic_metre>",
+    "wdEntry": "Q844211",
+    "measuredConcepts": [
+      "<Density>",
+      "<Mass_concentration_(chemistry)>"
+    ],
+    "symbols": [
+      "kg/m³"
+    ],
+    "siUnit": "<Kilogram_per_cubic_metre>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Lumen_(unit)>",
+    "wdEntry": "Q484092",
+    "measuredConcepts": [
+      "<Luminous_flux>"
+    ],
+    "symbols": [
+      "lm"
+    ],
+    "siUnit": "<Lumen_(unit)>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Lumen_second>",
+    "wdEntry": "Q910311",
+    "measuredConcepts": [
+      "<Luminous_energy>"
+    ],
+    "symbols": [
+      "lm s"
+    ],
+    "siUnit": "<Lumen_second>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Foot-candle>",
+    "wdEntry": "Q2064166",
+    "measuredConcepts": [
+      "<Illuminance>"
+    ],
+    "symbols": [
+      "fc"
+    ],
+    "siUnit": "<Lux>",
+    "conversionToSI": 10.764,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Phot>",
+    "wdEntry": "Q901492",
+    "measuredConcepts": [
+      "<Illuminance>"
+    ],
+    "symbols": [
+      "ph"
+    ],
+    "siUnit": "<Lux>",
+    "conversionToSI": 10000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Lux>",
+    "wdEntry": "Q179836",
+    "measuredConcepts": [
+      "<Illuminance>"
+    ],
+    "symbols": [
+      "lx"
+    ],
+    "siUnit": "<Lux>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Micrometre>",
+    "wdEntry": "Q175821",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "μm"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 0.000001,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Femtometre>",
+    "wdEntry": "Q208788",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "fm"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 1e-15,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Nanometre>",
+    "wdEntry": "Q178674",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "nm"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 1e-9,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Angstrom>",
+    "wdEntry": "Q81454",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "Å"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 1e-10,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Parsec>",
+    "wdEntry": "Q12129",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "pc"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 30856775814913700,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Light-year>",
+    "wdEntry": "Q531",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "ly",
+      "l.y."
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 9460800000000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Centimetre>",
+    "wdEntry": "Q174728",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "cm"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 0.01,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Millimetre>",
+    "wdEntry": "Q174789",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "mm"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 0.001,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Picometre>",
+    "wdEntry": "Q192274",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "pm"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 1e-12,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Thousandth_of_an_inch>",
+    "wdEntry": "Q1165799",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "mil"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 0.0000254,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Bohr_radius>",
+    "wdEntry": "Q652571",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "a₀"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 5.29177e-11,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Yoctometre>",
+    "wdEntry": "Q3221356",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "ym"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 1e-24,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Decimetre>",
+    "wdEntry": "Q200323",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "dm"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 0.1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<French_catheter_scale>",
+    "wdEntry": "Q1067722",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "Fg"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 0.000333,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Foot_(unit)>",
+    "wdEntry": "Q3710",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "ft"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 0.3048006,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Barleycorn_(unit)>",
+    "wdEntry": "Q4861171",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "H"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 0.0085,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Astronomical_unit>",
+    "wdEntry": "Q1811",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "AU",
+      "ua",
+      "au"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 149597870700,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Inch>",
+    "wdEntry": "Q218593",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "in",
+      "″"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 0.0254,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Decametre>",
+    "wdEntry": "Q848856",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "dam"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 10,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kilometre>",
+    "wdEntry": "Q828224",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "km"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 1000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Furlong>",
+    "wdEntry": "Q494083",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "fur"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 201.168,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Chain_(unit)>",
+    "wdEntry": "Q552299",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "ch"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 20.11684,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Metre>",
+    "wdEntry": "Q11573",
+    "measuredConcepts": [
+      "<Length>",
+      "<Distance>",
+      "<Position_(geometry)>",
+      "<Proper_length>"
+    ],
+    "symbols": [
+      "m"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Hectometre>",
+    "wdEntry": "Q844338",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "hm"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 100,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Nautical_mile>",
+    "wdEntry": "Q93318",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "nmi",
+      "NM",
+      "M"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 1852,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Solar_radius>",
+    "wdEntry": "Q48440",
+    "measuredConcepts": [
+      "<Distance>"
+    ],
+    "symbols": [],
+    "siUnit": "<Metre>",
+    "conversionToSI": 695700000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Mile>",
+    "wdEntry": "Q253276",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "mi"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 1609.344,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Nalva>",
+    "wdEntry": "Q6961037",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [],
+    "siUnit": "<Metre>",
+    "conversionToSI": 180,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Gigametre>",
+    "wdEntry": "Q854546",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "Gm"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 1000000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Megametre>",
+    "wdEntry": "Q1054140",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "Mm"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 1000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Jupiter_radius>",
+    "wdEntry": "Q3421309",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "R_J"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 69911000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Yard>",
+    "wdEntry": "Q482798",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "yd"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 0.9144,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Span_(unit)>",
+    "wdEntry": "Q185759",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "span"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 0.2286,
+    "isCurrency": false
+  },
+  {
+    "entity": "<International_yard>",
+    "wdEntry": "Q61756607",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "yd"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 0.9144,
+    "isCurrency": false
+  },
+  {
+    "entity": "<International_foot>",
+    "wdEntry": "Q61771602",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "ft"
+    ],
+    "siUnit": "<Metre>",
+    "conversionToSI": 0.3048,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Metre_per_hour>",
+    "wdEntry": "Q17093295",
+    "measuredConcepts": [
+      "<Speed>"
+    ],
+    "symbols": [
+      "m/h"
+    ],
+    "siUnit": "<Metre_per_second>",
+    "conversionToSI": 0.000277778,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Inch_per_second>",
+    "wdEntry": "Q6014364",
+    "measuredConcepts": [
+      "<Velocity>"
+    ],
+    "symbols": [
+      "in/s"
+    ],
+    "siUnit": "<Metre_per_second>",
+    "conversionToSI": 0.0254,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Speed_of_light>",
+    "wdEntry": "Q2111",
+    "measuredConcepts": [
+      "<Speed>"
+    ],
+    "symbols": [
+      "c"
+    ],
+    "siUnit": "<Metre_per_second>",
+    "conversionToSI": 299792458,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kilometres_per_hour>",
+    "wdEntry": "Q180154",
+    "measuredConcepts": [
+      "<Speed>"
+    ],
+    "symbols": [
+      "km/h",
+      "kmph"
+    ],
+    "siUnit": "<Metre_per_second>",
+    "conversionToSI": 0.2777777777777778,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Miles_per_hour>",
+    "wdEntry": "Q211256",
+    "measuredConcepts": [
+      "<Velocity>",
+      "<Speed>"
+    ],
+    "symbols": [
+      "mph",
+      "mi/h"
+    ],
+    "siUnit": "<Metre_per_second>",
+    "conversionToSI": 0.44704,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Knot_(unit)>",
+    "wdEntry": "Q128822",
+    "measuredConcepts": [
+      "<Speed>"
+    ],
+    "symbols": [
+      "kn"
+    ],
+    "siUnit": "<Metre_per_second>",
+    "conversionToSI": 0.5144444444444445,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Foot_per_second>",
+    "wdEntry": "Q748716",
+    "measuredConcepts": [
+      "<Speed>",
+      "<Velocity>"
+    ],
+    "symbols": [
+      "ft/s"
+    ],
+    "siUnit": "<Metre_per_second>",
+    "conversionToSI": 0.3048,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Metre_per_second>",
+    "wdEntry": "Q182429",
+    "measuredConcepts": [
+      "<Speed>",
+      "<Velocity>"
+    ],
+    "symbols": [
+      "m/s"
+    ],
+    "siUnit": "<Metre_per_second>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Gal_(unit)>",
+    "wdEntry": "Q500515",
+    "measuredConcepts": [
+      "<Acceleration>"
+    ],
+    "symbols": [
+      "Gal"
+    ],
+    "siUnit": "<Metre_per_second_squared>",
+    "conversionToSI": 0.01,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Standard_gravity>",
+    "wdEntry": "Q13400897",
+    "measuredConcepts": [
+      "<Acceleration>"
+    ],
+    "symbols": [
+      "g"
+    ],
+    "siUnit": "<Metre_per_second_squared>",
+    "conversionToSI": 9.80665,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Foot_per_second_squared>",
+    "wdEntry": "Q3867152",
+    "measuredConcepts": [
+      "<Acceleration>"
+    ],
+    "symbols": [
+      "ft/s²"
+    ],
+    "siUnit": "<Metre_per_second_squared>",
+    "conversionToSI": 0.3048,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Metre_per_second_squared>",
+    "wdEntry": "Q1051665",
+    "measuredConcepts": [
+      "<Acceleration>"
+    ],
+    "symbols": [
+      "m/s²"
+    ],
+    "siUnit": "<Metre_per_second_squared>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Metre_squared_per_second>",
+    "wdEntry": "Q3332099",
+    "measuredConcepts": [
+      "<Thermal_diffusivity>",
+      "<Mass_diffusivity>",
+      "<Magnetic_diffusivity>"
+    ],
+    "symbols": [
+      "m²/s"
+    ],
+    "siUnit": "<Metre_squared_per_second>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Equivalent_(chemistry)>",
+    "wdEntry": "Q36384",
+    "measuredConcepts": [
+      "<Amount_of_substance>"
+    ],
+    "symbols": [
+      "equiv",
+      "Eq"
+    ],
+    "siUnit": "<Mole_(unit)>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Mole_(unit)>",
+    "wdEntry": "Q41509",
+    "measuredConcepts": [
+      "<Amount_of_substance>",
+      "<Extent_of_reaction>"
+    ],
+    "symbols": [
+      "mol"
+    ],
+    "siUnit": "<Mole_(unit)>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Pound-foot_(torque)>",
+    "wdEntry": "Q16859309",
+    "measuredConcepts": [
+      "<Torque>"
+    ],
+    "symbols": [
+      "lb·ft",
+      "lb ft"
+    ],
+    "siUnit": "<Newton-metre>",
+    "conversionToSI": 1.355818,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kilopondmetre>",
+    "wdEntry": "Q1741429",
+    "measuredConcepts": [
+      "<Torque>",
+      "<Energy>"
+    ],
+    "symbols": [
+      "kpm"
+    ],
+    "siUnit": "<Newton-metre>",
+    "conversionToSI": 9.80665,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Newton-metre>",
+    "wdEntry": "Q215571",
+    "measuredConcepts": [
+      "<Torque>",
+      "<Bending_moment>"
+    ],
+    "symbols": [
+      "N m"
+    ],
+    "siUnit": "<Newton-metre>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Planck_momentum>",
+    "wdEntry": "Q239830",
+    "measuredConcepts": [
+      "<Momentum>"
+    ],
+    "symbols": [
+      "p_P",
+      "m_Pc"
+    ],
+    "siUnit": "<Newton-second>",
+    "conversionToSI": 6.525,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Newton-second>",
+    "wdEntry": "Q3395194",
+    "measuredConcepts": [
+      "<Impulse_(physics)>"
+    ],
+    "symbols": [
+      "N s"
+    ],
+    "siUnit": "<Newton-second>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Dyne>",
+    "wdEntry": "Q201933",
+    "measuredConcepts": [
+      "<Force>"
+    ],
+    "symbols": [
+      "dyn"
+    ],
+    "siUnit": "<Newton_(unit)>",
+    "conversionToSI": 0.00001,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Planck_force>",
+    "wdEntry": "Q915169",
+    "measuredConcepts": [
+      "<Force>"
+    ],
+    "symbols": [
+      "F_P"
+    ],
+    "siUnit": "<Newton_(unit)>",
+    "conversionToSI": 1.21027e+44,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kilogram-force>",
+    "wdEntry": "Q216880",
+    "measuredConcepts": [
+      "<Force>"
+    ],
+    "symbols": [
+      "kgf",
+      "kp"
+    ],
+    "siUnit": "<Newton_(unit)>",
+    "conversionToSI": 9.80665,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Poundal>",
+    "wdEntry": "Q1972579",
+    "measuredConcepts": [
+      "<Force>"
+    ],
+    "symbols": [
+      "pdl"
+    ],
+    "siUnit": "<Newton_(unit)>",
+    "conversionToSI": 0.138254954376,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Pound_(force)>",
+    "wdEntry": "Q1194225",
+    "measuredConcepts": [
+      "<Force>"
+    ],
+    "symbols": [
+      "lbf"
+    ],
+    "siUnit": "<Newton_(unit)>",
+    "conversionToSI": 4.4482216152605,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Sthène>",
+    "wdEntry": "Q1793863",
+    "measuredConcepts": [
+      "<Force>"
+    ],
+    "symbols": [
+      "sn"
+    ],
+    "siUnit": "<Newton_(unit)>",
+    "conversionToSI": 1000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kip_(unit)>",
+    "wdEntry": "Q6414556",
+    "measuredConcepts": [
+      "<Force>"
+    ],
+    "symbols": [
+      "kip"
+    ],
+    "siUnit": "<Newton_(unit)>",
+    "conversionToSI": 4448.2216,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Newton_(unit)>",
+    "wdEntry": "Q12438",
+    "measuredConcepts": [
+      "<Force>"
+    ],
+    "symbols": [
+      "N"
+    ],
+    "siUnit": "<Newton_(unit)>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Abohm>",
+    "wdEntry": "Q1091059",
+    "measuredConcepts": [
+      "<Electrical_resistance_and_conductance>"
+    ],
+    "symbols": [
+      "abohm"
+    ],
+    "siUnit": "<Ohm>",
+    "conversionToSI": 1e-9,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Statohm>",
+    "wdEntry": "Q25303759",
+    "measuredConcepts": [
+      "<Electrical_resistance_and_conductance>"
+    ],
+    "symbols": [
+      "statΩ"
+    ],
+    "siUnit": "<Ohm>",
+    "conversionToSI": 898755178700,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Planck_impedance>",
+    "wdEntry": "Q1323237",
+    "measuredConcepts": [
+      "<Electrical_impedance>"
+    ],
+    "symbols": [
+      "Z_P"
+    ],
+    "siUnit": "<Ohm>",
+    "conversionToSI": 29.9792458,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Ohm>",
+    "wdEntry": "Q47083",
+    "measuredConcepts": [
+      "<Electrical_resistance_and_conductance>",
+      "<Electrical_impedance>",
+      "<Electrical_reactance>"
+    ],
+    "symbols": [
+      "Ω"
+    ],
+    "siUnit": "<Ohm>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Planck_pressure>",
+    "wdEntry": "Q685662",
+    "measuredConcepts": [
+      "<Pressure>"
+    ],
+    "symbols": [
+      "p_P"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 4.633e+113,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Barye>",
+    "wdEntry": "Q809678",
+    "measuredConcepts": [
+      "<Pressure>"
+    ],
+    "symbols": [
+      "Ba"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 0.1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Pièze>",
+    "wdEntry": "Q514845",
+    "measuredConcepts": [
+      "<Pressure>"
+    ],
+    "symbols": [
+      "pz"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 1000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Torr>",
+    "wdEntry": "Q185648",
+    "measuredConcepts": [
+      "<Pressure>"
+    ],
+    "symbols": [
+      "Torr"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 133.3223684211,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Millimeters,_water_gauge>",
+    "wdEntry": "Q13479685",
+    "measuredConcepts": [
+      "<Pressure>"
+    ],
+    "symbols": [
+      "mm wg",
+      "mm H2O",
+      "mm wc"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 9.80638,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Inch_of_water>",
+    "wdEntry": "Q4041686",
+    "measuredConcepts": [
+      "<Pressure>"
+    ],
+    "symbols": [
+      "iwc",
+      "iwg",
+      "in H20"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 248.84,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Pounds_per_square_inch>",
+    "wdEntry": "Q626299",
+    "measuredConcepts": [
+      "<Pressure>"
+    ],
+    "symbols": [
+      "psi"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 6894.757,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Bar_(unit)>",
+    "wdEntry": "Q103510",
+    "measuredConcepts": [
+      "<Pressure>"
+    ],
+    "symbols": [
+      "bar"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 100000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Millimetre_of_mercury>",
+    "wdEntry": "Q6859652",
+    "measuredConcepts": [
+      "<Pressure>"
+    ],
+    "symbols": [
+      "mmHg",
+      "mm Hg"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 133.3223684211,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Technical_atmosphere>",
+    "wdEntry": "Q909066",
+    "measuredConcepts": [
+      "<Pressure>"
+    ],
+    "symbols": [
+      "at"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 98066.5,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Standard_atmosphere_(unit)>",
+    "wdEntry": "Q177974",
+    "measuredConcepts": [
+      "<Pressure>"
+    ],
+    "symbols": [
+      "atm"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 101325,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Inch_of_mercury>",
+    "wdEntry": "Q1050958",
+    "measuredConcepts": [
+      "<Pressure>"
+    ],
+    "symbols": [
+      "inHg"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 3386.389,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kilogram-force_per_square_centimetre>",
+    "wdEntry": "Q13582667",
+    "measuredConcepts": [
+      "<Pressure>"
+    ],
+    "symbols": [
+      "kgf/cm²"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 98066.5,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Pascal_(unit)>",
+    "wdEntry": "Q44395",
+    "measuredConcepts": [
+      "<Pressure>",
+      "<Stress_(mechanics)>",
+      "<Shear_modulus>",
+      "<Bulk_modulus>",
+      "<Young's_modulus>"
+    ],
+    "symbols": [
+      "Pa"
+    ],
+    "siUnit": "<Pascal_(unit)>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<X_unit>",
+    "wdEntry": "Q1542309",
+    "measuredConcepts": [
+      "<Length>"
+    ],
+    "symbols": [
+      "xu"
+    ],
+    "siUnit": "<Picometre>",
+    "conversionToSI": 0.100207697,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Degree_(angle)>",
+    "wdEntry": "Q28390",
+    "measuredConcepts": [
+      "<Angular_distance>"
+    ],
+    "symbols": [
+      "°"
+    ],
+    "siUnit": "<Radian>",
+    "conversionToSI": 0.017453292519943295,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Arcsecond>",
+    "wdEntry": "Q829073",
+    "measuredConcepts": [
+      "<Angle>"
+    ],
+    "symbols": [
+      "″",
+      "\""
+    ],
+    "siUnit": "<Radian>",
+    "conversionToSI": 0.0000048481368110954,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Milliradian>",
+    "wdEntry": "Q1065153",
+    "measuredConcepts": [
+      "<Angular_distance>"
+    ],
+    "symbols": [
+      "mrad"
+    ],
+    "siUnit": "<Radian>",
+    "conversionToSI": 0.001,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Gradian>",
+    "wdEntry": "Q208528",
+    "measuredConcepts": [
+      "<Angular_distance>"
+    ],
+    "symbols": [
+      "gon"
+    ],
+    "siUnit": "<Radian>",
+    "conversionToSI": 0.015707963267949,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Arcminute>",
+    "wdEntry": "Q209426",
+    "measuredConcepts": [
+      "<Angular_distance>"
+    ],
+    "symbols": [
+      "′",
+      "′"
+    ],
+    "siUnit": "<Radian>",
+    "conversionToSI": 0.0002908882086657216,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Decimal_degrees>",
+    "wdEntry": "Q1798227",
+    "measuredConcepts": [
+      "<Angle>"
+    ],
+    "symbols": [
+      "°"
+    ],
+    "siUnit": "<Radian>",
+    "conversionToSI": 0.017453292519943295,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Turn_(angle)>",
+    "wdEntry": "Q304479",
+    "measuredConcepts": [
+      "<Dimensionless_quantity>",
+      "<Angular_distance>"
+    ],
+    "symbols": [
+      "tr"
+    ],
+    "siUnit": "<Radian>",
+    "conversionToSI": 6.283185307179586,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Radian>",
+    "wdEntry": "Q33680",
+    "measuredConcepts": [
+      "<Angular_distance>"
+    ],
+    "symbols": [
+      "rad"
+    ],
+    "siUnit": "<Radian>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Planck_angular_frequency>",
+    "wdEntry": "Q1196837",
+    "measuredConcepts": [
+      "<Angular_frequency>"
+    ],
+    "symbols": [
+      "ω_P"
+    ],
+    "siUnit": "<Radian_per_second>",
+    "conversionToSI": 1.8549e+43,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Radian_per_second>",
+    "wdEntry": "Q1063756",
+    "measuredConcepts": [
+      "<Angular_velocity>",
+      "<Angular_frequency>"
+    ],
+    "symbols": [
+      "rad/s"
+    ],
+    "siUnit": "<Radian_per_second>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Statmho>",
+    "wdEntry": "Q25098783",
+    "measuredConcepts": [
+      "<Electrical_conductance>"
+    ],
+    "symbols": [
+      "statmho"
+    ],
+    "siUnit": "<Siemens_(unit)>",
+    "conversionToSI": 1.11265e-12,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Abmho>",
+    "wdEntry": "Q4668106",
+    "measuredConcepts": [
+      "<Electrical_conductance>"
+    ],
+    "symbols": [
+      "ab℧"
+    ],
+    "siUnit": "<Siemens_(unit)>",
+    "conversionToSI": 1000000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Siemens_(unit)>",
+    "wdEntry": "Q169893",
+    "measuredConcepts": [
+      "<Electrical_conductance>",
+      "<Admittance>",
+      "<Susceptance>"
+    ],
+    "symbols": [
+      "S",
+      "℧"
+    ],
+    "siUnit": "<Siemens_(unit)>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Roentgen_equivalent_man>",
+    "wdEntry": "Q260126",
+    "measuredConcepts": [
+      "<Equivalent_dose>"
+    ],
+    "symbols": [
+      "rem"
+    ],
+    "siUnit": "<Sievert>",
+    "conversionToSI": 0.01,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Sievert>",
+    "wdEntry": "Q103246",
+    "measuredConcepts": [
+      "<Equivalent_dose>"
+    ],
+    "symbols": [
+      "Sv"
+    ],
+    "siUnit": "<Sievert>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Barn_(unit)>",
+    "wdEntry": "Q209351",
+    "measuredConcepts": [
+      "<Cross_section_(physics)>"
+    ],
+    "symbols": [
+      "b"
+    ],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 1e-28,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Darcy_(unit)>",
+    "wdEntry": "Q1165725",
+    "measuredConcepts": [
+      "<Permeability_(Earth_sciences)>"
+    ],
+    "symbols": [
+      "D",
+      "d"
+    ],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 9.869e-13,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Square_centimetre>",
+    "wdEntry": "Q2489298",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [
+      "cm²"
+    ],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 0.0001,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Square_inch>",
+    "wdEntry": "Q1063786",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [
+      "in²"
+    ],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 0.00064516,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Square_foot>",
+    "wdEntry": "Q857027",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [
+      "ft²"
+    ],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 0.09290304,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Are_(unit)>",
+    "wdEntry": "Q185078",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [
+      "a"
+    ],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 100,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Dunam>",
+    "wdEntry": "Q216795",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 1000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Acre>",
+    "wdEntry": "Q81292",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [
+      "acre"
+    ],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 4046.8564224,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Hectare>",
+    "wdEntry": "Q35852",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [
+      "ha"
+    ],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 10000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Square_kilometre>",
+    "wdEntry": "Q712226",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [
+      "km²"
+    ],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 1000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Dessiatin>",
+    "wdEntry": "Q669931",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 10926.512,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Square_mile>",
+    "wdEntry": "Q232291",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [
+      "mi²"
+    ],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 2589988.110336,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Morgen>",
+    "wdEntry": "Q717310",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [
+      "Mg"
+    ],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 2500,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Rai_(unit)>",
+    "wdEntry": "Q935614",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 1600,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Square_yard>",
+    "wdEntry": "Q1550511",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [
+      "yd²"
+    ],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 0.8361274,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Square_metre>",
+    "wdEntry": "Q25343",
+    "measuredConcepts": [
+      "<Area>"
+    ],
+    "symbols": [
+      "m²"
+    ],
+    "siUnit": "<Square_metre>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Square_degree>",
+    "wdEntry": "Q254532",
+    "measuredConcepts": [
+      "<Solid_angle>"
+    ],
+    "symbols": [
+      "°²",
+      "deg²"
+    ],
+    "siUnit": "<Steradian>",
+    "conversionToSI": 0.0003046174197867086,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Spat_(unit)>",
+    "wdEntry": "Q7574000",
+    "measuredConcepts": [
+      "<Solid_angle>"
+    ],
+    "symbols": [
+      "sp"
+    ],
+    "siUnit": "<Steradian>",
+    "conversionToSI": 12.5664,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Steradian>",
+    "wdEntry": "Q177612",
+    "measuredConcepts": [
+      "<Solid_angle>"
+    ],
+    "symbols": [
+      "sr"
+    ],
+    "siUnit": "<Steradian>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Gauss_(unit)>",
+    "wdEntry": "Q177493",
+    "measuredConcepts": [
+      "<Magnetic_flux_density>"
+    ],
+    "symbols": [
+      "Gs"
+    ],
+    "siUnit": "<Tesla_(unit)>",
+    "conversionToSI": 0.0001,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Tesla_(unit)>",
+    "wdEntry": "Q163343",
+    "measuredConcepts": [
+      "<Magnetic_flux_density>"
+    ],
+    "symbols": [
+      "T"
+    ],
+    "siUnit": "<Tesla_(unit)>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Volt-ampere>",
+    "wdEntry": "Q550341",
+    "measuredConcepts": [
+      "<AC_power>",
+      "<Electric_power>"
+    ],
+    "symbols": [
+      "V A"
+    ],
+    "siUnit": "<Volt-ampere>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Planck_voltage>",
+    "wdEntry": "Q1377741",
+    "measuredConcepts": [
+      "<Voltage>"
+    ],
+    "symbols": [
+      "V_P"
+    ],
+    "siUnit": "<Volt>",
+    "conversionToSI": 1.0429e+27,
+    "isCurrency": false
+  },
+  {
+    "entity": "<IRE_(unit)>",
+    "wdEntry": "Q1654435",
+    "measuredConcepts": [
+      "<Voltage>"
+    ],
+    "symbols": [
+      "IRE"
+    ],
+    "siUnit": "<Volt>",
+    "conversionToSI": 0.00714,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Statvolt>",
+    "wdEntry": "Q2066484",
+    "measuredConcepts": [
+      "<Voltage>"
+    ],
+    "symbols": [
+      "statV"
+    ],
+    "siUnit": "<Volt>",
+    "conversionToSI": 299.792,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Volt>",
+    "wdEntry": "Q25250",
+    "measuredConcepts": [
+      "<Voltage>",
+      "<Electromotive_force>",
+      "<Electric_potential>",
+      "<Membrane_potential>"
+    ],
+    "symbols": [
+      "V"
+    ],
+    "siUnit": "<Volt>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Solar_luminosity>",
+    "wdEntry": "Q843877",
+    "measuredConcepts": [
+      "<Luminosity>"
+    ],
+    "symbols": [
+      "L☉"
+    ],
+    "siUnit": "<Watt>",
+    "conversionToSI": 3.828e+26,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Planck_power>",
+    "wdEntry": "Q914151",
+    "measuredConcepts": [
+      "<Power_(physics)>"
+    ],
+    "symbols": [
+      "P_P"
+    ],
+    "siUnit": "<Watt>",
+    "conversionToSI": 3.62831e+52,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Metric_horsepower>",
+    "wdEntry": "Q160857",
+    "measuredConcepts": [
+      "<Power_(physics)>"
+    ],
+    "symbols": [
+      "hp"
+    ],
+    "siUnit": "<Watt>",
+    "conversionToSI": 735.49875,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Poncelet>",
+    "wdEntry": "Q1768929",
+    "measuredConcepts": [
+      "<Power_(physics)>"
+    ],
+    "symbols": [
+      "p"
+    ],
+    "siUnit": "<Watt>",
+    "conversionToSI": 980.665,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Horsepower>",
+    "wdEntry": "Q2276380",
+    "measuredConcepts": [
+      "<Power_(physics)>"
+    ],
+    "symbols": [],
+    "siUnit": "<Watt>",
+    "conversionToSI": 745.7,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kilowatt>",
+    "wdEntry": "Q3320608",
+    "measuredConcepts": [
+      "<Power_(physics)>"
+    ],
+    "symbols": [
+      "kW"
+    ],
+    "siUnit": "<Watt>",
+    "conversionToSI": 1000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Ton_of_refrigeration>",
+    "wdEntry": "Q3332689",
+    "measuredConcepts": [
+      "<Power_(physics)>"
+    ],
+    "symbols": [
+      "ToR",
+      "RT",
+      "TR"
+    ],
+    "siUnit": "<Watt>",
+    "conversionToSI": 3517,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Watt>",
+    "wdEntry": "Q25236",
+    "measuredConcepts": [
+      "<Radiant_flux>",
+      "<Power_(physics)>"
+    ],
+    "symbols": [
+      "W"
+    ],
+    "siUnit": "<Watt>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Watt_second>",
+    "wdEntry": "Q7974920",
+    "measuredConcepts": [
+      "<Energy>",
+      "<Work_(physics)>",
+      "<Heat>",
+      "<Electrical_energy>"
+    ],
+    "symbols": [
+      "W s"
+    ],
+    "siUnit": "<Watt_second>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Maxwell_(unit)>",
+    "wdEntry": "Q608697",
+    "measuredConcepts": [
+      "<Magnetic_flux>"
+    ],
+    "symbols": [
+      "Mx"
+    ],
+    "siUnit": "<Weber_(unit)>",
+    "conversionToSI": 1e-8,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Weber_(unit)>",
+    "wdEntry": "Q170804",
+    "measuredConcepts": [
+      "<Magnetic_flux>",
+      "<Flux_linkage>"
+    ],
+    "symbols": [
+      "Wb"
+    ],
+    "siUnit": "<Weber_(unit)>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Livre_tournois>",
+    "wdEntry": "Q2670039",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₶"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Moroccan_dirham>",
+    "wdEntry": "Q200192",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "DH"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<United_Arab_Emirates_dirham>",
+    "wdEntry": "Q200294",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "DH"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Angolan_kwanza>",
+    "wdEntry": "Q200337",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Kz",
+      "Kz"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Bolivian_boliviano>",
+    "wdEntry": "Q200737",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Bs"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Mozambican_metical>",
+    "wdEntry": "Q200753",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "MT"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Papua_New_Guinean_kina>",
+    "wdEntry": "Q200759",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "K"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Cuban_peso>",
+    "wdEntry": "Q201505",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "$MN"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Bhutanese_ngultrum>",
+    "wdEntry": "Q201799",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Nu"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Bahraini_dinar>",
+    "wdEntry": "Q201871",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "BD"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Burmese_kyat>",
+    "wdEntry": "Q201875",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "K"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Lebanese_pound>",
+    "wdEntry": "Q201880",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "LL",
+      "LL"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Surinamese_dollar>",
+    "wdEntry": "Q202036",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<South_Korean_won>",
+    "wdEntry": "Q202040",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₩"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Namibian_dollar>",
+    "wdEntry": "Q202462",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "N$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Kenyan_shilling>",
+    "wdEntry": "Q202882",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Ksh"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Gambian_dalasi>",
+    "wdEntry": "Q202885",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "D"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Nepalese_rupee>",
+    "wdEntry": "Q202895",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "N₨"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Nigerian_naira>",
+    "wdEntry": "Q203567",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₦",
+      "₦"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Jordanian_dinar>",
+    "wdEntry": "Q203722",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "JD"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Haitian_gourde>",
+    "wdEntry": "Q203955",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "G"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Peruvian_sol>",
+    "wdEntry": "Q204656",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "S/."
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Cambodian_riel>",
+    "wdEntry": "Q204737",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "៛"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Ethiopian_birr>",
+    "wdEntry": "Q206243",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Br"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Brunei_dollar>",
+    "wdEntry": "Q206319",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "B$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Qatari_riyal>",
+    "wdEntry": "Q206386",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "QR"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Maldivian_rufiyaa>",
+    "wdEntry": "Q206600",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Rf",
+      "ރ",
+      "MRF"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Nicaraguan_córdoba>",
+    "wdEntry": "Q207312",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "C$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Guatemalan_quetzal>",
+    "wdEntry": "Q207396",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Q"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Paraguayan_guaraní>",
+    "wdEntry": "Q207514",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₲"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Vanuatu_vatu>",
+    "wdEntry": "Q207523",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "VT"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Lesotho_loti>",
+    "wdEntry": "Q208039",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "M"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<New_Taiwan_dollar>",
+    "wdEntry": "Q208526",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "NT$",
+      "NT$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Uruguayan_peso>",
+    "wdEntry": "Q209272",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "$U"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Jamaican_dollar>",
+    "wdEntry": "Q209792",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "J$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Panamanian_balboa>",
+    "wdEntry": "Q210472",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "B/.",
+      "B/."
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Bermudian_dollar>",
+    "wdEntry": "Q210478",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "BD$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Malawian_kwacha>",
+    "wdEntry": "Q211694",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "MK"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Mauritian_rupee>",
+    "wdEntry": "Q212967",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₨"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Guyanese_dollar>",
+    "wdEntry": "Q213005",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "G$",
+      "GY$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Guinean_franc>",
+    "wdEntry": "Q213311",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "FG"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<CFP_franc>",
+    "wdEntry": "Q214393",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₣"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Aruban_florin>",
+    "wdEntry": "Q232270",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "ƒ"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Burundian_franc>",
+    "wdEntry": "Q238007",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "FBu"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Syrian_pound>",
+    "wdEntry": "Q240468",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "LS",
+      "syr£"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Yemeni_rial>",
+    "wdEntry": "Q240512",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "﷼'"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Macanese_pataca>",
+    "wdEntry": "Q241214",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "MOP$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Trinidad_and_Tobago_dollar>",
+    "wdEntry": "Q242890",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "TT$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Costa_Rican_colón>",
+    "wdEntry": "Q242915",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₡"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Dominican_peso>",
+    "wdEntry": "Q242922",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "RD$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Liberian_dollar>",
+    "wdEntry": "Q242988",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Lib$",
+      "L$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<South_Sudanese_pound>",
+    "wdEntry": "Q244366",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Db"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Colombian_peso>",
+    "wdEntry": "Q244819",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "COL$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Australian_dollar>",
+    "wdEntry": "Q259502",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "AU$",
+      "A$",
+      "A$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Comorian_franc>",
+    "wdEntry": "Q267264",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "CF"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Jersey_pound>",
+    "wdEntry": "Q270744",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "JE£"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Sudanese_pound>",
+    "wdEntry": "Q271206",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "sud£"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Omani_rial>",
+    "wdEntry": "Q272290",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "ر.ع."
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Belize_dollar>",
+    "wdEntry": "Q275112",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Bz$",
+      "Bz$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Cayman_Islands_dollar>",
+    "wdEntry": "Q319885",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "CI$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Falkland_Islands_pound>",
+    "wdEntry": "Q330044",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "FK£"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Saint_Helena_pound>",
+    "wdEntry": "Q374453",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "£"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<As_(Roman_coin)>",
+    "wdEntry": "Q376895",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Azerbaijani_manat>",
+    "wdEntry": "Q483725",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "A.M.",
+      "₼"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Turkmenistan_manat>",
+    "wdEntry": "Q486637",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "T"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Uzbekistani_soʻm>",
+    "wdEntry": "Q487888",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "So'm"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Netherlands_Antillean_guilder>",
+    "wdEntry": "Q522701",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "NAƒ"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Hungarian_adópengő>",
+    "wdEntry": "Q722411",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Cuban_convertible_peso>",
+    "wdEntry": "Q731350",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Caribbean_guilder>",
+    "wdEntry": "Q737779",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "CMg"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<West_African_CFA_franc>",
+    "wdEntry": "Q861690",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Canadian_dollar>",
+    "wdEntry": "Q1104069",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "$",
+      "C$",
+      "CAD$",
+      "¢",
+      "C$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Dupondius>",
+    "wdEntry": "Q1127799",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [],
+    "isCurrency": true
+  },
+  {
+    "entity": "<SUCRE>",
+    "wdEntry": "Q1148329",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Sucre"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Quinarius>",
+    "wdEntry": "Q1249084",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [],
+    "isCurrency": true
+  },
+  {
+    "entity": "<New_Zealand_dollar>",
+    "wdEntry": "Q1472704",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "NZ$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Stelo>",
+    "wdEntry": "Q1918077",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Abkhazian_apsar>",
+    "wdEntry": "Q1983857",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Zambian_kwacha>",
+    "wdEntry": "Q73408",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "K",
+      "ZK"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Indian_rupee>",
+    "wdEntry": "Q80524",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₹"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Ukrainian_hryvnia>",
+    "wdEntry": "Q81893",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₴"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<North_Korean_won>",
+    "wdEntry": "Q106720",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₩"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Swedish_krona>",
+    "wdEntry": "Q122922",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "kr"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Polish_złoty>",
+    "wdEntry": "Q123213",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "zł"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Albanian_lek>",
+    "wdEntry": "Q125999",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "L"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Armenian_dram>",
+    "wdEntry": "Q130498",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "֏"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Czech_koruna>",
+    "wdEntry": "Q131016",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Kč"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Israeli_new_shekel>",
+    "wdEntry": "Q131309",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₪"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Icelandic_króna>",
+    "wdEntry": "Q131473",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "kr"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Romanian_leu>",
+    "wdEntry": "Q131645",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "lei"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Norwegian_krone>",
+    "wdEntry": "Q132643",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "kr",
+      "kr"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Belarusian_ruble>",
+    "wdEntry": "Q160680",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Br",
+      "Br"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Malaysian_ringgit>",
+    "wdEntry": "Q163712",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "RM"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Eritrean_nakfa>",
+    "wdEntry": "Q171503",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Nfk"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Serbian_dinar>",
+    "wdEntry": "Q172524",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "din"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Bulgarian_lev>",
+    "wdEntry": "Q172540",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "лв"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Turkish_lira>",
+    "wdEntry": "Q172872",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₺"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Brazilian_real>",
+    "wdEntry": "Q173117",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "R$",
+      "R$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Kazakhstani_tenge>",
+    "wdEntry": "Q173751",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₸"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Macedonian_denar>",
+    "wdEntry": "Q177875",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "DEN"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Thai_baht>",
+    "wdEntry": "Q177882",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "฿"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Bosnia_and_Herzegovina_convertible_mark>",
+    "wdEntry": "Q179620",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "KM"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Moldovan_leu>",
+    "wdEntry": "Q181129",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "L"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<South_African_rand>",
+    "wdEntry": "Q181907",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "R"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Mongolian_tögrög>",
+    "wdEntry": "Q183435",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₮"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Ghanaian_cedi>",
+    "wdEntry": "Q183530",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "GH₵"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Botswana_pula>",
+    "wdEntry": "Q186794",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "P"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Pakistani_rupee>",
+    "wdEntry": "Q188289",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₨"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Iranian_rial>",
+    "wdEntry": "Q188608",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "﷼"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Libyan_dinar>",
+    "wdEntry": "Q190699",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "LD"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Singapore_dollar>",
+    "wdEntry": "Q190951",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "S$",
+      "S$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Faroese_króna>",
+    "wdEntry": "Q191068",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [],
+    "isCurrency": true
+  },
+  {
+    "entity": "<CFA_franc>",
+    "wdEntry": "Q191511",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "FCFA"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Vietnamese_đồng>",
+    "wdEntry": "Q192090",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₫"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Iraqi_dinar>",
+    "wdEntry": "Q193094",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "د.ع"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Kuwaiti_dinar>",
+    "wdEntry": "Q193098",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "د.ك",
+      "KD"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<São_Tomé_and_Príncipe_dobra>",
+    "wdEntry": "Q193712",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₡"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Bahamian_dollar>",
+    "wdEntry": "Q194339",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "B$",
+      "B$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Barbadian_dollar>",
+    "wdEntry": "Q194351",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Bds$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Bangladeshi_taka>",
+    "wdEntry": "Q194453",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "৳"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Egyptian_pound>",
+    "wdEntry": "Q199462",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "LE",
+      "£E",
+      "LE"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Afghan_afghani>",
+    "wdEntry": "Q199471",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Afs",
+      "؋"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Argentine_peso>",
+    "wdEntry": "Q199578",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Algerian_dinar>",
+    "wdEntry": "Q199674",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "DA"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Saudi_riyal>",
+    "wdEntry": "Q199857",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "SR"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Tajikistani_somoni>",
+    "wdEntry": "Q199886",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "SM"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Chilean_peso>",
+    "wdEntry": "Q200050",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "CLP$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Lao_kip>",
+    "wdEntry": "Q200055",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₭"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Sovereign_Bolivar>",
+    "wdEntry": "Q56349362",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Bs.S"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Tuvaluan_dollar>",
+    "wdEntry": "Q4406",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "$T",
+      "TV$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Sierra_Leonean_leone>",
+    "wdEntry": "Q4587",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Le"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Malagasy_ariary>",
+    "wdEntry": "Q4584",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Ar"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Samoan_tālā>",
+    "wdEntry": "Q4588",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "WS$",
+      "WS$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Tanzanian_shilling>",
+    "wdEntry": "Q4589",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "TSh"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Djiboutian_franc>",
+    "wdEntry": "Q4594",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Fdj"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Seychellois_rupee>",
+    "wdEntry": "Q4595",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "SRe"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Fijian_dollar>",
+    "wdEntry": "Q4592",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "F$",
+      "FJ$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Ugandan_shilling>",
+    "wdEntry": "Q4598",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Ush"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Sri_Lankan_rupee>",
+    "wdEntry": "Q4596",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Rs",
+      "Rs"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Solomon_Islands_dollar>",
+    "wdEntry": "Q4597",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "$",
+      "SI$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Tunisian_dinar>",
+    "wdEntry": "Q4602",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "DT"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Somali_shilling>",
+    "wdEntry": "Q4603",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Sh.So."
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Georgian_lari>",
+    "wdEntry": "Q4608",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₾"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Tongan_paʻanga>",
+    "wdEntry": "Q4613",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "T$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Honduran_lempira>",
+    "wdEntry": "Q4719",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "L"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Mexican_peso>",
+    "wdEntry": "Q4730",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Congolese_franc>",
+    "wdEntry": "Q4734",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "CF"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Rwandan_franc>",
+    "wdEntry": "Q4741",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "FRw"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Swazi_lilangeni>",
+    "wdEntry": "Q4823",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "E"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Euro>",
+    "wdEntry": "Q4916",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "€"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<United_States_dollar>",
+    "wdEntry": "Q4917",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "$",
+      "US$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Japanese_yen>",
+    "wdEntry": "Q8146",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "¥"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Philippine_peso>",
+    "wdEntry": "Q17193",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₱"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Pound_sterling>",
+    "wdEntry": "Q25224",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "£"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Swiss_franc>",
+    "wdEntry": "Q25344",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Fr"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Danish_krone>",
+    "wdEntry": "Q25417",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "kr"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Croatian_kuna>",
+    "wdEntry": "Q26360",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "kn"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Eastern_Caribbean_dollar>",
+    "wdEntry": "Q26365",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "EC$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Manx_pound>",
+    "wdEntry": "Q27614",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "IM£"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Hong_Kong_dollar>",
+    "wdEntry": "Q31015",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "HK$"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Kyrgyzstani_som>",
+    "wdEntry": "Q35881",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "сом"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Renminbi>",
+    "wdEntry": "Q39099",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "¥"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Russian_ruble>",
+    "wdEntry": "Q41044",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "₽"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Gibraltar_pound>",
+    "wdEntry": "Q41429",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "£"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Indonesian_rupiah>",
+    "wdEntry": "Q41588",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Rp"
+    ],
+    "isCurrency": true
+  },
+  {
+    "entity": "<Hungarian_forint>",
+    "wdEntry": "Q47190",
+    "measuredConcepts": [
+      "<Currency>"
+    ],
+    "symbols": [
+      "Ft"
+    ],
+    "isCurrency": true
+  }
+]
