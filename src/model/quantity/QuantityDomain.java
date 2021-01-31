@@ -2,6 +2,7 @@ package model.quantity;
 
 import catalog.QuantityCatalog;
 import catalog.Unit;
+import nlp.NLP;
 import org.w3c.dom.Element;
 
 import java.util.*;
@@ -24,13 +25,13 @@ public class QuantityDomain {
                 for (Unit u : q.getUnits()) {
                     Set<String> surfaceForms = new HashSet<>();
                     for (String s : u.getBaseSymbols()) {
-                        surfaceForms.add(s.trim());
+                        surfaceForms.add(NLP.stripSentence(s));
                     }
                     for (String s : u.getBaseNames()) {
-                        surfaceForms.add(s.trim());
+                        surfaceForms.add(NLP.stripSentence(s));
                     }
                     for (String s : u.getLemmas()) {
-                        surfaceForms.add(s.trim());
+                        surfaceForms.add(NLP.stripSentence(s));
                     }
                     for (String s : surfaceForms) {
                         if (s.isEmpty()) {
