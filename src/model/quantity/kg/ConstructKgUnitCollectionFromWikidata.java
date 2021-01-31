@@ -29,7 +29,7 @@ public class ConstructKgUnitCollectionFromWikidata {
                   ?unit wdt:P5061 ?symbol . # having 'unit symbol'
                   ?unit wdt:P2370 ?si . # having 'conversion to SI unit'
                   ?unit wdt:P111 ?concept . # having 'measured physical quantity'
-                  ?wikiUnit schema:about ?unit; schema:isPartOf <https://en.wikipedia.org/> .
+                  # ?wikiUnit schema:about ?unit; schema:isPartOf <https://en.wikipedia.org/> .
                   ?wikiConcept schema:about ?concept; schema:isPartOf <https://en.wikipedia.org/> .
                   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
                 }
@@ -41,15 +41,19 @@ public class ConstructKgUnitCollectionFromWikidata {
             String wdDump = Crawler.getContentFromUrl(WD_DUMP_ENDPOINT.replace("{ENTRY}", entry));
             // check if the entry is found in YAGO
             JSONObject o = new JSONObject(wdDump);
+            String yagoEntry;
             try {
-                String yagoEntry = ("<" +
+                // use english wikipedia entry if available
+                yagoEntry = ("<" +
                         o.getJSONObject("entities").getJSONObject(entry).getJSONObject("sitelinks").getJSONObject("enwiki")
                                 .getString("title") + ">").replace(' ', '_');
-
-                out.println(yagoEntry + "\t" + entry + "\t" + wdDump);
             } catch (Exception exp) {
-                return;
+                // otherwise use english label + wikidata entry
+                yagoEntry = ("<" +
+                        o.getJSONObject("entities").getJSONObject(entry).getJSONObject("labels").getJSONObject("en")
+                                .getString("value") + "_wd:" + entry + ">").replace(' ', '_');
             }
+            out.println(yagoEntry + "\t" + entry + "\t" + wdDump);
         });
 
         // Currency
@@ -78,7 +82,6 @@ public class ConstructKgUnitCollectionFromWikidata {
                                 .getString("title") + ">").replace(' ', '_');
 
                 out.println(yagoEntry + "\t" + entry + "\t" + wdDump);
-                System.out.println(yagoEntry + "\t" + entry + "\t" + wdDump);
             } catch (Exception exp) {
                 return;
             }
@@ -103,10 +106,14 @@ public class ConstructKgUnitCollectionFromWikidata {
                 continue;
             }
 
-            JSONObject si = o.getJSONArray("P2370").getJSONObject(0).getJSONObject("mainsnak").getJSONObject("datavalue").getJSONObject("value");
-            unit.siUnit = si.getString("unit");
-            unit.siUnit = unit.siUnit.substring(unit.siUnit.lastIndexOf("/") + 1);
-            unit.conversionToSI = Double.parseDouble(si.getString("amount"));
+            try {
+                JSONObject si = o.getJSONArray("P2370").getJSONObject(0).getJSONObject("mainsnak").getJSONObject("datavalue").getJSONObject("value");
+                unit.siUnit = si.getString("unit");
+                unit.siUnit = unit.siUnit.substring(unit.siUnit.lastIndexOf("/") + 1);
+                unit.conversionToSI = Double.parseDouble(si.getString("amount"));
+            } catch (Exception e) {
+                continue;
+            }
 
             // symbols
             JSONArray sb = o.getJSONArray("P5061");
@@ -211,7 +218,7 @@ public class ConstructKgUnitCollectionFromWikidata {
         out = FileUtils.getPrintWriter(KG_UNIT_COLLECTION_FILE.replaceFirst("\\.json$", ".tsv"), "UTF-8");
         for (KgUnit u : units) {
             out.println(String.format("%s\t%s\t%s\t%s\t%s\t%s", u.entity, u.wdEntry,
-                    String.join(";", u.measuredConcepts),String.join(";", u.symbols),
+                    String.join(";", u.measuredConcepts), String.join(";", u.symbols),
                     u.conversionToSI, u.siUnit));
         }
         out.close();
