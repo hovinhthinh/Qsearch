@@ -26,7 +26,7 @@ public class ConstructKgUnitCollectionFromWikidata {
                 SELECT DISTINCT ?unit
                 WHERE
                 {
-                  ?unit wdt:P5061 ?symbol . # having 'unit symbol'
+                  # ?unit wdt:P5061 ?symbol . # having 'unit symbol'
                   ?unit wdt:P2370 ?si . # having 'conversion to SI unit'
                   ?unit wdt:P111 ?concept . # having 'measured physical quantity'
                   # ?wikiUnit schema:about ?unit; schema:isPartOf <https://en.wikipedia.org/> .
@@ -49,9 +49,13 @@ public class ConstructKgUnitCollectionFromWikidata {
                                 .getString("title") + ">").replace(' ', '_');
             } catch (Exception exp) {
                 // otherwise use english label + wikidata entry
-                yagoEntry = ("<" +
-                        o.getJSONObject("entities").getJSONObject(entry).getJSONObject("labels").getJSONObject("en")
-                                .getString("value") + "_wd:" + entry + ">").replace(' ', '_');
+                try {
+                    yagoEntry = ("<" +
+                            o.getJSONObject("entities").getJSONObject(entry).getJSONObject("labels").getJSONObject("en")
+                                    .getString("value") + "_wd:" + entry + ">").replace(' ', '_');
+                } catch (Exception exp2) {
+                    return;
+                }
             }
             out.println(yagoEntry + "\t" + entry + "\t" + wdDump);
         });
@@ -74,13 +78,12 @@ public class ConstructKgUnitCollectionFromWikidata {
         result.getJSONObject("results").getJSONArray("bindings").forEach(e -> {
             String entry = ((JSONObject) e).getJSONObject("unit").getString("value").substring("http://www.wikidata.org/entity/".length());
             String wdDump = Crawler.getContentFromUrl(WD_DUMP_ENDPOINT.replace("{ENTRY}", entry));
-            // check if the entry is found in YAGO
+            // check if the entry is found in enwiki
             JSONObject o = new JSONObject(wdDump);
             try {
                 String yagoEntry = ("<" +
                         o.getJSONObject("entities").getJSONObject(entry).getJSONObject("sitelinks").getJSONObject("enwiki")
                                 .getString("title") + ">").replace(' ', '_');
-
                 out.println(yagoEntry + "\t" + entry + "\t" + wdDump);
             } catch (Exception exp) {
                 return;
@@ -111,21 +114,29 @@ public class ConstructKgUnitCollectionFromWikidata {
                 unit.siUnit = si.getString("unit");
                 unit.siUnit = unit.siUnit.substring(unit.siUnit.lastIndexOf("/") + 1);
                 unit.conversionToSI = Double.parseDouble(si.getString("amount"));
+//                if (si.has("upperBound") && Double.parseDouble(si.getString("upperBound")) != unit.conversionToSI) {
+//                    continue;
+//                }
+//                if (si.has("lowerBound") && Double.parseDouble(si.getString("lowerBound")) != unit.conversionToSI) {
+//                    continue;
+//                }
             } catch (Exception e) {
                 continue;
             }
 
             // symbols
-            JSONArray sb = o.getJSONArray("P5061");
             unit.symbols = new ArrayList<>();
-            for (int i = 0; i < sb.length(); ++i) {
-                try {
-                    JSONObject v = sb.getJSONObject(i).getJSONObject("mainsnak").getJSONObject("datavalue").getJSONObject("value");
-                    String lang = v.getString("language");
-                    if (lang.equals("en") || lang.equals("mul")) {
-                        unit.symbols.add(v.getString("text"));
+            if (o.has("P5061")) {
+                JSONArray sb = o.getJSONArray("P5061");
+                for (int i = 0; i < sb.length(); ++i) {
+                    try {
+                        JSONObject v = sb.getJSONObject(i).getJSONObject("mainsnak").getJSONObject("datavalue").getJSONObject("value");
+                        String lang = v.getString("language");
+                        if (lang.equals("en") || lang.equals("mul")) {
+                            unit.symbols.add(v.getString("text"));
+                        }
+                    } catch (Exception e) {
                     }
-                } catch (Exception e) {
                 }
             }
 
