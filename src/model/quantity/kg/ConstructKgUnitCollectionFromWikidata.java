@@ -30,7 +30,7 @@ public class ConstructKgUnitCollectionFromWikidata {
                   ?unit wdt:P2370 ?si . # having 'conversion to SI unit'
                   ?unit wdt:P111 ?concept . # having 'measured physical quantity'
                   # ?wikiUnit schema:about ?unit; schema:isPartOf <https://en.wikipedia.org/> .
-                  ?wikiConcept schema:about ?concept; schema:isPartOf <https://en.wikipedia.org/> .
+                  # ?wikiConcept schema:about ?concept; schema:isPartOf <https://en.wikipedia.org/> .
                   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
                 }
                 """;
@@ -136,8 +136,15 @@ public class ConstructKgUnitCollectionFromWikidata {
                 try {
                     String concept = cc.getJSONObject(i).getJSONObject("mainsnak").getJSONObject("datavalue").getJSONObject("value").getString("id");
                     o = new JSONObject(Crawler.getContentFromUrl(WD_DUMP_ENDPOINT.replace("{ENTRY}", concept)));
-                    concept = ("<" + o.getJSONObject("entities").getJSONObject(concept).getJSONObject("sitelinks")
-                            .getJSONObject("enwiki").getString("title") + ">").replace(' ', '_');
+                    try {
+                        // use english wikipedia entry if available
+                        concept = ("<" + o.getJSONObject("entities").getJSONObject(concept).getJSONObject("sitelinks")
+                                .getJSONObject("enwiki").getString("title") + ">").replace(' ', '_');
+                    } catch (Exception e) {
+                        // otherwise use english label + wikidata entry
+                        concept = ("<" + o.getJSONObject("entities").getJSONObject(concept).getJSONObject("labels")
+                                .getJSONObject("en").getString("value") + "_wd:" + concept + ">").replace(' ', '_');
+                    }
                     unit.measuredConcepts.add(concept);
                 } catch (Exception e) {
                 }
