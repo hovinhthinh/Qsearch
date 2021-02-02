@@ -60,13 +60,13 @@ Currency	Pakistani rupee	<Pakistani_rupee>
 Currency	Russian ruble	<Russian_ruble>
 Currency	United States dollar	<United_States_dollar>
 Data rate	bytes per second	null
-Data size	bit; shannon	null
-Data size	byte	null
-Data size	gigabyte (decimal)	null
-Data size	kilobyte (decimal)	null
-Data size	megabyte (decimal)	null
-Data size	petabyte (decimal)	null
-Data size	terabyte (decimal)	null
+Data size	bit; shannon	<Bit>
+Data size	byte	<Byte>
+Data size	gigabyte (decimal)	<Gigabyte>
+Data size	kilobyte (decimal)	<Kilobyte>
+Data size	megabyte (decimal)	<Megabyte>
+Data size	petabyte (decimal)	<Petabyte>
+Data size	terabyte (decimal)	<Terabyte>
 Density	gram per millilitre	<gram_per_millilitre_wd:Q101877596>
 Density	kilogram per cubic metre	<Kilogram_per_cubic_metre>
 Density	kilogram per litre	<kilogram_per_litre_wd:Q104907192>
@@ -171,8 +171,8 @@ Frequency	hertz	<Hertz>
 Frequency	megahertz	<megahertz_wd:Q732707>
 Frequency	revolutions per minute	<Revolutions_per_minute>
 Frequency	terahertz	<terahertz_wd:Q13548586>
-fuel consumption	kilometre per litre (SI Unit)	null
-fuel consumption	miles per gallon	null
+fuel consumption	kilometre per litre (SI Unit)	<kilometre_per_litre_wd:Q93871856>
+fuel consumption	miles per gallon	<miles_per_gallon_wd:Q93868873>
 Illuminance	footcandle; lumen per square foot	<Foot-candle>
 Illuminance	lumen per square inch	null
 Illuminance	lux	<Lux>
