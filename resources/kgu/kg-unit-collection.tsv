@@ -1838,3 +1838,23 @@
 <Gibraltar_pound>	Q41429	<Currency>	£	null	null
 <Indonesian_rupiah>	Q41588	<Currency>	Rp	null	null
 <Hungarian_forint>	Q47190	<Currency>	Ft	null	null
+<Kilobyte>	Q79726	<information_wd:Q71699827>		1000.0	<Byte>
+<Megabyte>	Q79735	<information_wd:Q71699827>		1000000.0	<Byte>
+<Gigabyte>	Q79738	<information_wd:Q71699827>		1.0E9	<Byte>
+<Terabyte>	Q79741	<information_wd:Q71699827>		1.0E12	<Byte>
+<Zettabyte>	Q79747	<information_wd:Q71699827>		1.0E21	<Byte>
+<Petabyte>	Q79744	<information_wd:Q71699827>		1.0E15	<Byte>
+<Exabyte>	Q79745	<information_wd:Q71699827>		1.0E18	<Byte>
+<Yottabyte>	Q79752	<information_wd:Q71699827>		1.0E24	<Byte>
+<Kibibyte>	Q79756	<information_wd:Q71699827>		1024.0	<Byte>
+<Tebibyte>	Q79769	<information_wd:Q71699827>		1.099511627776E12	<Byte>
+<Zebibyte>	Q79779	<information_wd:Q71699827>		1.1805916207174113E21	<Byte>
+<Mebibyte>	Q79758	<information_wd:Q71699827>		1048576.0	<Byte>
+<Pebibyte>	Q79774	<information_wd:Q71699827>		1.125899906842624E15	<Byte>
+<Exbibyte>	Q79777	<information_wd:Q71699827>		1.15292150460684698E18	<Byte>
+<Yobibyte>	Q79781	<information_wd:Q71699827>		1.2089258196146292E24	<Byte>
+<Byte>	Q8799	<information_wd:Q71699827>		1.0	<Byte>
+<Bit>	Q8805	<information_wd:Q71699827>		0.125	<Byte>
+<Gibibyte>	Q79765	<information_wd:Q71699827>		1.073741824E9	<Byte>
+<kilometre_per_litre_wd:Q93871856>	Q93871856	<fuel_economy_in_automobiles_wd:Q931507>	km/L	2.3521458	<miles_per_gallon_wd:Q93868873>
+<miles_per_gallon_wd:Q93868873>	Q93868873	<fuel_economy_in_automobiles_wd:Q931507>	mpg	1.0	<miles_per_gallon_wd:Q93868873>

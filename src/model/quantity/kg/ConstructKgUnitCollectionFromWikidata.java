@@ -15,7 +15,7 @@ public class ConstructKgUnitCollectionFromWikidata {
     static String WD_SPARQL_ENDPOINT = "https://query.wikidata.org/sparql?format=json&query=";
     static String WD_DUMP_ENDPOINT = "https://www.wikidata.org/wiki/Special:EntityData/{ENTRY}.json";
 
-    static String WDU_DUMP_FILE = "./resources/kgu/wdu-entries";
+    static String WDU_DUMP_FILE = "/tmp/wdu-entries";
     static String KG_UNIT_COLLECTION_FILE = "./resources/kgu/kg-unit-collection.json";
 
     static void loadUnitsFromWikidata() throws Exception {
@@ -93,7 +93,7 @@ public class ConstructKgUnitCollectionFromWikidata {
         out.close();
     }
 
-    static void constructUnitCollection() {
+    static void constructUnitCollection() throws Exception {
         ArrayList<KgUnit> units = new ArrayList<>();
 
         // SI units
@@ -229,6 +229,87 @@ public class ConstructKgUnitCollectionFromWikidata {
 
             units.add(unit);
         }
+
+        // Datasize
+        String query = """
+                SELECT DISTINCT ?unit ?scaleAmount
+                WHERE
+                {                
+                  ?unit wdt:P111 wd:Q71699827 . # information
+                  ?unit p:P2442 ?scaleStm . # conversion to standard unit
+                  ?scaleStm psv:P2442 ?scaleVal .
+                  ?scaleVal wikibase:quantityUnit wd:Q8799 . # byte
+                  ?scaleVal wikibase:quantityAmount ?scaleAmount .                  
+                  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+                }
+                """;
+        JSONArray result = new JSONObject(Crawler.getContentFromUrl(WD_SPARQL_ENDPOINT + URLEncoder.encode(query, "UTF-8"))).getJSONObject("results").getJSONArray("bindings");
+        for (int k = 0; k < result.length(); ++k) {
+            JSONObject e = result.getJSONObject(k);
+            String entry = e.getJSONObject("unit").getString("value").substring("http://www.wikidata.org/entity/".length());
+            String wdDump = Crawler.getContentFromUrl(WD_DUMP_ENDPOINT.replace("{ENTRY}", entry));
+            // check if the entry is found in YAGO
+            JSONObject o = new JSONObject(wdDump);
+
+            KgUnit unit = new KgUnit();
+            String yagoEntry;
+            try {
+                // use english wikipedia entry if available
+                yagoEntry = ("<" +
+                        o.getJSONObject("entities").getJSONObject(entry).getJSONObject("sitelinks").getJSONObject("enwiki")
+                                .getString("title") + ">").replace(' ', '_');
+            } catch (Exception exp) {
+                // otherwise use english label + wikidata entry
+                try {
+                    yagoEntry = ("<" +
+                            o.getJSONObject("entities").getJSONObject(entry).getJSONObject("labels").getJSONObject("en")
+                                    .getString("value") + "_wd:" + entry + ">").replace(' ', '_');
+                } catch (Exception exp2) {
+                    return;
+                }
+            }
+            unit.entity = yagoEntry;
+            unit.wdEntry = entry;
+            unit.siUnit = "<Byte>";
+            unit.measuredConcepts = new ArrayList<>(Arrays.asList("<information_wd:Q71699827>"));
+            unit.conversionToSI = Double.parseDouble(e.getJSONObject("scaleAmount").getString("value"));
+            // symbols
+            unit.symbols = new ArrayList<>();
+            if (o.has("P5061")) {
+                JSONArray sb = o.getJSONArray("P5061");
+                for (int i = 0; i < sb.length(); ++i) {
+                    try {
+                        JSONObject v = sb.getJSONObject(i).getJSONObject("mainsnak").getJSONObject("datavalue").getJSONObject("value");
+                        String lang = v.getString("language");
+                        if (lang.equals("en") || lang.equals("mul")) {
+                            unit.symbols.add(v.getString("text"));
+                        }
+                    } catch (Exception exp) {
+                    }
+                }
+            }
+            units.add(unit);
+        }
+
+        // Fuel consumption
+        // km/L
+        KgUnit unit = new KgUnit();
+        unit.entity = "<kilometre_per_litre_wd:Q93871856>";
+        unit.wdEntry = "Q93871856";
+        unit.conversionToSI = 2.3521458;
+        unit.siUnit = "<miles_per_gallon_wd:Q93868873>";
+        unit.symbols = new ArrayList<>(Arrays.asList("km/L"));
+        unit.measuredConcepts = new ArrayList<>(Arrays.asList("<fuel_economy_in_automobiles_wd:Q931507>"));
+        units.add(unit);
+        // mpg
+        unit = new KgUnit();
+        unit.entity = "<miles_per_gallon_wd:Q93868873>";
+        unit.wdEntry = "Q93868873";
+        unit.conversionToSI = 1.0;
+        unit.siUnit = "<miles_per_gallon_wd:Q93868873>";
+        unit.symbols = new ArrayList<>(Arrays.asList("mpg"));
+        unit.measuredConcepts = new ArrayList<>(Arrays.asList("<fuel_economy_in_automobiles_wd:Q931507>"));
+        units.add(unit);
 
         PrintWriter out = FileUtils.getPrintWriter(KG_UNIT_COLLECTION_FILE, "UTF-8");
         out.println(Gson.toJson(units));

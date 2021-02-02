@@ -23168,5 +23168,229 @@
       "Ft"
     ],
     "isCurrency": true
+  },
+  {
+    "entity": "<Kilobyte>",
+    "wdEntry": "Q79726",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Megabyte>",
+    "wdEntry": "Q79735",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Gigabyte>",
+    "wdEntry": "Q79738",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1000000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Terabyte>",
+    "wdEntry": "Q79741",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1000000000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Zettabyte>",
+    "wdEntry": "Q79747",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1e+21,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Petabyte>",
+    "wdEntry": "Q79744",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1000000000000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Exabyte>",
+    "wdEntry": "Q79745",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1000000000000000000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Yottabyte>",
+    "wdEntry": "Q79752",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1e+24,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Kibibyte>",
+    "wdEntry": "Q79756",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1024,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Tebibyte>",
+    "wdEntry": "Q79769",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1099511627776,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Zebibyte>",
+    "wdEntry": "Q79779",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1.1805916207174113e+21,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Mebibyte>",
+    "wdEntry": "Q79758",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1048576,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Pebibyte>",
+    "wdEntry": "Q79774",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1125899906842624,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Exbibyte>",
+    "wdEntry": "Q79777",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1152921504606847000,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Yobibyte>",
+    "wdEntry": "Q79781",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1.2089258196146292e+24,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Byte>",
+    "wdEntry": "Q8799",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Bit>",
+    "wdEntry": "Q8805",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 0.125,
+    "isCurrency": false
+  },
+  {
+    "entity": "<Gibibyte>",
+    "wdEntry": "Q79765",
+    "measuredConcepts": [
+      "<information_wd:Q71699827>"
+    ],
+    "symbols": [],
+    "siUnit": "<Byte>",
+    "conversionToSI": 1073741824,
+    "isCurrency": false
+  },
+  {
+    "entity": "<kilometre_per_litre_wd:Q93871856>",
+    "wdEntry": "Q93871856",
+    "measuredConcepts": [
+      "<fuel_economy_in_automobiles_wd:Q931507>"
+    ],
+    "symbols": [
+      "km/L"
+    ],
+    "siUnit": "<miles_per_gallon_wd:Q93868873>",
+    "conversionToSI": 2.3521458,
+    "isCurrency": false
+  },
+  {
+    "entity": "<miles_per_gallon_wd:Q93868873>",
+    "wdEntry": "Q93868873",
+    "measuredConcepts": [
+      "<fuel_economy_in_automobiles_wd:Q931507>"
+    ],
+    "symbols": [
+      "mpg"
+    ],
+    "siUnit": "<miles_per_gallon_wd:Q93868873>",
+    "conversionToSI": 1,
+    "isCurrency": false
   }
 ]
