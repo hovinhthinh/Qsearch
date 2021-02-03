@@ -173,7 +173,7 @@ public class QuantityConstraint {
     }
 
     public boolean match(Quantity q) {
-        if (!domain.equals(QuantityDomain.getDomain(q))) {
+        if (!QuantityDomain.quantityMatchesDomain(q, domain)) {
             return false;
         }
 
