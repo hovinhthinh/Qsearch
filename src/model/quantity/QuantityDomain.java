@@ -191,57 +191,6 @@ public class QuantityDomain {
         quantity.scale = 1.0;
         return 1.0; // dimensionless.
     }
-    // anything else is considered dimensionless
-
-    public static double getFineGrainedScale(Quantity quantity) {
-        if (quantity.fineGrainedScale != null) {
-            return quantity.fineGrainedScale;
-        }
-        String unit = untokenizeUnit(quantity.unit);
-        if (LENGTH_DOMAIN.containsKey(unit)) {
-            quantity.fineGrainedScale = LENGTH_DOMAIN.get(unit);
-            return LENGTH_DOMAIN.get(unit);
-        }
-        if (MONEY_DOMAIN.containsKey(unit)) {
-            quantity.fineGrainedScale = MONEY_DOMAIN.get(unit);
-            return MONEY_DOMAIN.get(unit);
-        }
-        if (TIME_DOMAIN.containsKey(unit)) {
-            quantity.fineGrainedScale = TIME_DOMAIN.get(unit);
-            return TIME_DOMAIN.get(unit);
-        }
-        if (MASS_DOMAIN.containsKey(unit)) {
-            quantity.fineGrainedScale = MASS_DOMAIN.get(unit);
-            return MASS_DOMAIN.get(unit);
-        }
-        if (PERCENTAGE_DOMAIN.containsKey(unit)) {
-            quantity.fineGrainedScale = PERCENTAGE_DOMAIN.get(unit);
-            return PERCENTAGE_DOMAIN.get(unit);
-        }
-        if (AREA_DOMAIN.containsKey(unit)) {
-            quantity.fineGrainedScale = AREA_DOMAIN.get(unit);
-            return AREA_DOMAIN.get(unit);
-        }
-        if (VOLUME_DOMAIN.containsKey(unit)) {
-            quantity.fineGrainedScale = VOLUME_DOMAIN.get(unit);
-            return VOLUME_DOMAIN.get(unit);
-        }
-        // Now use QuTree.
-        try {
-            Unit u = unit.isEmpty() ? null : QUANTITY_CATALOG.getUnitFromBaseName(unit);
-            if (u == null) {
-                List<Unit> units = SURFACE_UNITS_MAP.get(unit);
-                u = units == null ? null : units.get(0);
-            }
-            if (u != null) {
-                return quantity.fineGrainedScale = u.getMultiplier();
-            }
-        } catch (Exception e) {
-        }
-        quantity.fineGrainedScale = 1.0;
-        return 1.0; // dimensionless.
-    }
-    // anything else is considered dimensionless
 
     public static String getFineGrainedDomain(Quantity quantity) {
         if (quantity.fineGrainedDomain != null) {
