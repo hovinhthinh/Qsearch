@@ -112,16 +112,16 @@ public class QuantityDomain {
             {"square kilometres", "square kilometers", "square kilometre", "square kilometer", "square km", "sq km", "sqkm", "km²", "km2", "km 2", "km ^ 2", 1000000.0},
             {"square metres", "square meters", "- square - meter", "square metre", "square meter", "sq m", 1.0}, // this is the standard
             {"square inches", "square inch", "sq in", 0.000645},
-            {"square yards", "square yard", "square yds", "square yd", 0.836},
+            {"square yards", "square yard", "square yds", "square yd", "sq yd", 0.836},
     });
     public static final Map<String, Double> VOLUME_DOMAIN = createDomainMap(new Object[][]{ // Domain added for Wikipedia
             {"cubic miles", "cubic mile", "cu mi", 4168181825.44},
-            {"cubic feet","cubic foot", "cubic ft","cu ft",0.0028},
-            {"cubic centimetres", "cubic centimeters", "cubic cm","cu cm",0.0000001},
-            {"cubic kilometres", "cubic kilometers","cubic kilometre","cubic kilometer","cubic km",  "cu km", 1000000000.0},
-            {"cubic metres","cubic meters", "cubic metre","cubic meter", "cu m", 1.0}, // this is the standard
-            {"cubic inches","cubic inch", "cu in", 0.0000163},
-            {"square yards","square yard","square yds","square yd",  0.764},
+            {"cubic feet", "cubic foot", "cubic ft", "cu ft", 0.0028},
+            {"cubic centimetres", "cubic centimeters", "cubic cm", "cu cm", 0.0000001},
+            {"cubic kilometres", "cubic kilometers", "cubic kilometre", "cubic kilometer", "cubic km", "cu km", 1000000000.0},
+            {"cubic metres", "cubic meters", "cubic metre", "cubic meter", "cu m", 1.0}, // this is the standard
+            {"cubic inches", "cubic inch", "cu in", 0.0000163},
+            {"cubic yards", "cubic yard", "cubic yds", "cubic yd", "cu yd", 0.764},
     });
 
     // units are tokenized during preprocessing, e.g., "km/h" -> "km / h", this function reverts this action.
