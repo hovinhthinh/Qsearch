@@ -6,8 +6,6 @@ import nlp.NLP;
 import org.w3c.dom.Element;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class QuantityDomain {
     public static final QuantityCatalog QUANTITY_CATALOG;
@@ -61,145 +59,70 @@ public class QuantityDomain {
         }
     }
 
-    public static final Map<String, Double> LENGTH_DOMAIN = Stream.of(new Object[][]{
-            {"miles", 1609.344},
-            {"mile", 1609.344},
-            {"feet", 0.3048},
-            {"ft", 0.3048},
-            {"km", 1000.0},
+    private static Map<String, Double> createDomainMap(Object[][] data) {
+        Map<String, Double> dm = new HashMap<>();
+        for (Object[] entry : data) {
+            for (int i = 0; i < entry.length - 1; ++i) {
+                dm.put((String) entry[i], (Double) entry[entry.length - 1]);
+            }
+        }
+        return dm;
+    }
+
+    public static final Map<String, Double> LENGTH_DOMAIN = createDomainMap(new Object[][]{
+            {"miles", "mile", 1609.344},
+            {"feet", "ft", 0.3048},
             {"cm", 0.01},
-            {"kilometres", 1000.0},
-            {"kilometers", 1000.0},
-            {"kilometre", 1000.0},
-            {"kilometer", 1000.0},
-            {"metres", 1.0}, // this is the standard
-            {"meters", 1.0},
-            {"metre", 1.0},
-            {"meter", 1.0},
-            {"inches", 0.0254},
-            {"inch", 0.0254},
-            {"yards", 0.9144},
-            {"- yards", 0.9144},
-            {"- yard", 0.9144}
-    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
-    public static final Map<String, Double> MONEY_DOMAIN = Stream.of(new Object[][]{
-            {"usd", 1.0},
-            {"US$", 1.0}, // this is the standard
-            {"euros", 1.15},
-            {"euro", 1.15},
-            {"eur", 1.15},
-            {"pound", 1.3},
-            {"pounds", 1.3},
-            {"gbp", 1.3},
+            {"km", "kilometres", "kilometers", "kilometre", "kilometer", 1000.0},
+            {"metres", "meters", "metre", "meter", 1.0}, // this is the standard
+            {"inches", "inch", 0.0254},
+            {"yards", "- yards", "- yard", 0.9144},
+    });
+    public static final Map<String, Double> MONEY_DOMAIN = createDomainMap(new Object[][]{
+            {"usd", "US$", 1.0}, // this is the standard
+            {"euros", "euro", "eur", 1.15},
+            {"pound", "pounds", "gbp", 1.3},
             {"yen", 0.009},
             {"yuan", 0.15}
-    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
-    // This is amount of time.
-    public static final Map<String, Double> TIME_DOMAIN = Stream.of(new Object[][]{
-            {"years", 3600.0 * 24 * 365},
-            {"months", 3600.0 * 24 * 30},
-            {"days", 3600.0 * 24},
-            {"weeks", 3600.0 * 24 * 7},
-            {"hours", 3600.0},
-            {"minutes", 60.0},
-            {"decades", 3600.0 * 24 * 365 * 10},
-            {"seconds", 1.0}, // this is the standard
-            {"year", 3600.0 * 24 * 365},
-            {"month", 3600.0 * 24 * 30},
-            {"day", 3600.0 * 24},
-            {"week", 3600.0 * 24 * 7},
-            {"hour", 3600.0},
-            {"minute", 60.0},
-            {"decade", 3600.0 * 24 * 365 * 10},
-            {"second", 1.0},
-            {"- year", 3600.0 * 24 * 265},
-            {"- minutes", 60.0}
-    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
-    public static final Map<String, Double> PERCENTAGE_DOMAIN = Stream.of(new Object[][]{
-            {"percent", 1.0},
-            {"per cent", 1.0}
-    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
-    public static final Map<String, Double> MASS_DOMAIN = Stream.of(new Object[][]{
+    });
+    public static final Map<String, Double> TIME_DOMAIN = createDomainMap(new Object[][]{
+            {"decades", "decade", 3600.0 * 24 * 365 * 10},
+            {"years", "year", "- year", 3600.0 * 24 * 365},
+            {"months", "month", 3600.0 * 24 * 30},
+            {"days", "day", 3600.0 * 24},
+            {"weeks", "week", 3600.0 * 24 * 7},
+            {"hours", "hour", 3600.0},
+            {"minutes", "minute", "- minutes", 60.0},
+            {"seconds", "second", 1.0}, // this is the standard
+    });
+    public static final Map<String, Double> PERCENTAGE_DOMAIN = createDomainMap(new Object[][]{
+            {"percent", "per cent", 1.0},
+    });
+    public static final Map<String, Double> MASS_DOMAIN = createDomainMap(new Object[][]{
             {"kilogram", 1.0}, // this is the standard
             {"tonnes", 1000.0}
-    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
-    public static final Map<String, Double> AREA_DOMAIN = Stream.of(new Object[][]{ // Domain added for Wikipedia
-            {"square miles", 2859988.11},
-            {"square mile", 2859988.11},
-            {"- square - mile", 2859988.11},
-            {"mi 2", 2859988.11},
-            {"sq miles", 2859988.11},
-            {"sq mi", 2859988.11},
-            {"sqmi", 2859988.11},
-            {"square feet", 0.0929},
-            {"square foot", 0.0929},
-            {"- square - foot", 0.0929},
-            {"square ft", 0.0929},
-            {"sq ft", 0.0929},
-            {"square centimetres", 0.0001},
-            {"square centimeters", 0.0001},
-            {"square cm", 0.0001},
-            {"sq cm", 0.0001},
+    });
+    public static final Map<String, Double> AREA_DOMAIN = createDomainMap(new Object[][]{ // Domain added for Wikipedia
+            {"square miles", "square mile", "- square - mile", "mi 2", "sq miles", "sq mi", "sqmi", 2859988.11},
+            {"square feet", "square foot", "- square - foot", "square ft", "sq ft", 0.0929},
+            {"square centimetres", "square centimeters", "square cm", "sq cm", 0.0001},
             {"acres", 4048.0},
-            {"hectares", 10000.0},
-            {"ha", 10000.0},
+            {"hectares", "ha", 10000.0},
             {"ares", 100.0},
-            {"square kilometres", 1000000.0},
-            {"square kilometers", 1000000.0},
-            {"square kilometre", 1000000.0},
-            {"square kilometer", 1000000.0},
-            {"square km", 1000000.0},
-            {"sq km", 1000000.0},
-            {"sqkm", 1000000.0},
-            {"km²", 1000000.0},
-            {"km2", 1000000.0},
-            {"km 2", 1000000.0},
-            {"km ^ 2", 1000000.0},
-            {"square metres", 1.0}, // this is the standard
-            {"square meters", 1.0},
-            {"- square - meter", 1.0},
-            {"square metre", 1.0},
-            {"square meter", 1.0},
-            {"sq m", 1.0},
-            {"square inches", 0.000645},
-            {"square inch", 0.000645},
-            {"sq in", 0.000645},
-            {"square yards", 0.836},
-            {"square yard", 0.836},
-            {"square yds", 0.836},
-            {"square yd", 0.836},
-    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
-    public static final Map<String, Double> VOLUME_DOMAIN = Stream.of(new Object[][]{ // Domain added for Wikipedia
-            {"cubic miles", 4168181825.44},
-            {"cubic mile", 4168181825.44},
-            {"cu mi", 4168181825.44},
-            {"cubic feet", 0.0028},
-            {"cubic foot", 0.0028},
-            {"cubic ft", 0.0028},
-            {"cu ft", 0.0028},
-            {"cubic centimetres", 0.0000001},
-            {"cubic centimeters", 0.0000001},
-            {"cubic cm", 0.0000001},
-            {"cu cm", 0.0000001},
-            {"cubic kilometres", 1000000000.0},
-            {"cubic kilometers", 1000000000.0},
-            {"cubic kilometre", 1000000000.0},
-            {"cubic kilometer", 1000000000.0},
-            {"cubic km", 1000000000.0},
-            {"cu km", 1000000000.0},
-            {"cubic metres", 1.0}, // this is the standard
-            {"cubic meters", 1.0},
-            {"cubic metre", 1.0},
-            {"cubic meter", 1.0},
-            {"cu m", 1.0},
-            {"cubic inches", 0.0000163},
-            {"cubic inch", 0.0000163},
-            {"cu in", 0.0000163},
-            {"square yards", 0.764},
-            {"square yard", 0.764},
-            {"square yds", 0.764},
-            {"square yd", 0.764},
-    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Double) data[1]));
+            {"square kilometres", "square kilometers", "square kilometre", "square kilometer", "square km", "sq km", "sqkm", "km²", "km2", "km 2", "km ^ 2", 1000000.0},
+            {"square metres", "square meters", "- square - meter", "square metre", "square meter", "sq m", 1.0}, // this is the standard
+            {"square inches", "square inch", "sq in", 0.000645},
+            {"square yards", "square yard", "square yds", "square yd", 0.836},
+    });
+    public static final Map<String, Double> VOLUME_DOMAIN = createDomainMap(new Object[][]{ // Domain added for Wikipedia
+            {"cubic miles", "cubic mile", "cu mi", 4168181825.44},
+            {"cubic feet","cubic foot", "cubic ft","cu ft",0.0028},
+            {"cubic centimetres", "cubic centimeters", "cubic cm","cu cm",0.0000001},
+            {"cubic kilometres", "cubic kilometers","cubic kilometre","cubic kilometer","cubic km",  "cu km", 1000000000.0},
+            {"cubic metres","cubic meters", "cubic metre","cubic meter", "cu m", 1.0}, // this is the standard
+            {"cubic inches","cubic inch", "cu in", 0.0000163},
+            {"square yards","square yard","square yds","square yd",  0.764},
+    });
 
     // units are tokenized during preprocessing, e.g., "km/h" -> "km / h", this function reverts this action.
     private static String untokenizeUnit(String unit) {
