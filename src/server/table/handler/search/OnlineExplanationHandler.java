@@ -3,7 +3,6 @@ package server.table.handler.search;
 import model.context.ContextMatcher;
 import model.quantity.Quantity;
 import model.quantity.QuantityConstraint;
-import model.quantity.QuantityDomain;
 import model.query.SimpleQueryParser;
 import nlp.NLP;
 import server.table.explain.TypeLiftingRestrictor;
@@ -91,8 +90,8 @@ public class OnlineExplanationHandler extends HttpServlet {
         QuantityConstraint qc = new QuantityConstraint();
         qc.quantity = Quantity.fromQuantityString(alteredQuantityStr);
         qc.resolutionCode = QuantityConstraint.QuantityResolution.Value.DOMAIN_ONLY; // important!
-        qc.searchDomain = QuantityDomain.getSearchDomain(qc.quantity);
-        qc.domain = QuantityDomain.getDomain(qc.quantity);
+        qc.searchDomain = qc.quantity.getSearchDomain();
+        qc.domain = qc.quantity.getDomain();
 
         server.text.handler.search.SearchResult response = new server.text.handler.search.SearchResult();
         try {

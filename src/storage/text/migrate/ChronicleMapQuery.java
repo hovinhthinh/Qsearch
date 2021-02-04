@@ -48,15 +48,15 @@ public class ChronicleMapQuery {
         if (quantityConstraint == null) {
             return result;
         }
-        double qtConstraintStandardValue = quantityConstraint.quantity.value * QuantityDomain.getScale(quantityConstraint.quantity);
+        double qtConstraintStandardValue = quantityConstraint.quantity.value * quantityConstraint.quantity.getScale();
         Double qtConstraintStandardValue2 = quantityConstraint.quantity.value2 == null ? null :
-                quantityConstraint.quantity.value2 * QuantityDomain.getScale(quantityConstraint.quantity);
+                quantityConstraint.quantity.value2 * quantityConstraint.quantity.getScale();
 
         TypeMatcher typeMatcher = new TypeMatcher(queryType);
 
         // Process query context terms
         queryContext = queryContext.toLowerCase();
-        String domain = QuantityDomain.getSearchDomain(quantityConstraint.quantity);
+        String domain = quantityConstraint.quantity.getSearchDomain();
         if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             queryContext += " " + quantityConstraint.quantity.unit;
         }
@@ -168,7 +168,7 @@ public class ChronicleMapQuery {
 
                     ArrayList<String> contextVerbose = new ArrayList<>(X);
 
-                    if (QuantityDomain.quantityMatchesSearchDomain(qt, QuantityDomain.Domain.DIMENSIONLESS)) {
+                    if (qt.matchesSearchDomain(QuantityDomain.Domain.DIMENSIONLESS)) {
                         X.addAll(NLP.splitSentence(qt.unit));
                     }
                     if (X.isEmpty()) {
@@ -186,7 +186,7 @@ public class ChronicleMapQuery {
 
                     ResultInstance.SubInstance si = new ResultInstance.SubInstance();
                     si.quantity = qt.toString(1);
-                    si.quantityStandardValue = qt.value * QuantityDomain.getScale(qt);
+                    si.quantityStandardValue = qt.value * qt.getScale();
                     si.quantityStr = facts.getJSONObject(i).getString("quantityStr");
                     si.quantityConvertedStr = qt.getQuantityConvertedStr(quantityConstraint.quantity);
 

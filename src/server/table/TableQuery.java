@@ -350,9 +350,9 @@ public class TableQuery {
         if (qtConstraint == null) {
             return result;
         }
-        double qtConstraintStandardValue = qtConstraint.quantity.value * QuantityDomain.getScale(qtConstraint.quantity);
+        double qtConstraintStandardValue = qtConstraint.quantity.value * qtConstraint.quantity.getScale();
         Double qtConstraintStandardValue2 = qtConstraint.quantity.value2 == null ? null :
-                qtConstraint.quantity.value2 * QuantityDomain.getScale(qtConstraint.quantity);
+                qtConstraint.quantity.value2 * qtConstraint.quantity.getScale();
 
         TypeMatcher typeMatcher = new TypeMatcher(queryType);
 
@@ -368,7 +368,7 @@ public class TableQuery {
         }
 
         // Process query context terms
-        String domain = QuantityDomain.getSearchDomain(qtConstraint.quantity);
+        String domain = qtConstraint.quantity.getSearchDomain();
         if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             queryContext += " " + qtConstraint.quantity.unit;
         }
@@ -453,7 +453,7 @@ public class TableQuery {
                 Pair<Double, ArrayList<ResultInstance.SubInstance.ContextMatchTrace>> matchScore =
                         match(queryTypeTerms, queryContextTerms, f, ti, additionalParameters, matchCache);
 
-                double qtStandardValue = qt.value * QuantityDomain.getScale(qt);
+                double qtStandardValue = qt.value * qt.getScale();
 
                 // compute quantity distance to query
                 double qtRelativeDist = Math.min(1,

@@ -78,8 +78,8 @@ public class QuantityConstraint {
                     }
 
                     c.quantity = new Quantity(q.value, NLP.stripSentence(q.units), "external"); // not use resolution from IllinoisQuantifier.
-                    c.searchDomain = QuantityDomain.getSearchDomain(c.quantity);
-                    c.domain = QuantityDomain.getDomain(c.quantity);
+                    c.searchDomain = c.quantity.getSearchDomain();
+                    c.domain = c.quantity.getDomain();
 
                     // all signals except RANGE
                     for (String operator : QuantityResolution.ALL_SIGNALS.keySet()) {
@@ -172,7 +172,7 @@ public class QuantityConstraint {
     }
 
     public boolean match(Quantity q) {
-        if (!QuantityDomain.quantityMatchesSearchDomain(q, searchDomain)) {
+        if (!q.matchesSearchDomain(searchDomain)) {
             return false;
         }
 
@@ -180,8 +180,8 @@ public class QuantityConstraint {
             return true;
         }
 
-        double qValue = q.value * QuantityDomain.getScale(q);
-        double thisQValue = quantity.value * QuantityDomain.getScale(quantity);
+        double qValue = q.value * q.getScale();
+        double thisQValue = quantity.value * quantity.getScale();
         if (resolutionCode == QuantityResolution.Value.UPPER_BOUND) {
             return qValue <= thisQValue;
         } else if (resolutionCode == QuantityResolution.Value.LOWER_BOUND) {
@@ -191,7 +191,7 @@ public class QuantityConstraint {
         } else if (resolutionCode == QuantityResolution.Value.APPROXIMATE) {
             return Math.abs(qValue - thisQValue) <= Math.abs(thisQValue * QuantityResolution.APPROXIMATE_RATE);
         } else if (resolutionCode == QuantityResolution.Value.RANGE) {
-            double thisQValue2 = quantity.value2 * QuantityDomain.getScale(quantity);
+            double thisQValue2 = quantity.value2 * quantity.getScale();
             return qValue >= thisQValue && qValue <= thisQValue2;
         } else {
             throw new RuntimeException("Unknown resolution.");

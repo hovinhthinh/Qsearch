@@ -2,7 +2,6 @@ package server.table;
 
 import model.context.IDF;
 import model.quantity.Quantity;
-import model.quantity.QuantityDomain;
 import nlp.Glove;
 import nlp.NLP;
 import org.eclipse.jetty.websocket.api.Session;
@@ -90,8 +89,8 @@ class KNNEstimator {
             Quantity q = getQuantity();
             Quantity oQ = o.getQuantity();
 
-            double qValue = q.value * QuantityDomain.getScale(q) / quantityMeanValue * QfactLightConsistencyRescoringEngine.QUANTITY_FEATURE_BOOST;
-            double oQValue = oQ.value * QuantityDomain.getScale(oQ) / quantityMeanValue * QfactLightConsistencyRescoringEngine.QUANTITY_FEATURE_BOOST;
+            double qValue = q.value * q.getScale() / quantityMeanValue * QfactLightConsistencyRescoringEngine.QUANTITY_FEATURE_BOOST;
+            double oQValue = oQ.value * oQ.getScale() / quantityMeanValue * QfactLightConsistencyRescoringEngine.QUANTITY_FEATURE_BOOST;
             dotProd += qValue * oQValue;
             length += qValue * qValue;
             oLength += oQValue * oQValue;
@@ -108,8 +107,8 @@ class KNNEstimator {
             Quantity q = getQuantity();
             Quantity oQ = o.getQuantity();
 
-            double qValue = q.value * QuantityDomain.getScale(q);
-            double oQValue = oQ.value * QuantityDomain.getScale(oQ);
+            double qValue = q.value * q.getScale();
+            double oQValue = oQ.value * oQ.getScale();
 
             double quantityRelDist = Math.min(Math.abs(qValue - oQValue) / Math.max(Math.abs(qValue), Math.abs(oQValue)), 1);
             return (1 - quantityFeatureBoost) * termDist + quantityFeatureBoost * quantityRelDist;
@@ -123,7 +122,7 @@ class KNNEstimator {
         this.quantityMeanNormalizeValue = 0;
         for (DataPoint p : training) {
             Quantity q = Quantity.fromQuantityString(p.si.qfact.quantity);
-            this.quantityMeanNormalizeValue += Math.abs(q.value * QuantityDomain.getScale(q)) / training.size();
+            this.quantityMeanNormalizeValue += Math.abs(q.value * q.getScale()) / training.size();
         }
     }
 

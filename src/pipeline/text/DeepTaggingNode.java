@@ -73,7 +73,7 @@ public class DeepTaggingNode implements TaggingNode {
         String textFeatureString = sent.getTextFeatureString();
         String entityFeatureString = sent.getEntityFeatureString();
         for (QuantityTag qtag : sent.quantityTags) {
-            if (!QuantityDomain.quantityMatchesSearchDomain(qtag.quantity, taggingDomain)) {
+            if (!qtag.quantity.matchesSearchDomain(taggingDomain)) {
                 continue;
             }
             try {

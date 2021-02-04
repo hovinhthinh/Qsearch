@@ -131,12 +131,12 @@ public class QueryTemplate {
             int nResultsLast = -100;
             for (int top : tops) {
                 Quantity thresholdQ = facts.get(top - 1).q;
-                double queryQ = thresholdQ.value * QuantityDomain.getScale(thresholdQ) / QuantityDomain.getScale(new Quantity(0, quantityUnit, "="));
+                double queryQ = thresholdQ.value * thresholdQ.getScale() / new Quantity(0, quantityUnit, "=").getScale();
                 Pair<Double, String> textualized = textualizeQuantity(queryQ,
                         QuantityDomain.getSearchDomainOfUnit(quantityUnit).equals(QuantityDomain.Domain.PERCENTAGE));
                 queryQ = textualized.first;
                 String queryQStr = textualized.second;
-                double factQThreshold = queryQ * QuantityDomain.getScale(new Quantity(0, quantityUnit, "=")) / QuantityDomain.getScale(thresholdQ);
+                double factQThreshold = queryQ * new Quantity(0, quantityUnit, "=").getScale() / thresholdQ.getScale();
                 RecallQuery q = new RecallQuery();
                 q.sourceURL = sourceURL;
                 q.groundFacts = new ArrayList<>();
@@ -188,12 +188,12 @@ public class QueryTemplate {
             int nResultsLast = -100;
             for (int top : tops) {
                 Quantity thresholdQ = facts.get(top - 1).q;
-                double queryQ = thresholdQ.value * QuantityDomain.getScale(thresholdQ) / QuantityDomain.getScale(new Quantity(0, quantityUnit, "="));
+                double queryQ = thresholdQ.value * thresholdQ.getScale() / new Quantity(0, quantityUnit, "=").getScale();
                 Pair<Double, String> textualized = textualizeQuantity(queryQ,
                         QuantityDomain.getSearchDomainOfUnit(quantityUnit).equals(QuantityDomain.Domain.PERCENTAGE));
                 queryQ = textualized.first;
                 String queryQStr = textualized.second;
-                double factQThreshold = queryQ * QuantityDomain.getScale(new Quantity(0, quantityUnit, "=")) / QuantityDomain.getScale(thresholdQ);
+                double factQThreshold = queryQ * new Quantity(0, quantityUnit, "=").getScale() / thresholdQ.getScale();
                 RecallQuery q = new RecallQuery();
                 q.sourceURL = sourceURL;
                 q.groundFacts = new ArrayList<>();

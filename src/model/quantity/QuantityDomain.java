@@ -145,13 +145,6 @@ public class QuantityDomain {
         // TODO: more;
     }
 
-    public static KgUnit getKgUnit(Quantity quantity) {
-        if (quantity.kgUnit != null) {
-            return quantity.kgUnit;
-        }
-        return quantity.kgUnit = getKgUnitFromUnitStr(quantity.unit);
-    }
-
     public static KgUnit getKgUnitFromUnitStr(String unit) {
         unit = untokenizeUnit(unit);
         String kge;
@@ -173,38 +166,8 @@ public class QuantityDomain {
         return KgUnit.DIMENSIONLESS;
     }
 
-    public static double getScale(Quantity quantity) {
-        if (quantity.scale != null) {
-            return quantity.scale;
-        }
-        KgUnit kgu = getKgUnit(quantity);
-        String siDomain = kgu.getSIDomain();
-        if (kgu.conversionToSI != null && Domain.SEARCHABLE_SPECIFIC_DOMAINS.contains(siDomain)) {
-            return quantity.scale = kgu.conversionToSI;
-        }
-        return quantity.scale = 1.0; // dimensionless
-    }
-
-    public static String getDomain(Quantity quantity) {
-        if (quantity.domain != null) {
-            return quantity.domain;
-        }
-        return quantity.domain = getKgUnit(quantity).getDomain();
-    }
-
     public static String getDomainOfUnit(String unit) {
         return getKgUnitFromUnitStr(unit).getDomain();
-    }
-
-    public static String getSearchDomain(Quantity quantity) {
-        if (quantity.searchDomain != null) {
-            return quantity.searchDomain;
-        }
-        KgUnit kgu = getKgUnit(quantity);
-        String siDomain = kgu.getSIDomain();
-        return quantity.searchDomain =
-                (kgu.conversionToSI != null && Domain.SEARCHABLE_SPECIFIC_DOMAINS.contains(siDomain)
-                        ? siDomain : Domain.DIMENSIONLESS);
     }
 
     public static String getSearchDomainOfUnit(String unit) {
@@ -212,13 +175,6 @@ public class QuantityDomain {
         String siDomain = kgu.getSIDomain();
         return kgu.conversionToSI != null && Domain.SEARCHABLE_SPECIFIC_DOMAINS.contains(siDomain)
                 ? siDomain : Domain.DIMENSIONLESS;
-    }
-
-    public static boolean quantityMatchesSearchDomain(Quantity quantity, String domain) {
-        if (domain.equals(Domain.ANY)) {
-            return true;
-        }
-        return getSearchDomain(quantity).equals(domain);
     }
 
     public static void main(String[] args) {

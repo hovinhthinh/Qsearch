@@ -12,10 +12,10 @@ public class Quantity {
     public String resolution;
 
     // these properties is for cached calls
-    public transient KgUnit kgUnit;
-    public transient String searchDomain, domain;
-    public transient Double scale;
-    public transient String string;
+    private transient KgUnit kgUnit;
+    private transient String searchDomain, domain;
+    private transient Double scale;
+    private transient String string;
 
     public Quantity(double value, String unit, String resolution) {
         this(value, null, unit, resolution);
@@ -76,11 +76,55 @@ public class Quantity {
         return sb.toString();
     }
 
+    public KgUnit getKgUnit() {
+        if (kgUnit != null) {
+            return kgUnit;
+        }
+        return kgUnit = QuantityDomain.getKgUnitFromUnitStr(unit);
+    }
+
+    public double getScale() {
+        if (scale != null) {
+            return scale;
+        }
+        KgUnit kgu = getKgUnit();
+        String siDomain = kgu.getSIDomain();
+        if (kgu.conversionToSI != null && QuantityDomain.Domain.SEARCHABLE_SPECIFIC_DOMAINS.contains(siDomain)) {
+            return scale = kgu.conversionToSI;
+        }
+        return scale = 1.0; // dimensionless
+    }
+
+    public String getDomain() {
+        if (domain != null) {
+            return domain;
+        }
+        return domain = getKgUnit().getDomain();
+    }
+
+    public String getSearchDomain() {
+        if (searchDomain != null) {
+            return searchDomain;
+        }
+        KgUnit kgu = getKgUnit();
+        String siDomain = kgu.getSIDomain();
+        return searchDomain =
+                (kgu.conversionToSI != null && QuantityDomain.Domain.SEARCHABLE_SPECIFIC_DOMAINS.contains(siDomain)
+                        ? siDomain : QuantityDomain.Domain.DIMENSIONLESS);
+    }
+
+    public boolean matchesSearchDomain(String domain) {
+        if (domain.equals(QuantityDomain.Domain.ANY)) {
+            return true;
+        }
+        return getSearchDomain().equals(domain);
+    }
+
     // 1% diff is considered equals
     // only works for quantities of the same concept.
     public int compareTo(Quantity o) {
-        double thisConvertedValue = value * QuantityDomain.getScale(this);
-        double otherConvertedValue = o.value * QuantityDomain.getScale(o);
+        double thisConvertedValue = value * getScale();
+        double otherConvertedValue = o.value * o.getScale();
 
         double maxDiff = Math.max(Math.abs(thisConvertedValue), Math.abs(otherConvertedValue)) * 0.01;
         double diff = Math.abs(thisConvertedValue - otherConvertedValue);
@@ -91,10 +135,10 @@ public class Quantity {
     // assume that the two quantities are of the same concept
     // return null if no conversion is required
     public String getQuantityConvertedStr(Quantity targetQuantity) {
-        if (!QuantityDomain.getSearchDomain(this).equals(QuantityDomain.getSearchDomain(targetQuantity))) {
+        if (!getSearchDomain().equals(targetQuantity.getSearchDomain())) {
             throw new RuntimeException("Two quantities are of different concepts");
         }
-        double scale = QuantityDomain.getScale(this) / QuantityDomain.getScale(targetQuantity);
+        double scale = getScale() / targetQuantity.getScale();
         if (Math.abs(scale - 1.0) <= 1e-6) {
             return null;
         }
