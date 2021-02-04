@@ -395,8 +395,8 @@ public class SimpleQueryParser {
                     }
 
                     constraint = QuantityConstraint.parseFromString(String.join(" ", arr.subList(start, end)));
-                    // shrink to get a (fine-grained) non-dimensional unit
-                    if (constraint.fineGrainedDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+                    // shrink to get a non-dimensional unit
+                    if (constraint.domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
 
                         int shrinkedEnd = -1;
                         int lastValidDimensionlessEnd = end;
@@ -408,7 +408,7 @@ public class SimpleQueryParser {
                                 break;
                             }
                             lastValidDimensionlessEnd = i;
-                            if (!newConstraint.fineGrainedDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+                            if (!newConstraint.domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
                                 shrinkedEnd = i;
                                 break;
                             }

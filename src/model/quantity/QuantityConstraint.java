@@ -23,8 +23,7 @@ public class QuantityConstraint {
     public Quantity quantity; // From Illinois Quantifier.
     public QuantityResolution.Value resolutionCode;
     public boolean resolutionCodeExplicitlyGiven;
-    public String domain;
-    public String fineGrainedDomain;
+    public String domain, searchDomain;
     public String phrase;
 
     // return first one if available, null otherwise
@@ -79,8 +78,8 @@ public class QuantityConstraint {
                     }
 
                     c.quantity = new Quantity(q.value, NLP.stripSentence(q.units), "external"); // not use resolution from IllinoisQuantifier.
-                    c.domain = QuantityDomain.getSearchDomain(c.quantity);
-                    c.fineGrainedDomain = QuantityDomain.getDomain(c.quantity);
+                    c.searchDomain = QuantityDomain.getSearchDomain(c.quantity);
+                    c.domain = QuantityDomain.getDomain(c.quantity);
 
                     // all signals except RANGE
                     for (String operator : QuantityResolution.ALL_SIGNALS.keySet()) {
@@ -173,7 +172,7 @@ public class QuantityConstraint {
     }
 
     public boolean match(Quantity q) {
-        if (!QuantityDomain.quantityMatchesSearchDomain(q, domain)) {
+        if (!QuantityDomain.quantityMatchesSearchDomain(q, searchDomain)) {
             return false;
         }
 
@@ -201,7 +200,7 @@ public class QuantityConstraint {
 
     @Override
     public String toString() {
-        return "<" + domain
+        return "<" + searchDomain
                 + ":" + (resolutionCodeExplicitlyGiven ? "explicit" : "implicit") + "-" + resolutionCode
                 + ":" + quantity.toString()
                 + ">";

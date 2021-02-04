@@ -564,7 +564,7 @@
             + ", " + '<span class="alert alert-danger">' + escapeText(value) + '</span>';
 
         quantityConstraintDetail += ", " + '<span class="alert alert-danger">' + escapeText(quantity.quantity.unit)
-            + ' (' + escapeText(quantity['fineGrainedDomain']) + ')</span>';
+            + ' (' + escapeText(quantity['domain']) + ')</span>';
         quantityConstraintDetail += " )";
 
         $('#parsed').html('Parsed:&nbsp;&nbsp;&nbsp;' + '<span class="entity-box">' + escapeText(type) + '</span>'
