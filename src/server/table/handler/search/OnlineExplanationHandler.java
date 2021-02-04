@@ -91,8 +91,8 @@ public class OnlineExplanationHandler extends HttpServlet {
         QuantityConstraint qc = new QuantityConstraint();
         qc.quantity = Quantity.fromQuantityString(alteredQuantityStr);
         qc.resolutionCode = QuantityConstraint.QuantityResolution.Value.DOMAIN_ONLY; // important!
-        qc.domain = QuantityDomain.getDomain(qc.quantity);
-        qc.fineGrainedDomain = QuantityDomain.getFineGrainedDomain(qc.quantity);
+        qc.domain = QuantityDomain.getSearchDomain(qc.quantity);
+        qc.fineGrainedDomain = QuantityDomain.getDomain(qc.quantity);
 
         server.text.handler.search.SearchResult response = new server.text.handler.search.SearchResult();
         try {

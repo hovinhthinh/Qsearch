@@ -133,7 +133,7 @@ public class QueryTemplate {
                 Quantity thresholdQ = facts.get(top - 1).q;
                 double queryQ = thresholdQ.value * QuantityDomain.getScale(thresholdQ) / QuantityDomain.getScale(new Quantity(0, quantityUnit, "="));
                 Pair<Double, String> textualized = textualizeQuantity(queryQ,
-                        QuantityDomain.getDomainOfUnit(quantityUnit).equals(QuantityDomain.Domain.PERCENTAGE));
+                        QuantityDomain.getSearchDomainOfUnit(quantityUnit).equals(QuantityDomain.Domain.PERCENTAGE));
                 queryQ = textualized.first;
                 String queryQStr = textualized.second;
                 double factQThreshold = queryQ * QuantityDomain.getScale(new Quantity(0, quantityUnit, "=")) / QuantityDomain.getScale(thresholdQ);
@@ -190,7 +190,7 @@ public class QueryTemplate {
                 Quantity thresholdQ = facts.get(top - 1).q;
                 double queryQ = thresholdQ.value * QuantityDomain.getScale(thresholdQ) / QuantityDomain.getScale(new Quantity(0, quantityUnit, "="));
                 Pair<Double, String> textualized = textualizeQuantity(queryQ,
-                        QuantityDomain.getDomainOfUnit(quantityUnit).equals(QuantityDomain.Domain.PERCENTAGE));
+                        QuantityDomain.getSearchDomainOfUnit(quantityUnit).equals(QuantityDomain.Domain.PERCENTAGE));
                 queryQ = textualized.first;
                 String queryQStr = textualized.second;
                 double factQThreshold = queryQ * QuantityDomain.getScale(new Quantity(0, quantityUnit, "=")) / QuantityDomain.getScale(thresholdQ);

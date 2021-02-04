@@ -79,8 +79,8 @@ public class QuantityConstraint {
                     }
 
                     c.quantity = new Quantity(q.value, NLP.stripSentence(q.units), "external"); // not use resolution from IllinoisQuantifier.
-                    c.domain = QuantityDomain.getDomain(c.quantity);
-                    c.fineGrainedDomain = QuantityDomain.getFineGrainedDomain(c.quantity);
+                    c.domain = QuantityDomain.getSearchDomain(c.quantity);
+                    c.fineGrainedDomain = QuantityDomain.getDomain(c.quantity);
 
                     // all signals except RANGE
                     for (String operator : QuantityResolution.ALL_SIGNALS.keySet()) {
@@ -173,7 +173,7 @@ public class QuantityConstraint {
     }
 
     public boolean match(Quantity q) {
-        if (!QuantityDomain.quantityMatchesDomain(q, domain)) {
+        if (!QuantityDomain.quantityMatchesSearchDomain(q, domain)) {
             return false;
         }
 

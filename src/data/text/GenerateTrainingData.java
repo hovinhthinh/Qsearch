@@ -17,7 +17,7 @@ public class GenerateTrainingData {
     public static boolean isGoodQuantitativeFact(QuantitativeFact fact, String quantityDomain) {
         // fact.conf >= 0.9 && entityTag.confidence >= 0.5 covers ~ 53% of NYT; ~77% of STICS
         return
-                QuantityDomain.quantityMatchesDomain(fact.quantityTag.quantity, quantityDomain) &&
+                QuantityDomain.quantityMatchesSearchDomain(fact.quantityTag.quantity, quantityDomain) &&
                         fact.conf >= 0.9 && (fact.entityTag == null || fact.entityTag.confidence >= 0.5);
     }
 

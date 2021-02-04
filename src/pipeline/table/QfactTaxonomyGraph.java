@@ -64,7 +64,7 @@ public class QfactTaxonomyGraph {
             qfact.id = id++;
             qfact.entity = arr[0];
             qfact.quantity = Quantity.fromQuantityString(arr[2]);
-            if (QuantityDomain.getDomain(qfact.quantity).equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+            if (QuantityDomain.getSearchDomain(qfact.quantity).equals(QuantityDomain.Domain.DIMENSIONLESS)) {
                 arr[1] += " " + qfact.quantity.unit;
             }
             qfact.context = NLP.splitSentence(arr[1].toLowerCase());
@@ -192,7 +192,7 @@ public class QfactTaxonomyGraph {
             return result.second == null ? null : result;
         }
 
-        String thisDomain = QuantityDomain.getDomain(quantity);
+        String thisDomain = QuantityDomain.getSearchDomain(quantity);
         if (thisDomain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             context = context + " " + quantity.unit;
         }
@@ -217,7 +217,7 @@ public class QfactTaxonomyGraph {
             Pair<Double, EntityTextQfact> singleEntityResult = new Pair<>(0.0, null);
             for (EntityTextQfact o : qfacts) {
                 // different concept should be ignored
-                if (!thisDomain.equals(QuantityDomain.getDomain(o.quantity))) {
+                if (!thisDomain.equals(QuantityDomain.getSearchDomain(o.quantity))) {
                     continue;
                 }
 
@@ -245,7 +245,7 @@ public class QfactTaxonomyGraph {
                     singleEntityResult = new Pair<>(0.0, null);
                     for (EntityTextQfact o : qfacts) {
                         // different concept should be ignored
-                        if (!thisDomain.equals(QuantityDomain.getDomain(o.quantity))) {
+                        if (!thisDomain.equals(QuantityDomain.getSearchDomain(o.quantity))) {
                             continue;
                         }
                         double contextMatchScr = ContextEmbeddingMatcher.directedEmbeddingIdfSimilarity(thisContext, o.context);

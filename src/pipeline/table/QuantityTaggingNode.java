@@ -181,7 +181,7 @@ public class QuantityTaggingNode implements TaggingNode {
                     // prefer header unit if available (only for first quantity, and the domain of the cell quantity
                     // is dimensionless)
                     String cellUnit = NLP.stripSentence((firstQuantity && unit != null
-                            && QuantityDomain.getDomainOfUnit(q.units).equals(QuantityDomain.Domain.DIMENSIONLESS))
+                            && QuantityDomain.getSearchDomainOfUnit(q.units).equals(QuantityDomain.Domain.DIMENSIONLESS))
                             ? unit : q.units);
                     firstQuantity = false;
 

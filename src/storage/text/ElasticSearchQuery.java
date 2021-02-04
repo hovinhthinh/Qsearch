@@ -194,7 +194,7 @@ public class ElasticSearchQuery {
         StreamedIterable<JSONObject> instances = searchByType(queryType);
 
         // Process query context terms
-        String domain = QuantityDomain.getDomain(constraint.quantity);
+        String domain = QuantityDomain.getSearchDomain(constraint.quantity);
         if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             queryContext += " " + constraint.quantity.unit;
         }
@@ -287,7 +287,7 @@ public class ElasticSearchQuery {
 
                     ArrayList<String> contextVerbose = new ArrayList<>(X);
 
-                    if (QuantityDomain.quantityMatchesDomain(qt, QuantityDomain.Domain.DIMENSIONLESS)) {
+                    if (QuantityDomain.quantityMatchesSearchDomain(qt, QuantityDomain.Domain.DIMENSIONLESS)) {
                         X.addAll(NLP.splitSentence(qt.unit));
                     }
                     if (X.isEmpty()) {

@@ -368,7 +368,7 @@ public class TableQuery {
         }
 
         // Process query context terms
-        String domain = QuantityDomain.getDomain(qtConstraint.quantity);
+        String domain = QuantityDomain.getSearchDomain(qtConstraint.quantity);
         if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             queryContext += " " + qtConstraint.quantity.unit;
         }

@@ -56,7 +56,7 @@ public class ChronicleMapQuery {
 
         // Process query context terms
         queryContext = queryContext.toLowerCase();
-        String domain = QuantityDomain.getDomain(quantityConstraint.quantity);
+        String domain = QuantityDomain.getSearchDomain(quantityConstraint.quantity);
         if (domain.equals(QuantityDomain.Domain.DIMENSIONLESS)) {
             queryContext += " " + quantityConstraint.quantity.unit;
         }
@@ -168,7 +168,7 @@ public class ChronicleMapQuery {
 
                     ArrayList<String> contextVerbose = new ArrayList<>(X);
 
-                    if (QuantityDomain.quantityMatchesDomain(qt, QuantityDomain.Domain.DIMENSIONLESS)) {
+                    if (QuantityDomain.quantityMatchesSearchDomain(qt, QuantityDomain.Domain.DIMENSIONLESS)) {
                         X.addAll(NLP.splitSentence(qt.unit));
                     }
                     if (X.isEmpty()) {

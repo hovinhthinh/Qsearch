@@ -1,6 +1,7 @@
 package model.quantity;
 
 import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
+import model.quantity.kg.KgUnit;
 import nlp.NLP;
 
 // These are extracted from IllinoisQuantifier.
@@ -10,9 +11,10 @@ public class Quantity {
     public String unit;
     public String resolution;
 
-    // these two properties is for cached calls
-    public transient String domain, fineGrainedDomain;
-    public transient Double scale, fineGrainedScale;
+    // these properties is for cached calls
+    public transient KgUnit kgUnit;
+    public transient String searchDomain, domain;
+    public transient Double scale;
     public transient String string;
 
     public Quantity(double value, String unit, String resolution) {
@@ -89,7 +91,7 @@ public class Quantity {
     // assume that the two quantities are of the same concept
     // return null if no conversion is required
     public String getQuantityConvertedStr(Quantity targetQuantity) {
-        if (!QuantityDomain.getDomain(this).equals(QuantityDomain.getDomain(targetQuantity))) {
+        if (!QuantityDomain.getSearchDomain(this).equals(QuantityDomain.getSearchDomain(targetQuantity))) {
             throw new RuntimeException("Two quantities are of different concepts");
         }
         double scale = QuantityDomain.getScale(this) / QuantityDomain.getScale(targetQuantity);
@@ -144,7 +146,7 @@ public class Quantity {
                             // not extend this token, as it could be a preposition
                             break;
                         }
-                        if (!QuantityDomain.getFineGrainedDomainOfUnit(extendedUnit).equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+                        if (!QuantityDomain.getDomainOfUnit(extendedUnit).equals(QuantityDomain.Domain.DIMENSIONLESS)) {
                             q.units = extendedUnit;
                             span.end = i - 1;
                             q.phrase = tokenizedText.substring(span.start, span.end + 1);
@@ -163,7 +165,7 @@ public class Quantity {
                 for (int i = spanEnd + 1; i > unitStart; --i) {
                     if (i == spanEnd + 1 || tokenizedText.charAt(i) == ' ') {
                         String shrunkUnit = tokenizedText.substring(unitStart, i);
-                        if (!QuantityDomain.getFineGrainedDomainOfUnit(shrunkUnit).equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+                        if (!QuantityDomain.getDomainOfUnit(shrunkUnit).equals(QuantityDomain.Domain.DIMENSIONLESS)) {
                             q.units = shrunkUnit;
                             span.end = i - 1;
                             q.phrase = tokenizedText.substring(span.start, span.end + 1);
