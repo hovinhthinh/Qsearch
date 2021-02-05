@@ -68,7 +68,7 @@ public class KgUnit {
     }
 
     public boolean isDimensionless() {
-        return siUnit.equals("");
+        return siUnit != null && siUnit.equals("");
     }
 
     public String getSIDomain() {
