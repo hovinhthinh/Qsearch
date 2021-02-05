@@ -14,7 +14,7 @@ public class QuantityDomain {
     public static final String QUTREE_2_KG_UNIT_MAPPING_FILE = "./resources/kgu/QuTreeUnitName2KgUnit.tsv";
     public static final QuantityCatalog QUANTITY_CATALOG;
 
-    private static Map<String, List<Unit>> SURFACE_UNITS_MAP;
+    private static Map<String, ArrayList<Unit>> SURFACE_UNITS_MAP;
 
     private static Map<String, KgUnit> QUTREE_UNITNAME_2_KG_UNIT;
 
@@ -25,6 +25,22 @@ public class QuantityDomain {
 
     static {
         try {
+            // load mapping between qutree and kg
+            QUTREE_UNITNAME_2_KG_UNIT = new HashMap<>();
+            for (String line : FileUtils.getLineStream(QUTREE_2_KG_UNIT_MAPPING_FILE, "UTF-8")) {
+                if (line.startsWith("#")) {
+                    continue;
+                }
+                String[] arr = line.split("\t");
+                if (arr[2].equals("null")) {
+                    continue;
+                }
+                KgUnit kgu = KgUnit.getKgUnitFromEntityName(arr[2]);
+                Assert.assertNotNull("Unit not found: " + arr[2], kgu);
+                QUTREE_UNITNAME_2_KG_UNIT.put(String.format("%s\t%s", NLP.stripSentence(arr[0]), NLP.stripSentence(arr[1])), kgu);
+            }
+
+            // load QuTree catalog
             QUANTITY_CATALOG = new QuantityCatalog((Element) null);
             SURFACE_UNITS_MAP = new HashMap<>();
             for (catalog.Quantity q : QUANTITY_CATALOG.getQuantities()) {
@@ -47,37 +63,33 @@ public class QuantityDomain {
                             continue;
                         }
                         if (!SURFACE_UNITS_MAP.containsKey(s)) {
-                            SURFACE_UNITS_MAP.put(s, new LinkedList<>());
+                            SURFACE_UNITS_MAP.put(s, new ArrayList<>());
                         }
                         SURFACE_UNITS_MAP.get(s).add(u);
                     }
                 }
             }
-            for (Map.Entry<String, List<Unit>> e : SURFACE_UNITS_MAP.entrySet()) {
-                if (e.getValue().size() > 1) {
+            for (Map.Entry<String, ArrayList<Unit>> e : SURFACE_UNITS_MAP.entrySet()) {
+                ArrayList<Unit> units = e.getValue();
+                if (units.size() > 1) {
                     Unit standardUnit = QUANTITY_CATALOG.getUnitFromBaseName(e.getKey());
                     if (standardUnit != null) {
                         // if standard unit can be found from base name, then use it.
-                        e.getValue().clear();
-                        e.getValue().add(standardUnit);
+                        units.clear();
+                        units.add(standardUnit);
                     }
                     // else we keep all candidate units, however we should use the first one.
                 }
-            }
 
-            // load mapping between qutree and kg
-            QUTREE_UNITNAME_2_KG_UNIT = new HashMap<>();
-            for (String line : FileUtils.getLineStream(QUTREE_2_KG_UNIT_MAPPING_FILE, "UTF-8")) {
-                if (line.startsWith("#")) {
-                    continue;
+                // move the first KG-mapped one to the first position.
+                for (int i = 0; i < units.size(); ++i) {
+                    Unit u = units.get(i);
+                    if (!getKgUnitForQuTreeUnit(u).isDimensionless()) {
+                        units.set(i, units.get(0));
+                        units.set(0, u);
+                        break;
+                    }
                 }
-                String[] arr = line.split("\t");
-                if (arr[2].equals("null")) {
-                    continue;
-                }
-                KgUnit kgu = KgUnit.getKgUnitFromEntityName(arr[2]);
-                Assert.assertNotNull("Unit not found: " + arr[2], kgu);
-                QUTREE_UNITNAME_2_KG_UNIT.put(String.format("%s\t%s", NLP.stripSentence(arr[0]), NLP.stripSentence(arr[1])), kgu);
             }
         } catch (Exception e) {
             e.printStackTrace();
