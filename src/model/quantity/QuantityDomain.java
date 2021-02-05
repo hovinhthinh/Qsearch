@@ -13,6 +13,7 @@ import java.util.*;
 public class QuantityDomain {
     public static final String QUTREE_2_KG_UNIT_MAPPING_FILE = "./resources/kgu/QuTreeUnitName2KgUnit.tsv";
     public static final QuantityCatalog QUANTITY_CATALOG;
+    public static final boolean USE_NARROW_SEARCH_DOMAINS = true;
 
     private static Map<String, ArrayList<Unit>> SURFACE_UNITS_MAP;
 
@@ -185,7 +186,8 @@ public class QuantityDomain {
     public static String getSearchDomainOfUnit(String unit) {
         KgUnit kgu = getKgUnitFromUnitStr(unit);
         String siDomain = kgu.getSIDomain();
-        return kgu.conversionToSI != null && Domain.SEARCHABLE_SPECIFIC_DOMAINS.contains(siDomain)
+        return kgu.conversionToSI != null
+                && (!QuantityDomain.USE_NARROW_SEARCH_DOMAINS || Domain.NARROW_SEARCH_DOMAINS.contains(siDomain))
                 ? siDomain : Domain.DIMENSIONLESS;
     }
 
@@ -217,7 +219,7 @@ public class QuantityDomain {
         public static final String SPEED = KgUnit.getKgUnitFromEntityName("<Metre_per_second>").getSIDomain();
         public static final String POWER = KgUnit.getKgUnitFromEntityName("<Watt>").getSIDomain();
 
-        public static final Set<String> SEARCHABLE_SPECIFIC_DOMAINS = Set.of(
+        public static final Set<String> NARROW_SEARCH_DOMAINS = Set.of(
                 LENGTH, MONEY, TIME, PERCENTAGE, MASS, AREA, VOLUME, SPEED, POWER
         );
     }

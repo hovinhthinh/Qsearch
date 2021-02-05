@@ -89,10 +89,9 @@ public class Quantity {
         }
         KgUnit kgu = getKgUnit();
         String siDomain = kgu.getSIDomain();
-        if (kgu.conversionToSI != null && QuantityDomain.Domain.SEARCHABLE_SPECIFIC_DOMAINS.contains(siDomain)) {
-            return scale = kgu.conversionToSI;
-        }
-        return scale = 1.0; // dimensionless
+        return scale = (kgu.conversionToSI != null
+                && (!QuantityDomain.USE_NARROW_SEARCH_DOMAINS || QuantityDomain.Domain.NARROW_SEARCH_DOMAINS.contains(siDomain))
+                ? kgu.conversionToSI : 1.0);
     }
 
     public String getDomain() {
@@ -108,9 +107,9 @@ public class Quantity {
         }
         KgUnit kgu = getKgUnit();
         String siDomain = kgu.getSIDomain();
-        return searchDomain =
-                (kgu.conversionToSI != null && QuantityDomain.Domain.SEARCHABLE_SPECIFIC_DOMAINS.contains(siDomain)
-                        ? siDomain : QuantityDomain.Domain.DIMENSIONLESS);
+        return searchDomain = (kgu.conversionToSI != null
+                && (!QuantityDomain.USE_NARROW_SEARCH_DOMAINS || QuantityDomain.Domain.NARROW_SEARCH_DOMAINS.contains(siDomain))
+                ? siDomain : QuantityDomain.Domain.DIMENSIONLESS);
     }
 
     public boolean matchesSearchDomain(String domain) {
