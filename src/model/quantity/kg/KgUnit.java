@@ -64,7 +64,7 @@ public class KgUnit {
     }
 
     public static KgUnit getKgUnitFromEntityName(String kgEntity) {
-        return KG_ENTITY_2_KG_UNIT.get(kgEntity);
+        return kgEntity.isEmpty() ? DIMENSIONLESS : KG_ENTITY_2_KG_UNIT.get(kgEntity);
     }
 
     public boolean isDimensionless() {
