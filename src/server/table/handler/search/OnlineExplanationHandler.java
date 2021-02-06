@@ -110,45 +110,40 @@ public class OnlineExplanationHandler extends HttpServlet {
 
             Pair<QuantityConstraint, ArrayList<ResultInstance>> result =
                     ChronicleMapQuery.search(typeConstraint, contextConstraint, qc, matcher, additionalParameters);
-            if (result.first == null) {
-                response.verdict = "Cannot detect quantity constraint.";
-            } else {
-                response.matchingModel = model;
-                response.typeConstraint = typeConstraint;
-                response.contextConstraint = contextConstraint;
-                response.quantityConstraint = result.first;
-                response.numResults = result.second.size();
+            response.matchingModel = model;
+            response.typeConstraint = typeConstraint;
+            response.contextConstraint = contextConstraint;
+            response.quantityConstraint = result.first;
+            response.numResults = result.second.size();
 
-                response.topResults = result.second;
-                response.verdict = "OK";
+            response.topResults = result.second;
+            response.verdict = "OK";
 
-                // promote exact entity
-                int pos = -1;
-                for (int i = 0; i < response.topResults.size(); ++i) {
-                    if (response.topResults.get(i).entity.equals(entity)) {
-                        pos = i;
-                        break;
-                    }
-                }
-                if (pos >= nTopResult) {
-                    response.topResults.set(nTopResult - 1, response.topResults.get(pos));
-                    pos = nTopResult - 1;
-                }
-
-                // trim results
-                if (response.topResults.size() > nTopResult) {
-                    response.topResults.subList(nTopResult, response.topResults.size()).clear();
-                }
-
-                // boost exact entity
-                if (pos != -1) {
-                    double eeBoost = additionalParameters == null ? EXACT_ENTITY_BOOST :
-                            (double) additionalParameters.getOrDefault("EXACT_ENTITY_BOOST", EXACT_ENTITY_BOOST);
-                    response.topResults.get(pos).score /= eeBoost;
-                    Collections.sort(response.topResults);
+            // promote exact entity
+            int pos = -1;
+            for (int i = 0; i < response.topResults.size(); ++i) {
+                if (response.topResults.get(i).entity.equals(entity)) {
+                    pos = i;
+                    break;
                 }
             }
+            if (pos >= nTopResult) {
+                response.topResults.set(nTopResult - 1, response.topResults.get(pos));
+                pos = nTopResult - 1;
+            }
 
+            // trim results
+            if (response.topResults.size() > nTopResult) {
+                response.topResults.subList(nTopResult, response.topResults.size()).clear();
+            }
+
+            // boost exact entity
+            if (pos != -1) {
+                double eeBoost = additionalParameters == null ? EXACT_ENTITY_BOOST :
+                        (double) additionalParameters.getOrDefault("EXACT_ENTITY_BOOST", EXACT_ENTITY_BOOST);
+                response.topResults.get(pos).score /= eeBoost;
+                Collections.sort(response.topResults);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             response = new server.text.handler.search.SearchResult();
