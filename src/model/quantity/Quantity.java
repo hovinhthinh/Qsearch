@@ -134,9 +134,9 @@ public class Quantity {
     // assume that the two quantities are of the same concept
     // return null if no conversion is required
     public String getQuantityConvertedStr(Quantity targetQuantity) {
-        if (!getSearchDomain().equals(targetQuantity.getSearchDomain())) {
-            throw new RuntimeException("Two quantities are of different concepts");
-        }
+//        if (!getSearchDomain().equals(targetQuantity.getSearchDomain())) {
+//            throw new RuntimeException("Two quantities are of different concepts");
+//        }
         double scale = getScale() / targetQuantity.getScale();
         if (Math.abs(scale - 1.0) <= 1e-6) {
             return null;

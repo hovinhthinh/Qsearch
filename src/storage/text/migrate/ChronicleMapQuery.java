@@ -185,6 +185,7 @@ public class ChronicleMapQuery {
                     }
 
                     ResultInstance.SubInstance si = new ResultInstance.SubInstance();
+                    si.kbcId = String.format("%d_%d", it, i);
                     si.quantity = qt.toString(1);
                     si.quantityStandardValue = qt.value * qt.getScale();
                     si.quantityStr = facts.getJSONObject(i).getString("quantityStr");

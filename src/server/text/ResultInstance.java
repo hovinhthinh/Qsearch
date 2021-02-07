@@ -15,6 +15,7 @@ public class ResultInstance implements Comparable<ResultInstance> {
     public String eval; // For evaluation
 
     public static class SubInstance {
+        public String kbcId;
         public double score;
 
         public String quantity;

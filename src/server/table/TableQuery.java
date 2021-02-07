@@ -425,7 +425,8 @@ public class TableQuery {
 
             inst.popularity = WikipediaView.getView(inst.entity);
 
-            for (QfactLight f : entityQFacts) {
+            for (int j = 0; j < entityQFacts.length; ++j) {
+                QfactLight f = entityQFacts[j];
                 if (linkingThreshold != -1 && f.linkingScore < linkingThreshold) {
                     continue;
                 }
@@ -475,7 +476,7 @@ public class TableQuery {
 //                    continue;
 //                }
 
-                inst.addSubInstance(new ResultInstance.SubInstance(f, matchScore.first,
+                inst.addSubInstance(new ResultInstance.SubInstance(String.format("%d_%d", i, j), f, matchScore.first,
                         qtStandardValue, qt.getQuantityConvertedStr(qtConstraint.quantity), matchScore.second));
             }
 

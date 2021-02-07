@@ -13,6 +13,7 @@ public class ResultInstance implements Comparable<ResultInstance> {
     public String eval; // For evaluation
 
     public static class SubInstance {
+        public String kbcId;
         public QfactLight qfact;
         public double score;
 
@@ -34,7 +35,8 @@ public class ResultInstance implements Comparable<ResultInstance> {
         public double quantityStandardValue;
         public ArrayList<ContextMatchTrace> traces;
 
-        public SubInstance(QfactLight qfact, double score, double quantityStandardValue, String quantityConvertedStr, ArrayList<ContextMatchTrace> traces) {
+        public SubInstance(String kbcId, QfactLight qfact, double score, double quantityStandardValue, String quantityConvertedStr, ArrayList<ContextMatchTrace> traces) {
+            this.kbcId = kbcId;
             this.qfact = qfact;
             this.score = score;
             this.rescore = null;

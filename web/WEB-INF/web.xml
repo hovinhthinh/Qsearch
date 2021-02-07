@@ -109,4 +109,22 @@
         <url-pattern>/browse_table</url-pattern>
     </servlet-mapping>
 
+    <!-- KBC -->
+    <servlet>
+        <servlet-name>KBCText</servlet-name>
+        <servlet-class>server.kgc.handler.KBCTextHandler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>KBCText</servlet-name>
+        <url-pattern>/kbc_text</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>KBCTable</servlet-name>
+        <servlet-class>server.kgc.handler.KBCTableHandler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>KBCTable</servlet-name>
+        <url-pattern>/kbc_table</url-pattern>
+    </servlet-mapping>
 </web-app>
