@@ -975,7 +975,7 @@
                         startRescore = true;
                     }
                 } else {
-                    window.location.replace("result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
+                    window.location.href = "result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0";
                 }
             };
             ws.onerror = function () {
@@ -998,7 +998,7 @@
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
                 success: function (data) {
-                    window.location.replace("result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0");
+                    window.location.href = "result.html?s=" + data.s + "&q=" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(params)))) + "&p=0";
                 },
                 error: function () {
                     alert("An error occurred.");
