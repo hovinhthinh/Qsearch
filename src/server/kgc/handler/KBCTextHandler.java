@@ -114,6 +114,18 @@ public class KBCTextHandler extends HttpServlet {
             if (response.topResults.size() > nTopResult) {
                 response.topResults.subList(nTopResult, response.topResults.size()).clear();
             }
+
+            // drop unnecessary info
+            for (ResultInstance ri : response.topResults) {
+                for (ResultInstance.SubInstance si : ri.subInstances) {
+                    si.entityStr = null;
+                    si.quantityStr = null;
+                    si.contextStr = null;
+                    si.quantityConvertedStr = null;
+                    si.sentence = null;
+                    si.source = null;
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
             response = new server.text.handler.search.SearchResult();

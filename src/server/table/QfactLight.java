@@ -8,7 +8,6 @@ public class QfactLight implements Cloneable {
 
     public String quantity;
     public String quantitySpan;
-    public String domain;
 
     public String headerContext;
     public String headerUnitSpan;

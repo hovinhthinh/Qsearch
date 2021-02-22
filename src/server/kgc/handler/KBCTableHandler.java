@@ -166,6 +166,22 @@ public class KBCTableHandler extends HttpServlet {
                 response.topResults.subList(nTopResult, response.topResults.size()).clear();
             }
             response.populateTableIndexesFromTopResults();
+
+            // drop unnecessary info
+            response.tableId2Index = null;
+            for (ResultInstance ri : response.topResults) {
+                for (ResultInstance.SubInstance si : ri.subInstances) {
+                    si.traces = null;
+                    si.quantityConvertedStr = null;
+                    si.qfact.explainQfactIds = null;
+                    si.qfact.explainStr = null;
+                    si.qfact.entitySpan = null;
+                    si.qfact.entity = null;
+                    si.qfact.headerContext = null;
+                    si.qfact.headerUnitSpan = null;
+                    si.qfact.quantitySpan = null;
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
             response = new server.table.handler.search.SearchResult();

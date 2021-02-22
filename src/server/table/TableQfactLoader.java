@@ -56,7 +56,6 @@ public class TableQfactLoader {
 
                         f.quantity = ql.quantity.toString();
                         f.quantitySpan = ql.text;
-                        f.domain = ql.quantity.getDomain();
 
                         f.headerContext = table.getCombinedHeader(qCol);
                         f.headerUnitSpan = table.getHeaderUnitSpan(qCol);
