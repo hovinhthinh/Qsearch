@@ -41,7 +41,7 @@ public class SimpleQueryParser {
             Pattern.compile("(?i)(\\$\\s*|\\b)\\d+(\\.\\d+)?(k|m|b| bio| mio)(\\s*\\$|\\b)");
 
     private static final Pattern RANGE_OPTIMIZE_PATTERN =
-            Pattern.compile("\\d+(\\.\\d+)?-\\d+(\\.\\d+)?");
+            Pattern.compile("\\d+(\\.\\d+)?\\s?-\\s?\\d+(\\.\\d+)?");
 
     public static Map<String, String> TYPE_SUGGESTION_MAP = Stream.of(new Object[][]{
             {"cricket player", "cricketer"},
