@@ -153,7 +153,9 @@ public class SimpleQueryParser {
         if (lastPos != -1) {
             originalResolutionSignal = lastOperator;
             alteredResolutionSignal = QuantityConstraint.QuantityResolution.ALL_SIGNALS.get(lastOperator).first;
-            query = query.substring(0, lastPos - lastOperator.length() - 2) + " " + alteredResolutionSignal + " "
+            query = (lastPos == lastOperator.length() + 1 ? "" :
+                    query.substring(0, lastPos - lastOperator.length() - 2) + " ")
+                    + alteredResolutionSignal + " "
                     + query.substring(lastPos);
         }
         // optimize for RANGE "-"
