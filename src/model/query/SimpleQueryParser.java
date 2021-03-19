@@ -136,8 +136,8 @@ public class SimpleQueryParser {
         // optimize resolution code, map to standard resolution code (except for RANGE)
         for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS.keySet()) {
             if (query.startsWith(operator + " ")) {
-                if (operator.length() + 2 > lastPos) {
-                    lastPos = operator.length() + 2;
+                if (operator.length() + 1 > lastPos) {
+                    lastPos = operator.length() + 1;
                     lastOperator = operator;
                 }
             } else {
