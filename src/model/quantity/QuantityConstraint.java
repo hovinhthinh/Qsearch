@@ -55,7 +55,7 @@ public class QuantityConstraint {
     }
 
     public static QuantityConstraint parseFromString(String constraintString) {
-        constraintString = SimpleQueryParser.preprocess(constraintString);
+        constraintString = SimpleQueryParser.preprocess(constraintString).first;
 
         constraintString = String.join(" ", NLP.tokenize(constraintString));
         QuantityConstraint c = new QuantityConstraint();
@@ -74,6 +74,13 @@ public class QuantityConstraint {
                     for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS.keySet()) {
                         if (q.phrase.endsWith(operator)) {
                             continue loop;
+                        }
+                    }
+
+                    for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS.keySet()) {
+                        if (q.phrase.startsWith(operator)) {
+                            q.phrase = q.phrase.substring(operator.length()).trim();
+                            break;
                         }
                     }
 

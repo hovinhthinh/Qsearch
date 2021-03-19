@@ -58,7 +58,8 @@ public class SimpleQueryParser {
             {"american", "the united state"},
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
 
-    public static String preprocess(String query) {
+    // Triple<preprocessed query, original resolution signal, altered resolution signal>
+    public static Triple<String, String, String> preprocess(String query) {
         query = NLP.stripSentence(query);
         // optimize multiplier
         Matcher matcher;
@@ -134,15 +135,25 @@ public class SimpleQueryParser {
         String lastOperator = null;
         // optimize resolution code, map to standard resolution code (except for RANGE)
         for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS.keySet()) {
-            int p = query.indexOf(" " + operator + " ");
-            if (p != -1 && p + operator.length() + 2 > lastPos) {
-                lastPos = p + operator.length() + 2;
-                lastOperator = operator;
+            if (query.startsWith(operator + " ")) {
+                if (operator.length() + 2 > lastPos) {
+                    lastPos = operator.length() + 2;
+                    lastOperator = operator;
+                }
+            } else {
+                int p = query.indexOf(" " + operator + " ");
+                if (p != -1 && p + operator.length() + 2 > lastPos) {
+                    lastPos = p + operator.length() + 2;
+                    lastOperator = operator;
+                }
             }
         }
+        String originalResolutionSignal = null;
+        String alteredResolutionSignal = null;
         if (lastPos != -1) {
-            query = query.substring(0, lastPos - lastOperator.length() - 2)
-                    + " " + QuantityConstraint.QuantityResolution.ALL_SIGNALS.get(lastOperator).first + " "
+            originalResolutionSignal = lastOperator;
+            alteredResolutionSignal = QuantityConstraint.QuantityResolution.ALL_SIGNALS.get(lastOperator).first;
+            query = query.substring(0, lastPos - lastOperator.length() - 2) + " " + alteredResolutionSignal + " "
                     + query.substring(lastPos);
         }
         // optimize for RANGE "-"
@@ -152,7 +163,7 @@ public class SimpleQueryParser {
             query = query.replace(str, str.replace("-", query.contains("between") ? " and " : " to "));
         }
 
-        return NLP.stripSentence(query);
+        return new Triple<>(NLP.stripSentence(query), originalResolutionSignal, alteredResolutionSignal);
     }
 
     // rule-based, because the fast stemming might return head with 2 words. The good stemming is too slow to use.
@@ -240,7 +251,8 @@ public class SimpleQueryParser {
     // suggestion code = 0 means no suggestion.
     public synchronized static Triple<String, String, String> parse(String rawQuery, int typeSuggestionCode) {
         rawQuery = NLP.stripSentence(rawQuery);
-        String preprocessedQuery = preprocess(rawQuery);
+        Triple<String, String, String> prep = preprocess(rawQuery);
+        String preprocessedQuery = prep.first;
         LOGGER.info("Preprocessed_query: " + preprocessedQuery);
         Triple<String, String, String> result = new Triple<>();
         try {
@@ -457,6 +469,9 @@ public class SimpleQueryParser {
 
             result.second = cSb.toString().trim();
 
+            if (prep.second != null) {
+                result.third = result.third.replace(prep.third, prep.second);
+            }
             return result;
         } catch (Exception e) {
             e.printStackTrace();
