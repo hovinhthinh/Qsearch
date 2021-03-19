@@ -55,12 +55,11 @@ public class QuantityConstraint {
     }
 
     public static QuantityConstraint parseFromString(String constraintString) {
-        constraintString = SimpleQueryParser.preprocess(constraintString).first;
-
-        constraintString = String.join(" ", NLP.tokenize(constraintString));
         QuantityConstraint c = new QuantityConstraint();
-        c.phrase = constraintString;
+        c.phrase = NLP.stripSentence(constraintString);
 
+        constraintString = SimpleQueryParser.preprocess(constraintString).first;
+        constraintString = String.join(" ", NLP.tokenize(constraintString));
         try {
             String text = "This quantity is " + constraintString + " .";
             loop:
