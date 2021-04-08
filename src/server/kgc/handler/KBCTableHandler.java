@@ -42,6 +42,10 @@ public class KBCTableHandler extends HttpServlet {
             additionalParams.put("n-evidence", Integer.parseInt(v));
         }
 
+        if ((v = request.getParameter("conf-threshold")) != null) {
+            additionalParams.put("conf-threshold", Double.parseDouble(v));
+        }
+
         // locational params:
         if ((v = request.getParameter("HEADER_MATCH_WEIGHT")) != null) {
             additionalParams.put("HEADER_MATCH_WEIGHT", Double.parseDouble(v));

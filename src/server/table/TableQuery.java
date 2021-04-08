@@ -520,6 +520,24 @@ public class TableQuery {
             Collections.sort(result.second.subList(0, nEntityRescoring));
         }
 
+        // filter by confidence threshold
+        double confThreshold = additionalParameters == null ? -1 :
+                (double) additionalParameters.getOrDefault("conf-threshold", -1);
+        if (confThreshold != -1) {
+            for (int i = result.second.size() - 1; i >= 0; --i) {
+                ResultInstance ri = result.second.get(i);
+                for (int j = ri.subInstances.size(); j >= 0; --j) {
+                    double effectiveScore = performConsistencyRescoring ? ri.subInstances.get(j).rescore : ri.subInstances.get(j).score;
+                    if (effectiveScore < confThreshold) {
+                        ri.subInstances.remove(j);
+                    }
+                }
+                if (ri.subInstances.isEmpty()) {
+                    result.second.remove(i);
+                }
+            }
+        }
+
         return result;
     }
 

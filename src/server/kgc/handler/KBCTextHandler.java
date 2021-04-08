@@ -47,6 +47,9 @@ public class KBCTextHandler extends HttpServlet {
         if ((v = request.getParameter("n-evidence")) != null) {
             additionalParams.put("n-evidence", Integer.parseInt(v));
         }
+        if ((v = request.getParameter("conf-threshold")) != null) {
+            additionalParams.put("conf-threshold", Double.parseDouble(v));
+        }
 
         additionalParams.put("QUANTITY_MATCH_WEIGHT", 0.0);
         additionalParams.put("ENTITY_POPULARITY_WEIGHT", 0.0);
