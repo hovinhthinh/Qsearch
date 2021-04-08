@@ -9,6 +9,7 @@ import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 import util.Pair;
 
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
@@ -107,8 +108,8 @@ public class TaxonomyGraph {
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
-        } else if (type.startsWith("<http://schema.org/")) {
-            type = type.substring(19, type.length() - 1);
+        } else if (type.startsWith("<http://schema.org/") || type.startsWith("<http://bioschemas.org/")) {
+            type = type.substring(type.startsWith("<http://schema.org/") ? 19 : 23, type.length() - 1);
             StringBuilder sb = new StringBuilder();
             int last = 0;
             for (int i = 0; i <= type.length(); ++i) {
