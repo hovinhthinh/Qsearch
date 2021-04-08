@@ -526,7 +526,7 @@ public class TableQuery {
         if (confThreshold != -1.0) {
             for (int i = result.second.size() - 1; i >= 0; --i) {
                 ResultInstance ri = result.second.get(i);
-                for (int j = ri.subInstances.size(); j >= 0; --j) {
+                for (int j = ri.subInstances.size() - 1; j >= 0; --j) {
                     double effectiveScore = performConsistencyRescoring ? ri.subInstances.get(j).rescore : ri.subInstances.get(j).score;
                     if (effectiveScore < confThreshold) {
                         ri.subInstances.remove(j);
