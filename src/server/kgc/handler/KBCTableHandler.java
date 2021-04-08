@@ -38,6 +38,10 @@ public class KBCTableHandler extends HttpServlet {
             additionalParams.put("linking-threshold", Double.parseDouble(v));
         }
 
+        if ((v = request.getParameter("n-evidence")) != null) {
+            additionalParams.put("n-evidence", Integer.parseInt(v));
+        }
+
         // locational params:
         if ((v = request.getParameter("HEADER_MATCH_WEIGHT")) != null) {
             additionalParams.put("HEADER_MATCH_WEIGHT", Double.parseDouble(v));

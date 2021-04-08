@@ -126,8 +126,10 @@ public class ChronicleMapQuery {
 
                 // computer score
                 JSONArray facts = ChronicleMapQfactStorage.get(entity);
-                // save space.
-                ResultInstance r = new ResultInstance();
+
+                int nSubInstances = additionalParameters == null ? -1 :
+                        (int) additionalParameters.getOrDefault("n-evidence", -1);
+                ResultInstance r = nSubInstances == -1 ? new ResultInstance() : new ResultInstance(nSubInstances);
                 r.score = Constants.MAX_DOUBLE;
                 r.entity = entity;
                 r.popularity = WikipediaView.getView(r.entity);

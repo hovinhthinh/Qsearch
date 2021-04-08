@@ -415,7 +415,10 @@ public class TableQuery {
 
             QfactLight[] entityQFacts = QFACTS.get(i);
 
-            ResultInstance inst = new ResultInstance();
+
+            int nSubInstances = additionalParameters == null ? -1 :
+                    (int) additionalParameters.getOrDefault("n-evidence", -1);
+            ResultInstance inst = nSubInstances == -1 ? new ResultInstance() : new ResultInstance(nSubInstances);
             inst.entity = "<" + entityQFacts[0].entity.substring(5) + ">";
 
             // process type

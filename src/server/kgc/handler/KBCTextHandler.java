@@ -44,6 +44,9 @@ public class KBCTextHandler extends HttpServlet {
         if ((v = request.getParameter("lambda")) != null) {
             additionalParams.put("lambda", Double.parseDouble(v));
         }
+        if ((v = request.getParameter("n-evidence")) != null) {
+            additionalParams.put("n-evidence", Integer.parseInt(v));
+        }
 
         additionalParams.put("QUANTITY_MATCH_WEIGHT", 0.0);
         additionalParams.put("ENTITY_POPULARITY_WEIGHT", 0.0);
