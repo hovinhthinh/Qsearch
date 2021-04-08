@@ -12,6 +12,16 @@ public class ResultInstance implements Comparable<ResultInstance> {
 
     public String eval; // For evaluation
 
+    public transient int topKeepSubInstances;
+
+    public ResultInstance(int topKeepSubInstances) {
+        this.topKeepSubInstances = topKeepSubInstances;
+    }
+
+    public ResultInstance() {
+        this(TOP_KEEP_SUBINSTANCES);
+    }
+
     public static class SubInstance {
         public String kbcId;
         public QfactLight qfact;
@@ -66,7 +76,7 @@ public class ResultInstance implements Comparable<ResultInstance> {
         }
 
         subInstances.add(si);
-        if (subInstances.size() > TOP_KEEP_SUBINSTANCES) {
+        if (subInstances.size() > this.topKeepSubInstances) {
             int pivot = 0;
             for (int i = 1; i < subInstances.size(); ++i) {
                 if (subInstances.get(i).score < subInstances.get(pivot).score) {
