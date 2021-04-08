@@ -521,9 +521,9 @@ public class TableQuery {
         }
 
         // filter by confidence threshold
-        double confThreshold = additionalParameters == null ? -1 :
-                (double) additionalParameters.getOrDefault("conf-threshold", -1);
-        if (confThreshold != -1) {
+        double confThreshold = additionalParameters == null ? -1.0 :
+                (double) additionalParameters.getOrDefault("conf-threshold", -1.0);
+        if (confThreshold != -1.0) {
             for (int i = result.second.size() - 1; i >= 0; --i) {
                 ResultInstance ri = result.second.get(i);
                 for (int j = ri.subInstances.size(); j >= 0; --j) {
