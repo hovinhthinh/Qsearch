@@ -1,10 +1,12 @@
 package nlp;
 
+import config.Configuration;
 import de.unihd.dbs.heideltime.standalone.DocumentType;
 import de.unihd.dbs.heideltime.standalone.HeidelTimeStandalone;
 import de.unihd.dbs.heideltime.standalone.OutputType;
 import de.unihd.dbs.heideltime.standalone.POSTagger;
 import de.unihd.dbs.uima.annotator.heideltime.resources.Language;
+import edu.iitd.cse.openieListExtractor.constants.ListExtractorFilePaths;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
 import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
 import edu.knowitall.openie.OpenIE;
@@ -61,6 +63,9 @@ public class Static {
     }
 
     public static OpenIE getOpenIe() {
+        // Only for OpenIE5
+        ListExtractorFilePaths.LMFilePath = Configuration.get("openie5.language_model_file");
+
         if (OPEN_IE == null) {
             OPEN_IE = new edu.knowitall.openie.OpenIE(new ClearParser(new ClearPostagger(new ClearTokenizer())),
                     new ClearSrl(), false, false);

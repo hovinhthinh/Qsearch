@@ -18,6 +18,7 @@
     <entry key="yago.file_path.entity_view">./resources/entityView-2019.gz</entry>
     <entry key="glove.folder_path">./resources/glove/</entry>
     <entry key="wordnet.folder_path">./resources/WordNet-3.0/</entry>
+    <entry key="openie5.language_model_file">./resources/openie5/languageModel</entry>
     <entry key="el.prior_distribution_file">./resources/m2ePrior_wikipages+wikitables+wikilinks.case-sensitive_tokenized.gz</entry>
     <entry key="ca.bg_qfact_file">./table-non-deep/bg_qfact_text_coref.gz</entry>
 

@@ -178,4 +178,31 @@ public class OpenIETaggingNode implements TaggingNode {
         }
         return true;
     }
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        String s;
+        System.out.print(">> ");
+        while ((s = in.nextLine()) != null) {
+            try {
+                for (Instance ins : JavaConversions.seqAsJavaList(Static.getOpenIe().extract(s).toList())) {
+                    System.out.println("========================================");
+                    System.out.println("conf: " + ins.confidence());
+
+                    Extraction e = ins.extraction();
+                    System.out.println("negated: " + e.negated());
+                    System.out.println("passive: " + e.passive());
+                    System.out.println("(S:" + e.arg1().getClass() + "): " + e.arg1().text());
+                    System.out.println("(R:" + e.rel().getClass() + "): " + e.rel().text());
+                    for (Argument a : JavaConversions.seqAsJavaList(e.arg2s())) {
+                        System.out.println("(P:" + a.getClass() + "): " + a.text());
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            System.out.println();
+            System.out.print(">> ");
+        }
+    }
 }
