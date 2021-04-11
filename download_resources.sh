@@ -18,6 +18,11 @@ echo "Download Yago4 Taxonomy"
 wget https://yago-knowledge.org/data/yago4/en/2020-02-24/yago-wd-class.nt.gz -P ./resources/yago/
 wget https://yago-knowledge.org/data/yago4/en/2020-02-24/yago-wd-full-types.nt.gz -P ./resources/yago/
 
+echo "Download OpenIE5"
+wget https://qsearch.mpi-inf.mpg.de/resources/openie5/openie-assembly-5.1-SNAPSHOT-modified.jar -P ./lib/
+mkdir -p ./resources/openie5/
+wget https://qsearch.mpi-inf.mpg.de/resources/openie5/languageModel -P ./resources/openie5/
+
 echo "Download treeTagger"
 mkdir -p ./lib/treeTagger
 wget https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/tree-tagger-linux-3.2.3.tar.gz -P ./lib/treeTagger/
