@@ -22,18 +22,28 @@ public class ConstructKgUnitCollectionFromWikidata {
         PrintWriter out = FileUtils.getPrintWriter(WDU_DUMP_FILE, "UTF-8");
 
         // SI units
-        String query = """
-                SELECT DISTINCT ?unit
-                WHERE
-                {
-                  # ?unit wdt:P5061 ?symbol . # having 'unit symbol'
-                  ?unit wdt:P2370 ?si . # having 'conversion to SI unit'
-                  ?unit wdt:P111 ?concept . # having 'measured physical quantity'
-                  # ?wikiUnit schema:about ?unit; schema:isPartOf <https://en.wikipedia.org/> .
-                  # ?wikiConcept schema:about ?concept; schema:isPartOf <https://en.wikipedia.org/> .
-                  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-                }
-                """;
+        /*
+SELECT DISTINCT ?unit
+WHERE
+{
+  # ?unit wdt:P5061 ?symbol . # having 'unit symbol'
+  ?unit wdt:P2370 ?si . # having 'conversion to SI unit'
+  ?unit wdt:P111 ?concept . # having 'measured physical quantity'
+  # ?wikiUnit schema:about ?unit; schema:isPartOf <https://en.wikipedia.org/> .
+  # ?wikiConcept schema:about ?concept; schema:isPartOf <https://en.wikipedia.org/> .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+        */
+        String query = "SELECT DISTINCT ?unit\n" +
+                "WHERE\n" +
+                "{\n" +
+                "  # ?unit wdt:P5061 ?symbol . # having 'unit symbol'\n" +
+                "  ?unit wdt:P2370 ?si . # having 'conversion to SI unit'\n" +
+                "  ?unit wdt:P111 ?concept . # having 'measured physical quantity'\n" +
+                "  # ?wikiUnit schema:about ?unit; schema:isPartOf <https://en.wikipedia.org/> .\n" +
+                "  # ?wikiConcept schema:about ?concept; schema:isPartOf <https://en.wikipedia.org/> .\n" +
+                "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
+                "}";
         JSONObject result = new JSONObject(Crawler.getContentFromUrl(WD_SPARQL_ENDPOINT + URLEncoder.encode(query, "UTF-8")));
 
         result.getJSONObject("results").getJSONArray("bindings").forEach(e -> {
@@ -61,18 +71,28 @@ public class ConstructKgUnitCollectionFromWikidata {
         });
 
         // Currency
-        query = """
-                SELECT DISTINCT ?unit
-                WHERE
-                {
-                  ?unit wdt:P5061 ?symbol . # having 'unit symbol'
-                  ?unit wdt:P31 wd:Q8142 . # having 'instance of' 'currency'
-                  FILTER NOT EXISTS {
-                    ?unit wdt:P582 ?endTime
-                  }
-                  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-                }
-                """;
+        /*
+SELECT DISTINCT ?unit
+WHERE
+{
+  ?unit wdt:P5061 ?symbol . # having 'unit symbol'
+  ?unit wdt:P31 wd:Q8142 . # having 'instance of' 'currency'
+  FILTER NOT EXISTS {
+    ?unit wdt:P582 ?endTime
+  }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+        */
+        query = "SELECT DISTINCT ?unit\n" +
+                "WHERE\n" +
+                "{\n" +
+                "  ?unit wdt:P5061 ?symbol . # having 'unit symbol'\n" +
+                "  ?unit wdt:P31 wd:Q8142 . # having 'instance of' 'currency'\n" +
+                "  FILTER NOT EXISTS {\n" +
+                "    ?unit wdt:P582 ?endTime\n" +
+                "  }\n" +
+                "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
+                "}\n";
         result = new JSONObject(Crawler.getContentFromUrl(WD_SPARQL_ENDPOINT + URLEncoder.encode(query, "UTF-8")));
 
         result.getJSONObject("results").getJSONArray("bindings").forEach(e -> {
@@ -230,19 +250,29 @@ public class ConstructKgUnitCollectionFromWikidata {
             units.add(unit);
         }
 
+        /*
+SELECT DISTINCT ?unit ?scaleAmount
+WHERE
+{
+  ?unit wdt:P111 wd:Q71699827 . # information
+  ?unit p:P2442 ?scaleStm . # conversion to standard unit
+  ?scaleStm psv:P2442 ?scaleVal .
+  ?scaleVal wikibase:quantityUnit wd:Q8799 . # byte
+  ?scaleVal wikibase:quantityAmount ?scaleAmount .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+        */
         // Datasize
-        String query = """
-                SELECT DISTINCT ?unit ?scaleAmount
-                WHERE
-                {                
-                  ?unit wdt:P111 wd:Q71699827 . # information
-                  ?unit p:P2442 ?scaleStm . # conversion to standard unit
-                  ?scaleStm psv:P2442 ?scaleVal .
-                  ?scaleVal wikibase:quantityUnit wd:Q8799 . # byte
-                  ?scaleVal wikibase:quantityAmount ?scaleAmount .                  
-                  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-                }
-                """;
+        String query = "SELECT DISTINCT ?unit ?scaleAmount\n" +
+                "WHERE\n" +
+                "{                \n" +
+                "  ?unit wdt:P111 wd:Q71699827 . # information\n" +
+                "  ?unit p:P2442 ?scaleStm . # conversion to standard unit\n" +
+                "  ?scaleStm psv:P2442 ?scaleVal .\n" +
+                "  ?scaleVal wikibase:quantityUnit wd:Q8799 . # byte\n" +
+                "  ?scaleVal wikibase:quantityAmount ?scaleAmount .                  \n" +
+                "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
+                "}";
         JSONArray result = new JSONObject(Crawler.getContentFromUrl(WD_SPARQL_ENDPOINT + URLEncoder.encode(query, "UTF-8"))).getJSONObject("results").getJSONArray("bindings");
         for (int k = 0; k < result.length(); ++k) {
             JSONObject e = result.getJSONObject(k);
