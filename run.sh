@@ -35,10 +35,10 @@ running_time=`textifyDuration $running_time`
 hostname=`hostname`
 pwd=`pwd`
 command="${@:0}"
-( printf '%s\n' "Dear Thinh,"
+( printf '%s\n' "Dear ${USER},"
   printf '\n%s\n' "Your command is done:"
   printf '\n     %s\n' "$hostname:$pwd\$ $command"
   printf '\n%s\n' "$running_time"
   printf '\n%s\n' "Cheers,"
   printf '%s\n' "Your mail bot"
-) | mail -s "[$hostname] Your job is done" hvthinh@mpi-inf.mpg.de
+) | mail -s "[$hostname] Your job is done" ${USER}@mpi-inf.mpg.de
