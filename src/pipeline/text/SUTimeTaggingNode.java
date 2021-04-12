@@ -20,16 +20,24 @@ import java.util.List;
 import java.util.Properties;
 
 // Now using CoreNLP
+// FIXME: SUTime only supports resolving RelativeTime from reference time, not from preceding sentences.
+// So, param 'processWholeParagraph' has no effect now.
 public class SUTimeTaggingNode implements TaggingNode {
     private AnnotationPipeline pipeline;
     private boolean enabled;
+    private boolean processWholeParagraph;
 
     public SUTimeTaggingNode() {
         this(true);
     }
 
     public SUTimeTaggingNode(boolean enabled) {
+        this(enabled, false);
+    }
+
+    public SUTimeTaggingNode(boolean enabled, boolean processWholeParagraph) {
         this.enabled = enabled;
+        this.processWholeParagraph = processWholeParagraph;
 
         Properties props = new Properties();
         pipeline = new AnnotationPipeline();
@@ -62,28 +70,38 @@ public class SUTimeTaggingNode implements TaggingNode {
             return true;
         }
         try {
-            // not using reference date
-//            String reference_date = (String) paragraph.attributes.get(Paragraph.REFERENCE_DATE_KEY);
+            String reference_date = (String) paragraph.attributes.get(Paragraph.REFERENCE_DATE_KEY);
 
-            for (int i = paragraph.sentences.size() - 1; i >= 0; --i) {
-                Sentence sent = paragraph.sentences.get(i);
+            for (Sentence sent : paragraph.sentences) {
+                sent.timeTags = new ArrayList<>();
+            }
 
-                try {
-                    Assert.assertNotNull(sent.entityTags);
-                    sent.timeTags = new ArrayList<>();
+            if (processWholeParagraph) {
+                // Build paragraph string
+                String[] sents = new String[paragraph.sentences.size()];
+                StringBuilder parStr = new StringBuilder();
+                for (int i = 0; i < paragraph.sentences.size(); ++i) {
+                    sents[i] = paragraph.sentences.get(i).toString();
+                    if (parStr.length() > 0) {
+                        parStr.append(" ");
+                    }
+                    parStr.append(sents[i]);
+                }
 
-                    // process individual sentence only
+                Annotation annotation = new Annotation(parStr.toString());
+                if (reference_date != null) {
+                    annotation.set(CoreAnnotations.DocDateAnnotation.class, reference_date);
+                }
+                pipeline.annotate(annotation);
 
-                    String sentStr = sent.toString();
-                    Annotation annotation = new Annotation(sentStr);
-                    pipeline.annotate(annotation);
-
-                    List<CoreLabel> tokens = annotation.get(CoreAnnotations.TokensAnnotation.class);
-
-                    loop:
-                    for (CoreMap cm : annotation.get(TimeAnnotations.TimexAnnotations.class)) {
+                loop:
+                for (CoreMap cm : annotation.get(TimeAnnotations.TimexAnnotations.class)) {
+                    try {
                         SUTime.Temporal t = cm.get(TimeExpression.Annotation.class).getTemporal();
                         if (!t.getTimexType().toString().equals("DATE")) {
+                            System.out.println(cm);
+                            System.out.println(t.getTimexType());
+                            System.out.println(t.getTimexValue());
                             continue;
                         }
                         if (!(t instanceof SUTime.PartialTime)) {
@@ -92,37 +110,95 @@ public class SUTimeTaggingNode implements TaggingNode {
 
                         int beginCharPos = cm.get(CoreAnnotations.CharacterOffsetBeginAnnotation.class).intValue();
                         int endCharPos = cm.get(CoreAnnotations.CharacterOffsetEndAnnotation.class).intValue();
-                        String qStr = sentStr.substring(beginCharPos, endCharPos).trim();
-                        String passed = sentStr.substring(0, beginCharPos).trim();
+                        int sentIdx = 0;
+                        int sentStartCharIndex = 0;
+                        while (beginCharPos >= sentStartCharIndex + sents[sentIdx].length() + 1) {
+                            sentStartCharIndex += (sents[sentIdx].length() + 1);
+                            ++sentIdx;
+                        }
+
+                        String tStr = parStr.substring(beginCharPos, endCharPos).trim();
+                        String passed = parStr.substring(sentStartCharIndex, beginCharPos).trim();
                         int beginToken = 0;
                         if (!passed.isEmpty()) {
                             beginToken = NLP.splitSentence(passed).size();
                             // FIX_FOR:"NFor further information , please contact : Virtue PR & Marketing Communications P.O
                             // Box : 191931 Dubai , United Arab Emirates Tel : +97144508835"
-                            if (sentStr.charAt(beginCharPos) != ' ' && sentStr.charAt(beginCharPos - 1) != ' ') {
+                            if (parStr.charAt(beginCharPos) != ' ' && parStr.charAt(beginCharPos - 1) != ' ') {
                                 --beginToken;
                             }
                         }
-                        int endToken = beginToken + NLP.splitSentence(qStr).size();
-                        // double check time tags from SUTime vs OpenIE tokens
-                        for (int k = beginToken; k < endToken; ++k) {
-                            if (!tokens.get(k).value().equals(sent.tokens.get(k).str)) {
-                                continue loop;
-                            }
-                        }
+                        int endToken = beginToken + NLP.splitSentence(tStr).size();
+
                         // Check if there is no overlap entity tag.
-                        for (EntityTag et : sent.entityTags) {
+                        for (EntityTag et : paragraph.sentences.get(sentIdx).entityTags) {
                             if (et.beginIndex < endToken && beginToken < et.endIndex) {
                                 continue loop;
                             }
                         }
-                        sent.timeTags.add(new TimeTag(beginToken, endToken,
+                        paragraph.sentences.get(sentIdx).timeTags.add(new TimeTag(beginToken, endToken,
                                 t.getRange().beginTime().getJodaTimeInstant().getMillis(),
                                 t.getRange().endTime().getJodaTimeInstant().getMillis()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        continue;
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    paragraph.sentences.remove(i);
+                }
+            } else {
+                // process individual sentence
+                for (int i = paragraph.sentences.size() - 1; i >= 0; --i) {
+                    Sentence sent = paragraph.sentences.get(i);
+
+                    try {
+                        Assert.assertNotNull(sent.entityTags);
+                        sent.timeTags = new ArrayList<>();
+
+                        String sentStr = sent.toString();
+                        Annotation annotation = new Annotation(sentStr);
+                        if (reference_date != null) {
+                            annotation.set(CoreAnnotations.DocDateAnnotation.class, reference_date);
+                        }
+                        pipeline.annotate(annotation);
+
+                        loop:
+                        for (CoreMap cm : annotation.get(TimeAnnotations.TimexAnnotations.class)) {
+                            SUTime.Temporal t = cm.get(TimeExpression.Annotation.class).getTemporal();
+                            if (!t.getTimexType().toString().equals("DATE")) {
+                                continue;
+                            }
+                            if (!(t instanceof SUTime.PartialTime)) {
+                                continue;
+                            }
+
+                            int beginCharPos = cm.get(CoreAnnotations.CharacterOffsetBeginAnnotation.class).intValue();
+                            int endCharPos = cm.get(CoreAnnotations.CharacterOffsetEndAnnotation.class).intValue();
+                            String tStr = sentStr.substring(beginCharPos, endCharPos).trim();
+                            String passed = sentStr.substring(0, beginCharPos).trim();
+                            int beginToken = 0;
+                            if (!passed.isEmpty()) {
+                                beginToken = NLP.splitSentence(passed).size();
+                                // FIX_FOR:"NFor further information , please contact : Virtue PR & Marketing Communications P.O
+                                // Box : 191931 Dubai , United Arab Emirates Tel : +97144508835"
+                                if (sentStr.charAt(beginCharPos) != ' ' && sentStr.charAt(beginCharPos - 1) != ' ') {
+                                    --beginToken;
+                                }
+                            }
+                            int endToken = beginToken + NLP.splitSentence(tStr).size();
+
+                            // Check if there is no overlap entity tag.
+                            for (EntityTag et : sent.entityTags) {
+                                if (et.beginIndex < endToken && beginToken < et.endIndex) {
+                                    continue loop;
+                                }
+                            }
+                            sent.timeTags.add(new TimeTag(beginToken, endToken,
+                                    t.getRange().beginTime().getJodaTimeInstant().getMillis(),
+                                    t.getRange().endTime().getJodaTimeInstant().getMillis()));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        paragraph.sentences.remove(i);
+                    }
                 }
             }
         } catch (Exception e) {
