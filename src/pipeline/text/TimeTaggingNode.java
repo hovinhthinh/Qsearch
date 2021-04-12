@@ -70,7 +70,7 @@ public class TimeTaggingNode implements TaggingNode {
                     throw new Exception(TimeTaggingNode.class.getName() + ": Different numbers of sentences" + "\r\n" + paragraph);
                 }
             }
-            int cur = 0;
+            int cur = paragraph.sentences.size() - 1;
             for (int i = paragraph.sentences.size() - 1; i >= 0; --i) {
                 Sentence sent = paragraph.sentences.get(i);
                 try {
@@ -95,7 +95,7 @@ public class TimeTaggingNode implements TaggingNode {
                             }
                         }
                     } else {
-                        taggedSent = sents.get(cur++);
+                        taggedSent = sents.get(cur--);
                     }
                     int numPassedTokens = 0, lastProcessedPos = 0;
                     do {
