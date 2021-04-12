@@ -3,13 +3,16 @@ package pipeline.text;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.*;
+import edu.stanford.nlp.time.SUTime;
 import edu.stanford.nlp.time.TimeAnnotations;
 import edu.stanford.nlp.time.TimeAnnotator;
+import edu.stanford.nlp.time.TimeExpression;
 import edu.stanford.nlp.util.CoreMap;
 import model.text.Paragraph;
 import model.text.Sentence;
 import model.text.tag.EntityTag;
 import model.text.tag.TimeTag;
+import nlp.NLP;
 import org.junit.Assert;
 
 import java.util.ArrayList;
@@ -71,31 +74,51 @@ public class SUTimeTaggingNode implements TaggingNode {
 
                     // process individual sentence only
 
-                    Annotation annotation = new Annotation(sent.toString());
+                    String sentStr = sent.toString();
+                    Annotation annotation = new Annotation(sentStr);
                     pipeline.annotate(annotation);
 
                     List<CoreLabel> tokens = annotation.get(CoreAnnotations.TokensAnnotation.class);
 
                     loop:
                     for (CoreMap cm : annotation.get(TimeAnnotations.TimexAnnotations.class)) {
-                        int begin = cm.get(CoreAnnotations.TokenBeginAnnotation.class).intValue();
-                        int end = cm.get(CoreAnnotations.TokenEndAnnotation.class).intValue();
-                        if (end > sent.tokens.size()) {
+                        SUTime.Temporal t = cm.get(TimeExpression.Annotation.class).getTemporal();
+                        if (!t.getTimexType().toString().equals("DATE")) {
                             continue;
                         }
-                        // double check time tags from SUTime vs OpenIE t okens
-                        for (int k = begin; k < end; ++k) {
+                        if (!(t instanceof SUTime.PartialTime)) {
+                            continue;
+                        }
+
+                        int beginCharPos = cm.get(CoreAnnotations.CharacterOffsetBeginAnnotation.class).intValue();
+                        int endCharPos = cm.get(CoreAnnotations.CharacterOffsetEndAnnotation.class).intValue();
+                        String qStr = sentStr.substring(beginCharPos, endCharPos).trim();
+                        String passed = sentStr.substring(0, beginCharPos).trim();
+                        int beginToken = 0;
+                        if (!passed.isEmpty()) {
+                            beginToken = NLP.splitSentence(passed).size();
+                            // FIX_FOR:"NFor further information , please contact : Virtue PR & Marketing Communications P.O
+                            // Box : 191931 Dubai , United Arab Emirates Tel : +97144508835"
+                            if (sentStr.charAt(beginCharPos) != ' ' && sentStr.charAt(beginCharPos - 1) != ' ') {
+                                --beginToken;
+                            }
+                        }
+                        int endToken = beginToken + NLP.splitSentence(qStr).size();
+                        // double check time tags from SUTime vs OpenIE tokens
+                        for (int k = beginToken; k < endToken; ++k) {
                             if (!tokens.get(k).value().equals(sent.tokens.get(k).str)) {
                                 continue loop;
                             }
                         }
                         // Check if there is no overlap entity tag.
                         for (EntityTag et : sent.entityTags) {
-                            if (et.beginIndex < end && begin < et.endIndex) {
+                            if (et.beginIndex < endToken && beginToken < et.endIndex) {
                                 continue loop;
                             }
                         }
-                        sent.timeTags.add(new TimeTag(begin, end, -1, -1));
+                        sent.timeTags.add(new TimeTag(beginToken, endToken,
+                                t.getRange().beginTime().getJodaTimeInstant().getMillis(),
+                                t.getRange().endTime().getJodaTimeInstant().getMillis()));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
