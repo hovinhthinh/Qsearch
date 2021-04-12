@@ -99,12 +99,6 @@ public class SUTimeTaggingNode implements TaggingNode {
                     try {
                         SUTime.Temporal t = cm.get(TimeExpression.Annotation.class).getTemporal();
                         if (!t.getTimexType().toString().equals("DATE")) {
-                            System.out.println(cm);
-                            System.out.println(t.getTimexType());
-                            System.out.println(t.getTimexValue());
-                            continue;
-                        }
-                        if (!(t instanceof SUTime.PartialTime)) {
                             continue;
                         }
 
@@ -136,9 +130,14 @@ public class SUTimeTaggingNode implements TaggingNode {
                                 continue loop;
                             }
                         }
-                        paragraph.sentences.get(sentIdx).timeTags.add(new TimeTag(beginToken, endToken,
-                                t.getRange().beginTime().getJodaTimeInstant().getMillis(),
-                                t.getRange().endTime().getJodaTimeInstant().getMillis()));
+
+                        if (t instanceof SUTime.PartialTime) {
+                            paragraph.sentences.get(sentIdx).timeTags.add(new TimeTag(beginToken, endToken,
+                                    t.getRange().beginTime().getJodaTimeInstant().getMillis(),
+                                    t.getRange().endTime().getJodaTimeInstant().getMillis()));
+                        } else if (t instanceof SUTime.RelativeTime) {
+                            paragraph.sentences.get(sentIdx).timeTags.add(new TimeTag(beginToken, endToken, true));
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                         continue;
@@ -166,9 +165,6 @@ public class SUTimeTaggingNode implements TaggingNode {
                             if (!t.getTimexType().toString().equals("DATE")) {
                                 continue;
                             }
-                            if (!(t instanceof SUTime.PartialTime)) {
-                                continue;
-                            }
 
                             int beginCharPos = cm.get(CoreAnnotations.CharacterOffsetBeginAnnotation.class).intValue();
                             int endCharPos = cm.get(CoreAnnotations.CharacterOffsetEndAnnotation.class).intValue();
@@ -191,9 +187,14 @@ public class SUTimeTaggingNode implements TaggingNode {
                                     continue loop;
                                 }
                             }
-                            sent.timeTags.add(new TimeTag(beginToken, endToken,
-                                    t.getRange().beginTime().getJodaTimeInstant().getMillis(),
-                                    t.getRange().endTime().getJodaTimeInstant().getMillis()));
+
+                            if (t instanceof SUTime.PartialTime) {
+                                sent.timeTags.add(new TimeTag(beginToken, endToken,
+                                        t.getRange().beginTime().getJodaTimeInstant().getMillis(),
+                                        t.getRange().endTime().getJodaTimeInstant().getMillis()));
+                            } else if (t instanceof SUTime.RelativeTime) {
+                                sent.timeTags.add(new TimeTag(beginToken, endToken, true));
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
