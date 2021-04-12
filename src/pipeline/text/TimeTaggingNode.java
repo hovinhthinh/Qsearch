@@ -117,18 +117,20 @@ public class TimeTaggingNode implements TaggingNode {
                                 timeRange = time.getRange();
                             } catch (Exception e) {
                             }
-                            if (timeRange != null) {
-                                // Check if there is no overlap entity tag.
-                                boolean flag = true;
-                                for (EntityTag et : sent.entityTags) {
-                                    if (et.beginIndex < numPassedTokens + numInnerTokens && numPassedTokens < et.endIndex) {
-                                        flag = false;
-                                        break;
-                                    }
+                            // Check if there is no overlap entity tag.
+                            boolean flag = true;
+                            for (EntityTag et : sent.entityTags) {
+                                if (et.beginIndex < numPassedTokens + numInnerTokens && numPassedTokens < et.endIndex) {
+                                    flag = false;
+                                    break;
                                 }
-                                if (flag) {
+                            }
+                            if (flag) {
+                                if (timeRange != null) {
                                     sent.timeTags.add(new TimeTag(numPassedTokens, numPassedTokens + numInnerTokens,
                                             timeRange.first.getTimeInMillis(), timeRange.second.getTimeInMillis()));
+                                } else {
+                                    sent.timeTags.add(new TimeTag(numPassedTokens, numPassedTokens + numInnerTokens, true));
                                 }
                             }
                         }
