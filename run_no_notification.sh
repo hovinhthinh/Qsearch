@@ -4,5 +4,5 @@
 # This script is used for parallel running only, so do NOT touch this.
 
 args="${@:3}"
-export MAVEN_OPTS="-Xms$1 -Xmx$1 -XX:+UseSerialGC -XX:GCTimeRatio=19" && \
+export MAVEN_OPTS="-Xms$1 -Xmx$1 -XX:+UseParallelOldGC -XX:ParallelGCThreads=2 -XX:GCTimeRatio=19" && \
   mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass="$2" -Dexec.args="$args"
