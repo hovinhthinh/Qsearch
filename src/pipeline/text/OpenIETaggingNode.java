@@ -141,6 +141,7 @@ public class OpenIETaggingNode implements TaggingNode {
                 }}) {
                     QuantitativeFact nf = new QuantitativeFact();
                     nf.conf = ins.confidence();
+                    nf.negated = e.negated();
                     nf.quantityTag = nq;
                     sent.negativeQuantitativeFacts.add(nf);
                 }
@@ -166,6 +167,7 @@ public class OpenIETaggingNode implements TaggingNode {
                 continue;
             }
             qfact.conf = ins.confidence();
+            qfact.negated = e.negated();
 
             sent.quantitativeFacts.add(qfact);
         }

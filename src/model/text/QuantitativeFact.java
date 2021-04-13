@@ -13,6 +13,8 @@ public class QuantitativeFact {
     public ArrayList<EntityTag> contextEntityTags;
     public ArrayList<TimeTag> contextTimeTags;
 
+    public boolean negated;
+
     // For now, these are normal context tokens. In training data, entity contexts are stored in contextEntityTags,
     // however in decoding time, all entity contexts are treated the same, and hence stored here.
     public ArrayList<Token> contextTokens;
@@ -26,7 +28,7 @@ public class QuantitativeFact {
         contextEntityTags = new ArrayList<>();
         contextTimeTags = new ArrayList<>();
         contextTokens = new ArrayList<>();
-
+        negated = false;
         conf = -1;
     }
 
