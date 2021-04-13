@@ -27,7 +27,7 @@ class MapClient {
     private int clientId;
     private String mapClass, memorySpecs;
 
-    private boolean isProcessing;
+    private boolean isProcessing, isShutdown;
     private long lastMapStartTimestamp, lastResponseTimeStamp;
 
     private void startService() {
@@ -73,6 +73,7 @@ class MapClient {
                     errStream.flush();
                 }
             }
+            isShutdown = true; // Shutdown if the map interactive runner cannot be started/restarted.
             throw new RuntimeException(e);
         }
     }
@@ -84,6 +85,7 @@ class MapClient {
         this.outStream = outPath == null ? null : FileUtils.getPrintWriter(outPath, "UTF-8");
         this.errStream = errPath == null ? null : FileUtils.getPrintWriter(errPath, "UTF-8");
         this.isProcessing = false;
+        this.isShutdown = false;
         this.lastMapStartTimestamp = -1;
         this.lastResponseTimeStamp = -1;
         startService();
@@ -130,6 +132,10 @@ class MapClient {
             startService();
             return new LinkedList<>();
         }
+    }
+
+    public boolean isShutdown() {
+        return isShutdown;
     }
 
     public boolean isLongProcessing() {
