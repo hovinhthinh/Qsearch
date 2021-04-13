@@ -1,6 +1,5 @@
 package data.table.background.qfact_text;
 
-import edu.knowitall.collection.immutable.Interval;
 import edu.knowitall.openie.Argument;
 import edu.knowitall.openie.Extraction;
 import edu.knowitall.openie.Instance;
@@ -92,36 +91,62 @@ public class OpenIETaggingNodeTabQs implements TaggingNode {
         sent.negativeQuantitativeFacts = new ArrayList<>();
 
         String sentStr = sent.toString();
+        loop:
         for (Instance ins : JavaConversions.seqAsJavaList(Static.getOpenIe().extract(sentStr).toList())) {
             if (ins.confidence() < minimumFactConfidence) {
                 continue;
             }
             Extraction e = ins.extraction();
 
-            List<Interval> rawSubjectSegments = new ArrayList<>();
-            List<Interval> rawOtherArgsSegments = new ArrayList<>();
-
-            // Extract raw segments.
-            rawSubjectSegments.addAll(JavaConversions.seqAsJavaList(e.arg1().offsets()));
-            rawOtherArgsSegments.addAll(JavaConversions.seqAsJavaList(e.rel().offsets()));
+            // Extract raw texts.
+            ArrayList<String> rawSubjectTexts = new ArrayList<>();
+            ArrayList<String> otherArgsTexts = new ArrayList<>();
+            rawSubjectTexts.add(e.arg1().text().trim());
+            otherArgsTexts.add(e.rel().text().trim());
             for (Argument a : JavaConversions.seqAsJavaList(e.arg2s())) {
-                rawOtherArgsSegments.addAll(JavaConversions.seqAsJavaList(a.offsets()));
+                otherArgsTexts.add(a.text().trim());
             }
 
             // Reduce to token segments.
-            List<Pair<Integer, Integer>> reducedSubjectSegments = new ArrayList<>();
-            List<Pair<Integer, Integer>> reducedOtherArgsSegments = new ArrayList<>();
-            for (Interval i : rawSubjectSegments) {
-                String passedStr = sentStr.substring(0, i.start()).trim();
+            List<Pair<Integer, Integer>> subjectSegments = new ArrayList<>();
+            List<Pair<Integer, Integer>> otherArgsSegments = new ArrayList<>();
+            for (String s : rawSubjectTexts) {
+                if (s.isEmpty()) {
+                    continue loop;
+                }
+                int pstart;
+                if (sentStr.startsWith(s)) {
+                    pstart = 0;
+                } else if (sentStr.endsWith(s)) {
+                    pstart = sentStr.length() - s.length();
+                } else if ((pstart = sentStr.indexOf(String.format(" %s ", s))) != -1) {
+                    ++pstart;
+                } else {
+                    continue loop;
+                }
+                String passedStr = sentStr.substring(0, pstart).trim();
                 int start = passedStr.isEmpty() ? 0 : NLP.splitSentence(passedStr).size();
-                int end = start + NLP.splitSentence(sentStr.substring(i.start(), i.end())).size();
-                reducedSubjectSegments.add(new Pair(start, end));
+                int end = start + NLP.splitSentence(s).size();
+                subjectSegments.add(new Pair(start, end));
             }
-            for (Interval i : rawOtherArgsSegments) {
-                String passedStr = sentStr.substring(0, i.start()).trim();
+            for (String s : otherArgsTexts) {
+                if (s.isEmpty()) {
+                    continue loop;
+                }
+                int pstart;
+                if (sentStr.startsWith(s)) {
+                    pstart = 0;
+                } else if (sentStr.endsWith(s)) {
+                    pstart = sentStr.length() - s.length();
+                } else if ((pstart = sentStr.indexOf(String.format(" %s ", s))) != -1) {
+                    ++pstart;
+                } else {
+                    continue loop;
+                }
+                String passedStr = sentStr.substring(0, pstart).trim();
                 int start = passedStr.isEmpty() ? 0 : NLP.splitSentence(passedStr).size();
-                int end = start + NLP.splitSentence(sentStr.substring(i.start(), i.end())).size();
-                reducedOtherArgsSegments.add(new Pair(start, end));
+                int end = start + NLP.splitSentence(s).size();
+                otherArgsSegments.add(new Pair(start, end));
             }
 
             // Extract quantitative facts.
@@ -129,9 +154,9 @@ public class OpenIETaggingNodeTabQs implements TaggingNode {
             // and 1 QuantityTag in other segments, .
             // Everything else could be in the context: either EntityTag, TimeTag, or a normal token.
             Quadruple<List<EntityTag>, List<QuantityTag>, List<TimeTag>, List<Token>> subjectParts
-                    = extractFromSegment(sent, reducedSubjectSegments);
+                    = extractFromSegment(sent, subjectSegments);
             Quadruple<List<EntityTag>, List<QuantityTag>, List<TimeTag>, List<Token>> otherParts
-                    = extractFromSegment(sent, reducedOtherArgsSegments);
+                    = extractFromSegment(sent, otherArgsSegments);
 
 
             if (subjectParts.first.size() != 1 || subjectParts.second.size() != 0 || otherParts.second.size() != 1) {
@@ -182,7 +207,11 @@ public class OpenIETaggingNodeTabQs implements TaggingNode {
     @Override
     public boolean process(Paragraph paragraph) {
         for (Sentence sent : paragraph.sentences) {
-            tag(sent);
+            try {
+                tag(sent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return true;
     }
