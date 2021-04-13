@@ -1,4 +1,4 @@
-package data.text.stics;
+package data.text.wikipedia;
 
 import model.text.Paragraph;
 import pipeline.text.*;
@@ -8,11 +8,11 @@ import util.distributed.String2StringMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class STICS_TrainingDataTaggingPipeline extends String2StringMap {
+public class WIKIPEDIA_TrainingDataTaggingPipeline extends String2StringMap {
 
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
-                new STICS_EntityTaggingNode(0),
+                new WIKIPEDIA_EntityTaggingNode(),
                 new SUTimeTaggingNode(),
                 new SentenceLengthFiltering(4, 40),
                 new EntityFilteringNode(),
@@ -28,7 +28,7 @@ public class STICS_TrainingDataTaggingPipeline extends String2StringMap {
 
     @Override
     public List<String> map(String input) {
-        Paragraph paragraph = STICS.parseFromJSON(input);
+        Paragraph paragraph = WIKIPEDIA.parseFromJSON(input);
         if (paragraph == null || !pipeline.tag(paragraph)) {
             return null;
         }

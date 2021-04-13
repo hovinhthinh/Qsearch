@@ -1,49 +1,41 @@
 package data.text.nyt;
 
 import model.text.Paragraph;
-import model.text.Sentence;
 import pipeline.text.*;
-import util.FileUtils;
 import util.Gson;
+import util.distributed.String2StringMap;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class NYT_TrainingDataTaggingPipeline {
+public class NYT_TrainingDataTaggingPipeline extends String2StringMap {
 
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
                 new NYT_EntityTaggingNode(0),
-                new TimeTaggingNode(),
+                new SUTimeTaggingNode(),
                 new SentenceLengthFiltering(4, 40),
                 new EntityFilteringNode(),
                 new QuantityTaggingNode(),
                 new QuantityFilteringNode(),
                 new POSTaggingNode(),
-                new OpenIETaggingNode(10, 0.9),
+                new OpenIETaggingNode(10, 0),
                 new PostFilteringNode()
         );
     }
 
-    // Args: <input> <output>
-    public static void main(String[] args) throws IOException {
-//        args = "/home/hvthinh/datasets/NYT/nytimes_aida.tar.bz2 ./tmp".split("\\s++");
-        TaggingPipeline pipeline = getDefaultTaggingPipeline();
-        PrintWriter out = FileUtils.getPrintWriter(args[1], "UTF-8");
-        FileUtils.LineStream stream = FileUtils.getLineStream(args[0], "UTF-8");
+    TaggingPipeline pipeline = getDefaultTaggingPipeline();
 
-        for (String line : stream) {
-            Paragraph paragraph = NYT.parseFromJSON(line);
-            if (paragraph == null) {
-                continue;
-            }
-            if (!pipeline.tag(paragraph)) {
-                continue;
-            }
-            for (Sentence sent : paragraph.sentences) {
-                out.println(Gson.toJson(sent));
-            }
+    @Override
+    public List<String> map(String input) {
+        Paragraph paragraph = NYT.parseFromJSON(input);
+        if (paragraph == null || !pipeline.tag(paragraph)) {
+            return null;
         }
-        out.close();
+        return paragraph.sentences.stream().map(o -> Gson.toJson(o)).collect(Collectors.toList());
+    }
+
+    static {
+//        ARGS = "test_map.in test_map.out".split("\\s++");
     }
 }
