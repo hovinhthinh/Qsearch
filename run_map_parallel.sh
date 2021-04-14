@@ -25,7 +25,7 @@ start_time="$(TZ=UTC0 printf '%(%s)T\n' '-1')"
 # START JOB
 
 args="${@:1}"
-export MAVEN_OPTS="-Xmx8G" && mvn exec:java \
+export MAVEN_OPTS="-Xmx8G -XX:+UseParallelOldGC -XX:ParallelGCThreads=4" && mvn exec:java \
     -Dexec.classpathScope=compile \
     -Dexec.mainClass=util.distributed.ParallelMapClient \
     -Dexec.args="12G $args"

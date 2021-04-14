@@ -24,7 +24,7 @@ echo "#!/bin/bash
 eval \"\$(conda shell.bash hook)\"
 conda activate maven
 
-cd /home/hvthinh/TabQs/ && export MAVEN_OPTS=\"-Xms512M -Xmx512M\" && \\
+cd /home/hvthinh/TabQs/ && export MAVEN_OPTS=\"-Xms512M -Xmx512M -XX:+UseSerialGC\" && \\
 mvn exec:java -Dexec.classpathScope=compile -Dexec.mainClass=\"util.distributed.MapClient\" -Dexec.args=\"$args\""
 
 
