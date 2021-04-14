@@ -70,13 +70,13 @@ public abstract class Monitor extends Thread {
         String currentString = progress.total == -1
                 ? String.format("%d/--", progress.current)
                 : String.format("%d/%d", progress.current, progress.total);
-        String percentString = progress.total == -1 ? "--" : String.format("%.2f%%", progress.percent);
+        String percentString = progress.total == -1 ? "" : String.format(" (%.2f%%)", progress.percent);
         String speedString = String.format("%.2f/sec", progress.speed);
         String etString = String.format("%dd %02d:%02d:%02d", progress.et_d, progress.et_h, progress.et_m, progress.et_s);
         String etaString = progress.total == -1 ? "--d --:--:--" :
                 String.format("%dd %02d:%02d:%02d", progress.eta_d, progress.eta_h, progress.eta_m, progress.eta_s);
 
-        log(String.format("MONITOR [%s]: et: %s    current: %s    percent: %s    speed: %s    eta: %s",
+        log(String.format("MONITOR [%s]: et: %s    current: %s%s    speed: %s    eta: %s",
                 name, etString, currentString, percentString, speedString, etaString));
     }
 
