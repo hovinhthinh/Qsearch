@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ALLOC_MEM_PER_TASK="16G"
-TASK_JAVA_MEM="12G"
+TASK_JAVA_MEM="15G"
 
 # Generate a slurm array script,
 # gen_slurm_script.sh <nProcesses> <MapClass> <input> <output>
@@ -17,7 +17,7 @@ echo "#!/bin/bash
 #SBATCH --mail-type=END,FAIL
 #SBATCH --output=${slurm_output}/part%a.log
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=2
 #SBATCH --array=0-${np}
 #SBATCH --mem=${ALLOC_MEM_PER_TASK}
 

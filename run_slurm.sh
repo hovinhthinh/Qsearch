@@ -9,7 +9,7 @@ temp_script=$(mktemp)
 echo "Temporary slurm script is generated at: ${temp_script}"
 
 echo "========== SCRIPT-CONTENT =========="
-bash gen_slurm_script.sh $@ > ${temp_script}
+bash gen_slurm_array_script.sh $@ > ${temp_script}
 cat ${temp_script}
 echo "========== END-OF-CONTENT =========="
 sbatch ${temp_script}
