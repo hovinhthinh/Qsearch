@@ -33,9 +33,16 @@ public class OpenIETaggingNodeTabQs implements TaggingNode {
 
     private double minimumFactConfidence;
 
-    public OpenIETaggingNodeTabQs(int maximumNumberOfFactContextTokens, double minimumFactConfidence) {
+    private boolean extractNegativeQfacts;
+
+    public OpenIETaggingNodeTabQs(int maximumNumberOfFactContextTokens, double minimumFactConfidence, boolean extractNegativeQfacts) {
         this.maximumNumberOfFactContextTokens = maximumNumberOfFactContextTokens;
         this.minimumFactConfidence = minimumFactConfidence;
+        this.extractNegativeQfacts = extractNegativeQfacts;
+    }
+
+    public OpenIETaggingNodeTabQs(int maximumNumberOfFactContextTokens, double minimumFactConfidence) {
+        this(maximumNumberOfFactContextTokens, minimumFactConfidence, false);
     }
 
     private Quadruple<List<EntityTag>, List<QuantityTag>, List<TimeTag>, List<Token>> extractFromSegment
@@ -79,7 +86,7 @@ public class OpenIETaggingNodeTabQs implements TaggingNode {
             for (int r : remainingTokens) {
                 Token t = sent.tokens.get(r);
 //                if (ALLOWED_CONTEXT_POSTAGS.contains(t.POS) && !NLP.BLOCKED_STOPWORDS.contains(t.str.toLowerCase())) {
-                    ts.add(t);
+                ts.add(t);
 //                }
             }
         }
@@ -97,6 +104,10 @@ public class OpenIETaggingNodeTabQs implements TaggingNode {
                 continue;
             }
             Extraction e = ins.extraction();
+
+            if (!extractNegativeQfacts && e.negated()) {
+                continue;
+            }
 
             // Extract raw texts.
             ArrayList<String> rawSubjectTexts = new ArrayList<>();
@@ -161,15 +172,17 @@ public class OpenIETaggingNodeTabQs implements TaggingNode {
 
             if (subjectParts.first.size() != 1 || subjectParts.second.size() != 0 || otherParts.second.size() != 1) {
                 // add negative quantity facts.
-                for (QuantityTag nq : new ArrayList<QuantityTag>() {{
-                    addAll(subjectParts.second);
-                    addAll(otherParts.second);
-                }}) {
-                    QuantitativeFact nf = new QuantitativeFact();
-                    nf.conf = ins.confidence();
-                    nf.negated = e.negated();
-                    nf.quantityTag = nq;
-                    sent.negativeQuantitativeFacts.add(nf);
+                if (extractNegativeQfacts) {
+                    for (QuantityTag nq : new ArrayList<QuantityTag>() {{
+                        addAll(subjectParts.second);
+                        addAll(otherParts.second);
+                    }}) {
+                        QuantitativeFact nf = new QuantitativeFact();
+                        nf.conf = ins.confidence();
+                        nf.negated = e.negated();
+                        nf.quantityTag = nq;
+                        sent.negativeQuantitativeFacts.add(nf);
+                    }
                 }
                 continue;
             }
