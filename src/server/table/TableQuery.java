@@ -13,6 +13,7 @@ import storage.table.index.TableIndex;
 import storage.table.index.TableIndexStorage;
 import storage.text.migrate.TypeMatcher;
 import uk.ac.susx.informatics.Morpha;
+import util.Constants;
 import util.Gson;
 import util.Pair;
 import util.headword.StringUtils;
@@ -460,14 +461,13 @@ public class TableQuery {
                 double qtStandardValue = qt.value * qt.getScale();
 
                 // compute quantity distance to query
-                double qtRelativeDist = Math.min(1,
-                        Math.abs(qtStandardValue - qtConstraintStandardValue)
-                                / Math.max(Math.abs(qtStandardValue), Math.abs(qtConstraintStandardValue))
-                );
+                double qtDist = Math.abs(qtStandardValue - qtConstraintStandardValue);
+                double qtRelativeDist = qtDist <= Constants.EPS ? 0 : Math.min(1,
+                        qtDist / Math.max(Math.abs(qtStandardValue), Math.abs(qtConstraintStandardValue)));
                 if (qtConstraintStandardValue2 != null) {
-                    qtRelativeDist = Math.min(qtRelativeDist,
-                            Math.abs(qtStandardValue - qtConstraintStandardValue2)
-                                    / Math.max(Math.abs(qtStandardValue), Math.abs(qtConstraintStandardValue2))
+                    qtDist = Math.abs(qtStandardValue - qtConstraintStandardValue2);
+                    qtRelativeDist = qtDist <= Constants.EPS ? 0 : Math.min(qtRelativeDist,
+                            qtDist / Math.max(Math.abs(qtStandardValue), Math.abs(qtConstraintStandardValue2))
                     );
                 }
 

@@ -156,8 +156,8 @@ public class ElasticSearchDataImport {
                 Sentence sent = Gson.fromJson(line, Sentence.class);
                 for (QuantitativeFact qfact : sent.quantitativeFacts) {
                     if (qfact.entityTag == null
-                            || (qfact.conf > 1e-6 && qfact.conf < minConf)
-                            || (qfact.conf <= 1e-6 && Math.exp(qfact.conf) < minConf)) {
+                            || (qfact.conf > Constants.EPS && qfact.conf < minConf)
+                            || (qfact.conf <= Constants.EPS && Math.exp(qfact.conf) < minConf)) {
                         continue;
                     }
 

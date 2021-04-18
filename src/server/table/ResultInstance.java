@@ -1,5 +1,7 @@
 package server.table;
 
+import util.Constants;
+
 import java.util.ArrayList;
 
 public class ResultInstance implements Comparable<ResultInstance> {
@@ -90,7 +92,7 @@ public class ResultInstance implements Comparable<ResultInstance> {
 
     @Override
     public int compareTo(ResultInstance o) {
-        if (Math.abs(this.score - o.score) > 1e-6) {
+        if (Math.abs(this.score - o.score) > Constants.EPS) {
             return Double.compare(o.score, this.score);
         }
         // Entities with same score are ordered by estimated popularity.

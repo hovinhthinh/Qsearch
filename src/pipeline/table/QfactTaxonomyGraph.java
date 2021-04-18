@@ -11,6 +11,7 @@ import model.quantity.Quantity;
 import model.quantity.QuantityDomain;
 import nlp.NLP;
 import org.json.JSONArray;
+import util.Constants;
 import util.FileUtils;
 import util.Pair;
 import yago.TaxonomyGraph;
@@ -199,7 +200,7 @@ public class QfactTaxonomyGraph {
         ArrayList<String> thisContext = NLP.splitSentence(context.toLowerCase());
 
         ObjectHeapPriorityQueue<Pair<Double, EntityTextQfact>> queue = new ObjectHeapPriorityQueue<>((a, b) -> {
-            if (Math.abs(a.first - b.first) > 1e-6) {
+            if (Math.abs(a.first - b.first) > Constants.EPS) {
                 return a.first.compareTo(b.first);
             }
             if (a.second != null && entity.equals(a.second.entity)) {

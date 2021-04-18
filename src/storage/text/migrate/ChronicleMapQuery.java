@@ -201,14 +201,13 @@ public class ChronicleMapQuery {
                 si.source = facts.getJSONObject(i).getString("source");
 
                 // compute quantity distance to query
-                double qtRelativeDist = Math.min(1,
-                        Math.abs(si.quantityStandardValue - qtConstraintStandardValue)
-                                / Math.max(Math.abs(si.quantityStandardValue), Math.abs(qtConstraintStandardValue))
-                );
+                double qtDist = Math.abs(si.quantityStandardValue - qtConstraintStandardValue);
+                double qtRelativeDist = qtDist <= Constants.EPS ? 0 : Math.min(1,
+                        qtDist / Math.max(Math.abs(si.quantityStandardValue), Math.abs(qtConstraintStandardValue)));
                 if (qtConstraintStandardValue2 != null) {
-                    qtRelativeDist = Math.min(qtRelativeDist,
-                            Math.abs(si.quantityStandardValue - qtConstraintStandardValue2)
-                                    / Math.max(Math.abs(si.quantityStandardValue), Math.abs(qtConstraintStandardValue2))
+                    qtDist = Math.abs(si.quantityStandardValue - qtConstraintStandardValue2);
+                    qtRelativeDist = qtDist <= Constants.EPS ? 0 : Math.min(qtRelativeDist,
+                            qtDist / Math.max(Math.abs(si.quantityStandardValue), Math.abs(qtConstraintStandardValue2))
                     );
                 }
 

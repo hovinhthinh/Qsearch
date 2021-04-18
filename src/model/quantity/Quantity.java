@@ -3,6 +3,7 @@ package model.quantity;
 import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import model.quantity.kg.KgUnit;
 import nlp.NLP;
+import util.Constants;
 
 // These are extracted from IllinoisQuantifier.
 public class Quantity {
@@ -138,7 +139,7 @@ public class Quantity {
 //            throw new RuntimeException("Two quantities are of different concepts");
 //        }
         double scale = getScale() / targetQuantity.getScale();
-        if (Math.abs(scale - 1.0) <= 1e-6) {
+        if (Math.abs(scale - 1.0) <= Constants.EPS) {
             return null;
         }
         String suffix = " (" + targetQuantity.unit + ")";

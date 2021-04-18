@@ -1,6 +1,7 @@
 package pipeline.table;
 
 import model.table.Table;
+import util.Constants;
 
 public class ColumnTypeTaggingNode implements TaggingNode {
     public static final double DEFAULT_ENTITY_THRESHOLD = 0.3;
@@ -38,10 +39,10 @@ public class ColumnTypeTaggingNode implements TaggingNode {
                     ++nQuantity;
                 }
             }
-            if (minEntityThreshold > 0 && nEntity >= minEntityThreshold * table.nDataRow - 1e-6) {
+            if (minEntityThreshold > 0 && nEntity >= minEntityThreshold * table.nDataRow - Constants.EPS) {
                 table.isEntityColumn[c] = true;
                 hasEntityColumn = true;
-            } else if (minQuantityThreshold > 0 && nQuantity >= minQuantityThreshold * table.nDataRow - 1e-6) {
+            } else if (minQuantityThreshold > 0 && nQuantity >= minQuantityThreshold * table.nDataRow - Constants.EPS) {
                 table.isNumericColumn[c] = true;
                 hasQuantityColumn = true;
             }

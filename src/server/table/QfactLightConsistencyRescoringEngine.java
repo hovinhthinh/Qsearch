@@ -8,6 +8,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import storage.table.index.TableIndex;
 import storage.table.index.TableIndexStorage;
 import uk.ac.susx.informatics.Morpha;
+import util.Constants;
 import util.Pair;
 import util.Vectors;
 import util.headword.StringUtils;
@@ -280,7 +281,7 @@ public class QfactLightConsistencyRescoringEngine {
         }
 
         // Now perform consistency-based re-scoring.
-        int nProbe = (int) (candidates.size() * (double) params.getOrDefault("CONSISTENCY_LEARNING_PROBE_RATE", CONSISTENCY_LEARNING_PROBE_RATE) + 1e-6);
+        int nProbe = (int) (candidates.size() * (double) params.getOrDefault("CONSISTENCY_LEARNING_PROBE_RATE", CONSISTENCY_LEARNING_PROBE_RATE) + Constants.EPS);
         if (nProbe == 0) {
             return;
         }
