@@ -159,9 +159,9 @@ public class ChronicleMapQuery {
                     String ct = context.getString(k);
                     if (ct.startsWith("<T>:")) {
                         // handle time like normal terms.
-                        X.addAll(NLP.splitSentence(ct.substring(4)));
+                        X.addAll(NLP.splitSentence(ct.substring(4).split("\t")[0]));
                     } else if (ct.startsWith("<E>:")) {
-                        X.addAll(NLP.splitSentence(ct.substring(4)));
+                        X.addAll(NLP.splitSentence(ct.substring(4).split("\t")[0]));
                     } else {
                         X.add(ct);
                     }

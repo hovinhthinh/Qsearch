@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import storage.text.ElasticSearchDataImport;
 import util.*;
+import yago.TaxonomyGraph;
 
 import java.io.File;
 import java.io.IOException;
@@ -159,7 +160,7 @@ public class ChronicleMapQfactStorage {
             }
             tempOut.close();
 
-            File newTempFile = File.createTempFile("yagoImport", ".gz", new File("/GW/D5data-14/hvthinh/kbc/"));
+            File newTempFile = File.createTempFile("yagoImport", ".gz", new File("/tmp/"));
             System.out.println("Preparing: " + newTempFile.getAbsolutePath());
             ShellCommand.execute("zcat " + tempFile.getAbsolutePath() + " | LC_ALL=C sort | gzip > " + newTempFile.getAbsolutePath());
             tempFile.delete();
@@ -177,17 +178,16 @@ public class ChronicleMapQfactStorage {
                 if (lastEntity != null && entity.equals(lastEntity)) {
                     entityFacts.put(data);
                 } else {
-                    if (lastEntity != null) {
+                    if (lastEntity != null && TaxonomyGraph.getDefaultGraphInstance().entity2Id.containsKey(lastEntity)) {
                         INDEX.put(lastEntity, ObjectCompressor.compressStringIntoByteArray(entityFacts.toString()));
-                        m.incAndGet();
                     }
                     lastEntity = entity;
                     entityFacts = new JSONArray().put(data);
                 }
-            }
-            if (lastEntity != null) {
-                INDEX.put(lastEntity, ObjectCompressor.compressStringIntoByteArray(entityFacts.toString()));
                 m.incAndGet();
+            }
+            if (lastEntity != null && TaxonomyGraph.getDefaultGraphInstance().entity2Id.containsKey(lastEntity)) {
+                INDEX.put(lastEntity, ObjectCompressor.compressStringIntoByteArray(entityFacts.toString()));
             }
             newTempFile.delete();
         } catch (Exception e) {
@@ -197,7 +197,7 @@ public class ChronicleMapQfactStorage {
             m.forceShutdown();
         }
 
-        System.out.println("Importing facts succeeded.");
+        System.out.println("Importing facts succeeded. Total entities: " + INDEX.size());
         return true;
     }
 
