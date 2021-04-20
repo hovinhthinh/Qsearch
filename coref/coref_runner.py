@@ -5,7 +5,10 @@ import resource
 import spacy
 import sys
 
-nlp = spacy.load('en')
+# Download a larger model if needed. However, we stick to use this small model to achieve fast speed.
+# Bigger models do NOT bring significant improvement (1-2 percents only)
+# Reference: https://v2.spacy.io/models/en
+nlp = spacy.load('en_core_web_sm')
 # Add neural coref to SpaCy's pipe
 neuralcoref.add_to_pipe(nlp)
 
