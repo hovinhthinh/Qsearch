@@ -32,7 +32,9 @@ public class QuantityConstraint {
             String text = "This quantity is " + str + " .";
             for (QuantSpan span : QUANTIFIER_LOCAL.get().getSpans(text, true, null)) {
                 if (span.object instanceof edu.illinois.cs.cogcomp.quant.standardize.Quantity) {
-                    model.quantity.Quantity.fixQuantityFromIllinois(span, text);
+                    if (!model.quantity.Quantity.fixQuantityFromIllinois(span, text)) {
+                        continue;
+                    }
                     return (edu.illinois.cs.cogcomp.quant.standardize.Quantity) span.object;
                 }
             }

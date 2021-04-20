@@ -346,7 +346,9 @@ public class SimpleQueryParser {
             main_loop:
             for (QuantSpan span : Static.getIllinoisQuantifier().getSpans(text, true, null)) {
                 if (span.object instanceof Quantity) {
-                    model.quantity.Quantity.fixQuantityFromIllinois(span, text);
+                    if (!model.quantity.Quantity.fixQuantityFromIllinois(span, text)) {
+                        continue;
+                    }
                     String qStr = rawTokenized.substring(span.start, span.end + 1).trim();
                     for (String operator : QuantityConstraint.QuantityResolution.ALL_SIGNALS.keySet()) {
                         if (qStr.endsWith(operator)) {

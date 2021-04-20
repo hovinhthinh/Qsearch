@@ -167,9 +167,22 @@ public class Quantity {
             while (span.start <= span.end && tokenizedText.charAt(span.end) == ' ') {
                 --span.end;
             }
+            // expand to the left
+            while (span.start > 0 && tokenizedText.charAt(span.start - 1) != ' ') {
+                --span.start;
+            }
+            // expansion to the right is disabled
+//            while (span.end < tokenizedText.length() - 1 && tokenizedText.charAt(span.end + 1) != ' ') {
+//                ++span.end;
+//            }
 
             q.units = NLP.stripSentence(q.units);
             q.phrase = tokenizedText.substring(span.start, span.end + 1);
+
+            // Rule-based filters
+            if (q.phrase.equals("'s")) {
+                return false;
+            }
 
             // Extend to get a non-dimensionless unit
             if (q.units.isEmpty() || q.phrase.endsWith(" " + q.units)) {
