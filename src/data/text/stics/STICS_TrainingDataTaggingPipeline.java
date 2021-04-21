@@ -13,6 +13,7 @@ public class STICS_TrainingDataTaggingPipeline extends String2StringMap {
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
                 new STICS_EntityTaggingNode(0),
+                new CoreferenceTaggingNode(),
                 new SUTimeTaggingNode(),
                 new SentenceLengthFiltering(4, 40),
                 new EntityFilteringNode(),
