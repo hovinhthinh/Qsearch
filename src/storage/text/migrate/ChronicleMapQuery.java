@@ -242,7 +242,7 @@ public class ChronicleMapQuery {
 
         // filter by confidence threshold
         double confThreshold = additionalParameters == null ? -1.0 :
-                (double) additionalParameters.getOrDefault("conf-threshold", -1.0);
+                (double) additionalParameters.getOrDefault("matching-conf-threshold", -1.0);
         if (confThreshold != -1.0) {
             for (int i = result.second.size() - 1; i >= 0; --i) {
                 ResultInstance ri = result.second.get(i);
