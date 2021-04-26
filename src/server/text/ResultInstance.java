@@ -43,6 +43,20 @@ public class ResultInstance implements Comparable<ResultInstance> {
 
     public void addSubInstance(SubInstance si) {
         score = Math.min(score, si.score);
+        // check if there is a better fact from same sentence (different sources does NOT matter)
+        int sameIdPivot = -1;
+        for (int i = 0; i < subInstances.size(); ++i) {
+            if (subInstances.get(i).sentence.equals(si.sentence)) {
+                sameIdPivot = i;
+                break;
+            }
+        }
+        if (sameIdPivot != -1) {
+            if (subInstances.get(sameIdPivot).score > si.score) {
+                subInstances.set(sameIdPivot, si);
+            }
+            return;
+        }
 
         subInstances.add(si);
         if (subInstances.size() > this.topKeepSubInstances) {
