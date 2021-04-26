@@ -106,6 +106,7 @@ public class ChronicleMapQfactStorage {
 
     public static boolean importFacts(String input, double qfactMinConf, double entityMinConf) {
         SelfMonitor m = new SelfMonitor("importFacts", -1, 10);
+        int totalFacts = 0;
 
         try {
             // Load
@@ -180,6 +181,7 @@ public class ChronicleMapQfactStorage {
                 } else {
                     if (lastEntity != null && TaxonomyGraph.getDefaultGraphInstance().entity2Id.containsKey(lastEntity)) {
                         INDEX.put(lastEntity, ObjectCompressor.compressStringIntoByteArray(entityFacts.toString()));
+                        totalFacts += entityFacts.length();
                     }
                     lastEntity = entity;
                     entityFacts = new JSONArray().put(data);
@@ -188,6 +190,7 @@ public class ChronicleMapQfactStorage {
             }
             if (lastEntity != null && TaxonomyGraph.getDefaultGraphInstance().entity2Id.containsKey(lastEntity)) {
                 INDEX.put(lastEntity, ObjectCompressor.compressStringIntoByteArray(entityFacts.toString()));
+                totalFacts += entityFacts.length();
             }
             newTempFile.delete();
         } catch (Exception e) {
@@ -197,7 +200,7 @@ public class ChronicleMapQfactStorage {
             m.forceShutdown();
         }
 
-        System.out.println("Importing facts succeeded. Total entities: " + INDEX.size());
+        System.out.println("Importing facts succeeded. Total entities: " + INDEX.size() + ". Total facts: " + totalFacts);
         return true;
     }
 
