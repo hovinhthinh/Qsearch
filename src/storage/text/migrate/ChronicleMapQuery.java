@@ -11,6 +11,7 @@ import nlp.NLP;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import server.table.explain.TypeLiftingRestrictor;
 import server.text.ResultInstance;
 import uk.ac.susx.informatics.Morpha;
@@ -132,12 +133,22 @@ public class ChronicleMapQuery {
             r.score = Constants.MAX_DOUBLE;
             r.entity = entity;
             r.popularity = WikipediaView.getView(r.entity);
+
+            // entity & qfact thresholding
+            double minEntityConf = additionalParameters == null ? -1.0 :
+                    (double) additionalParameters.getOrDefault("min-entity-conf", -1.0);
+            double minQfactConf = additionalParameters == null ? -1.0 :
+                    (double) additionalParameters.getOrDefault("min-qfact-conf", -1.0);
+
+
             for (int i = 0; i < facts.length(); ++i) {
+                JSONObject qfact = facts.getJSONObject(i);
+
                 // check corpus target
                 if (corpusConstraint != null) {
                     boolean goodSource = false;
                     for (String c : corpusConstraint) {
-                        if (facts.getJSONObject(i).getString("source").startsWith(c + ":")) {
+                        if (qfact.getString("source").startsWith(c + ":")) {
                             goodSource = true;
                             break;
                         }
@@ -147,14 +158,22 @@ public class ChronicleMapQuery {
                     }
                 }
 
-                String Q = facts.getJSONObject(i).getString("quantity");
+                // filter by entity & qfact extraction threshold (if available)
+                if (minQfactConf != -1.0 && qfact.has("qfact_conf") && qfact.getDouble("qfact_conf") < minQfactConf) {
+                    continue;
+                }
+                if (minEntityConf != -1.0 && qfact.has("entity_conf") && qfact.getDouble("entity_conf") < minEntityConf) {
+                    continue;
+                }
+
+                String Q = qfact.getString("quantity");
                 Quantity qt = Quantity.fromQuantityString(Q);
                 if (!quantityConstraint.match(qt)) {
                     continue;
                 }
 
                 ArrayList<String> X = new ArrayList<>();
-                JSONArray context = facts.getJSONObject(i).getJSONArray("context");
+                JSONArray context = qfact.getJSONArray("context");
                 for (int k = 0; k < context.length(); ++k) {
                     String ct = context.getString(k);
                     if (ct.startsWith("<T>:")) {
@@ -189,16 +208,16 @@ public class ChronicleMapQuery {
                 si.kbcId = String.format("%d_%d", it, i);
                 si.quantity = qt.toString(1);
                 si.quantityStandardValue = qt.value * qt.getScale();
-                si.quantityStr = facts.getJSONObject(i).getString("quantityStr");
+                si.quantityStr = qfact.getString("quantityStr");
                 si.quantityConvertedStr = qt.getQuantityConvertedStr(quantityConstraint.quantity);
 
-                si.entityStr = facts.getJSONObject(i).getString("entityStr");
+                si.entityStr = qfact.getString("entityStr");
 
                 si.contextStr = contextVerbose;
 //                        matchContext = new ArrayList<>(X);
 
-                si.sentence = facts.getJSONObject(i).getString("sentence");
-                si.source = facts.getJSONObject(i).getString("source");
+                si.sentence = qfact.getString("sentence");
+                si.source = qfact.getString("source");
 
                 // compute quantity distance to query
                 double qtDist = Math.abs(si.quantityStandardValue - qtConstraintStandardValue);

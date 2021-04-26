@@ -51,6 +51,13 @@ public class KBCTextHandler extends HttpServlet {
             additionalParams.put("matching-conf-threshold", Double.parseDouble(v));
         }
 
+        if ((v = request.getParameter("min-entity-conf")) != null) {
+            additionalParams.put("min-entity-conf", Double.parseDouble(v));
+        }
+        if ((v = request.getParameter("min-qfact-conf")) != null) {
+            additionalParams.put("min-qfact-conf", Double.parseDouble(v));
+        }
+
         additionalParams.put("QUANTITY_MATCH_WEIGHT", 0.0);
         additionalParams.put("ENTITY_POPULARITY_WEIGHT", 0.0);
 
@@ -126,10 +133,10 @@ public class KBCTextHandler extends HttpServlet {
                 for (ResultInstance.SubInstance si : ri.subInstances) {
                     si.entityStr = null;
                     si.quantityStr = null;
-                    si.contextStr = null;
                     si.quantityConvertedStr = null;
-                    si.sentence = null;
-                    si.source = null;
+//                    si.contextStr = null;
+//                    si.sentence = null;
+//                    si.source = null;
                 }
             }
         } catch (Exception e) {
