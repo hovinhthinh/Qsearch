@@ -134,9 +134,9 @@ public class KBCTextHandler extends HttpServlet {
                     si.entityStr = null;
                     si.quantityStr = null;
                     si.quantityConvertedStr = null;
-//                    si.contextStr = null;
-//                    si.sentence = null;
-//                    si.source = null;
+                    si.contextStr = null;
+                    si.sentence = null;
+                    si.source = null;
                 }
             }
         } catch (Exception e) {
