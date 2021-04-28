@@ -370,5 +370,12 @@
             <artifactId>aircompressor</artifactId>
             <version>0.18</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/ca.umontreal.iro.simul/ssj -->
+        <dependency>
+            <groupId>ca.umontreal.iro.simul</groupId>
+            <artifactId>ssj</artifactId>
+            <version>3.3.1</version>
+        </dependency>
     </dependencies>
 </project>
