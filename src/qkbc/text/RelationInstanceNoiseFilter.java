@@ -6,6 +6,7 @@ import umontreal.ssj.probdist.Distribution;
 import umontreal.ssj.probdist.NormalDist;
 import util.Constants;
 import util.Number;
+import util.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,26 +37,26 @@ public class RelationInstanceNoiseFilter {
         return samples;
     }
 
-    public static void consistencyBasedDistributionNoiseFilter(ArrayList<RelationInstance> ri) {
+    public static Pair<ContinuousDistribution, Double> consistencyBasedDistributionNoiseFilter(ArrayList<RelationInstance> ri) {
         for (RelationInstance i : ri) {
             i.positive = true;
         }
 
         ArrayList<Double> distSamples = extractDistributionSamplesFromRelationInstances(ri);
-        ContinuousDistribution originalDist = DistributionFitter.fitContinuous(distSamples).first;
+        Pair<ContinuousDistribution, Double> originalDist = DistributionFitter.fitContinuous(distSamples);
 //        System.out.println(originalDist);
 
         // compute original p-values
         HashMap<String, Double> kbcId2OriginalPValue = new HashMap<>() {{
             for (RelationInstance i : ri) {
-                put(i.kbcId, DistributionFitter.getPValueFromSample(originalDist, i.quantityStdValue));
+                put(i.kbcId, DistributionFitter.getPValueFromSample(originalDist.first, i.quantityStdValue));
             }
         }};
 
         // compute consistency p-values
         int sampleSize = (int) (ri.size() * SAMPLING_RATE + Constants.EPS);
         if (sampleSize < MIN_SAMPLING_SIZE) {
-            return;
+            return originalDist;
         }
 
         HashMap<String, Integer> kbcId2ConsistencyTimeCount = new HashMap<>();
@@ -68,7 +69,7 @@ public class RelationInstanceNoiseFilter {
             if (sampleValues.size() < MIN_SAMPLING_SIZE) {
                 continue;
             }
-            ContinuousDistribution sampleDist = DistributionFitter.fitContinuous(sampleValues, originalDist.getClass()).first;
+            ContinuousDistribution sampleDist = DistributionFitter.fitContinuous(sampleValues, originalDist.first.getClass()).first;
             for (int j = sampleSize; j < riCopy.size(); ++j) {
                 RelationInstance ins = riCopy.get(j);
                 kbcId2ConsistencyTimeCount.put(ins.kbcId, kbcId2ConsistencyTimeCount.getOrDefault(ins.kbcId, 0) + 1);
@@ -79,7 +80,7 @@ public class RelationInstanceNoiseFilter {
 
         // too small number of samples, or too many duplicated values, so that the computation is invalid.
         if (kbcId2ConsistencyTimeCount.size() < ri.size()) {
-            return;
+            return originalDist;
         }
 
         for (RelationInstance i : ri) {
@@ -101,6 +102,12 @@ public class RelationInstanceNoiseFilter {
             for (RelationInstance i : ri) {
                 i.positive = true;
             }
+            return originalDist;
+        } else {
+            // fit positive instances only
+            return DistributionFitter.fitContinuous(
+                    extractDistributionSamplesFromRelationInstances(ri.stream().filter(i -> i.positive).collect(Collectors.toList())),
+                    originalDist.first.getClass());
         }
     }
 
@@ -118,6 +125,6 @@ public class RelationInstanceNoiseFilter {
             samples.add(new RelationInstance(i + nSample + "", null, (r.nextDouble() - 0.5) * 100, 0, i + nSample + ""));
         }
 
-        consistencyBasedDistributionNoiseFilter(samples);
+        System.out.println(consistencyBasedDistributionNoiseFilter(samples));
     }
 }
