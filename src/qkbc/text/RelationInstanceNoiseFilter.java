@@ -15,6 +15,7 @@ public class RelationInstanceNoiseFilter {
     public static final double SAMPLING_RATE = 0.9;
     public static final int MIN_SAMPLING_SIZE = 20;
     public static final double NOISE_PVALUE_RELDIST_THRESHOLD = 0.1;
+    public static final double MAX_NOISE_RATE = 0.1;
 
     // do not allow duplicated sample values for the same entity
     private static ArrayList<Double> extractDistributionSamplesFromRelationInstances(List<RelationInstance> ri) {
@@ -40,7 +41,9 @@ public class RelationInstanceNoiseFilter {
             i.positive = true;
         }
 
-        ContinuousDistribution originalDist = DistributionFitter.fitContinuous(extractDistributionSamplesFromRelationInstances(ri)).first;
+        ArrayList<Double> distSamples = extractDistributionSamplesFromRelationInstances(ri);
+        ContinuousDistribution originalDist = DistributionFitter.fitContinuous(distSamples).first;
+//        System.out.println(originalDist);
 
         // compute original p-values
         HashMap<String, Double> kbcId2OriginalPValue = new HashMap<>() {{
@@ -82,12 +85,22 @@ public class RelationInstanceNoiseFilter {
         for (RelationInstance i : ri) {
             double diff = Number.relativeNumericDistance(kbcId2OriginalPValue.get(i.kbcId),
                     kbcId2ConsistencySumPValue.get(i.kbcId) / kbcId2ConsistencyTimeCount.get(i.kbcId));
-            i.positive = diff < NOISE_PVALUE_RELDIST_THRESHOLD && kbcId2OriginalPValue.get(i.kbcId) > Constants.EPS;
+            i.positive = diff < NOISE_PVALUE_RELDIST_THRESHOLD && kbcId2OriginalPValue.get(i.kbcId) > 1e-4;
 
 //            System.out.printf("%10.3f    oP: %.3f    cP: %.3f    %.3f    %s\n", i.quantityStdValue,
 //                    kbcId2OriginalPValue.get(i.kbcId),
 //                    kbcId2ConsistencySumPValue.get(i.kbcId) / kbcId2ConsistencyTimeCount.get(i.kbcId),
 //                    diff, i.positive ? "" : "noise");
+        }
+
+        // if noise rate is too high, then the test becomes invalid
+        double noiseRate = 1.0 * extractDistributionSamplesFromRelationInstances(ri.stream().filter(i -> !i.positive)
+                .collect(Collectors.toList())).size() / distSamples.size();
+//        System.out.println(String.format("Noise rate: %.3f", noiseRate));
+        if (noiseRate > MAX_NOISE_RATE) {
+            for (RelationInstance i : ri) {
+                i.positive = true;
+            }
         }
     }
 
