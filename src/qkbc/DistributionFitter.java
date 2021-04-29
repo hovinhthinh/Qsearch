@@ -12,6 +12,7 @@ import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.ui.ApplicationFrame;
 import org.jfree.chart.ui.UIUtils;
 import org.jfree.data.statistics.HistogramDataset;
+import org.jfree.data.statistics.HistogramType;
 import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
 import umontreal.ssj.gof.GofStat;
@@ -75,6 +76,8 @@ class DistributionPresenter extends ApplicationFrame {
 
     private static JFreeChart createChart(double[] samples, ContinuousDistribution d) {
         HistogramDataset samplesData = new HistogramDataset();
+        samplesData.setType(HistogramType.RELATIVE_FREQUENCY);
+
         samplesData.addSeries("Samples", samples, 100);
 
         CombinedDomainXYPlot plot = new CombinedDomainXYPlot(new NumberAxis("Value"));
