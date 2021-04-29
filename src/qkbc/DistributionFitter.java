@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-;
-
 public class DistributionFitter {
     public static double getPValueFromSamples(ContinuousDistribution d, double[] samples) {
         /*
