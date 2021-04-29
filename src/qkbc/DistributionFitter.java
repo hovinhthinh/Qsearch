@@ -34,7 +34,7 @@ class DistributionPresenter extends ApplicationFrame {
         return new XYSeriesCollection(series);
     }
 
-    public DistributionPresenter(double[] samples, ContinuousDistribution d) {
+    public DistributionPresenter(ContinuousDistribution d, double[] samples) {
         super(DistributionPresenter.class.getName());
         this.setContentPane(new ChartPanel(createChart(samples, d)));
         this.pack();
@@ -42,8 +42,8 @@ class DistributionPresenter extends ApplicationFrame {
         this.setVisible(true);
     }
 
-    public DistributionPresenter(ArrayList<Double> samples, ContinuousDistribution d) {
-        this(samples.stream().mapToDouble(Double::doubleValue).toArray(), d);
+    public DistributionPresenter(ContinuousDistribution d, ArrayList<Double> samples) {
+        this(d, samples.stream().mapToDouble(Double::doubleValue).toArray());
     }
 
     private static JFreeChart createChart(double[] samples, ContinuousDistribution d) {
@@ -147,6 +147,10 @@ public class DistributionFitter {
         return fitContinuous(values, null);
     }
 
+    public static void drawDistributionVsSamples(ContinuousDistribution dist, double[] samples) {
+        new DistributionPresenter(dist, samples);
+    }
+
     public static void main(String[] args) {
         Random r = new Random();
         Distribution d = new NormalDist(0, 1);
@@ -160,6 +164,6 @@ public class DistributionFitter {
 
         System.out.println(dist);
 
-        new DistributionPresenter(samples, dist.first);
+        new DistributionPresenter(dist.first, samples);
     }
 }
