@@ -1,65 +1,37 @@
 package qkbc;
 
 
+import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.ui.ApplicationFrame;
 import org.jfree.chart.ui.UIUtils;
 import org.jfree.data.statistics.HistogramDataset;
-import org.jfree.data.statistics.HistogramType;
-import org.jfree.data.xy.AbstractXYDataset;
-import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import umontreal.ssj.gof.GofStat;
 import umontreal.ssj.probdist.*;
 import util.Pair;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 class DistributionPresenter extends ApplicationFrame {
 
-    public static class DistributionXYDataset extends AbstractXYDataset implements XYDataset {
-        private int nSamples;
-        private ContinuousDistribution dist;
-
-        public DistributionXYDataset(ContinuousDistribution dist, int nSamples) {
-            this.dist = dist;
-            this.nSamples = nSamples;
+    private static XYSeriesCollection getDistributionSamples(ContinuousDistribution dist, int nSamples) {
+        XYSeries series = new XYSeries(dist.toString());
+        for (int i = 0; i < nSamples; ++i) {
+            double cd = 1.0 / (nSamples * 2) * (i * 2 + 1);
+            double x = dist.inverseF(cd);
+            series.add(x, dist.density(x));
         }
-
-        @Override
-        public Number getX(int series, int item) {
-            double cd = 1.0 / (nSamples * 2) * (item * 2 + 1);
-            return dist.inverseF(cd);
-        }
-
-        @Override
-        public Number getY(int series, int item) {
-            double cd = 1.0 / (nSamples * 2) * (item * 2 + 1);
-            return dist.density(dist.inverseF(cd));
-        }
-
-        @Override
-        public int getSeriesCount() {
-            return 1;
-        }
-
-        @Override
-        public Comparable getSeriesKey(int series) {
-            return dist.toString();
-        }
-
-        @Override
-        public int getItemCount(int series) {
-            return nSamples;
-        }
+        return new XYSeriesCollection(series);
     }
 
     public DistributionPresenter(double[] samples, ContinuousDistribution d) {
@@ -76,28 +48,27 @@ class DistributionPresenter extends ApplicationFrame {
 
     private static JFreeChart createChart(double[] samples, ContinuousDistribution d) {
         HistogramDataset samplesData = new HistogramDataset();
-        samplesData.setType(HistogramType.RELATIVE_FREQUENCY);
-
         samplesData.addSeries("Samples", samples, 100);
 
-        CombinedDomainXYPlot plot = new CombinedDomainXYPlot(new NumberAxis("Value"));
+        // Draw distribution first
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                "Samples vs. Distribution",
+                "Value", "Distribution density",
+                getDistributionSamples(d, 1000),
+                PlotOrientation.VERTICAL, true, true, false);
 
+        // Draw samples
+        XYPlot plot = chart.getXYPlot();
+        plot.setDataset(1, samplesData);
+        plot.setRangeAxis(1, new NumberAxis("Sample count"));
         XYBarRenderer renderer = new XYBarRenderer();
         renderer.setShadowVisible(false);
-        XYPlot samplesPlot = new XYPlot(samplesData,
-                null, new NumberAxis("Sample count"),
-                renderer);
+        plot.setRenderer(1, renderer);
+        plot.mapDatasetToRangeAxis(1, 1);
 
-        XYPlot distPlot = new XYPlot(new DistributionXYDataset(d, 1000),
-                null, new NumberAxis("Distribution density"),
-                new StandardXYItemRenderer());
+        // Style
+        plot.getRenderer().setSeriesPaint(0, Color.BLUE);
 
-        plot.add(samplesPlot, 1);
-        plot.add(distPlot, 1);
-        plot.setOrientation(PlotOrientation.VERTICAL);
-
-
-        JFreeChart chart = new JFreeChart("Samples vs. Distribution", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
         return chart;
     }
 }
