@@ -17,6 +17,7 @@ import server.text.ResultInstance;
 import uk.ac.susx.informatics.Morpha;
 import util.Constants;
 import util.Gson;
+import util.Number;
 import util.Pair;
 import util.headword.StringUtils;
 
@@ -220,14 +221,9 @@ public class ChronicleMapQuery {
                 si.source = qfact.getString("source");
 
                 // compute quantity distance to query
-                double qtDist = Math.abs(si.quantityStandardValue - qtConstraintStandardValue);
-                double qtRelativeDist = qtDist <= Constants.EPS ? 0 : Math.min(1,
-                        qtDist / Math.max(Math.abs(si.quantityStandardValue), Math.abs(qtConstraintStandardValue)));
+                double qtRelativeDist = Math.min(1, Number.relativeNumericDistance(si.quantityStandardValue, qtConstraintStandardValue));
                 if (qtConstraintStandardValue2 != null) {
-                    qtDist = Math.abs(si.quantityStandardValue - qtConstraintStandardValue2);
-                    qtRelativeDist = qtDist <= Constants.EPS ? 0 : Math.min(qtRelativeDist,
-                            qtDist / Math.max(Math.abs(si.quantityStandardValue), Math.abs(qtConstraintStandardValue2))
-                    );
+                    qtRelativeDist = Math.min(qtRelativeDist, Number.relativeNumericDistance(si.quantityStandardValue, qtConstraintStandardValue2));
                 }
 
                 // entity popularity would be added later

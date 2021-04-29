@@ -13,8 +13,8 @@ import storage.table.index.TableIndex;
 import storage.table.index.TableIndexStorage;
 import storage.text.migrate.TypeMatcher;
 import uk.ac.susx.informatics.Morpha;
-import util.Constants;
 import util.Gson;
+import util.Number;
 import util.Pair;
 import util.headword.StringUtils;
 import yago.TaxonomyGraph;
@@ -461,14 +461,9 @@ public class TableQuery {
                 double qtStandardValue = qt.value * qt.getScale();
 
                 // compute quantity distance to query
-                double qtDist = Math.abs(qtStandardValue - qtConstraintStandardValue);
-                double qtRelativeDist = qtDist <= Constants.EPS ? 0 : Math.min(1,
-                        qtDist / Math.max(Math.abs(qtStandardValue), Math.abs(qtConstraintStandardValue)));
+                double qtRelativeDist = Math.min(1, Number.relativeNumericDistance(qtStandardValue, qtConstraintStandardValue));
                 if (qtConstraintStandardValue2 != null) {
-                    qtDist = Math.abs(qtStandardValue - qtConstraintStandardValue2);
-                    qtRelativeDist = qtDist <= Constants.EPS ? 0 : Math.min(qtRelativeDist,
-                            qtDist / Math.max(Math.abs(qtStandardValue), Math.abs(qtConstraintStandardValue2))
-                    );
+                    qtRelativeDist = Math.min(qtRelativeDist, Number.relativeNumericDistance(qtStandardValue, qtConstraintStandardValue2));
                 }
 
                 // entity popularity would be added later
