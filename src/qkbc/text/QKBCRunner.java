@@ -147,6 +147,8 @@ public class QKBCRunner {
                     positivePart.size(), riList.size(), positivePart.stream().collect(Collectors.groupingBy(o -> o.entity)).size()));
             System.out.println(String.format("Distribution: %s | p-value: %.3f", positiveDist.first.toString(), positiveDist.second));
 
+//            DistributionFitter.drawDistributionVsSamples(String.format("Iteration #%d", iter), positiveDist.first,
+//                    positivePart.stream().mapToDouble(i -> i.quantityStdValue).toArray(), true);
 
             // mine more context in the unknown part
             Map<String, List<RelationInstance>> entity2PositiveInstances = riList.stream().filter(i -> i.positive)

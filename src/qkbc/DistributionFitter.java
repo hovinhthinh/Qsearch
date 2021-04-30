@@ -18,6 +18,7 @@ import umontreal.ssj.probdist.*;
 import util.Pair;
 
 import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -34,33 +35,34 @@ class DistributionPresenter extends ApplicationFrame {
         return new XYSeriesCollection(series);
     }
 
-    public DistributionPresenter(ContinuousDistribution d, double[] samples) {
-        super(DistributionPresenter.class.getName());
-        this.setContentPane(new ChartPanel(createChart(samples, d)));
+    public DistributionPresenter(String title, ContinuousDistribution d, double[] samples) {
+        super("Samples vs. Distribution");
+        this.setContentPane(new ChartPanel(createChart(title, samples, d)));
         this.pack();
         UIUtils.centerFrameOnScreen(this);
         this.setVisible(true);
     }
 
-    public DistributionPresenter(ContinuousDistribution d, ArrayList<Double> samples) {
-        this(d, samples.stream().mapToDouble(Double::doubleValue).toArray());
+    public DistributionPresenter(String title, ContinuousDistribution d, ArrayList<Double> samples) {
+        this(title, d, samples.stream().mapToDouble(Double::doubleValue).toArray());
     }
 
-    private static JFreeChart createChart(double[] samples, ContinuousDistribution d) {
+    private static JFreeChart createChart(String title, double[] samples, ContinuousDistribution d) {
         HistogramDataset samplesData = new HistogramDataset();
         samplesData.addSeries("Samples", samples, 100);
 
         // Draw distribution first
         JFreeChart chart = ChartFactory.createXYLineChart(
-                "Samples vs. Distribution",
-                "Value", "Distribution density",
+                title, "Value", "Distribution density",
                 getDistributionSamples(d, 1000),
                 PlotOrientation.VERTICAL, true, true, false);
 
         // Draw samples
         XYPlot plot = chart.getXYPlot();
         plot.setDataset(1, samplesData);
-        plot.setRangeAxis(1, new NumberAxis("Sample count"));
+        NumberAxis rangeAxis = new NumberAxis("Sample count");
+        rangeAxis.setLabelFont(plot.getRangeAxis().getLabelFont());
+        plot.setRangeAxis(1, rangeAxis);
         XYBarRenderer renderer = new XYBarRenderer();
         renderer.setShadowVisible(false);
         plot.setRenderer(1, renderer);
@@ -70,6 +72,22 @@ class DistributionPresenter extends ApplicationFrame {
         plot.getRenderer().setSeriesPaint(0, Color.BLUE);
 
         return chart;
+    }
+
+    @Override
+    public void windowClosing(WindowEvent event) {
+        this.dispose();
+        synchronized (lock) {
+            lock.notifyAll();
+        }
+    }
+
+    private Object lock = new Object();
+
+    public void join() throws InterruptedException {
+        synchronized (lock) {
+            lock.wait();
+        }
     }
 }
 
@@ -147,11 +165,17 @@ public class DistributionFitter {
         return fitContinuous(values, null);
     }
 
-    public static void drawDistributionVsSamples(ContinuousDistribution dist, double[] samples) {
-        new DistributionPresenter(dist, samples);
+    public static void drawDistributionVsSamples(String title, ContinuousDistribution dist, double[] samples, boolean waitUntilClose) {
+        DistributionPresenter p = new DistributionPresenter(title, dist, samples);
+        if (waitUntilClose) {
+            try {
+                p.join();
+            } catch (InterruptedException e) {
+            }
+        }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Random r = new Random();
         Distribution d = new NormalDist(0, 1);
 
@@ -164,6 +188,6 @@ public class DistributionFitter {
 
         System.out.println(dist);
 
-        new DistributionPresenter(dist.first, samples);
+        new DistributionPresenter(null, dist.first, samples);
     }
 }
