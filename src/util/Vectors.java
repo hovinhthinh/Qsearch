@@ -1,6 +1,28 @@
 package util;
 
 public class Vectors {
+    public static double max(double[] v) {
+        if (v.length == 0) {
+            return 0;
+        }
+        double m = v[0];
+        for (int i = 1; i < v.length; ++i) {
+            m = Math.max(m, v[i]);
+        }
+        return m;
+    }
+
+    public static double min(double[] v) {
+        if (v.length == 0) {
+            return 0;
+        }
+        double m = v[0];
+        for (int i = 1; i < v.length; ++i) {
+            m = Math.min(m, v[i]);
+        }
+        return m;
+    }
+
     public static double[] multiply(double[] v, double scala) {
         double[] r = new double[v.length];
         for (int i = 0; i < v.length; ++i) {

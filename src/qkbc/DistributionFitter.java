@@ -1,6 +1,7 @@
 package qkbc;
 
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -16,6 +17,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 import umontreal.ssj.gof.GofStat;
 import umontreal.ssj.probdist.*;
 import util.Pair;
+import util.Vectors;
 
 import java.awt.*;
 import java.awt.event.WindowEvent;
@@ -47,9 +49,19 @@ class DistributionPresenter extends ApplicationFrame {
         this(title, d, samples.stream().mapToDouble(Double::doubleValue).toArray());
     }
 
+    private static int optimalFreedmanDiaconisNBins(double[] samples) {
+        if (samples.length <= 1) {
+            return samples.length;
+        }
+        DescriptiveStatistics ds = new DescriptiveStatistics(samples);
+        double iqr = ds.getPercentile(75) - ds.getPercentile(25);
+        int nBins = (int) Math.round((Vectors.max(samples) - Vectors.min(samples)) / (2 * iqr / Math.pow(samples.length, 1.0 / 3)));
+        return Math.max(nBins, 1);
+    }
+
     private static JFreeChart createChart(String title, double[] samples, ContinuousDistribution d) {
         HistogramDataset samplesData = new HistogramDataset();
-        samplesData.addSeries("Samples", samples, 100);
+        samplesData.addSeries("Samples", samples, optimalFreedmanDiaconisNBins(samples));
 
         // Draw distribution first
         JFreeChart chart = ChartFactory.createXYLineChart(
