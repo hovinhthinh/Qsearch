@@ -97,12 +97,12 @@ public class QKBCRunner {
     }
 
     public static void harvest(String type, String seedCtx, KgUnit quantitySiUnit) {
-        double groupConfidenceThreshold = 0.85;
+        double groupConfidenceThreshold = 0.9;
 
         HashMap<String, RelationInstance> kbcId2RelationInstanceMap = new HashMap<>();
 
         ArrayList<RelationInstance> riList = new ArrayList<>();
-        ArrayList<String> ctxList = new ArrayList<>();
+        LinkedHashSet<String> ctxList = new LinkedHashSet<>();
 
         Queue<String> ctxQueue = new LinkedList<>() {{
             add(seedCtx);
@@ -146,9 +146,6 @@ public class QKBCRunner {
             System.out.println(String.format("Positive size: %d/%d (%d entities)",
                     positivePart.size(), riList.size(), positivePart.stream().collect(Collectors.groupingBy(o -> o.entity)).size()));
             System.out.println(String.format("Distribution: %s | p-value: %.3f", positiveDist.first.toString(), positiveDist.second));
-
-//            DistributionFitter.drawDistributionVsSamples(String.format("Iteration #%d", iter), positiveDist.first,
-//                    positivePart.stream().mapToDouble(i -> i.quantityStdValue).toArray(), true);
 
             // mine more context in the unknown part
             Map<String, List<RelationInstance>> entity2PositiveInstances = riList.stream().filter(i -> i.positive)
@@ -215,7 +212,7 @@ public class QKBCRunner {
 
             // Sort stats and output
             List<ContextStats> sortedContextStats = contextStats.entrySet().stream().map(e -> e.getValue())
-                    .filter(o -> o.support() > 1 && o.confidence(positiveDist.first) >= 0.3)
+                    .filter(o -> o.support() > 1 && o.confidence(positiveDist.first) >= 0.4)
                     .sorted((a, b) -> Long.compare(b.support(), a.support()))
                     .collect(Collectors.toList());
 
@@ -225,14 +222,22 @@ public class QKBCRunner {
                         stats.context, stats.support(), stats.extensibility(), stats.confidence(positiveDist.first)));
             }
 
+//            DistributionFitter.drawDistributionVsSamples(String.format("Iteration #%d", iter), positiveDist.first,
+//                    positivePart.stream().mapToDouble(i -> i.quantityStdValue).toArray(), true);
+
             // reformulate
-            if (sortedContextStats.size() > 0) {
-                ctxQueue.add(sortedContextStats.get(0).context);
+            for (ContextStats stats : sortedContextStats) {
+                if (!ctxList.contains(stats.context)) {
+                    ctxQueue.add(stats.context);
+//                    break;
+                }
             }
         } while (!ctxQueue.isEmpty());
     }
 
     public static void main(String[] args) {
-        harvest("building", "height", KgUnit.getKgUnitFromEntityName("<Metre>"));
+        harvest("building", "tall", KgUnit.getKgUnitFromEntityName("<Metre>"));
+//        harvest("company", "revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"));
+//        harvest("person", "height", KgUnit.getKgUnitFromEntityName("<Metre>"));
     }
 }
