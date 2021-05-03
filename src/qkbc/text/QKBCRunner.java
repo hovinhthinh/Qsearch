@@ -8,11 +8,12 @@ import server.text.handler.search.SearchResult;
 import shaded.org.apache.http.client.utils.URIBuilder;
 import uk.ac.susx.informatics.Morpha;
 import umontreal.ssj.probdist.ContinuousDistribution;
-import util.Crawler;
-import util.Gson;
 import util.Number;
-import util.Pair;
+import util.*;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -69,6 +70,18 @@ class ContextStats {
 public class QKBCRunner {
     public static final String QSEARCH_END_POINT = "http://sedna:6993/kbc_text";
 
+    static class EntityFact {
+        String quantity;
+        Double qtStandardValue;
+        ArrayList<String> sources = new ArrayList<>();
+
+        public EntityFact(String quantity, Double qtStandardValue, String source) {
+            this.quantity = quantity;
+            this.qtStandardValue = qtStandardValue;
+            this.sources.add(source);
+        }
+    }
+
     private static ArrayList<RelationInstance> query(String yagoType, String context, KgUnit quantitySiUnit) {
         try {
             URIBuilder b = new URIBuilder(QSEARCH_END_POINT);
@@ -96,9 +109,38 @@ public class QKBCRunner {
         }
     }
 
-    public static void harvest(String type, String seedCtx, KgUnit quantitySiUnit) {
-        double groupConfidenceThreshold = 0.9;
+    static void printToFile(List<RelationInstance> instances, File outputFile) {
+        PrintWriter out = FileUtils.getPrintWriter(outputFile, StandardCharsets.UTF_8);
+        HashMap<String, List<EntityFact>> e2f = new HashMap<>();
+        loop:
+        for (RelationInstance i : instances) {
+            e2f.putIfAbsent(i.entity, new ArrayList<>());
+            List<EntityFact> fs = e2f.get(i.entity);
 
+            String iSource = i.getSource();
+            for (EntityFact f : fs) {
+                if (Number.relativeNumericDistance(f.qtStandardValue, i.quantityStdValue) <= 0.01) {
+                    if (!f.sources.contains(iSource)) {
+                        f.sources.add(iSource);
+                    }
+                    continue loop;
+                }
+            }
+
+            fs.add(new EntityFact(i.quantity, i.quantityStdValue, iSource));
+        }
+
+        e2f.entrySet().stream().forEach(e -> {
+            for (EntityFact f : e.getValue()) {
+                out.println(String.format("%s\t%s\t%s", e.getKey(), f.quantity, String.join("\t", f.sources)));
+            }
+        });
+
+        out.close();
+    }
+
+    public static void harvest(String type, String seedCtx, KgUnit quantitySiUnit,
+                               double groupConfidenceThreshold, File outputFile) {
         HashMap<String, RelationInstance> kbcId2RelationInstanceMap = new HashMap<>();
 
         ArrayList<RelationInstance> riList = new ArrayList<>();
@@ -125,12 +167,9 @@ public class QKBCRunner {
                 }
             }
             // query reformulation mining
-            ArrayList<RelationInstance> mostlyPositive = new ArrayList<>();
-            for (RelationInstance i : riList) {
-                if (1 / i.score >= groupConfidenceThreshold) {
-                    mostlyPositive.add(i);
-                }
-            }
+            ArrayList<RelationInstance> mostlyPositive = riList.stream()
+                    .filter(i -> 1 / i.score >= groupConfidenceThreshold)
+                    .collect(Collectors.toCollection(ArrayList::new));
             Pair<ContinuousDistribution, Double> positiveDist = RelationInstanceNoiseFilter.consistencyBasedDistributionNoiseFilter(mostlyPositive);
 
             // print stats
@@ -232,12 +271,18 @@ public class QKBCRunner {
 //                    break;
                 }
             }
+
+            if (outputFile != null && ctxQueue.isEmpty()) {
+                printToFile(positivePart, outputFile);
+            }
         } while (!ctxQueue.isEmpty());
     }
 
     public static void main(String[] args) {
-        harvest("building", "tall", KgUnit.getKgUnitFromEntityName("<Metre>"));
-//        harvest("company", "revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"));
-//        harvest("person", "height", KgUnit.getKgUnitFromEntityName("<Metre>"));
+//        harvest("building", "height", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.9,
+//        new File("./eval/qkbc/exp_1/qsearch_queries/building_height.tsv"));
+
+        harvest("tunnel", "length", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.9,
+                new File("./eval/qkbc/exp_1/qsearch_queries/tunnel_length.tsv"));
     }
 }
