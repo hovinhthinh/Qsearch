@@ -8,6 +8,7 @@ import server.text.handler.search.SearchResult;
 import shaded.org.apache.http.client.utils.URIBuilder;
 import uk.ac.susx.informatics.Morpha;
 import umontreal.ssj.probdist.ContinuousDistribution;
+import umontreal.ssj.probdist.EmpiricalDist;
 import util.Number;
 import util.*;
 
@@ -182,9 +183,17 @@ public class QKBCRunner {
                 }
             }
             List<RelationInstance> positivePart = mostlyPositive.stream().filter(i -> i.positive).collect(Collectors.toList());
-            System.out.println(String.format("Positive size: %d/%d (%d entities)",
-                    positivePart.size(), riList.size(), positivePart.stream().collect(Collectors.groupingBy(o -> o.entity)).size()));
-            System.out.println(String.format("Distribution: %s | p-value: %.3f", positiveDist.first.toString(), positiveDist.second));
+
+            EmpiricalDist empDist = new EmpiricalDist(RelationInstanceNoiseFilter.extractDistributionSamplesFromRelationInstances(positivePart)
+                    .stream().mapToDouble(Double::doubleValue).toArray());
+
+            System.out.println(String.format("Positive samples: size: %d/%d (%d entities) | mean: %.3f | sd: %.3f",
+                    positivePart.size(), riList.size(), positivePart.stream().collect(Collectors.groupingBy(o -> o.entity)).size(),
+                    empDist.getMean(), empDist.getStandardDeviation()));
+
+
+            System.out.println(String.format("Positive distribution: %s | mean: %.3f | sd: %.3f | p-value: %.3f",
+                    positiveDist.first.toString(), positiveDist.first.getMean(), positiveDist.first.getStandardDeviation(), positiveDist.second));
 
             // mine more context in the unknown part
             Map<String, List<RelationInstance>> entity2PositiveInstances = riList.stream().filter(i -> i.positive)
@@ -251,7 +260,9 @@ public class QKBCRunner {
 
             // Sort stats and output
             List<ContextStats> sortedContextStats = contextStats.entrySet().stream().map(e -> e.getValue())
-                    .filter(o -> o.support() > 1 && o.confidence(positiveDist.first) >= 0.4)
+                    .filter(o -> o.support() > 1
+                            && o.confidence(positiveDist.first) >= 0.4
+                            && o.extensibility() > 0)
                     .sorted((a, b) -> Long.compare(b.support(), a.support()))
                     .collect(Collectors.toList());
 

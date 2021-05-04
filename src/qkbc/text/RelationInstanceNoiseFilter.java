@@ -19,7 +19,7 @@ public class RelationInstanceNoiseFilter {
     public static final double MAX_NOISE_RATE = 0.1;
 
     // do not allow duplicated sample values for the same entity
-    private static ArrayList<Double> extractDistributionSamplesFromRelationInstances(List<RelationInstance> ri) {
+    public static ArrayList<Double> extractDistributionSamplesFromRelationInstances(List<RelationInstance> ri) {
         ArrayList<Double> samples = new ArrayList<>();
         ri.stream().collect(Collectors.groupingBy(i -> i.entity)).forEach((e, eri) -> {
             ArrayList<Double> entitySamples = new ArrayList<>();
