@@ -22,6 +22,7 @@ import util.Vectors;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -105,6 +106,15 @@ class DistributionPresenter extends ApplicationFrame {
 
 
 public class DistributionFitter {
+    public static final List<Class<? extends ContinuousDistribution>> CONTINUOUS_DIST_TYPES = Arrays.asList(
+            NormalDist.class,
+            ExponentialDist.class,
+            GammaDist.class,
+            BetaDist.class,
+            WeibullDist.class,
+            LognormalDist.class
+    );
+
     public static double getPValueFromSamples(ContinuousDistribution d, double[] samples) {
         /*
         double[] pValues = new double[3];
@@ -123,40 +133,18 @@ public class DistributionFitter {
         ContinuousDistribution bestDist = null;
         double bestPValue = -1;
 
-        ArrayList<ContinuousDistribution> distTypes = new ArrayList<>() {{
+        for (Class<? extends ContinuousDistribution> c : distType == null ? CONTINUOUS_DIST_TYPES : Arrays.asList(distType)) {
             try {
-                if (distType == null || distType.equals(NormalDist.class)) {
-                    add(NormalDist.getInstanceFromMLE(values, values.length));
-                }
-            } catch (Exception e) {
-            }
-            try {
-                if (distType == null || distType.equals(ExponentialDist.class)) {
-                    add(ExponentialDist.getInstanceFromMLE(values, values.length));
-                }
-            } catch (Exception e) {
-            }
-            try {
-                if (distType == null || distType.equals(GammaDist.class)) {
-                    add(GammaDist.getInstanceFromMLE(values, values.length));
-                }
-            } catch (Exception e) {
-            }
-            try {
-                if (distType == null || distType.equals(WeibullDist.class)) {
-                    add(WeibullDist.getInstanceFromMLE(values, values.length));
-                }
-            } catch (Exception e) {
-            }
-        }};
+                ContinuousDistribution d = (ContinuousDistribution) c.getMethod("getInstanceFromMLE", double[].class, int.class)
+                        .invoke(null, values, values.length);
 
-        for (ContinuousDistribution d : distTypes) {
-            try {
                 double pValue = getPValueFromSamples(d, values);
                 if (bestDist == null || pValue > bestPValue) {
                     bestPValue = pValue;
                     bestDist = d;
                 }
+            } catch (NoSuchMethodException | SecurityException e) {
+                e.printStackTrace();
             } catch (Exception e) {
             }
         }
