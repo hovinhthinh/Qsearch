@@ -37,14 +37,18 @@ public class RelationInstanceNoiseFilter {
         return samples;
     }
 
-    public static Pair<ContinuousDistribution, Double> consistencyBasedDistributionNoiseFilter(ArrayList<RelationInstance> ri) {
+    private static Pair<ContinuousDistribution, Double> consistencyBasedDistributionNoiseFilter(
+            ArrayList<RelationInstance> ri, Class<? extends ContinuousDistribution> distType) {
         for (RelationInstance i : ri) {
             i.positive = true;
         }
 
         ArrayList<Double> distSamples = extractDistributionSamplesFromRelationInstances(ri);
-        Pair<ContinuousDistribution, Double> originalDist = DistributionFitter.fitContinuous(distSamples);
+        Pair<ContinuousDistribution, Double> originalDist = DistributionFitter.fitContinuous(distSamples, distType);
 //        System.out.println(originalDist);
+        if (originalDist == null) {
+            return null;
+        }
 
         // compute original p-values
         HashMap<String, Double> kbcId2OriginalPValue = new HashMap<>() {{
@@ -109,6 +113,20 @@ public class RelationInstanceNoiseFilter {
                     extractDistributionSamplesFromRelationInstances(ri.stream().filter(i -> i.positive).collect(Collectors.toList())),
                     originalDist.first.getClass());
         }
+    }
+
+    public static Pair<ContinuousDistribution, Double> consistencyBasedDistributionNoiseFilter(ArrayList<RelationInstance> ri) {
+        Pair<ContinuousDistribution, Double> bestDist = null;
+
+        for (Class<? extends ContinuousDistribution> c : DistributionFitter.CONTINUOUS_DIST_TYPES) {
+            Pair<ContinuousDistribution, Double> d = consistencyBasedDistributionNoiseFilter(ri, c);
+
+            if (d != null && (bestDist == null || d.second > bestDist.second)) {
+                bestDist = d;
+            }
+        }
+
+        return bestDist;
     }
 
     public static void main(String[] args) {

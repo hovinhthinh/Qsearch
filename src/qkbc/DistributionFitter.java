@@ -130,8 +130,7 @@ public class DistributionFitter {
 
     // return Pair<dist, pValue>
     public static Pair<ContinuousDistribution, Double> fitContinuous(double[] values, Class<? extends ContinuousDistribution> distType) {
-        ContinuousDistribution bestDist = null;
-        double bestPValue = -1;
+        Pair<ContinuousDistribution, Double> bestDist = null;
 
         for (Class<? extends ContinuousDistribution> c : distType == null ? CONTINUOUS_DIST_TYPES : Arrays.asList(distType)) {
             try {
@@ -139,9 +138,8 @@ public class DistributionFitter {
                         .invoke(null, values, values.length);
 
                 double pValue = getPValueFromSamples(d, values);
-                if (bestDist == null || pValue > bestPValue) {
-                    bestPValue = pValue;
-                    bestDist = d;
+                if (bestDist == null || pValue > bestDist.second) {
+                    bestDist = new Pair<>(d, pValue);
                 }
             } catch (NoSuchMethodException | SecurityException e) {
                 e.printStackTrace();
@@ -149,7 +147,7 @@ public class DistributionFitter {
             }
         }
 
-        return new Pair<>(bestDist, bestPValue);
+        return bestDist;
     }
 
     // return Pair<dist, pValue>
