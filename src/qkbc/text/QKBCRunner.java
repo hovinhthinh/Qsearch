@@ -33,7 +33,7 @@ class ContextStats {
             entity2ValuesDuplicated.put(entity, new ArrayList<>());
         }
         for (Double v : entity2ValuesDuplicated.get(entity)) {
-            if (Number.relativeNumericDistance(v, quantityStdValue) <= 0.01) {
+            if (Number.relativeNumericDistance(v, quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
                 return;
             }
         }
@@ -45,7 +45,7 @@ class ContextStats {
             entity2Values.put(entity, new ArrayList<>());
         }
         for (Double v : entity2Values.get(entity)) {
-            if (Number.relativeNumericDistance(v, quantityStdValue) <= 0.01) {
+            if (Number.relativeNumericDistance(v, quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
                 return;
             }
         }
@@ -120,7 +120,7 @@ public class QKBCRunner {
 
             String iSource = i.getSource();
             for (EntityFact f : fs) {
-                if (Number.relativeNumericDistance(f.qtStandardValue, i.quantityStdValue) <= 0.01) {
+                if (Number.relativeNumericDistance(f.qtStandardValue, i.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
                     if (!f.sources.contains(iSource)) {
                         f.sources.add(iSource);
                     }
@@ -223,7 +223,7 @@ public class QKBCRunner {
                         continue;
                     }
                     for (RelationInstance p : posList) {
-                        if (Number.relativeNumericDistance(u.quantityStdValue, p.quantityStdValue) <= 0.01) {
+                        if (Number.relativeNumericDistance(u.quantityStdValue, p.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
                             stats.addDuplicatedInstance(u.entity, u.quantityStdValue);
                             continue;
                         }
@@ -248,7 +248,7 @@ public class QKBCRunner {
                             continue;
                         }
                         for (RelationInstance p : posList) {
-                            if (Number.relativeNumericDistance(u.quantityStdValue, p.quantityStdValue) <= 0.01) {
+                            if (Number.relativeNumericDistance(u.quantityStdValue, p.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
                                 stats.addDuplicatedInstance(u.entity, u.quantityStdValue);
                                 continue loop;
                             }

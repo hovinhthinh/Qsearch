@@ -18,6 +18,7 @@ public class RelationInstanceNoiseFilter {
     public static final double NOISE_PVALUE_RELDIST_THRESHOLD = 0.1;
     public static final double MAX_NOISE_RATE = 0.1;
 
+    public static final double DUPLICATED_DIFF_RATE = 0.03;
     // do not allow duplicated sample values for the same entity
     public static ArrayList<Double> extractDistributionSamplesFromRelationInstances(List<RelationInstance> ri) {
         ArrayList<Double> samples = new ArrayList<>();
@@ -26,7 +27,7 @@ public class RelationInstanceNoiseFilter {
             loop:
             for (RelationInstance i : eri) {
                 for (Double s : entitySamples) {
-                    if (Number.relativeNumericDistance(s, i.quantityStdValue) <= 0.01) {
+                    if (Number.relativeNumericDistance(s, i.quantityStdValue) <= DUPLICATED_DIFF_RATE) {
                         continue loop;
                     }
                 }
