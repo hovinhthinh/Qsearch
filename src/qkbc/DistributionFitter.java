@@ -112,7 +112,10 @@ public class DistributionFitter {
             GammaDist.class,
             BetaDist.class,
             WeibullDist.class,
-            LognormalDist.class
+            LognormalDist.class,
+            GumbelDist.class,
+            ParetoDist.class,
+            InverseGaussianDist.class
     );
 
     public static double getPValueFromSamples(ContinuousDistribution d, double[] samples) {
