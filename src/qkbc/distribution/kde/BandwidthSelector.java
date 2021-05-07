@@ -12,8 +12,11 @@ public interface BandwidthSelector {
 
         @Override
         public double compute(double[] samples) {
-            if (samples.length <= 1) {
-                return 0;
+            if (samples.length == 0) {
+                throw new RuntimeException("Sample size cannot be 0");
+            }
+            if (samples.length == 1) {
+                return 1;
             }
             return CONST * (new EmpiricalDist(samples).getSampleStandardDeviation()) * Math.pow(samples.length, -1.0 / 5);
         }
@@ -24,8 +27,11 @@ public interface BandwidthSelector {
 
         @Override
         public double compute(double[] samples) {
-            if (samples.length <= 1) {
-                return 0;
+            if (samples.length == 0) {
+                throw new RuntimeException("Sample size cannot be 0");
+            }
+            if (samples.length == 1) {
+                return 1;
             }
             DescriptiveStatistics ds = new DescriptiveStatistics(samples);
             double iqr = ds.getPercentile(75) - ds.getPercentile(25);
