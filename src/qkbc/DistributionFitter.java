@@ -83,6 +83,7 @@ class DistributionPresenter extends ApplicationFrame {
 
         // Style
         plot.getRenderer().setSeriesPaint(0, Color.BLUE);
+        plot.getRenderer().setSeriesStroke(0, new BasicStroke(1.5f));
 
         return chart;
     }
@@ -170,9 +171,12 @@ public class DistributionFitter {
     }
 
     public static Pair<ContinuousDistribution, Double> fitNonParametricContinuous(double[] values) {
+//        ContinuousDistribution dist = KernelDensityDistribution.buildKDDWithEpanechnikovKernel(0.2, values);
+        ContinuousDistribution dist = KernelDensityDistribution.buildKDDWithNormalKernel(0.2, values);
+
+        Double p = getPValueFromSamples(dist, values);
         // TODO: more
-//        return new Pair(KernelDensityDistribution.buildKDDWithEpanechnikovKernel(1, values), null);
-        return new Pair(KernelDensityDistribution.buildKDDWithNormalKernel(0.1, values), null);
+        return new Pair(dist, p);
     }
 
     public static void drawDistributionVsSamples(String title, ContinuousDistribution dist, double[] samples, boolean waitUntilClose) {
