@@ -1,4 +1,4 @@
-package qkbc;
+package qkbc.distribution;
 
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -14,6 +14,8 @@ import org.jfree.chart.ui.UIUtils;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import qkbc.distribution.kde.BandwidthSelector;
+import qkbc.distribution.kde.KernelDensityDistribution;
 import umontreal.ssj.gof.GofStat;
 import umontreal.ssj.probdist.*;
 import util.Pair;
@@ -128,6 +130,7 @@ public class DistributionFitter {
     }
 
     public static double getPValueFromSample(ContinuousDistribution d, double sample) {
+        // TODO: reimplement this function
         return getPValueFromSamples(d, new double[]{sample});
     }
 
@@ -171,8 +174,7 @@ public class DistributionFitter {
     }
 
     public static Pair<ContinuousDistribution, Double> fitNonParametricContinuous(double[] values) {
-//        ContinuousDistribution dist = KernelDensityDistribution.buildKDDWithEpanechnikovKernel(0.2, values);
-        ContinuousDistribution dist = KernelDensityDistribution.buildKDDWithNormalKernel(0.2, values);
+        ContinuousDistribution dist = KernelDensityDistribution.buildKDDWithNormalKernel(new BandwidthSelector.Silverman().compute(values), values);
 
         Double p = getPValueFromSamples(dist, values);
         // TODO: more
@@ -190,7 +192,7 @@ public class DistributionFitter {
     }
 
     public static void main(String[] args) throws Exception {
-        Random r = new Random((int)1e9 + 7);
+        Random r = new Random((int) 1e9 + 7);
         Distribution d = new NormalDist(0, 1);
 
         ArrayList<Double> samples = new ArrayList<>();

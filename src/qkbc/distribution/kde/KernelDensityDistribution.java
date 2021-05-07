@@ -1,4 +1,4 @@
-package qkbc;
+package qkbc.distribution.kde;
 
 import umontreal.ssj.probdist.BetaDist;
 import umontreal.ssj.probdist.ContinuousDistribution;
