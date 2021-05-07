@@ -45,7 +45,7 @@ public class RelationInstanceNoiseFilter {
         }
 
         ArrayList<Double> distSamples = extractDistributionSamplesFromRelationInstances(ri);
-        Pair<ContinuousDistribution, Double> originalDist = DistributionFitter.fitContinuous(distSamples, distType);
+        Pair<ContinuousDistribution, Double> originalDist = DistributionFitter.fitParametricContinuous(distSamples, distType);
 //        System.out.println(originalDist);
         if (originalDist == null) {
             return null;
@@ -74,7 +74,7 @@ public class RelationInstanceNoiseFilter {
             if (sampleValues.size() < MIN_SAMPLING_SIZE) {
                 continue;
             }
-            ContinuousDistribution sampleDist = DistributionFitter.fitContinuous(sampleValues, originalDist.first.getClass()).first;
+            ContinuousDistribution sampleDist = DistributionFitter.fitParametricContinuous(sampleValues, originalDist.first.getClass()).first;
             for (int j = sampleSize; j < riCopy.size(); ++j) {
                 RelationInstance ins = riCopy.get(j);
                 kbcId2ConsistencyTimeCount.put(ins.kbcId, kbcId2ConsistencyTimeCount.getOrDefault(ins.kbcId, 0) + 1);
@@ -110,7 +110,7 @@ public class RelationInstanceNoiseFilter {
             return originalDist;
         } else {
             // fit positive instances only
-            return DistributionFitter.fitContinuous(
+            return DistributionFitter.fitParametricContinuous(
                     extractDistributionSamplesFromRelationInstances(ri.stream().filter(i -> i.positive).collect(Collectors.toList())),
                     originalDist.first.getClass());
         }
@@ -119,7 +119,7 @@ public class RelationInstanceNoiseFilter {
     public static Pair<ContinuousDistribution, Double> consistencyBasedDistributionNoiseFilter(ArrayList<RelationInstance> ri) {
         Pair<ContinuousDistribution, Double> bestDist = null;
 
-        for (Class<? extends ContinuousDistribution> c : DistributionFitter.CONTINUOUS_DIST_TYPES) {
+        for (Class<? extends ContinuousDistribution> c : DistributionFitter.PARAMETRIC_CONTINUOUS_DIST_TYPES) {
             Pair<ContinuousDistribution, Double> d = consistencyBasedDistributionNoiseFilter(ri, c);
 
             if (d != null && (bestDist == null || d.second > bestDist.second)) {

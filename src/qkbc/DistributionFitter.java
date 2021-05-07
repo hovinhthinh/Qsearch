@@ -67,7 +67,7 @@ class DistributionPresenter extends ApplicationFrame {
         // Draw distribution first
         JFreeChart chart = ChartFactory.createXYLineChart(
                 title, "Value", "Distribution density",
-                getDistributionSamples(d, 1000),
+                getDistributionSamples(d, 2000),
                 PlotOrientation.VERTICAL, true, true, false);
 
         // Draw samples
@@ -104,9 +104,8 @@ class DistributionPresenter extends ApplicationFrame {
     }
 }
 
-
 public class DistributionFitter {
-    public static final List<Class<? extends ContinuousDistribution>> CONTINUOUS_DIST_TYPES = Arrays.asList(
+    public static final List<Class<? extends ContinuousDistribution>> PARAMETRIC_CONTINUOUS_DIST_TYPES = Arrays.asList(
             NormalDist.class,
             ExponentialDist.class,
             GammaDist.class,
@@ -132,10 +131,10 @@ public class DistributionFitter {
     }
 
     // return Pair<dist, pValue>
-    public static Pair<ContinuousDistribution, Double> fitContinuous(double[] values, Class<? extends ContinuousDistribution> distType) {
+    public static Pair<ContinuousDistribution, Double> fitParametricContinuous(double[] values, Class<? extends ContinuousDistribution> distType) {
         Pair<ContinuousDistribution, Double> bestDist = null;
 
-        for (Class<? extends ContinuousDistribution> c : distType == null ? CONTINUOUS_DIST_TYPES : Arrays.asList(distType)) {
+        for (Class<? extends ContinuousDistribution> c : distType == null ? PARAMETRIC_CONTINUOUS_DIST_TYPES : Arrays.asList(distType)) {
             try {
                 ContinuousDistribution d = (ContinuousDistribution) c.getMethod("getInstanceFromMLE", double[].class, int.class)
                         .invoke(null, values, values.length);
@@ -154,16 +153,26 @@ public class DistributionFitter {
     }
 
     // return Pair<dist, pValue>
-    public static Pair<ContinuousDistribution, Double> fitContinuous(List<Double> values, Class<? extends ContinuousDistribution> distType) {
-        return fitContinuous(values.stream().mapToDouble(Double::doubleValue).toArray(), distType);
+    public static Pair<ContinuousDistribution, Double> fitParametricContinuous(List<Double> values, Class<? extends ContinuousDistribution> distType) {
+        return fitParametricContinuous(values.stream().mapToDouble(Double::doubleValue).toArray(), distType);
     }
 
-    public static Pair<ContinuousDistribution, Double> fitContinuous(double[] values) {
-        return fitContinuous(values, null);
+    public static Pair<ContinuousDistribution, Double> fitParametricContinuous(double[] values) {
+        return fitParametricContinuous(values, null);
     }
 
-    public static Pair<ContinuousDistribution, Double> fitContinuous(List<Double> values) {
-        return fitContinuous(values, null);
+    public static Pair<ContinuousDistribution, Double> fitParametricContinuous(List<Double> values) {
+        return fitParametricContinuous(values, null);
+    }
+
+    public static Pair<ContinuousDistribution, Double> fitNonParametricContinuous(List<Double> values) {
+        return fitNonParametricContinuous(values.stream().mapToDouble(Double::doubleValue).toArray());
+    }
+
+    public static Pair<ContinuousDistribution, Double> fitNonParametricContinuous(double[] values) {
+        // TODO: more
+//        return new Pair(KernelDensityDistribution.buildKDDWithEpanechnikovKernel(1, values), null);
+        return new Pair(KernelDensityDistribution.buildKDDWithNormalKernel(0.1, values), null);
     }
 
     public static void drawDistributionVsSamples(String title, ContinuousDistribution dist, double[] samples, boolean waitUntilClose) {
@@ -177,7 +186,7 @@ public class DistributionFitter {
     }
 
     public static void main(String[] args) throws Exception {
-        Random r = new Random();
+        Random r = new Random((int)1e9 + 7);
         Distribution d = new NormalDist(0, 1);
 
         ArrayList<Double> samples = new ArrayList<>();
@@ -185,7 +194,7 @@ public class DistributionFitter {
             samples.add(d.inverseF(r.nextDouble()));
         }
 
-        Pair<ContinuousDistribution, Double> dist = fitContinuous(samples);
+        Pair<ContinuousDistribution, Double> dist = fitNonParametricContinuous(samples);
 
         System.out.println(dist);
 
