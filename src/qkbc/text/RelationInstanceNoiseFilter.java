@@ -1,6 +1,6 @@
 package qkbc.text;
 
-import qkbc.DistributionFitter;
+import qkbc.distribution.DistributionFitter;
 import umontreal.ssj.probdist.ContinuousDistribution;
 import umontreal.ssj.probdist.Distribution;
 import umontreal.ssj.probdist.NormalDist;
@@ -19,6 +19,7 @@ public class RelationInstanceNoiseFilter {
     public static final double MAX_NOISE_RATE = 0.1;
 
     public static final double DUPLICATED_DIFF_RATE = 0.03;
+
     // do not allow duplicated sample values for the same entity
     public static ArrayList<Double> extractDistributionSamplesFromRelationInstances(List<RelationInstance> ri) {
         ArrayList<Double> samples = new ArrayList<>();

@@ -2,7 +2,7 @@ package qkbc.text;
 
 import model.quantity.kg.KgUnit;
 import nlp.NLP;
-import qkbc.DistributionFitter;
+import qkbc.distribution.DistributionFitter;
 import server.text.ResultInstance;
 import server.text.handler.search.SearchResult;
 import shaded.org.apache.http.client.utils.URIBuilder;
