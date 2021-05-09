@@ -3,6 +3,7 @@ package qkbc.text;
 import model.quantity.kg.KgUnit;
 import nlp.NLP;
 import qkbc.distribution.DistributionFitter;
+import qkbc.distribution.IntegralDistributionApproximator;
 import server.text.ResultInstance;
 import server.text.handler.search.SearchResult;
 import shaded.org.apache.http.client.utils.URIBuilder;
@@ -62,9 +63,9 @@ class ContextStats {
         return 1 - ((double) sup) / total;
     }
 
-    public double confidence(ContinuousDistribution positiveDist) {
+    public double confidence(IntegralDistributionApproximator positiveDistAppr) {
         return entity2Values.entrySet().stream().flatMap(o -> o.getValue().stream())
-                .mapToDouble(o -> DistributionFitter.getPValueFromSample(positiveDist, o)).average().getAsDouble();
+                .mapToDouble(o -> positiveDistAppr.getEstimatedPValue(o)).average().getAsDouble();
     }
 }
 
@@ -171,7 +172,7 @@ public class QKBCRunner {
             ArrayList<RelationInstance> mostlyPositive = riList.stream()
                     .filter(i -> 1 / i.score >= groupConfidenceThreshold)
                     .collect(Collectors.toCollection(ArrayList::new));
-            Pair<ContinuousDistribution, Double> positiveDist = RelationInstanceNoiseFilter.consistencyBasedDistributionNoiseFilter(mostlyPositive);
+            Pair<ContinuousDistribution, Double> positiveDist = RelationInstanceNoiseFilter.consistencyBasedParametricDistributionNoiseFilter(mostlyPositive);
 
             // print stats
             System.out.println(String.format("Mostly-positive size: %d", mostlyPositive.size()));
@@ -258,10 +259,11 @@ public class QKBCRunner {
             }
 
 
+            IntegralDistributionApproximator positiveDistAppr = new IntegralDistributionApproximator(positiveDist.first);
             // Sort stats and output
             List<ContextStats> sortedContextStats = contextStats.entrySet().stream().map(e -> e.getValue())
                     .filter(o -> o.support() > 1
-                            && o.confidence(positiveDist.first) >= 0.4
+                            && o.confidence(positiveDistAppr) >= 0.4
                             && o.extensibility() > 0)
                     .sorted((a, b) -> Long.compare(b.support(), a.support()))
                     .collect(Collectors.toList());
@@ -269,7 +271,7 @@ public class QKBCRunner {
             System.out.println("Mined context: " + sortedContextStats.size());
             for (ContextStats stats : sortedContextStats) {
                 System.out.println(String.format("  ContextStats{'%s', support=%d, extensibility=%.3f, confidence=%.3f}",
-                        stats.context, stats.support(), stats.extensibility(), stats.confidence(positiveDist.first)));
+                        stats.context, stats.support(), stats.extensibility(), stats.confidence(positiveDistAppr)));
             }
 
 //            DistributionFitter.drawDistributionVsSamples(String.format("Iteration #%d", iter), positiveDist.first,
@@ -279,7 +281,7 @@ public class QKBCRunner {
             for (ContextStats stats : sortedContextStats) {
                 if (!ctxList.contains(stats.context)) {
                     ctxQueue.add(stats.context);
-//                    break;
+                    break;
                 }
             }
 
@@ -290,10 +292,17 @@ public class QKBCRunner {
     }
 
     public static void main(String[] args) {
-//        harvest("building", "height", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.9,
-//        new File("./eval/qkbc/exp_1/qsearch_queries/building_height.tsv"));
+        harvest("building", "height", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.9,
+                new File("./eval/qkbc/exp_1/qsearch_queries/building_height.tsv"));
 
-        harvest("tunnel", "length", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.9,
-                new File("./eval/qkbc/exp_1/qsearch_queries/tunnel_length.tsv"));
+//        harvest("tunnel", "length", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.9,
+//                new File("./eval/qkbc/exp_1/qsearch_queries/tunnel_length.tsv"));
+
+//        harvest("stadium", "capacity", KgUnit.DIMENSIONLESS, 0.9,
+//                new File("./eval/qkbc/exp_1/qsearch_queries/stadium-seating_capacity.tsv"));
+
+//        harvest("athlete", "tall", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.85,
+//                new File("./eval/qkbc/exp_1/qsearch_queries/athlete-height.tsv"));
+
     }
 }

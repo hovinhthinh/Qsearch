@@ -1,6 +1,8 @@
 package qkbc.text;
 
 import qkbc.distribution.DistributionFitter;
+import qkbc.distribution.IntegralDistributionApproximator;
+import qkbc.distribution.kde.KernelDensityDistribution;
 import umontreal.ssj.probdist.ContinuousDistribution;
 import umontreal.ssj.probdist.Distribution;
 import umontreal.ssj.probdist.NormalDist;
@@ -12,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class RelationInstanceNoiseFilter {
-    public static final int N_FOLD = 10000;
+    public static final int N_FOLD = 1000;
     public static final double SAMPLING_RATE = 0.9;
     public static final int MIN_SAMPLING_SIZE = 20;
     public static final double NOISE_PVALUE_RELDIST_THRESHOLD = 0.1;
@@ -46,16 +48,19 @@ public class RelationInstanceNoiseFilter {
         }
 
         ArrayList<Double> distSamples = extractDistributionSamplesFromRelationInstances(ri);
-        Pair<ContinuousDistribution, Double> originalDist = DistributionFitter.fitParametricContinuous(distSamples, distType);
+        Pair<ContinuousDistribution, Double> originalDist = distType.equals(KernelDensityDistribution.class)
+                ? DistributionFitter.fitNonParametricContinuous(distSamples)
+                : DistributionFitter.fitParametricContinuous(distSamples, distType);
 //        System.out.println(originalDist);
         if (originalDist == null) {
             return null;
         }
 
         // compute original p-values
+        IntegralDistributionApproximator appr = new IntegralDistributionApproximator(originalDist.first);
         HashMap<String, Double> kbcId2OriginalPValue = new HashMap<>() {{
             for (RelationInstance i : ri) {
-                put(i.kbcId, DistributionFitter.getPValueFromSample(originalDist.first, i.quantityStdValue));
+                put(i.kbcId, appr.getEstimatedPValue(i.quantityStdValue));
             }
         }};
 
@@ -75,12 +80,18 @@ public class RelationInstanceNoiseFilter {
             if (sampleValues.size() < MIN_SAMPLING_SIZE) {
                 continue;
             }
-            ContinuousDistribution sampleDist = DistributionFitter.fitParametricContinuous(sampleValues, originalDist.first.getClass()).first;
+            Pair<ContinuousDistribution, Double> sampleDist = originalDist.first.getClass().equals(KernelDensityDistribution.class)
+                    ? DistributionFitter.fitNonParametricContinuous(sampleValues)
+                    : DistributionFitter.fitParametricContinuous(sampleValues, originalDist.first.getClass());
+            if (sampleDist == null) {
+                return null;
+            }
+            IntegralDistributionApproximator sampleDistAppr = new IntegralDistributionApproximator(sampleDist.first);
             for (int j = sampleSize; j < riCopy.size(); ++j) {
                 RelationInstance ins = riCopy.get(j);
                 kbcId2ConsistencyTimeCount.put(ins.kbcId, kbcId2ConsistencyTimeCount.getOrDefault(ins.kbcId, 0) + 1);
                 kbcId2ConsistencySumPValue.put(ins.kbcId,
-                        kbcId2ConsistencySumPValue.getOrDefault(ins.kbcId, 0.0) + DistributionFitter.getPValueFromSample(sampleDist, ins.quantityStdValue));
+                        kbcId2ConsistencySumPValue.getOrDefault(ins.kbcId, 0.0) + sampleDistAppr.getEstimatedPValue(ins.quantityStdValue));
             }
         }
 
@@ -111,13 +122,14 @@ public class RelationInstanceNoiseFilter {
             return originalDist;
         } else {
             // fit positive instances only
-            return DistributionFitter.fitParametricContinuous(
-                    extractDistributionSamplesFromRelationInstances(ri.stream().filter(i -> i.positive).collect(Collectors.toList())),
-                    originalDist.first.getClass());
+            ArrayList<Double> positiveIns = extractDistributionSamplesFromRelationInstances(ri.stream().filter(i -> i.positive).collect(Collectors.toList()));
+            return originalDist.first.getClass().equals(KernelDensityDistribution.class)
+                    ? DistributionFitter.fitNonParametricContinuous(positiveIns)
+                    : DistributionFitter.fitParametricContinuous(positiveIns, originalDist.first.getClass());
         }
     }
 
-    public static Pair<ContinuousDistribution, Double> consistencyBasedDistributionNoiseFilter(ArrayList<RelationInstance> ri) {
+    public static Pair<ContinuousDistribution, Double> consistencyBasedParametricDistributionNoiseFilter(ArrayList<RelationInstance> ri) {
         Pair<ContinuousDistribution, Double> bestDist = null;
 
         for (Class<? extends ContinuousDistribution> c : DistributionFitter.PARAMETRIC_CONTINUOUS_DIST_TYPES) {
@@ -131,20 +143,26 @@ public class RelationInstanceNoiseFilter {
         return bestDist;
     }
 
+    public static Pair<ContinuousDistribution, Double> consistencyBasedNonParametricDistributionNoiseFilter(ArrayList<RelationInstance> ri) {
+        return consistencyBasedDistributionNoiseFilter(ri, KernelDensityDistribution.class);
+    }
+
     public static void main(String[] args) {
-        Random r = new Random();
+        Random r = new Random((int) 1e9 + 7);
         Distribution d = new NormalDist(0, 1);
 
         ArrayList<RelationInstance> samples = new ArrayList<>();
-        int nSample = 30, nNoise = 2;
+        int nSample = 50, nNoise = 5;
 
         for (int i = 0; i < nSample; ++i) {
             samples.add(new RelationInstance(i + "", null, d.inverseF(r.nextDouble()), 0, i + ""));
         }
         for (int i = 0; i < nNoise; ++i) {
-            samples.add(new RelationInstance(i + nSample + "", null, (r.nextDouble() - 0.5) * 100, 0, i + nSample + ""));
+            samples.add(new RelationInstance(i + nSample + "", null, (r.nextDouble() - 0.5) * 50, 0, i + nSample + ""));
         }
 
-        System.out.println(consistencyBasedDistributionNoiseFilter(samples));
+        Pair<ContinuousDistribution, Double> filteredDist = consistencyBasedParametricDistributionNoiseFilter(samples);
+        System.out.println(filteredDist);
+        DistributionFitter.drawDistributionVsSamples(null, filteredDist.first, samples.stream().mapToDouble(s -> s.quantityStdValue).toArray(), false);
     }
 }
