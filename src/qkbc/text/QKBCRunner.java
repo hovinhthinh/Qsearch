@@ -187,13 +187,13 @@ public class QKBCRunner {
             EmpiricalDist empDist = new EmpiricalDist(RelationInstanceNoiseFilter.extractDistributionSamplesFromRelationInstances(positivePart)
                     .stream().mapToDouble(Double::doubleValue).toArray());
 
-            System.out.println(String.format("Positive samples: size: %d/%d (%d entities) | mean: %.3f | sd: %.3f",
-                    positivePart.size(), riList.size(), positivePart.stream().collect(Collectors.groupingBy(o -> o.entity)).size(),
-                    empDist.getMean(), empDist.getStandardDeviation()));
+            System.out.println(String.format("Positive samples: size: %d/%d (%d entities) | mean: %.3f",
+                    positivePart.size(), riList.size(), positivePart.stream()
+                            .collect(Collectors.groupingBy(o -> o.entity)).size(), empDist.getMean()));
 
 
-            System.out.println(String.format("Positive distribution: %s | mean: %.3f | sd: %.3f | p-value: %.3f",
-                    positiveDist.first.toString(), positiveDist.first.getMean(), positiveDist.first.getStandardDeviation(), positiveDist.second));
+            System.out.println(String.format("Positive distribution: %s | mean: %.3f | p-value: %.3f",
+                    positiveDist.first.toString(), positiveDist.first.getMean(), positiveDist.second));
 
             // mine more context in the unknown part
             Map<String, List<RelationInstance>> entity2PositiveInstances = riList.stream().filter(i -> i.positive)
