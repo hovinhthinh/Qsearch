@@ -2,7 +2,6 @@ package qkbc.text;
 
 import model.quantity.kg.KgUnit;
 import nlp.NLP;
-import qkbc.distribution.DistributionFitter;
 import qkbc.distribution.IntegralDistributionApproximator;
 import server.text.ResultInstance;
 import server.text.handler.search.SearchResult;
