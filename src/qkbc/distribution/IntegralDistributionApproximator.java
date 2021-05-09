@@ -70,11 +70,11 @@ public class IntegralDistributionApproximator {
                 r = mid;
             }
         }
-        if (l == -1 || v <= binX[l] + binWidth * 0.5) {
-            return l;
-        } else {
-            return l + 1;
+        if (l == -1) {
+            return v >= binX[0] - binWidth * 0.5 ? 0 : -1;
         }
+
+        return (v <= binX[l] + binWidth * 0.5) ? l : l + 1;
     }
 
     public double getEstimatedCdf(double v) {
