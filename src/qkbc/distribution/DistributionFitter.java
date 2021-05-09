@@ -180,7 +180,6 @@ public class DistributionFitter {
         ContinuousDistribution dist = KernelDensityDistribution.buildKDDWithNormalKernel(new BandwidthSelector.ISJ().compute(values), values);
 
         Double p = getPValueFromSamples(dist, values);
-        // TODO: more
         return new Pair(dist, p);
     }
 
