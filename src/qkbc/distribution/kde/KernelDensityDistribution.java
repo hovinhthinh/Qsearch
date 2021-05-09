@@ -1,5 +1,6 @@
 package qkbc.distribution.kde;
 
+import qkbc.distribution.IntegralDistributionApproximator;
 import umontreal.ssj.probdist.BetaDist;
 import umontreal.ssj.probdist.ContinuousDistribution;
 import umontreal.ssj.probdist.NormalDist;
@@ -10,8 +11,15 @@ import java.util.Arrays;
 
 public class KernelDensityDistribution extends ContinuousDistribution {
     private DEKernelDensity kd;
+    private IntegralDistributionApproximator distApproximator;
 
     private KernelDensityDistribution() {
+    }
+
+    public void enableFastCdf() {
+        if (distApproximator == null) {
+            distApproximator = new IntegralDistributionApproximator(this);
+        }
     }
 
     public static KernelDensityDistribution buildKDDWithNormalKernel(double h, double[] data) {
@@ -43,8 +51,7 @@ public class KernelDensityDistribution extends ContinuousDistribution {
         return kd.evalDensity(v);
     }
 
-    @Override
-    public double cdf(double v) {
+    public double trueCdf(double v) {
         double cdf = 0;
         ContinuousDistribution kernel = kd.getKernel();
         double bandwidth = kd.getH();
@@ -54,6 +61,20 @@ public class KernelDensityDistribution extends ContinuousDistribution {
         }
         cdf /= data.length;
         return cdf;
+
+    }
+
+    public double fastCdf(double v) {
+        return distApproximator.getEstimatedCdf(v);
+    }
+
+    @Override
+    public double cdf(double v) {
+        if (distApproximator == null) {
+            return trueCdf(v);
+        } else {
+            return fastCdf(v);
+        }
     }
 
     @Override

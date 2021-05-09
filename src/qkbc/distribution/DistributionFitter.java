@@ -126,6 +126,9 @@ public class DistributionFitter {
         GofStat.kolmogorovSmirnov(samples, d, new double[3], pValues);
         return pValues[2];
         */
+        if (d instanceof KernelDensityDistribution) {
+            ((KernelDensityDistribution) d).enableFastCdf();
+        }
         return GofStat.andersonDarling(samples, d)[1];
     }
 

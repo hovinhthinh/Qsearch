@@ -55,6 +55,7 @@ public interface BandwidthSelector {
 
     // Improved Sheather Jones (ISJ) algorithm from the paper by Botev et al.
     // Following https://github.com/tommyod/KDEpy
+    // Used for normal dist kernel
     class ISJ implements BandwidthSelector {
         static int N_POINTS = 1 << 10;
         static double GRID_BOUNDARY_ABS = 6, GRID_BOUNDARY_REL = 0.5;
