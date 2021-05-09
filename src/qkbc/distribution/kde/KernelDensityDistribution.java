@@ -90,4 +90,9 @@ public class KernelDensityDistribution extends ContinuousDistribution {
     public String toString() {
         return kd.toString();
     }
+
+    @Override
+    public double getMean() {
+        return inverseF(0.5);
+    }
 }
