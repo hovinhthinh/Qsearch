@@ -6,11 +6,15 @@ import qkbc.distribution.kde.KernelDensityDistribution;
 import umontreal.ssj.probdist.ContinuousDistribution;
 import umontreal.ssj.probdist.Distribution;
 import umontreal.ssj.probdist.NormalDist;
+import util.Concurrent;
 import util.Constants;
 import util.Number;
 import util.Pair;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class RelationInstanceNoiseFilter {
@@ -71,29 +75,38 @@ public class RelationInstanceNoiseFilter {
             return originalDist;
         }
 
-        HashMap<String, Integer> kbcId2ConsistencyTimeCount = new HashMap<>();
-        HashMap<String, Double> kbcId2ConsistencySumPValue = new HashMap<>();
+        ConcurrentHashMap<String, Integer> kbcId2ConsistencyTimeCount = new ConcurrentHashMap<>();
+        ConcurrentHashMap<String, Double> kbcId2ConsistencySumPValue = new ConcurrentHashMap<>();
 
-        ArrayList<RelationInstance> riCopy = new ArrayList<>(ri);
-        for (int i = 0; i < N_FOLD; ++i) {
-            Collections.shuffle(riCopy);
-            ArrayList<Double> sampleValues = extractDistributionSamplesFromRelationInstances(riCopy.subList(0, sampleSize));
-            if (sampleValues.size() < MIN_SAMPLING_SIZE) {
-                continue;
+        AtomicInteger foldCount = new AtomicInteger(0);
+        AtomicBoolean stop = new AtomicBoolean(false);
+        Concurrent.runAndWait(() -> {
+            ArrayList<RelationInstance> riCopy = new ArrayList<>(ri);
+            while (foldCount.getAndIncrement() < N_FOLD && !stop.get()) {
+                Collections.shuffle(riCopy);
+                ArrayList<Double> sampleValues = extractDistributionSamplesFromRelationInstances(riCopy.subList(0, sampleSize));
+                if (sampleValues.size() < MIN_SAMPLING_SIZE) {
+                    continue;
+                }
+                Pair<ContinuousDistribution, Double> sampleDist = distType.equals(KernelDensityDistribution.class)
+                        ? DistributionFitter.fitNonParametricContinuous(sampleValues, ((KernelDensityDistribution) originalDist.first).getH())
+                        : DistributionFitter.fitParametricContinuous(sampleValues, originalDist.first.getClass());
+                if (sampleDist == null) {
+                    stop.set(true);
+                    return;
+                }
+                IntegralDistributionApproximator sampleDistAppr = new IntegralDistributionApproximator(sampleDist.first);
+                for (int j = sampleSize; j < riCopy.size(); ++j) {
+                    RelationInstance ins = riCopy.get(j);
+                    kbcId2ConsistencyTimeCount.put(ins.kbcId, kbcId2ConsistencyTimeCount.getOrDefault(ins.kbcId, 0) + 1);
+                    kbcId2ConsistencySumPValue.put(ins.kbcId,
+                            kbcId2ConsistencySumPValue.getOrDefault(ins.kbcId, 0.0) + sampleDistAppr.getEstimatedPValue(ins.quantityStdValue));
+                }
+
             }
-            Pair<ContinuousDistribution, Double> sampleDist = distType.equals(KernelDensityDistribution.class)
-                    ? DistributionFitter.fitNonParametricContinuous(sampleValues, ((KernelDensityDistribution) originalDist.first).getH())
-                    : DistributionFitter.fitParametricContinuous(sampleValues, originalDist.first.getClass());
-            if (sampleDist == null) {
-                return null;
-            }
-            IntegralDistributionApproximator sampleDistAppr = new IntegralDistributionApproximator(sampleDist.first);
-            for (int j = sampleSize; j < riCopy.size(); ++j) {
-                RelationInstance ins = riCopy.get(j);
-                kbcId2ConsistencyTimeCount.put(ins.kbcId, kbcId2ConsistencyTimeCount.getOrDefault(ins.kbcId, 0) + 1);
-                kbcId2ConsistencySumPValue.put(ins.kbcId,
-                        kbcId2ConsistencySumPValue.getOrDefault(ins.kbcId, 0.0) + sampleDistAppr.getEstimatedPValue(ins.quantityStdValue));
-            }
+        }, 32);
+        if (stop.get()) {
+            return null;
         }
 
         // too small number of samples, or too many duplicated values, so that the computation is invalid.
