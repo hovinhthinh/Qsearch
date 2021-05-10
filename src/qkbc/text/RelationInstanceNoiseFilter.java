@@ -81,7 +81,7 @@ public class RelationInstanceNoiseFilter {
             if (sampleValues.size() < MIN_SAMPLING_SIZE) {
                 continue;
             }
-            Pair<ContinuousDistribution, Double> sampleDist = originalDist.first.getClass().equals(KernelDensityDistribution.class)
+            Pair<ContinuousDistribution, Double> sampleDist = distType.getClass().equals(KernelDensityDistribution.class)
                     ? DistributionFitter.fitNonParametricContinuous(sampleValues, ((KernelDensityDistribution) originalDist.first).getEstimator().getH())
                     : DistributionFitter.fitParametricContinuous(sampleValues, originalDist.first.getClass());
             if (sampleDist == null) {
@@ -100,7 +100,7 @@ public class RelationInstanceNoiseFilter {
         if (kbcId2ConsistencyTimeCount.size() < ri.size()) {
             return originalDist;
         }
-        double pValueRelDistThreshold = originalDist.first.getClass().equals(KernelDensityDistribution.class)
+        double pValueRelDistThreshold = distType.getClass().equals(KernelDensityDistribution.class)
                 ? NONPARAMETRIC_NOISE_PVALUE_RELDIST_THRESHOLD
                 : PARAMETRIC_NOISE_PVALUE_RELDIST_THRESHOLD;
 
@@ -128,7 +128,7 @@ public class RelationInstanceNoiseFilter {
         } else {
             // fit positive instances only
             ArrayList<Double> positiveIns = extractDistributionSamplesFromRelationInstances(ri.stream().filter(i -> i.positive).collect(Collectors.toList()));
-            return originalDist.first.getClass().equals(KernelDensityDistribution.class)
+            return distType.getClass().equals(KernelDensityDistribution.class)
                     ? DistributionFitter.fitNonParametricContinuous(positiveIns, ((KernelDensityDistribution) originalDist.first).getEstimator().getH())
                     : DistributionFitter.fitParametricContinuous(positiveIns, originalDist.first.getClass());
         }
