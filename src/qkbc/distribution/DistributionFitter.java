@@ -175,6 +175,18 @@ public class DistributionFitter {
         return new Pair(dist, p);
     }
 
+    public static Pair<ContinuousDistribution, Double> fitNonParametricContinuous(List<Double> values, double h) {
+        return fitNonParametricContinuous(values.stream().mapToDouble(Double::doubleValue).toArray(), h);
+
+    }
+
+    public static Pair<ContinuousDistribution, Double> fitNonParametricContinuous(double[] values, double h) {
+        ContinuousDistribution dist = KernelDensityDistribution.buildKDDWithNormalKernel(h, values);
+
+        Double p = getPValueFromSamples(dist, values);
+        return new Pair(dist, p);
+    }
+
     public static void drawDistributionVsSamples(String title, ContinuousDistribution dist, double[] samples, boolean waitUntilClose) {
         DistributionPresenter p = new DistributionPresenter(title, dist, samples);
         if (waitUntilClose) {
