@@ -1,7 +1,6 @@
 package qkbc.distribution;
 
 import umontreal.ssj.probdist.ContinuousDistribution;
-import util.Constants;
 import util.Pair;
 
 import java.util.Arrays;
@@ -9,6 +8,7 @@ import java.util.Comparator;
 
 public class IntegralDistributionApproximator {
     public static final int INTEGRAL_N_BINS = 1 << 16;
+    public static final double INVERSE_F_IGNORE_THRESHOLD = 1e-4;
 
     private double[] binX, binDensity;
     private double binWidth;
@@ -18,7 +18,7 @@ public class IntegralDistributionApproximator {
     public IntegralDistributionApproximator(ContinuousDistribution d) {
         binX = new double[INTEGRAL_N_BINS];
         binDensity = new double[INTEGRAL_N_BINS];
-        double start = d.inverseF(Constants.EPS), end = d.inverseF(1 - Constants.EPS);
+        double start = d.inverseF(INVERSE_F_IGNORE_THRESHOLD), end = d.inverseF(1 - INVERSE_F_IGNORE_THRESHOLD);
 
         binWidth = (end - start) / INTEGRAL_N_BINS;
 
