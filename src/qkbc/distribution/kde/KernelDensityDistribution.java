@@ -13,35 +13,32 @@ import java.util.Arrays;
 public class KernelDensityDistribution extends ContinuousDistribution {
     private DEKernelDensity kd;
     private IntegralDistributionApproximator distApproximator;
+    private ContinuousDistribution kernel;
+    private double h;
 
-    private KernelDensityDistribution() {
+    public KernelDensityDistribution(ContinuousDistribution kernel, double bandwidth, double[] data) {
+        double[] sortedData = Arrays.copyOf(data, data.length);
+        Arrays.sort(sortedData);
+        this.kernel = kernel;
+        this.h = bandwidth;
+        this.kd = new DEKernelDensity(kernel, bandwidth, sortedData);
+        this.distApproximator = new IntegralDistributionApproximator(this);
+    }
+
+    public static KernelDensityDistribution buildKDDWithNormalKernel(BandwidthSelector bws, double[] data) {
+        return buildKDDWithNormalKernel(bws.compute(data), data);
     }
 
     public static KernelDensityDistribution buildKDDWithNormalKernel(double h, double[] data) {
-        double[] sortedData = Arrays.copyOf(data, data.length);
-        Arrays.sort(sortedData);
-        KernelDensityDistribution d = new KernelDensityDistribution();
-        d.kd = new DEKernelDensity(new NormalDist(), h, sortedData);
-        d.distApproximator = new IntegralDistributionApproximator(d);
-        return d;
+        return new KernelDensityDistribution(new NormalDist(), h, data);
     }
 
     public static KernelDensityDistribution buildKDDWithEpanechnikovKernel(double h, double[] data) {
-        double[] sortedData = Arrays.copyOf(data, data.length);
-        Arrays.sort(sortedData);
-        KernelDensityDistribution d = new KernelDensityDistribution();
-        d.kd = new DEKernelDensity(new BetaDist(2, 2, -1, 1), h, sortedData);
-        d.distApproximator = new IntegralDistributionApproximator(d);
-        return d;
+        return new KernelDensityDistribution(new BetaDist(2, 2, -1, 1), h, data);
     }
 
     public static KernelDensityDistribution buildKDDWithTriangularKernel(double h, double[] data) {
-        double[] sortedData = Arrays.copyOf(data, data.length);
-        Arrays.sort(sortedData);
-        KernelDensityDistribution d = new KernelDensityDistribution();
-        d.kd = new DEKernelDensity(new TriangularDist(-1, 1, 0), h, sortedData);
-        d.distApproximator = new IntegralDistributionApproximator(d);
-        return d;
+        return new KernelDensityDistribution(new TriangularDist(-1, 1, 0), h, data);
     }
 
     @Override
@@ -71,10 +68,6 @@ public class KernelDensityDistribution extends ContinuousDistribution {
         return new double[0];
     }
 
-    public DEKernelDensity getEstimator() {
-        return kd;
-    }
-
     @Override
     public String toString() {
         return kd.toString();
@@ -99,5 +92,13 @@ public class KernelDensityDistribution extends ContinuousDistribution {
         }
 
         return l;
+    }
+
+    public double getH() {
+        return h;
+    }
+
+    public ContinuousDistribution getKernel() {
+        return kernel;
     }
 }

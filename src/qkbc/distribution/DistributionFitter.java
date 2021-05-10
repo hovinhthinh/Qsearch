@@ -169,7 +169,7 @@ public class DistributionFitter {
     }
 
     public static Pair<ContinuousDistribution, Double> fitNonParametricContinuous(double[] values) {
-        ContinuousDistribution dist = KernelDensityDistribution.buildKDDWithNormalKernel(new BandwidthSelector.ISJ().compute(values), values);
+        ContinuousDistribution dist = KernelDensityDistribution.buildKDDWithNormalKernel(new BandwidthSelector.ISJ(), values);
 
         Double p = getPValueFromSamples(dist, values);
         return new Pair(dist, p);
