@@ -129,11 +129,6 @@ public class DistributionFitter {
         return GofStat.andersonDarling(samples, d)[1];
     }
 
-    public static double getPValueFromSample(ContinuousDistribution d, double sample) {
-        // TODO: reimplement this function
-        return getPValueFromSamples(d, new double[]{sample});
-    }
-
     // return Pair<dist, pValue>
     public static Pair<ContinuousDistribution, Double> fitParametricContinuous(double[] values, Class<? extends ContinuousDistribution> distType) {
         Pair<ContinuousDistribution, Double> bestDist = null;
