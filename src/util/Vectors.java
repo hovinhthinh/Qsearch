@@ -23,6 +23,14 @@ public class Vectors {
         return m;
     }
 
+    public static double[] abs(double[] v) {
+        double[] r = new double[v.length];
+        for (int i = 0; i < v.length; ++i) {
+            r[i] = Math.abs(v[i]);
+        }
+        return r;
+    }
+
     public static double[] multiply(double[] v, double scala) {
         double[] r = new double[v.length];
         for (int i = 0; i < v.length; ++i) {
