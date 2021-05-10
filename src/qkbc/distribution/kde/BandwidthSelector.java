@@ -133,7 +133,7 @@ public interface BandwidthSelector {
         }
 
         private static double findRoot(UnivariateFunction f, int N) {
-            BrentSolver solver = new BrentSolver();
+            BrentSolver solver = new BrentSolver(8.881784197001252e-16, 2e-12);
 
             N = Math.max(Math.min(1050, N), 50);
             double tol = 1e-12 + 0.01 * (N - 50) / 1000;
