@@ -6,6 +6,7 @@ import umontreal.ssj.probdist.ContinuousDistribution;
 import umontreal.ssj.probdist.NormalDist;
 import umontreal.ssj.probdist.TriangularDist;
 import umontreal.ssj.stat.density.DEKernelDensity;
+import util.Constants;
 
 import java.util.Arrays;
 
@@ -16,17 +17,12 @@ public class KernelDensityDistribution extends ContinuousDistribution {
     private KernelDensityDistribution() {
     }
 
-    public void enableFastCdf() {
-        if (distApproximator == null) {
-            distApproximator = new IntegralDistributionApproximator(this);
-        }
-    }
-
     public static KernelDensityDistribution buildKDDWithNormalKernel(double h, double[] data) {
         double[] sortedData = Arrays.copyOf(data, data.length);
         Arrays.sort(sortedData);
         KernelDensityDistribution d = new KernelDensityDistribution();
         d.kd = new DEKernelDensity(new NormalDist(), h, sortedData);
+        d.distApproximator = new IntegralDistributionApproximator(d);
         return d;
     }
 
@@ -35,6 +31,7 @@ public class KernelDensityDistribution extends ContinuousDistribution {
         Arrays.sort(sortedData);
         KernelDensityDistribution d = new KernelDensityDistribution();
         d.kd = new DEKernelDensity(new BetaDist(2, 2, -1, 1), h, sortedData);
+        d.distApproximator = new IntegralDistributionApproximator(d);
         return d;
     }
 
@@ -43,6 +40,7 @@ public class KernelDensityDistribution extends ContinuousDistribution {
         Arrays.sort(sortedData);
         KernelDensityDistribution d = new KernelDensityDistribution();
         d.kd = new DEKernelDensity(new TriangularDist(-1, 1, 0), h, sortedData);
+        d.distApproximator = new IntegralDistributionApproximator(d);
         return d;
     }
 
@@ -61,20 +59,11 @@ public class KernelDensityDistribution extends ContinuousDistribution {
         }
         cdf /= data.length;
         return cdf;
-
-    }
-
-    public double fastCdf(double v) {
-        return distApproximator.getEstimatedCdf(v);
     }
 
     @Override
     public double cdf(double v) {
-        if (distApproximator == null) {
-            return trueCdf(v);
-        } else {
-            return fastCdf(v);
-        }
+        return distApproximator.getEstimatedCdf(v);
     }
 
     @Override
@@ -94,5 +83,21 @@ public class KernelDensityDistribution extends ContinuousDistribution {
     @Override
     public double getMean() {
         return inverseF(0.5);
+    }
+
+    @Override
+    public double inverseF(double u) {
+        double l = Constants.MIN_DOUBLE, r = Constants.MAX_DOUBLE;
+
+        while (r - l > Constants.EPS) {
+            double mid = (l + r) / 2;
+            if (trueCdf(mid) <= u) {
+                l = mid;
+            } else {
+                r = mid;
+            }
+        }
+
+        return l;
     }
 }
