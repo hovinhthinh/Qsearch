@@ -100,6 +100,7 @@ public class RelationInstanceNoiseFilter {
             return originalDist;
         }
 
+//        System.out.println("[Fitting results] " + distType.getSimpleName());
         for (RelationInstance i : ri) {
             double diff = Number.relativeNumericDistance(kbcId2OriginalPValue.get(i.kbcId),
                     kbcId2ConsistencySumPValue.get(i.kbcId) / kbcId2ConsistencyTimeCount.get(i.kbcId));
@@ -134,7 +135,7 @@ public class RelationInstanceNoiseFilter {
 
         for (Class<? extends ContinuousDistribution> c : DistributionFitter.PARAMETRIC_CONTINUOUS_DIST_TYPES) {
             Pair<ContinuousDistribution, Double> d = consistencyBasedDistributionNoiseFilter(ri, c);
-
+//            System.out.println(String.format("[DIST: %s] -> %s", c.getSimpleName(), d));
             if (d != null && (bestDist == null || d.second > bestDist.second)) {
                 bestDist = d;
             }
