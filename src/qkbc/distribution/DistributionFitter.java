@@ -9,6 +9,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.ui.ApplicationFrame;
 import org.jfree.chart.ui.UIUtils;
 import org.jfree.data.statistics.HistogramDataset;
@@ -23,6 +24,7 @@ import util.Vectors;
 
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -63,29 +65,45 @@ class DistributionPresenter extends ApplicationFrame {
     }
 
     private static JFreeChart createChart(String title, double[] samples, ContinuousDistribution d) {
-        HistogramDataset samplesData = new HistogramDataset();
-        samplesData.addSeries("Samples", samples, optimalFreedmanDiaconisNBins(samples));
+        HistogramDataset histogramData = new HistogramDataset();
+        histogramData.addSeries("Histogram", samples, optimalFreedmanDiaconisNBins(samples));
 
-        // Draw distribution first
+        XYSeries dotsData = new XYSeries("Samples");
+        for (double v : samples) {
+            dotsData.add(v, 0);
+        }
+
+        // Draw samples first
         JFreeChart chart = ChartFactory.createXYLineChart(
                 title, "Value", "Distribution density",
-                getDistributionSamples(d, 2000),
+                new XYSeriesCollection(dotsData),
                 PlotOrientation.VERTICAL, true, true, false);
-
-        // Draw samples
         XYPlot plot = chart.getXYPlot();
-        plot.setDataset(1, samplesData);
+        XYLineAndShapeRenderer renderer0 = new XYLineAndShapeRenderer();
+        renderer0.setSeriesLinesVisible(0, false);
+        renderer0.setSeriesShape(0, new Rectangle2D.Double(-0.5, -8, 1, 8));
+        plot.setRenderer(0, renderer0);
+
+        // Draw distribution
+        plot.setDataset(1, getDistributionSamples(d, 2000));
+        XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer();
+        renderer1.setSeriesShapesVisible(0, false);
+        plot.setRenderer(1, renderer1);
+
+        // Draw histogram
+        plot.setDataset(2, histogramData);
         NumberAxis rangeAxis = new NumberAxis("Sample count");
         rangeAxis.setLabelFont(plot.getRangeAxis().getLabelFont());
         plot.setRangeAxis(1, rangeAxis);
-        XYBarRenderer renderer = new XYBarRenderer();
-        renderer.setShadowVisible(false);
-        plot.setRenderer(1, renderer);
-        plot.mapDatasetToRangeAxis(1, 1);
+        XYBarRenderer renderer2 = new XYBarRenderer();
+        renderer2.setShadowVisible(false);
+        plot.setRenderer(2, renderer2);
+        plot.mapDatasetToRangeAxis(2, 1);
 
         // Style
-        plot.getRenderer().setSeriesPaint(0, Color.BLUE);
-        plot.getRenderer().setSeriesStroke(0, new BasicStroke(1.5f));
+        plot.getRenderer(0).setSeriesPaint(0, Color.DARK_GRAY);
+        plot.getRenderer(1).setSeriesPaint(0, Color.BLUE);
+        plot.getRenderer(1).setSeriesStroke(0, new BasicStroke(1.5f));
 
         return chart;
     }
