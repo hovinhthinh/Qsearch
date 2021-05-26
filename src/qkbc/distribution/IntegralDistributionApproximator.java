@@ -10,14 +10,21 @@ public class IntegralDistributionApproximator {
     public static final int INTEGRAL_N_BINS = 1 << 16;
     public static final double INVERSE_F_IGNORE_THRESHOLD = 1e-4;
 
-    private double[] binX, binDensity;
+    public static final int MIDPOINT_RULE = 0, TRAPEZOID_RULE = 1, SIMPSON_RULE = 2;
+
+    private double[] binX, binDensity, binVolume;
     private double binWidth;
 
     private double[] cdf, pValue;
 
     public IntegralDistributionApproximator(ContinuousDistribution d) {
+        this(d, SIMPSON_RULE);
+    }
+
+    public IntegralDistributionApproximator(ContinuousDistribution d, int ruleCode) {
         binX = new double[INTEGRAL_N_BINS];
         binDensity = new double[INTEGRAL_N_BINS];
+        binVolume = new double[INTEGRAL_N_BINS];
         double start = d.inverseF(INVERSE_F_IGNORE_THRESHOLD), end = d.inverseF(1 - INVERSE_F_IGNORE_THRESHOLD);
 
         binWidth = (end - start) / INTEGRAL_N_BINS;
@@ -26,19 +33,25 @@ public class IntegralDistributionApproximator {
         for (int i = 0; i < INTEGRAL_N_BINS; ++i) {
             binX[i] = start + binWidth * (i + 0.5);
             binDensity[i] = d.density(binX[i]);
+            if (ruleCode == MIDPOINT_RULE) {
+                binVolume[i] = binDensity[i] * binWidth;
+            } else if (ruleCode == TRAPEZOID_RULE) {
+                binVolume[i] = (d.density(binX[i] - binWidth * 0.5) + d.density(binX[i] + binWidth * 0.5)) * binWidth / 2;
+            } else if (ruleCode == SIMPSON_RULE) {
+                binVolume[i] = (d.density(binX[i] - binWidth * 0.5) + 4 * d.density(binX[i]) + d.density(binX[i] + binWidth * 0.5)) * binWidth / 6;
+            } else {
+                throw new RuntimeException("Unknown rule code");
+            }
         }
 
         // Init cdf
         cdf = new double[INTEGRAL_N_BINS];
 
         for (int i = 0; i < INTEGRAL_N_BINS; ++i) {
-            cdf[i] = binDensity[i];
+            cdf[i] = binVolume[i];
             if (i > 0) {
                 cdf[i] += cdf[i - 1];
             }
-        }
-        for (int i = 0; i < INTEGRAL_N_BINS; ++i) {
-            cdf[i] *= binWidth;
         }
 
         // init pValue
@@ -50,13 +63,10 @@ public class IntegralDistributionApproximator {
         }
         Arrays.sort(pos, Comparator.comparing(o -> o.second));
         for (int i = 0; i < INTEGRAL_N_BINS; ++i) {
-            pValue[pos[i].first] = binDensity[pos[i].first];
+            pValue[pos[i].first] = binVolume[pos[i].first];
             if (i > 0) {
                 pValue[pos[i].first] += pValue[pos[i - 1].first];
             }
-        }
-        for (int i = 0; i < INTEGRAL_N_BINS; ++i) {
-            pValue[i] *= binWidth;
         }
     }
 
