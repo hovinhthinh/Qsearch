@@ -3,7 +3,6 @@ package qkbc.text;
 import qkbc.distribution.DistributionFitter;
 import qkbc.distribution.IntegralDistributionApproximator;
 import qkbc.distribution.kde.KDEDistribution;
-import qkbc.distribution.kde.ReflectKDEDistribution;
 import umontreal.ssj.probdist.ContinuousDistribution;
 import umontreal.ssj.probdist.Distribution;
 import umontreal.ssj.probdist.NormalDist;
@@ -55,7 +54,7 @@ public class RelationInstanceNoiseFilter {
 
         ArrayList<Double> distSamples = extractDistributionSamplesFromRelationInstances(ri);
         Pair<ContinuousDistribution, Double> originalDist = KDEDistribution.class.isAssignableFrom(distType)
-                ? DistributionFitter.fitNonParametricContinuous(distSamples)
+                ? DistributionFitter.fitNonParametricContinuous(distSamples, distType)
                 : DistributionFitter.fitParametricContinuous(distSamples, distType);
 //        System.out.println(originalDist);
         if (originalDist == null) {
@@ -90,7 +89,7 @@ public class RelationInstanceNoiseFilter {
                     continue;
                 }
                 Pair<ContinuousDistribution, Double> sampleDist = KDEDistribution.class.isAssignableFrom(distType)
-                        ? DistributionFitter.fitNonParametricContinuous(sampleValues, ((KDEDistribution) originalDist.first).getH())
+                        ? DistributionFitter.fitNonParametricContinuous(sampleValues, originalDist.first.getClass(), ((KDEDistribution) originalDist.first).getH())
                         : DistributionFitter.fitParametricContinuous(sampleValues, originalDist.first.getClass());
                 if (sampleDist == null) {
                     stop.set(true);
@@ -143,7 +142,7 @@ public class RelationInstanceNoiseFilter {
             // fit positive instances only
             ArrayList<Double> positiveIns = extractDistributionSamplesFromRelationInstances(ri.stream().filter(i -> i.positive).collect(Collectors.toList()));
             return KDEDistribution.class.isAssignableFrom(distType)
-                    ? DistributionFitter.fitNonParametricContinuous(positiveIns, ((KDEDistribution) originalDist.first).getH())
+                    ? DistributionFitter.fitNonParametricContinuous(positiveIns, originalDist.first.getClass(), ((KDEDistribution) originalDist.first).getH())
                     : DistributionFitter.fitParametricContinuous(positiveIns, originalDist.first.getClass());
         }
     }
@@ -163,7 +162,17 @@ public class RelationInstanceNoiseFilter {
     }
 
     public static Pair<ContinuousDistribution, Double> consistencyBasedNonParametricDistributionNoiseFilter(ArrayList<RelationInstance> ri) {
-        return consistencyBasedDistributionNoiseFilter(ri, ReflectKDEDistribution.class);
+        Pair<ContinuousDistribution, Double> bestDist = null;
+
+        for (Class<? extends ContinuousDistribution> c : DistributionFitter.NON_PARAMETRIC_CONTINUOUS_DIST_TYPES) {
+            Pair<ContinuousDistribution, Double> d = consistencyBasedDistributionNoiseFilter(ri, c);
+//            System.out.println(String.format("[DIST: %s] -> %s", c.getSimpleName(), d));
+            if (d != null && (bestDist == null || d.second > bestDist.second)) {
+                bestDist = d;
+            }
+        }
+
+        return bestDist;
     }
 
     public static void main(String[] args) {
@@ -180,7 +189,7 @@ public class RelationInstanceNoiseFilter {
             samples.add(new RelationInstance(i + nSample + "", null, (r.nextDouble() - 0.5) * 50, 0, i + nSample + ""));
         }
 
-        Pair<ContinuousDistribution, Double> filteredDist = consistencyBasedParametricDistributionNoiseFilter(samples);
+        Pair<ContinuousDistribution, Double> filteredDist = consistencyBasedNonParametricDistributionNoiseFilter(samples);
         System.out.println(filteredDist);
         DistributionFitter.drawDistributionVsSamples(null, filteredDist.first, samples.stream().mapToDouble(s -> s.quantityStdValue).toArray(), false);
     }
