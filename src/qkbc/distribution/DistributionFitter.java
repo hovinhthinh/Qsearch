@@ -16,7 +16,7 @@ import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import qkbc.distribution.kde.BandwidthSelector;
-import qkbc.distribution.kde.KernelDensityDistribution;
+import qkbc.distribution.kde.ReflectKDEDistribution;
 import umontreal.ssj.gof.GofStat;
 import umontreal.ssj.probdist.*;
 import util.Pair;
@@ -187,7 +187,7 @@ public class DistributionFitter {
     }
 
     public static Pair<ContinuousDistribution, Double> fitNonParametricContinuous(double[] values) {
-        ContinuousDistribution dist = KernelDensityDistribution.buildKDDWithNormalKernel(new BandwidthSelector.ISJ(), values);
+        ContinuousDistribution dist = ReflectKDEDistribution.buildKDDWithNormalKernel(new BandwidthSelector.ISJ(), values);
 
         Double p = getPValueFromSamples(dist, values);
         return new Pair(dist, p);
@@ -199,7 +199,7 @@ public class DistributionFitter {
     }
 
     public static Pair<ContinuousDistribution, Double> fitNonParametricContinuous(double[] values, double h) {
-        ContinuousDistribution dist = KernelDensityDistribution.buildKDDWithNormalKernel(h, values);
+        ContinuousDistribution dist = ReflectKDEDistribution.buildKDDWithNormalKernel(h, values);
 
         Double p = getPValueFromSamples(dist, values);
         return new Pair(dist, p);

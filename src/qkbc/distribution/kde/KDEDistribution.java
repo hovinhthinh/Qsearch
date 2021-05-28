@@ -10,13 +10,13 @@ import util.Constants;
 
 import java.util.Arrays;
 
-public class KernelDensityDistribution extends ContinuousDistribution {
-    private DEKernelDensity kd;
-    private IntegralDistributionApproximator distApproximator;
-    private ContinuousDistribution kernel;
-    private double h;
+public class KDEDistribution extends ContinuousDistribution {
+    protected DEKernelDensity kd;
+    protected IntegralDistributionApproximator distApproximator;
+    protected ContinuousDistribution kernel;
+    protected double h;
 
-    public KernelDensityDistribution(ContinuousDistribution kernel, double bandwidth, double[] data) {
+    public KDEDistribution(ContinuousDistribution kernel, double bandwidth, double[] data) {
         double[] sortedData = Arrays.copyOf(data, data.length);
         Arrays.sort(sortedData);
         this.kernel = kernel;
@@ -25,20 +25,20 @@ public class KernelDensityDistribution extends ContinuousDistribution {
         this.distApproximator = new IntegralDistributionApproximator(this);
     }
 
-    public static KernelDensityDistribution buildKDDWithNormalKernel(BandwidthSelector bws, double[] data) {
+    public static KDEDistribution buildKDDWithNormalKernel(BandwidthSelector bws, double[] data) {
         return buildKDDWithNormalKernel(bws.compute(data), data);
     }
 
-    public static KernelDensityDistribution buildKDDWithNormalKernel(double h, double[] data) {
-        return new KernelDensityDistribution(new NormalDist(), h, data);
+    public static KDEDistribution buildKDDWithNormalKernel(double h, double[] data) {
+        return new KDEDistribution(new NormalDist(), h, data);
     }
 
-    public static KernelDensityDistribution buildKDDWithEpanechnikovKernel(double h, double[] data) {
-        return new KernelDensityDistribution(new BetaDist(2, 2, -1, 1), h, data);
+    public static KDEDistribution buildKDDWithEpanechnikovKernel(double h, double[] data) {
+        return new KDEDistribution(new BetaDist(2, 2, -1, 1), h, data);
     }
 
-    public static KernelDensityDistribution buildKDDWithTriangularKernel(double h, double[] data) {
-        return new KernelDensityDistribution(new TriangularDist(-1, 1, 0), h, data);
+    public static KDEDistribution buildKDDWithTriangularKernel(double h, double[] data) {
+        return new KDEDistribution(new TriangularDist(-1, 1, 0), h, data);
     }
 
     @Override

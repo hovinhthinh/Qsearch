@@ -2,7 +2,8 @@ package qkbc.text;
 
 import qkbc.distribution.DistributionFitter;
 import qkbc.distribution.IntegralDistributionApproximator;
-import qkbc.distribution.kde.KernelDensityDistribution;
+import qkbc.distribution.kde.KDEDistribution;
+import qkbc.distribution.kde.ReflectKDEDistribution;
 import umontreal.ssj.probdist.ContinuousDistribution;
 import umontreal.ssj.probdist.Distribution;
 import umontreal.ssj.probdist.NormalDist;
@@ -53,7 +54,7 @@ public class RelationInstanceNoiseFilter {
         }
 
         ArrayList<Double> distSamples = extractDistributionSamplesFromRelationInstances(ri);
-        Pair<ContinuousDistribution, Double> originalDist = distType.equals(KernelDensityDistribution.class)
+        Pair<ContinuousDistribution, Double> originalDist = KDEDistribution.class.isAssignableFrom(distType)
                 ? DistributionFitter.fitNonParametricContinuous(distSamples)
                 : DistributionFitter.fitParametricContinuous(distSamples, distType);
 //        System.out.println(originalDist);
@@ -88,8 +89,8 @@ public class RelationInstanceNoiseFilter {
                 if (sampleValues.size() < MIN_SAMPLING_SIZE) {
                     continue;
                 }
-                Pair<ContinuousDistribution, Double> sampleDist = distType.equals(KernelDensityDistribution.class)
-                        ? DistributionFitter.fitNonParametricContinuous(sampleValues, ((KernelDensityDistribution) originalDist.first).getH())
+                Pair<ContinuousDistribution, Double> sampleDist = KDEDistribution.class.isAssignableFrom(distType)
+                        ? DistributionFitter.fitNonParametricContinuous(sampleValues, ((KDEDistribution) originalDist.first).getH())
                         : DistributionFitter.fitParametricContinuous(sampleValues, originalDist.first.getClass());
                 if (sampleDist == null) {
                     stop.set(true);
@@ -113,7 +114,7 @@ public class RelationInstanceNoiseFilter {
         if (kbcId2ConsistencyTimeCount.size() < ri.size()) {
             return originalDist;
         }
-        double pValueRelDistThreshold = distType.equals(KernelDensityDistribution.class)
+        double pValueRelDistThreshold = KDEDistribution.class.isAssignableFrom(distType)
                 ? NONPARAMETRIC_NOISE_PVALUE_RELDIST_THRESHOLD
                 : PARAMETRIC_NOISE_PVALUE_RELDIST_THRESHOLD;
 
@@ -141,8 +142,8 @@ public class RelationInstanceNoiseFilter {
         } else {
             // fit positive instances only
             ArrayList<Double> positiveIns = extractDistributionSamplesFromRelationInstances(ri.stream().filter(i -> i.positive).collect(Collectors.toList()));
-            return distType.equals(KernelDensityDistribution.class)
-                    ? DistributionFitter.fitNonParametricContinuous(positiveIns, ((KernelDensityDistribution) originalDist.first).getH())
+            return KDEDistribution.class.isAssignableFrom(distType)
+                    ? DistributionFitter.fitNonParametricContinuous(positiveIns, ((KDEDistribution) originalDist.first).getH())
                     : DistributionFitter.fitParametricContinuous(positiveIns, originalDist.first.getClass());
         }
     }
@@ -162,7 +163,7 @@ public class RelationInstanceNoiseFilter {
     }
 
     public static Pair<ContinuousDistribution, Double> consistencyBasedNonParametricDistributionNoiseFilter(ArrayList<RelationInstance> ri) {
-        return consistencyBasedDistributionNoiseFilter(ri, KernelDensityDistribution.class);
+        return consistencyBasedDistributionNoiseFilter(ri, ReflectKDEDistribution.class);
     }
 
     public static void main(String[] args) {
