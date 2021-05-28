@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class RelationInstanceNoiseFilter {
-    public static final int N_FOLD = 1000;
+    public static final int N_FOLD = 200;
     public static final double SAMPLING_RATE = 0.9;
     public static final int MIN_SAMPLING_SIZE = 20;
     public static final double PARAMETRIC_NOISE_PVALUE_RELDIST_THRESHOLD = 0.1;
