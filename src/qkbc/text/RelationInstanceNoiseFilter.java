@@ -80,6 +80,8 @@ public class RelationInstanceNoiseFilter {
 
         AtomicInteger foldCount = new AtomicInteger(0);
         AtomicBoolean stop = new AtomicBoolean(false);
+        double originalDistH = ((KDEDistribution) originalDist.first).getH();
+
         Concurrent.runAndWait(() -> {
             ArrayList<RelationInstance> riCopy = new ArrayList<>(ri);
             while (foldCount.getAndIncrement() < N_FOLD && !stop.get()) {
@@ -89,7 +91,7 @@ public class RelationInstanceNoiseFilter {
                     continue;
                 }
                 Pair<ContinuousDistribution, Double> sampleDist = KDEDistribution.class.isAssignableFrom(distType)
-                        ? DistributionFitter.fitNonParametricContinuous(sampleValues, originalDist.first.getClass(), ((KDEDistribution) originalDist.first).getH())
+                        ? DistributionFitter.fitNonParametricContinuous(sampleValues, originalDist.first.getClass()) // not using originalDistH
                         : DistributionFitter.fitParametricContinuous(sampleValues, originalDist.first.getClass());
                 if (sampleDist == null) {
                     stop.set(true);
@@ -142,7 +144,7 @@ public class RelationInstanceNoiseFilter {
             // fit positive instances only
             ArrayList<Double> positiveIns = extractDistributionSamplesFromRelationInstances(ri.stream().filter(i -> i.positive).collect(Collectors.toList()));
             return KDEDistribution.class.isAssignableFrom(distType)
-                    ? DistributionFitter.fitNonParametricContinuous(positiveIns, originalDist.first.getClass(), ((KDEDistribution) originalDist.first).getH())
+                    ? DistributionFitter.fitNonParametricContinuous(positiveIns, originalDist.first.getClass()) // not using originalDistH
                     : DistributionFitter.fitParametricContinuous(positiveIns, originalDist.first.getClass());
         }
     }
