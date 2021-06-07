@@ -111,7 +111,7 @@ function autocomplete(inp, endPoint) {
             } else {
                 $("#search").click();
             }
-        } else if (e.keyCode == 27) {
+        } else if (e.keyCode == 27 || e.keyCode == 9) {
             // If the ESC key is pressed
             currentFocus = -1;
             closeAllLists();
