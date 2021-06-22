@@ -93,12 +93,14 @@
         <repository>
             <id>cogcomp</id>
             <name>Cogcomp repository</name>
-            <url>http://cogcomp.org/m2repo/</url>
+<!--            <url>http://cogcomp.org/m2repo/</url>-->
+            <url>https://cogcomp.seas.upenn.edu/m2repo/</url>
         </repository>
         <repository>
             <id>clojars</id>
             <name>Clojars repository</name>
-            <url>http://clojars.org/repo/</url>
+<!--            <url>http://clojars.org/repo/</url>-->
+            <url>https://clojars.org/repo/</url>
         </repository>
     </repositories>
 
