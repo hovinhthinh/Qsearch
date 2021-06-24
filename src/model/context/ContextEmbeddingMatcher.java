@@ -64,8 +64,8 @@ public class ContextEmbeddingMatcher implements ContextMatcher {
     }
 
     @Override
-    public double match(ArrayList<String> queryContext, ArrayList<String> factContext) {
+    public double match(ArrayList<String> queryContext, ArrayList<String> factContext, ArrayList<String> essentialFactContext) {
         return directedEmbeddingIdfDistance(queryContext, factContext) *
-                Math.pow(directedEmbeddingIdfDistance(factContext, queryContext), alpha);
+                Math.pow(directedEmbeddingIdfDistance(essentialFactContext, queryContext), alpha);
     }
 }

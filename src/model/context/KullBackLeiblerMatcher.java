@@ -101,8 +101,9 @@ public class KullBackLeiblerMatcher implements ContextMatcher {
 
     // contexts should be stemmed and in lowercase. // we assume terms in contexts are different (appear only 1).
     // Jelinek-Mercer smoothing for P(w|factContext): (1 - lambda) * P(LM) + lambda * P(BLM)
+    // essentialFactContext unused.
     @Override
-    public double match(ArrayList<String> queryContext, ArrayList<String> factContext) {
+    public double match(ArrayList<String> queryContext, ArrayList<String> factContext, ArrayList<String> essentialFactContext) {
         // Expand query.
         queryContext = wordnetBasedContextExpanding(queryContext);
         for (int j = 0; j < queryContext.size(); ++j) {

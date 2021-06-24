@@ -173,7 +173,7 @@ public class ChronicleMapQuery {
                     continue;
                 }
 
-                ArrayList<String> X = new ArrayList<>();
+                ArrayList<String> X = new ArrayList<>(), essentialX = new ArrayList<>();
                 JSONArray context = qfact.getJSONArray("context");
                 for (int k = 0; k < context.length(); ++k) {
                     String ct = context.getString(k);
@@ -184,6 +184,7 @@ public class ChronicleMapQuery {
                         X.addAll(NLP.splitSentence(ct.substring(4).split("\t")[0]));
                     } else {
                         X.add(ct);
+                        essentialX.add(ct);
                     }
                 }
 
@@ -191,6 +192,7 @@ public class ChronicleMapQuery {
 
                 if (qt.matchesSearchDomain(QuantityDomain.Domain.DIMENSIONLESS)) {
                     X.addAll(NLP.splitSentence(qt.unit));
+                    essentialX.addAll(NLP.splitSentence(qt.unit));
                 }
                 if (X.isEmpty()) {
                     continue;
@@ -198,8 +200,11 @@ public class ChronicleMapQuery {
                 for (int j = 0; j < X.size(); ++j) {
                     X.set(j, StringUtils.stem(X.get(j).toLowerCase(), Morpha.any));
                 }
+                for (int j = 0; j < essentialX.size(); ++j) {
+                    essentialX.set(j, StringUtils.stem(essentialX.get(j).toLowerCase(), Morpha.any));
+                }
                 // use explicit matcher if given.
-                double dist = explicitMatcher != null ? explicitMatcher.match(queryContextTerms, X) : matcher.match(queryContextTerms, X);
+                double dist = explicitMatcher != null ? explicitMatcher.match(queryContextTerms, X, essentialX) : matcher.match(queryContextTerms, X, essentialX);
 
                 if (dist >= Constants.MAX_DOUBLE) {
                     continue;
