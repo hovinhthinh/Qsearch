@@ -25,7 +25,7 @@ public class RelationInstanceNoiseFilter {
     public static final double NONPARAMETRIC_NOISE_PVALUE_RELDIST_THRESHOLD = 0.3;
     public static final double MAX_NOISE_RATE = 0.1;
 
-    public static final double DUPLICATED_DIFF_RATE = 0.03;
+    public static final double DUPLICATED_DIFF_RATE = 0.05;
 
     // do not allow duplicated sample values for the same entity
     public static ArrayList<Double> extractDistributionSamplesFromRelationInstances(List<RelationInstance> ri) {
