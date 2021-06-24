@@ -198,7 +198,7 @@ public class DistributionFitter {
         for (Class<? extends ContinuousDistribution> c : distType == null ? NON_PARAMETRIC_CONTINUOUS_DIST_TYPES : Arrays.asList(distType)) {
             try {
                 ContinuousDistribution d = (ContinuousDistribution) c.getMethod("buildKDDWithNormalKernel", BandwidthSelector.class, double[].class)
-                        .invoke(null, new BandwidthSelector.ISJ(), values);
+                        .invoke(null, new BandwidthSelector.Silverman(), values);
 
                 double pValue = getPValueFromSamples(d, values);
                 if (bestDist == null || pValue > bestDist.second) {
