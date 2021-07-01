@@ -261,6 +261,7 @@
                     '">' + qStr + '</span>');
             }
         }
+        value += ' <sub class="font-weight-bold"><u>Score:</u> ' + sentenceContent['score'].toFixed(3) + '</sub>';
         return "<td>" + value + "</td>";
     }
 
@@ -310,6 +311,7 @@
                 var instance = topResults[i];
                 str += encode(i + 1 + data.startIdx, instance.subInstances[0]["score"].toFixed(3), instance["entity"], instance["quantity"],
                     {
+                        'score': instance.subInstances[0]["score"],
                         'value': instance.subInstances[0]["sentence"],
                         'entityStr': instance.subInstances[0]["entityStr"],
                         'quantityStr': instance.subInstances[0]["quantityStr"],
