@@ -25,13 +25,16 @@ public class KgUnit {
             {"<Renminbi>", 0.15},
     }).collect(Collectors.toMap(o -> (String) o[0], o -> (Double) o[1]));
 
-    private static Map<String, KgUnit> KG_ENTITY_2_KG_UNIT = new HashMap<>(
+    private static final Map<String, KgUnit> KG_ENTITY_2_KG_UNIT = new HashMap<>(
             Arrays.asList(Gson.fromJson(FileUtils.getContent(KG_UNIT_SPEC_FILE, "UTF-8"), KgUnit[].class))
                     .stream().collect(Collectors.toMap(k -> k.entity, v -> v))) {{
         CURRENCY_CONVERISON_RATE.forEach((k, v) -> {
             get(k).conversionToSI = v;
         });
     }};
+
+    private static final Map<String, KgUnit> WDENTRY_2_KG_UNIT =
+            KG_ENTITY_2_KG_UNIT.values().stream().collect(Collectors.toMap(e -> e.wdEntry, e -> e));
 
     public static final KgUnit DIMENSIONLESS = new KgUnit() {{
         siUnit = "";
@@ -65,6 +68,10 @@ public class KgUnit {
 
     public static KgUnit getKgUnitFromEntityName(String kgEntity) {
         return kgEntity.isEmpty() ? DIMENSIONLESS : KG_ENTITY_2_KG_UNIT.get(kgEntity);
+    }
+
+    public static KgUnit getKgUnitFromWdEntry(String wdEntry) {
+        return WDENTRY_2_KG_UNIT.get(wdEntry);
     }
 
     public boolean isDimensionless() {
