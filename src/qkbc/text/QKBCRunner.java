@@ -113,6 +113,10 @@ public class QKBCRunner {
 
     static void printToFile(List<RelationInstance> instances, File outputFile) {
         PrintWriter out = FileUtils.getPrintWriter(outputFile, StandardCharsets.UTF_8);
+        for (RelationInstance ri : instances) {
+            out.println(Gson.toJson(ri));
+        }
+        /*
         HashMap<String, List<EntityFact>> e2f = new HashMap<>();
         loop:
         for (RelationInstance i : instances) {
@@ -137,6 +141,7 @@ public class QKBCRunner {
                 out.println(String.format("%s\t%s\t%s", e.getKey(), f.quantity, String.join("\t", f.sources)));
             }
         });
+        */
 
         out.close();
     }
@@ -294,7 +299,7 @@ public class QKBCRunner {
             }
 
             if (outputFile != null && ctxQueue.isEmpty()) {
-                printToFile(positivePart, outputFile);
+                printToFile(mostlyPositive, outputFile);
             }
         } while (!ctxQueue.isEmpty() && iter < 3);
     }
@@ -308,8 +313,7 @@ public class QKBCRunner {
 //        harvest("company", "annual revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"), 0.9,
 //                new File("/dev/null"));
 
-        harvest("",
-                   "visitor", KgUnit.DIMENSIONLESS, 0.9,
+        harvest("building", "height", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.9,
                 new File("/dev/null"));
 
 //        harvest("athlete", "tall", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.85,
