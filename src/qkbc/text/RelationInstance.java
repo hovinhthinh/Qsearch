@@ -41,6 +41,8 @@ public class RelationInstance {
 
     boolean positive;
 
+    ArrayList<Integer> positiveIterIndices, noiseIterIndices;
+
     public RelationInstance(String entity, String quantity, double quantityStdValue, double score, String kbcId) {
         this.entity = entity;
         this.quantity = quantity;
@@ -50,6 +52,9 @@ public class RelationInstance {
         this.kbcId = kbcId;
 
         this.positive = false;
+
+        positiveIterIndices = new ArrayList<>();
+        noiseIterIndices = new ArrayList<>();
     }
 
     public Quantity getQuantity() {
