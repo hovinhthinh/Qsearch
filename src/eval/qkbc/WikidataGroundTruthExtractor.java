@@ -16,6 +16,14 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class WikidataGroundTruthExtractor {
+    static String WD_QUERY_TEMPLATE = "SELECT DISTINCT ?e WHERE {\n" +
+            "  ?e (wdt:P31/(wdt:P279*)) wd:<TYPE>;\n" +
+            "    wdt:<PREDICATE> ?q.\n" +
+            "  ?wikiPage schema:about ?e;\n" +
+            "    schema:isPartOf <https://en.wikipedia.org/>.\n" +
+            "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
+            "}";
+
     static String WD_SPARQL_ENDPOINT = "https://query.wikidata.org/sparql?format=json&query=";
     static String WD_DUMP_ENDPOINT = "https://www.wikidata.org/wiki/Special:EntityData/{ENTRY}.json";
 
@@ -32,8 +40,7 @@ public class WikidataGroundTruthExtractor {
     static ArrayList<PredicateNumericalFact> getGroundTruthData(String type, String predicate, String outputFile) throws UnsupportedEncodingException {
         Map<String, PredicateNumericalFact> loadedFacts = Objects.requireNonNullElse(loadPredicateGroundTruthFromFile(outputFile), new HashMap<>());
 
-        String template = FileUtils.getContent("eval/qkbc/exp_1/wdt_groundtruth_queries/query_template");
-        String query = template.replace("<TYPE>", type).replace("<PREDICATE>", predicate);
+        String query = WD_QUERY_TEMPLATE.replace("<TYPE>", type).replace("<PREDICATE>", predicate);
 
         System.out.println("Query:\r\n" + query);
 
