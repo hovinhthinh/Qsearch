@@ -10,10 +10,10 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 public class WikidataGroundTruthExtractor {
     static String WD_QUERY_TEMPLATE = "SELECT DISTINCT ?e WHERE {\n" +
@@ -30,6 +30,7 @@ public class WikidataGroundTruthExtractor {
 
     public static class PredicateNumericalFact {
         public String e;
+        public String wdEntry;
         public ArrayList<Pair<Double, String>> quantities;
 
         public PredicateNumericalFact() {
@@ -37,8 +38,10 @@ public class WikidataGroundTruthExtractor {
         }
     }
 
-    static ArrayList<PredicateNumericalFact> getGroundTruthData(String type, String predicate, String outputFile) throws UnsupportedEncodingException {
-        Map<String, PredicateNumericalFact> loadedFacts = Objects.requireNonNullElse(loadPredicateGroundTruthFromFile(outputFile), new HashMap<>());
+    static void downloadGroundTruthData(String type, String predicate, String outputFile) throws UnsupportedEncodingException {
+        ArrayList<PredicateNumericalFact> loadedFacts = Objects.requireNonNullElse(loadPredicateGroundTruthFromFile(outputFile), new ArrayList<>());
+
+        Map<String, PredicateNumericalFact> wdEntry2Fact = loadedFacts.stream().collect(Collectors.toMap(f -> f.wdEntry, f -> f, (a1, a2) -> a1));
 
         String query = WD_QUERY_TEMPLATE.replace("<TYPE>", type).replace("<PREDICATE>", predicate);
 
@@ -52,13 +55,15 @@ public class WikidataGroundTruthExtractor {
         Concurrent.runAndWait(() -> {
             JSONObject e;
             while ((e = queue.poll()) != null) {
-                System.out.println("Processing: " + e);
                 String entry = e.getJSONObject("e").getString("value").substring("http://www.wikidata.org/entity/".length());
-                synchronized (loadedFacts) {
-                    if (loadedFacts.containsKey(entry)) {
+
+                synchronized (wdEntry2Fact) {
+                    if (wdEntry2Fact.containsKey(entry)) {
                         continue;
                     }
                 }
+
+                System.out.println("Processing: " + e);
 
                 try {
                     String wdDump = Crawler.getContentFromUrl(WD_DUMP_ENDPOINT.replace("{ENTRY}", entry));
@@ -80,6 +85,7 @@ public class WikidataGroundTruthExtractor {
 
                     PredicateNumericalFact entityFacts = new PredicateNumericalFact();
                     entityFacts.e = yagoEntry;
+                    entityFacts.wdEntry = entry;
 
                     JSONArray arr = o.getJSONArray(predicate);
                     for (int i = 0; i < arr.length(); ++i) {
@@ -102,31 +108,29 @@ public class WikidataGroundTruthExtractor {
                     }
 
                     synchronized (loadedFacts) {
-                        loadedFacts.put(entry, entityFacts);
+                        wdEntry2Fact.put(entry, entityFacts);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     System.err.println("Err: " + entry);
                 }
             }
-        }, 8);
+        }, 4);
 
         PrintWriter out = FileUtils.getPrintWriter(outputFile, "UTF-8");
-        for (PredicateNumericalFact f : loadedFacts.values()) {
+        for (PredicateNumericalFact f : wdEntry2Fact.values()) {
             out.println(Gson.toJson(f));
         }
         out.close();
-        return new ArrayList<>(loadedFacts.values());
     }
 
-    public static Map<String, PredicateNumericalFact> loadPredicateGroundTruthFromFile(String inputFile) {
+    public static ArrayList<PredicateNumericalFact> loadPredicateGroundTruthFromFile(String inputFile) {
         try {
-            Map<String, PredicateNumericalFact> map = new HashMap<>();
+            ArrayList<PredicateNumericalFact> list = new ArrayList<>();
             for (String line : FileUtils.getLineStream(inputFile, "UTF-8")) {
-                PredicateNumericalFact f = Gson.fromJson(line, PredicateNumericalFact.class);
-                map.put(f.e, f);
+                list.add(Gson.fromJson(line, PredicateNumericalFact.class));
             }
-            return map;
+            return list;
         } catch (Exception e) {
             return null;
         }
@@ -134,13 +138,12 @@ public class WikidataGroundTruthExtractor {
 
     public static void main(String[] args) throws Exception {
         // building-height
-//        getGroundTruthData("Q41176", "P2048", "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height");
+//        downloadGroundTruthData("Q41176", "P2048", "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height");
         // mountain-elevation
-//        getGroundTruthData("Q8502", "P2044", "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation");
+//        downloadGroundTruthData("Q8502", "P2044", "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation");
         // stadium-capacity
-//        getGroundTruthData("Q483110", "P1083", "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity");
+//        downloadGroundTruthData("Q483110", "P1083", "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity");
         // river-length
-//        getGroundTruthData("Q4022", "P2043", "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length");
-
+//        downloadGroundTruthData("Q4022", "P2043", "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length");
     }
 }
