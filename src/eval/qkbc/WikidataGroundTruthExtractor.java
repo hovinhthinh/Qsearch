@@ -41,7 +41,7 @@ public class WikidataGroundTruthExtractor {
     static void downloadGroundTruthData(String type, String predicate, String outputFile) throws UnsupportedEncodingException {
         ArrayList<PredicateNumericalFact> loadedFacts = Objects.requireNonNullElse(loadPredicateGroundTruthFromFile(outputFile), new ArrayList<>());
 
-        Map<String, PredicateNumericalFact> wdEntry2Fact = loadedFacts.stream().collect(Collectors.toMap(f -> f.wdEntry, f -> f, (a1, a2) -> a1));
+        Map<String, PredicateNumericalFact> wdEntry2Fact = loadedFacts.stream().collect(Collectors.toMap(f -> f.wdEntry, f -> f));
 
         String query = WD_QUERY_TEMPLATE.replace("<TYPE>", type).replace("<PREDICATE>", predicate);
 
