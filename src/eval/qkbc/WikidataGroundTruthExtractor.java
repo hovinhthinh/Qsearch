@@ -91,9 +91,13 @@ public class WikidataGroundTruthExtractor {
                     for (int i = 0; i < arr.length(); ++i) {
                         JSONObject q = arr.getJSONObject(i).getJSONObject("mainsnak").getJSONObject("datavalue").getJSONObject("value");
                         Double qV = Double.parseDouble(q.getString("amount"));
-                        String qU = "";
-                        if (q.has("unit")) {
-                            qU = q.getString("unit");
+                        if (!q.has("unit")) {
+                            continue;
+                        }
+                        String qU = q.getString("unit");
+                        if (qU.equals("1")) {
+                            qU = "";
+                        } else {
                             KgUnit u = KgUnit.getKgUnitFromWdEntry(qU.substring(qU.lastIndexOf("/") + 1));
                             if (u == null) {
                                 continue;
