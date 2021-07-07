@@ -159,6 +159,11 @@ public class RelationInstanceNoiseFilter {
             }
         }
 
+        // Recompute the noise flag
+        if (bestDist != null)  {
+            consistencyBasedDistributionNoiseFilter(ri, bestDist.first.getClass());
+        }
+
         return bestDist;
     }
 
@@ -171,6 +176,11 @@ public class RelationInstanceNoiseFilter {
             if (d != null && (bestDist == null || d.second > bestDist.second)) {
                 bestDist = d;
             }
+        }
+
+        // Recompute the noise flag
+        if (bestDist != null)  {
+            consistencyBasedDistributionNoiseFilter(ri, bestDist.first.getClass());
         }
 
         return bestDist;
