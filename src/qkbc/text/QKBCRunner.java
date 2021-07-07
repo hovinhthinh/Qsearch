@@ -1,5 +1,6 @@
 package qkbc.text;
 
+import eval.qkbc.WikidataGroundTruthExtractor;
 import model.quantity.kg.KgUnit;
 import nlp.NLP;
 import qkbc.distribution.DistributionFitter;
@@ -9,15 +10,13 @@ import server.text.handler.search.SearchResult;
 import shaded.org.apache.http.client.utils.URIBuilder;
 import uk.ac.susx.informatics.Morpha;
 import umontreal.ssj.probdist.ContinuousDistribution;
-import umontreal.ssj.probdist.EmpiricalDist;
 import util.Number;
 import util.*;
 
-import java.io.File;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class ContextStats {
     private HashMap<String, List<Double>> entity2Values = new HashMap<>();
@@ -111,8 +110,8 @@ public class QKBCRunner {
         }
     }
 
-    static void printToFile(List<RelationInstance> instances, File outputFile) {
-        PrintWriter out = FileUtils.getPrintWriter(outputFile, StandardCharsets.UTF_8);
+    static void printToFile(List<RelationInstance> instances, String outputFile) {
+        PrintWriter out = FileUtils.getPrintWriter(outputFile, "UTF-8");
         for (RelationInstance ri : instances) {
             out.println(Gson.toJson(ri));
         }
@@ -147,17 +146,55 @@ public class QKBCRunner {
     }
 
     public static void harvest(String type, String seedCtx, KgUnit quantitySiUnit,
-                               double groupConfidenceThreshold, File outputFile) {
+                               double groupConfidenceThreshold, int maxNIter,
+                               String groundTruthFile, int maxGroundTruthSize,
+                               String outputFile) {
+        Map<String, WikidataGroundTruthExtractor.PredicateNumericalFact> grouthtruth = groundTruthFile == null ? null :
+                WikidataGroundTruthExtractor.loadPredicateGroundTruthFromFile(groundTruthFile).stream()
+                        .collect(Collectors.toMap(f -> f.e, f -> f));
+
+
         HashMap<String, RelationInstance> kbcId2RelationInstanceMap = new HashMap<>();
 
         ArrayList<RelationInstance> riList = new ArrayList<>();
+        List<RelationInstance> groundTruthList = new ArrayList<>(), groundTruthListSampled = new ArrayList<>();
+        if (grouthtruth != null) {
+            for (WikidataGroundTruthExtractor.PredicateNumericalFact f : grouthtruth.values()) {
+                for (Pair<Double, String> p : f.quantities) {
+                    groundTruthList.add(RelationInstance.newRelationInstanceFromGroundTruth(
+                            f.e, p.first * KgUnit.getKgUnitFromEntityName(p.second).conversionToSI
+                    ));
+                    // only allow 1 quantity for each entity from the groundtruth
+                    break;
+                }
+            }
+            groundTruthListSampled = groundTruthList;
+            if (maxGroundTruthSize >= 0 && groundTruthList.size() > maxGroundTruthSize) {
+                Collections.shuffle(groundTruthList);
+                groundTruthListSampled = groundTruthList.subList(0, maxGroundTruthSize);
+            }
+        }
+
+
         LinkedHashSet<String> ctxList = new LinkedHashSet<>();
 
         Queue<String> ctxQueue = new LinkedList<>() {{
-            add(seedCtx);
+            if (seedCtx != null) {
+                add(seedCtx);
+            } else {
+                add("");
+            }
         }};
 
         int iter = 0;
+        if (seedCtx == null) {
+            --iter;
+        }
+
+        if (maxNIter == -1) {
+            maxNIter = Integer.MAX_VALUE;
+        }
+
         do {
             System.out.println(String.format("======== Iteration #%d ========", ++iter));
             ctxList.addAll(ctxQueue);
@@ -170,14 +207,21 @@ public class QKBCRunner {
                         riList.add(i);
                     }
                     RelationInstance storedI = kbcId2RelationInstanceMap.get(i.kbcId);
-                    storedI.score = Math.min(storedI.score, i.score);
+                    // iter == 0 means that we ignore querying step. However we still query to get the list of answers,
+                    // but set their conf to 1e9 so that 1/1e9 ~ 0.
+                    storedI.score = iter == 0 ? 1e9 : Math.min(storedI.score, i.score);
                 }
             }
             // query reformulation mining
             ArrayList<RelationInstance> mostlyPositive = riList.stream()
                     .filter(i -> 1 / i.score >= groupConfidenceThreshold)
                     .collect(Collectors.toCollection(ArrayList::new));
-            Pair<ContinuousDistribution, Double> positiveDist = RelationInstanceNoiseFilter.consistencyBasedNonParametricDistributionNoiseFilter(mostlyPositive);
+
+            ArrayList<RelationInstance> mostlyPositiveWithGroundTruthSampled = new ArrayList<>(mostlyPositive);
+            mostlyPositiveWithGroundTruthSampled.addAll(groundTruthListSampled);
+
+            Pair<ContinuousDistribution, Double> positiveDist
+                    = RelationInstanceNoiseFilter.consistencyBasedNonParametricDistributionNoiseFilter(mostlyPositiveWithGroundTruthSampled);
 
             // print stats
             System.out.println(String.format("Mostly-positive size: %d", mostlyPositive.size()));
@@ -193,21 +237,21 @@ public class QKBCRunner {
             }
             List<RelationInstance> positivePart = mostlyPositive.stream().filter(i -> i.positive).collect(Collectors.toList());
 
-            EmpiricalDist empDist = new EmpiricalDist(RelationInstanceNoiseFilter.extractDistributionSamplesFromRelationInstances(positivePart)
-                    .stream().mapToDouble(Double::doubleValue).toArray());
-
-            System.out.println(String.format("Positive samples: size: %d/%d (%d entities) | mean: %.3f",
-                    positivePart.size(), riList.size(), positivePart.stream()
-                            .collect(Collectors.groupingBy(o -> o.entity)).size(), empDist.getMean()));
-
+            System.out.println(String.format("Positive samples: size: %d/%d (%d entities)",
+                    positivePart.size(), riList.size(), positivePart.stream().collect(Collectors.groupingBy(o -> o.entity)).size()));
 
             System.out.println(String.format("Positive distribution: %s | mean: %.3f | p-value: %.3f",
                     positiveDist.first.toString(), positiveDist.first.getMean(), positiveDist.second));
 
+            ArrayList<RelationInstance> positiveWithGroundTruth =
+                    Stream.concat(mostlyPositive.stream().filter(i -> i.positive), groundTruthList.stream())
+                            .collect(Collectors.toCollection(ArrayList::new));
+
             // mine more context in the unknown part
-            Map<String, List<RelationInstance>> entity2PositiveInstances = riList.stream().filter(i -> i.positive)
+            Map<String, List<RelationInstance>> entity2PositiveInstances = positiveWithGroundTruth.stream()
                     .collect(Collectors.groupingBy(i -> i.entity));
 
+            // also include the removed noise into the unknown part, as the noise detection is not perfect, especially at the beginning
             ArrayList<RelationInstance> unknownInstances = riList.stream().filter(i -> !i.positive).collect(Collectors.toCollection(ArrayList::new));
 
             HashMap<String, ContextStats> contextStats = new HashMap<>();
@@ -271,7 +315,7 @@ public class QKBCRunner {
             // Sort stats and output
             List<ContextStats> sortedContextStats = contextStats.entrySet().stream().map(e -> e.getValue())
                     .filter(o -> o.support() > 1
-//                            && o.confidence(positiveDistAppr) >= 0.3
+//                            && o.confidence(positiveDistAppr) >= 0.2
                             && o.extensibility() >= 0)
                     .sorted((a, b) -> Long.compare(b.support(), a.support()))
                     .collect(Collectors.toList());
@@ -288,7 +332,8 @@ public class QKBCRunner {
             }
 
             DistributionFitter.drawDistributionVsSamples(String.format("Iteration #%d", iter), positiveDist.first,
-                    positivePart.stream().mapToDouble(i -> i.quantityStdValue).toArray(), true);
+                    mostlyPositiveWithGroundTruthSampled.stream().filter(i -> i.positive || i.isFromGroundTruth())
+                            .mapToDouble(i -> i.quantityStdValue).toArray(), true);
 
             // reformulate
             for (ContextStats stats : sortedContextStats) {
@@ -298,10 +343,10 @@ public class QKBCRunner {
                 }
             }
 
-            if (outputFile != null && ctxQueue.isEmpty()) {
+            if (outputFile != null && (ctxQueue.isEmpty() || iter == maxNIter)) {
                 printToFile(mostlyPositive, outputFile);
             }
-        } while (!ctxQueue.isEmpty() && iter < 3);
+        } while (!ctxQueue.isEmpty() && iter < maxNIter);
     }
 
     public static void main(String[] args) {
@@ -313,8 +358,9 @@ public class QKBCRunner {
 //        harvest("company", "annual revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"), 0.9,
 //                new File("/dev/null"));
 
-        harvest("building", "height", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.9,
-                new File("/dev/null"));
+        harvest("building", null, KgUnit.getKgUnitFromEntityName("<Metre>"), 0.9, 5,
+                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/building_height.json");
 
 //        harvest("athlete", "tall", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.85,
 //                new File("./eval/qkbc/exp_1/qsearch_queries/athlete-height.tsv"));

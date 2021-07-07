@@ -9,6 +9,7 @@ import util.Pair;
 import util.Triple;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RelationInstance {
     private static int INDEXED_QFACT_CACHE_SIZE = 10000;
@@ -55,6 +56,16 @@ public class RelationInstance {
 
         positiveIterIndices = new ArrayList<>();
         noiseIterIndices = new ArrayList<>();
+    }
+
+    private static final AtomicInteger GROUNDTRUTH_COUNTER = new AtomicInteger();
+
+    public static RelationInstance newRelationInstanceFromGroundTruth(String entity, double quantityStdValue) {
+        return new RelationInstance(entity, null, quantityStdValue, -1, "GT" + GROUNDTRUTH_COUNTER.getAndIncrement());
+    }
+
+    public boolean isFromGroundTruth() {
+        return score == -1 && kbcId.startsWith("GT");
     }
 
     public Quantity getQuantity() {
