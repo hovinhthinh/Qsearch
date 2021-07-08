@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class ContextStats {
-    private HashMap<String, List<Double>> entity2Values = new HashMap<>();
+    private HashMap<String, List<Pair<Double, Double>>> entity2ValuesAndQueryingConf = new HashMap<>();
     private HashMap<String, List<Double>> entity2ValuesDuplicated = new HashMap<>();
 
     public String context;
@@ -40,16 +40,19 @@ class ContextStats {
         entity2ValuesDuplicated.get(entity).add(quantityStdValue);
     }
 
-    public void addInstance(String entity, double quantityStdValue) {
-        if (!entity2Values.containsKey(entity)) {
-            entity2Values.put(entity, new ArrayList<>());
+    public void addInstance(String entity, double quantityStdValue, double conf) {
+        if (!entity2ValuesAndQueryingConf.containsKey(entity)) {
+            entity2ValuesAndQueryingConf.put(entity, new ArrayList<>());
         }
-        for (Double v : entity2Values.get(entity)) {
-            if (Number.relativeNumericDistance(v, quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
+        for (Pair<Double, Double> v : entity2ValuesAndQueryingConf.get(entity)) {
+            if (Number.relativeNumericDistance(v.first, quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
+                if (v.second > conf) {
+                    v.second = conf;
+                }
                 return;
             }
         }
-        entity2Values.get(entity).add(quantityStdValue);
+        entity2ValuesAndQueryingConf.get(entity).add(new Pair<>(quantityStdValue, conf));
     }
 
     public int support() {
@@ -58,13 +61,18 @@ class ContextStats {
 
     public double extensibility() {
         int sup = support();
-        int total = entity2Values.entrySet().stream().mapToInt(o -> o.getValue().size()).sum();
+        int total = entity2ValuesAndQueryingConf.entrySet().stream().mapToInt(o -> o.getValue().size()).sum();
         return 1 - ((double) sup) / total;
     }
 
-    public double confidence(IntegralDistributionApproximator positiveDistAppr) {
-        return entity2Values.entrySet().stream().flatMap(o -> o.getValue().stream())
-                .mapToDouble(o -> positiveDistAppr.getEstimatedPValue(o)).average().getAsDouble();
+    public double queryingConfidence() {
+        return entity2ValuesAndQueryingConf.entrySet().stream().flatMap(o -> o.getValue().stream())
+                .mapToDouble(o -> 1 / o.second).average().getAsDouble();
+    }
+
+    public double distConfidence(IntegralDistributionApproximator positiveDistAppr) {
+        return entity2ValuesAndQueryingConf.entrySet().stream().flatMap(o -> o.getValue().stream())
+                .mapToDouble(o -> positiveDistAppr.getEstimatedPValue(o.first)).average().getAsDouble();
     }
 }
 
@@ -146,6 +154,7 @@ public class QKBCRunner {
     }
 
     public static void harvest(String type, String seedCtx, KgUnit quantitySiUnit,
+                               boolean useParametricDenoising,
                                double groupConfidenceThreshold, int maxNIter,
                                String groundTruthFile, int maxGroundTruthSize,
                                String outputFile) {
@@ -220,8 +229,10 @@ public class QKBCRunner {
             ArrayList<RelationInstance> mostlyPositiveWithGroundTruthSampled = new ArrayList<>(mostlyPositive);
             mostlyPositiveWithGroundTruthSampled.addAll(groundTruthListSampled);
 
-            Pair<ContinuousDistribution, Double> positiveDist
-                    = RelationInstanceNoiseFilter.consistencyBasedNonParametricDistributionNoiseFilter(mostlyPositiveWithGroundTruthSampled);
+            Pair<ContinuousDistribution, Double> positiveDist = useParametricDenoising
+                    ? RelationInstanceNoiseFilter.consistencyBasedParametricDistributionNoiseFilter(mostlyPositiveWithGroundTruthSampled)
+                    : RelationInstanceNoiseFilter.consistencyBasedNonParametricDistributionNoiseFilter(mostlyPositiveWithGroundTruthSampled);
+
 
             // print stats
             System.out.println(String.format("Mostly-positive size: %d", mostlyPositive.size()));
@@ -269,7 +280,7 @@ public class QKBCRunner {
                     }
                     ContextStats stats = contextStats.get(x);
                     // add unknown
-                    stats.addInstance(u.entity, u.quantityStdValue);
+                    stats.addInstance(u.entity, u.quantityStdValue, u.score);
                     // add duplicated unknown
                     List<RelationInstance> posList = entity2PositiveInstances.get(u.entity);
                     if (posList == null) {
@@ -294,7 +305,7 @@ public class QKBCRunner {
                         ContextStats stats = contextStats.get(x);
 
                         // add unknown
-                        stats.addInstance(u.entity, u.quantityStdValue);
+                        stats.addInstance(u.entity, u.quantityStdValue, u.score);
                         // add duplicated unknown
                         List<RelationInstance> posList = entity2PositiveInstances.get(u.entity);
                         if (posList == null) {
@@ -313,9 +324,11 @@ public class QKBCRunner {
 
             IntegralDistributionApproximator positiveDistAppr = new IntegralDistributionApproximator(positiveDist.first);
             // Sort stats and output
+            int currentIter = iter;
             List<ContextStats> sortedContextStats = contextStats.entrySet().stream().map(e -> e.getValue())
                     .filter(o -> o.support() > 1
-//                            && o.confidence(positiveDistAppr) >= 0.2
+//                            && (currentIter == 0 || o.queryingConfidence() >= 0.2)
+//                            && o.distConfidence(positiveDistAppr) >= 0.2
                             && o.extensibility() >= 0)
                     .sorted((a, b) -> Long.compare(b.support(), a.support()))
                     .collect(Collectors.toList());
@@ -323,10 +336,10 @@ public class QKBCRunner {
             System.out.println("Mined context: " + sortedContextStats.size());
             int nPrinted = 0;
             for (ContextStats stats : sortedContextStats) {
-                System.out.println(String.format("  ContextStats{'%s', support=%d, extensibility=%.3f, confidence=%.3f}",
-                        stats.context, stats.support(), stats.extensibility(), stats.confidence(positiveDistAppr)));
+                System.out.println(String.format("  ContextStats{'%s', support=%d, extensibility=%.3f, distConfidence=%.3f, queryingConfidence=%.3f}",
+                        stats.context, stats.support(), stats.extensibility(), stats.distConfidence(positiveDistAppr), stats.queryingConfidence()));
                 ++nPrinted;
-                if (nPrinted == 50) {
+                if (nPrinted == 20) {
                     break;
                 }
             }
@@ -358,9 +371,10 @@ public class QKBCRunner {
 //        harvest("company", "annual revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"), 0.9,
 //                new File("/dev/null"));
 
-        harvest("building", null, KgUnit.getKgUnitFromEntityName("<Metre>"), 0.9, 5,
-                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
-                "./eval/qkbc/exp_1/qsearch_queries/building_height.json");
+        harvest("building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+                true, 0.9, 10,
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/building_height_ourP.json");
 
 //        harvest("athlete", "tall", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.85,
 //                new File("./eval/qkbc/exp_1/qsearch_queries/athlete-height.tsv"));
