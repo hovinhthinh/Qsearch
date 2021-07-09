@@ -18,7 +18,7 @@ public class IntegralDistributionApproximator {
     private double[] cdf, pValue;
 
     public IntegralDistributionApproximator(ContinuousDistribution d) {
-        this(d, SIMPSON_RULE);
+        this(d, MIDPOINT_RULE);
     }
 
     public IntegralDistributionApproximator(ContinuousDistribution d, int ruleCode) {
