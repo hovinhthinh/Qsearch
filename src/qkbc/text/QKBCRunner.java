@@ -351,7 +351,7 @@ public class QKBCRunner {
 
             DistributionFitter.drawDistributionVsSamples(String.format("Iteration #%d", iter), positiveDist.first,
                     mostlyPositiveWithGroundTruthSampled.stream().filter(i -> i.positive || i.isFromGroundTruth())
-                            .mapToDouble(i -> i.quantityStdValue).toArray(), true);
+                            .mapToDouble(i -> i.quantityStdValue).toArray(), false, true);
 
             // reformulate
             for (ContextStats stats : sortedContextStats) {

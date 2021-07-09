@@ -43,16 +43,16 @@ class DistributionPresenter extends ApplicationFrame {
         return new XYSeriesCollection(series);
     }
 
-    public DistributionPresenter(String title, ContinuousDistribution d, double[] samples) {
+    public DistributionPresenter(String title, ContinuousDistribution d, double[] samples, boolean drawHistogram) {
         super("Samples vs. Distribution");
-        this.setContentPane(new ChartPanel(createChart(title, samples, d)));
+        this.setContentPane(new ChartPanel(createChart(title, samples, d, drawHistogram)));
         this.pack();
         UIUtils.centerFrameOnScreen(this);
         this.setVisible(true);
     }
 
-    public DistributionPresenter(String title, ContinuousDistribution d, ArrayList<Double> samples) {
-        this(title, d, samples.stream().mapToDouble(Double::doubleValue).toArray());
+    public DistributionPresenter(String title, ContinuousDistribution d, ArrayList<Double> samples, boolean drawHistogram) {
+        this(title, d, samples.stream().mapToDouble(Double::doubleValue).toArray(), drawHistogram);
     }
 
     private static int optimalFreedmanDiaconisNBins(double[] samples) {
@@ -65,7 +65,7 @@ class DistributionPresenter extends ApplicationFrame {
         return Math.max(nBins, 1);
     }
 
-    private static JFreeChart createChart(String title, double[] samples, ContinuousDistribution d) {
+    private static JFreeChart createChart(String title, double[] samples, ContinuousDistribution d, boolean drawHistogram) {
         HistogramDataset histogramData = new HistogramDataset();
         histogramData.addSeries("Histogram", samples, optimalFreedmanDiaconisNBins(samples));
 
@@ -80,6 +80,11 @@ class DistributionPresenter extends ApplicationFrame {
                 new XYSeriesCollection(dotsData),
                 PlotOrientation.VERTICAL, true, true, false);
         XYPlot plot = chart.getXYPlot();
+        // change BG
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setDomainGridlinePaint(Color.LIGHT_GRAY);
+        plot.setRangeGridlinePaint(Color.LIGHT_GRAY);
+
         XYLineAndShapeRenderer renderer0 = new XYLineAndShapeRenderer();
         renderer0.setSeriesLinesVisible(0, false);
         renderer0.setSeriesShape(0, new Rectangle2D.Double(-0.5, -8, 1, 8));
@@ -92,14 +97,16 @@ class DistributionPresenter extends ApplicationFrame {
         plot.setRenderer(1, renderer1);
 
         // Draw histogram
-        plot.setDataset(2, histogramData);
-        NumberAxis rangeAxis = new NumberAxis("Sample count");
-        rangeAxis.setLabelFont(plot.getRangeAxis().getLabelFont());
-        plot.setRangeAxis(1, rangeAxis);
-        XYBarRenderer renderer2 = new XYBarRenderer();
-        renderer2.setShadowVisible(false);
-        plot.setRenderer(2, renderer2);
-        plot.mapDatasetToRangeAxis(2, 1);
+        if (drawHistogram) {
+            plot.setDataset(2, histogramData);
+            NumberAxis rangeAxis = new NumberAxis("Sample count");
+            rangeAxis.setLabelFont(plot.getRangeAxis().getLabelFont());
+            plot.setRangeAxis(1, rangeAxis);
+            XYBarRenderer renderer2 = new XYBarRenderer();
+            renderer2.setShadowVisible(false);
+            plot.setRenderer(2, renderer2);
+            plot.mapDatasetToRangeAxis(2, 1);
+        }
 
         // Style
         plot.getRenderer(0).setSeriesPaint(0, Color.DARK_GRAY);
@@ -233,8 +240,8 @@ public class DistributionFitter {
         return null;
     }
 
-    public static void drawDistributionVsSamples(String title, ContinuousDistribution dist, double[] samples, boolean waitUntilClose) {
-        DistributionPresenter p = new DistributionPresenter(title, dist, samples);
+    public static void drawDistributionVsSamples(String title, ContinuousDistribution dist, double[] samples, boolean drawHistogram, boolean waitUntilClose) {
+        DistributionPresenter p = new DistributionPresenter(title, dist, samples, drawHistogram);
         if (waitUntilClose) {
             try {
                 p.join();
@@ -256,6 +263,6 @@ public class DistributionFitter {
 
         System.out.println(dist);
 
-        new DistributionPresenter(null, dist.first, samples);
+        new DistributionPresenter(null, dist.first, samples, true);
     }
 }
