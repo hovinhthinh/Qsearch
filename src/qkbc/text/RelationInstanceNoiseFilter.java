@@ -81,10 +81,13 @@ public class RelationInstanceNoiseFilter {
         AtomicInteger foldCount = new AtomicInteger(0);
         AtomicBoolean stop = new AtomicBoolean(false);
 
+        Random r = new Random(1209);
         Concurrent.runAndWait(() -> {
             ArrayList<RelationInstance> riCopy = new ArrayList<>(ri);
             while (foldCount.getAndIncrement() < N_FOLD && !stop.get()) {
-                Collections.shuffle(riCopy);
+                synchronized (r) {
+                    Collections.shuffle(riCopy, r);
+                }
                 ArrayList<Double> sampleValues = extractDistributionSamplesFromRelationInstances(riCopy.subList(0, sampleSize));
                 if (sampleValues.size() < MIN_SAMPLING_SIZE) {
                     continue;
@@ -160,7 +163,7 @@ public class RelationInstanceNoiseFilter {
         }
 
         // Recompute the noise flag
-        if (bestDist != null)  {
+        if (bestDist != null) {
             consistencyBasedDistributionNoiseFilter(ri, bestDist.first.getClass());
         }
 
@@ -179,7 +182,7 @@ public class RelationInstanceNoiseFilter {
         }
 
         // Recompute the noise flag
-        if (bestDist != null)  {
+        if (bestDist != null) {
             consistencyBasedDistributionNoiseFilter(ri, bestDist.first.getClass());
         }
 

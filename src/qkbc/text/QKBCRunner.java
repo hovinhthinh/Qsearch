@@ -91,6 +91,8 @@ public class QKBCRunner {
         }
     }
 
+    private static Random RANDOM = new Random(120993);
+
     private static ArrayList<RelationInstance> query(String yagoType, String context, KgUnit quantitySiUnit) {
         try {
             URIBuilder b = new URIBuilder(QSEARCH_END_POINT);
@@ -179,7 +181,9 @@ public class QKBCRunner {
             }
             groundTruthListSampled = groundTruthList;
             if (maxGroundTruthSize >= 0 && groundTruthList.size() > maxGroundTruthSize) {
-                Collections.shuffle(groundTruthList);
+                synchronized (RANDOM) {
+                    Collections.shuffle(groundTruthList, RANDOM);
+                }
                 groundTruthListSampled = groundTruthList.subList(0, maxGroundTruthSize);
             }
         }
@@ -326,10 +330,11 @@ public class QKBCRunner {
             // Sort stats and output
             int currentIter = iter;
             List<ContextStats> sortedContextStats = contextStats.entrySet().stream().map(e -> e.getValue())
-                    .filter(o -> o.support() > 1
-//                            && (currentIter == 0 || o.queryingConfidence() >= 0.2)
-//                            && o.distConfidence(positiveDistAppr) >= 0.2
-                            && o.extensibility() >= 0)
+                    .filter(o -> !ctxList.contains(o.context))
+                    .filter(o -> o.support() > 1)
+//                    .filter(o -> o.distConfidence(positiveDistAppr) >= 0.2)
+//                    .filter(o -> currentIter == 0 || o.queryingConfidence() >= 0.2)
+                    .filter(o -> o.extensibility() >= 0)
                     .sorted((a, b) -> Long.compare(b.support(), a.support()))
                     .collect(Collectors.toList());
 
@@ -350,10 +355,8 @@ public class QKBCRunner {
 
             // reformulate
             for (ContextStats stats : sortedContextStats) {
-                if (!ctxList.contains(stats.context)) {
-                    ctxQueue.add(stats.context);
-                    break;
-                }
+                ctxQueue.add(stats.context);
+                break;
             }
 
             if (outputFile != null && (ctxQueue.isEmpty() || iter == maxNIter)) {
