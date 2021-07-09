@@ -331,9 +331,9 @@ public class QKBCRunner {
             int currentIter = iter;
             List<ContextStats> sortedContextStats = contextStats.entrySet().stream().map(e -> e.getValue())
                     .filter(o -> !ctxList.contains(o.context))
-                    .filter(o -> o.support() > 1)
-//                    .filter(o -> o.distConfidence(positiveDistAppr) >= 0.2)
-//                    .filter(o -> currentIter == 0 || o.queryingConfidence() >= 0.2)
+                    .filter(o -> o.support() > 10)
+                    .filter(o -> o.distConfidence(positiveDistAppr) >= 0.1)
+                    .filter(o -> currentIter == 0 || o.queryingConfidence() >= 0.7)
                     .filter(o -> o.extensibility() >= 0)
                     .sorted((a, b) -> Long.compare(b.support(), a.support()))
                     .collect(Collectors.toList());
@@ -344,14 +344,14 @@ public class QKBCRunner {
                 System.out.println(String.format("  ContextStats{'%s', support=%d, extensibility=%.3f, distConfidence=%.3f, queryingConfidence=%.3f}",
                         stats.context, stats.support(), stats.extensibility(), stats.distConfidence(positiveDistAppr), stats.queryingConfidence()));
                 ++nPrinted;
-                if (nPrinted == 20) {
+                if (nPrinted == 10) {
                     break;
                 }
             }
 
-            DistributionFitter.drawDistributionVsSamples(String.format("Iteration #%d", iter), positiveDist.first,
-                    mostlyPositiveWithGroundTruthSampled.stream().filter(i -> i.positive || i.isFromGroundTruth())
-                            .mapToDouble(i -> i.quantityStdValue).toArray(), false, true);
+//            DistributionFitter.drawDistributionVsSamples(String.format("Iteration #%d", iter), positiveDist.first,
+//                    mostlyPositiveWithGroundTruthSampled.stream().filter(i -> i.positive || i.isFromGroundTruth())
+//                            .mapToDouble(i -> i.quantityStdValue).toArray(), false, true);
 
             // reformulate
             for (ContextStats stats : sortedContextStats) {
