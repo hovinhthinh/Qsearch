@@ -366,21 +366,48 @@ public class QKBCRunner {
     }
 
     public static void main(String[] args) {
-//        harvest("train", "speed", KgUnit.getKgUnitFromEntityName("<Kilometres_per_hour>"), 0.85,
-//                new File("./eval/qkbc/exp_1/qsearch_queries/tmp.tsv"));
-//        harvest("bridge", "span", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.85,
-//                new File("/dev/null"));
 
-//        harvest("company", "annual revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"), 0.9,
-//                new File("/dev/null"));
-
+        // Bootstrapping - parametric
         harvest("building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/building_height_ourP.json");
 
-//        harvest("athlete", "tall", KgUnit.getKgUnitFromEntityName("<Metre>"), 0.85,
-//                new File("./eval/qkbc/exp_1/qsearch_queries/athlete-height.tsv"));
+        harvest("mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+                true, 0.9, 10,
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourP.json");
+
+        harvest("river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+                true, 0.9, 10,
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/river_length_ourP.json");
+
+        harvest("stadium", null, KgUnit.DIMENSIONLESS,
+                true, 0.9, 10,
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourP.json");
+
+        // Bootstrapping - Non-parametric
+        harvest("building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+                false, 0.9, 10,
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/building_height_ourN.json");
+
+        harvest("mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+                false, 0.9, 10,
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourN.json");
+
+        harvest("river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+                false, 0.9, 10,
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/river_length_ourN.json");
+
+        harvest("stadium", null, KgUnit.DIMENSIONLESS,
+                false, 0.9, 10,
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourN.json");
 
     }
 }
