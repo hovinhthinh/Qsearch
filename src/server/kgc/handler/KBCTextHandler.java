@@ -104,6 +104,9 @@ public class KBCTextHandler extends HttpServlet {
 
         try {
             ContextMatcher matcher;
+            if (model == null) {
+                model = additionalParameters == null ? null : (String) additionalParameters.get("model");
+            }
             if (model != null && model.equals(SearchHandler.KL_MODEL_STRING)) {
                 matcher = SearchHandler.getKLMatcher();
             } else {

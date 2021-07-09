@@ -46,7 +46,7 @@ class ContextStats {
         }
         for (Pair<Double, Double> v : entity2ValuesAndQueryingConf.get(entity)) {
             if (Number.relativeNumericDistance(v.first, quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
-                if (v.second > conf) {
+                if (v.second < conf) {
                     v.second = conf;
                 }
                 return;
@@ -67,7 +67,7 @@ class ContextStats {
 
     public double queryingConfidence() {
         return entity2ValuesAndQueryingConf.entrySet().stream().flatMap(o -> o.getValue().stream())
-                .mapToDouble(o -> 1 / o.second).average().getAsDouble();
+                .mapToDouble(o -> o.second).average().getAsDouble();
     }
 
     public double distConfidence(IntegralDistributionApproximator positiveDistAppr) {
@@ -217,13 +217,13 @@ public class QKBCRunner {
                     }
                     RelationInstance storedI = kbcId2RelationInstanceMap.get(i.kbcId);
                     // iter == 0 means that we ignore querying step. However we still query to get the list of answers,
-                    // but set their conf to 1e9 so that 1/1e9 ~ 0.
-                    storedI.score = iter == 0 ? 1e9 : Math.min(storedI.score, i.score);
+                    // but set their conf to 0.
+                    storedI.score = iter == 0 ? 0 : Math.max(storedI.score, 1 / i.score);
                 }
             }
             // query reformulation mining
             ArrayList<RelationInstance> mostlyPositive = riList.stream()
-                    .filter(i -> 1 / i.score >= groupConfidenceThreshold)
+                    .filter(i -> i.score >= groupConfidenceThreshold)
                     .collect(Collectors.toCollection(ArrayList::new));
 
             ArrayList<RelationInstance> mostlyPositiveWithGroundTruthSampled = new ArrayList<>(mostlyPositive);

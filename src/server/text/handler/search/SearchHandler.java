@@ -121,6 +121,9 @@ public class SearchHandler extends HttpServlet {
         SearchResult response = new SearchResult();
         try {
             ContextMatcher matcher;
+            if (model == null) {
+                model = additionalParameters == null ? null : (String) additionalParameters.get("model");
+            }
             if (model != null && model.equals(KL_MODEL_STRING)) {
                 matcher = getKLMatcher();
             } else {
