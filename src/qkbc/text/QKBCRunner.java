@@ -332,7 +332,7 @@ public class QKBCRunner {
             List<ContextStats> sortedContextStats = contextStats.entrySet().stream().map(e -> e.getValue())
                     .filter(o -> !ctxList.contains(o.context))
                     .filter(o -> o.support() > 10)
-                    .filter(o -> o.distConfidence(positiveDistAppr) >= 0.1)
+                    .filter(o -> positiveDist.second < 0.1 || o.distConfidence(positiveDistAppr) >= 0.1)
                     .filter(o -> currentIter == 0 || o.queryingConfidence() >= 0.675)
                     .filter(o -> o.extensibility() >= 0)
                     .sorted((a, b) -> Long.compare(b.support(), a.support()))
