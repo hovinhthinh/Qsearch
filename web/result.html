@@ -260,8 +260,10 @@
                     (sentenceContent.quantityConvertedStr == null ? "null" : sentenceContent.quantityConvertedStr) +
                     '">' + qStr + '</span>');
             }
+            if ('score' in sentenceContent) {
+                value += ' <sub><sub class="badge badge-secondary">Score: ' + sentenceContent['score'].toFixed(3) + '</sub></sub>';
+            }
         }
-        value += ' <sub><sub class="badge badge-secondary">Score: ' + sentenceContent['score'].toFixed(3) + '</sub></sub>';
         return "<td>" + value + "</td>";
     }
 
