@@ -81,7 +81,7 @@ class ContextStats {
 
     private static double RELATIVE_SUPPORT_WEIGHT = 0.1;
     private static double QUERYING_CONF_WEIGHT = 0.5;
-    private static double DIST_CONF_WEIGHT = 0.3;
+    private static double DIST_CONF_WEIGHT = 0.2;
 
     public double totalConfidence(int relSupportDenom, IntegralDistributionApproximator positiveDistAppr) {
         return (relativeSupport(relSupportDenom) * RELATIVE_SUPPORT_WEIGHT
@@ -368,7 +368,7 @@ public class QKBCRunner {
                         }
                         return true;
                     })
-                    .filter(o -> o.support() >= 10) // 10 for bootstrapping, 5 for original settings
+                    .filter(o -> o.support() >= (groundTruthFile == null ? 5 : 10)) // 10 for bootstrapping, 5 for original settings
                     .filter(o -> o.distConfidence(positiveDistAppr) >= 0.3)
                     .filter(o -> currentIter == 0 || o.queryingConfidence() >= 0.675)
                     .sorted((a, b) -> Double.compare(b.totalConfidence(relSuppDenom, positiveDistAppr), a.totalConfidence(relSuppDenom, positiveDistAppr)))
