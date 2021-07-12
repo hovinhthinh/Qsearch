@@ -59,6 +59,10 @@ class ContextStats {
         return entity2ValuesDuplicated.entrySet().stream().mapToInt(o -> o.getValue().size()).sum();
     }
 
+    public double relativeSupport(int denominator) {
+        return ((double) support()) / denominator;
+    }
+
     public double extensibility() {
         int sup = support();
         int total = entity2ValuesAndQueryingConf.entrySet().stream().mapToInt(o -> o.getValue().size()).sum();
@@ -73,6 +77,16 @@ class ContextStats {
     public double distConfidence(IntegralDistributionApproximator positiveDistAppr) {
         return entity2ValuesAndQueryingConf.entrySet().stream().flatMap(o -> o.getValue().stream())
                 .mapToDouble(o -> positiveDistAppr.getEstimatedPValue(o.first)).average().getAsDouble();
+    }
+
+    private static double RELATIVE_SUPPORT_WEIGHT = 0.05;
+    private static double QUERYING_CONF_WEIGHT = 0.5;
+    private static double DIST_CONF_WEIGHT = 0.3;
+
+    public double totalConfidence(int relSupportDenom, IntegralDistributionApproximator positiveDistAppr) {
+        return relativeSupport(relSupportDenom) * RELATIVE_SUPPORT_WEIGHT
+                + queryingConfidence() * QUERYING_CONF_WEIGHT
+                + distConfidence(positiveDistAppr) * DIST_CONF_WEIGHT;
     }
 }
 
@@ -109,7 +123,7 @@ public class QKBCRunner {
 
             for (ResultInstance ri : sr.topResults) {
                 for (ResultInstance.SubInstance si : ri.subInstances) {
-                    result.add(new RelationInstance(ri.entity, si.quantity, si.quantityStandardValue, si.score, si.kbcId));
+                    result.add(new RelationInstance(ri.entity, si.quantity, si.quantityStandardValue, 1 / si.score, si.kbcId));
                 }
             }
 
@@ -153,6 +167,20 @@ public class QKBCRunner {
         */
 
         out.close();
+    }
+
+    public static boolean contextIncluding(String superset, String subset) {
+        Set<String> sup = NLP.splitSentence(superset).stream().map(x -> NLP.fastStemming(x.toLowerCase(), Morpha.any))
+                .collect(Collectors.toCollection(HashSet::new));
+
+        for (String t : NLP.splitSentence(subset).stream()
+                .map(x -> NLP.fastStemming(x.toLowerCase(), Morpha.any))
+                .collect(Collectors.toList())) {
+            if (!sup.contains(t)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void harvest(String type, String seedCtx, KgUnit quantitySiUnit,
@@ -222,7 +250,7 @@ public class QKBCRunner {
                     RelationInstance storedI = kbcId2RelationInstanceMap.get(i.kbcId);
                     // iter == 0 means that we ignore querying step. However we still query to get the list of answers,
                     // but set their conf to 0.
-                    storedI.score = iter == 0 ? 0 : Math.max(storedI.score, 1 / i.score);
+                    storedI.score = iter == 0 ? 0 : Math.max(storedI.score, i.score);
                 }
             }
             // query reformulation mining
@@ -274,8 +302,8 @@ public class QKBCRunner {
             for (RelationInstance u : unknownInstances) {
                 ArrayList<String> ctx = u.getNormalContext();
                 // stemming & unique
-                ctx = NLP.splitSentence(NLP.fastStemming(String.join(" ", ctx).toLowerCase(), Morpha.any));
-                ctx = new HashSet<>(ctx).stream().collect(Collectors.toCollection(ArrayList::new));
+                ctx = new ArrayList<>(ctx.stream().map(x -> NLP.fastStemming(x.toLowerCase(), Morpha.any))
+                        .collect(Collectors.toCollection(HashSet::new)));
                 // uni-gram
                 loop:
                 for (String x : ctx) {
@@ -329,20 +357,27 @@ public class QKBCRunner {
             IntegralDistributionApproximator positiveDistAppr = new IntegralDistributionApproximator(positiveDist.first);
             // Sort stats and output
             int currentIter = iter;
+            int relSuppDenom = contextStats.entrySet().stream().mapToInt(e -> e.getValue().support()).max().orElse(0);
             List<ContextStats> sortedContextStats = contextStats.entrySet().stream().map(e -> e.getValue())
-                    .filter(o -> !ctxList.contains(o.context))
-                    .filter(o -> o.support() > 10)
-                    .filter(o -> positiveDist.second < 0.1 || o.distConfidence(positiveDistAppr) >= 0.1)
+                    .filter(o -> {
+                        for (String ctx : ctxList) {
+                            if (contextIncluding(ctx, o.context)) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    })
+                    .filter(o -> o.support() >= 5) // 10 for bootstrapping, 5 for original settings
+                    .filter(o -> o.distConfidence(positiveDistAppr) >= 0.3)
                     .filter(o -> currentIter == 0 || o.queryingConfidence() >= 0.675)
-                    .filter(o -> o.extensibility() >= 0)
-                    .sorted((a, b) -> Long.compare(b.support(), a.support()))
+                    .sorted((a, b) -> Double.compare(b.totalConfidence(relSuppDenom, positiveDistAppr), a.totalConfidence(relSuppDenom, positiveDistAppr)))
                     .collect(Collectors.toList());
 
             System.out.println("Mined context: " + sortedContextStats.size());
             int nPrinted = 0;
             for (ContextStats stats : sortedContextStats) {
-                System.out.println(String.format("  ContextStats{'%s', support=%d, extensibility=%.3f, distConfidence=%.3f, queryingConfidence=%.3f}",
-                        stats.context, stats.support(), stats.extensibility(), stats.distConfidence(positiveDistAppr), stats.queryingConfidence()));
+                System.out.println(String.format("  ContextStats{'%s', support=%d, extensibility=%.3f, distConfidence=%.3f, queryingConfidence=%.3f, totalConf=%.3f}",
+                        stats.context, stats.support(), stats.extensibility(), stats.distConfidence(positiveDistAppr), stats.queryingConfidence(), stats.totalConfidence(relSuppDenom, positiveDistAppr)));
                 ++nPrinted;
                 if (nPrinted == 10) {
                     break;
