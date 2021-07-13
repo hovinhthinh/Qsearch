@@ -42,9 +42,9 @@ public class RelationInstance {
 
     public transient boolean positive;
 
-    public ArrayList<Integer> positiveIterIndices, noiseIterIndices;
+    public ArrayList<Integer> positiveIterIndices, noiseIterIndices, effectivePositiveIterIndices;
 
-    public Boolean effective, eval;
+    public Boolean eval;
 
     public RelationInstance(String entity, String quantity, double quantityStdValue, double score, String kbcId) {
         this.entity = entity;
