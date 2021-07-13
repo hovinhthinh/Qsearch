@@ -137,11 +137,13 @@ public class QKBCRunner {
         }
     }
 
-    static void printToFile(List<RelationInstance> instances, String outputFile) {
+    static void printToFile(LinkedHashSet<String> ctxList, List<RelationInstance> instances, String outputFile) {
+        QKBCResult r = new QKBCResult();
+        r.ctxList = new ArrayList<>(ctxList);
+        r.instances = new ArrayList<>(instances);
+
         PrintWriter out = FileUtils.getPrintWriter(outputFile, "UTF-8");
-        for (RelationInstance ri : instances) {
-            out.println(Gson.toJson(ri));
-        }
+        out.println(Gson.toJson(r));
         /*
         HashMap<String, List<EntityFact>> e2f = new HashMap<>();
         loop:
@@ -398,7 +400,7 @@ public class QKBCRunner {
             }
 
             if (outputFile != null && (ctxQueue.isEmpty() || iter == maxNIter)) {
-                printToFile(mostlyPositive, outputFile);
+                printToFile(ctxList, mostlyPositive, outputFile);
             }
         } while (!ctxQueue.isEmpty() && iter < maxNIter);
     }

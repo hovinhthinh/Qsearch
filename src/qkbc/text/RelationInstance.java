@@ -33,16 +33,18 @@ public class RelationInstance {
     }
 
 
-    String entity;
-    String quantity;
-    double quantityStdValue;
-    double score;
+    public String entity;
+    public String quantity;
+    public double quantityStdValue;
+    public double score;
 
-    String kbcId;
+    public String kbcId;
 
-    boolean positive;
+    public transient boolean positive;
 
-    ArrayList<Integer> positiveIterIndices, noiseIterIndices;
+    public ArrayList<Integer> positiveIterIndices, noiseIterIndices;
+
+    public Boolean effective, eval;
 
     public RelationInstance(String entity, String quantity, double quantityStdValue, double score, String kbcId) {
         this.entity = entity;
@@ -105,6 +107,17 @@ public class RelationInstance {
             ctx.add(new Triple<>(args[0], Long.parseLong(args[1]), Long.parseLong(args[2])));
         });
         return ctx;
+    }
+
+    public String getYearCtx() {
+        for (Triple<String, Long, Long> t : getTimeContext()) {
+            try {
+                Integer.parseInt(t.first);
+                return t.first;
+            } catch (Exception e) {
+            }
+        }
+        return null;
     }
 
     // Triple<surface, entity>
