@@ -80,8 +80,8 @@ class ContextStats {
     }
 
     private static double RELATIVE_SUPPORT_WEIGHT = 0.1;
-    private static double QUERYING_CONF_WEIGHT = 0.5;
-    private static double DIST_CONF_WEIGHT = 0.2;
+    private static double QUERYING_CONF_WEIGHT = 0.5; // for company-revenue, use 0.2 instead of 0.5
+    private static double DIST_CONF_WEIGHT = 0.2; // for company-revenue, use 0 instead of 0.2
 
     public double totalConfidence(int relSupportDenom, IntegralDistributionApproximator positiveDistAppr) {
         return (relativeSupport(relSupportDenom) * RELATIVE_SUPPORT_WEIGHT
@@ -94,6 +94,7 @@ class ContextStats {
 public class QKBCRunner {
     public static final String QSEARCH_END_POINT = "http://sedna:6993/kbc_text";
 
+    /*
     static class EntityFact {
         String quantity;
         Double qtStandardValue;
@@ -105,6 +106,7 @@ public class QKBCRunner {
             this.sources.add(source);
         }
     }
+    */
 
     private static Random RANDOM = new Random(120993);
 
@@ -369,7 +371,7 @@ public class QKBCRunner {
                         return true;
                     })
                     .filter(o -> o.support() >= (groundTruthFile == null ? 5 : 10)) // 10 for bootstrapping, 5 for original settings
-                    .filter(o -> o.distConfidence(positiveDistAppr) >= 0.3)
+//                    .filter(o -> o.distConfidence(positiveDistAppr) >= 0.3)
                     .filter(o -> currentIter == 0 || o.queryingConfidence() >= 0.675)
                     .sorted((a, b) -> Double.compare(b.totalConfidence(relSuppDenom, positiveDistAppr), a.totalConfidence(relSuppDenom, positiveDistAppr)))
                     .collect(Collectors.toList());
@@ -402,7 +404,6 @@ public class QKBCRunner {
     }
 
     public static void main(String[] args) {
-
         // Bootstrapping - parametric
         harvest("building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 true, 0.9, 10,
@@ -414,10 +415,10 @@ public class QKBCRunner {
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourP.json");
 
-        harvest("river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
-                true, 0.9, 10,
-                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
-                "./eval/qkbc/exp_1/qsearch_queries/river_length_ourP.json");
+//        harvest("river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+//                true, 0.9, 10,
+//                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
+//                "./eval/qkbc/exp_1/qsearch_queries/river_length_ourP.json");
 
         harvest("stadium", null, KgUnit.DIMENSIONLESS,
                 true, 0.9, 10,
@@ -435,15 +436,35 @@ public class QKBCRunner {
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourN.json");
 
-        harvest("river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
-                false, 0.9, 10,
-                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
-                "./eval/qkbc/exp_1/qsearch_queries/river_length_ourN.json");
+//        harvest("river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+//                false, 0.9, 10,
+//                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
+//                "./eval/qkbc/exp_1/qsearch_queries/river_length_ourN.json");
 
         harvest("stadium", null, KgUnit.DIMENSIONLESS,
                 false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourN.json");
 
+        // Original - parametric
+        harvest("city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
+                true, 0.9, 10,
+                null, 200,
+                "./eval/qkbc/exp_1/qsearch_queries/city_altitude_ourP.json");
+        harvest("company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
+                true, 0.9, 10,
+                null, 200,
+                "./eval/qkbc/exp_1/qsearch_queries/company_revenue_ourP.json");
+
+        // Original - non - parametric
+        harvest("city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
+                false, 0.9, 10,
+                null, 200,
+                "./eval/qkbc/exp_1/qsearch_queries/city_altitude_ourN.json");
+
+        harvest("company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
+                false, 0.9, 10,
+                null, 200,
+                "./eval/qkbc/exp_1/qsearch_queries/company_revenue_ourN.json");
     }
 }
