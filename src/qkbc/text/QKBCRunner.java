@@ -137,8 +137,9 @@ public class QKBCRunner {
         }
     }
 
-    static void printToFile(LinkedHashSet<String> ctxList, List<RelationInstance> instances, String outputFile) {
+    static void printToFile(String predicateName, LinkedHashSet<String> ctxList, List<RelationInstance> instances, String outputFile) {
         QKBCResult r = new QKBCResult();
+        r.predicate = predicateName;
         r.ctxList = new ArrayList<>(ctxList);
         r.instances = new ArrayList<>(instances);
 
@@ -188,7 +189,7 @@ public class QKBCRunner {
         return true;
     }
 
-    public static void harvest(String type, String seedCtx, KgUnit quantitySiUnit,
+    public static void harvest(String predicateName, String type, String seedCtx, KgUnit quantitySiUnit,
                                boolean useParametricDenoising,
                                double groupConfidenceThreshold, int maxNIter,
                                String groundTruthFile, int maxGroundTruthSize,
@@ -400,71 +401,72 @@ public class QKBCRunner {
             }
 
             if (outputFile != null && (ctxQueue.isEmpty() || iter == maxNIter)) {
-                printToFile(ctxList, mostlyPositive, outputFile);
+                printToFile(predicateName, ctxList, mostlyPositive, outputFile);
             }
         } while (!ctxQueue.isEmpty() && iter < maxNIter);
     }
 
     public static void main(String[] args) {
         // Bootstrapping - parametric
-        harvest("building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("height", "building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/building_height_ourP.json");
 
-        harvest("mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("elevation", "mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourP.json");
 
-//        harvest("river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
-//                true, 0.9, 10,
-//                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
-//                "./eval/qkbc/exp_1/qsearch_queries/river_length_ourP.json");
+        harvest("length", "river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+                true, 0.9, 10,
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/river_length_ourP.json");
 
-        harvest("stadium", null, KgUnit.DIMENSIONLESS,
+        harvest("capacity", "stadium", null, KgUnit.DIMENSIONLESS,
                 true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourP.json");
 
         // Bootstrapping - Non-parametric
-        harvest("building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("height",
+                "building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/building_height_ourN.json");
 
-        harvest("mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("elevation", "mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourN.json");
 
-//        harvest("river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
-//                false, 0.9, 10,
-//                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
-//                "./eval/qkbc/exp_1/qsearch_queries/river_length_ourN.json");
+        harvest("length", "river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+                false, 0.9, 10,
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/river_length_ourN.json");
 
-        harvest("stadium", null, KgUnit.DIMENSIONLESS,
+        harvest("capacity", "stadium", null, KgUnit.DIMENSIONLESS,
                 false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourN.json");
 
         // Original - parametric
-        harvest("city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("altitude", "city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
                 true, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/city_altitude_ourP.json");
-        harvest("company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
+        harvest("revenue", "company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
                 true, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/company_revenue_ourP.json");
 
-        // Original - non - parametric
-        harvest("city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
+        // Original - non-parametric
+        harvest("altitude", "city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/city_altitude_ourN.json");
 
-        harvest("company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
+        harvest("revenue", "company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
                 false, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/company_revenue_ourN.json");

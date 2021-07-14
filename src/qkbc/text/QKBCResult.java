@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class QKBCResult {
+    public String predicate;
     public ArrayList<String> ctxList;
     public ArrayList<RelationInstance> instances;
 
@@ -173,8 +174,8 @@ public class QKBCResult {
             // TODO
 
 //            currentInstances.stream().filter(o -> o.effectivePositiveIterIndices.size() > 0).forEach(ri ->
-//                    System.out.println(ri.entity + " -- revenue" + (refinementByTime ? " " + ri.getYearCtx() : "") + " -- "
-//                            + ri.getQuantity().value + "," + ri.getQuantity().getKgUnit().entity
+//                    System.out.println(ri.entity + " -- " + r.predicate + (refinementByTime ? "@" + ri.getYearCtx() : "") + " -- "
+//                            + Number.getWrittenString(ri.getQuantity().value, true) + "," + ri.getQuantity().getKgUnit().entity
 //                            + " -- " + ri.getSentence() + " -- " + ri.getSource()));
 
         } while (true);
