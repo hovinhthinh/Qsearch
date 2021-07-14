@@ -1,6 +1,7 @@
 package qkbc.text;
 
 import eval.qkbc.WikidataGroundTruthExtractor;
+import model.quantity.kg.KgUnit;
 import util.FileUtils;
 import util.Gson;
 import util.Number;
@@ -91,11 +92,12 @@ public class QKBCResult {
 
     public static void printStats(String inputFile, String groundTruthFile, boolean refinementByTime) {
         // load groundTruth
-        ArrayList<WikidataGroundTruthExtractor.PredicateNumericalFact> groundTruth = null;
+        Map<String, WikidataGroundTruthExtractor.PredicateNumericalFact> groundTruth = null;
         if (groundTruthFile != null) {
-            groundTruth = new ArrayList<>();
+            groundTruth = new HashMap<>();
             for (String line : FileUtils.getLineStream(groundTruthFile)) {
-                groundTruth.add(Gson.fromJson(line, WikidataGroundTruthExtractor.PredicateNumericalFact.class));
+                WikidataGroundTruthExtractor.PredicateNumericalFact f = Gson.fromJson(line, WikidataGroundTruthExtractor.PredicateNumericalFact.class);
+                groundTruth.put(f.e, f);
             }
         }
 
@@ -104,7 +106,7 @@ public class QKBCResult {
 
         System.out.println(inputFile);
         System.out.println(r.ctxList.toString());
-        System.out.println(String.format("%12s%12s%12s%12s%12s", "iter", "#facts", "prec.", "recall", "ext."));
+        System.out.println(String.format("%12s%12s%12s%16s%16s", "iter", "#facts", "prec.", "recall(x1e-2)", "ext."));
         int it = 0;
         do {
             ++it;
@@ -133,9 +135,40 @@ public class QKBCResult {
 //                    .collect(Collectors.toCollection(ArrayList::new));
 
             markEffectiveFacts(it, currentInstances, refinementByTime);
-            nFacts = (int) currentInstances.stream().filter(o -> o.effectivePositiveIterIndices.size() > 0).count();
 
-            System.out.println(String.format("%12d%12d%12.3f%12.3f%12d", it, nFacts, prec, recall, ext));
+            ArrayList<RelationInstance> effectiveInstances = currentInstances.stream()
+                    .filter(o -> o.effectivePositiveIterIndices.size() > 0)
+                    .sorted(Comparator.comparing(a -> a.effectivePositiveIterIndices.get(0)))
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            // nFacts
+            nFacts = effectiveInstances.size();
+
+            // recall, ext (only when refinement by time == false)
+            if (groundTruth != null && !refinementByTime) {
+                int nTrue = 0;
+                ext = 0;
+                for (RelationInstance ri : effectiveInstances) {
+                    WikidataGroundTruthExtractor.PredicateNumericalFact f = groundTruth.get(ri.entity);
+                    if (f == null) {
+                        ext++;
+                        continue;
+                    }
+                    for (Pair<Double, String> p : f.quantities) {
+                        double v = p.first * KgUnit.getKgUnitFromEntityName(p.second).conversionToSI;
+                        if (Number.relativeNumericDistance(v, ri.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
+                            nTrue++;
+                            break;
+                        }
+                    }
+
+                }
+                recall = 1.0 * nTrue / groundTruth.size() * 100;
+            }
+
+
+            System.out.println(String.format("%12d%12d%12.3f%16.3f%16s", it, nFacts, prec, recall,
+                    ext == -1 ? String.format("%.3f", 1.0 * ext) : String.format("%d(%.3f)", ext, 1.0 * ext / effectiveInstances.size())));
 
             // TODO
 
