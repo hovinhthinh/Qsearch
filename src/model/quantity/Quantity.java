@@ -4,6 +4,7 @@ import edu.illinois.cs.cogcomp.quant.driver.QuantSpan;
 import model.quantity.kg.KgUnit;
 import nlp.NLP;
 import util.Constants;
+import util.Number;
 
 // These are extracted from IllinoisQuantifier.
 public class Quantity {
@@ -144,15 +145,7 @@ public class Quantity {
         }
         String suffix = " (" + targetQuantity.unit + ")";
         double convertedValue = scale * value;
-        if (Math.abs(convertedValue) >= 1e9) {
-            return String.format("%.1f", convertedValue / 1e9) + " billion" + suffix;
-        } else if (convertedValue >= 1e6) {
-            return String.format("%.1f", convertedValue / 1e6) + " million" + suffix;
-        } else if (convertedValue >= 1e5) {
-            return String.format("%.0f", convertedValue / 1e3) + " thousand" + suffix;
-        } else {
-            return String.format("%.2f", convertedValue) + suffix;
-        }
+        return Number.getWrittenString(convertedValue, false) + suffix;
     }
 
     public static boolean fixQuantityFromIllinois(QuantSpan span, String tokenizedText) {
