@@ -408,65 +408,65 @@ public class QKBCRunner {
 
     public static void main(String[] args) {
         // Bootstrapping - parametric
-        harvest("height", "building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("buildingHeight", "building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/building_height_ourP.json");
 
-        harvest("elevation", "mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("mountainElevation", "mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourP.json");
 
-        harvest("length", "river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("riverLength", "river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/river_length_ourP.json");
 
-        harvest("capacity", "stadium", null, KgUnit.DIMENSIONLESS,
+        harvest("stadiumCapacity", "stadium", null, KgUnit.DIMENSIONLESS,
                 true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourP.json");
 
         // Bootstrapping - Non-parametric
-        harvest("height",
+        harvest("buildingHeight",
                 "building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/building_height_ourN.json");
 
-        harvest("elevation", "mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("mountainElevation", "mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourN.json");
 
-        harvest("length", "river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("riverLength", "river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/river_length_ourN.json");
 
-        harvest("capacity", "stadium", null, KgUnit.DIMENSIONLESS,
+        harvest("stadiumCapacity", "stadium", null, KgUnit.DIMENSIONLESS,
                 false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourN.json");
 
         // Original - parametric
-        harvest("altitude", "city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("cityAltitude", "city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
                 true, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/city_altitude_ourP.json");
-        harvest("revenue", "company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
+        harvest("companyRevenue", "company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
                 true, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/company_revenue_ourP.json");
 
         // Original - non-parametric
-        harvest("altitude", "city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("cityAltitude", "city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/city_altitude_ourN.json");
 
-        harvest("revenue", "company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
+        harvest("companyRevenue", "company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
                 false, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/company_revenue_ourN.json");
