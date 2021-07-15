@@ -119,6 +119,7 @@ public class QKBCResult {
 
         // mark groundtruth (only when refinementByTime == false)
         if (groundTruth != null && !refinementByTime) {
+            loop:
             for (RelationInstance ri : r.instances) {
                 if (ri.effectivePositiveIterIndices.size() == 0) {
                     continue;
@@ -137,7 +138,14 @@ public class QKBCResult {
                                 throw new RuntimeException("inconsistent eval vs. groundtruth for " + ri.entity + " -- " + r.predicate);
                             }
                         }
-                        break;
+                        continue loop;
+                    }
+                }
+                if (ri.eval == null) {
+                    ri.eval = false;
+                } else {
+                    if (ri.eval) {
+                        throw new RuntimeException("inconsistent eval vs. groundtruth for " + ri.entity + " -- " + r.predicate);
                     }
                 }
             }
@@ -185,6 +193,7 @@ public class QKBCResult {
             if (groundTruth != null && !refinementByTime) {
                 int nTrue = 0;
                 ext = 0;
+                loop:
                 for (RelationInstance ri : currentEffectiveInstances) {
                     WikidataGroundTruthExtractor.PredicateNumericalFact f = groundTruth.get(ri.entity);
                     if (f == null) {
@@ -198,10 +207,12 @@ public class QKBCResult {
                                 throw new RuntimeException("inconsistent eval vs. groundtruth for " + ri.entity + " -- " + r.predicate);
                             }
                             nTrue++;
-                            break;
+                            continue loop;
                         }
                     }
-
+                    if (ri.eval != null && ri.eval) {
+                        throw new RuntimeException("inconsistent eval vs. groundtruth for " + ri.entity + " -- " + r.predicate);
+                    }
                 }
                 recall = 1.0 * nTrue / groundTruth.size() * 100;
             }
