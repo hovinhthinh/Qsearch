@@ -95,20 +95,6 @@ class ContextStats {
 public class QKBCRunner {
     public static final String QSEARCH_END_POINT = "http://sedna:6993/kbc_text";
 
-    /*
-    static class EntityFact {
-        String quantity;
-        Double qtStandardValue;
-        ArrayList<String> sources = new ArrayList<>();
-
-        public EntityFact(String quantity, Double qtStandardValue, String source) {
-            this.quantity = quantity;
-            this.qtStandardValue = qtStandardValue;
-            this.sources.add(source);
-        }
-    }
-    */
-
     private static Random RANDOM = new Random(120993);
 
     private static ArrayList<RelationInstance> query(String yagoType, String context, KgUnit quantitySiUnit) {
@@ -138,44 +124,6 @@ public class QKBCRunner {
         }
     }
 
-    static void printToFile(String predicateName, LinkedHashSet<String> ctxList, List<RelationInstance> instances, String outputFile) {
-        QKBCResult r = new QKBCResult();
-        r.predicate = predicateName;
-        r.ctxList = new ArrayList<>(ctxList);
-        r.instances = new ArrayList<>(instances);
-
-        PrintWriter out = FileUtils.getPrintWriter(outputFile, "UTF-8");
-        out.println(Gson.toJson(r));
-        /*
-        HashMap<String, List<EntityFact>> e2f = new HashMap<>();
-        loop:
-        for (RelationInstance i : instances) {
-            e2f.putIfAbsent(i.entity, new ArrayList<>());
-            List<EntityFact> fs = e2f.get(i.entity);
-
-            String iSource = i.getSource();
-            for (EntityFact f : fs) {
-                if (Number.relativeNumericDistance(f.qtStandardValue, i.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
-                    if (!f.sources.contains(iSource)) {
-                        f.sources.add(iSource);
-                    }
-                    continue loop;
-                }
-            }
-
-            fs.add(new EntityFact(i.quantity, i.quantityStdValue, iSource));
-        }
-
-        e2f.entrySet().stream().forEach(e -> {
-            for (EntityFact f : e.getValue()) {
-                out.println(String.format("%s\t%s\t%s", e.getKey(), f.quantity, String.join("\t", f.sources)));
-            }
-        });
-        */
-
-        out.close();
-    }
-
     public static boolean contextIncluding(String superset, String subset) {
         Set<String> sup = NLP.splitSentence(superset).stream().map(x -> NLP.fastStemming(x.toLowerCase(), Morpha.any))
                 .collect(Collectors.toCollection(HashSet::new));
@@ -191,6 +139,7 @@ public class QKBCRunner {
     }
 
     public static void harvest(String predicateName, String type, String seedCtx, KgUnit quantitySiUnit,
+                               boolean refinementByTime,
                                boolean useParametricDenoising,
                                double groupConfidenceThreshold, int maxNIter,
                                String groundTruthFile, int maxGroundTruthSize,
@@ -198,7 +147,6 @@ public class QKBCRunner {
         Map<String, WikidataGroundTruthExtractor.PredicateNumericalFact> grouthtruth = groundTruthFile == null ? null :
                 WikidataGroundTruthExtractor.loadPredicateGroundTruthFromFile(groundTruthFile).stream()
                         .collect(Collectors.toMap(f -> f.e, f -> f));
-
 
         HashMap<String, RelationInstance> kbcId2RelationInstanceMap = new HashMap<>();
 
@@ -392,7 +340,7 @@ public class QKBCRunner {
             }
 
 //            DistributionFitter.drawDistributionVsSamples(String.format("Iteration #%d", iter), positiveDist.first,
-//                    mostlyPositiveWithGroundTruthSampled.stream().filter(i -> i.positive || i.isFromGroundTruth())
+//                    mostlyPositiveWithGroundTruthSampled.stream().filter(i -> i.positive || i.isArtificial())
 //                            .mapToDouble(i -> i.quantityStdValue).toArray(), false, true);
 
             // reformulate
@@ -402,73 +350,214 @@ public class QKBCRunner {
             }
 
             if (outputFile != null && (ctxQueue.isEmpty() || iter == maxNIter)) {
-                printToFile(predicateName, ctxList, mostlyPositive, outputFile);
+                QKBCResult r = new QKBCResult();
+                r.predicate = predicateName;
+                r.refinementByTime = refinementByTime;
+                r.groundTruthSize = grouthtruth == null ? null : grouthtruth.size();
+                r.ctxList = new ArrayList<>(ctxList);
+                r.instances = new ArrayList<>(mostlyPositive);
+
+                // mark effective, groundtruth, and sampled instances
+                markEffectiveAndGroundTruthFacts(r, grouthtruth, refinementByTime);
+
+                PrintWriter out = FileUtils.getPrintWriter(outputFile, "UTF-8");
+                out.println(Gson.toJson(r));
+                out.close();
             }
         } while (!ctxQueue.isEmpty() && iter < maxNIter);
     }
 
+    private static void markEffectiveFactsForIter(int iter, ArrayList<RelationInstance> instances, boolean refinementByTime) {
+        // entity or entity+time to values + freqs
+        HashMap<String, ArrayList<Pair<RelationInstance, Integer>>> map = new HashMap<>();
+
+        if (refinementByTime) {
+            ArrayList<RelationInstance> withYears = instances.stream().filter(ri -> ri.getYearCtx() != null)
+                    .collect(Collectors.toCollection(ArrayList::new));
+            ArrayList<RelationInstance> withoutYears = instances.stream().filter(ri -> ri.getYearCtx() == null)
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            loop:
+            for (RelationInstance ri : withYears) {
+                String key = ri.entity + ":" + ri.getYearCtx();
+                if (!map.containsKey(key)) {
+                    map.put(key, new ArrayList<>());
+                }
+
+                List<Pair<RelationInstance, Integer>> values = map.get(key);
+                for (Pair<RelationInstance, Integer> p : values) {
+                    if (Number.relativeNumericDistance(ri.quantityStdValue, p.first.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
+                        p.second++;
+                        continue loop;
+                    }
+                }
+
+                values.add(new Pair<>(ri, 1));
+            }
+
+            for (RelationInstance ri : withoutYears) {
+                for (Map.Entry<String, ArrayList<Pair<RelationInstance, Integer>>> e : map.entrySet()) {
+                    if (!e.getKey().startsWith(ri.entity + ":")) {
+                        continue;
+                    }
+                    for (Pair<RelationInstance, Integer> p : e.getValue()) {
+                        if (Number.relativeNumericDistance(ri.quantityStdValue, p.first.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
+                            p.second++;
+                            break;
+                        }
+                    }
+                }
+            }
+        } else {
+            loop:
+            for (RelationInstance ri : instances) {
+                if (!map.containsKey(ri.entity)) {
+                    map.put(ri.entity, new ArrayList<>());
+                }
+                List<Pair<RelationInstance, Integer>> values = map.get(ri.entity);
+                for (Pair<RelationInstance, Integer> p : values) {
+                    if (Number.relativeNumericDistance(ri.quantityStdValue, p.first.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
+                        p.second++;
+                        continue loop;
+                    }
+                }
+
+                values.add(new Pair<>(ri, 1));
+            }
+        }
+
+        ArrayList<RelationInstance> effectiveRIOutsideGroundTruth = new ArrayList<>();
+        for (ArrayList<Pair<RelationInstance, Integer>> arr : map.values()) {
+            Collections.sort(arr, (a, b) -> b.second.compareTo(a.second));
+            RelationInstance ri = arr.get(0).first;
+            ri.effectivePositiveIterIndices.add(iter);
+            if (ri.groundtruth == null) {
+                effectiveRIOutsideGroundTruth.add(ri);
+            }
+        }
+
+        Collections.shuffle(effectiveRIOutsideGroundTruth, RANDOM);
+        for (int i = 0; i < effectiveRIOutsideGroundTruth.size(); ++i) {
+            if (i < QKBCResult.ANNOTATION_SAMPLING_SIZE) {
+                effectiveRIOutsideGroundTruth.get(i).sampledEffectivePositiveIterIndices.add(iter);
+            }
+        }
+    }
+
+    private static void markEffectiveAndGroundTruthFacts(
+            QKBCResult r, Map<String, WikidataGroundTruthExtractor.PredicateNumericalFact> groundTruth, boolean refinementByTime) {
+        for (RelationInstance ri : r.instances) {
+            ri.effectivePositiveIterIndices = new ArrayList<>();
+            ri.sampledEffectivePositiveIterIndices = new ArrayList<>();
+        }
+
+        // mark effective
+        int it = 0;
+        do {
+            int currentIt = ++it;
+            boolean goodIt = false;
+            for (RelationInstance ri : r.instances) {
+                if (ri.positiveIterIndices.contains(it)) {
+                    goodIt = true;
+                }
+            }
+            if (!goodIt) {
+                break;
+            }
+            ArrayList<RelationInstance> currentInstances = r.instances.stream().filter(o -> o.positiveIterIndices.contains(currentIt))
+                    .sorted(Comparator.comparing(o -> o.positiveIterIndices.get(0)))
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            markEffectiveFactsForIter(currentIt, currentInstances, refinementByTime);
+        } while (true);
+
+        // mark groundtruth (only when refinementByTime == false)
+        if (groundTruth != null && !refinementByTime) {
+            loop:
+            for (RelationInstance ri : r.instances) {
+                if (ri.effectivePositiveIterIndices.size() == 0) {
+                    continue;
+                }
+                WikidataGroundTruthExtractor.PredicateNumericalFact f = groundTruth.get(ri.entity);
+                if (f == null) {
+                    continue;
+                }
+                for (Pair<Double, String> p : f.quantities) {
+                    double v = p.first * KgUnit.getKgUnitFromEntityName(p.second).conversionToSI;
+                    if (Number.relativeNumericDistance(v, ri.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
+                        ri.groundtruth = true;
+                        continue loop;
+                    }
+                }
+                ri.groundtruth = false;
+            }
+        }
+    }
+
     public static void main(String[] args) {
+
         // Bootstrapping - parametric
         harvest("buildingHeight", "building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
-                true, 0.9, 10,
+                false, true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/building_height_ourP.json");
 
         harvest("mountainElevation", "mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
-                true, 0.9, 10,
+                false, true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourP.json");
 
         harvest("riverLength", "river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
-                true, 0.9, 10,
+                false, true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/river_length_ourP.json");
 
         harvest("stadiumCapacity", "stadium", null, KgUnit.DIMENSIONLESS,
-                true, 0.9, 10,
+                false, true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourP.json");
 
         // Bootstrapping - Non-parametric
         harvest("buildingHeight",
                 "building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
-                false, 0.9, 10,
+                false, false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/building_height_ourN.json");
 
         harvest("mountainElevation", "mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
-                false, 0.9, 10,
+                false, false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourN.json");
 
         harvest("riverLength", "river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
-                false, 0.9, 10,
+                false, false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/river_length_ourN.json");
 
         harvest("stadiumCapacity", "stadium", null, KgUnit.DIMENSIONLESS,
-                false, 0.9, 10,
+                false, false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourN.json");
 
         // Original - parametric
         harvest("cityAltitude", "city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
-                true, 0.9, 10,
+                false, true, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/city_altitude_ourP.json");
+
         harvest("companyRevenue", "company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
-                true, 0.9, 10,
+                true, true, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/company_revenue_ourP.json");
 
         // Original - non-parametric
         harvest("cityAltitude", "city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
-                false, 0.9, 10,
+                false, false, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/city_altitude_ourN.json");
 
         harvest("companyRevenue", "company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
-                false, 0.9, 10,
+                true, false, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/company_revenue_ourN.json");
     }

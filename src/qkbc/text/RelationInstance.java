@@ -42,8 +42,11 @@ public class RelationInstance {
 
     public transient boolean positive;
 
-    public ArrayList<Integer> positiveIterIndices, noiseIterIndices, effectivePositiveIterIndices;
+    public ArrayList<Integer> positiveIterIndices, noiseIterIndices;
+    public ArrayList<Integer> effectivePositiveIterIndices; // a subset of positiveIterIndices
+    public ArrayList<Integer> sampledEffectivePositiveIterIndices; // a subset of effectivePositiveIterIndices, only contains facts outside groundtruth.
 
+    public Boolean groundtruth;
     public Boolean eval;
 
     public RelationInstance(String entity, String quantity, double quantityStdValue, double score, String kbcId) {
@@ -66,8 +69,8 @@ public class RelationInstance {
         return new RelationInstance(entity, null, quantityStdValue, -1, "GT" + GROUNDTRUTH_COUNTER.getAndIncrement());
     }
 
-    public boolean isFromGroundTruth() {
-        return score == -1 && kbcId.startsWith("GT");
+    public boolean isArtificial() {
+        return score == -1 && kbcId.startsWith("AT");
     }
 
     public Quantity getQuantity() {
