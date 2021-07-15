@@ -112,6 +112,7 @@ public class QKBCResult {
                 break;
             }
             ArrayList<RelationInstance> currentInstances = r.instances.stream().filter(o -> o.positiveIterIndices.contains(currentIt))
+                    .sorted(Comparator.comparing(o -> o.positiveIterIndices.get(0)))
                     .collect(Collectors.toCollection(ArrayList::new));
 
             markEffectiveFactsForIter(currentIt, currentInstances, refinementByTime);
