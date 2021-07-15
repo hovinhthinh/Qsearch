@@ -1,7 +1,8 @@
-package qkbc.text;
+package eval.qkbc;
 
-import eval.qkbc.WikidataGroundTruthExtractor;
 import model.quantity.kg.KgUnit;
+import qkbc.text.RelationInstance;
+import qkbc.text.RelationInstanceNoiseFilter;
 import util.FileUtils;
 import util.Gson;
 import util.Number;

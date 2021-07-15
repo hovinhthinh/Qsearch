@@ -1,5 +1,6 @@
 package qkbc.text;
 
+import eval.qkbc.QKBCResult;
 import eval.qkbc.WikidataGroundTruthExtractor;
 import model.quantity.kg.KgUnit;
 import nlp.NLP;
