@@ -486,8 +486,8 @@ public class QKBCRunner {
 
             // sampling for effectivePositiveRI
             ArrayList<RelationInstance> effectiveRIOutsideGroundTruth =
-            r.instances.stream().filter(o -> o.effectivePositiveIterIndices.contains(currentIt) && o.groundtruth == null)
-                    .collect(Collectors.toCollection(ArrayList::new));
+                    r.instances.stream().filter(o -> o.effectivePositiveIterIndices.contains(currentIt) && o.groundtruth == null)
+                            .collect(Collectors.toCollection(ArrayList::new));
             Collections.shuffle(effectiveRIOutsideGroundTruth, RANDOM);
             for (int i = 0; i < effectiveRIOutsideGroundTruth.size(); ++i) {
                 if (i < QKBCResult.ANNOTATION_SAMPLING_SIZE) {
@@ -511,66 +511,65 @@ public class QKBCRunner {
     public static void main(String[] args) {
 
         // Bootstrapping - parametric
-        harvest("buildingHeight", "building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("buildingHeight", "<wordnet_building_102913152>", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/building_height_ourP.json");
 
-        harvest("mountainElevation", "mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("mountainElevation", "<http://schema.org/Mountain>", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourP.json");
 
-        harvest("riverLength", "river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("riverLength", "<wordnet_river_109411430>", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/river_length_ourP.json");
 
-        harvest("stadiumCapacity", "stadium", null, KgUnit.DIMENSIONLESS,
+        harvest("stadiumCapacity", "<wordnet_stadium_104295881>", null, KgUnit.DIMENSIONLESS,
                 false, true, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourP.json");
 
         // Bootstrapping - Non-parametric
-        harvest("buildingHeight",
-                "building", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("buildingHeight", "<wordnet_building_102913152>", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/building_height_ourN.json");
 
-        harvest("mountainElevation", "mountain", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("mountainElevation", "<http://schema.org/Mountain>", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourN.json");
 
-        harvest("riverLength", "river", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("riverLength", "<wordnet_river_109411430>", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/river_length_ourN.json");
 
-        harvest("stadiumCapacity", "stadium", null, KgUnit.DIMENSIONLESS,
+        harvest("stadiumCapacity", "<wordnet_stadium_104295881>", null, KgUnit.DIMENSIONLESS,
                 false, false, 0.9, 10,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", 200,
                 "./eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourN.json");
 
         // Original - parametric
-        harvest("cityAltitude", "city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("cityAltitude", "<wordnet_city_108524735>", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, true, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/city_altitude_ourP.json");
 
-        harvest("companyRevenue", "company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
+        harvest("companyRevenue", "<wordnet_company_108058098>", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
                 true, true, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/company_revenue_ourP.json");
 
         // Original - non-parametric
-        harvest("cityAltitude", "city", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
+        harvest("cityAltitude", "<wordnet_city_108524735>", "altitude", KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, false, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/city_altitude_ourN.json");
 
-        harvest("companyRevenue", "company", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
+        harvest("companyRevenue", "<wordnet_company_108058098>", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
                 true, false, 0.9, 10,
                 null, 200,
                 "./eval/qkbc/exp_1/qsearch_queries/company_revenue_ourN.json");
