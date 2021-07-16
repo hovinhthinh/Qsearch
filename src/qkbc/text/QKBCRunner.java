@@ -475,7 +475,7 @@ public class QKBCRunner {
         }
     }
 
-    private static void markSampledInstances(QKBCResult r) {
+    public static void markSampledInstances(QKBCResult r) {
         for (RelationInstance ri : r.instances) {
             ri.sampledEffectivePositiveIterIndices = new ArrayList<>();
             ri.sampledNoiseIterIndices = new ArrayList<>();
