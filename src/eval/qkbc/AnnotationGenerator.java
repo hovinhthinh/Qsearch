@@ -24,55 +24,55 @@ public class AnnotationGenerator {
         Map<String, RelationInstance> kbcId2RI = new HashMap<>();
         Map<String, String> kbcId2Settings = new HashMap<>();
         Map<String, Integer> kbcId2IterP = new HashMap<>(), kbcId2IterN = new HashMap<>();
-        rp.instances.stream().filter(ri -> ri.effectivePositiveIterIndices.size() > 0).forEach(ri -> {
-            kbcId2IterP.put(ri.kbcId, ri.effectivePositiveIterIndices.get(0));
+        rp.instances.stream().filter(ri -> ri.sampledEffectivePositiveIterIndices.size() > 0).forEach(ri -> {
+            kbcId2IterP.put(ri.kbcId, ri.sampledEffectivePositiveIterIndices.get(0));
             kbcId2RI.put(ri.kbcId, ri);
-            kbcId2Settings.put(ri.kbcId, kbcId2Settings.getOrDefault(ri.kbcId, "") + "P(" + ri.effectivePositiveIterIndices.get(0) + ")");
+            kbcId2Settings.put(ri.kbcId, kbcId2Settings.getOrDefault(ri.kbcId, "") + "P(" + ri.sampledEffectivePositiveIterIndices.get(0) + ")");
         });
-        rn.instances.stream().filter(ri -> ri.effectivePositiveIterIndices.size() > 0).forEach(ri -> {
-            kbcId2IterN.put(ri.kbcId, ri.effectivePositiveIterIndices.get(0));
+        rn.instances.stream().filter(ri -> ri.sampledEffectivePositiveIterIndices.size() > 0).forEach(ri -> {
+            kbcId2IterN.put(ri.kbcId, ri.sampledEffectivePositiveIterIndices.get(0));
             kbcId2RI.put(ri.kbcId, ri);
-            kbcId2Settings.put(ri.kbcId, kbcId2Settings.getOrDefault(ri.kbcId, "") + "N(" + ri.effectivePositiveIterIndices.get(0) + ")");
+            kbcId2Settings.put(ri.kbcId, kbcId2Settings.getOrDefault(ri.kbcId, "") + "N(" + ri.sampledEffectivePositiveIterIndices.get(0) + ")");
         });
 
         try {
             CSVPrinter csvPrinter = new CSVPrinter(FileUtils.getPrintWriter(outputFile, "UTF-8"), CSVFormat.DEFAULT
                     .withHeader("id", "settings", "iter", "source", "entity", rp.predicate, "sentence", "groundtruth", "eval"));
 
-            kbcId2RI.values().stream().filter(ri -> ri.effectivePositiveIterIndices.size() > 0)
-                    .sorted(Comparator.comparing(ri -> ri.effectivePositiveIterIndices.get(0)))
-                    .forEach(ri -> {
-                        Quantity q = Quantity.fromQuantityString(ri.quantity);
-                        String qStr = Number.getWrittenString(q.value, true);
-                        if (rp.refinementByTime) {
-                            qStr = "@" + ri.getYearCtx() + ": " + qStr;
-                        }
+            kbcId2RI.values().stream().sorted(Comparator.comparing(ri ->
+                    Math.min(kbcId2IterP.getOrDefault(ri.kbcId, 100), kbcId2IterN.getOrDefault(ri.kbcId, 100))
+            )).forEach(ri -> {
+                Quantity q = Quantity.fromQuantityString(ri.quantity);
+                String qStr = Number.getWrittenString(q.value, true);
+                if (rp.refinementByTime) {
+                    qStr = "@" + ri.getYearCtx() + ": " + qStr;
+                }
 
-                        String entityStr = q.getKgUnit().entity;
-                        if (entityStr != null) {
-                            qStr += " " + entityStr;
-                        }
+                String entityStr = q.getKgUnit().entity;
+                if (entityStr != null) {
+                    qStr += " " + entityStr;
+                }
 
-                        String source = ri.getSource();
-                        source = source.substring(source.indexOf(":") + 1);
-                        source = source.substring(source.indexOf(":") + 1);
+                String source = ri.getSource();
+                source = source.substring(source.indexOf(":") + 1);
+                source = source.substring(source.indexOf(":") + 1);
 
-                        try {
-                            csvPrinter.printRecord(
-                                    ri.kbcId,
-                                    kbcId2Settings.get(ri.kbcId),
-                                    Math.min(kbcId2IterP.getOrDefault(ri.kbcId, 100), kbcId2IterN.getOrDefault(ri.kbcId, 100)),
-                                    source,
-                                    ri.entity,
-                                    qStr,
-                                    ri.getSentence(),
-                                    ri.groundtruth == null ? "" : ri.groundtruth,
-                                    ri.groundtruth == null && ri.eval == null ? "?" : ""
-                            );
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
+                try {
+                    csvPrinter.printRecord(
+                            ri.kbcId,
+                            kbcId2Settings.get(ri.kbcId),
+                            Math.min(kbcId2IterP.getOrDefault(ri.kbcId, 100), kbcId2IterN.getOrDefault(ri.kbcId, 100)),
+                            source,
+                            ri.entity,
+                            qStr,
+                            ri.getSentence(),
+                            ri.groundtruth == null ? "" : ri.groundtruth,
+                            ri.groundtruth == null && ri.eval == null ? "?" : ""
+                    );
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
             csvPrinter.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
