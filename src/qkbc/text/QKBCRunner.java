@@ -354,11 +354,15 @@ public class QKBCRunner {
                 r.predicate = predicateName;
                 r.refinementByTime = refinementByTime;
                 r.groundTruthSize = grouthtruth == null ? null : grouthtruth.size();
+                r.nIterations = iter;
                 r.ctxList = new ArrayList<>(ctxList);
                 r.instances = new ArrayList<>(mostlyPositive);
 
-                // mark effective, groundtruth, and sampled instances
+                // mark effective, groundtruth
                 markEffectiveAndGroundTruthFacts(r, grouthtruth, refinementByTime);
+
+                // mark sampled instances
+                markSampledInstances(r);
 
                 PrintWriter out = FileUtils.getPrintWriter(outputFile, "UTF-8");
                 out.println(Gson.toJson(r));
@@ -426,56 +430,33 @@ public class QKBCRunner {
             }
         }
 
-        ArrayList<RelationInstance> effectiveRIOutsideGroundTruth = new ArrayList<>();
-        for (ArrayList<Pair<RelationInstance, Integer>> arr : map.values()) {
-            Collections.sort(arr, (a, b) -> b.second.compareTo(a.second));
-            RelationInstance ri = arr.get(0).first;
-            ri.effectivePositiveIterIndices.add(iter);
-            if (ri.groundtruth == null) {
-                effectiveRIOutsideGroundTruth.add(ri);
-            }
-        }
-
-        Collections.shuffle(effectiveRIOutsideGroundTruth, RANDOM);
-        for (int i = 0; i < effectiveRIOutsideGroundTruth.size(); ++i) {
-            if (i < QKBCResult.ANNOTATION_SAMPLING_SIZE) {
-                effectiveRIOutsideGroundTruth.get(i).sampledEffectivePositiveIterIndices.add(iter);
-            }
-        }
+        map.values().forEach(o -> {
+            Collections.sort(o, (a, b) -> b.second.compareTo(a.second));
+            o.get(0).first.effectivePositiveIterIndices.add(iter);
+        });
     }
 
     private static void markEffectiveAndGroundTruthFacts(
             QKBCResult r, Map<String, WikidataGroundTruthExtractor.PredicateNumericalFact> groundTruth, boolean refinementByTime) {
         for (RelationInstance ri : r.instances) {
             ri.effectivePositiveIterIndices = new ArrayList<>();
-            ri.sampledEffectivePositiveIterIndices = new ArrayList<>();
         }
 
         // mark effective
-        int it = 0;
-        do {
-            int currentIt = ++it;
-            boolean goodIt = false;
-            for (RelationInstance ri : r.instances) {
-                if (ri.positiveIterIndices.contains(it)) {
-                    goodIt = true;
-                }
-            }
-            if (!goodIt) {
-                break;
-            }
+        for (int it = 1; it <= r.nIterations; ++it) {
+            int currentIt = it;
             ArrayList<RelationInstance> currentInstances = r.instances.stream().filter(o -> o.positiveIterIndices.contains(currentIt))
                     .sorted(Comparator.comparing(o -> o.positiveIterIndices.get(0)))
                     .collect(Collectors.toCollection(ArrayList::new));
 
-            markEffectiveFactsForIter(currentIt, currentInstances, refinementByTime);
-        } while (true);
+            markEffectiveFactsForIter(it, currentInstances, refinementByTime);
+        }
 
         // mark groundtruth (only when refinementByTime == false)
         if (groundTruth != null && !refinementByTime) {
             loop:
             for (RelationInstance ri : r.instances) {
-                if (ri.effectivePositiveIterIndices.size() == 0) {
+                if (ri.effectivePositiveIterIndices.size() == 0 && ri.noiseIterIndices.size() == 0) {
                     continue;
                 }
                 WikidataGroundTruthExtractor.PredicateNumericalFact f = groundTruth.get(ri.entity);
@@ -490,6 +471,39 @@ public class QKBCRunner {
                     }
                 }
                 ri.groundtruth = false;
+            }
+        }
+    }
+
+    private static void markSampledInstances(QKBCResult r) {
+        for (RelationInstance ri : r.instances) {
+            ri.sampledEffectivePositiveIterIndices = new ArrayList<>();
+            ri.sampledNoiseIterIndices = new ArrayList<>();
+        }
+
+        for (int it = 1; it <= r.nIterations; ++it) {
+            int currentIt = it;
+
+            // sampling for effectivePositiveRI
+            ArrayList<RelationInstance> effectiveRIOutsideGroundTruth =
+            r.instances.stream().filter(o -> o.effectivePositiveIterIndices.contains(currentIt) && o.groundtruth == null)
+                    .collect(Collectors.toCollection(ArrayList::new));
+            Collections.shuffle(effectiveRIOutsideGroundTruth, RANDOM);
+            for (int i = 0; i < effectiveRIOutsideGroundTruth.size(); ++i) {
+                if (i < QKBCResult.ANNOTATION_SAMPLING_SIZE) {
+                    effectiveRIOutsideGroundTruth.get(i).sampledEffectivePositiveIterIndices.add(it);
+                }
+            }
+
+            // sampling for noiseRI
+            ArrayList<RelationInstance> noiseRIOutsideGroundTruth =
+                    r.instances.stream().filter(o -> o.noiseIterIndices.contains(currentIt) && o.groundtruth == null)
+                            .collect(Collectors.toCollection(ArrayList::new));
+            Collections.shuffle(noiseRIOutsideGroundTruth, RANDOM);
+            for (int i = 0; i < noiseRIOutsideGroundTruth.size(); ++i) {
+                if (i < QKBCResult.ANNOTATION_SAMPLING_SIZE) {
+                    noiseRIOutsideGroundTruth.get(i).sampledNoiseIterIndices.add(it);
+                }
             }
         }
     }

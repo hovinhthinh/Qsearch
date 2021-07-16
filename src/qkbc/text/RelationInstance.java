@@ -42,9 +42,12 @@ public class RelationInstance {
 
     public transient boolean positive;
 
-    public ArrayList<Integer> positiveIterIndices, noiseIterIndices;
+    public ArrayList<Integer> positiveIterIndices;
     public ArrayList<Integer> effectivePositiveIterIndices; // a subset of positiveIterIndices
     public ArrayList<Integer> sampledEffectivePositiveIterIndices; // a subset of effectivePositiveIterIndices, only contains facts outside groundtruth.
+
+    public ArrayList<Integer> noiseIterIndices;
+    public ArrayList<Integer> sampledNoiseIterIndices; // a subset of noiseIterIndices, only contains facts outside groundtruth.
 
     public Boolean groundtruth;
     public Boolean eval;
