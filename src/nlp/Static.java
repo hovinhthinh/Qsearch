@@ -15,10 +15,14 @@ import edu.knowitall.tool.parse.ClearParser;
 import edu.knowitall.tool.postag.ClearPostagger;
 import edu.knowitall.tool.srl.ClearSrl;
 import edu.knowitall.tool.tokenize.ClearTokenizer;
+import edu.mit.jwi.Dictionary;
+import edu.mit.jwi.IDictionary;
 import iitb.shared.XMLConfigs;
 import parser.CFGParser4Header;
 
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 
 public class Static {
     private static Quantifier ILLINOIS_QUANTIFIER = null;
@@ -40,7 +44,22 @@ public class Static {
     private static HeidelTimeStandalone HEIDEL_TIME_NARRATIVES = null;
     private static HeidelTimeStandalone HEIDEL_TIME_NEWS = null;
 
+    private static IDictionary WN_DICT;
+
     private static CFGParser4Header TABLE_HEADER_PARSER = null;
+
+    public static IDictionary getWordNetDict() {
+        if (WN_DICT == null) {
+            try {
+                WN_DICT = new Dictionary(new File(Configuration.get("wordnet.folder_path"), "dict"));
+                WN_DICT.open();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        }
+        return WN_DICT;
+    }
 
     public static CFGParser4Header getTableHeaderParser() {
         if (TABLE_HEADER_PARSER == null) {

@@ -1,9 +1,7 @@
 package model.context;
 
-import config.Configuration;
 import edu.knowitall.openie.OpenIE;
 import edu.knowitall.tool.postag.PostaggedToken;
-import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
 import edu.mit.jwi.item.*;
 import nlp.NLP;
@@ -13,24 +11,17 @@ import uk.ac.susx.informatics.Morpha;
 import util.FileUtils;
 import util.headword.StringUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 public class KullBackLeiblerMatcher implements ContextMatcher {
-    private static final String WORDNET_PATH = Configuration.get("wordnet.folder_path");
-
     private static final double MIN_BLM_COUNT = 0.0001;
-    private static IDictionary WN_DICT;
     private static HashMap<String, Integer> BLM;
 
     static {
         try {
-            WN_DICT = new Dictionary(new File(WORDNET_PATH, "dict"));
-            WN_DICT.open();
-
             BLM = new HashMap<>();
             for (String line : FileUtils.getLineStream("./resources/bow/blm_stics+nyt.gz", "UTF-8")) {
                 int pos = line.indexOf("\t");
@@ -84,10 +75,11 @@ public class KullBackLeiblerMatcher implements ContextMatcher {
                 result.append(" ").append(token.string());
                 continue;
             }
+            IDictionary wnDict = Static.getWordNetDict();
             try {
-                IIndexWord idxWord = WN_DICT.getIndexWord(token.string(), pos);
+                IIndexWord idxWord = wnDict.getIndexWord(token.string(), pos);
                 IWordID wordID = idxWord.getWordIDs().get(0); // 1st meaning
-                ISynset synset = WN_DICT.getWord(wordID).getSynset();
+                ISynset synset = wnDict.getWord(wordID).getSynset();
                 for (IWord w : synset.getWords()) {
                     result.append(" ").append(w.getLemma());
                 }

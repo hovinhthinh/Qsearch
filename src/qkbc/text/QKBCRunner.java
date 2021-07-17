@@ -1,10 +1,12 @@
 package qkbc.text;
 
+import edu.mit.jwi.IDictionary;
+import edu.mit.jwi.item.POS;
 import eval.qkbc.QKBCResult;
 import eval.qkbc.WikidataGroundTruthExtractor;
 import model.quantity.kg.KgUnit;
 import nlp.NLP;
-import qkbc.distribution.DistributionFitter;
+import nlp.Static;
 import qkbc.distribution.IntegralDistributionApproximator;
 import server.text.ResultInstance;
 import server.text.handler.search.SearchResult;
@@ -322,7 +324,17 @@ public class QKBCRunner {
                         }
                         return true;
                     })
-                    .filter(o -> o.support() >= (groundTruthFile == null ? 5 : 10)) // 10 for bootstrapping, 5 for original settings
+                    .filter(o -> { // filter by postag
+                        IDictionary wnDict = Static.getWordNetDict();
+                        for (String x : NLP.splitSentence(o.context)) {
+                            if (wnDict.getIndexWord(x, POS.NOUN) != null || wnDict.getIndexWord(x, POS.ADJECTIVE) != null
+                                    || wnDict.getIndexWord(x, POS.VERB) != null) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    })
+                    .filter(o -> o.support() >= (groundTruthFile == null ? 3 : 10)) // 10 for bootstrapping, 5 for original settings
 //                    .filter(o -> o.distConfidence(positiveDistAppr) >= 0.3)
                     .filter(o -> currentIter == 0 || o.queryingConfidence() >= 0.675)
                     .sorted((a, b) -> Double.compare(b.totalConfidence(relSuppDenom, positiveDistAppr), a.totalConfidence(relSuppDenom, positiveDistAppr)))
