@@ -114,8 +114,16 @@ public class QKBCRunner {
             ArrayList<RelationInstance> result = new ArrayList<>();
 
             for (ResultInstance ri : sr.topResults) {
+                loop:
                 for (ResultInstance.SubInstance si : ri.subInstances) {
-                    result.add(new RelationInstance(ri.entity, si.quantity, si.quantityStandardValue, 1 / si.score, si.kbcId));
+                    RelationInstance r = new RelationInstance(ri.entity, si.quantity, si.quantityStandardValue, 1 / si.score, si.kbcId);
+                    for (String t : r.getNormalContext()) {
+                        t = NLP.fastStemming(t.toLowerCase(), Morpha.any);
+                        if (t.equals("expect") || t.equals("forecast")) {
+                            continue loop;
+                        }
+                    }
+                    result.add(r);
                 }
             }
 
@@ -314,8 +322,7 @@ public class QKBCRunner {
             IntegralDistributionApproximator positiveDistAppr = new IntegralDistributionApproximator(positiveDist.first);
             // Sort stats and output
             int currentIter = iter;
-            int relSuppDenom = contextStats.entrySet().stream().mapToInt(e -> e.getValue().support()).max().orElse(0);
-            List<ContextStats> sortedContextStats = contextStats.entrySet().stream().map(e -> e.getValue())
+            List<ContextStats> filteredContextStats = contextStats.entrySet().stream().map(e -> e.getValue())
                     .filter(o -> {
                         for (String ctx : ctxList) {
                             if (contextIncluding(ctx, o.context)) {
@@ -337,6 +344,10 @@ public class QKBCRunner {
                     .filter(o -> o.support() >= (groundTruthFile == null ? 3 : 10)) // 10 for bootstrapping, 5 for original settings
 //                    .filter(o -> o.distConfidence(positiveDistAppr) >= 0.3)
                     .filter(o -> currentIter == 0 || o.queryingConfidence() >= 0.675)
+                    .collect(Collectors.toList());
+
+            int relSuppDenom = contextStats.entrySet().stream().mapToInt(e -> e.getValue().support()).max().orElse(0);
+            List<ContextStats> sortedContextStats = filteredContextStats.stream()
                     .sorted((a, b) -> Double.compare(b.totalConfidence(relSuppDenom, positiveDistAppr), a.totalConfidence(relSuppDenom, positiveDistAppr)))
                     .collect(Collectors.toList());
 
