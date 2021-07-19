@@ -28,23 +28,25 @@ public class QKBCResult {
 
         // load annotation
 
-        Iterable<CSVRecord> records = CSVFormat.DEFAULT
-                .withFirstRecordAsHeader()
-                .parse(new FileReader(annotationFile, StandardCharsets.UTF_8));
+        HashMap<String, Boolean> kbcId2Eval = null;
 
-        HashMap<String, Boolean> kbcId2Eval = new HashMap<>();
-        records.forEach(o -> {
-            String id = o.get(0);
-            String eval = o.get(8);
-            if (eval.equals("TRUE")) {
-                kbcId2Eval.put(id, true);
-            } else if (eval.equals("FALSE")) {
-                kbcId2Eval.put(id, false);
-            } else {
-                throw new RuntimeException("invalid eval: " + annotationFile + " @ " + id);
+        if (annotationFile != null) {
+            kbcId2Eval = new HashMap<>();
+            Iterable<CSVRecord> records = CSVFormat.DEFAULT
+                    .withFirstRecordAsHeader()
+                    .parse(new FileReader(annotationFile, StandardCharsets.UTF_8));
+            for (CSVRecord o : records) {
+                String id = o.get(0);
+                String eval = o.get(8);
+                if (eval.equals("TRUE")) {
+                    kbcId2Eval.put(id, true);
+                } else if (eval.equals("FALSE")) {
+                    kbcId2Eval.put(id, false);
+                } else {
+                    throw new RuntimeException("invalid eval: " + annotationFile + " @ " + id);
+                }
             }
-        });
-
+        }
 
         System.out.println(inputFile);
         System.out.println(r.ctxList.toString());
@@ -69,12 +71,11 @@ public class QKBCResult {
             double recall = -1;
             double precCWA = -1;
 
-            int ext = -1;
+            int ext;
             int nTrueInGroundTruth = 0;
             int nInGroundTruth = 0;
 
             if (r.groundTruthSize != null) {
-
                 ext = 0;
 
                 loop:
@@ -91,21 +92,27 @@ public class QKBCResult {
                 }
                 recall = 1.0 * nTrueInGroundTruth / r.groundTruthSize * 100;
                 precCWA = nInGroundTruth == 0 ? -1 : 1.0 * nTrueInGroundTruth / nInGroundTruth;
-            }
-
-            int sampledTrue = 0, totalSampled = 0;
-            for (RelationInstance ri : currentEffectiveInstances) {
-                if (ri.sampledEffectivePositiveIterIndices.contains(currentIt)) {
-                    ++totalSampled;
-                    if (kbcId2Eval.get(ri.kbcId)) {
-                        ++sampledTrue;
-                    }
-                }
+            } else {
+                ext = currentEffectiveInstances.size();
             }
 
             // prec
-            double precOutsideGroundTruth = totalSampled == 0 ? 0 : 1.0 * sampledTrue / totalSampled;
-            double prec = (precOutsideGroundTruth * ext + nTrueInGroundTruth) / currentEffectiveInstances.size();
+            double prec = -1;
+            if (kbcId2Eval != null) {
+                int sampledTrue = 0, totalSampled = 0;
+                for (RelationInstance ri : currentEffectiveInstances) {
+                    if (ri.sampledEffectivePositiveIterIndices.contains(currentIt)) {
+                        ++totalSampled;
+                        if (kbcId2Eval.get(ri.kbcId)) {
+                            ++sampledTrue;
+                        }
+                    }
+                }
+
+                // prec
+                double precOutsideGroundTruth = totalSampled == 0 ? 0 : 1.0 * sampledTrue / totalSampled;
+                prec = (precOutsideGroundTruth * ext + nTrueInGroundTruth) / currentEffectiveInstances.size();
+            }
 
             System.out.println(String.format("%12d%12d%12.3f%12.3f%16.3f%16s%12d", it, nFacts, precCWA, prec, recall,
                     ext == -1 ? String.format("%.3f", 1.0 * ext) : String.format("%d(%.3f)", ext, 1.0 * ext / currentEffectiveInstances.size()),
@@ -132,13 +139,15 @@ public class QKBCResult {
         calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/mountain_elevation_ourN.json",
                 "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - mountain_elevation_our.csv");
 
-//        calculateStats("eval/qkbc/exp_1/qsearch_queries/river_length_ourN.json");
-//
-//        calculateStats("eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourN.json");
-//
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/river_length_ourN.json", null);
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/stadium_capacity_ourN.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - stadium_capacity_our.csv");
+
 //        // original
-//        calculateStats("eval/qkbc/exp_1/qsearch_queries/company_revenue_ourN.json");
-//
-//        calculateStats("eval/qkbc/exp_1/qsearch_queries/city_altitude_ourN.json");
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/company_revenue_ourN.json", null);
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/city_altitude_ourN.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - city_altitude_our.csv");
     }
 }
