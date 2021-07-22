@@ -394,7 +394,7 @@ public class QKBCRunner {
         } while (!ctxQueue.isEmpty() && iter < maxNIter);
     }
 
-    private static void markEffectiveFactsForIter(int iter, ArrayList<RelationInstance> instances, boolean refinementByTime) {
+    public static void markEffectiveFactsForIter(int iter, ArrayList<RelationInstance> instances, boolean refinementByTime) {
         // entity or entity+time to values + freqs
         HashMap<String, ArrayList<Pair<RelationInstance, Integer>>> map = new HashMap<>();
 
@@ -459,7 +459,7 @@ public class QKBCRunner {
         });
     }
 
-    private static void markEffectiveAndGroundTruthFacts(
+    public static void markEffectiveAndGroundTruthFacts(
             QKBCResult r, Map<String, WikidataGroundTruthExtractor.PredicateNumericalFact> groundTruth, boolean refinementByTime) {
         for (RelationInstance ri : r.instances) {
             ri.effectivePositiveIterIndices = new ArrayList<>();

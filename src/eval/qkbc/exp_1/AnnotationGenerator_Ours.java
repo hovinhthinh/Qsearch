@@ -1,5 +1,6 @@
-package eval.qkbc;
+package eval.qkbc.exp_1;
 
+import eval.qkbc.QKBCResult;
 import model.quantity.Quantity;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -13,7 +14,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AnnotationGenerator {
+public class AnnotationGenerator_Ours {
     public static void generateTsvForGoogleSpreadsheet(String inputFileParametric,
                                                        String inputFileNonParametric,
                                                        String outputFile) {

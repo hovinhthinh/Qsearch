@@ -174,5 +174,23 @@ public class QKBCResult {
         calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/city_altitude_ourP.json",
                 "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - city_altitude_our.csv");
 
+        // QSEARCH
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/building_height_qs.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv");
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/mountain_elevation_qs.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv");
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/river_length_qs.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv");
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/stadium_capacity_qs.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv");
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/company_revenue_qs.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv");
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/city_altitude_qs.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv");
     }
 }
