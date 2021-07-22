@@ -1,3 +1,8 @@
+import os
+
+os.environ['TRANSFORMERS_CACHE'] = '/scratch/GW/pool0/hvthinh/huggingfaceTransformers/.cache'
+os.environ["CUDA_VISIBLE_DEVICES"] = '1'
+
 import json
 import logging
 from http.server import BaseHTTPRequestHandler, HTTPServer
