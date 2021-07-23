@@ -9,6 +9,7 @@ import util.Pair;
 import util.Triple;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RelationInstance {
@@ -51,6 +52,9 @@ public class RelationInstance {
 
     public Boolean groundtruth;
     public Boolean eval;
+
+    // for LM baseline
+    public Map<String, ArrayList<Double>> unit2TopRoBERTaValues;
 
     public RelationInstance(String entity, String quantity, double quantityStdValue, double score, String kbcId) {
         this.entity = entity;

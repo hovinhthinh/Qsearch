@@ -22,6 +22,9 @@ public class QKBCResult {
     public int nIterations;
     public ArrayList<RelationInstance> instances;
 
+    // for LM baseline
+    public String template;
+
     public static void calculateStats(String inputFile, String annotationFile) throws Exception {
         // load input (querying output)
         QKBCResult r = Gson.fromJson(FileUtils.getContent(inputFile, "UTF-8"), QKBCResult.class);
@@ -192,5 +195,24 @@ public class QKBCResult {
 
         calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/city_altitude_qs.json",
                 "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv");
+
+        // LM
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/building_height_lm.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv");
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/mountain_elevation_lm.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv");
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/river_length_lm.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv");
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/stadium_capacity_lm.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv");
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/city_altitude_lm.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv");
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/company_revenue_lm.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv");
     }
 }
