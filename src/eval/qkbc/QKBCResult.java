@@ -100,7 +100,7 @@ public class QKBCResult {
             }
 
             // prec
-            double prec = -1;
+            double precOutsideGroundTruth = -1, prec = -1;
             if (kbcId2Eval != null) {
                 int sampledTrue = 0, totalSampled = 0;
                 for (RelationInstance ri : currentEffectiveInstances) {
@@ -113,12 +113,12 @@ public class QKBCResult {
                 }
 
                 // prec
-                double precOutsideGroundTruth = totalSampled == 0 ? 0 : 1.0 * sampledTrue / totalSampled;
+                precOutsideGroundTruth = totalSampled == 0 ? 0 : 1.0 * sampledTrue / totalSampled;
                 prec = (precOutsideGroundTruth * ext + nTrueInGroundTruth) / currentEffectiveInstances.size();
             }
 
             System.out.println(String.format("%12d%12d%12.3f%12.3f%16.3f%16s%12d", it, nFacts, precCWA, prec, recall,
-                    ext == -1 ? String.format("%.3f", 1.0 * ext) : String.format("%d(%.3f)", ext, 1.0 * ext / currentEffectiveInstances.size()),
+                    ext == -1 ? String.format("%.3f", 1.0 * ext) : String.format("%.3f", 1.0 * ext * precOutsideGroundTruth / currentEffectiveInstances.size()),
                     currentNoise.size()
             ));
 
