@@ -286,7 +286,7 @@ public class QKBCRunner {
                     for (RelationInstance p : posList) {
                         if (Number.relativeNumericDistance(u.quantityStdValue, p.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
                             stats.addDuplicatedInstance(u.entity, u.quantityStdValue);
-                            continue;
+                            continue loop;
                         }
                     }
                 }
