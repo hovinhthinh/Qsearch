@@ -332,10 +332,9 @@ public class QKBCRunner {
                         return true;
                     })
                     .filter(o -> { // filter by postag
-                        IDictionary wnDict = Static.getWordNetDict();
                         for (String x : NLP.splitSentence(o.context)) {
-                            if (wnDict.getIndexWord(x, POS.NOUN) != null || wnDict.getIndexWord(x, POS.ADJECTIVE) != null
-                                    || wnDict.getIndexWord(x, POS.VERB) != null) {
+                            String pt = NLP.postag(Arrays.asList(x)).get(0);
+                            if (pt.startsWith("VB") || pt.startsWith("NN") || pt.startsWith("JJ")) {
                                 return true;
                             }
                         }
