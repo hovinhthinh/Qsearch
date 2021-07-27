@@ -31,14 +31,16 @@ public class WikidataGroundTruthExtractor {
     public static class PredicateNumericalFact {
         public String e;
         public String wdEntry;
-        public ArrayList<Pair<Double, String>> quantities;
+        public ArrayList<Pair<Double, String>> quantities; // value / entity
+        public ArrayList<Triple<Double, String, String>> quantitiesByYear; // value / entity / year
 
         public PredicateNumericalFact() {
             quantities = new ArrayList<>();
+            quantitiesByYear = new ArrayList<>();
         }
     }
 
-    static void downloadGroundTruthData(String type, String predicate, String outputFile) throws UnsupportedEncodingException {
+    static void downloadGroundTruthData(String type, String predicate, boolean refinementByYear, String outputFile) throws UnsupportedEncodingException {
         ArrayList<PredicateNumericalFact> loadedFacts = Objects.requireNonNullElse(loadPredicateGroundTruthFromFile(outputFile), new ArrayList<>());
 
         Map<String, PredicateNumericalFact> wdEntry2Fact = loadedFacts.stream().collect(Collectors.toMap(f -> f.wdEntry, f -> f));
@@ -88,8 +90,10 @@ public class WikidataGroundTruthExtractor {
                     entityFacts.wdEntry = entry;
 
                     JSONArray arr = o.getJSONArray(predicate);
+                    loop:
                     for (int i = 0; i < arr.length(); ++i) {
-                        JSONObject q = arr.getJSONObject(i).getJSONObject("mainsnak").getJSONObject("datavalue").getJSONObject("value");
+                        JSONObject fact = arr.getJSONObject(i);
+                        JSONObject q = fact.getJSONObject("mainsnak").getJSONObject("datavalue").getJSONObject("value");
                         Double qV = Double.parseDouble(q.getString("amount"));
                         if (!q.has("unit")) {
                             continue;
@@ -104,10 +108,29 @@ public class WikidataGroundTruthExtractor {
                             }
                             qU = u.entity;
                         }
-                        entityFacts.quantities.add(new Pair<>(qV, qU));
+
+                        // qualifier
+                        if (refinementByYear) {
+                            if (!fact.has("qualifiers")) {
+                                continue loop;
+                            }
+                            JSONObject y = fact.getJSONObject("qualifiers");
+                            if (y.keySet().size() != 1 || !y.has("P585")) {
+                                continue loop;
+                            }
+                            y = y.getJSONArray("P585").getJSONObject(0).getJSONObject("datavalue").getJSONObject("value");
+                            if (y.getInt("precision") != 9) {
+                                continue loop;
+                            }
+                            String time = y.getString("time");
+                            String year = time.substring(time.indexOf("+") + 1, time.indexOf("-"));
+                            entityFacts.quantitiesByYear.add(new Triple<>(qV, qU, year));
+                        } else {
+                            entityFacts.quantities.add(new Pair<>(qV, qU));
+                        }
                     }
 
-                    if (entityFacts.quantities.size() == 0) {
+                    if (entityFacts.quantities.size() == 0 && entityFacts.quantitiesByYear.size() == 0) {
                         continue;
                     }
 
@@ -142,12 +165,14 @@ public class WikidataGroundTruthExtractor {
 
     public static void main(String[] args) throws Exception {
         // building-height
-//        downloadGroundTruthData("Q41176", "P2048", "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height");
-        // mountain-elevation
-//        downloadGroundTruthData("Q8502", "P2044", "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation");
-        // stadium-capacity
-//        downloadGroundTruthData("Q483110", "P1083", "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity");
-        // river-length
-//        downloadGroundTruthData("Q4022", "P2043", "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length");
+//        downloadGroundTruthData("Q41176", "P2048", false, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height");
+//        // mountain-elevation
+//        downloadGroundTruthData("Q8502", "P2044", false, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation");
+//        // stadium-capacity
+//        downloadGroundTruthData("Q483110", "P1083", false, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity");
+//        // river-length
+//        downloadGroundTruthData("Q4022", "P2043", false, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length");
+        // company-revenue
+        downloadGroundTruthData("Q783794", "P2139", true, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-company_revenue");
     }
 }
