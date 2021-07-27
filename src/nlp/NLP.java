@@ -1,12 +1,16 @@
 package nlp;
 
+import edu.knowitall.tool.postag.PostaggedToken;
 import edu.knowitall.tool.tokenize.Token;
 import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.trees.CollinsHeadFinder;
 import edu.stanford.nlp.trees.HeadFinder;
 import edu.stanford.nlp.trees.Tree;
 import org.json.JSONObject;
+import scala.collection.Iterator;
 import scala.collection.JavaConversions;
+import scala.collection.JavaConverters;
+import scala.collection.Seq;
 import util.Triple;
 import util.headword.StringUtils;
 
@@ -296,6 +300,21 @@ public class NLP {
         text = NLP.stripSentence(text);
         List<Token> tokens = JavaConversions.seqAsJavaList(Static.getOpenIe().tokenizer().tokenize(Static.getOpenIe().clean(text)));
         return tokens.stream().map(o -> o.string()).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public static final ArrayList<String> postag(List<String> tokenized) {
+        int cur = 0;
+        ArrayList<Token> seq = new ArrayList<>();
+        for (String t : tokenized) {
+            seq.add(new Token(t, cur++));
+        }
+        ArrayList<String> pt = new ArrayList<>();
+        Seq<PostaggedToken> s = Static.getOpenIe().postagger().postagTokenized(
+                JavaConverters.asScalaIterableConverter(seq).asScala().toSeq());
+        for (Iterator<PostaggedToken> t = s.iterator(); t.hasNext(); ) {
+            pt.add(t.next().postag());
+        }
+        return pt;
     }
 
     public static void main(String[] args) {
