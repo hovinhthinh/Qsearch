@@ -120,7 +120,7 @@ public class RelationInstance {
             }
             String[] args = s.substring(4).split("\t");
 
-            ctx.add(new Triple<>(args[0], Long.parseLong(args[1]), Long.parseLong(args[2])));
+            ctx.add(new Triple<>(args[0], args.length <= 1 ? null : Long.parseLong(args[1]), args.length <= 1 ? null : Long.parseLong(args[2])));
         });
         return ctx;
     }
