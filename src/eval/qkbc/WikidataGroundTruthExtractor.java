@@ -38,6 +38,14 @@ public class WikidataGroundTruthExtractor {
             quantities = new ArrayList<>();
             quantitiesByYear = new ArrayList<>();
         }
+
+        public int nFacts() {
+            if (quantities.size() > 0) {
+                return 1;
+            } else {
+                return quantitiesByYear.stream().map(o -> o.third).collect(Collectors.toSet()).size();
+            }
+        }
     }
 
     static void downloadGroundTruthData(String type, String predicate, boolean refinementByYear, String outputFile) throws UnsupportedEncodingException {

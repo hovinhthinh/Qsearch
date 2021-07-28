@@ -388,7 +388,7 @@ public class QKBCRunner {
                 QKBCResult r = new QKBCResult();
                 r.predicate = predicateName;
                 r.refinementByTime = refinementByTime;
-                r.groundTruthSize = grouthtruth == null ? null : grouthtruth.size();
+                r.groundTruthSize = grouthtruth == null ? null : grouthtruth.values().stream().mapToInt(o -> o.nFacts()).sum();
                 r.nIterations = iter;
                 r.ctxList = new ArrayList<>(ctxList);
                 r.instances = new ArrayList<>(mostlyPositive);
@@ -487,7 +487,7 @@ public class QKBCRunner {
             markEffectiveFactsForIter(it, currentInstances, refinementByTime);
         }
 
-        // mark groundtruth (only when refinementByTime == false)
+        // mark groundtruth
         if (groundTruth != null) {
             loop:
             for (RelationInstance ri : r.instances) {
