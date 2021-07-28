@@ -2,6 +2,7 @@ package qkbc.text;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import model.quantity.Quantity;
+import model.quantity.QuantityDomain;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import storage.text.migrate.ChronicleMapQfactStorage;
@@ -9,6 +10,7 @@ import util.Pair;
 import util.Triple;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -101,6 +103,10 @@ public class RelationInstance {
             }
             ctx.add(s);
         });
+        Quantity q = getQuantity();
+        if (getQuantity().getSearchDomain().equals(QuantityDomain.Domain.DIMENSIONLESS)) {
+            ctx.addAll(Arrays.asList(q.unit.split(" ")));
+        }
         return ctx;
     }
 

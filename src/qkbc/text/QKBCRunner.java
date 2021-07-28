@@ -1,12 +1,9 @@
 package qkbc.text;
 
-import edu.mit.jwi.IDictionary;
-import edu.mit.jwi.item.POS;
 import eval.qkbc.QKBCResult;
 import eval.qkbc.WikidataGroundTruthExtractor;
 import model.quantity.kg.KgUnit;
 import nlp.NLP;
-import nlp.Static;
 import qkbc.distribution.IntegralDistributionApproximator;
 import server.text.ResultInstance;
 import server.text.handler.search.SearchResult;
@@ -164,12 +161,28 @@ public class QKBCRunner {
         List<RelationInstance> groundTruthList = new ArrayList<>(), groundTruthListSampled = new ArrayList<>();
         if (grouthtruth != null) {
             for (WikidataGroundTruthExtractor.PredicateNumericalFact f : grouthtruth.values()) {
-                for (Pair<Double, String> p : f.quantities) {
-                    groundTruthList.add(RelationInstance.newRelationInstanceFromGroundTruth(
-                            f.e, p.first * KgUnit.getKgUnitFromEntityName(p.second).conversionToSI
-                    ));
-                    // only allow 1 quantity for each entity from the groundtruth
-                    break;
+                if (refinementByTime) {
+                    for (Triple<Double, String, String> p : f.quantitiesByYear) {
+                        if (KgUnit.getKgUnitFromEntityName(p.second).conversionToSI == null) {
+                            continue;
+                        }
+                        groundTruthList.add(RelationInstance.newRelationInstanceFromGroundTruth(
+                                f.e, p.first * KgUnit.getKgUnitFromEntityName(p.second).conversionToSI
+                        ));
+                        // only allow 1 quantity for each entity from the groundtruth
+                        break;
+                    }
+                } else {
+                    for (Pair<Double, String> p : f.quantities) {
+                        if (KgUnit.getKgUnitFromEntityName(p.second).conversionToSI == null) {
+                            continue;
+                        }
+                        groundTruthList.add(RelationInstance.newRelationInstanceFromGroundTruth(
+                                f.e, p.first * KgUnit.getKgUnitFromEntityName(p.second).conversionToSI
+                        ));
+                        // only allow 1 quantity for each entity from the groundtruth
+                        break;
+                    }
                 }
             }
             groundTruthListSampled = groundTruthList;
@@ -475,7 +488,7 @@ public class QKBCRunner {
         }
 
         // mark groundtruth (only when refinementByTime == false)
-        if (groundTruth != null && !refinementByTime) {
+        if (groundTruth != null) {
             loop:
             for (RelationInstance ri : r.instances) {
                 if (ri.effectivePositiveIterIndices.size() == 0 && ri.noiseIterIndices.size() == 0) {
@@ -485,14 +498,39 @@ public class QKBCRunner {
                 if (f == null) {
                     continue;
                 }
-                for (Pair<Double, String> p : f.quantities) {
-                    double v = p.first * KgUnit.getKgUnitFromEntityName(p.second).conversionToSI;
-                    if (Number.relativeNumericDistance(v, ri.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
-                        ri.groundtruth = true;
-                        continue loop;
+                if (refinementByTime) {
+                    boolean gtFound = false;
+                    for (Triple<Double, String, String> p : f.quantitiesByYear) {
+                        if (KgUnit.getKgUnitFromEntityName(p.second).conversionToSI == null) {
+                            continue;
+                        }
+                        if (!p.third.equals(ri.getYearCtx())) {
+                            continue;
+                        } else {
+                            gtFound = true;
+                        }
+                        double v = p.first * KgUnit.getKgUnitFromEntityName(p.second).conversionToSI;
+                        if (Number.relativeNumericDistance(v, ri.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
+                            ri.groundtruth = true;
+                            continue loop;
+                        }
                     }
+                    if (gtFound) {
+                        ri.groundtruth = false;
+                    }
+                } else {
+                    for (Pair<Double, String> p : f.quantities) {
+                        if (KgUnit.getKgUnitFromEntityName(p.second).conversionToSI == null) {
+                            continue;
+                        }
+                        double v = p.first * KgUnit.getKgUnitFromEntityName(p.second).conversionToSI;
+                        if (Number.relativeNumericDistance(v, ri.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
+                            ri.groundtruth = true;
+                            continue loop;
+                        }
+                    }
+                    ri.groundtruth = false;
                 }
-                ri.groundtruth = false;
             }
         }
     }
