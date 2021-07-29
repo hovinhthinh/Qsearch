@@ -7,6 +7,7 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import qkbc.text.RelationInstance;
 import qkbc.text.RelationInstanceNoiseFilter;
+import umontreal.ssj.probdist.EmpiricalDist;
 import util.FileUtils;
 import util.Gson;
 import util.Number;
@@ -51,7 +52,7 @@ public class AnnotationGeneratorAndSummerization_Noise {
 
         ArrayList<RelationInstance> ris = r.instances.stream()
                 .filter(ri -> ri.positiveIterIndices.contains(baseIter) || ri.noiseIterIndices.contains(baseIter))
-                .filter(ri-> !r.refinementByTime || ri.getYearCtx() != null)
+                .filter(ri -> !r.refinementByTime || ri.getYearCtx() != null)
                 .collect(Collectors.toCollection(ArrayList::new));
 
         HashMap<String, Boolean> kbcId2Eval = null;
@@ -117,7 +118,11 @@ public class AnnotationGeneratorAndSummerization_Noise {
         double begin = ris.get(0).quantityStdValue, end = ris.get(ris.size() - 1).quantityStdValue;
         double interval = (end - begin) / 100;
 
-        ArrayList<RelationInstance> deduplicatedPrct = new ArrayList<>(), deduplicatedRng = new ArrayList<>();
+        EmpiricalDist dist = new EmpiricalDist(ris.stream().mapToDouble(o -> o.quantityStdValue).toArray());
+
+        ArrayList<RelationInstance> deduplicatedPrct = new ArrayList<>(),
+                deduplicatedRng = new ArrayList<>(),
+                deduplicatedZscr = new ArrayList<>();
 
         for (int i = 0; i < ris.size(); ++i) {
             if (i < nTail_1 || i >= ris.size() - nTail_1) {
@@ -126,6 +131,10 @@ public class AnnotationGeneratorAndSummerization_Noise {
             double v = ris.get(i).quantityStdValue;
             if (v <= begin + interval || v >= end - interval) {
                 deduplicatedRng.add(ris.get(i));
+            }
+            double z = (v - dist.getMean()) / dist.getSampleStandardDeviation();
+            if (Math.abs(z) > 3) {
+                deduplicatedZscr.add(ris.get(i));
             }
         }
         deduplicatedPrct = deduplicateNoise(deduplicatedPrct);
@@ -187,6 +196,36 @@ public class AnnotationGeneratorAndSummerization_Noise {
             map.get(ri.kbcId).add("rng@1");
         });
 
+        //
+        deduplicatedZscr = deduplicateNoise(deduplicatedZscr);
+        System.out.println("#Z-scr@1: " + deduplicatedZscr.size());
+        groundtruth = deduplicatedZscr.stream().filter(ri -> ri.groundtruth != null).collect(Collectors.toList());
+        nTrueGt = (int) groundtruth.stream().filter(ri -> ri.groundtruth).count();
+        System.out.println("groundtruth: " + nTrueGt + "/" + groundtruth.size());
+        gtUnavail = deduplicatedZscr.stream().filter(ri -> ri.groundtruth == null)
+                .collect(Collectors.toCollection(ArrayList::new));
+        nGtUnavail = gtUnavail.size();
+        System.out.println("groundtruthUnavail: " + gtUnavail.size());
+        sample(gtUnavail);
+
+        // print prec
+        if (annotatedFile != null) {
+            int nTrueUnavail = 0;
+            for (RelationInstance ri : gtUnavail) {
+                if (kbcId2Eval.get(ri.kbcId)) {
+                    ++nTrueUnavail;
+                }
+            }
+
+            double prec = 1 - ((1.0 * nTrueUnavail / gtUnavail.size()) * nGtUnavail + nTrueGt) / (groundtruth.size() + nGtUnavail);
+            System.out.println(String.format("---- Noise prec: %.3f", prec));
+        }
+
+        gtUnavail.forEach(ri -> {
+            map.putIfAbsent(ri.kbcId, new ArrayList<>());
+            map.get(ri.kbcId).add("z-scr");
+        });
+
         return map;
     }
 
@@ -200,7 +239,7 @@ public class AnnotationGeneratorAndSummerization_Noise {
 
         if (annotatedFile == null && outputFile != null) {
             CSVPrinter csvPrinter = new CSVPrinter(FileUtils.getPrintWriter(outputFile, "UTF-8"), CSVFormat.DEFAULT
-                    .withHeader("id", "settings", "source", "entity", r.predicate, "sentence", "groundtruth", "eval"));
+                    .withHeader("id", "settings", "source", "entity", "sentence", "groundtruth", "eval"));
 
             r.instances.forEach(ri -> {
                 if (!noiseMap.containsKey(ri.kbcId)) {
