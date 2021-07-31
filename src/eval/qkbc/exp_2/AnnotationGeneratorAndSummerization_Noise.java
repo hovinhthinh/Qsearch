@@ -11,6 +11,7 @@ import umontreal.ssj.probdist.EmpiricalDist;
 import util.FileUtils;
 import util.Gson;
 import util.Number;
+import util.Pair;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -45,6 +46,67 @@ public class AnnotationGeneratorAndSummerization_Noise {
         if (ri.size() > QKBCResult.ANNOTATION_SAMPLING_SIZE) {
             ri.subList(QKBCResult.ANNOTATION_SAMPLING_SIZE, ri.size()).clear();
         }
+    }
+
+    public static ArrayList<RelationInstance> dbScanNoiseDetect(ArrayList<RelationInstance> ris) {
+        ArrayList<Pair<Double, Integer>> arr = new ArrayList<>();
+        double max = ris.stream().mapToDouble(o -> Math.abs(o.quantityStdValue)).max().getAsDouble();
+        for (int i = 0; i < ris.size(); ++i) {
+            arr.add(new Pair<>(ris.get(i).quantityStdValue / max, i));
+        }
+        Collections.sort(arr, Comparator.comparing(a -> a.first));
+
+        double EPS = 0.5, MIN_SAMPLES = 5;
+        boolean[] isCore = new boolean[ris.size()];
+        boolean[] isNoise = new boolean[ris.size()];
+
+        for (int i = 0; i < ris.size(); ++i) {
+            int nPoint = 1;
+            int cur = i - 1;
+            while (nPoint < MIN_SAMPLES && cur >= 0 && arr.get(i).first - arr.get(cur).first <= EPS) {
+                ++nPoint;
+                --cur;
+            }
+            cur = i + 1;
+            while (nPoint < MIN_SAMPLES && cur < arr.size() && arr.get(cur).first - arr.get(i).first <= EPS) {
+                ++nPoint;
+                ++cur;
+            }
+            if (nPoint >= MIN_SAMPLES) {
+                isCore[i] = true;
+            }
+        }
+
+        loop:
+        for (int i = 0; i < ris.size(); ++i) {
+            isNoise[i] = true;
+            for (int j = i; j >= 0; --j) {
+                if (arr.get(i).first - arr.get(j).first > EPS) {
+                    break;
+                }
+                if (isCore[j]) {
+                    isNoise[i] = false;
+                    continue loop;
+                }
+            }
+            for (int j = i; j < arr.size(); ++j) {
+                if (arr.get(j).first - arr.get(i).first > EPS) {
+                    break;
+                }
+                if (isCore[j]) {
+                    isNoise[i] = false;
+                    continue loop;
+                }
+            }
+        }
+
+        ArrayList<RelationInstance> res = new ArrayList<>();
+        for (int i = 0; i < arr.size(); ++i) {
+            if (isNoise[i]) {
+                res.add(ris.get(arr.get(i).second));
+            }
+        }
+        return res;
     }
 
     public static Map<String, List<String>> markNoise(QKBCResult r, int baseIter, String annotatedFile) throws Exception {
@@ -122,7 +184,8 @@ public class AnnotationGeneratorAndSummerization_Noise {
 
         ArrayList<RelationInstance> deduplicatedPrct = new ArrayList<>(),
                 deduplicatedRng = new ArrayList<>(),
-                deduplicatedZscr = new ArrayList<>();
+                deduplicatedZscr = new ArrayList<>(),
+                deduplicatedDbScan = new ArrayList<>();
 
         for (int i = 0; i < ris.size(); ++i) {
             if (i < nTail_1 || i >= ris.size() - nTail_1) {
@@ -198,7 +261,7 @@ public class AnnotationGeneratorAndSummerization_Noise {
 
         //
         deduplicatedZscr = deduplicateNoise(deduplicatedZscr);
-        System.out.println("#Z-scr@1: " + deduplicatedZscr.size());
+        System.out.println("#Z-scr: " + deduplicatedZscr.size());
         groundtruth = deduplicatedZscr.stream().filter(ri -> ri.groundtruth != null).collect(Collectors.toList());
         nTrueGt = (int) groundtruth.stream().filter(ri -> ri.groundtruth).count();
         System.out.println("groundtruth: " + nTrueGt + "/" + groundtruth.size());
@@ -226,6 +289,35 @@ public class AnnotationGeneratorAndSummerization_Noise {
             map.get(ri.kbcId).add("z-scr");
         });
 
+        // DBScan
+        deduplicatedDbScan = deduplicateNoise(dbScanNoiseDetect(ris));
+        System.out.println("#Dbscan: " + deduplicatedDbScan.size());
+        groundtruth = deduplicatedDbScan.stream().filter(ri -> ri.groundtruth != null).collect(Collectors.toList());
+        nTrueGt = (int) groundtruth.stream().filter(ri -> ri.groundtruth).count();
+        System.out.println("groundtruth: " + nTrueGt + "/" + groundtruth.size());
+        gtUnavail = deduplicatedDbScan.stream().filter(ri -> ri.groundtruth == null)
+                .collect(Collectors.toCollection(ArrayList::new));
+        nGtUnavail = gtUnavail.size();
+        System.out.println("groundtruthUnavail: " + gtUnavail.size());
+        sample(gtUnavail);
+
+        // print prec
+        if (annotatedFile != null) {
+            int nTrueUnavail = 0;
+            for (RelationInstance ri : gtUnavail) {
+                if (kbcId2Eval.get(ri.kbcId)) {
+                    ++nTrueUnavail;
+                }
+            }
+
+            double prec = 1 - ((1.0 * nTrueUnavail / gtUnavail.size()) * nGtUnavail + nTrueGt) / (groundtruth.size() + nGtUnavail);
+            System.out.println(String.format("---- Noise prec: %.3f", prec));
+        }
+
+        gtUnavail.forEach(ri -> {
+            map.putIfAbsent(ri.kbcId, new ArrayList<>());
+            map.get(ri.kbcId).add("dbs");
+        });
         return map;
     }
 
