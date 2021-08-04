@@ -43,6 +43,7 @@ public class RelationInstance {
 
     public String kbcId;
 
+    public transient double denoisingScore;
     public transient boolean positive;
 
     public ArrayList<Integer> positiveIterIndices;

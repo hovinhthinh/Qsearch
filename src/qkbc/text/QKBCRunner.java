@@ -4,6 +4,7 @@ import eval.qkbc.QKBCResult;
 import eval.qkbc.WikidataGroundTruthExtractor;
 import model.quantity.kg.KgUnit;
 import nlp.NLP;
+import qkbc.distribution.DistributionPresenter;
 import qkbc.distribution.IntegralDistributionApproximator;
 import server.text.ResultInstance;
 import server.text.handler.search.SearchResult;
@@ -374,9 +375,10 @@ public class QKBCRunner {
                 }
             }
 
-//            DistributionFitter.drawDistributionVsSamples(String.format("Iteration #%d", iter), positiveDist.first,
-//                    mostlyPositiveWithGroundTruthSampled.stream().filter(i -> i.positive || i.isArtificial())
-//                            .mapToDouble(i -> i.quantityStdValue).toArray(), false, true);
+//            new DistributionPresenter(String.format("Iteration #%d", iter), positiveDist.first,
+//                    mostlyPositiveWithGroundTruthSampled.stream().filter(i -> i.positive || i.isArtificial()).mapToDouble(i -> i.quantityStdValue).toArray(),
+//                    false, true, true)
+//                    .present(true);
 
             // reformulate
             for (ContextStats stats : sortedContextStats) {

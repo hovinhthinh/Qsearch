@@ -1,6 +1,7 @@
 package qkbc.text;
 
 import qkbc.distribution.DistributionFitter;
+import qkbc.distribution.DistributionPresenter;
 import qkbc.distribution.IntegralDistributionApproximator;
 import qkbc.distribution.kde.KDEDistribution;
 import umontreal.ssj.probdist.ContinuousDistribution;
@@ -125,6 +126,7 @@ public class RelationInstanceNoiseFilter {
         for (RelationInstance i : ri) {
             double diff = Number.relativeNumericDistance(kbcId2OriginalPValue.get(i.kbcId),
                     kbcId2ConsistencySumPValue.get(i.kbcId) / kbcId2ConsistencyTimeCount.get(i.kbcId));
+            i.denoisingScore = diff;
             i.positive = diff < pValueRelDistThreshold && kbcId2OriginalPValue.get(i.kbcId) > 1e-4;
 
 //            System.out.printf("%10.3f    oP: %.3f    cP: %.3f    %.3f    %s\n", i.quantityStdValue,
@@ -205,6 +207,8 @@ public class RelationInstanceNoiseFilter {
 
         Pair<ContinuousDistribution, Double> filteredDist = consistencyBasedNonParametricDistributionNoiseFilter(samples);
         System.out.println(filteredDist);
-        DistributionFitter.drawDistributionVsSamples(null, filteredDist.first, samples.stream().mapToDouble(s -> s.quantityStdValue).toArray(), false, false);
+        new DistributionPresenter(null, filteredDist.first, samples.stream().mapToDouble(s -> s.quantityStdValue).toArray(),
+                false, false, true)
+                .present(true);
     }
 }

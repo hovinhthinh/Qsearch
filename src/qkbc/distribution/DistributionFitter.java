@@ -1,137 +1,17 @@
 package qkbc.distribution;
 
 
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYBarRenderer;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.chart.ui.ApplicationFrame;
-import org.jfree.chart.ui.UIUtils;
-import org.jfree.data.statistics.HistogramDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 import qkbc.distribution.kde.BandwidthSelector;
 import qkbc.distribution.kde.KDEDistribution;
 import qkbc.distribution.kde.ReflectKDEDistribution;
 import umontreal.ssj.gof.GofStat;
 import umontreal.ssj.probdist.*;
 import util.Pair;
-import util.Vectors;
 
-import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-
-class DistributionPresenter extends ApplicationFrame {
-
-    private static XYSeriesCollection getDistributionSamples(ContinuousDistribution dist, int nSamples) {
-        XYSeries series = new XYSeries(dist.toString());
-        for (int i = 0; i < nSamples; ++i) {
-            double cd = 1.0 / (nSamples * 2) * (i * 2 + 1);
-            double x = dist.inverseF(cd);
-            series.add(x, dist.density(x));
-        }
-        return new XYSeriesCollection(series);
-    }
-
-    public DistributionPresenter(String title, ContinuousDistribution d, double[] samples, boolean drawHistogram) {
-        super("Samples vs. Distribution");
-        this.setContentPane(new ChartPanel(createChart(title, samples, d, drawHistogram)));
-        this.pack();
-        UIUtils.centerFrameOnScreen(this);
-        this.setVisible(true);
-    }
-
-    public DistributionPresenter(String title, ContinuousDistribution d, ArrayList<Double> samples, boolean drawHistogram) {
-        this(title, d, samples.stream().mapToDouble(Double::doubleValue).toArray(), drawHistogram);
-    }
-
-    private static int optimalFreedmanDiaconisNBins(double[] samples) {
-        if (samples.length <= 1) {
-            return samples.length;
-        }
-        DescriptiveStatistics ds = new DescriptiveStatistics(samples);
-        double iqr = ds.getPercentile(75) - ds.getPercentile(25);
-        int nBins = (int) Math.round((Vectors.max(samples) - Vectors.min(samples)) / (2 * iqr / Math.pow(samples.length, 1.0 / 3)));
-        return Math.max(nBins, 1);
-    }
-
-    private static JFreeChart createChart(String title, double[] samples, ContinuousDistribution d, boolean drawHistogram) {
-        HistogramDataset histogramData = new HistogramDataset();
-        histogramData.addSeries("Histogram", samples, optimalFreedmanDiaconisNBins(samples));
-
-        XYSeries dotsData = new XYSeries("Samples");
-        for (double v : samples) {
-            dotsData.add(v, 0);
-        }
-
-        // Draw samples first
-        JFreeChart chart = ChartFactory.createXYLineChart(
-                title, "Value", "Distribution density",
-                new XYSeriesCollection(dotsData),
-                PlotOrientation.VERTICAL, true, true, false);
-        XYPlot plot = chart.getXYPlot();
-        // change BG
-        plot.setBackgroundPaint(Color.WHITE);
-        plot.setDomainGridlinePaint(Color.LIGHT_GRAY);
-        plot.setRangeGridlinePaint(Color.LIGHT_GRAY);
-
-        XYLineAndShapeRenderer renderer0 = new XYLineAndShapeRenderer();
-        renderer0.setSeriesLinesVisible(0, false);
-        renderer0.setSeriesShape(0, new Rectangle2D.Double(-0.5, -8, 1, 8));
-        plot.setRenderer(0, renderer0);
-
-        // Draw distribution
-        plot.setDataset(1, getDistributionSamples(d, 2000));
-        XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer();
-        renderer1.setSeriesShapesVisible(0, false);
-        plot.setRenderer(1, renderer1);
-
-        // Draw histogram
-        if (drawHistogram) {
-            plot.setDataset(2, histogramData);
-            NumberAxis rangeAxis = new NumberAxis("Sample count");
-            rangeAxis.setLabelFont(plot.getRangeAxis().getLabelFont());
-            plot.setRangeAxis(1, rangeAxis);
-            XYBarRenderer renderer2 = new XYBarRenderer();
-            renderer2.setShadowVisible(false);
-            plot.setRenderer(2, renderer2);
-            plot.mapDatasetToRangeAxis(2, 1);
-        }
-
-        // Style
-        plot.getRenderer(0).setSeriesPaint(0, Color.DARK_GRAY);
-        plot.getRenderer(1).setSeriesPaint(0, Color.BLUE);
-        plot.getRenderer(1).setSeriesStroke(0, new BasicStroke(1.5f));
-
-        return chart;
-    }
-
-    @Override
-    public void windowClosing(WindowEvent event) {
-        this.dispose();
-        synchronized (lock) {
-            lock.notifyAll();
-        }
-    }
-
-    private Object lock = new Object();
-
-    public void join() throws InterruptedException {
-        synchronized (lock) {
-            lock.wait();
-        }
-    }
-}
 
 public class DistributionFitter {
     public static final List<Class<? extends ContinuousDistribution>> PARAMETRIC_CONTINUOUS_DIST_TYPES = Arrays.asList(
@@ -240,16 +120,6 @@ public class DistributionFitter {
         return null;
     }
 
-    public static void drawDistributionVsSamples(String title, ContinuousDistribution dist, double[] samples, boolean drawHistogram, boolean waitUntilClose) {
-        DistributionPresenter p = new DistributionPresenter(title, dist, samples, drawHistogram);
-        if (waitUntilClose) {
-            try {
-                p.join();
-            } catch (InterruptedException e) {
-            }
-        }
-    }
-
     public static void main(String[] args) throws Exception {
         Random r = new Random((int) 1e9 + 7);
         Distribution d = new NormalDist(0, 1);
@@ -263,6 +133,8 @@ public class DistributionFitter {
 
         System.out.println(dist);
 
-        new DistributionPresenter(null, dist.first, samples, true);
+        new DistributionPresenter(null, dist.first, samples.stream().mapToDouble(o->o).toArray(),
+                true, true, true)
+                .present(true);
     }
 }
