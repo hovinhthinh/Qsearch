@@ -208,7 +208,7 @@ public class RelationInstanceNoiseFilter {
         Pair<ContinuousDistribution, Double> filteredDist = consistencyBasedNonParametricDistributionNoiseFilter(samples);
         System.out.println(filteredDist);
         new DistributionPresenter(null, filteredDist.first, samples.stream().mapToDouble(s -> s.quantityStdValue).toArray(),
-                false, false, true)
+                true, false, false, true)
                 .present(true);
     }
 }

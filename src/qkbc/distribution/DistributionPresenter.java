@@ -38,9 +38,10 @@ public class DistributionPresenter extends ApplicationFrame {
         return new XYSeriesCollection(series);
     }
 
-    public DistributionPresenter(String title, ContinuousDistribution d, double[] samples, boolean drawHistogram, boolean drawSamples, boolean legend) {
+    public DistributionPresenter(String title, ContinuousDistribution d, double[] samples,
+                                 boolean drawDistribution, boolean drawHistogram, boolean drawSamples, boolean legend) {
         super("Samples vs. Distribution");
-        this.chart = createChart(title, samples, d, drawHistogram, drawSamples, legend);
+        this.chart = createChart(title, samples, d, drawDistribution, drawHistogram, drawSamples, legend);
     }
 
     public void present(boolean waitUntilClose) {
@@ -81,7 +82,7 @@ public class DistributionPresenter extends ApplicationFrame {
     }
 
     private static JFreeChart createChart(String title, double[] samples, ContinuousDistribution d,
-                                          boolean drawHistogram, boolean drawSamples, boolean legend) {
+                                          boolean drawDistribution, boolean drawHistogram, boolean drawSamples, boolean legend) {
         HistogramDataset histogramData = new HistogramDataset();
         histogramData.addSeries("Histogram", samples, optimalFreedmanDiaconisNBins(samples));
 
@@ -92,7 +93,7 @@ public class DistributionPresenter extends ApplicationFrame {
 
         // Draw samples first
         JFreeChart chart = ChartFactory.createXYLineChart(
-                title, "Value", "Distribution density",
+                title, "Value", null,
                 new XYSeriesCollection(drawSamples ? dotsData : new XYSeries("Samples")),
                 PlotOrientation.VERTICAL, legend, true, false);
         XYPlot plot = chart.getXYPlot();
@@ -104,30 +105,37 @@ public class DistributionPresenter extends ApplicationFrame {
         XYLineAndShapeRenderer renderer0 = new XYLineAndShapeRenderer();
         renderer0.setSeriesLinesVisible(0, false);
         renderer0.setSeriesShape(0, new Rectangle2D.Double(-0.5, -8, 1, 8));
+        renderer0.setSeriesPaint(0, Color.DARK_GRAY);
         plot.setRenderer(0, renderer0);
 
+        int rangeAxisIndex = 0;
         // Draw distribution
-        plot.setDataset(1, getDistributionSamples(d, 1000));
-        XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer();
-        renderer1.setSeriesShapesVisible(0, false);
-        plot.setRenderer(1, renderer1);
+        if (drawDistribution) {
+            plot.setDataset(1, getDistributionSamples(d, 1000));
+            NumberAxis rangeAxis = new NumberAxis("Distribution density");
+            rangeAxis.setLabelFont(plot.getRangeAxis().getLabelFont());
+            plot.setRangeAxis(rangeAxisIndex, rangeAxis);
+            XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer();
+            renderer1.setSeriesShapesVisible(0, false);
+            renderer1.setSeriesPaint(0, Color.BLUE);
+            renderer1.setSeriesStroke(0, new BasicStroke(1.5f));
+            plot.setRenderer(1, renderer1);
+            plot.mapDatasetToRangeAxis(1, rangeAxisIndex);
+            rangeAxisIndex++;
+        }
 
         // Draw histogram
         if (drawHistogram) {
             plot.setDataset(2, histogramData);
             NumberAxis rangeAxis = new NumberAxis("Sample count");
             rangeAxis.setLabelFont(plot.getRangeAxis().getLabelFont());
-            plot.setRangeAxis(1, rangeAxis);
+            plot.setRangeAxis(rangeAxisIndex, rangeAxis);
             XYBarRenderer renderer2 = new XYBarRenderer();
             renderer2.setShadowVisible(false);
             plot.setRenderer(2, renderer2);
-            plot.mapDatasetToRangeAxis(2, 1);
+            plot.mapDatasetToRangeAxis(2, rangeAxisIndex);
+            rangeAxisIndex++;
         }
-
-        // Style
-        plot.getRenderer(0).setSeriesPaint(0, Color.DARK_GRAY);
-        plot.getRenderer(1).setSeriesPaint(0, Color.BLUE);
-        plot.getRenderer(1).setSeriesStroke(0, new BasicStroke(1.5f));
 
         return chart;
     }

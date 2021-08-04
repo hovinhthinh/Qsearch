@@ -134,7 +134,7 @@ public class DistributionFitter {
         System.out.println(dist);
 
         new DistributionPresenter(null, dist.first, samples.stream().mapToDouble(o->o).toArray(),
-                true, true, true)
+                true, true, true, true)
                 .present(true);
     }
 }

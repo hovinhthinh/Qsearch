@@ -377,7 +377,7 @@ public class QKBCRunner {
 
 //            new DistributionPresenter(String.format("Iteration #%d", iter), positiveDist.first,
 //                    mostlyPositiveWithGroundTruthSampled.stream().filter(i -> i.positive || i.isArtificial()).mapToDouble(i -> i.quantityStdValue).toArray(),
-//                    false, true, true)
+//                    true, false, true, true)
 //                    .present(true);
 
             // reformulate

@@ -392,5 +392,12 @@
             <artifactId>jfreechart</artifactId>
             <version>1.5.2</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jfree/jfreesvg -->
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreesvg</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+
     </dependencies>
 </project>
