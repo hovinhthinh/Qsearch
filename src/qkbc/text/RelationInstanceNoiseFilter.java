@@ -126,8 +126,11 @@ public class RelationInstanceNoiseFilter {
         for (RelationInstance i : ri) {
             double diff = Number.relativeNumericDistance(kbcId2OriginalPValue.get(i.kbcId),
                     kbcId2ConsistencySumPValue.get(i.kbcId) / kbcId2ConsistencyTimeCount.get(i.kbcId));
+            if (kbcId2OriginalPValue.get(i.kbcId) <= 1e-4) {
+                diff = 1;
+            }
             i.denoisingScore = diff;
-            i.positive = diff < pValueRelDistThreshold && kbcId2OriginalPValue.get(i.kbcId) > 1e-4;
+            i.positive = diff < pValueRelDistThreshold;
 
 //            System.out.printf("%10.3f    oP: %.3f    cP: %.3f    %.3f    %s\n", i.quantityStdValue,
 //                    kbcId2OriginalPValue.get(i.kbcId),
