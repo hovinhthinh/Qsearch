@@ -138,7 +138,6 @@ public class DistributionPresenter extends ApplicationFrame {
             if (LOG_SCALED_HISTOGRAM) {
                 XYSeries scaled = new XYSeries("Scaled_histogram");
                 for (int i = 0; i < histogramData.getItemCount(0); ++i) {
-                    System.out.println(histogramData.getX(0, i) + " " + Math.log((double) histogramData.getY(0, i) + 1));
                     scaled.add((double) histogramData.getX(0, i), Math.log((double) histogramData.getY(0, i) + 1));
                 }
                 XYSeriesCollection ds = new XYSeriesCollection(scaled);
