@@ -7,6 +7,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.StandardXYBarPainter;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.ui.ApplicationFrame;
@@ -137,6 +138,7 @@ public class DistributionPresenter extends ApplicationFrame {
             plot.setRangeAxis(rangeAxisIndex, rangeAxis);
             XYBarRenderer renderer = new XYBarRenderer();
             renderer.setShadowVisible(false);
+            renderer.setBarPainter(new StandardXYBarPainter()); // don't use gradient
             plot.setRenderer(2, renderer);
             plot.mapDatasetToRangeAxis(2, rangeAxisIndex);
             rangeAxisIndex++;
