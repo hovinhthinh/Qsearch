@@ -27,6 +27,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class DistributionPresenter extends ApplicationFrame {
+    private static boolean LOG_SCALED_HISTOGRAM = false;
+
     private JFreeChart chart;
 
     private static XYSeriesCollection getDistributionSamples(ContinuousDistribution dist, int nSamples) {
@@ -133,7 +135,18 @@ public class DistributionPresenter extends ApplicationFrame {
 
         // Draw histogram
         if (drawHistogram) {
-            plot.setDataset(2, histogramData);
+            if (LOG_SCALED_HISTOGRAM) {
+                XYSeries scaled = new XYSeries("Scaled_histogram");
+                for (int i = 0; i < histogramData.getItemCount(0); ++i) {
+                    System.out.println(histogramData.getX(0, i) + " " + Math.log((double) histogramData.getY(0, i) + 1));
+                    scaled.add((double) histogramData.getX(0, i), Math.log((double) histogramData.getY(0, i) + 1));
+                }
+                XYSeriesCollection ds = new XYSeriesCollection(scaled);
+                ds.setAutoWidth(true);
+                plot.setDataset(2, ds);
+            } else {
+                plot.setDataset(2, histogramData);
+            }
             NumberAxis rangeAxis = new NumberAxis("Sample count");
             rangeAxis.setLabelFont(plot.getRangeAxis().getLabelFont());
             plot.setRangeAxis(rangeAxisIndex, rangeAxis);
