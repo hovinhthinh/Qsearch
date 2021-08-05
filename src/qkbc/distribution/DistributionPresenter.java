@@ -27,7 +27,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class DistributionPresenter extends ApplicationFrame {
-    private static boolean LOG_SCALED_HISTOGRAM = false;
+    public static boolean LOG_SCALED_HISTOGRAM = false;
 
     private JFreeChart chart;
 
