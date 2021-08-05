@@ -92,9 +92,7 @@ public class DistributionPresenter extends ApplicationFrame {
         }
 
         // Draw samples first
-        JFreeChart chart = ChartFactory.createXYLineChart(
-                title, "Value", null,
-                new XYSeriesCollection(drawSamples ? dotsData : new XYSeries("Samples")),
+        JFreeChart chart = ChartFactory.createXYLineChart(title, "Value", null, new XYSeriesCollection(),
                 PlotOrientation.VERTICAL, legend, true, false);
         XYPlot plot = chart.getXYPlot();
         // change BG
@@ -102,26 +100,29 @@ public class DistributionPresenter extends ApplicationFrame {
         plot.setDomainGridlinePaint(Color.LIGHT_GRAY);
         plot.setRangeGridlinePaint(Color.LIGHT_GRAY);
 
-        XYLineAndShapeRenderer renderer0 = new XYLineAndShapeRenderer();
-        renderer0.setSeriesLinesVisible(0, false);
-        renderer0.setSeriesShape(0, new Rectangle2D.Double(-0.5, -8, 1, 8));
-        renderer0.setSeriesPaint(0, Color.DARK_GRAY);
-        plot.setRenderer(0, renderer0);
-
         int rangeAxisIndex = 0;
         // Draw distribution
         if (drawDistribution) {
-            plot.setDataset(1, getDistributionSamples(d, 1000));
+            plot.setDataset(0, getDistributionSamples(d, 1000));
             NumberAxis rangeAxis = new NumberAxis("Distribution density");
             rangeAxis.setLabelFont(plot.getRangeAxis().getLabelFont());
             plot.setRangeAxis(rangeAxisIndex, rangeAxis);
-            XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer();
-            renderer1.setSeriesShapesVisible(0, false);
-            renderer1.setSeriesPaint(0, Color.BLUE);
-            renderer1.setSeriesStroke(0, new BasicStroke(1.5f));
-            plot.setRenderer(1, renderer1);
-            plot.mapDatasetToRangeAxis(1, rangeAxisIndex);
+            XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+            renderer.setSeriesShapesVisible(0, false);
+            renderer.setSeriesPaint(0, Color.BLUE);
+            renderer.setSeriesStroke(0, new BasicStroke(1.5f));
+            plot.setRenderer(0, renderer);
+            plot.mapDatasetToRangeAxis(0, rangeAxisIndex);
             rangeAxisIndex++;
+        }
+
+        if (drawSamples) {
+            plot.setDataset(1, new XYSeriesCollection(dotsData));
+            XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+            renderer.setSeriesLinesVisible(0, false);
+            renderer.setSeriesShape(0, new Rectangle2D.Double(-0.25, -4, 0.5, 4));
+            renderer.setSeriesPaint(0, Color.DARK_GRAY);
+            plot.setRenderer(1, renderer);
         }
 
         // Draw histogram
@@ -130,9 +131,9 @@ public class DistributionPresenter extends ApplicationFrame {
             NumberAxis rangeAxis = new NumberAxis("Sample count");
             rangeAxis.setLabelFont(plot.getRangeAxis().getLabelFont());
             plot.setRangeAxis(rangeAxisIndex, rangeAxis);
-            XYBarRenderer renderer2 = new XYBarRenderer();
-            renderer2.setShadowVisible(false);
-            plot.setRenderer(2, renderer2);
+            XYBarRenderer renderer = new XYBarRenderer();
+            renderer.setShadowVisible(false);
+            plot.setRenderer(2, renderer);
             plot.mapDatasetToRangeAxis(2, rangeAxisIndex);
             rangeAxisIndex++;
         }
