@@ -31,10 +31,11 @@ public class DistributionPresenter extends ApplicationFrame {
 
     private static XYSeriesCollection getDistributionSamples(ContinuousDistribution dist, int nSamples) {
         XYSeries series = new XYSeries(dist.toString());
+        double start = dist.inverseF(IntegralDistributionApproximator.INVERSE_F_IGNORE_THRESHOLD);
+        double step = (dist.inverseF(1 - IntegralDistributionApproximator.INVERSE_F_IGNORE_THRESHOLD) - start) / (nSamples - 1);
         for (int i = 0; i < nSamples; ++i) {
-            double cd = 1.0 / (nSamples * 2) * (i * 2 + 1);
-            double x = dist.inverseF(cd);
-            series.add(x, dist.density(x));
+            series.add(start, dist.density(start));
+            start += step;
         }
         return new XYSeriesCollection(series);
     }
