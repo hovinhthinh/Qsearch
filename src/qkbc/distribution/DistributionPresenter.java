@@ -67,7 +67,7 @@ public class DistributionPresenter extends ApplicationFrame {
         return chart.getXYPlot();
     }
 
-    public void printToFile(String file, int width, int height) {
+    public void printToSvg(String file, int width, int height) {
         try {
             SVGGraphics2D g2 = new SVGGraphics2D(width, height);
             Rectangle r = new Rectangle(0, 0, width, height);
