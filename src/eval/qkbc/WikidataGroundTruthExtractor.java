@@ -181,6 +181,10 @@ public class WikidataGroundTruthExtractor {
 //        // river-length
 //        downloadGroundTruthData("Q4022", "P2043", false, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length");
         // company-revenue
-        downloadGroundTruthData("Q783794", "P2139", true, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-company_revenue");
+//        downloadGroundTruthData("Q783794", "P2139", true, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-company_revenue");
+        // powerStation-capacity
+//        downloadGroundTruthData("Q159719", "P2109", false, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-powerStation_capacity");
+        // earthquake-magnitude
+//        downloadGroundTruthData("Q7944", "P2528", false, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-earthquake_magnitude");
     }
 }

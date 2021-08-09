@@ -3,6 +3,7 @@ package qkbc.text;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import model.quantity.Quantity;
 import model.quantity.QuantityDomain;
+import nlp.NLP;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import storage.text.migrate.ChronicleMapQfactStorage;
@@ -102,11 +103,11 @@ public class RelationInstance {
             if (s.startsWith("<E>:") || s.startsWith("<T>:")) {
                 return;
             }
-            ctx.add(s);
+            ctx.add(s.trim());
         });
         Quantity q = getQuantity();
         if (getQuantity().getSearchDomain().equals(QuantityDomain.Domain.DIMENSIONLESS)) {
-            ctx.addAll(Arrays.asList(q.unit.split(" ")));
+            ctx.addAll(NLP.splitSentence(q.unit));
         }
         return ctx;
     }

@@ -15,21 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AnnotationGenerator_Ours {
-    public static void generateTsvForGoogleSpreadsheet(String inputFileParametric,
-                                                       String inputFileNonParametric,
-                                                       String outputFile) {
+    public static void generateTsvForGoogleSpreadsheet(String inputFileNonParametric, String outputFile) {
         // load input (querying output)
-        QKBCResult rp = Gson.fromJson(FileUtils.getContent(inputFileParametric, "UTF-8"), QKBCResult.class);
         QKBCResult rn = Gson.fromJson(FileUtils.getContent(inputFileNonParametric, "UTF-8"), QKBCResult.class);
 
         Map<String, RelationInstance> kbcId2RI = new HashMap<>();
         Map<String, String> kbcId2Settings = new HashMap<>();
         Map<String, Integer> kbcId2IterP = new HashMap<>(), kbcId2IterN = new HashMap<>();
-        rp.instances.stream().filter(ri -> ri.sampledEffectivePositiveIterIndices.size() > 0).forEach(ri -> {
-            kbcId2IterP.put(ri.kbcId, ri.sampledEffectivePositiveIterIndices.get(0));
-            kbcId2RI.put(ri.kbcId, ri);
-            kbcId2Settings.put(ri.kbcId, kbcId2Settings.getOrDefault(ri.kbcId, "") + "P(" + ri.sampledEffectivePositiveIterIndices.get(0) + ")");
-        });
         rn.instances.stream().filter(ri -> ri.sampledEffectivePositiveIterIndices.size() > 0).forEach(ri -> {
             kbcId2IterN.put(ri.kbcId, ri.sampledEffectivePositiveIterIndices.get(0));
             kbcId2RI.put(ri.kbcId, ri);
@@ -38,14 +30,14 @@ public class AnnotationGenerator_Ours {
 
         try {
             CSVPrinter csvPrinter = new CSVPrinter(FileUtils.getPrintWriter(outputFile, "UTF-8"), CSVFormat.DEFAULT
-                    .withHeader("id", "settings", "iter", "source", "entity", rp.predicate, "sentence", "groundtruth", "eval"));
+                    .withHeader("id", "settings", "iter", "source", "entity", rn.predicate, "sentence", "groundtruth", "eval"));
 
             kbcId2RI.values().stream().sorted(Comparator.comparing(ri ->
                     Math.min(kbcId2IterP.getOrDefault(ri.kbcId, 100), kbcId2IterN.getOrDefault(ri.kbcId, 100))
             )).forEach(ri -> {
                 Quantity q = Quantity.fromQuantityString(ri.quantity);
                 String qStr = Number.getWrittenString(q.value, true);
-                if (rp.refinementByTime) {
+                if (rn.refinementByTime) {
                     qStr = "@" + ri.getYearCtx() + ": " + qStr;
                 }
 
@@ -81,36 +73,32 @@ public class AnnotationGenerator_Ours {
     }
 
     public static void main(String[] args) {
-        // boostrapping
-        generateTsvForGoogleSpreadsheet("eval/qkbc/exp_1/qsearch_queries/building_height_ourP.json",
-                "eval/qkbc/exp_1/qsearch_queries/building_height_ourN.json",
+        generateTsvForGoogleSpreadsheet("eval/qkbc/exp_1/qsearch_queries/building_height_ourN.json",
                 "eval/qkbc/exp_1/qsearch_queries/annotation/building_height_our.annotation_gg.csv"
         );
 
-        generateTsvForGoogleSpreadsheet("eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourP.json",
-                "eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourN.json",
+        generateTsvForGoogleSpreadsheet("eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourN.json",
                 "eval/qkbc/exp_1/qsearch_queries/annotation/mountain_elevation_our.annotation_gg.csv"
         );
 
-        generateTsvForGoogleSpreadsheet("eval/qkbc/exp_1/qsearch_queries/river_length_ourP.json",
-                "eval/qkbc/exp_1/qsearch_queries/river_length_ourN.json",
+        generateTsvForGoogleSpreadsheet("eval/qkbc/exp_1/qsearch_queries/river_length_ourN.json",
                 "eval/qkbc/exp_1/qsearch_queries/annotation/river_length_our.annotation_gg.csv"
         );
 
-        generateTsvForGoogleSpreadsheet("eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourP.json",
-                "eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourN.json",
+        generateTsvForGoogleSpreadsheet("eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourN.json",
                 "eval/qkbc/exp_1/qsearch_queries/annotation/stadium_capacity_our.annotation_gg.csv"
         );
 
-        // original
-        generateTsvForGoogleSpreadsheet("eval/qkbc/exp_1/qsearch_queries/city_altitude_ourP.json",
-                "eval/qkbc/exp_1/qsearch_queries/city_altitude_ourN.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/city_altitude_our.annotation_gg.csv"
+        generateTsvForGoogleSpreadsheet("eval/qkbc/exp_1/qsearch_queries/our_output_fact/company_revenue_ourN_gt.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation/company_revenue_our.annotation_gg_gt.csv"
         );
 
-        generateTsvForGoogleSpreadsheet("eval/qkbc/exp_1/qsearch_queries/company_revenue_ourP.json",
-                "eval/qkbc/exp_1/qsearch_queries/company_revenue_ourN.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/company_revenue_our.annotation_gg.csv"
+        generateTsvForGoogleSpreadsheet("eval/qkbc/exp_1/qsearch_queries/our_output_fact/powerstation_capacity_ourN.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation/powerstation_capacity_our.annotation_gg_gt.csv"
+        );
+
+        generateTsvForGoogleSpreadsheet("eval/qkbc/exp_1/qsearch_queries/our_output_fact/earthquake_magnitude_ourN.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation/earthquake_magnitude_our.annotation_gg_gt.csv"
         );
     }
 }
