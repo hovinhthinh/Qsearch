@@ -76,7 +76,9 @@ public class AnnotationGenerator_LM {
                         "eval/qkbc/exp_1/qsearch_queries/lm_output_fact/river_length_lm.json",
                         "eval/qkbc/exp_1/qsearch_queries/lm_output_fact/stadium_capacity_lm.json",
                         "eval/qkbc/exp_1/qsearch_queries/lm_output_fact/city_altitude_lm.json",
-                        "eval/qkbc/exp_1/qsearch_queries/lm_output_fact/company_revenue_lm.json"
+//                        "eval/qkbc/exp_1/qsearch_queries/lm_output_fact/earthquake_magnitude_lm.json",
+//                        "eval/qkbc/exp_1/qsearch_queries/lm_output_fact/powerStation_capacity_lm.json",
+//                        "eval/qkbc/exp_1/qsearch_queries/lm_output_fact/company_revenue_lm_gt.json"
                 },
                 "eval/qkbc/exp_1/qsearch_queries/annotation_lm/lm_annotation_gg.csv"
         );

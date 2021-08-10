@@ -3,6 +3,8 @@ package eval.qkbc;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import qkbc.text.RelationInstance;
+import storage.text.migrate.ChronicleMapQfactStorage;
+import storage.text.migrate.TypeMatcher;
 import util.FileUtils;
 import util.Gson;
 
@@ -10,6 +12,7 @@ import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 public class QKBCResult {
@@ -26,6 +29,25 @@ public class QKBCResult {
     public String template;
 
     public static void calculateStats(String inputFile, String annotationFile) throws Exception {
+        calculateStats(inputFile, annotationFile, null, null);
+    }
+
+    public static void calculateStats(String inputFile, String annotationFile,
+                                      String groundTruthFile, String type) throws Exception {
+        Integer nGroundtruth = null;
+        if (groundTruthFile != null) {
+            TypeMatcher matcher = new TypeMatcher(type);
+            HashSet<String> eS = new HashSet<>();
+            for (String e : ChronicleMapQfactStorage.SEARCHABLE_ENTITIES) {
+                if (matcher.match(e)) {
+                    eS.add(e);
+                }
+            }
+            nGroundtruth = (int) WikidataGroundTruthExtractor.loadPredicateGroundTruthFromFile(groundTruthFile).stream()
+                    .filter(o -> eS.contains(o.e))
+                    .mapToInt(o -> o.nFacts()).sum();
+        }
+
         // load input (querying output)
         QKBCResult r = Gson.fromJson(FileUtils.getContent(inputFile, "UTF-8"), QKBCResult.class);
 
@@ -93,7 +115,8 @@ public class QKBCResult {
                         }
                     }
                 }
-                recall = 1.0 * nTrueInGroundTruth / r.groundTruthSize * 100;
+//                recall = 1.0 * nTrueInGroundTruth / r.groundTruthSize * 100;
+                recall = 1.0 * nTrueInGroundTruth / (nGroundtruth != null ? nGroundtruth : r.groundTruthSize) * 100;
                 precCWA = nInGroundTruth == 0 ? -1 : 1.0 * nTrueInGroundTruth / nInGroundTruth;
             } else {
                 ext = currentEffectiveInstances.size();
@@ -136,83 +159,91 @@ public class QKBCResult {
 
     public static void main(String[] args) throws Exception {
         // non-parametric
-        // bootstrapping
         calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/building_height_ourN.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - building_height_our.csv");
+                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - building_height_our.csv",
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", "<wordnet_building_102913152>");
 
         calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/mountain_elevation_ourN.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - mountain_elevation_our.csv");
+                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - mountain_elevation_our.csv",
+                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", "<http://schema.org/Mountain>");
 
         calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/river_length_ourN.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - river_length_our.csv");
+                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - river_length_our.csv",
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", "<wordnet_river_109411430>");
 
         calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/stadium_capacity_ourN.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - stadium_capacity_our.csv");
+                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - stadium_capacity_our.csv",
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", "<wordnet_stadium_104295881>");
 
-        // original
-        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/company_revenue_ourN.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - company_revenue_our.csv");
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/company_revenue_ourN_gt.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - company_revenue_our_gt.csv",
+                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-company_revenue", "<wordnet_company_108058098>");
 
-        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/city_altitude_ourN.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - city_altitude_our.csv");
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/powerstation_capacity_ourN.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - powerstation_capacity_our.csv",
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-powerStation_capacity", "<wordnet_power_station_103996655>");
 
-        // parametric
-        // bootstrapping
-        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/building_height_ourP.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - building_height_our.csv");
-
-        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/mountain_elevation_ourP.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - mountain_elevation_our.csv");
-
-        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/river_length_ourP.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - river_length_our.csv");
-
-        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/stadium_capacity_ourP.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - stadium_capacity_our.csv");
-
-        // original
-        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/company_revenue_ourP.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - company_revenue_our.csv");
-
-        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/city_altitude_ourP.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - city_altitude_our.csv");
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/our_output_fact/earthquake_magnitude_ourN.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation/qkbc eval - earthquake_magnitude_our.csv",
+                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-earthquake_magnitude", "<wordnet_earthquake_107428954>");
 
         // QSEARCH
         calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/building_height_qs.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv");
+                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv",
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", "<wordnet_building_102913152>");
 
         calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/mountain_elevation_qs.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv");
+                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv",
+                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", "<http://schema.org/Mountain>");
 
         calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/river_length_qs.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv");
+                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv",
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", "<wordnet_river_109411430>");
 
         calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/stadium_capacity_qs.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv");
+                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv",
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", "<wordnet_stadium_104295881>");
 
-        calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/company_revenue_qs.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv");
 
-        calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/city_altitude_qs.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - qsearch_annotation.csv");
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/company_revenue_qs_gt.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - company_revenue_qs_gt.csv",
+                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-company_revenue", "<wordnet_company_108058098>");
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/powerStation_capacity_qs.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - powerStation_capacity_and_earthquake_magnitude_qs.csv",
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-powerStation_capacity", "<wordnet_power_station_103996655>");
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/qs_output_fact/earthquake_magnitude_qs.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_qs/qkbc eval - powerStation_capacity_and_earthquake_magnitude_qs.csv",
+                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-earthquake_magnitude", "<wordnet_earthquake_107428954>");
 
         // LM
         calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/building_height_lm.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv");
+                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv",
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", "<wordnet_building_102913152>");
 
         calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/mountain_elevation_lm.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv");
+                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv",
+                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", "<http://schema.org/Mountain>");
 
         calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/river_length_lm.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv");
+                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv",
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", "<wordnet_river_109411430>");
 
         calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/stadium_capacity_lm.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv");
+                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv",
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", "<wordnet_stadium_104295881>");
 
-        calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/city_altitude_lm.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv");
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/company_revenue_lm_gt.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - company_revenue_lm_gt.csv",
+                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-company_revenue", "<wordnet_company_108058098>");
 
-        calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/company_revenue_lm.json",
-                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - lm_annotation.csv");
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/powerStation_capacity_lm.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - powerStation_capacity_and_earthquake_magnitude_lm.csv",
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-powerStation_capacity", "<wordnet_power_station_103996655>");
+
+        calculateStats("eval/qkbc/exp_1/qsearch_queries/lm_output_fact/earthquake_magnitude_lm.json",
+                "eval/qkbc/exp_1/qsearch_queries/annotation_lm/qkbc eval - powerStation_capacity_and_earthquake_magnitude_lm.csv",
+                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-earthquake_magnitude", "<wordnet_earthquake_107428954>");
     }
 }

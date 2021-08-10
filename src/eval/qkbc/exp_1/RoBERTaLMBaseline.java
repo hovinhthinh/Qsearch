@@ -170,5 +170,18 @@ public class RoBERTaLMBaseline {
                         new Pair<>("<Euro>", "<mask> million euros")),
                 null,
                 "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact/company_revenue_lm.json");
+
+        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact/powerstation_capacity_ourN.json", 3,
+                "[ENTITY] has a capacity of [QUANTITY] .",
+                Arrays.asList(new Pair<>("<megawatt_wd:Q6982035>", "<mask> MW"),
+                        new Pair<>("<Kilowatt>", "<mask> kW")),
+                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-powerStation_capacity",
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact/powerStation_capacity_lm.json");
+
+        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact/earthquake_magnitude_ourN.json", 5,
+                "[ENTITY] had a magnitude of [QUANTITY] .",
+                Arrays.asList(new Pair<>("", "<mask>")),
+                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-earthquake_magnitude",
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact/earthquake_magnitude_lm.json");
     }
 }
