@@ -20,6 +20,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AnnotationGeneratorAndSummerization_Noise {
+    public static class DoQStats {
+        public double mean, std;
+
+        public DoQStats(double mean, double std) {
+            this.mean = mean;
+            this.std = std;
+        }
+    }
+
     // do not allow duplicated sample values for the same entity
     public static ArrayList<RelationInstance> deduplicateNoise(List<RelationInstance> ri) {
         ArrayList<RelationInstance> r = new ArrayList<>();
@@ -109,7 +118,7 @@ public class AnnotationGeneratorAndSummerization_Noise {
         return res;
     }
 
-    public static Map<String, List<String>> markNoise(QKBCResult r, int baseIter, String annotatedFile) throws Exception {
+    public static Map<String, List<String>> markNoise(QKBCResult r, int baseIter, String annotatedFile, DoQStats doq) throws Exception {
         Map<String, List<String>> map = new HashMap<>();
 
         ArrayList<RelationInstance> ris = r.instances.stream()
@@ -185,6 +194,7 @@ public class AnnotationGeneratorAndSummerization_Noise {
         ArrayList<RelationInstance> deduplicatedPrct = new ArrayList<>(),
                 deduplicatedRng = new ArrayList<>(),
                 deduplicatedZscr = new ArrayList<>(),
+                deduplicatedDoQ = new ArrayList<>(),
                 deduplicatedDbScan = new ArrayList<>();
 
         for (int i = 0; i < ris.size(); ++i) {
@@ -198,6 +208,12 @@ public class AnnotationGeneratorAndSummerization_Noise {
             double z = (v - dist.getMean()) / dist.getSampleStandardDeviation();
             if (Math.abs(z) > 3) {
                 deduplicatedZscr.add(ris.get(i));
+            }
+            if (doq != null) {
+                z = (v - doq.mean) / doq.std;
+                if (Math.abs(z) > 3) {
+                    deduplicatedDoQ.add(ris.get(i));
+                }
             }
         }
         deduplicatedPrct = deduplicateNoise(deduplicatedPrct);
@@ -289,6 +305,38 @@ public class AnnotationGeneratorAndSummerization_Noise {
             map.get(ri.kbcId).add("z-scr");
         });
 
+        //
+        if (doq != null) {
+            deduplicatedDoQ = deduplicateNoise(deduplicatedDoQ);
+            System.out.println("#DoQ: " + deduplicatedDoQ.size());
+            groundtruth = deduplicatedDoQ.stream().filter(ri -> ri.groundtruth != null).collect(Collectors.toList());
+            nTrueGt = (int) groundtruth.stream().filter(ri -> ri.groundtruth).count();
+            System.out.println("groundtruth: " + nTrueGt + "/" + groundtruth.size());
+            gtUnavail = deduplicatedDoQ.stream().filter(ri -> ri.groundtruth == null)
+                    .collect(Collectors.toCollection(ArrayList::new));
+            nGtUnavail = gtUnavail.size();
+            System.out.println("groundtruthUnavail: " + gtUnavail.size());
+            sample(gtUnavail);
+
+            // print prec
+            if (annotatedFile != null) {
+                int nTrueUnavail = 0;
+                for (RelationInstance ri : gtUnavail) {
+                    if (kbcId2Eval.get(ri.kbcId)) {
+                        ++nTrueUnavail;
+                    }
+                }
+
+                double prec = 1 - ((1.0 * nTrueUnavail / gtUnavail.size()) * nGtUnavail + nTrueGt) / (groundtruth.size() + nGtUnavail);
+                System.out.println(String.format("---- Noise prec: %.3f", prec));
+            }
+
+            gtUnavail.forEach(ri -> {
+                map.putIfAbsent(ri.kbcId, new ArrayList<>());
+                map.get(ri.kbcId).add("doq");
+            });
+        }
+
         // DBScan
         deduplicatedDbScan = deduplicateNoise(dbScanNoiseDetect(ris));
         System.out.println("#Dbscan: " + deduplicatedDbScan.size());
@@ -323,15 +371,15 @@ public class AnnotationGeneratorAndSummerization_Noise {
 
     public static void generateTsvForGoogleSpreadsheet_Ours(String inputFile, int iter,
                                                             String annotatedFile,
-                                                            String outputFile) throws Exception {
+                                                            String outputFile, DoQStats doq) throws Exception {
         System.out.println("======== " + inputFile + " : iter@" + iter);
         QKBCResult r = Gson.fromJson(FileUtils.getContent(inputFile, "UTF-8"), QKBCResult.class);
 
-        Map<String, List<String>> noiseMap = markNoise(r, iter, annotatedFile);
+        Map<String, List<String>> noiseMap = markNoise(r, iter, annotatedFile, doq);
 
         if (annotatedFile == null && outputFile != null) {
             CSVPrinter csvPrinter = new CSVPrinter(FileUtils.getPrintWriter(outputFile, "UTF-8"), CSVFormat.DEFAULT
-                    .withHeader("id", "settings", "source", "entity", "sentence", "groundtruth", "eval"));
+                    .withHeader("id", "settings", "source", "entity", r.predicate, "sentence", "groundtruth", "eval"));
 
             r.instances.forEach(ri -> {
                 if (!noiseMap.containsKey(ri.kbcId)) {
@@ -375,34 +423,41 @@ public class AnnotationGeneratorAndSummerization_Noise {
     }
 
     public static void main(String[] args) throws Exception {
-        generateTsvForGoogleSpreadsheet_Ours(
-                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/building_height_ourN.json", 5,
-                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - building_height.csv",
-                "eval/qkbc/exp_2/annotation/building_height-noise_gg.csv");
+//        generateTsvForGoogleSpreadsheet_Ours(
+//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/building_height_ourN.json", 5,
+//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - building_height.csv",
+//                "eval/qkbc/exp_2/annotation/building_height-noise_gg.csv", null);
+//
+//        generateTsvForGoogleSpreadsheet_Ours(
+//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/mountain_elevation_ourN.json", 10,
+//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - mountain_elevation.csv",
+//                "eval/qkbc/exp_2/annotation/mountain_elevation-noise_gg.csv", null);
+//
+//        generateTsvForGoogleSpreadsheet_Ours(
+//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/river_length_ourN.json", 5,
+//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - river_length.csv",
+//                "eval/qkbc/exp_2/annotation/river_length-noise_gg.csv", null);
+//
+//        generateTsvForGoogleSpreadsheet_Ours(
+//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/stadium_capacity_ourN.json", 6,
+//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - stadium_capacity.csv",
+//                "eval/qkbc/exp_2/annotation/stadium_capacity-noise_gg.csv", null);
+//
+//        generateTsvForGoogleSpreadsheet_Ours(
+//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/company_revenue_ourN.json", 4,
+//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - company_revenue.csv",
+//                "eval/qkbc/exp_2/annotation/company_revenue-noise_gg.csv", null);
 
-        generateTsvForGoogleSpreadsheet_Ours(
-                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/mountain_elevation_ourN.json", 10,
-                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - mountain_elevation.csv",
-                "eval/qkbc/exp_2/annotation/mountain_elevation-noise_gg.csv");
 
-        generateTsvForGoogleSpreadsheet_Ours(
-                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/river_length_ourN.json", 5,
-                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - river_length.csv",
-                "eval/qkbc/exp_2/annotation/river_length-noise_gg.csv");
-
-        generateTsvForGoogleSpreadsheet_Ours(
-                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/stadium_capacity_ourN.json", 6,
-                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - stadium_capacity.csv",
-                "eval/qkbc/exp_2/annotation/stadium_capacity-noise_gg.csv");
-
-        generateTsvForGoogleSpreadsheet_Ours(
-                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/city_altitude_ourN.json", 5,
-                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - city_altitude.csv",
-                "eval/qkbc/exp_2/annotation/city_altitude-noise_gg.csv");
-
-        generateTsvForGoogleSpreadsheet_Ours(
-                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/company_revenue_ourN.json", 4,
-                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - company_revenue.csv",
-                "eval/qkbc/exp_2/annotation/company_revenue-noise_gg.csv");
+//        generateTsvForGoogleSpreadsheet_Ours(
+//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/powerstation_capacity_ourN.json", 3,
+//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - powerstation_capacity.csv",
+//                "eval/qkbc/exp_2/annotation/powerstation_capacity-noise_gg.csv",
+//                new DoQStats(443157278.73, 371247766.015));
+//
+//        generateTsvForGoogleSpreadsheet_Ours(
+//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/earthquake_magnitude_ourN.json", 5,
+//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - earthquake_magnitude.csv",
+//                "eval/qkbc/exp_2/annotation/earthquake_magnitude-noise_gg.csv", null);
     }
 }
