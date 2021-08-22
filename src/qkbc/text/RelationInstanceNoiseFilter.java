@@ -48,9 +48,10 @@ public class RelationInstanceNoiseFilter {
     }
 
     private static Pair<ContinuousDistribution, Double> consistencyBasedDistributionNoiseFilter(
-            ArrayList<RelationInstance> ri, Class<? extends ContinuousDistribution> distType) {
+            ArrayList<RelationInstance> ri, Class<? extends ContinuousDistribution> distType, boolean fitDistOnly) {
         for (RelationInstance i : ri) {
             i.positive = true;
+            i.denoisingScore = 0;
         }
 
         ArrayList<Double> distSamples = extractDistributionSamplesFromRelationInstances(ri);
@@ -60,6 +61,10 @@ public class RelationInstanceNoiseFilter {
 //        System.out.println(originalDist);
         if (originalDist == null) {
             return null;
+        }
+
+        if (fitDistOnly) {
+            return originalDist;
         }
 
         // compute original p-values
@@ -145,6 +150,7 @@ public class RelationInstanceNoiseFilter {
         if (noiseRate > MAX_NOISE_RATE) {
             for (RelationInstance i : ri) {
                 i.positive = true;
+                i.denoisingScore = 0;
             }
             return originalDist;
         } else {
@@ -156,11 +162,11 @@ public class RelationInstanceNoiseFilter {
         }
     }
 
-    public static Pair<ContinuousDistribution, Double> consistencyBasedParametricDistributionNoiseFilter(ArrayList<RelationInstance> ri) {
+    public static Pair<ContinuousDistribution, Double> consistencyBasedParametricDistributionNoiseFilter(ArrayList<RelationInstance> ri, boolean fitDistOnly) {
         Pair<ContinuousDistribution, Double> bestDist = null;
 
         for (Class<? extends ContinuousDistribution> c : DistributionFitter.PARAMETRIC_CONTINUOUS_DIST_TYPES) {
-            Pair<ContinuousDistribution, Double> d = consistencyBasedDistributionNoiseFilter(ri, c);
+            Pair<ContinuousDistribution, Double> d = consistencyBasedDistributionNoiseFilter(ri, c, fitDistOnly);
 //            System.out.println(String.format("[DIST: %s] -> %s", c.getSimpleName(), d));
             if (d != null && (bestDist == null || d.second > bestDist.second)) {
                 bestDist = d;
@@ -169,17 +175,17 @@ public class RelationInstanceNoiseFilter {
 
         // Recompute the noise flag
         if (bestDist != null) {
-            consistencyBasedDistributionNoiseFilter(ri, bestDist.first.getClass());
+            consistencyBasedDistributionNoiseFilter(ri, bestDist.first.getClass(), fitDistOnly);
         }
 
         return bestDist;
     }
 
-    public static Pair<ContinuousDistribution, Double> consistencyBasedNonParametricDistributionNoiseFilter(ArrayList<RelationInstance> ri) {
+    public static Pair<ContinuousDistribution, Double> consistencyBasedNonParametricDistributionNoiseFilter(ArrayList<RelationInstance> ri, boolean fitDistOnly) {
         Pair<ContinuousDistribution, Double> bestDist = null;
 
         for (Class<? extends ContinuousDistribution> c : DistributionFitter.NON_PARAMETRIC_CONTINUOUS_DIST_TYPES) {
-            Pair<ContinuousDistribution, Double> d = consistencyBasedDistributionNoiseFilter(ri, c);
+            Pair<ContinuousDistribution, Double> d = consistencyBasedDistributionNoiseFilter(ri, c, fitDistOnly);
 //            System.out.println(String.format("[DIST: %s] -> %s", c.getSimpleName(), d));
             if (d != null && (bestDist == null || d.second > bestDist.second)) {
                 bestDist = d;
@@ -188,7 +194,7 @@ public class RelationInstanceNoiseFilter {
 
         // Recompute the noise flag
         if (bestDist != null) {
-            consistencyBasedDistributionNoiseFilter(ri, bestDist.first.getClass());
+            consistencyBasedDistributionNoiseFilter(ri, bestDist.first.getClass(), fitDistOnly);
         }
 
         return bestDist;
@@ -208,7 +214,7 @@ public class RelationInstanceNoiseFilter {
             samples.add(new RelationInstance(i + nSample + "", null, (r.nextDouble() - 0.5) * 50, 0, i + nSample + ""));
         }
 
-        Pair<ContinuousDistribution, Double> filteredDist = consistencyBasedNonParametricDistributionNoiseFilter(samples);
+        Pair<ContinuousDistribution, Double> filteredDist = consistencyBasedNonParametricDistributionNoiseFilter(samples, false);
         System.out.println(filteredDist);
         new DistributionPresenter(null, filteredDist.first, samples.stream().mapToDouble(s -> s.quantityStdValue).toArray(),
                 true, false, false, true)
