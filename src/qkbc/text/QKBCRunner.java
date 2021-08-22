@@ -146,7 +146,7 @@ public class QKBCRunner {
         return true;
     }
 
-    public static void harvest(String predicateName, String type, String seedCtx, KgUnit quantitySiUnit,
+    public static QKBCResult harvest(String predicateName, String type, String seedCtx, KgUnit quantitySiUnit,
                                boolean refinementByTime,
                                boolean denoise,
                                boolean useParametricDenoising,
@@ -388,7 +388,7 @@ public class QKBCRunner {
                 break;
             }
 
-            if (outputFile != null && (ctxQueue.isEmpty() || iter == maxNIter)) {
+            if (ctxQueue.isEmpty() || iter == maxNIter) {
                 QKBCResult r = new QKBCResult();
                 r.predicate = predicateName;
                 r.refinementByTime = refinementByTime;
@@ -397,17 +397,21 @@ public class QKBCRunner {
                 r.ctxList = new ArrayList<>(ctxList);
                 r.instances = new ArrayList<>(mostlyPositive);
 
-                // mark effective, groundtruth
-                markEffectiveAndGroundTruthFacts(r, grouthtruth, refinementByTime);
+                if (outputFile != null) {
+                    // mark effective, groundtruth
+                    markEffectiveAndGroundTruthFacts(r, grouthtruth, refinementByTime);
 
-                // mark sampled instances
-                markSampledInstances(r);
+                    // mark sampled instances
+                    markSampledInstances(r);
 
-                PrintWriter out = FileUtils.getPrintWriter(outputFile, "UTF-8");
-                out.println(Gson.toJson(r));
-                out.close();
+                    PrintWriter out = FileUtils.getPrintWriter(outputFile, "UTF-8");
+                    out.println(Gson.toJson(r));
+                    out.close();
+                }
+
+                return r;
             }
-        } while (!ctxQueue.isEmpty() && iter < maxNIter);
+        } while (true);
     }
 
     public static void markEffectiveFactsForIter(int iter, ArrayList<RelationInstance> instances, boolean refinementByTime) {
