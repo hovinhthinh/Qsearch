@@ -71,6 +71,10 @@ public class SocketSearchHandler extends WebSocketServlet {
                 additionalParams.put("ENTITY_POPULARITY_WEIGHT", Double.parseDouble(o.getString("ENTITY_POPULARITY_WEIGHT")));
             }
 
+            if (o.has("KBC_MODE")) {
+                additionalParams.put("KBC_MODE", o.getString("KBC_MODE").equalsIgnoreCase("true"));
+            }
+
             additionalParams.put("session", session);
 
             int nResult = o.has("ntop") ? Integer.parseInt(o.getString("ntop")) : 20;

@@ -67,6 +67,10 @@ public class SearchHandler extends HttpServlet {
             additionalParams.put("ENTITY_POPULARITY_WEIGHT", Double.parseDouble(v));
         }
 
+        if ((v = request.getParameter("KBC_MODE")) != null) {
+            additionalParams.put("KBC_MODE", v.equalsIgnoreCase("true"));
+        }
+
         int nResult = (v = request.getParameter("ntop")) != null ? Integer.parseInt(v) : 10;
 
         httpServletResponse.setCharacterEncoding("utf-8");

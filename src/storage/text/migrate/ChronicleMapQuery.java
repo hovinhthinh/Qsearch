@@ -1,5 +1,6 @@
 package storage.text.migrate;
 
+import eval.qkbc.QKBCResult;
 import misc.WikipediaView;
 import model.context.ContextEmbeddingMatcher;
 import model.context.ContextMatcher;
@@ -12,6 +13,8 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import qkbc.text.QKBCRunner;
+import qkbc.text.RelationInstance;
 import server.table.explain.TypeLiftingRestrictor;
 import server.text.ResultInstance;
 import uk.ac.susx.informatics.Morpha;
@@ -24,8 +27,10 @@ import util.headword.StringUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ChronicleMapQuery {
     public static final Logger LOGGER = Logger.getLogger(ChronicleMapQuery.class.getName());
@@ -50,6 +55,76 @@ public class ChronicleMapQuery {
         if (quantityConstraint == null) {
             return result;
         }
+
+        // KBC MODE -- handled separately
+        if ((boolean) additionalParameters.getOrDefault("KBC_MODE", false)) {
+            QKBCResult r = QKBCRunner.harvest(null, queryType, queryContext, quantityConstraint.quantity.getKgUnit(),
+                    false, true, false,
+                    0.9, 10, 3, null, -1, null);
+            result.second = new ArrayList<>();
+
+            r.instances.stream().collect(Collectors.groupingBy(o -> o.entity, LinkedHashMap::new,
+                    Collectors.toList())).forEach((e, l) -> {
+                ResultInstance ri = new ResultInstance();
+                ri.entity = e;
+                ri.popularity = WikipediaView.getView(e);
+                JSONArray entityQfacts = ChronicleMapQfactStorage.get(e);
+                for (RelationInstance i : l) {
+                    ResultInstance.SubInstance si = new ResultInstance.SubInstance();
+                    si.kbcId = i.kbcId;
+                    si.score = 1 / i.score;
+                    JSONObject qfact = entityQfacts.getJSONObject(Integer.parseInt(i.kbcId.split("_")[1]));
+
+                    String Q = qfact.getString("quantity");
+                    Quantity qt = Quantity.fromQuantityString(Q);
+                    if (!quantityConstraint.match(qt)) {
+                        continue;
+                    }
+                    si.quantity = qt.toString(1);
+                    si.quantityStandardValue = qt.value * qt.getScale();
+                    si.quantityStr = qfact.getString("quantityStr");
+                    si.quantityConvertedStr = qt.getQuantityConvertedStr(quantityConstraint.quantity);
+
+                    si.entityStr = qfact.getString("entityStr");
+
+                    ArrayList<String> X = new ArrayList<>(), essentialX = new ArrayList<>();
+                    JSONArray context = qfact.getJSONArray("context");
+                    for (int k = 0; k < context.length(); ++k) {
+                        String ct = context.getString(k);
+                        if (ct.startsWith("<T>:")) {
+                            // handle time like normal terms.
+                            X.addAll(NLP.splitSentence(ct.substring(4).split("\t")[0]));
+                        } else if (ct.startsWith("<E>:")) {
+                            X.addAll(NLP.splitSentence(ct.substring(4).split("\t")[0]));
+                        } else {
+                            X.add(ct);
+                            essentialX.add(ct);
+                        }
+                    }
+
+                    ArrayList<String> contextVerbose = new ArrayList<>(X);
+                    si.contextStr = contextVerbose;
+//                        matchContext = new ArrayList<>(X);
+
+                    si.sentence = qfact.getString("sentence");
+                    si.source = qfact.getString("source");
+                    ri.subInstances.add(si);
+                }
+
+                if (ri.subInstances.size() > ri.topKeepSubInstances) {
+                    ri.subInstances.subList(ri.topKeepSubInstances, ri.subInstances.size()).clear();
+                }
+
+                if (ri.subInstances.size() > 0) {
+                    result.second.add(ri);
+                }
+            });
+
+            Collections.sort(result.second);
+
+            return result;
+        }
+
         double qtConstraintStandardValue = quantityConstraint.quantity.value * quantityConstraint.quantity.getScale();
         Double qtConstraintStandardValue2 = quantityConstraint.quantity.value2 == null ? null :
                 quantityConstraint.quantity.value2 * quantityConstraint.quantity.getScale();
