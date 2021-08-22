@@ -1,10 +1,10 @@
 package qkbc.text;
 
+import config.Configuration;
 import eval.qkbc.QKBCResult;
 import eval.qkbc.WikidataGroundTruthExtractor;
 import model.quantity.kg.KgUnit;
 import nlp.NLP;
-import qkbc.distribution.DistributionPresenter;
 import qkbc.distribution.IntegralDistributionApproximator;
 import server.text.ResultInstance;
 import server.text.handler.search.SearchResult;
@@ -93,7 +93,7 @@ class ContextStats {
 }
 
 public class QKBCRunner {
-    public static final String QSEARCH_END_POINT = "http://sedna:6993/kbc_text";
+    public static final String QSEARCH_END_POINT = "http://127.0.0.1:" + Configuration.get("server.port") + "/kbc_text";
 
     private static Random RANDOM = new Random(120993);
 
