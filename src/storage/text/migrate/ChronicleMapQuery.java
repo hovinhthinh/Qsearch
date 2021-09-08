@@ -59,8 +59,8 @@ public class ChronicleMapQuery {
         // KBC MODE -- handled separately
         if ((boolean) additionalParameters.getOrDefault("KBC_MODE", false)) {
             QKBCResult r = QKBCRunner.harvest(null, queryType, queryContext, quantityConstraint.quantity.getKgUnit(),
-                    false, true, false,
-                    0.9, 10, 3, null, -1, null);
+                    false, false, false, // disable denoising
+                    0.9, 5, 3, null, -1, null);
             result.second = new ArrayList<>();
 
             r.instances.stream().collect(Collectors.groupingBy(o -> o.entity, LinkedHashMap::new,
@@ -120,7 +120,7 @@ public class ChronicleMapQuery {
                 }
             });
 
-            Collections.sort(result.second);
+            Collections.sort(result.second); // order by popularity only
 
             return result;
         }

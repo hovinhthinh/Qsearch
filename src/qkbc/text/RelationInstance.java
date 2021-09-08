@@ -11,7 +11,6 @@ import util.Pair;
 import util.Triple;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -23,13 +22,18 @@ public class RelationInstance {
         String[] args = kbcId.split("_");
         int eIdx = Integer.parseInt(args[0]);
 
-        JSONArray qfact = INDEXED_QFACT_TEXT_CACHE.getAndMoveToFirst(eIdx);
+        JSONArray qfact;
+        synchronized (INDEXED_QFACT_TEXT_CACHE) {
+            qfact = INDEXED_QFACT_TEXT_CACHE.getAndMoveToFirst(eIdx);
+        }
 
         if (qfact == null) {
             qfact = ChronicleMapQfactStorage.get(ChronicleMapQfactStorage.SEARCHABLE_ENTITIES.get(eIdx));
-            INDEXED_QFACT_TEXT_CACHE.putAndMoveToFirst(eIdx, qfact);
-            if (INDEXED_QFACT_TEXT_CACHE.size() > INDEXED_QFACT_CACHE_SIZE) {
-                INDEXED_QFACT_TEXT_CACHE.removeLast();
+            synchronized (INDEXED_QFACT_TEXT_CACHE) {
+                INDEXED_QFACT_TEXT_CACHE.putAndMoveToFirst(eIdx, qfact);
+                if (INDEXED_QFACT_TEXT_CACHE.size() > INDEXED_QFACT_CACHE_SIZE) {
+                    INDEXED_QFACT_TEXT_CACHE.removeLast();
+                }
             }
         }
 
