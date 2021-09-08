@@ -264,8 +264,10 @@ public class QKBCRunner {
             System.out.println(String.format("Positive samples: size: %d/%d (%d entities)",
                     positivePart.size(), riList.size(), positivePart.stream().collect(Collectors.groupingBy(o -> o.entity)).size()));
 
-            System.out.println(String.format("Positive distribution: %s | mean: %.3f | p-value: %.3f",
-                    positiveDist.first.toString(), positiveDist.first.getMean(), positiveDist.second));
+            if (positiveDist != null) {
+                System.out.println(String.format("Positive distribution: %s | mean: %.3f | p-value: %.3f",
+                        positiveDist.first.toString(), positiveDist.first.getMean(), positiveDist.second));
+            }
 
             ArrayList<RelationInstance> positiveWithGroundTruth =
                     Stream.concat(mostlyPositive.stream().filter(i -> i.positive), groundTruthList.stream())
@@ -335,7 +337,7 @@ public class QKBCRunner {
             }
 
 
-            IntegralDistributionApproximator positiveDistAppr = new IntegralDistributionApproximator(positiveDist.first);
+            IntegralDistributionApproximator positiveDistAppr = positiveDist != null ? new IntegralDistributionApproximator(positiveDist.first) : null;
             // Sort stats and output
             int currentIter = iter;
             List<ContextStats> filteredContextStats = contextStats.entrySet().stream().map(e -> e.getValue())
