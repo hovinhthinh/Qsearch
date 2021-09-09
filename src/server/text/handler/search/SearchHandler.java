@@ -170,6 +170,7 @@ public class SearchHandler extends HttpServlet {
                     // Compute recall-based metrics from groundtruth
                     if (groundtruth != null) {
                         response.AP = 0.0;
+                        response.AP_10 = 0.0;
                         response.RR = 0.0;
                         response.RECALL = 0.0;
                         response.RECALL_10 = 0.0;
@@ -192,11 +193,13 @@ public class SearchHandler extends HttpServlet {
                                     response.RECALL += 1;
                                 }
                                 if (i < 10) {
+                                    response.AP_10 += ((double) nTrue) / (i + 1);
                                     response.RECALL_10 += 1;
                                 }
                             }
                         }
                         if (groundtruth.size() > 0) {
+                            response.AP_10 /= groundtruth.size();
                             response.AP /= groundtruth.size();
                             response.RECALL /= groundtruth.size();
                             response.RECALL_10 /= groundtruth.size();

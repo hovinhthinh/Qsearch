@@ -24,7 +24,7 @@ public class SearchResult implements Cloneable {
 
 
     // below are recall-based metrics computed in case groundtruth is provided.
-    public Double RR, AP, RECALL, RECALL_10;
+    public Double RR, AP, RECALL, RECALL_10, AP_10;
 
     // below are pagination-info
     public int nResultsPerPage;
