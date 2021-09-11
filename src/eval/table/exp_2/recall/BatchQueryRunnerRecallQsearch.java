@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BatchQueryRunnerRecallQsearch {
-    public static final String END_POINT = "http://halimede:6993";
+    public static final String END_POINT = "https://qsearch.mpi-inf.mpg.de";
 
     public static void run(String[] args) {
         final File outputFolder = args.length > 1 ? new File(args[1]) : null;
@@ -28,7 +28,8 @@ public class BatchQueryRunnerRecallQsearch {
         final AtomicDouble map = new AtomicDouble(0),
                 mrr = new AtomicDouble(0),
                 recall = new AtomicDouble(0),
-                recall_10 = new AtomicDouble(0);
+                recall_10 = new AtomicDouble(0),
+                map_10 = new AtomicDouble(0);
         final AtomicInteger cnt = new AtomicInteger(0);
         Concurrent.runAndWait(() -> {
             while (true) {
@@ -57,6 +58,7 @@ public class BatchQueryRunnerRecallQsearch {
                     SearchResult r = Gson.fromJson(Crawler.getContentFromUrl(b.toString()), SearchResult.class);
 
                     map.addAndGet(r.AP);
+                    map_10.addAndGet(r.AP_10);
                     mrr.addAndGet(r.RR);
                     recall.addAndGet(r.RECALL);
                     recall_10.addAndGet(r.RECALL_10);
@@ -75,8 +77,8 @@ public class BatchQueryRunnerRecallQsearch {
         }, 6);
 
         monitor.forceShutdown();
-        System.out.println(String.format("MAP: %.3f    MRR: %.3f    RECALL_10: %.3f    RECALL: %.3f",
-                map.get() / cnt.get(), mrr.get() / cnt.get(), recall_10.get() / cnt.get(), recall.get() / cnt.get()));
+        System.out.println(String.format("MAP_10: %.3f    MAP: %.3f    MRR: %.3f    RECALL_10: %.3f    RECALL: %.3f",
+                map_10.get() / cnt.get(), map.get() / cnt.get(), mrr.get() / cnt.get(), recall_10.get() / cnt.get(), recall.get() / cnt.get()));
         System.out.flush();
 
     }
