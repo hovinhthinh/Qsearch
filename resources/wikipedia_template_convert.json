@@ -1,0 +1,4361 @@
+{
+  "ksi": {
+    "code": "ksi",
+    "abbr": "ksi",
+    "name": "kilopound per square inch",
+    "pluralName": "kilopounds per square inch",
+    "link": "/wiki/Pound_per_square_inch"
+  },
+  "in/ft": {
+    "code": "in/ft",
+    "abbr": "in/ft",
+    "name": "inch per foot",
+    "pluralName": "inches per foot",
+    "link": "/wiki/Grade_(slope)"
+  },
+  "year": {
+    "code": "year",
+    "abbr": "a",
+    "name": "year",
+    "pluralName": "years",
+    "link": "/wiki/Annum"
+  },
+  "kg-f": {
+    "code": "kg-f",
+    "abbr": "kgf",
+    "name": "kilogram-force",
+    "pluralName": "kilograms-force",
+    "link": "/wiki/Kilogram-force"
+  },
+  "DWton": {
+    "code": "DWton",
+    "abbr": "deadweight ton",
+    "name": "deadweight ton",
+    "pluralName": "deadweight tons",
+    "link": "/wiki/Tonnage"
+  },
+  "g/mL": {
+    "code": "g/mL",
+    "abbr": "g/mL",
+    "name": "gram per millilitre",
+    "pluralName": "grams per millilitre",
+    "link": "/wiki/Density"
+  },
+  "chainlk": {
+    "code": "chainlk",
+    "abbr": "[[Chain (unit)|chain]]",
+    "name": "[[Chain (unit)|chain]]",
+    "pluralName": "[[Chain (unit)|chain]]s"
+  },
+  "tTNT": {
+    "code": "tTNT",
+    "abbr": "tonne of TNT",
+    "name": "tonne of TNT",
+    "pluralName": "tonnes of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "milliard year": {
+    "code": "milliard year",
+    "abbr": "Ga",
+    "name": "milliard years",
+    "pluralName": "milliard years",
+    "link": "/wiki/Annum"
+  },
+  "bar": {
+    "code": "bar",
+    "abbr": "bar",
+    "name": "bar",
+    "pluralName": "bars",
+    "link": "/wiki/Bar_(unit)"
+  },
+  "rad": {
+    "code": "rad",
+    "abbr": "rad",
+    "name": "rad",
+    "pluralName": "rads",
+    "link": "/wiki/Rad_(unit)"
+  },
+  "Gly": {
+    "code": "Gly",
+    "abbr": "Gly",
+    "name": "gigalight-year",
+    "pluralName": "gigalight-years",
+    "link": "/wiki/Light-year#Definitions"
+  },
+  "scf": {
+    "code": "scf",
+    "abbr": "scf",
+    "name": "standard cubic foot",
+    "pluralName": "standard cubic feet",
+    "link": "/wiki/Standard_cubic_foot"
+  },
+  "Goilbbl/a": {
+    "code": "Goilbbl/a",
+    "abbr": "Gbbl/a",
+    "name": "billion barrels per year",
+    "pluralName": "billion barrels per year",
+    "link": "/wiki/Barrel_per_day"
+  },
+  "rai": {
+    "code": "rai",
+    "abbr": "rai",
+    "name": "rai",
+    "pluralName": "rai",
+    "link": "/wiki/Rai_(unit)"
+  },
+  "perch": {
+    "code": "perch",
+    "abbr": "perch",
+    "name": "perch",
+    "pluralName": "perches",
+    "link": "/wiki/Rod_(unit)"
+  },
+  "USbbl": {
+    "code": "USbbl",
+    "abbr": "US bbl",
+    "name": "US barrel",
+    "pluralName": "US barrels",
+    "link": "/wiki/Barrel_(unit)"
+  },
+  "kgf.m": {
+    "code": "kgf.m",
+    "abbr": "kgf⋅m",
+    "name": "kilogram force-metre",
+    "pluralName": "kilogram force-metres",
+    "link": "/wiki/Kilogram_metre_(torque)"
+  },
+  "mWh": {
+    "code": "mWh",
+    "abbr": "mWh",
+    "name": "milliwatt-hour",
+    "pluralName": "milliwatt-hours",
+    "link": "/wiki/Watt-hour"
+  },
+  "cm/s": {
+    "code": "cm/s",
+    "abbr": "cm/s",
+    "name": "centimetre per second",
+    "pluralName": "centimetres per second",
+    "link": "/wiki/Metre_per_second"
+  },
+  "cda": {
+    "code": "cda",
+    "abbr": "cda",
+    "name": "cuerda",
+    "pluralName": "cuerdas",
+    "link": "/wiki/Cuerda"
+  },
+  "mtTNT": {
+    "code": "mtTNT",
+    "abbr": "millitonne of TNT",
+    "name": "millitonne of TNT",
+    "pluralName": "millitonnes of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "g/km": {
+    "code": "g/km",
+    "abbr": "g/km",
+    "name": "gram per kilometre",
+    "pluralName": "grams per kilometre",
+    "link": "/wiki/Exhaust_gas"
+  },
+  "league": {
+    "code": "league",
+    "abbr": "league",
+    "name": "league",
+    "pluralName": "leagues",
+    "link": "/wiki/League_(unit)"
+  },
+  "USgi": {
+    "code": "USgi",
+    "abbr": "gi",
+    "name": "gill",
+    "pluralName": "gills",
+    "link": "/wiki/Gill_(unit)"
+  },
+  "-12USoz(mL)serve": {
+    "code": "-12USoz(mL)serve",
+    "abbr": "12 US fl oz (355 mL) serving",
+    "name": "12 US fl oz (355 mL) serving",
+    "pluralName": "12 US fl oz (355 mL) servings",
+    "link": "/wiki/Beverage_can#Standard_sizes"
+  },
+  "kgTNT": {
+    "code": "kgTNT",
+    "abbr": "kilogram of TNT",
+    "name": "kilogram of TNT",
+    "pluralName": "kilograms of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "solar radius": {
+    "code": "solar radius",
+    "abbr": "R☉",
+    "name": "solar radius",
+    "pluralName": "solar radii",
+    "link": "/wiki/Solar_radius"
+  },
+  "cm/h": {
+    "code": "cm/h",
+    "abbr": "cm/h",
+    "name": "centimetre per hour",
+    "pluralName": "centimetres per hour",
+    "link": "/wiki/Metre_per_second"
+  },
+  "pondemaat": {
+    "code": "pondemaat",
+    "abbr": "pond",
+    "name": "pondemaat",
+    "pluralName": "pondemaat",
+    "link": "https://nl.wikipedia.org/wiki/pondemaat"
+  },
+  "gr-f": {
+    "code": "gr-f",
+    "abbr": "grf",
+    "name": "grain-force",
+    "pluralName": "grains-force",
+    "link": "/wiki/Pound_(force)"
+  },
+  "AU": {
+    "code": "AU",
+    "abbr": "AU",
+    "name": "astronomical unit",
+    "pluralName": "astronomical units",
+    "link": "/wiki/Astronomical_unit"
+  },
+  "sqin": {
+    "code": "sqin",
+    "abbr": "sq in",
+    "name": "square inch",
+    "pluralName": "square inches",
+    "link": "/wiki/Square_inch"
+  },
+  "sqperch": {
+    "code": "sqperch",
+    "abbr": "perch",
+    "name": "perch",
+    "pluralName": "perches",
+    "link": "/wiki/Rod_(unit)#Area_and_volume"
+  },
+  "-lb/in2": {
+    "code": "-lb/in2",
+    "abbr": "lb/in2",
+    "name": "pound per square inch",
+    "pluralName": "pounds per square inch",
+    "link": "/wiki/Pound_per_square_inch"
+  },
+  "kW/t": {
+    "code": "kW/t",
+    "abbr": "kW/t",
+    "name": "kilowatt per tonne",
+    "pluralName": "kilowatts per tonne",
+    "link": "/wiki/Power-to-weight_ratio"
+  },
+  "cm/s2": {
+    "code": "cm/s2",
+    "abbr": "cm/s2",
+    "name": "centimetre per second squared",
+    "pluralName": "centimetres per second squared",
+    "link": "/wiki/Gal_(unit)"
+  },
+  "C": {
+    "code": "C",
+    "abbr": "°C",
+    "name": "degree Celsius",
+    "pluralName": "degrees Celsius",
+    "link": "/wiki/Celsius"
+  },
+  "Mcal": {
+    "code": "Mcal",
+    "abbr": "Mcal",
+    "name": "megacalorie",
+    "pluralName": "megacalories",
+    "link": "/wiki/Calorie"
+  },
+  "F": {
+    "code": "F",
+    "abbr": "°F",
+    "name": "degree Fahrenheit",
+    "pluralName": "degrees Fahrenheit",
+    "link": "/wiki/Fahrenheit"
+  },
+  "G": {
+    "code": "G",
+    "abbr": "G",
+    "name": "gauss",
+    "pluralName": "gauss",
+    "link": "/wiki/Gauss_(unit)"
+  },
+  "/acre": {
+    "code": "/acre",
+    "abbr": "/acre",
+    "name": "per acre",
+    "pluralName": "per acre",
+    "link": "/wiki/Acre"
+  },
+  "kg/m": {
+    "code": "kg/m",
+    "abbr": "kg/m",
+    "name": "kilogram per metre",
+    "pluralName": "kilograms per metre",
+    "link": "/wiki/Linear_density"
+  },
+  "J": {
+    "code": "J",
+    "abbr": "J",
+    "name": "joule",
+    "pluralName": "joules",
+    "link": "/wiki/Joule"
+  },
+  "kg/l": {
+    "code": "kg/l",
+    "abbr": "kg/l",
+    "name": "kilogram per litre",
+    "pluralName": "kilograms per litre",
+    "link": "/wiki/Density"
+  },
+  "Btu-59F": {
+    "code": "Btu-59F",
+    "abbr": "Btu59°F",
+    "name": "British thermal unit (59°F)",
+    "pluralName": "British thermal units (59°F)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "K": {
+    "code": "K",
+    "abbr": "K",
+    "name": "kelvin",
+    "pluralName": "kelvins",
+    "link": "/wiki/Kelvin"
+  },
+  "L": {
+    "code": "L",
+    "abbr": "L",
+    "name": "litre",
+    "pluralName": "litres",
+    "link": "/wiki/Litre"
+  },
+  "N": {
+    "code": "N",
+    "abbr": "N",
+    "name": "newton",
+    "pluralName": "newtons",
+    "link": "/wiki/Newton_(unit)"
+  },
+  "hp-electric": {
+    "code": "hp-electric",
+    "abbr": "hp",
+    "name": "electric horsepower",
+    "pluralName": "electric horsepower",
+    "link": "/wiki/Horsepower#Electrical_horsepower"
+  },
+  "sqmi": {
+    "code": "sqmi",
+    "abbr": "sq mi",
+    "name": "square mile",
+    "pluralName": "square miles",
+    "link": "/wiki/Square_mile"
+  },
+  "board foot": {
+    "code": "board foot",
+    "abbr": "board foot",
+    "name": "board foot",
+    "pluralName": "board foot",
+    "link": "/wiki/Board_foot"
+  },
+  "R": {
+    "code": "R",
+    "abbr": "°R",
+    "name": "degree Rankine",
+    "pluralName": "degrees Rankine",
+    "link": "/wiki/Rankine_scale"
+  },
+  "bu": {
+    "code": "bu",
+    "abbr": "bu",
+    "name": "bu",
+    "pluralName": "bu",
+    "link": "/wiki/Japanese_units_of_measurement#Length"
+  },
+  "T": {
+    "code": "T",
+    "abbr": "T",
+    "name": "tesla",
+    "pluralName": "teslas",
+    "link": "/wiki/Tesla_(unit)"
+  },
+  "impgi": {
+    "code": "impgi",
+    "abbr": "gi",
+    "name": "gill",
+    "pluralName": "gills",
+    "link": "/wiki/Gill_(unit)"
+  },
+  "m3/ha": {
+    "code": "m3/ha",
+    "abbr": "m3/ha",
+    "name": "cubic metre per hectare",
+    "pluralName": "cubic metres per hectare",
+    "link": "/wiki/Hectare"
+  },
+  "W": {
+    "code": "W",
+    "abbr": "W",
+    "name": "watt",
+    "pluralName": "watts",
+    "link": "/wiki/Watt"
+  },
+  "lb/yd": {
+    "code": "lb/yd",
+    "abbr": "lb/yd",
+    "name": "pound per yard",
+    "pluralName": "pounds per yard",
+    "link": "/wiki/Linear_density"
+  },
+  "-Scwt": {
+    "code": "-Scwt",
+    "abbr": "cwt",
+    "name": "hundredweight",
+    "pluralName": "hundredweight",
+    "link": "/wiki/Hundredweight"
+  },
+  "shton": {
+    "code": "shton",
+    "abbr": "ton",
+    "name": "ton",
+    "pluralName": "tons",
+    "link": "/wiki/Ton"
+  },
+  "million year": {
+    "code": "million year",
+    "abbr": "Ma",
+    "name": "million years",
+    "pluralName": "million years",
+    "link": "/wiki/Annum"
+  },
+  "foot": {
+    "code": "foot",
+    "abbr": "ft",
+    "name": "foot",
+    "pluralName": "foot",
+    "link": "/wiki/Foot_(unit)"
+  },
+  "lbfft": {
+    "code": "lbfft",
+    "abbr": "lbf⋅ft",
+    "name": "pound force-foot",
+    "pluralName": "pound force-feet",
+    "link": "/wiki/Pound-foot_(torque)"
+  },
+  "hand": {
+    "code": "hand",
+    "abbr": "h",
+    "name": "hand",
+    "pluralName": "hands",
+    "link": "/wiki/Hand_(unit)"
+  },
+  "Ba": {
+    "code": "Ba",
+    "abbr": "Ba",
+    "name": "barye",
+    "pluralName": "baryes",
+    "link": "/wiki/Barye"
+  },
+  "cc": {
+    "code": "cc",
+    "abbr": "cc",
+    "name": "cubic centimetre",
+    "pluralName": "cubic centimetres",
+    "link": "/wiki/Cubic_centimetre"
+  },
+  "a": {
+    "code": "a",
+    "abbr": "a",
+    "name": "are",
+    "pluralName": "ares",
+    "link": "/wiki/Hectare#Are"
+  },
+  "hph": {
+    "code": "hph",
+    "abbr": "hp⋅h",
+    "name": "horsepower-hour",
+    "pluralName": "horsepower-hours",
+    "link": "/wiki/Horsepower"
+  },
+  "lbmol/h": {
+    "code": "lbmol/h",
+    "abbr": "lbmol/h",
+    "name": "pound-mole per hour",
+    "pluralName": "pound-moles per hour",
+    "link": "/wiki/Pound-mole"
+  },
+  "Toilbbl/a": {
+    "code": "Toilbbl/a",
+    "abbr": "Tbbl/a",
+    "name": "trillion barrels per year",
+    "pluralName": "trillion barrels per year",
+    "link": "/wiki/Barrel_per_day"
+  },
+  "viss": {
+    "code": "viss",
+    "abbr": "viss",
+    "name": "viss",
+    "pluralName": "viss",
+    "link": "/wiki/Myanmar_units_of_measurement#Mass"
+  },
+  "d": {
+    "code": "d",
+    "abbr": "d",
+    "name": "day",
+    "pluralName": "days",
+    "link": "/wiki/Day"
+  },
+  "e": {
+    "code": "e",
+    "abbr": "e",
+    "name": "elementary charge",
+    "pluralName": "elementary charges",
+    "link": "/wiki/Elementary_charge"
+  },
+  "ch": {
+    "code": "ch",
+    "abbr": "ch",
+    "name": "chain",
+    "pluralName": "chains",
+    "link": "/wiki/Chain_(unit)"
+  },
+  "lbmol/d": {
+    "code": "lbmol/d",
+    "abbr": "lbmol/d",
+    "name": "pound-mole per day",
+    "pluralName": "pound-moles per day",
+    "link": "/wiki/Pound-mole"
+  },
+  "g": {
+    "code": "g",
+    "abbr": "g",
+    "name": "gram",
+    "pluralName": "grams",
+    "link": "/wiki/Gram"
+  },
+  "g/ml": {
+    "code": "g/ml",
+    "abbr": "g/ml",
+    "name": "gram per millilitre",
+    "pluralName": "grams per millilitre",
+    "link": "/wiki/Density"
+  },
+  "h": {
+    "code": "h",
+    "abbr": "h",
+    "name": "hour",
+    "pluralName": "hours",
+    "link": "/wiki/Hour"
+  },
+  "kg.m": {
+    "code": "kg.m",
+    "abbr": "kg⋅m",
+    "name": "kilogram metre",
+    "pluralName": "kilogram metres",
+    "link": "/wiki/Kilogram_metre_(torque)"
+  },
+  "firkin": {
+    "code": "firkin",
+    "abbr": "firkin",
+    "name": "firkin",
+    "pluralName": "firkins",
+    "link": "/wiki/Firkin_(unit)"
+  },
+  "kg/L": {
+    "code": "kg/L",
+    "abbr": "kg/L",
+    "name": "kilogram per litre",
+    "pluralName": "kilograms per litre",
+    "link": "/wiki/Density"
+  },
+  "g/mi": {
+    "code": "g/mi",
+    "abbr": "g/mi",
+    "name": "gram per mile",
+    "pluralName": "grams per mile",
+    "link": "/wiki/Exhaust_gas"
+  },
+  "l": {
+    "code": "l",
+    "abbr": "l",
+    "name": "litre",
+    "pluralName": "litres",
+    "link": "/wiki/Litre"
+  },
+  "m": {
+    "code": "m",
+    "abbr": "m",
+    "name": "metre",
+    "pluralName": "metres",
+    "link": "/wiki/Metre"
+  },
+  "Bq": {
+    "code": "Bq",
+    "abbr": "Bq",
+    "name": "becquerel",
+    "pluralName": "becquerels",
+    "link": "/wiki/Becquerel"
+  },
+  "p": {
+    "code": "p",
+    "abbr": "p",
+    "name": "pond",
+    "pluralName": "ponds",
+    "link": "/wiki/Kilogram-force"
+  },
+  "cufoot": {
+    "code": "cufoot",
+    "abbr": "cu ft",
+    "name": "cubic foot",
+    "pluralName": "cubic foot",
+    "link": "/wiki/Cubic_foot"
+  },
+  "ton-mile": {
+    "code": "ton-mile",
+    "abbr": "ton-mile",
+    "name": "ton-mile",
+    "pluralName": "ton-miles",
+    "link": "/wiki/Ton-mile"
+  },
+  "mcal": {
+    "code": "mcal",
+    "abbr": "mcal",
+    "name": "millicalorie",
+    "pluralName": "millicalories",
+    "link": "/wiki/Calorie"
+  },
+  "oz/cuin": {
+    "code": "oz/cuin",
+    "abbr": "oz/cu in",
+    "name": "ounce per cubic inch",
+    "pluralName": "ounces per cubic inch",
+    "link": "/wiki/Density"
+  },
+  "CV": {
+    "code": "CV",
+    "abbr": "CV",
+    "name": "metric horsepower",
+    "pluralName": "metric horsepower",
+    "link": "/wiki/Metric_horsepower"
+  },
+  "s": {
+    "code": "s",
+    "abbr": "s",
+    "name": "second",
+    "pluralName": "seconds",
+    "link": "/wiki/Second"
+  },
+  "pre1954U.S.nmi": {
+    "code": "pre1954U.S.nmi",
+    "abbr": "(pre‑1954 U.S.) nmi",
+    "name": "(pre-1954 U.S.) nautical mile",
+    "pluralName": "(pre-1954 U.S.) nautical miles",
+    "link": "/wiki/Nautical_mile"
+  },
+  "t": {
+    "code": "t",
+    "abbr": "t",
+    "name": "tonne",
+    "pluralName": "tonnes",
+    "link": "/wiki/Tonne"
+  },
+  "Cal-IT": {
+    "code": "Cal-IT",
+    "abbr": "CalIT",
+    "name": "Calorie (International Steam Table)",
+    "pluralName": "Calories (International Steam Table)",
+    "link": "/wiki/Calorie"
+  },
+  "kW.h": {
+    "code": "kW.h",
+    "abbr": "kW⋅h",
+    "name": "kilowatt-hour",
+    "pluralName": "kilowatt-hours",
+    "link": "/wiki/Watt-hour"
+  },
+  "lbmol/s": {
+    "code": "lbmol/s",
+    "abbr": "lbmol/s",
+    "name": "pound-mole per second",
+    "pluralName": "pound-moles per second",
+    "link": "/wiki/Pound-mole"
+  },
+  "Moilbbl/d": {
+    "code": "Moilbbl/d",
+    "abbr": "Mbbl/d",
+    "name": "million barrels per day",
+    "pluralName": "million barrels per day",
+    "link": "/wiki/Barrel_per_day"
+  },
+  "Gpc": {
+    "code": "Gpc",
+    "abbr": "Gpc",
+    "name": "gigaparsec",
+    "pluralName": "gigaparsecs",
+    "link": "/wiki/Parsec#Megaparsecs_and_gigaparsecs"
+  },
+  "Moilbbl/a": {
+    "code": "Moilbbl/a",
+    "abbr": "Mbbl/a",
+    "name": "million barrels per year",
+    "pluralName": "million barrels per year",
+    "link": "/wiki/Barrel_per_day"
+  },
+  "g-f": {
+    "code": "g-f",
+    "abbr": "gf",
+    "name": "gram-force",
+    "pluralName": "grams-force",
+    "link": "/wiki/Kilogram-force"
+  },
+  "Toilbbl": {
+    "code": "Toilbbl",
+    "abbr": "Tbbl",
+    "name": "trillion barrels",
+    "pluralName": "trillion barrels",
+    "link": "/wiki/Barrel_(unit)#Oil_barrel"
+  },
+  "cm/km": {
+    "code": "cm/km",
+    "abbr": "cm/km",
+    "name": "centimetre per kilometre",
+    "pluralName": "centimetres per kilometre",
+    "link": "/wiki/Grade_(slope)"
+  },
+  "mi/d": {
+    "code": "mi/d",
+    "abbr": "mi/d",
+    "name": "mile per day",
+    "pluralName": "miles per day",
+    "link": "/wiki/Orders_of_magnitude_(speed)"
+  },
+  "-LTf": {
+    "code": "-LTf",
+    "abbr": "LTf",
+    "name": "long ton-force",
+    "pluralName": "long tons-force",
+    "link": "/wiki/Long_ton-force"
+  },
+  "Ci": {
+    "code": "Ci",
+    "abbr": "Ci",
+    "name": "curie",
+    "pluralName": "curies",
+    "link": "/wiki/Curie_(unit)"
+  },
+  "isp": {
+    "code": "isp",
+    "abbr": "s",
+    "name": "second",
+    "pluralName": "seconds",
+    "link": "/wiki/Specific_impulse"
+  },
+  "chlk": {
+    "code": "chlk",
+    "abbr": "[[Chain (unit)|ch]]",
+    "name": "[[Chain (unit)|chain]]",
+    "pluralName": "[[Chain (unit)|chain]]s"
+  },
+  "W.h": {
+    "code": "W.h",
+    "abbr": "W⋅h",
+    "name": "watt-hour",
+    "pluralName": "watt-hours",
+    "link": "/wiki/Watt-hour"
+  },
+  "solar mass": {
+    "code": "solar mass",
+    "abbr": "M☉",
+    "name": "solar mass",
+    "pluralName": "solar masses",
+    "link": "/wiki/Solar_mass"
+  },
+  "eV": {
+    "code": "eV",
+    "abbr": "eV",
+    "name": "electronvolt",
+    "pluralName": "electronvolts",
+    "link": "/wiki/Electronvolt"
+  },
+  "mol/h": {
+    "code": "mol/h",
+    "abbr": "mol/h",
+    "name": "mole per hour",
+    "pluralName": "moles per hour",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "mol/s": {
+    "code": "mol/s",
+    "abbr": "mol/s",
+    "name": "mole per second",
+    "pluralName": "moles per second",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "hp-metric": {
+    "code": "hp-metric",
+    "abbr": "hp",
+    "name": "metric horsepower",
+    "pluralName": "metric horsepower",
+    "link": "/wiki/Metric_horsepower"
+  },
+  "pyeong": {
+    "code": "pyeong",
+    "abbr": "pyeong",
+    "name": "pyeong",
+    "pluralName": "pyeong",
+    "link": "/wiki/Pyeong"
+  },
+  "rem": {
+    "code": "rem",
+    "abbr": "rem",
+    "name": "rem",
+    "pluralName": "rems",
+    "link": "/wiki/Roentgen_equivalent_man"
+  },
+  "Mbbl": {
+    "code": "Mbbl",
+    "abbr": "Mbbl",
+    "name": "thousand barrels",
+    "pluralName": "thousand barrels",
+    "link": "/wiki/Barrel_(unit)#Oil_barrel"
+  },
+  "kWh": {
+    "code": "kWh",
+    "abbr": "kWh",
+    "name": "kilowatt-hour",
+    "pluralName": "kilowatt-hours",
+    "link": "/wiki/Watt-hour"
+  },
+  "Mt(TNT)": {
+    "code": "Mt(TNT)",
+    "abbr": "Mt",
+    "name": "megatonne",
+    "pluralName": "megatonnes",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "CID": {
+    "code": "CID",
+    "abbr": "cu in",
+    "name": "cubic inch",
+    "pluralName": "cubic inches",
+    "link": "/wiki/Cubic_inch#Engine_displacement"
+  },
+  "g/L": {
+    "code": "g/L",
+    "abbr": "g/L",
+    "name": "gram per litre",
+    "pluralName": "grams per litre",
+    "link": "/wiki/Density"
+  },
+  "Mcal-15": {
+    "code": "Mcal-15",
+    "abbr": "Mcal15",
+    "name": "megacalorie (15°C)",
+    "pluralName": "megacalories (15°C)",
+    "link": "/wiki/Calorie"
+  },
+  "g0": {
+    "code": "g0",
+    "abbr": "g0",
+    "name": "standard gravity",
+    "pluralName": "standard gravities",
+    "link": "/wiki/Standard_gravity"
+  },
+  "mol/d": {
+    "code": "mol/d",
+    "abbr": "mol/d",
+    "name": "mole per day",
+    "pluralName": "moles per day",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "L/T-f": {
+    "code": "L/T-f",
+    "abbr": "L/Tf",
+    "name": "long ton-force",
+    "pluralName": "long tons-force",
+    "link": "/wiki/Long_ton-force"
+  },
+  "AUtbsp": {
+    "code": "AUtbsp",
+    "abbr": "AU tbsp",
+    "name": "Australian tablespoon",
+    "pluralName": "Australian tablespoons",
+    "link": "/wiki/Australian_tablespoon"
+  },
+  "month": {
+    "code": "month",
+    "abbr": "month",
+    "name": "month",
+    "pluralName": "months",
+    "link": "/wiki/Month"
+  },
+  "mbar": {
+    "code": "mbar",
+    "abbr": "mbar",
+    "name": "millibar",
+    "pluralName": "millibars",
+    "link": "/wiki/Bar_(unit)"
+  },
+  "mol/min": {
+    "code": "mol/min",
+    "abbr": "mol/min",
+    "name": "mole per minute",
+    "pluralName": "moles per minute",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "ftpdl": {
+    "code": "ftpdl",
+    "abbr": "ft⋅pdl",
+    "name": "foot-poundal",
+    "pluralName": "foot-poundals",
+    "link": "/wiki/Foot-poundal"
+  },
+  "shp": {
+    "code": "shp",
+    "abbr": "shp",
+    "name": "shaft horsepower",
+    "pluralName": "shaft horsepower",
+    "link": "/wiki/Horsepower#Shaft_horsepower"
+  },
+  "foe": {
+    "code": "foe",
+    "abbr": "foe",
+    "name": "foe",
+    "pluralName": "foes",
+    "link": "/wiki/Foe_(unit)"
+  },
+  "bdft": {
+    "code": "bdft",
+    "abbr": "bd ft",
+    "name": "board foot",
+    "pluralName": "board feet",
+    "link": "/wiki/Board_foot"
+  },
+  "mg-f": {
+    "code": "mg-f",
+    "abbr": "mgf",
+    "name": "milligram-force",
+    "pluralName": "milligrams-force",
+    "link": "/wiki/Kilogram-force"
+  },
+  "MMBtu": {
+    "code": "MMBtu",
+    "abbr": "MMBtu",
+    "name": "million British thermal units",
+    "pluralName": "million British thermal units",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "Eh": {
+    "code": "Eh",
+    "abbr": "Eh",
+    "name": "Hartree",
+    "pluralName": "Hartrees",
+    "link": "/wiki/Hartree"
+  },
+  "Å": {
+    "code": "Å",
+    "abbr": "Å",
+    "name": "ångström",
+    "pluralName": "ångströms",
+    "link": "/wiki/%C3%85ngstr%C3%B6m"
+  },
+  "kg/kW": {
+    "code": "kg/kW",
+    "abbr": "kg/kW",
+    "name": "kilogram per kilowatt",
+    "pluralName": "kilograms per kilowatt",
+    "link": "/wiki/Kilowatt"
+  },
+  "ktoe": {
+    "code": "ktoe",
+    "abbr": "ktoe",
+    "name": "kilotonne of oil equivalent",
+    "pluralName": "kilotonnes of oil equivalent",
+    "link": "/wiki/Tonne_of_oil_equivalent"
+  },
+  "ft": {
+    "code": "ft",
+    "abbr": "ft",
+    "name": "foot",
+    "pluralName": "feet",
+    "link": "/wiki/Foot_(unit)"
+  },
+  "kWh/100 km": {
+    "code": "kWh/100 km",
+    "abbr": "kW⋅h/100 km",
+    "name": "kilowatt-hour per 100 kilometres",
+    "pluralName": "kilowatt-hours per 100 kilometres",
+    "link": "/wiki/Watt-hour"
+  },
+  "admi": {
+    "code": "admi",
+    "abbr": "nmi (admiralty)",
+    "name": "admiralty mile",
+    "pluralName": "admiralty miles",
+    "link": "/wiki/Nautical_mile"
+  },
+  "thousand million year": {
+    "code": "thousand million year",
+    "abbr": "Ga",
+    "name": "thousand million years",
+    "pluralName": "thousand million years",
+    "link": "/wiki/Annum"
+  },
+  "lb/cuyd": {
+    "code": "lb/cuyd",
+    "abbr": "lb/cu yd",
+    "name": "pound per cubic yard",
+    "pluralName": "pounds per cubic yard",
+    "link": "/wiki/Density"
+  },
+  "tkm": {
+    "code": "tkm",
+    "abbr": "tkm",
+    "name": "tonne-kilometre",
+    "pluralName": "tonne-kilometres",
+    "link": "/wiki/Tonne-kilometre"
+  },
+  "Mcal-th": {
+    "code": "Mcal-th",
+    "abbr": "Mcalth",
+    "name": "megacalorie (thermochemical)",
+    "pluralName": "megacalories (thermochemical)",
+    "link": "/wiki/Calorie"
+  },
+  "grf": {
+    "code": "grf",
+    "abbr": "grf",
+    "name": "grain-force",
+    "pluralName": "grains-force",
+    "link": "/wiki/Pound_(force)"
+  },
+  "tonne": {
+    "code": "tonne",
+    "abbr": "t",
+    "name": "tonne",
+    "pluralName": "tonnes",
+    "link": "/wiki/Tonne"
+  },
+  "lbf/in2": {
+    "code": "lbf/in2",
+    "abbr": "lbf/in2",
+    "name": "pound-force per square inch",
+    "pluralName": "pounds-force per square inch",
+    "link": "/wiki/Pound-force_per_square_inch"
+  },
+  "gf": {
+    "code": "gf",
+    "abbr": "gf",
+    "name": "gram-force",
+    "pluralName": "grams-force",
+    "link": "/wiki/Kilogram-force"
+  },
+  "PeV": {
+    "code": "PeV",
+    "abbr": "PeV",
+    "name": "petaelectronvolt",
+    "pluralName": "petaelectronvolts",
+    "link": "/wiki/Electronvolt"
+  },
+  "impbu": {
+    "code": "impbu",
+    "abbr": "imp bu",
+    "name": "imperial bushel",
+    "pluralName": "imperial bushels",
+    "link": "/wiki/Imperial_bushel"
+  },
+  "kg/km": {
+    "code": "kg/km",
+    "abbr": "kg/km",
+    "name": "kilogram per kilometre",
+    "pluralName": "kilograms per kilometre",
+    "link": "/wiki/Exhaust_gas"
+  },
+  "rood": {
+    "code": "rood",
+    "abbr": "rood",
+    "name": "rood",
+    "pluralName": "roods",
+    "link": "/wiki/Rood_(unit)"
+  },
+  "grt": {
+    "code": "grt",
+    "abbr": "grt",
+    "name": "gross register ton",
+    "pluralName": "gross register tons",
+    "link": "/wiki/Gross_register_tonnage"
+  },
+  "USdrygal": {
+    "code": "USdrygal",
+    "abbr": "US dry gal",
+    "name": "US dry gallon",
+    "pluralName": "US dry gallons",
+    "link": "/wiki/Gallon"
+  },
+  "kg/m3": {
+    "code": "kg/m3",
+    "abbr": "kg/m3",
+    "name": "kilogram per cubic metre",
+    "pluralName": "kilograms per cubic metre",
+    "link": "/wiki/Density"
+  },
+  "gr": {
+    "code": "gr",
+    "abbr": "gr",
+    "name": "grain",
+    "pluralName": "grains",
+    "link": "/wiki/Grain_(unit)"
+  },
+  "bhp": {
+    "code": "bhp",
+    "abbr": "bhp",
+    "name": "brake horsepower",
+    "pluralName": "brake horsepower",
+    "link": "/wiki/Horsepower#Brake_horsepower"
+  },
+  "kcal/h": {
+    "code": "kcal/h",
+    "abbr": "kcal/h",
+    "name": "kilocalorie per hour",
+    "pluralName": "kilocalories per hour",
+    "link": "/wiki/Calorie"
+  },
+  "kcal/g": {
+    "code": "kcal/g",
+    "abbr": "kcal/g",
+    "name": "kilocalorie per gram",
+    "pluralName": "kilocalories per gram",
+    "link": "/wiki/Kilocalorie_per_gram"
+  },
+  "dunum": {
+    "code": "dunum",
+    "abbr": "dunum",
+    "name": "dunum",
+    "pluralName": "dunums",
+    "link": "/wiki/Dunam"
+  },
+  "BTU-59F": {
+    "code": "BTU-59F",
+    "abbr": "BTU59°F",
+    "name": "British thermal unit (59°F)",
+    "pluralName": "British thermal units (59°F)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "kilderkin": {
+    "code": "kilderkin",
+    "abbr": "kilderkin",
+    "name": "kilderkin",
+    "pluralName": "kilderkins",
+    "link": "/wiki/Kilderkin"
+  },
+  "cuft": {
+    "code": "cuft",
+    "abbr": "cu ft",
+    "name": "cubic foot",
+    "pluralName": "cubic feet",
+    "link": "/wiki/Cubic_foot"
+  },
+  "GtTNT": {
+    "code": "GtTNT",
+    "abbr": "gigatonne of TNT",
+    "name": "gigatonne of TNT",
+    "pluralName": "gigatonnes of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "mi/s": {
+    "code": "mi/s",
+    "abbr": "mi/s",
+    "name": "mile per second",
+    "pluralName": "miles per second",
+    "link": "/wiki/Mile"
+  },
+  "MtonTNT": {
+    "code": "MtonTNT",
+    "abbr": "Mt",
+    "name": "megaton of TNT",
+    "pluralName": "megatons of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "kWh/100 mi": {
+    "code": "kWh/100 mi",
+    "abbr": "kW⋅h/100 mi",
+    "name": "kilowatt-hour per 100 miles",
+    "pluralName": "kilowatt-hours per 100 miles",
+    "link": "/wiki/Miles_per_gallon_gasoline_equivalent"
+  },
+  "lbft": {
+    "code": "lbft",
+    "abbr": "lb⋅ft",
+    "name": "pound-foot",
+    "pluralName": "pound-feet",
+    "link": "/wiki/Pound-foot_(torque)"
+  },
+  "ha": {
+    "code": "ha",
+    "abbr": "ha",
+    "name": "hectare",
+    "pluralName": "hectares",
+    "link": "/wiki/Hectare"
+  },
+  "pdl": {
+    "code": "pdl",
+    "abbr": "pdl",
+    "name": "poundal",
+    "pluralName": "poundals",
+    "link": "/wiki/Poundal"
+  },
+  "pdr": {
+    "code": "pdr",
+    "abbr": "pdr",
+    "name": "pounder",
+    "pluralName": "pounders",
+    "link": "/wiki/Pound_(mass)"
+  },
+  "MW.h": {
+    "code": "MW.h",
+    "abbr": "MW⋅h",
+    "name": "megawatt-hour",
+    "pluralName": "megawatt-hours",
+    "link": "/wiki/Watt-hour"
+  },
+  "peV": {
+    "code": "peV",
+    "abbr": "peV",
+    "name": "picoelectronvolt",
+    "pluralName": "picoelectronvolts",
+    "link": "/wiki/Electronvolt"
+  },
+  "dbar": {
+    "code": "dbar",
+    "abbr": "dbar",
+    "name": "decibar",
+    "pluralName": "decibars",
+    "link": "/wiki/Bar_(unit)"
+  },
+  "decade": {
+    "code": "decade",
+    "abbr": "daa",
+    "name": "decade",
+    "pluralName": "decades",
+    "link": "/wiki/Decade"
+  },
+  "hk": {
+    "code": "hk",
+    "abbr": "hk",
+    "name": "metric horsepower",
+    "pluralName": "metric horsepower",
+    "link": "/wiki/Metric_horsepower"
+  },
+  "USpt": {
+    "code": "USpt",
+    "abbr": "US pt",
+    "name": "US pint",
+    "pluralName": "US pints",
+    "link": "/wiki/Pint"
+  },
+  "Btu-th": {
+    "code": "Btu-th",
+    "abbr": "Btuth",
+    "name": "British thermal unit (thermochemical)",
+    "pluralName": "British thermal units (thermochemical)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "kcal-IT": {
+    "code": "kcal-IT",
+    "abbr": "kcalIT",
+    "name": "kilocalorie (International Steam Table)",
+    "pluralName": "kilocalories (International Steam Table)",
+    "link": "/wiki/Calorie"
+  },
+  "ktTNT": {
+    "code": "ktTNT",
+    "abbr": "kilotonne of TNT",
+    "name": "kilotonne of TNT",
+    "pluralName": "kilotonnes of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "hp": {
+    "code": "hp",
+    "abbr": "hp",
+    "name": "horsepower",
+    "pluralName": "horsepower",
+    "link": "/wiki/Horsepower"
+  },
+  "Gt": {
+    "code": "Gt",
+    "abbr": "Gt",
+    "name": "gigatonne",
+    "pluralName": "gigatonnes",
+    "link": "/wiki/Tonne"
+  },
+  "years": {
+    "code": "years",
+    "abbr": "yr",
+    "name": "year",
+    "pluralName": "years",
+    "link": "/wiki/Annum"
+  },
+  "cuftnaturalgas": {
+    "code": "cuftnaturalgas",
+    "abbr": "cuftnaturalgas",
+    "name": "cubic foot of natural gas",
+    "pluralName": "cubic feet of natural gas",
+    "link": "/wiki/Conversion_of_units#Energy"
+  },
+  "Gy": {
+    "code": "Gy",
+    "abbr": "Gy",
+    "name": "gray",
+    "pluralName": "grays",
+    "link": "/wiki/Gray_(unit)"
+  },
+  "fathom": {
+    "code": "fathom",
+    "abbr": "fathom",
+    "name": "fathom",
+    "pluralName": "fathoms",
+    "link": "/wiki/Fathom"
+  },
+  "ft/min": {
+    "code": "ft/min",
+    "abbr": "ft/min",
+    "name": "foot per minute",
+    "pluralName": "feet per minute",
+    "link": "/wiki/Feet_per_second"
+  },
+  "inlb-f": {
+    "code": "inlb-f",
+    "abbr": "in⋅lbf",
+    "name": "inch-pound force",
+    "pluralName": "inch-pounds force",
+    "link": "/wiki/Foot-pound_(energy)"
+  },
+  "Irish acre": {
+    "code": "Irish acre",
+    "abbr": "Irish acres",
+    "name": "Irish acre",
+    "pluralName": "Irish acres",
+    "link": "/wiki/Acre_(Irish)"
+  },
+  "pitch": {
+    "code": "pitch",
+    "abbr": "*μm",
+    "name": "μm",
+    "pluralName": "μm",
+    "link": "/wiki/Dots_per_inch"
+  },
+  "lbmol/min": {
+    "code": "lbmol/min",
+    "abbr": "lbmol/min",
+    "name": "pound-mole per minute",
+    "pluralName": "pound-moles per minute",
+    "link": "/wiki/Pound-mole"
+  },
+  "hp/t": {
+    "code": "hp/t",
+    "abbr": "hp/t",
+    "name": "horsepower per tonne",
+    "pluralName": "horsepower per tonne",
+    "link": "/wiki/Power-to-weight_ratio"
+  },
+  "inabbreviated": {
+    "code": "inabbreviated",
+    "abbr": "in",
+    "name": "in",
+    "pluralName": "in",
+    "link": "/wiki/Inch"
+  },
+  "mg/L": {
+    "code": "mg/L",
+    "abbr": "mg/L",
+    "name": "milligram per litre",
+    "pluralName": "milligrams per litre",
+    "link": "/wiki/Density"
+  },
+  "in": {
+    "code": "in",
+    "abbr": "in",
+    "name": "inch",
+    "pluralName": "inches",
+    "link": "/wiki/Inch"
+  },
+  "hp/ST": {
+    "code": "hp/ST",
+    "abbr": "hp/ST",
+    "name": "horsepower per short ton",
+    "pluralName": "horsepower per short ton",
+    "link": "/wiki/Power-to-weight_ratio"
+  },
+  "dog year": {
+    "code": "dog year",
+    "abbr": "dog yr",
+    "name": "dog year",
+    "pluralName": "dog years",
+    "link": "/wiki/List_of_unusual_units_of_measurement#Dog_year"
+  },
+  "USoz": {
+    "code": "USoz",
+    "abbr": "US fl oz",
+    "name": "US fluid ounce",
+    "pluralName": "US fluid ounces",
+    "link": "/wiki/US_fluid_ounce"
+  },
+  "oz-f": {
+    "code": "oz-f",
+    "abbr": "ozf",
+    "name": "ounce-force",
+    "pluralName": "ounces-force",
+    "link": "/wiki/Pound_(force)"
+  },
+  "lb/cuin": {
+    "code": "lb/cuin",
+    "abbr": "lb/cu in",
+    "name": "pound per cubic inch",
+    "pluralName": "pounds per cubic inch",
+    "link": "/wiki/Density"
+  },
+  "Hz": {
+    "code": "Hz",
+    "abbr": "Hz",
+    "name": "hertz",
+    "pluralName": "hertz",
+    "link": "/wiki/Hertz"
+  },
+  "inHg": {
+    "code": "inHg",
+    "abbr": "inHg",
+    "name": "inch of mercury",
+    "pluralName": "inches of mercury",
+    "link": "/wiki/Inch_of_mercury"
+  },
+  "K-change": {
+    "code": "K-change",
+    "abbr": "K",
+    "name": "kelvin change",
+    "pluralName": "kelvins change",
+    "link": "/wiki/Kelvin"
+  },
+  "mW.h": {
+    "code": "mW.h",
+    "abbr": "mW⋅h",
+    "name": "milliwatt-hour",
+    "pluralName": "milliwatt-hours",
+    "link": "/wiki/Watt-hour"
+  },
+  "BTU-60F": {
+    "code": "BTU-60F",
+    "abbr": "BTU60°F",
+    "name": "British thermal unit (60°F)",
+    "pluralName": "British thermal units (60°F)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "g-force": {
+    "code": "g-force",
+    "abbr": "g",
+    "name": "g",
+    "pluralName": "g",
+    "link": "/wiki/G-force"
+  },
+  "cuin": {
+    "code": "cuin",
+    "abbr": "cu in",
+    "name": "cubic inch",
+    "pluralName": "cubic inches",
+    "link": "/wiki/Cubic_inch"
+  },
+  "UStbsp": {
+    "code": "UStbsp",
+    "abbr": "US tbsp",
+    "name": "US tablespoon",
+    "pluralName": "US tablespoons",
+    "link": "/wiki/US_tablespoon"
+  },
+  "/sqcm": {
+    "code": "/sqcm",
+    "abbr": "/cm2",
+    "name": "per square centimetre",
+    "pluralName": "per square centimetre",
+    "link": "/wiki/Square_centimetre"
+  },
+  "kerg": {
+    "code": "kerg",
+    "abbr": "kerg",
+    "name": "kiloerg",
+    "pluralName": "kiloergs",
+    "link": "/wiki/Erg"
+  },
+  "Mach": {
+    "code": "Mach",
+    "abbr": "Mach",
+    "name": "Mach",
+    "pluralName": "Mach",
+    "link": "/wiki/Mach_number"
+  },
+  "USpk": {
+    "code": "USpk",
+    "abbr": "US pk",
+    "name": "US peck",
+    "pluralName": "US pecks",
+    "link": "/wiki/Peck"
+  },
+  "cuft/a": {
+    "code": "cuft/a",
+    "abbr": "cu ft/a",
+    "name": "cubic foot per annum",
+    "pluralName": "cubic feet per annum",
+    "link": "/wiki/Cubic_foot_per_second"
+  },
+  "LT-f": {
+    "code": "LT-f",
+    "abbr": "LTf",
+    "name": "long ton-force",
+    "pluralName": "long tons-force",
+    "link": "/wiki/Long_ton-force"
+  },
+  "μeV": {
+    "code": "μeV",
+    "abbr": "μeV",
+    "name": "microelectronvolt",
+    "pluralName": "microelectronvolts",
+    "link": "/wiki/Electronvolt"
+  },
+  "cuft/d": {
+    "code": "cuft/d",
+    "abbr": "cu ft/d",
+    "name": "cubic foot per day",
+    "pluralName": "cubic feet per day",
+    "link": "/wiki/Cubic_foot_per_second"
+  },
+  "Ns/kg": {
+    "code": "Ns/kg",
+    "abbr": "N‑s/kg",
+    "name": "N‑s/kg",
+    "pluralName": "N‑s/kg",
+    "link": "/wiki/Specific_impulse"
+  },
+  "cuft/h": {
+    "code": "cuft/h",
+    "abbr": "cu ft/h",
+    "name": "cubic foot per hour",
+    "pluralName": "cubic feet per hour",
+    "link": "/wiki/Cubic_foot_per_second"
+  },
+  "toe": {
+    "code": "toe",
+    "abbr": "toe",
+    "name": "tonne of oil equivalent",
+    "pluralName": "tonnes of oil equivalent",
+    "link": "/wiki/Tonne_of_oil_equivalent"
+  },
+  "gCO2/mi": {
+    "code": "gCO2/mi",
+    "abbr": "g(CO2)/mi",
+    "name": "gram of CO2 per mile",
+    "pluralName": "grams of CO2 per mile",
+    "link": "/wiki/Exhaust_gas"
+  },
+  "lb-mol/min": {
+    "code": "lb-mol/min",
+    "abbr": "lb‑mol/min",
+    "name": "pound-mole per minute",
+    "pluralName": "pound-moles per minute",
+    "link": "/wiki/Pound-mole"
+  },
+  "Btu-63F": {
+    "code": "Btu-63F",
+    "abbr": "Btu63°F",
+    "name": "British thermal unit (63°F)",
+    "pluralName": "British thermal units (63°F)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "t-f": {
+    "code": "t-f",
+    "abbr": "tf",
+    "name": "tonne-force",
+    "pluralName": "tonnes-force",
+    "link": "/wiki/Ton-force#Tonne-force"
+  },
+  "ft/nmi": {
+    "code": "ft/nmi",
+    "abbr": "ft/nmi",
+    "name": "foot per nautical mile",
+    "pluralName": "feet per nautical mile",
+    "link": "/wiki/Grade_(slope)"
+  },
+  "smi": {
+    "code": "smi",
+    "abbr": "mi",
+    "name": "statute mile",
+    "pluralName": "statute miles",
+    "link": "/wiki/Statute_mile"
+  },
+  "B.O.T.U.": {
+    "code": "B.O.T.U.",
+    "abbr": "B.O.T.U.",
+    "name": "Board of Trade Unit",
+    "pluralName": "Board of Trade Units",
+    "link": "/wiki/Watt-hour"
+  },
+  "oldUKnmi": {
+    "code": "oldUKnmi",
+    "abbr": "nmi",
+    "name": "nautical mile",
+    "pluralName": "nautical miles",
+    "link": "/wiki/Nautical_mile"
+  },
+  "cuft/min": {
+    "code": "cuft/min",
+    "abbr": "cu ft/min",
+    "name": "cubic foot per minute",
+    "pluralName": "cubic feet per minute",
+    "link": "/wiki/Cubic_foot_per_minute"
+  },
+  "U.S.gal/min": {
+    "code": "U.S.gal/min",
+    "abbr": "U.S. gal/min",
+    "name": "U.S. gallon per minute",
+    "pluralName": "U.S. gallons per minute",
+    "link": "/wiki/Gallon"
+  },
+  "erg": {
+    "code": "erg",
+    "abbr": "erg",
+    "name": "erg",
+    "pluralName": "ergs",
+    "link": "/wiki/Erg"
+  },
+  "dpi": {
+    "code": "dpi",
+    "abbr": "DPI",
+    "name": "DPI",
+    "pluralName": "DPI",
+    "link": "/wiki/Dots_per_inch"
+  },
+  "metric ton": {
+    "code": "metric ton",
+    "abbr": "metric ton",
+    "name": "metric ton",
+    "pluralName": "metric tons",
+    "link": "/wiki/Tonne"
+  },
+  "shp/lb": {
+    "code": "shp/lb",
+    "abbr": "shp/lb",
+    "name": "shaft horsepower per pound",
+    "pluralName": "shaft horsepower per pound",
+    "link": "/wiki/Power-to-weight_ratio"
+  },
+  "kn": {
+    "code": "kn",
+    "abbr": "kn",
+    "name": "knot",
+    "pluralName": "knots",
+    "link": "/wiki/Knot_(unit)"
+  },
+  "USquart": {
+    "code": "USquart",
+    "abbr": "US qt",
+    "name": "US quart",
+    "pluralName": "US quarts",
+    "link": "/wiki/Quart"
+  },
+  "m2": {
+    "code": "m2",
+    "abbr": "m2",
+    "name": "square smetre",
+    "pluralName": "square smetres",
+    "link": "/wiki/Square_metre"
+  },
+  "g-mol": {
+    "code": "g-mol",
+    "abbr": "g‑mol",
+    "name": "gram-mole",
+    "pluralName": "gram-moles",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "kp": {
+    "code": "kp",
+    "abbr": "kp",
+    "name": "kilopond",
+    "pluralName": "kiloponds",
+    "link": "/wiki/Kilogram-force"
+  },
+  "m3": {
+    "code": "m3",
+    "abbr": "m3",
+    "name": "cubic smetre",
+    "pluralName": "cubic smetres",
+    "link": "/wiki/Cubic_metre"
+  },
+  "USqt": {
+    "code": "USqt",
+    "abbr": "US qt",
+    "name": "US quart",
+    "pluralName": "US quarts",
+    "link": "/wiki/Quart"
+  },
+  "acre-ft": {
+    "code": "acre-ft",
+    "abbr": "acre⋅ft",
+    "name": "acre-foot",
+    "pluralName": "acre-feet",
+    "link": "/wiki/Acre-foot"
+  },
+  "/ha": {
+    "code": "/ha",
+    "abbr": "/ha",
+    "name": "per hectare",
+    "pluralName": "per hectare",
+    "link": "/wiki/Hectare"
+  },
+  "sqfoot": {
+    "code": "sqfoot",
+    "abbr": "sq ft",
+    "name": "square foot",
+    "pluralName": "square foot",
+    "link": "/wiki/Square_foot"
+  },
+  "kt": {
+    "code": "kt",
+    "abbr": "kt",
+    "name": "kilotonne",
+    "pluralName": "kilotonnes",
+    "link": "/wiki/Tonne"
+  },
+  "inlb": {
+    "code": "inlb",
+    "abbr": "in⋅lb",
+    "name": "inch-pound",
+    "pluralName": "inch-pounds",
+    "link": "/wiki/Foot-pound_(energy)"
+  },
+  "Scwt": {
+    "code": "Scwt",
+    "abbr": "Scwt",
+    "name": "short hundredweight",
+    "pluralName": "short hundredweight",
+    "link": "/wiki/Hundredweight"
+  },
+  "dtex": {
+    "code": "dtex",
+    "abbr": "dtex",
+    "name": "decitex",
+    "pluralName": "decitex",
+    "link": "/wiki/Units_of_textile_measurement#Units"
+  },
+  "inozf": {
+    "code": "inozf",
+    "abbr": "in⋅ozf",
+    "name": "inch-ounce force",
+    "pluralName": "inch-ounces force",
+    "link": "/wiki/Foot-pound_(energy)"
+  },
+  "quad": {
+    "code": "quad",
+    "abbr": "quad",
+    "name": "quadrillion British thermal units",
+    "pluralName": "quadrillion British thermal units",
+    "link": "/wiki/Quad_(unit)"
+  },
+  "century": {
+    "code": "century",
+    "abbr": "ha",
+    "name": "century",
+    "pluralName": "centuries",
+    "link": "/wiki/Century"
+  },
+  "gmol": {
+    "code": "gmol",
+    "abbr": "gmol",
+    "name": "gram-mole",
+    "pluralName": "gram-moles",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "cuft/s": {
+    "code": "cuft/s",
+    "abbr": "cu ft/s",
+    "name": "cubic foot per second",
+    "pluralName": "cubic feet per second",
+    "link": "/wiki/Cubic_foot_per_second"
+  },
+  "lb": {
+    "code": "lb",
+    "abbr": "lb",
+    "name": "pound",
+    "pluralName": "pounds",
+    "link": "/wiki/Pound_(mass)"
+  },
+  "LD": {
+    "code": "LD",
+    "abbr": "LD",
+    "name": "lunar distance",
+    "pluralName": "lunar distances",
+    "link": "/wiki/Lunar_distance_(astronomy)"
+  },
+  "GWh": {
+    "code": "GWh",
+    "abbr": "GWh",
+    "name": "gigawatt-hour",
+    "pluralName": "gigawatt-hours",
+    "link": "/wiki/Watt-hour"
+  },
+  "troy pound": {
+    "code": "troy pound",
+    "abbr": "troy pound",
+    "name": "troy pound",
+    "pluralName": "troy pounds",
+    "link": "/wiki/Troy_weight"
+  },
+  "kBOE": {
+    "code": "kBOE",
+    "abbr": "kBOE",
+    "name": "kilo barrel of oil equivalent",
+    "pluralName": "kilo barrels of oil equivalent",
+    "link": "/wiki/Barrel_of_oil_equivalent"
+  },
+  "PD/sqmi": {
+    "code": "PD/sqmi",
+    "abbr": "/sq mi",
+    "name": "inhabitant per square mile",
+    "pluralName": "inhabitants per square mile",
+    "link": "/wiki/Square_mile"
+  },
+  "neV": {
+    "code": "neV",
+    "abbr": "neV",
+    "name": "nanoelectronvolt",
+    "pluralName": "nanoelectronvolts",
+    "link": "/wiki/Electronvolt"
+  },
+  "MtTNT": {
+    "code": "MtTNT",
+    "abbr": "megatonne of TNT",
+    "name": "megatonne of TNT",
+    "pluralName": "megatonnes of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "impbbl": {
+    "code": "impbbl",
+    "abbr": "imp bbl",
+    "name": "imperial barrel",
+    "pluralName": "imperial barrels",
+    "link": "/wiki/Barrel_(unit)"
+  },
+  "pre1954USnmi": {
+    "code": "pre1954USnmi",
+    "abbr": "(pre‑1954 US) nmi",
+    "name": "(pre-1954 US) nautical mile",
+    "pluralName": "(pre-1954 US) nautical miles",
+    "link": "/wiki/Nautical_mile"
+  },
+  "cent": {
+    "code": "cent",
+    "abbr": "¢",
+    "name": "cent",
+    "pluralName": "cents",
+    "link": "/wiki/Cent_(currency)"
+  },
+  "LT": {
+    "code": "LT",
+    "abbr": "long ton",
+    "name": "long ton",
+    "pluralName": "long tons",
+    "link": "/wiki/Long_ton"
+  },
+  "lt": {
+    "code": "lt",
+    "abbr": "LT",
+    "name": "long ton",
+    "pluralName": "long tons",
+    "link": "/wiki/Long_ton"
+  },
+  "lb-mol/s": {
+    "code": "lb-mol/s",
+    "abbr": "lb‑mol/s",
+    "name": "pound-mole per second",
+    "pluralName": "pound-moles per second",
+    "link": "/wiki/Pound-mole"
+  },
+  "lbm/cuin": {
+    "code": "lbm/cuin",
+    "abbr": "lbm/cu in",
+    "name": "pound mass per cubic inch",
+    "pluralName": "pounds mass per cubic inch",
+    "link": "/wiki/Density"
+  },
+  "ly": {
+    "code": "ly",
+    "abbr": "ly",
+    "name": "light-year",
+    "pluralName": "light-years",
+    "link": "/wiki/Light-year"
+  },
+  "kg/cm2": {
+    "code": "kg/cm2",
+    "abbr": "kg/cm2",
+    "name": "kilogram per square centimetre",
+    "pluralName": "kilograms per square centimetre",
+    "link": "/wiki/Kilogram-force"
+  },
+  "Btu-60F": {
+    "code": "Btu-60F",
+    "abbr": "Btu60°F",
+    "name": "British thermal unit (60°F)",
+    "pluralName": "British thermal units (60°F)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "BTU-IT": {
+    "code": "BTU-IT",
+    "abbr": "BTUIT",
+    "name": "British thermal unit (IT)",
+    "pluralName": "British thermal units (IT)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "koilbbl/d": {
+    "code": "koilbbl/d",
+    "abbr": "kbbl/d",
+    "name": "thousand barrels per day",
+    "pluralName": "thousand barrels per day",
+    "link": "/wiki/Barrel_per_day"
+  },
+  "shaku": {
+    "code": "shaku",
+    "abbr": "shaku",
+    "name": "shaku",
+    "pluralName": "shaku",
+    "link": "/wiki/Shaku_(unit)"
+  },
+  "lb-mol/h": {
+    "code": "lb-mol/h",
+    "abbr": "lb‑mol/h",
+    "name": "pound-mole per hour",
+    "pluralName": "pound-moles per hour",
+    "link": "/wiki/Pound-mole"
+  },
+  "MtTNT/MT": {
+    "code": "MtTNT/MT",
+    "abbr": "megatonne of TNT per tonne",
+    "name": "megatonne of TNT per tonne",
+    "pluralName": "megatonnes of TNT per tonne",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "mb": {
+    "code": "mb",
+    "abbr": "mb",
+    "name": "millibar",
+    "pluralName": "millibars",
+    "link": "/wiki/Bar_(unit)"
+  },
+  "lb-mol/d": {
+    "code": "lb-mol/d",
+    "abbr": "lb‑mol/d",
+    "name": "pound-mole per day",
+    "pluralName": "pound-moles per day",
+    "link": "/wiki/Pound-mole"
+  },
+  "BOE": {
+    "code": "BOE",
+    "abbr": "BOE",
+    "name": "barrel of oil equivalent",
+    "pluralName": "barrels of oil equivalent",
+    "link": "/wiki/Barrel_of_oil_equivalent"
+  },
+  "Cal/h": {
+    "code": "Cal/h",
+    "abbr": "Cal/h",
+    "name": "large calorie per hour",
+    "pluralName": "large calories per hour",
+    "link": "/wiki/Calorie"
+  },
+  "mi": {
+    "code": "mi",
+    "abbr": "mi",
+    "name": "mile",
+    "pluralName": "miles",
+    "link": "/wiki/Mile"
+  },
+  "koilbbl/a": {
+    "code": "koilbbl/a",
+    "abbr": "kbbl/a",
+    "name": "thousand barrels per year",
+    "pluralName": "thousand barrels per year",
+    "link": "/wiki/Barrel_per_day"
+  },
+  "Cal/d": {
+    "code": "Cal/d",
+    "abbr": "Cal/d",
+    "name": "large calorie per day",
+    "pluralName": "large calories per day",
+    "link": "/wiki/Calorie"
+  },
+  "MeV": {
+    "code": "MeV",
+    "abbr": "MeV",
+    "name": "megaelectronvolt",
+    "pluralName": "megaelectronvolts",
+    "link": "/wiki/Electronvolt"
+  },
+  "cumi": {
+    "code": "cumi",
+    "abbr": "cu mi",
+    "name": "cubic mile",
+    "pluralName": "cubic miles",
+    "link": "/wiki/Cubic_mile"
+  },
+  "kgCO2/km": {
+    "code": "kgCO2/km",
+    "abbr": "kg(CO2)/km",
+    "name": "kilogram of CO2 per kilometre",
+    "pluralName": "kilograms of CO2 per kilometre",
+    "link": "/wiki/Exhaust_gas"
+  },
+  "mp": {
+    "code": "mp",
+    "abbr": "mp",
+    "name": "millipond",
+    "pluralName": "milliponds",
+    "link": "/wiki/Kilogram-force"
+  },
+  "DWtonne": {
+    "code": "DWtonne",
+    "abbr": "deadweight tonne",
+    "name": "deadweight tonne",
+    "pluralName": "deadweight tonnes",
+    "link": "/wiki/Tonnage"
+  },
+  "months": {
+    "code": "months",
+    "abbr": "mo",
+    "name": "month",
+    "pluralName": "months",
+    "link": "/wiki/Month"
+  },
+  "BTU/lb": {
+    "code": "BTU/lb",
+    "abbr": "BTU/lb",
+    "name": "British thermal unit per pound",
+    "pluralName": "British thermal units per pound",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "hp-electrical": {
+    "code": "hp-electrical",
+    "abbr": "hp",
+    "name": "electrical horsepower",
+    "pluralName": "electrical horsepower",
+    "link": "/wiki/Horsepower#Electrical_horsepower"
+  },
+  "cufootnaturalgas": {
+    "code": "cufootnaturalgas",
+    "abbr": "cuftnaturalgas",
+    "name": "cubic foot of natural gas",
+    "pluralName": "cubic foot of natural gas",
+    "link": "/wiki/Conversion_of_units#Energy"
+  },
+  "MT": {
+    "code": "MT",
+    "abbr": "t",
+    "name": "metric ton",
+    "pluralName": "metric tons",
+    "link": "/wiki/Tonne"
+  },
+  "μerg": {
+    "code": "μerg",
+    "abbr": "μerg",
+    "name": "microerg",
+    "pluralName": "microergs",
+    "link": "/wiki/Erg"
+  },
+  "keVT": {
+    "code": "keVT",
+    "abbr": "keV",
+    "name": "kiloelectronvolt",
+    "pluralName": "kiloelectronvolts",
+    "link": "/wiki/Electronvolt"
+  },
+  "m.kg-f": {
+    "code": "m.kg-f",
+    "abbr": "m⋅kgf",
+    "name": "metre kilogram-force",
+    "pluralName": "metre kilograms-force",
+    "link": "/wiki/Kilogram_metre_(torque)"
+  },
+  "/USgal": {
+    "code": "/USgal",
+    "abbr": "/gal",
+    "name": "per gallon",
+    "pluralName": "per gallon",
+    "link": "/wiki/US_gallon"
+  },
+  "Mcal-IT": {
+    "code": "Mcal-IT",
+    "abbr": "McalIT",
+    "name": "megacalorie (International Steam Table)",
+    "pluralName": "megacalories (International Steam Table)",
+    "link": "/wiki/Calorie"
+  },
+  "thm-EC": {
+    "code": "thm-EC",
+    "abbr": "thm (EC)",
+    "name": "therm (EC)",
+    "pluralName": "therms (EC)",
+    "link": "/wiki/Therm"
+  },
+  "lb/USgal": {
+    "code": "lb/USgal",
+    "abbr": "lb/US gal",
+    "name": "pound per US gallon",
+    "pluralName": "pounds per US gallon",
+    "link": "/wiki/Density"
+  },
+  "lbf": {
+    "code": "lbf",
+    "abbr": "lbf",
+    "name": "pound-force",
+    "pluralName": "pounds-force",
+    "link": "/wiki/Pound_(force)"
+  },
+  "kgf/cm2": {
+    "code": "kgf/cm2",
+    "abbr": "kgf/cm2",
+    "name": "kilogram-force per square centimetre",
+    "pluralName": "kilograms-force per square centimetre",
+    "link": "/wiki/Kilogram-force"
+  },
+  "PD/sqkm": {
+    "code": "PD/sqkm",
+    "abbr": "/km2",
+    "name": "inhabitant per square kilometre",
+    "pluralName": "inhabitants per square kilometre",
+    "link": "/wiki/Square_kilometre"
+  },
+  "impgal/min": {
+    "code": "impgal/min",
+    "abbr": "imp gal/min",
+    "name": "imperial gallon per minute",
+    "pluralName": "imperial gallons per minute",
+    "link": "/wiki/Gallon"
+  },
+  "meV": {
+    "code": "meV",
+    "abbr": "meV",
+    "name": "millielectronvolt",
+    "pluralName": "millielectronvolts",
+    "link": "/wiki/Electronvolt"
+  },
+  "NM": {
+    "code": "NM",
+    "abbr": "NM",
+    "name": "nautical mile",
+    "pluralName": "nautical miles",
+    "link": "/wiki/Nautical_mile"
+  },
+  "Mp": {
+    "code": "Mp",
+    "abbr": "Mp",
+    "name": "megapond",
+    "pluralName": "megaponds",
+    "link": "/wiki/Kilogram-force"
+  },
+  "Mt": {
+    "code": "Mt",
+    "abbr": "Mt",
+    "name": "megatonne",
+    "pluralName": "megatonnes",
+    "link": "/wiki/Tonne"
+  },
+  "Merg": {
+    "code": "Merg",
+    "abbr": "Merg",
+    "name": "megaerg",
+    "pluralName": "megaergs",
+    "link": "/wiki/Erg"
+  },
+  "m3/d": {
+    "code": "m3/d",
+    "abbr": "m3/d",
+    "name": "cubic metre per day",
+    "pluralName": "cubic metres per day",
+    "link": "/wiki/Cubic_metre_per_second"
+  },
+  "m3/a": {
+    "code": "m3/a",
+    "abbr": "m3/a",
+    "name": "cubic metre per annum",
+    "pluralName": "cubic metres per annum",
+    "link": "/wiki/Cubic_metre_per_second"
+  },
+  "m3/h": {
+    "code": "m3/h",
+    "abbr": "m3/h",
+    "name": "cubic metre per hour",
+    "pluralName": "cubic metres per hour",
+    "link": "/wiki/Cubic_metre_per_second"
+  },
+  "kg/dm3": {
+    "code": "kg/dm3",
+    "abbr": "kg/dm3",
+    "name": "kilogram per cubic decimetre",
+    "pluralName": "kilograms per cubic decimetre",
+    "link": "/wiki/Density"
+  },
+  "in/h": {
+    "code": "in/h",
+    "abbr": "in/h",
+    "name": "inch per hour",
+    "pluralName": "inches per hour",
+    "link": "/wiki/Inch"
+  },
+  "kmol/h": {
+    "code": "kmol/h",
+    "abbr": "kmol/h",
+    "name": "kilomole per hour",
+    "pluralName": "kilomoles per hour",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "S/T-f": {
+    "code": "S/T-f",
+    "abbr": "S/Tf",
+    "name": "short ton-force",
+    "pluralName": "short tons-force",
+    "link": "/wiki/Short_ton-force"
+  },
+  "dpcm": {
+    "code": "dpcm",
+    "abbr": "dot/cm",
+    "name": "dot/cm",
+    "pluralName": "dot/cm",
+    "link": "/wiki/Dots_per_inch"
+  },
+  "sqyd": {
+    "code": "sqyd",
+    "abbr": "sq yd",
+    "name": "square yard",
+    "pluralName": "square yards",
+    "link": "/wiki/Square_yard"
+  },
+  "USgal/min": {
+    "code": "USgal/min",
+    "abbr": "US gal/min",
+    "name": "US gallon per minute",
+    "pluralName": "US gallons per minute",
+    "link": "/wiki/Gallon"
+  },
+  "stere": {
+    "code": "stere",
+    "abbr": "stere",
+    "name": "stere",
+    "pluralName": "steres",
+    "link": "/wiki/Stere"
+  },
+  "kmol/d": {
+    "code": "kmol/d",
+    "abbr": "kmol/d",
+    "name": "kilomole per day",
+    "pluralName": "kilomoles per day",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "Nm": {
+    "code": "Nm",
+    "abbr": "N⋅m",
+    "name": "newton-metre",
+    "pluralName": "newton-metres",
+    "link": "/wiki/Newton-metre"
+  },
+  "MTON": {
+    "code": "MTON",
+    "abbr": "MTON",
+    "name": "measurement ton",
+    "pluralName": "measurement tons",
+    "link": "/wiki/Measurement_ton"
+  },
+  "MMoilbbl": {
+    "code": "MMoilbbl",
+    "abbr": "MMbbl",
+    "name": "million barrels",
+    "pluralName": "million barrels",
+    "link": "/wiki/Barrel_(unit)#Oil_barrel"
+  },
+  "sqnmi": {
+    "code": "sqnmi",
+    "abbr": "sq nmi",
+    "name": "square nautical mile",
+    "pluralName": "square nautical miles",
+    "link": "/wiki/Nautical_mile"
+  },
+  "kA/m": {
+    "code": "kA/m",
+    "abbr": "kA/m",
+    "name": "kiloampere per metre",
+    "pluralName": "kiloamperes per metre",
+    "link": "/wiki/Ampere_per_metre"
+  },
+  "S/Tf": {
+    "code": "S/Tf",
+    "abbr": "S/Tf",
+    "name": "short ton-force",
+    "pluralName": "short tons-force",
+    "link": "/wiki/Short_ton-force"
+  },
+  "kmol/s": {
+    "code": "kmol/s",
+    "abbr": "kmol/s",
+    "name": "kilomole per second",
+    "pluralName": "kilomoles per second",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "BTU-63F": {
+    "code": "BTU-63F",
+    "abbr": "BTU63°F",
+    "name": "British thermal unit (63°F)",
+    "pluralName": "British thermal units (63°F)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "oz": {
+    "code": "oz",
+    "abbr": "oz",
+    "name": "ounce",
+    "pluralName": "ounces",
+    "link": "/wiki/Ounce"
+  },
+  "rpm": {
+    "code": "rpm",
+    "abbr": "rpm",
+    "name": "revolution per minute",
+    "pluralName": "revolutions per minute",
+    "link": "/wiki/Revolutions_per_minute"
+  },
+  "μin": {
+    "code": "μin",
+    "abbr": "μin",
+    "name": "microinch",
+    "pluralName": "microinches",
+    "link": "/wiki/SI_prefix#Non-metric_units"
+  },
+  "g-mol/min": {
+    "code": "g-mol/min",
+    "abbr": "g‑mol/min",
+    "name": "gram-mole per minute",
+    "pluralName": "gram-moles per minute",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "cal-IT": {
+    "code": "cal-IT",
+    "abbr": "calIT",
+    "name": "calorie (International Steam Table)",
+    "pluralName": "calories (International Steam Table)",
+    "link": "/wiki/Calorie"
+  },
+  "GtonTNT": {
+    "code": "GtonTNT",
+    "abbr": "gigaton of TNT",
+    "name": "gigaton of TNT",
+    "pluralName": "gigatons of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "mpge": {
+    "code": "mpge",
+    "abbr": "mpg‑e",
+    "name": "mile per gallon gasoline equivalent",
+    "pluralName": "miles per gallon gasoline equivalent",
+    "link": "/wiki/Miles_per_gallon_gasoline_equivalent"
+  },
+  "pc": {
+    "code": "pc",
+    "abbr": "pc",
+    "name": "parsec",
+    "pluralName": "parsecs",
+    "link": "/wiki/Parsec"
+  },
+  "Oe": {
+    "code": "Oe",
+    "abbr": "Oe",
+    "name": "oersted",
+    "pluralName": "oersteds",
+    "link": "/wiki/Oersted"
+  },
+  "F-change": {
+    "code": "F-change",
+    "abbr": "°F",
+    "name": "degree Fahrenheit change",
+    "pluralName": "degrees Fahrenheit change",
+    "link": "/wiki/Fahrenheit"
+  },
+  "acre": {
+    "code": "acre",
+    "abbr": "acre",
+    "name": "acre",
+    "pluralName": "acres",
+    "link": "/wiki/Acre"
+  },
+  "Mtoe": {
+    "code": "Mtoe",
+    "abbr": "Mtoe",
+    "name": "megatonne of oil equivalent",
+    "pluralName": "megatonnes of oil equivalent",
+    "link": "/wiki/Tonne_of_oil_equivalent"
+  },
+  "CHU-IT": {
+    "code": "CHU-IT",
+    "abbr": "CHUIT",
+    "name": "Celsius heat unit (International Table)",
+    "pluralName": "Celsius heat units (International Table)",
+    "link": "/wiki/Conversion_of_units#Energy"
+  },
+  "A.h": {
+    "code": "A.h",
+    "abbr": "A⋅h",
+    "name": "ampere hour",
+    "pluralName": "ampere hours",
+    "link": "/wiki/Ampere_hour"
+  },
+  "lb-f": {
+    "code": "lb-f",
+    "abbr": "lbf",
+    "name": "pound-force",
+    "pluralName": "pounds-force",
+    "link": "/wiki/Pound_(force)"
+  },
+  "merg": {
+    "code": "merg",
+    "abbr": "merg",
+    "name": "millierg",
+    "pluralName": "milliergs",
+    "link": "/wiki/Erg"
+  },
+  "μmol/s": {
+    "code": "μmol/s",
+    "abbr": "μmol/s",
+    "name": "micromole per second",
+    "pluralName": "micromoles per second",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "GJ/kg": {
+    "code": "GJ/kg",
+    "abbr": "GJ/kg",
+    "name": "gigajoule per kilogram",
+    "pluralName": "gigajoules per kilogram",
+    "link": "/wiki/Specific_energy"
+  },
+  "hp/LT": {
+    "code": "hp/LT",
+    "abbr": "hp/LT",
+    "name": "horsepower per long ton",
+    "pluralName": "horsepower per long ton",
+    "link": "/wiki/Power-to-weight_ratio"
+  },
+  "mm/km": {
+    "code": "mm/km",
+    "abbr": "mm/km",
+    "name": "millimetre per kilometre",
+    "pluralName": "millimetres per kilometre",
+    "link": "/wiki/Grade_(slope)"
+  },
+  "PS": {
+    "code": "PS",
+    "abbr": "PS",
+    "name": "metric horsepower",
+    "pluralName": "metric horsepower",
+    "link": "/wiki/Metric_horsepower"
+  },
+  "ktTNT/t": {
+    "code": "ktTNT/t",
+    "abbr": "kilotonne of TNT per tonne",
+    "name": "kilotonne of TNT per tonne",
+    "pluralName": "kilotonnes of TNT per tonne",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "kBa": {
+    "code": "kBa",
+    "abbr": "kBa",
+    "name": "kilobarye",
+    "pluralName": "kilobaryes",
+    "link": "/wiki/Barye"
+  },
+  "short qtr": {
+    "code": "short qtr",
+    "abbr": "short qtr",
+    "name": "short quarter",
+    "pluralName": "short quarters",
+    "link": "/wiki/Short_quarter"
+  },
+  "USbsh": {
+    "code": "USbsh",
+    "abbr": "US bsh",
+    "name": "US bushel",
+    "pluralName": "US bushels",
+    "link": "/wiki/Bushel"
+  },
+  "mgf": {
+    "code": "mgf",
+    "abbr": "mgf",
+    "name": "milligram-force",
+    "pluralName": "milligrams-force",
+    "link": "/wiki/Kilogram-force"
+  },
+  "Pa": {
+    "code": "Pa",
+    "abbr": "Pa",
+    "name": "pascal",
+    "pluralName": "pascals",
+    "link": "/wiki/Pascal_(unit)"
+  },
+  "kg-f/cm2": {
+    "code": "kg-f/cm2",
+    "abbr": "kgf/cm2",
+    "name": "kilogram-force per square centimetre",
+    "pluralName": "kilograms-force per square centimetre",
+    "link": "/wiki/Kilogram-force"
+  },
+  "oz/mi": {
+    "code": "oz/mi",
+    "abbr": "oz/mi",
+    "name": "ounce per mile",
+    "pluralName": "ounces per mile",
+    "link": "/wiki/Exhaust_gas"
+  },
+  "in/year": {
+    "code": "in/year",
+    "abbr": "in/year",
+    "name": "inch per year",
+    "pluralName": "inches per year",
+    "link": "/wiki/Orders_of_magnitude_(speed)"
+  },
+  "lb/ft": {
+    "code": "lb/ft",
+    "abbr": "lb/ft",
+    "name": "pound per foot",
+    "pluralName": "pounds per foot",
+    "link": "/wiki/Linear_density"
+  },
+  "lbCO2/mi": {
+    "code": "lbCO2/mi",
+    "abbr": "lb(CO2)/mi",
+    "name": "pound of CO2 per mile",
+    "pluralName": "pounds of CO2 per mile",
+    "link": "/wiki/Exhaust_gas"
+  },
+  "kdyn": {
+    "code": "kdyn",
+    "abbr": "kdyn",
+    "name": "kilodyne",
+    "pluralName": "kilodynes",
+    "link": "/wiki/Dyne"
+  },
+  "kcal-15": {
+    "code": "kcal-15",
+    "abbr": "kcal15",
+    "name": "kilocalorie (15°C)",
+    "pluralName": "kilocalories (15°C)",
+    "link": "/wiki/Calorie"
+  },
+  "/l": {
+    "code": "/l",
+    "abbr": "/l",
+    "name": "per litre",
+    "pluralName": "per litre",
+    "link": "/wiki/Litre"
+  },
+  "A/m": {
+    "code": "A/m",
+    "abbr": "A/m",
+    "name": "ampere per metre",
+    "pluralName": "amperes per metre",
+    "link": "/wiki/Ampere_per_metre"
+  },
+  "USmin": {
+    "code": "USmin",
+    "abbr": "US min",
+    "name": "US minim",
+    "pluralName": "US minims",
+    "link": "/wiki/Minim_(unit)"
+  },
+  "g-mol/h": {
+    "code": "g-mol/h",
+    "abbr": "g‑mol/h",
+    "name": "gram-mole per hour",
+    "pluralName": "gram-moles per hour",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "/sqkm": {
+    "code": "/sqkm",
+    "abbr": "/km2",
+    "name": "per square kilometre",
+    "pluralName": "per square kilometre",
+    "link": "/wiki/Square_kilometre"
+  },
+  "STf": {
+    "code": "STf",
+    "abbr": "STf",
+    "name": "short ton-force",
+    "pluralName": "short tons-force",
+    "link": "/wiki/Short_ton-force"
+  },
+  "g-mol/d": {
+    "code": "g-mol/d",
+    "abbr": "g‑mol/d",
+    "name": "gram-mole per day",
+    "pluralName": "gram-moles per day",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "kt(TNT)": {
+    "code": "kt(TNT)",
+    "abbr": "kt",
+    "name": "kilotonne",
+    "pluralName": "kilotonnes",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "kJ/kg": {
+    "code": "kJ/kg",
+    "abbr": "kJ/kg",
+    "name": "kilojoule per kilogram",
+    "pluralName": "kilojoules per kilogram",
+    "link": "/wiki/Specific_energy"
+  },
+  "arpent": {
+    "code": "arpent",
+    "abbr": "arpent",
+    "name": "arpent",
+    "pluralName": "arpents",
+    "link": "/wiki/Arpent"
+  },
+  "hp/lb": {
+    "code": "hp/lb",
+    "abbr": "hp/lb",
+    "name": "horsepower per pound",
+    "pluralName": "horsepower per pound",
+    "link": "/wiki/Power-to-weight_ratio"
+  },
+  "rd": {
+    "code": "rd",
+    "abbr": "rd",
+    "name": "rod",
+    "pluralName": "rods",
+    "link": "/wiki/Rod_(unit)"
+  },
+  "kgCO2/L": {
+    "code": "kgCO2/L",
+    "abbr": "kg(CO2)/L",
+    "name": "kilogram per litre",
+    "pluralName": "kilograms per litre",
+    "link": "/wiki/Exhaust_gas"
+  },
+  "bboe": {
+    "code": "bboe",
+    "abbr": "bboe",
+    "name": "barrel of oil equivalent",
+    "pluralName": "barrels of oil equivalent",
+    "link": "/wiki/Barrel_of_oil_equivalent"
+  },
+  "m3/s": {
+    "code": "m3/s",
+    "abbr": "m3/s",
+    "name": "cubic metre per second",
+    "pluralName": "cubic metres per second",
+    "link": "/wiki/Cubic_metre_per_second"
+  },
+  "in/s": {
+    "code": "in/s",
+    "abbr": "in/s",
+    "name": "inch per second",
+    "pluralName": "inches per second",
+    "link": "/wiki/Inch"
+  },
+  "tsubo": {
+    "code": "tsubo",
+    "abbr": "tsubo",
+    "name": "tsubo",
+    "pluralName": "tsubo",
+    "link": "/wiki/Japanese_units_of_measurement#Area"
+  },
+  "Torr": {
+    "code": "Torr",
+    "abbr": "Torr",
+    "name": "torr",
+    "pluralName": "torrs",
+    "link": "/wiki/Torr"
+  },
+  "mph/s": {
+    "code": "mph/s",
+    "abbr": "mph/s",
+    "name": "mile per hour per second",
+    "pluralName": "miles per hour per second",
+    "link": "/wiki/Acceleration"
+  },
+  "keV": {
+    "code": "keV",
+    "abbr": "keV",
+    "name": "kiloelectronvolt",
+    "pluralName": "kiloelectronvolts",
+    "link": "/wiki/Electronvolt"
+  },
+  "oilbbl/d": {
+    "code": "oilbbl/d",
+    "abbr": "bbl/d",
+    "name": "barrel per day",
+    "pluralName": "barrels per day",
+    "link": "/wiki/Barrel_per_day"
+  },
+  "dwt": {
+    "code": "dwt",
+    "abbr": "dwt",
+    "name": "pennyweight",
+    "pluralName": "pennyweights",
+    "link": "/wiki/Pennyweight"
+  },
+  "BTU": {
+    "code": "BTU",
+    "abbr": "BTU",
+    "name": "British thermal unit",
+    "pluralName": "British thermal units",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "Btu": {
+    "code": "Btu",
+    "abbr": "Btu",
+    "name": "British thermal unit",
+    "pluralName": "British thermal units",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "oilbbl/a": {
+    "code": "oilbbl/a",
+    "abbr": "bbl/a",
+    "name": "barrel per year",
+    "pluralName": "barrels per year",
+    "link": "/wiki/Barrel_per_day"
+  },
+  "TWh": {
+    "code": "TWh",
+    "abbr": "TWh",
+    "name": "terawatt-hour",
+    "pluralName": "terawatt-hours",
+    "link": "/wiki/Watt-hour"
+  },
+  "impgal/h": {
+    "code": "impgal/h",
+    "abbr": "imp gal/h",
+    "name": "imperial gallon per hour",
+    "pluralName": "imperial gallons per hour",
+    "link": "/wiki/Gallon"
+  },
+  "mcal-IT": {
+    "code": "mcal-IT",
+    "abbr": "mcalIT",
+    "name": "millicalorie (International Steam Table)",
+    "pluralName": "millicalories (International Steam Table)",
+    "link": "/wiki/Calorie"
+  },
+  "lbCO2/USgal": {
+    "code": "lbCO2/USgal",
+    "abbr": "lbCO2/US gal",
+    "name": "pound per US gallon",
+    "pluralName": "pounds per US gallon",
+    "link": "/wiki/Exhaust_gas"
+  },
+  "L/min": {
+    "code": "L/min",
+    "abbr": "L/min",
+    "name": "litre per minute",
+    "pluralName": "litres per minute",
+    "link": "/wiki/Cubic_metre_per_second"
+  },
+  "kcal-th": {
+    "code": "kcal-th",
+    "abbr": "kcalth",
+    "name": "kilocalorie (thermochemical)",
+    "pluralName": "kilocalories (thermochemical)",
+    "link": "/wiki/Calorie"
+  },
+  "sun": {
+    "code": "sun",
+    "abbr": "sun",
+    "name": "sun",
+    "pluralName": "sun",
+    "link": "/wiki/Japanese_units_of_measurement#Length"
+  },
+  "cuyd/h": {
+    "code": "cuyd/h",
+    "abbr": "cuyd/h",
+    "name": "cubic yard per hour",
+    "pluralName": "cubic yards per hour",
+    "link": "/wiki/Cubic_foot_per_second"
+  },
+  "MtonTNT/MT": {
+    "code": "MtonTNT/MT",
+    "abbr": "megaton of TNT per metric ton",
+    "name": "megaton of TNT per metric ton",
+    "pluralName": "megatons of TNT per metric ton",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "mil": {
+    "code": "mil",
+    "abbr": "mil",
+    "name": "mil",
+    "pluralName": "mils",
+    "link": "/wiki/Thousandth_of_an_inch"
+  },
+  "lb/in3": {
+    "code": "lb/in3",
+    "abbr": "lb/cu in",
+    "name": "pound per cubic inch",
+    "pluralName": "pounds per cubic inch",
+    "link": "/wiki/Density"
+  },
+  "Rd": {
+    "code": "Rd",
+    "abbr": "Rd",
+    "name": "rutherford",
+    "pluralName": "rutherfords",
+    "link": "/wiki/Rutherford_(unit)"
+  },
+  "usgalh2o": {
+    "code": "usgalh2o",
+    "abbr": "US gal H2O",
+    "name": "US gallon of water",
+    "pluralName": "US gallons of water",
+    "link": "/wiki/United_States_customary_units#Fluid_volume"
+  },
+  "min": {
+    "code": "min",
+    "abbr": "min",
+    "name": "minute",
+    "pluralName": "minutes",
+    "link": "/wiki/Minute"
+  },
+  "mmol/s": {
+    "code": "mmol/s",
+    "abbr": "mmol/s",
+    "name": "millimole per second",
+    "pluralName": "millimoles per second",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "g-mol/s": {
+    "code": "g-mol/s",
+    "abbr": "g‑mol/s",
+    "name": "gram-mole per second",
+    "pluralName": "gram-moles per second",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "oldUSnmi": {
+    "code": "oldUSnmi",
+    "abbr": "nmi",
+    "name": "nautical mile",
+    "pluralName": "nautical miles",
+    "link": "/wiki/Nautical_mile"
+  },
+  "lb.ft": {
+    "code": "lb.ft",
+    "abbr": "lb⋅ft",
+    "name": "pound force-foot",
+    "pluralName": "pound force-feet",
+    "link": "/wiki/Pound-foot_(torque)"
+  },
+  "sm": {
+    "code": "sm",
+    "abbr": "sm",
+    "name": "smoot",
+    "pluralName": "smoots",
+    "link": "/wiki/Smoot_(unit)"
+  },
+  "U.S.gal/h": {
+    "code": "U.S.gal/h",
+    "abbr": "gal/h",
+    "name": "gallon per hour",
+    "pluralName": "gallons per hour",
+    "link": "/wiki/Gallon"
+  },
+  "BTU-mean": {
+    "code": "BTU-mean",
+    "abbr": "BTUmean",
+    "name": "British thermal unit (mean)",
+    "pluralName": "British thermal units (mean)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "lb/hp": {
+    "code": "lb/hp",
+    "abbr": "lb/hp",
+    "name": "pound per horsepower",
+    "pluralName": "pounds per horsepower",
+    "link": "/wiki/Horsepower"
+  },
+  "U.S.gal/d": {
+    "code": "U.S.gal/d",
+    "abbr": "U.S. gal/d",
+    "name": "U.S. gallon per day",
+    "pluralName": "U.S. gallons per day",
+    "link": "/wiki/U.S._gallon_per_day"
+  },
+  "ST": {
+    "code": "ST",
+    "abbr": "short ton",
+    "name": "short ton",
+    "pluralName": "short tons",
+    "link": "/wiki/Short_ton"
+  },
+  "st": {
+    "code": "st",
+    "abbr": "st",
+    "name": "stone",
+    "pluralName": "stone",
+    "link": "/wiki/Stone_(unit)"
+  },
+  "Ry": {
+    "code": "Ry",
+    "abbr": "Ry",
+    "name": "rydberg",
+    "pluralName": "rydbergs",
+    "link": "/wiki/Rydberg_constant"
+  },
+  "short billion year": {
+    "code": "short billion year",
+    "abbr": "Ga",
+    "name": "billion years",
+    "pluralName": "billion years",
+    "link": "/wiki/Annum"
+  },
+  "impgal/s": {
+    "code": "impgal/s",
+    "abbr": "impgal/s",
+    "name": "imperial gallon per second",
+    "pluralName": "imperial gallons per second",
+    "link": "/wiki/Imperial_gallons_per_second"
+  },
+  "tf": {
+    "code": "tf",
+    "abbr": "tf",
+    "name": "tonne-force",
+    "pluralName": "tonnes-force",
+    "link": "/wiki/Ton-force#Tonne-force"
+  },
+  "PD/ha": {
+    "code": "PD/ha",
+    "abbr": "/ha",
+    "name": "inhabitant per hectare",
+    "pluralName": "inhabitants per hectare",
+    "link": "/wiki/Hectare"
+  },
+  "th": {
+    "code": "th",
+    "abbr": "th",
+    "name": "thermie",
+    "pluralName": "thermies",
+    "link": "/wiki/Conversion_of_units#Energy"
+  },
+  "m/km": {
+    "code": "m/km",
+    "abbr": "m/km",
+    "name": "metre per kilometre",
+    "pluralName": "metres per kilometre",
+    "link": "/wiki/Grade_(slope)"
+  },
+  "coulomb": {
+    "code": "coulomb",
+    "abbr": "C",
+    "name": "coulomb",
+    "pluralName": "coulombs",
+    "link": "/wiki/Coulomb"
+  },
+  "cuyd/s": {
+    "code": "cuyd/s",
+    "abbr": "cu yd/s",
+    "name": "cubic yard per second",
+    "pluralName": "cubic yards per second",
+    "link": "/wiki/Cubic_yard_per_second"
+  },
+  "dyn": {
+    "code": "dyn",
+    "abbr": "dyn",
+    "name": "dyne",
+    "pluralName": "dynes",
+    "link": "/wiki/Dyne"
+  },
+  "/sqin": {
+    "code": "/sqin",
+    "abbr": "/in2",
+    "name": "per square inch",
+    "pluralName": "per square inch",
+    "link": "/wiki/Square_inch"
+  },
+  "oilbbl": {
+    "code": "oilbbl",
+    "abbr": "bbl",
+    "name": "barrel",
+    "pluralName": "barrels",
+    "link": "/wiki/Barrel_(unit)#Oil_barrel"
+  },
+  "lb.in": {
+    "code": "lb.in",
+    "abbr": "lb⋅in",
+    "name": "pound force-inch",
+    "pluralName": "pound force-inchs",
+    "link": "/wiki/Pound-foot_(torque)"
+  },
+  "Sv": {
+    "code": "Sv",
+    "abbr": "Sv",
+    "name": "sievert",
+    "pluralName": "sieverts",
+    "link": "/wiki/Sievert"
+  },
+  "lb/impgal": {
+    "code": "lb/impgal",
+    "abbr": "lb/imp gal",
+    "name": "pound per imperial gallon",
+    "pluralName": "pounds per imperial gallon",
+    "link": "/wiki/Density"
+  },
+  "kgf": {
+    "code": "kgf",
+    "abbr": "kgf",
+    "name": "kilogram-force",
+    "pluralName": "kilograms-force",
+    "link": "/wiki/Kilogram-force"
+  },
+  "nmi": {
+    "code": "nmi",
+    "abbr": "nmi",
+    "name": "nautical mile",
+    "pluralName": "nautical miles",
+    "link": "/wiki/Nautical_mile"
+  },
+  "1000sqft": {
+    "code": "1000sqft",
+    "abbr": "1000 sq ft",
+    "name": "thousand square feet",
+    "pluralName": "thousand square feet",
+    "link": "/wiki/Square_foot"
+  },
+  "mmHg": {
+    "code": "mmHg",
+    "abbr": "mmHg",
+    "name": "millimetre of mercury",
+    "pluralName": "millimetres of mercury",
+    "link": "/wiki/Millimetre_of_mercury"
+  },
+  "kmol": {
+    "code": "kmol",
+    "abbr": "kmol",
+    "name": "kilomole",
+    "pluralName": "kilomoles",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "Lcwt": {
+    "code": "Lcwt",
+    "abbr": "Lcwt",
+    "name": "long hundredweight",
+    "pluralName": "long hundredweight",
+    "link": "/wiki/Hundredweight"
+  },
+  "kgm": {
+    "code": "kgm",
+    "abbr": "kg⋅m",
+    "name": "kilogram metre",
+    "pluralName": "kilogram metres",
+    "link": "/wiki/Kilogram_metre_(torque)"
+  },
+  "MA/m": {
+    "code": "MA/m",
+    "abbr": "MA/m",
+    "name": "megaampere per metre",
+    "pluralName": "megaamperes per metre",
+    "link": "/wiki/Ampere_per_metre"
+  },
+  "gCO2/km": {
+    "code": "gCO2/km",
+    "abbr": "g(CO2)/km",
+    "name": "gram of CO2 per kilometre",
+    "pluralName": "grams of CO2 per kilometre",
+    "link": "/wiki/Exhaust_gas"
+  },
+  "gmol/min": {
+    "code": "gmol/min",
+    "abbr": "gmol/min",
+    "name": "gram-mole per minute",
+    "pluralName": "gram-moles per minute",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "lb/cuft": {
+    "code": "lb/cuft",
+    "abbr": "lb/cu ft",
+    "name": "pound per cubic foot",
+    "pluralName": "pounds per cubic foot",
+    "link": "/wiki/Density"
+  },
+  "Mly": {
+    "code": "Mly",
+    "abbr": "Mly",
+    "name": "megalight-year",
+    "pluralName": "megalight-years",
+    "link": "/wiki/Light-year#Definitions"
+  },
+  "atm": {
+    "code": "atm",
+    "abbr": "atm",
+    "name": "standard atmosphere",
+    "pluralName": "standard atmospheres",
+    "link": "/wiki/Atmosphere_(unit)"
+  },
+  "long cwt": {
+    "code": "long cwt",
+    "abbr": "long cwt",
+    "name": "long hundredweight",
+    "pluralName": "long hundredweight",
+    "link": "/wiki/Hundredweight"
+  },
+  "tonTNT": {
+    "code": "tonTNT",
+    "abbr": "ton of TNT",
+    "name": "ton of TNT",
+    "pluralName": "tons of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "carat": {
+    "code": "carat",
+    "abbr": "carat",
+    "name": "carat",
+    "pluralName": "carats",
+    "link": "/wiki/Carat_(mass)"
+  },
+  "cal-th": {
+    "code": "cal-th",
+    "abbr": "calth",
+    "name": "calorie (thermochemical)",
+    "pluralName": "calories (thermochemical)",
+    "link": "/wiki/Calorie"
+  },
+  "BTU-ISO": {
+    "code": "BTU-ISO",
+    "abbr": "BTUISO",
+    "name": "British thermal unit (ISO)",
+    "pluralName": "British thermal units (ISO)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "qtr": {
+    "code": "qtr",
+    "abbr": "qtr",
+    "name": "quarter",
+    "pluralName": "quarters",
+    "link": "/wiki/Long_quarter"
+  },
+  "TtTNT": {
+    "code": "TtTNT",
+    "abbr": "teratonne of TNT",
+    "name": "teratonne of TNT",
+    "pluralName": "teratonnes of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "fortnight": {
+    "code": "fortnight",
+    "abbr": "fortnight",
+    "name": "fortnight",
+    "pluralName": "fortnights",
+    "link": "/wiki/Fortnight"
+  },
+  "royal cubit": {
+    "code": "royal cubit",
+    "abbr": "cu",
+    "name": "royal cubit",
+    "pluralName": "royal cubits",
+    "link": "/wiki/Royal_cubit"
+  },
+  "psf": {
+    "code": "psf",
+    "abbr": "psf",
+    "name": "pound per square foot",
+    "pluralName": "pounds per square foot",
+    "link": "/wiki/Pound_per_square_inch"
+  },
+  "PSh": {
+    "code": "PSh",
+    "abbr": "PSh",
+    "name": "Pferdestärkenstunde",
+    "pluralName": "Pferdestärkenstundes",
+    "link": "/wiki/Pferdest%C3%A4rkenstunde"
+  },
+  "km/d": {
+    "code": "km/d",
+    "abbr": "km/d",
+    "name": "kilometre per day",
+    "pluralName": "kilometres per day",
+    "link": "/wiki/Orders_of_magnitude_(speed)"
+  },
+  "inoz-f": {
+    "code": "inoz-f",
+    "abbr": "in⋅ozf",
+    "name": "inch-ounce force",
+    "pluralName": "inch-ounces force",
+    "link": "/wiki/Foot-pound_(energy)"
+  },
+  "psi": {
+    "code": "psi",
+    "abbr": "psi",
+    "name": "pound per square inch",
+    "pluralName": "pounds per square inch",
+    "link": "/wiki/Pound_per_square_inch"
+  },
+  "ktonTNT/MT": {
+    "code": "ktonTNT/MT",
+    "abbr": "kiloton of TNT per metric ton",
+    "name": "kiloton of TNT per metric ton",
+    "pluralName": "kilotons of TNT per metric ton",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "km/h": {
+    "code": "km/h",
+    "abbr": "km/h",
+    "name": "kilometre per hour",
+    "pluralName": "kilometres per hour",
+    "link": "/wiki/Kilometres_per_hour"
+  },
+  "millennium": {
+    "code": "millennium",
+    "abbr": "ka",
+    "name": "millennium",
+    "pluralName": "millennia",
+    "link": "/wiki/Millennium"
+  },
+  "lb/mi": {
+    "code": "lb/mi",
+    "abbr": "lb/mi",
+    "name": "pound per mile",
+    "pluralName": "pounds per mile",
+    "link": "/wiki/Exhaust_gas"
+  },
+  "GW.h": {
+    "code": "GW.h",
+    "abbr": "GW⋅h",
+    "name": "gigawatt-hour",
+    "pluralName": "gigawatt-hours",
+    "link": "/wiki/Watt-hour"
+  },
+  "m3/min": {
+    "code": "m3/min",
+    "abbr": "m3/min",
+    "name": "cubic metre per minute",
+    "pluralName": "cubic metres per minute",
+    "link": "/wiki/Cubic_metre_per_second"
+  },
+  "-STf": {
+    "code": "-STf",
+    "abbr": "STf",
+    "name": "short ton-force",
+    "pluralName": "short tons-force",
+    "link": "/wiki/Short_ton-force"
+  },
+  "km/hs": {
+    "code": "km/hs",
+    "abbr": "km/(h⋅s)",
+    "name": "kilometre per hour per second",
+    "pluralName": "kilometres per hour per second",
+    "link": "/wiki/Acceleration"
+  },
+  "t(TNT)": {
+    "code": "t(TNT)",
+    "abbr": "t",
+    "name": "tonne",
+    "pluralName": "tonnes",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "ft/s2": {
+    "code": "ft/s2",
+    "abbr": "ft/s2",
+    "name": "foot per second squared",
+    "pluralName": "feet per second squared",
+    "link": "/wiki/Foot_per_second_squared"
+  },
+  "cuyd": {
+    "code": "cuyd",
+    "abbr": "cu yd",
+    "name": "cubic yard",
+    "pluralName": "cubic yards",
+    "link": "/wiki/Cubic_yard"
+  },
+  "wk": {
+    "code": "wk",
+    "abbr": "week",
+    "name": "week",
+    "pluralName": "weeks",
+    "link": "/wiki/Week"
+  },
+  "long billion year": {
+    "code": "long billion year",
+    "abbr": "Ta",
+    "name": "billion years",
+    "pluralName": "billion years",
+    "link": "/wiki/Annum"
+  },
+  "gr water": {
+    "code": "gr water",
+    "abbr": "gr H2O",
+    "name": "grains water",
+    "pluralName": "grains water",
+    "link": "/wiki/Grain_(unit)"
+  },
+  "koilbbl": {
+    "code": "koilbbl",
+    "abbr": "kbbl",
+    "name": "thousand barrels",
+    "pluralName": "thousand barrels",
+    "link": "/wiki/Barrel_(unit)#Oil_barrel"
+  },
+  "USdrypt": {
+    "code": "USdrypt",
+    "abbr": "US dry pt",
+    "name": "US dry pint",
+    "pluralName": "US dry pints",
+    "link": "/wiki/Pint"
+  },
+  "mdyn": {
+    "code": "mdyn",
+    "abbr": "mdyn",
+    "name": "millidyne",
+    "pluralName": "millidynes",
+    "link": "/wiki/Dyne"
+  },
+  "g/dm3": {
+    "code": "g/dm3",
+    "abbr": "g/dm3",
+    "name": "gram per cubic decimetre",
+    "pluralName": "grams per cubic decimetre",
+    "link": "/wiki/Density"
+  },
+  "μW.h": {
+    "code": "μW.h",
+    "abbr": "μW⋅h",
+    "name": "microwatt-hour",
+    "pluralName": "microwatt-hours",
+    "link": "/wiki/Watt-hour"
+  },
+  "impgal": {
+    "code": "impgal",
+    "abbr": "imp gal",
+    "name": "imperial gallon",
+    "pluralName": "imperial gallons",
+    "link": "/wiki/Imperial_gallon"
+  },
+  "MJ/100 km": {
+    "code": "MJ/100 km",
+    "abbr": "MJ/100 km",
+    "name": "megajoule per 100 kilometres",
+    "pluralName": "megajoules per 100 kilometres",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "acre-foot": {
+    "code": "acre-foot",
+    "abbr": "acre⋅ft",
+    "name": "acre-foot",
+    "pluralName": "acre-foot",
+    "link": "/wiki/Acre-foot"
+  },
+  "hectare": {
+    "code": "hectare",
+    "abbr": "ha",
+    "name": "hectare",
+    "pluralName": "hectares",
+    "link": "/wiki/Hectare"
+  },
+  "km3/d": {
+    "code": "km3/d",
+    "abbr": "km3/d",
+    "name": "cubic kilometre per day",
+    "pluralName": "cubic kilometres per day",
+    "link": "/wiki/Cubic_metre_per_second"
+  },
+  "Wh": {
+    "code": "Wh",
+    "abbr": "Wh",
+    "name": "watt-hour",
+    "pluralName": "watt-hours",
+    "link": "/wiki/Watt-hour"
+  },
+  "kW/kg": {
+    "code": "kW/kg",
+    "abbr": "kW/kg",
+    "name": "kilowatt per kilogram",
+    "pluralName": "kilowatts per kilogram",
+    "link": "/wiki/Power-to-weight_ratio"
+  },
+  "ftlb": {
+    "code": "ftlb",
+    "abbr": "ft⋅lb",
+    "name": "foot-pound",
+    "pluralName": "foot-pounds",
+    "link": "/wiki/Foot-pound_(energy)"
+  },
+  "km3/a": {
+    "code": "km3/a",
+    "abbr": "km3/a",
+    "name": "cubic kilometre per annum",
+    "pluralName": "cubic kilometres per annum",
+    "link": "/wiki/Cubic_metre_per_second"
+  },
+  "USdryqt": {
+    "code": "USdryqt",
+    "abbr": "US dry qt",
+    "name": "US dry quart",
+    "pluralName": "US dry quarts",
+    "link": "/wiki/Quart"
+  },
+  "cal-15": {
+    "code": "cal-15",
+    "abbr": "cal15",
+    "name": "calorie (15°C)",
+    "pluralName": "calories (15°C)",
+    "link": "/wiki/Calorie"
+  },
+  "USbu/acre": {
+    "code": "USbu/acre",
+    "abbr": "US bushel per acre",
+    "name": "US bushel per acre",
+    "pluralName": "US bushels per acre",
+    "link": "/wiki/Bushel"
+  },
+  "-Lcwt": {
+    "code": "-Lcwt",
+    "abbr": "cwt",
+    "name": "hundredweight",
+    "pluralName": "hundredweight",
+    "link": "/wiki/Hundredweight"
+  },
+  "Mpc": {
+    "code": "Mpc",
+    "abbr": "Mpc",
+    "name": "megaparsec",
+    "pluralName": "megaparsecs",
+    "link": "/wiki/Parsec#Megaparsecs_and_gigaparsecs"
+  },
+  "Moilbbl": {
+    "code": "Moilbbl",
+    "abbr": "Mbbl",
+    "name": "million barrels",
+    "pluralName": "million barrels",
+    "link": "/wiki/Barrel_(unit)#Oil_barrel"
+  },
+  "mol": {
+    "code": "mol",
+    "abbr": "mol",
+    "name": "mole",
+    "pluralName": "moles",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "yd": {
+    "code": "yd",
+    "abbr": "yd",
+    "name": "yard",
+    "pluralName": "yards",
+    "link": "/wiki/Yard"
+  },
+  "rtkm": {
+    "code": "rtkm",
+    "abbr": "km",
+    "name": "route kilometre",
+    "pluralName": "route kilometres",
+    "link": "/wiki/Kilometre"
+  },
+  "cm/year": {
+    "code": "cm/year",
+    "abbr": "cm/year",
+    "name": "centimetre per year",
+    "pluralName": "centimetres per year",
+    "link": "/wiki/Orders_of_magnitude_(speed)"
+  },
+  "impqt": {
+    "code": "impqt",
+    "abbr": "imp qt",
+    "name": "imperial quart",
+    "pluralName": "imperial quarts",
+    "link": "/wiki/Imperial_quart"
+  },
+  "L/Tf": {
+    "code": "L/Tf",
+    "abbr": "L/Tf",
+    "name": "long ton-force",
+    "pluralName": "long tons-force",
+    "link": "/wiki/Long_ton-force"
+  },
+  "GeV": {
+    "code": "GeV",
+    "abbr": "GeV",
+    "name": "gigaelectronvolt",
+    "pluralName": "gigaelectronvolts",
+    "link": "/wiki/Electronvolt"
+  },
+  "lb-fft": {
+    "code": "lb-fft",
+    "abbr": "ft⋅lbf",
+    "name": "pound force-foot",
+    "pluralName": "pound force-feet",
+    "link": "/wiki/Pound-foot_(torque)"
+  },
+  "Goilbbl": {
+    "code": "Goilbbl",
+    "abbr": "Gbbl",
+    "name": "billion barrels",
+    "pluralName": "billion barrels",
+    "link": "/wiki/Barrel_(unit)#Oil_barrel"
+  },
+  "impkenning": {
+    "code": "impkenning",
+    "abbr": "kenning",
+    "name": "imperial kenning",
+    "pluralName": "imperial kennings",
+    "link": "/wiki/Kenning_(unit)"
+  },
+  "mph": {
+    "code": "mph",
+    "abbr": "mph",
+    "name": "mile per hour",
+    "pluralName": "miles per hour",
+    "link": "/wiki/Miles_per_hour"
+  },
+  "Mdyn": {
+    "code": "Mdyn",
+    "abbr": "Mdyn",
+    "name": "megadyne",
+    "pluralName": "megadynes",
+    "link": "/wiki/Dyne"
+  },
+  "imppt": {
+    "code": "imppt",
+    "abbr": "imp pt",
+    "name": "imperial pint",
+    "pluralName": "imperial pints",
+    "link": "/wiki/Imperial_pint"
+  },
+  "drachm": {
+    "code": "drachm",
+    "abbr": "drachm",
+    "name": "drachm",
+    "pluralName": "drachms",
+    "link": "/wiki/Dram_(unit)"
+  },
+  "kNs/kg": {
+    "code": "kNs/kg",
+    "abbr": "kN‑s/kg",
+    "name": "kN‑s/kg",
+    "pluralName": "kN‑s/kg",
+    "link": "/wiki/Specific_impulse"
+  },
+  "Cal-th": {
+    "code": "Cal-th",
+    "abbr": "Calth",
+    "name": "Calorie (thermochemical)",
+    "pluralName": "Calories (thermochemical)",
+    "link": "/wiki/Calorie"
+  },
+  "ihp": {
+    "code": "ihp",
+    "abbr": "ihp",
+    "name": "indicated horsepower",
+    "pluralName": "indicated horsepower",
+    "link": "/wiki/Horsepower#Indicated_horsepower"
+  },
+  "m/s2": {
+    "code": "m/s2",
+    "abbr": "m/s2",
+    "name": "metre per second squared",
+    "pluralName": "metres per second squared",
+    "link": "/wiki/Metre_per_second_squared"
+  },
+  "USdrybbl": {
+    "code": "USdrybbl",
+    "abbr": "US dry bbl",
+    "name": "US dry barrel",
+    "pluralName": "US dry barrels",
+    "link": "/wiki/Barrel_(unit)"
+  },
+  "km/s": {
+    "code": "km/s",
+    "abbr": "km/s",
+    "name": "kilometre per second",
+    "pluralName": "kilometres per second",
+    "link": "/wiki/Metre_per_second"
+  },
+  "winecase": {
+    "code": "winecase",
+    "abbr": "case",
+    "name": "case",
+    "pluralName": "cases",
+    "link": "/wiki/Case_(goods)"
+  },
+  "kly": {
+    "code": "kly",
+    "abbr": "kly",
+    "name": "kilolight-year",
+    "pluralName": "kilolight-years",
+    "link": "/wiki/Light-year#Definitions"
+  },
+  "USkenning": {
+    "code": "USkenning",
+    "abbr": "US kenning",
+    "name": "US kenning",
+    "pluralName": "US kennings",
+    "link": "/wiki/Kenning_(unit)"
+  },
+  "in/mi": {
+    "code": "in/mi",
+    "abbr": "in/mi",
+    "name": "inch per mile",
+    "pluralName": "inches per mile",
+    "link": "/wiki/Grade_(slope)"
+  },
+  "imppk": {
+    "code": "imppk",
+    "abbr": "pk",
+    "name": "imperial peck",
+    "pluralName": "imperial pecks",
+    "link": "/wiki/Peck"
+  },
+  "ftlb-f": {
+    "code": "ftlb-f",
+    "abbr": "ft⋅lbf",
+    "name": "foot-pound force",
+    "pluralName": "foot-pounds force",
+    "link": "/wiki/Foot-pound_(energy)"
+  },
+  "ft/s": {
+    "code": "ft/s",
+    "abbr": "ft/s",
+    "name": "foot per second",
+    "pluralName": "feet per second",
+    "link": "/wiki/Feet_per_second"
+  },
+  "C-change": {
+    "code": "C-change",
+    "abbr": "°C",
+    "name": "degree Celsius change",
+    "pluralName": "degrees Celsius change",
+    "link": "/wiki/Celsius"
+  },
+  "sqverst": {
+    "code": "sqverst",
+    "abbr": "square verst",
+    "name": "square verst",
+    "pluralName": "square versts",
+    "link": "/wiki/Verst"
+  },
+  "long qtr": {
+    "code": "long qtr",
+    "abbr": "long qtr",
+    "name": "long quarter",
+    "pluralName": "long quarters",
+    "link": "/wiki/Long_quarter"
+  },
+  "tsfc": {
+    "code": "tsfc",
+    "abbr": "lb/(lbf⋅h)",
+    "name": "lb/(lbf⋅h)",
+    "pluralName": "lb/(lbf⋅h)",
+    "link": "/wiki/Thrust_specific_fuel_consumption"
+  },
+  "foot/s": {
+    "code": "foot/s",
+    "abbr": "ft/s",
+    "name": "foot per second",
+    "pluralName": "foot per second",
+    "link": "/wiki/Foot_per_second"
+  },
+  "PS/t": {
+    "code": "PS/t",
+    "abbr": "PS/t",
+    "name": "metric horsepower per tonne",
+    "pluralName": "metric horsepower per tonne",
+    "link": "/wiki/Power-to-weight_ratio"
+  },
+  "impoz": {
+    "code": "impoz",
+    "abbr": "imp fl oz",
+    "name": "imperial fluid ounce",
+    "pluralName": "imperial fluid ounces",
+    "link": "/wiki/Imperial_fluid_ounce"
+  },
+  "-ST": {
+    "code": "-ST",
+    "abbr": "ST",
+    "name": "short ton",
+    "pluralName": "short tons",
+    "link": "/wiki/Short_ton"
+  },
+  "mcal-15": {
+    "code": "mcal-15",
+    "abbr": "mcal15",
+    "name": "millicalorie (15°C)",
+    "pluralName": "millicalories (15°C)",
+    "link": "/wiki/Calorie"
+  },
+  "gmol/s": {
+    "code": "gmol/s",
+    "abbr": "gmol/s",
+    "name": "gram-mole per second",
+    "pluralName": "gram-moles per second",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "m/s": {
+    "code": "m/s",
+    "abbr": "m/s",
+    "name": "metre per second",
+    "pluralName": "metres per second",
+    "link": "/wiki/Metre_per_second"
+  },
+  "dunam": {
+    "code": "dunam",
+    "abbr": "dunam",
+    "name": "dunam",
+    "pluralName": "dunams",
+    "link": "/wiki/Dunam"
+  },
+  "USbu": {
+    "code": "USbu",
+    "abbr": "US bu",
+    "name": "US bushel",
+    "pluralName": "US bushels",
+    "link": "/wiki/Bushel"
+  },
+  "TJ/kg": {
+    "code": "TJ/kg",
+    "abbr": "TJ/kg",
+    "name": "terajoule per kilogram",
+    "pluralName": "terajoules per kilogram",
+    "link": "/wiki/Specific_energy"
+  },
+  "BTU-th": {
+    "code": "BTU-th",
+    "abbr": "BTUth",
+    "name": "British thermal unit (thermochemical)",
+    "pluralName": "British thermal units (thermochemical)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "lb/U.S.gal": {
+    "code": "lb/U.S.gal",
+    "abbr": "lb/U.S. gal",
+    "name": "pound per U.S. gallon",
+    "pluralName": "pounds per U.S. gallon",
+    "link": "/wiki/Density"
+  },
+  "scfoot": {
+    "code": "scfoot",
+    "abbr": "scf",
+    "name": "standard cubic foot",
+    "pluralName": "standard cubic foot",
+    "link": "/wiki/Standard_cubic_foot"
+  },
+  "USgal/h": {
+    "code": "USgal/h",
+    "abbr": "gal/h",
+    "name": "gallon per hour",
+    "pluralName": "gallons per hour",
+    "link": "/wiki/Gallon"
+  },
+  "chain": {
+    "code": "chain",
+    "abbr": "chain",
+    "name": "chain",
+    "pluralName": "chains",
+    "link": "/wiki/Chain_(unit)"
+  },
+  "BTU-39F": {
+    "code": "BTU-39F",
+    "abbr": "BTU39°F",
+    "name": "British thermal unit (39°F)",
+    "pluralName": "British thermal units (39°F)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "gTNT": {
+    "code": "gTNT",
+    "abbr": "gram of TNT",
+    "name": "gram of TNT",
+    "pluralName": "grams of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "L/h": {
+    "code": "L/h",
+    "abbr": "L/h",
+    "name": "litre per hour",
+    "pluralName": "litres per hour",
+    "link": "/wiki/Cubic_metre_per_second"
+  },
+  "USgal/d": {
+    "code": "USgal/d",
+    "abbr": "US gal/d",
+    "name": "US gallon per day",
+    "pluralName": "US gallons per day",
+    "link": "/wiki/US_gallon_per_day"
+  },
+  "USbeerbbl": {
+    "code": "USbeerbbl",
+    "abbr": "US bbl",
+    "name": "US beer barrel",
+    "pluralName": "US beer barrels",
+    "link": "/wiki/Barrel_(unit)"
+  },
+  "impgalh2o": {
+    "code": "impgalh2o",
+    "abbr": "imp gal H2O",
+    "name": "imperial gallon of water",
+    "pluralName": "imperial gallons of water",
+    "link": "/wiki/Imperial_gallon"
+  },
+  "lb(f)": {
+    "code": "lb(f)",
+    "abbr": "lb",
+    "name": "pound",
+    "pluralName": "pounds",
+    "link": "/wiki/Pound_(force)"
+  },
+  "USgal/a": {
+    "code": "USgal/a",
+    "abbr": "US gal/a",
+    "name": "US gallon per year",
+    "pluralName": "US gallons per year",
+    "link": "/wiki/US_gallon_per_year"
+  },
+  "rtmi": {
+    "code": "rtmi",
+    "abbr": "mi",
+    "name": "route mile",
+    "pluralName": "route miles",
+    "link": "/wiki/Mile"
+  },
+  "gmol/h": {
+    "code": "gmol/h",
+    "abbr": "gmol/h",
+    "name": "gram-mole per hour",
+    "pluralName": "gram-moles per hour",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "thou": {
+    "code": "thou",
+    "abbr": "thou",
+    "name": "thou",
+    "pluralName": "thou",
+    "link": "/wiki/Thousandth_of_an_inch"
+  },
+  "ktonTNT": {
+    "code": "ktonTNT",
+    "abbr": "kt",
+    "name": "kiloton of TNT",
+    "pluralName": "kilotons of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "gmol/d": {
+    "code": "gmol/d",
+    "abbr": "gmol/d",
+    "name": "gram-mole per day",
+    "pluralName": "gram-moles per day",
+    "link": "/wiki/Mole_(unit)"
+  },
+  "lb/USbu": {
+    "code": "lb/USbu",
+    "abbr": "lb/US bu",
+    "name": "pound per US bushel",
+    "pluralName": "pounds per US bushel",
+    "link": "/wiki/Bushel"
+  },
+  "L/s": {
+    "code": "L/s",
+    "abbr": "L/s",
+    "name": "litre per second",
+    "pluralName": "litres per second",
+    "link": "/wiki/Cubic_metre_per_second"
+  },
+  "mN.m": {
+    "code": "mN.m",
+    "abbr": "mN⋅m",
+    "name": "millinewton-metre",
+    "pluralName": "millinewton-metres",
+    "link": "/wiki/Newton-metre"
+  },
+  "USgal/s": {
+    "code": "USgal/s",
+    "abbr": "USgal/s",
+    "name": "US gallon per second",
+    "pluralName": "US gallons per second",
+    "link": "/wiki/US_gallons_per_second"
+  },
+  "feV": {
+    "code": "feV",
+    "abbr": "feV",
+    "name": "femtoelectronvolt",
+    "pluralName": "femtoelectronvolts",
+    "link": "/wiki/Electronvolt"
+  },
+  "MUSgal": {
+    "code": "MUSgal",
+    "abbr": "million US gal",
+    "name": "million US gallons",
+    "pluralName": "million US gallons",
+    "link": "/wiki/US_gallon"
+  },
+  "Cal-15": {
+    "code": "Cal-15",
+    "abbr": "Cal15",
+    "name": "Calorie (15°C)",
+    "pluralName": "Calories (15°C)",
+    "link": "/wiki/Calorie"
+  },
+  "Gtoe": {
+    "code": "Gtoe",
+    "abbr": "Gtoe",
+    "name": "gigatonne of oil equivalent",
+    "pluralName": "gigatonnes of oil equivalent",
+    "link": "/wiki/Tonne_of_oil_equivalent"
+  },
+  "daa": {
+    "code": "daa",
+    "abbr": "daa",
+    "name": "decare",
+    "pluralName": "decares",
+    "link": "/wiki/Decare"
+  },
+  "mm/h": {
+    "code": "mm/h",
+    "abbr": "mm/h",
+    "name": "millimetre per hour",
+    "pluralName": "millimetres per hour",
+    "link": "/wiki/Metre_per_second"
+  },
+  "impbsh": {
+    "code": "impbsh",
+    "abbr": "imp bsh",
+    "name": "imperial bushel",
+    "pluralName": "imperial bushels",
+    "link": "/wiki/Imperial_bushel"
+  },
+  "pole": {
+    "code": "pole",
+    "abbr": "pole",
+    "name": "pole",
+    "pluralName": "poles",
+    "link": "/wiki/Rod_(unit)"
+  },
+  "mm/m": {
+    "code": "mm/m",
+    "abbr": "mm/m",
+    "name": "millimetre per metre",
+    "pluralName": "millimetres per metre",
+    "link": "/wiki/Grade_(slope)"
+  },
+  "short trillion year": {
+    "code": "short trillion year",
+    "abbr": "Ta",
+    "name": "trillion years",
+    "pluralName": "trillion years",
+    "link": "/wiki/Annum"
+  },
+  "USflgal": {
+    "code": "USflgal",
+    "abbr": "US fl gal",
+    "name": "US gallon",
+    "pluralName": "US gallons",
+    "link": "/wiki/Gallon"
+  },
+  "inlbf": {
+    "code": "inlbf",
+    "abbr": "in⋅lbf",
+    "name": "inch-pound force",
+    "pluralName": "inch-pounds force",
+    "link": "/wiki/Foot-pound_(energy)"
+  },
+  "ozCO2/mi": {
+    "code": "ozCO2/mi",
+    "abbr": "oz(CO2)/mi",
+    "name": "ounce of CO2 per mile",
+    "pluralName": "ounces of CO2 per mile",
+    "link": "/wiki/Exhaust_gas"
+  },
+  "board feet": {
+    "code": "board feet",
+    "abbr": "board foot",
+    "name": "board foot",
+    "pluralName": "board feet",
+    "link": "/wiki/Board_foot"
+  },
+  "si tsfc": {
+    "code": "si tsfc",
+    "abbr": "g/(kN⋅s)",
+    "name": "g/(kN⋅s)",
+    "pluralName": "g/(kN⋅s)",
+    "link": "/wiki/Thrust_specific_fuel_consumption"
+  },
+  "kmol/min": {
+    "code": "kmol/min",
+    "abbr": "kmol/min",
+    "name": "kilomole per minute",
+    "pluralName": "kilomoles per minute",
+    "link": "/wiki/Kilomole_(unit)"
+  },
+  "sqft": {
+    "code": "sqft",
+    "abbr": "sq ft",
+    "name": "square foot",
+    "pluralName": "square feet",
+    "link": "/wiki/Square_foot"
+  },
+  "TW.h": {
+    "code": "TW.h",
+    "abbr": "TW⋅h",
+    "name": "terawatt-hour",
+    "pluralName": "terawatt-hours",
+    "link": "/wiki/Watt-hour"
+  },
+  "kpc": {
+    "code": "kpc",
+    "abbr": "kpc",
+    "name": "kiloparsec",
+    "pluralName": "kiloparsecs",
+    "link": "/wiki/Parsec#Parsecs_and_kiloparsecs"
+  },
+  "m.kgf": {
+    "code": "m.kgf",
+    "abbr": "m⋅kgf",
+    "name": "metre kilogram-force",
+    "pluralName": "metre kilograms-force",
+    "link": "/wiki/Kilogram_metre_(torque)"
+  },
+  "USgal": {
+    "code": "USgal",
+    "abbr": "US gal",
+    "name": "US gallon",
+    "pluralName": "US gallons",
+    "link": "/wiki/US_gallon"
+  },
+  "μWh": {
+    "code": "μWh",
+    "abbr": "μWh",
+    "name": "microwatt-hour",
+    "pluralName": "microwatt-hours",
+    "link": "/wiki/Watt-hour"
+  },
+  "furlong": {
+    "code": "furlong",
+    "abbr": "furlong",
+    "name": "furlong",
+    "pluralName": "furlongs",
+    "link": "/wiki/Furlong"
+  },
+  "kJ/d": {
+    "code": "kJ/d",
+    "abbr": "kJ/d",
+    "name": "kilojoule per day",
+    "pluralName": "kilojoules per day",
+    "link": "/wiki/Kilojoule"
+  },
+  "kJ/g": {
+    "code": "kJ/g",
+    "abbr": "kJ/g",
+    "name": "kilojoule per gram",
+    "pluralName": "kilojoules per gram",
+    "link": "/wiki/Specific_energy"
+  },
+  "m/min": {
+    "code": "m/min",
+    "abbr": "m/min",
+    "name": "metre per minute",
+    "pluralName": "metres per minute",
+    "link": "/wiki/Metre_per_second"
+  },
+  "kJ/h": {
+    "code": "kJ/h",
+    "abbr": "kJ/h",
+    "name": "kilojoule per hour",
+    "pluralName": "kilojoules per hour",
+    "link": "/wiki/Kilojoule"
+  },
+  "kpm": {
+    "code": "kpm",
+    "abbr": "kp⋅m",
+    "name": "kilopond metre",
+    "pluralName": "kilopond metres",
+    "link": "/wiki/Kilogram_metre_(torque)"
+  },
+  "Cal": {
+    "code": "Cal",
+    "abbr": "Cal",
+    "name": "calorie",
+    "pluralName": "calories",
+    "link": "/wiki/Calorie"
+  },
+  "thm-US": {
+    "code": "thm-US",
+    "abbr": "thm (US)",
+    "name": "therm (US)",
+    "pluralName": "therms (US)",
+    "link": "/wiki/Therm"
+  },
+  "ft/mi": {
+    "code": "ft/mi",
+    "abbr": "ft/mi",
+    "name": "foot per mile",
+    "pluralName": "feet per mile",
+    "link": "/wiki/Grade_(slope)"
+  },
+  "PD/acre": {
+    "code": "PD/acre",
+    "abbr": "/acre",
+    "name": "inhabitant per acre",
+    "pluralName": "inhabitants per acre",
+    "link": "/wiki/Acre"
+  },
+  "cord": {
+    "code": "cord",
+    "abbr": "cord",
+    "name": "cord",
+    "pluralName": "cords",
+    "link": "/wiki/Cord_(unit)"
+  },
+  "kcal": {
+    "code": "kcal",
+    "abbr": "kcal",
+    "name": "kilocalorie",
+    "pluralName": "kilocalories",
+    "link": "/wiki/Calorie"
+  },
+  "cumi/a": {
+    "code": "cumi/a",
+    "abbr": "cu mi/a",
+    "name": "cubic mile per annum",
+    "pluralName": "cubic miles per annum",
+    "link": "/wiki/Cubic_foot_per_second"
+  },
+  "-12USoz(ml)serve": {
+    "code": "-12USoz(ml)serve",
+    "abbr": "12 US fl oz (355 ml) serving",
+    "name": "12 US fl oz (355 ml) serving",
+    "pluralName": "12 US fl oz (355 ml) servings",
+    "link": "/wiki/Beverage_can#Standard_sizes"
+  },
+  "thm-UK": {
+    "code": "thm-UK",
+    "abbr": "thm (UK)",
+    "name": "therm (UK)",
+    "pluralName": "therms (UK)",
+    "link": "/wiki/Therm"
+  },
+  "shtn": {
+    "code": "shtn",
+    "abbr": "sh tn",
+    "name": "short ton",
+    "pluralName": "short tons",
+    "link": "/wiki/Short_ton"
+  },
+  "Btu-mean": {
+    "code": "Btu-mean",
+    "abbr": "Btumean",
+    "name": "British thermal unit (mean)",
+    "pluralName": "British thermal units (mean)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "furlong per fortnight": {
+    "code": "furlong per fortnight",
+    "abbr": "furlong per fortnight",
+    "name": "furlong per fortnight",
+    "pluralName": "furlongs per fortnight",
+    "link": "/wiki/FFF_system"
+  },
+  "-12USozserve": {
+    "code": "-12USozserve",
+    "abbr": "12 US fl oz serving",
+    "name": "12 US fl oz serving",
+    "pluralName": "12 US fl oz servings",
+    "link": "/wiki/Beverage_can#Standard_sizes"
+  },
+  "Btu-39F": {
+    "code": "Btu-39F",
+    "abbr": "Btu39°F",
+    "name": "British thermal unit (39°F)",
+    "pluralName": "British thermal units (39°F)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "cal/g": {
+    "code": "cal/g",
+    "abbr": "cal/g",
+    "name": "calorie per gram",
+    "pluralName": "calories per gram",
+    "link": "/wiki/Calorie_per_gram"
+  },
+  "cal/h": {
+    "code": "cal/h",
+    "abbr": "cal/h",
+    "name": "calorie per hour",
+    "pluralName": "calories per hour",
+    "link": "/wiki/Calorie"
+  },
+  "eVpar": {
+    "code": "eVpar",
+    "abbr": "eV",
+    "name": "electronvolt",
+    "pluralName": "electronvolts",
+    "link": "/wiki/Electronvolt"
+  },
+  "sqft/acre": {
+    "code": "sqft/acre",
+    "abbr": "sq ft/acre",
+    "name": "square foot per acre",
+    "pluralName": "square feet per acre",
+    "link": "/wiki/Basal_area"
+  },
+  "Btu-IT": {
+    "code": "Btu-IT",
+    "abbr": "BtuIT",
+    "name": "British thermal unit (IT)",
+    "pluralName": "British thermal units (IT)",
+    "link": "/wiki/British_thermal_unit"
+  },
+  "Brnmi": {
+    "code": "Brnmi",
+    "abbr": "(Brit) nmi",
+    "name": "British nautical mile",
+    "pluralName": "British nautical miles",
+    "link": "/wiki/Nautical_mile"
+  },
+  "cal": {
+    "code": "cal",
+    "abbr": "cal",
+    "name": "calorie",
+    "pluralName": "calories",
+    "link": "/wiki/Calorie"
+  },
+  "Bcuft": {
+    "code": "Bcuft",
+    "abbr": "billion cu ft",
+    "name": "billion cubic foot",
+    "pluralName": "billion cubic feet",
+    "link": "/wiki/Cubic_foot"
+  },
+  "ozf": {
+    "code": "ozf",
+    "abbr": "ozf",
+    "name": "ounce-force",
+    "pluralName": "ounces-force",
+    "link": "/wiki/Pound_(force)"
+  },
+  "short cwt": {
+    "code": "short cwt",
+    "abbr": "short cwt",
+    "name": "short hundredweight",
+    "pluralName": "short hundredweight",
+    "link": "/wiki/Hundredweight"
+  },
+  "mtonTNT": {
+    "code": "mtonTNT",
+    "abbr": "milliton of TNT",
+    "name": "milliton of TNT",
+    "pluralName": "millitons of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "ST-f": {
+    "code": "ST-f",
+    "abbr": "STf",
+    "name": "short ton-force",
+    "pluralName": "short tons-force",
+    "link": "/wiki/Short_ton-force"
+  },
+  "LTf": {
+    "code": "LTf",
+    "abbr": "LTf",
+    "name": "long ton-force",
+    "pluralName": "long tons-force",
+    "link": "/wiki/Long_ton-force"
+  },
+  "J/g": {
+    "code": "J/g",
+    "abbr": "J/g",
+    "name": "joule per gram",
+    "pluralName": "joules per gram",
+    "link": "/wiki/Specific_energy"
+  },
+  "TeV": {
+    "code": "TeV",
+    "abbr": "TeV",
+    "name": "teraelectronvolt",
+    "pluralName": "teraelectronvolts",
+    "link": "/wiki/Electronvolt"
+  },
+  "/sqmi": {
+    "code": "/sqmi",
+    "abbr": "/sq mi",
+    "name": "per square mile",
+    "pluralName": "per square mile",
+    "link": "/wiki/Square_mile"
+  },
+  "ozt": {
+    "code": "ozt",
+    "abbr": "ozt",
+    "name": "troy ounce",
+    "pluralName": "troy ounces",
+    "link": "/wiki/Troy_ounce"
+  },
+  "verst": {
+    "code": "verst",
+    "abbr": "verst",
+    "name": "verst",
+    "pluralName": "versts",
+    "link": "/wiki/Verst"
+  },
+  "kg/cm": {
+    "code": "kg/cm",
+    "abbr": "kg/cm",
+    "name": "kilogram per centimetre",
+    "pluralName": "kilograms per centimetre",
+    "link": "/wiki/Linear_density"
+  },
+  "ftlbf": {
+    "code": "ftlbf",
+    "abbr": "ft⋅lbf",
+    "name": "foot-pound force",
+    "pluralName": "foot-pounds force",
+    "link": "/wiki/Foot-pound_(energy)"
+  },
+  "m2/ha": {
+    "code": "m2/ha",
+    "abbr": "m2/ha",
+    "name": "square metre per hectare",
+    "pluralName": "square metres per hectare",
+    "link": "/wiki/Basal_area"
+  },
+  "lbmol": {
+    "code": "lbmol",
+    "abbr": "lbmol",
+    "name": "pound-mole",
+    "pluralName": "pound-moles",
+    "link": "/wiki/Pound-mole"
+  },
+  "lb-mol": {
+    "code": "lb-mol",
+    "abbr": "lb‑mol",
+    "name": "pound-mole",
+    "pluralName": "pound-moles",
+    "link": "/wiki/Pound-mole"
+  },
+  "TtonTNT": {
+    "code": "TtonTNT",
+    "abbr": "teraton of TNT",
+    "name": "teraton of TNT",
+    "pluralName": "teratons of TNT",
+    "link": "/wiki/TNT_equivalent"
+  },
+  "km/s2": {
+    "code": "km/s2",
+    "abbr": "km/s2",
+    "name": "kilometre per second squared",
+    "pluralName": "kilometres per second squared",
+    "link": "/wiki/Acceleration"
+  },
+  "mcal-th": {
+    "code": "mcal-th",
+    "abbr": "mcalth",
+    "name": "millicalorie (thermochemical)",
+    "pluralName": "millicalories (thermochemical)",
+    "link": "/wiki/Calorie"
+  },
+  "MWh": {
+    "code": "MWh",
+    "abbr": "MWh",
+    "name": "megawatt-hour",
+    "pluralName": "megawatt-hours",
+    "link": "/wiki/Watt-hour"
+  }
+}
