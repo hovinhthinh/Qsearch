@@ -1666,8 +1666,8 @@
   "m2": {
     "code": "m2",
     "abbr": "m2",
-    "name": "square smetre",
-    "pluralName": "square smetres",
+    "name": "square metre",
+    "pluralName": "square metres",
     "link": "/wiki/Square_metre"
   },
   "g-mol": {
@@ -1687,8 +1687,8 @@
   "m3": {
     "code": "m3",
     "abbr": "m3",
-    "name": "cubic smetre",
-    "pluralName": "cubic smetres",
+    "name": "cubic metre",
+    "pluralName": "cubic metres",
     "link": "/wiki/Cubic_metre"
   },
   "USqt": {

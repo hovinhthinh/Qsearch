@@ -45,7 +45,7 @@ public class WikipediaTemplateConvert {
                 u.code = cols.get(0).text();
                 u.abbr = cols.get(1).text().replace("~", "");
                 try {
-                    u.name = cols.get(5).text().replace("%", "");
+                    u.name = cols.get(5).text().replace("%s", "");
                 } catch (Exception ex) {
                     continue;
                 }
