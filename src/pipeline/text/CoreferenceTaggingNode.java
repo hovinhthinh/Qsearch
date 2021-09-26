@@ -17,9 +17,10 @@ public class CoreferenceTaggingNode implements TaggingNode {
     private PrintWriter out = null;
     private Process p = null;
     private boolean logErrStream;
+    private boolean useAllenCoref;
 
     public CoreferenceTaggingNode() {
-        this(false);
+        this(false, false);
     }
 
     public static class CorefMentionInfo {
@@ -40,7 +41,7 @@ public class CoreferenceTaggingNode implements TaggingNode {
         try {
             String[] cmd = new String[]{
                     "/bin/sh", "-c",
-                    "python3 -u coref_runner.py"
+                    useAllenCoref ? "python3 -u allencoref_runner.py" : "python3 -u coref_runner.py"
             };
             ProcessBuilder pb = new ProcessBuilder(cmd)
                     .redirectError(logErrStream ? ProcessBuilder.Redirect.INHERIT : ProcessBuilder.Redirect.DISCARD);
@@ -62,13 +63,14 @@ public class CoreferenceTaggingNode implements TaggingNode {
 
     // if logErrStream is true, need to explicitly call System.exit(0) at the end of the main thread.
     // only works
-    public CoreferenceTaggingNode(boolean logErrStream) {
+    public CoreferenceTaggingNode(boolean useAllenCoref, boolean logErrStream) {
+        this.useAllenCoref = useAllenCoref;
         this.logErrStream = logErrStream;
         resetService(logErrStream);
     }
 
-    public String callCorefService(String paragraphContentTokenized) {
-        out.println(new JSONObject().put("paragraph", paragraphContentTokenized).toString());
+    public String callCorefService(Object data) {
+        out.println(new JSONObject().put("paragraph", data).toString());
         out.flush();
         try {
             String str;
@@ -87,6 +89,12 @@ public class CoreferenceTaggingNode implements TaggingNode {
         loop_coref:
         for (int i = 0; i < cls.length(); ++i) {
             JSONObject corefMention = cls.getJSONObject(i);
+
+            if (useAllenCoref) { // AllenCoref
+                infos.add(new CorefMentionInfo(corefMention.getInt("sent"), corefMention.getInt("start"), corefMention.getInt("end")));
+                continue;
+            }
+
             int corefStart = corefMention.getInt("start");
             int corefEnd = corefMention.getInt("end");
             String corefText = corefMention.getString("text");
@@ -142,7 +150,21 @@ public class CoreferenceTaggingNode implements TaggingNode {
 
     @Override
     public boolean process(Paragraph paragraph) {
-        String corefInfo = callCorefService(paragraph.toString());
+        Object data;
+        if (useAllenCoref) {
+            JSONArray sents = new JSONArray();
+            for (Sentence s : paragraph.sentences) {
+                JSONArray sent = new JSONArray();
+                for (Token t : s.tokens) {
+                    sent.put(t.str);
+                }
+                sents.put(sent);
+            }
+            data = sents;
+        } else {
+            data = paragraph.toString();
+        }
+        String corefInfo = callCorefService(data);
         if (corefInfo == null) {
             System.err.println("[CoreferenceTaggingNodeError]\t" + paragraph.sentences.get(0).source);
             // Coref error, but we still continue without it.
