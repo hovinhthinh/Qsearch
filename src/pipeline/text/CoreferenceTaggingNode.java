@@ -159,7 +159,9 @@ public class CoreferenceTaggingNode implements TaggingNode {
             for (CorefMentionInfo info : infos) {
                 Sentence sent = paragraph.sentences.get(info.sentIndex);
                 for (EntityTag t : sent.entityTags) {
-                    if (t.beginIndex == info.beginToken && t.endIndex == info.endToken) {
+                    // Allow an additional "the" before the entity.
+                    if (t.endIndex == info.endToken && (t.beginIndex == info.beginToken || (t.beginIndex == info.beginToken + 1
+                            && sent.tokens.get(info.beginToken).str.equalsIgnoreCase("the")))) {
                         // use max conf
                         entitySet.put(t.id, Math.max(entitySet.getOrDefault(t.id, 0.0), t.confidence));
                         if (referSentIndex == -1 || info.sentIndex < referSentIndex) {
