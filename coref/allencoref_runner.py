@@ -41,6 +41,6 @@ if __name__ == "__main__":
 
     while True:
         line = sys.stdin.readline().strip()
-        d = json.loads(line)  # {'document': <content>}
-        out = do_coref(d['document'])
+        d = json.loads(line)  # {'paragraph': <content>}
+        out = do_coref(d['paragraph'])
         print("__interactive_result__\t%s" % json.dumps(out), flush=True)
