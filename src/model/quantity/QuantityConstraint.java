@@ -195,7 +195,7 @@ public class QuantityConstraint {
         } else if (resolutionCode == QuantityResolution.Value.LOWER_BOUND) {
             return qValue >= thisQValue;
         } else if (resolutionCode == QuantityResolution.Value.EXACT) {
-            return Math.abs(qValue - thisQValue) <= 1e-3;
+            return Math.abs(qValue - thisQValue) <= 0.01;
         } else if (resolutionCode == QuantityResolution.Value.APPROXIMATE) {
             return Math.abs(qValue - thisQValue) <= Math.abs(thisQValue * QuantityResolution.APPROXIMATE_RATE);
         } else if (resolutionCode == QuantityResolution.Value.RANGE) {
@@ -216,7 +216,7 @@ public class QuantityConstraint {
 
     public static class QuantityResolution {
         public static final int APPROXIMATE_THRESHOLD = 1000;
-        public static final double APPROXIMATE_RATE = 0.01;
+        public static final double APPROXIMATE_RATE = 0.05;
         public static final ArrayList<String> UPPER_BOUND_SIGNAL = new ArrayList<>(Arrays.asList(
                 "less than", "below", "fewer than", "lower than", "under", "at most", "up to", "smaller than", "within", "<", "<="
         ));
