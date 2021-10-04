@@ -33,7 +33,7 @@ public class ChronicleMapQfactStorage {
                     .of(String.class, byte[].class)
                     .averageKeySize(30)
                     .averageValueSize(1500)
-                    .actualSegments(32)
+                    .actualSegments(32) // 48 for allencoref
                     .entriesPerSegment(60000)
                     .createPersistedTo(new File(QFACT_INDEX_FILE));
             SEARCHABLE_ENTITIES = new ArrayList<>();
@@ -104,7 +104,7 @@ public class ChronicleMapQfactStorage {
         return new JSONArray(ObjectCompressor.decompressByteArrayIntoString(INDEX.get(entity)));
     }
 
-    public static boolean importFacts(String input, double qfactMinConf, double entityMinConf) {
+    public static boolean importFacts(double qfactMinConf, double entityMinConf, String... input) {
         SelfMonitor m = new SelfMonitor("importFacts", -1, 10);
         int totalFacts = 0;
 
@@ -113,7 +113,8 @@ public class ChronicleMapQfactStorage {
             File tempFile = File.createTempFile("yagoImport", ".gz", new File("/tmp/"));
             System.out.println("Loading: " + tempFile.getAbsolutePath());
             PrintWriter tempOut = FileUtils.getPrintWriter(tempFile, Charset.forName("UTF-8"));
-            for (String line : FileUtils.getLineStream(input, "UTF-8")) {
+            for (String inputFile : input)
+            for (String line : FileUtils.getLineStream(inputFile, "UTF-8")) {
                 Sentence sent = Gson.fromJson(line, Sentence.class);
                 for (QuantitativeFact qfact : sent.quantitativeFacts) {
                     if (qfact.conf <= Constants.EPS) {
@@ -206,6 +207,9 @@ public class ChronicleMapQfactStorage {
 
     public static void main(String[] args) {
 //        migrateElasticSearchStorageToChronicleMap();
-//        System.out.println(importFacts("./data/stics+nyt/full_all.gz", 0.7, 0));
+//        System.out.println(importFacts(0, 0,
+//                "/GW/D5data-14/hvthinh/kbc/nyt_openie5_allencoref_qfact_extraction_new_092021.gz",
+//                "/GW/D5data-14/hvthinh/kbc/stics_openie5_allencoref_qfact_extraction_new_092021.gz",
+//                "/GW/D5data-14/hvthinh/kbc/wiki_openie5_allencoref_qfact_extraction_new_092021.gz"));
     }
 }

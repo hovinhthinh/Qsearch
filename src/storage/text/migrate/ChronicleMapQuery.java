@@ -1,6 +1,7 @@
 package storage.text.migrate;
 
 import eval.qkbc.QKBCResult;
+import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import misc.WikipediaView;
 import model.context.ContextEmbeddingMatcher;
 import model.context.ContextMatcher;
@@ -23,6 +24,7 @@ import util.Gson;
 import util.Number;
 import util.Pair;
 import util.headword.StringUtils;
+import yago.TaxonomyGraph;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -120,7 +122,7 @@ public class ChronicleMapQuery {
                 }
             });
 
-            Collections.sort(result.second); // order by popularity only
+//            Collections.sort(result.second); // order by popularity only
 
             return result;
         }
@@ -269,7 +271,23 @@ public class ChronicleMapQuery {
                     X.addAll(NLP.splitSentence(qt.unit));
                     essentialX.addAll(NLP.splitSentence(qt.unit));
                 }
-                if (X.isEmpty()) {
+
+                // Rules here
+                if (essentialX.isEmpty() && qt.matchesSearchDomain(QuantityDomain.Domain.LENGTH)) {
+                    TaxonomyGraph graph = TaxonomyGraph.getDefaultGraphInstance();
+                    Int2IntLinkedOpenHashMap type2DistMap = graph.getType2DistanceMapForEntity(graph.getEntityId(entity));
+
+                    if (type2DistMap.containsKey(graph.getTypeId("<wordnet_building_102913152>"))
+                            || type2DistMap.containsKey(graph.getTypeId("<http://schema.org/Mountain>"))) {
+                        essentialX.add("height");
+                        X.add("height");
+                    } else if (type2DistMap.containsKey(graph.getTypeId("<wordnet_river_109411430>"))) {
+                        essentialX.add("length");
+                        X.add("length");
+                    }
+                }
+
+                if (essentialX.isEmpty()) {
                     continue;
                 }
                 for (int j = 0; j < X.size(); ++j) {
