@@ -422,7 +422,7 @@ public class QKBCRunner {
         } while (true);
     }
 
-    public static void markEffectiveFactsForIter(int iter, ArrayList<RelationInstance> instances, boolean refinementByTime) {
+    public static void markEffectiveFactsForIter(int iter, ArrayList<RelationInstance> instances, boolean refinementByTime, Map<String, WikidataGroundTruthExtractor.PredicateNumericalFact> groundtruth) {
         // entity or entity+time to values + freqs
         HashMap<String, ArrayList<Pair<RelationInstance, Integer>>> map = new HashMap<>();
 
@@ -432,9 +432,37 @@ public class QKBCRunner {
             ArrayList<RelationInstance> withoutYears = instances.stream().filter(ri -> ri.getYearCtx() == null)
                     .collect(Collectors.toCollection(ArrayList::new));
 
+            HashSet<String> computedKeys = new HashSet<>();
+            if (groundtruth != null) {
+                WikidataGroundTruthExtractor.PredicateNumericalFact gt;
+                loop:
+                for (RelationInstance ri : instances) {
+                    String key = ri.entity + ":" + ri.getYearCtx();
+                    if (computedKeys.contains(key) || (gt = groundtruth.get(ri.entity)) == null) {
+                        continue;
+                    }
+
+                    for (Triple<Double, String, String> p : gt.quantitiesByYear) {
+                        if (KgUnit.getKgUnitFromEntityName(p.second).conversionToSI == null || !p.third.equals(ri.getYearCtx())) {
+                            continue;
+                        }
+                        double v = p.first * KgUnit.getKgUnitFromEntityName(p.second).conversionToSI;
+                        if (Number.relativeNumericDistance(v, ri.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
+                            ri.effectivePositiveIterIndices.add(iter);
+                            computedKeys.add(key);
+                            continue loop;
+                        }
+                    }
+
+                }
+            }
+
             loop:
             for (RelationInstance ri : withYears) {
                 String key = ri.entity + ":" + ri.getYearCtx();
+                if (computedKeys.contains(key)) {
+                    continue;
+                }
                 if (!map.containsKey(key)) {
                     map.put(key, new ArrayList<>());
                 }
@@ -464,8 +492,34 @@ public class QKBCRunner {
                 }
             }
         } else {
+            HashSet<String> computedEntities = new HashSet<>();
+            if (groundtruth != null) {
+                WikidataGroundTruthExtractor.PredicateNumericalFact gt;
+                loop:
+                for (RelationInstance ri : instances) {
+                    if (computedEntities.contains(ri.entity) || (gt = groundtruth.get(ri.entity)) == null) {
+                        continue;
+                    }
+
+                    for (Pair<Double, String> p : gt.quantities) {
+                        if (KgUnit.getKgUnitFromEntityName(p.second).conversionToSI == null) {
+                            continue;
+                        }
+                        double v = p.first * KgUnit.getKgUnitFromEntityName(p.second).conversionToSI;
+                        if (Number.relativeNumericDistance(v, ri.quantityStdValue) <= RelationInstanceNoiseFilter.DUPLICATED_DIFF_RATE) {
+                            ri.effectivePositiveIterIndices.add(iter);
+                            computedEntities.add(ri.entity);
+                            continue loop;
+                        }
+                    }
+                }
+            }
+
             loop:
             for (RelationInstance ri : instances) {
+                if (computedEntities.contains(ri.entity)) {
+                    continue;
+                }
                 if (!map.containsKey(ri.entity)) {
                     map.put(ri.entity, new ArrayList<>());
                 }
@@ -500,7 +554,7 @@ public class QKBCRunner {
                     .sorted(Comparator.comparing(o -> o.positiveIterIndices.get(0)))
                     .collect(Collectors.toCollection(ArrayList::new));
 
-            markEffectiveFactsForIter(it, currentInstances, refinementByTime);
+            markEffectiveFactsForIter(it, currentInstances, refinementByTime, groundTruth);
         }
 
         // mark groundtruth
