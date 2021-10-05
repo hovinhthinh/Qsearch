@@ -82,7 +82,7 @@ class ContextStats {
 
     private static double RELATIVE_SUPPORT_WEIGHT = 0.2;
     private static double QUERYING_CONF_WEIGHT = 0.5;
-    private static double DIST_CONF_WEIGHT = 0.3;
+    private static double DIST_CONF_WEIGHT = 0.3; // river-length: 0
 
     public double totalConfidence(int relSupportDenom, IntegralDistributionApproximator positiveDistAppr) {
         return (relativeSupport(relSupportDenom) * RELATIVE_SUPPORT_WEIGHT
@@ -585,39 +585,40 @@ public class QKBCRunner {
     }
 
     public static void main(String[] args) {
-        harvest("buildingHeight", "<wordnet_building_102913152>", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
-                false, true, false, 0.9, 10, 10,
+        harvest("buildingHeight", "<wordnet_building_102913152>", "height", KgUnit.getKgUnitFromEntityName("<Metre>"),
+                false, true, false, 0.9, 10, 20,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height", 200,
-                "./eval/qkbc/exp_1/qsearch_queries/building_height_ourN.json");
+                "./eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/building_height_ourN.json");
 
-        harvest("mountainElevation", "<http://schema.org/Mountain>", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
-                false, true, false, 0.9, 10, 10,
+        harvest("mountainElevation", "<http://schema.org/Mountain>", "elevation", KgUnit.getKgUnitFromEntityName("<Metre>"),
+                false, true, false, 0.9, 10, 20,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation", 200,
-                "./eval/qkbc/exp_1/qsearch_queries/mountain_elevation_ourN.json");
+                "./eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/mountain_elevation_ourN.json");
 
-        harvest("riverLength", "<wordnet_river_109411430>", null, KgUnit.getKgUnitFromEntityName("<Metre>"),
-                false, true, false, 0.9, 10, 10,
-                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
-                "./eval/qkbc/exp_1/qsearch_queries/river_length_ourN.json");
-
-        harvest("stadiumCapacity", "<wordnet_stadium_104295881>", null, KgUnit.DIMENSIONLESS,
-                false, true, false, 0.9, 10, 10,
-                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", 200,
-                "./eval/qkbc/exp_1/qsearch_queries/stadium_capacity_ourN.json");
-
-        harvest("companyRevenue", "<wordnet_company_108058098>", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
-                true, true, false, 0.9, 10, 3,
-                null, 200,
-                "./eval/qkbc/exp_1/qsearch_queries/company_revenue_ourN.json");
-
-        harvest("powerStationCapacity", "<wordnet_power_station_103996655>", null, KgUnit.getKgUnitFromEntityName("<Watt>"),
-                false, true, false, 0.9, 10, 6,
-                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-powerStation_capacity", 200,
-                "./eval/qkbc/exp_1/qsearch_queries/powerstation_capacity_ourN.json");
-
-        harvest("earthquakeMagnitude", "<wordnet_earthquake_107428954>", null, KgUnit.getKgUnitFromEntityName(""),
-                false, true, false, 0.9, 10, 6,
+        harvest("earthquakeMagnitude", "<wordnet_earthquake_107428954>", "magnitude", KgUnit.getKgUnitFromEntityName(""),
+                false, true, false, 0.9, 5, 5,
                 "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-earthquake_magnitude", 200,
-                "./eval/qkbc/exp_1/qsearch_queries/earthquake_magnitude_ourN.json");
+                "./eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/earthquake_magnitude_ourN.json");
+
+        harvest("stadiumCapacity", "<wordnet_stadium_104295881>", "capacity", KgUnit.DIMENSIONLESS,
+                false, true, false, 0.9, 10, 20,
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/stadium_capacity_ourN.json");
+
+        harvest("powerStationCapacity", "<wordnet_power_station_103996655>", "capacity", KgUnit.getKgUnitFromEntityName("<Watt>"),
+                false, true, false, 0.9, 10, 20,
+                "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-powerStation_capacity", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/powerstation_capacity_ourN.json");
+
+        harvest("riverLength", "<wordnet_river_109411430>", "length", KgUnit.getKgUnitFromEntityName("<Metre>"),
+                false, true, false, 0.9, 10, 20,
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
+                "./eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/river_length_ourN.json");
+//
+//
+//        harvest("companyRevenue", "<wordnet_company_108058098>", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
+//                true, true, false, 0.9, 10, 20,
+//                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-company_revenue", 200,
+//                "./eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/company_revenue_ourN.json");
     }
 }
