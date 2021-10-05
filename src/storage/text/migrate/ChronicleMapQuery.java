@@ -273,6 +273,7 @@ public class ChronicleMapQuery {
                 }
 
                 // Rules here
+                /*
                 if (essentialX.isEmpty() && qt.matchesSearchDomain(QuantityDomain.Domain.LENGTH)) {
                     TaxonomyGraph graph = TaxonomyGraph.getDefaultGraphInstance();
                     Int2IntLinkedOpenHashMap type2DistMap = graph.getType2DistanceMapForEntity(graph.getEntityId(entity));
@@ -286,6 +287,7 @@ public class ChronicleMapQuery {
                         X.add("length");
                     }
                 }
+                */
 
                 if (essentialX.isEmpty()) {
                     continue;
