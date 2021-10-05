@@ -80,9 +80,9 @@ class ContextStats {
                 .mapToDouble(o -> positiveDistAppr.getEstimatedPValue(o.first)).average().getAsDouble();
     }
 
-    private static double RELATIVE_SUPPORT_WEIGHT = 0.1;
-    private static double QUERYING_CONF_WEIGHT = 0.5; // for company-revenue, use 0.2 instead of 0.5
-    private static double DIST_CONF_WEIGHT = 0.2; // for company-revenue, use 0 instead of 0.2
+    private static double RELATIVE_SUPPORT_WEIGHT = 0.2;
+    private static double QUERYING_CONF_WEIGHT = 0.5;
+    private static double DIST_CONF_WEIGHT = 0.3;
 
     public double totalConfidence(int relSupportDenom, IntegralDistributionApproximator positiveDistAppr) {
         return (relativeSupport(relSupportDenom) * RELATIVE_SUPPORT_WEIGHT
@@ -313,6 +313,9 @@ public class QKBCRunner {
                     loop:
                     for (int j = i + 1; j < ctx.size(); ++j) {
                         String c0 = ctx.get(i), c1 = ctx.get(j);
+                        if (c0.equals("-") || c1.equals("-")) {
+                            continue;
+                        }
                         String x = c0.compareTo(c1) < 0 ? c0 + " " + c1 : c1 + " " + c0;
                         if (!contextStats.containsKey(x)) {
                             contextStats.put(x, new ContextStats(x));
@@ -358,12 +361,12 @@ public class QKBCRunner {
                         }
                         return false;
                     })
-                    .filter(o -> o.support() >= ctxMinSupport) // 3 for company-revenue, 6 for earthquake-magnitude & powerstation-capacity, 10 for remainings
+                    .filter(o -> o.support() >= ctxMinSupport)
 //                    .filter(o -> o.distConfidence(positiveDistAppr) >= 0.3)
                     .filter(o -> currentIter == 0 || o.queryingConfidence() >= 0.675)
                     .collect(Collectors.toList());
 
-            int relSuppDenom = contextStats.entrySet().stream().mapToInt(e -> e.getValue().support()).max().orElse(0);
+            int relSuppDenom = filteredContextStats.stream().mapToInt(e -> e.support()).max().orElse(0);
             List<ContextStats> sortedContextStats = filteredContextStats.stream()
                     .sorted((a, b) -> Double.compare(b.totalConfidence(relSuppDenom, positiveDistAppr), a.totalConfidence(relSuppDenom, positiveDistAppr)))
                     .collect(Collectors.toList());
