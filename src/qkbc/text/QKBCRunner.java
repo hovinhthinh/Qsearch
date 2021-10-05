@@ -290,6 +290,9 @@ public class QKBCRunner {
                 // uni-gram
                 loop:
                 for (String x : ctx) {
+                    if (x.equals("-")) {
+                        continue;
+                    }
                     if (!contextStats.containsKey(x)) {
                         contextStats.put(x, new ContextStats(x));
                     }
