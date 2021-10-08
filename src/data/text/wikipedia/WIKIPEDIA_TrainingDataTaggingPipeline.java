@@ -13,7 +13,7 @@ public class WIKIPEDIA_TrainingDataTaggingPipeline extends String2StringMap {
     public static TaggingPipeline getDefaultTaggingPipeline() {
         return new TaggingPipeline(
                 new WIKIPEDIA_EntityTaggingNode(),
-                new CoreferenceTaggingNode(),
+                new CoreferenceTaggingNode(true, false),
                 new SUTimeTaggingNode(),
                 new SentenceLengthFiltering(4, 40),
                 new EntityFilteringNode(),

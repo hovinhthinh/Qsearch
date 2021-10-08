@@ -82,30 +82,31 @@ public class QsearchBaseline {
     public static void main(String[] args) {
 //        harvest("companyRevenue", "<wordnet_company_108058098>", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),
 //                951, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-company_revenue",
-//                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact/company_revenue_qs_gt.json");
+//                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact_new/company_revenue_qs_gt.json");
 //
-//        harvest("buildingHeight", "<wordnet_building_102913152>", "height", KgUnit.getKgUnitFromEntityName("<Metre>"),
-//                236, "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height",
-//                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact/building_height_qs.json");
+        harvest("buildingHeight", "<wordnet_building_102913152>", "height", KgUnit.getKgUnitFromEntityName("<Metre>"),
+                1253, "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height",
+                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact_new/building_height_qs.json");
 //
-//        harvest("mountainElevation", "<http://schema.org/Mountain>", "high", KgUnit.getKgUnitFromEntityName("<Metre>"),
-//                518, "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation",
-//                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact/mountain_elevation_qs.json");
+        harvest("mountainElevation", "<http://schema.org/Mountain>", "elevation", KgUnit.getKgUnitFromEntityName("<Metre>"),
+                3289, "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation",
+                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact_new/mountain_elevation_qs.json");
+
+        harvest("stadiumCapacity", "<wordnet_stadium_104295881>", "capacity", KgUnit.DIMENSIONLESS,
+                3496,
+                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity",
+                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact_new/stadium_capacity_qs.json");
 //
-//        harvest("stadiumCapacity", "<wordnet_stadium_104295881>", "capacity", KgUnit.DIMENSIONLESS,
-//                1045,
-//                "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity",
-//                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact/stadium_capacity_qs.json");
-//
-//        harvest("riverLength", "<wordnet_river_109411430>", "long", KgUnit.getKgUnitFromEntityName("<Metre>"),
-//                589, "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length",
-//                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact/river_length_qs.json");
+        harvest("riverLength", "<wordnet_river_109411430>", "length", KgUnit.getKgUnitFromEntityName("<Metre>"),
+                3019, "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length",
+                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact_new/river_length_qs.json");
 
         harvest("powerStationCapacity", "<wordnet_power_station_103996655>", "capacity", KgUnit.getKgUnitFromEntityName("<Watt>"),
-                149, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-powerStation_capacity",
-                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact/powerStation_capacity_qs.json");
+                394, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-powerStation_capacity",
+                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact_new/powerStation_capacity_qs.json");
+
         harvest("earthquakeMagnitude", "<wordnet_earthquake_107428954>", "magnitude", KgUnit.getKgUnitFromEntityName(""),
-                155, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-earthquake_magnitude",
-                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact/earthquake_magnitude_qs.json");
+                236, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-earthquake_magnitude",
+                "./eval/qkbc/exp_1/qsearch_queries/qs_output_fact_new/earthquake_magnitude_qs.json");
     }
 }

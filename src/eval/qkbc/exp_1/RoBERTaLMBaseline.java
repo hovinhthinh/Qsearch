@@ -132,56 +132,50 @@ public class RoBERTaLMBaseline {
     }
 
     public static void main(String[] args) {
-        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact/building_height_ourN.json", 5,
+        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/building_height_ourN.json", 5,
                 "[ENTITY] has a height of [QUANTITY] .",
                 Arrays.asList(new Pair<>("<Metre>", "<mask> metres"), new Pair<>("<Foot_(unit)>", "<mask> feet")),
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height",
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact/building_height_lm.json");
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/building_height_lm.json");
 
-        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact/mountain_elevation_ourN.json", 10,
+        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/mountain_elevation_ourN.json", 10,
                 "[ENTITY] is [QUANTITY] high .",
                 Arrays.asList(new Pair<>("<Metre>", "<mask> metres"), new Pair<>("<Foot_(unit)>", "<mask> feet")),
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation",
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact/mountain_elevation_lm.json");
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/mountain_elevation_lm.json");
 
-        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact/stadium_capacity_ourN.json", 6,
+        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/stadium_capacity_ourN.json", 6,
                 "[ENTITY] has a capacity of [QUANTITY] .",
                 Arrays.asList(new Pair<>("", "<mask>")),
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity",
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact/stadium_capacity_lm.json");
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/stadium_capacity_lm.json");
 
-        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact/river_length_ourN.json", 5,
+        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/river_length_ourN.json", 5,
                 "[ENTITY] is [QUANTITY] long .",
                 Arrays.asList(new Pair<>("<Kilometre>", "<mask> kilometers"), new Pair<>("<Mile>", "<mask> miles")),
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length",
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact/river_length_lm.json");
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/river_length_lm.json");
 
-        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact/city_altitude_ourN.json", 5,
-                "[ENTITY] is at an altitude of [QUANTITY] .",
-                Arrays.asList(new Pair<>("<Metre>", "<mask> metres"), new Pair<>("<Foot_(unit)>", "<mask> feet")),
-                null,
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact/city_altitude_lm.json");
+//        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/company_revenue_ourN.json", 4,
+//                "[ENTITY] reported [QUANTITY] in revenue in [TIME] .",
+//                Arrays.asList(new Pair<>("<United_States_dollar>", "$ <mask> billion"),
+//                        new Pair<>("<United_States_dollar>", "$ <mask> million"),
+//                        new Pair<>("<Euro>", "<mask> billion euros"),
+//                        new Pair<>("<Euro>", "<mask> million euros")),
+//                null,
+//                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/company_revenue_lm.json");
 
-        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact/company_revenue_ourN.json", 4,
-                "[ENTITY] reported [QUANTITY] in revenue in [TIME] .",
-                Arrays.asList(new Pair<>("<United_States_dollar>", "$ <mask> billion"),
-                        new Pair<>("<United_States_dollar>", "$ <mask> million"),
-                        new Pair<>("<Euro>", "<mask> billion euros"),
-                        new Pair<>("<Euro>", "<mask> million euros")),
-                null,
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact/company_revenue_lm.json");
-
-        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact/powerstation_capacity_ourN.json", 3,
+        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/powerstation_capacity_ourN.json", 3,
                 "[ENTITY] has a capacity of [QUANTITY] .",
                 Arrays.asList(new Pair<>("<megawatt_wd:Q6982035>", "<mask> MW"),
                         new Pair<>("<Kilowatt>", "<mask> kW")),
                 "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-powerStation_capacity",
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact/powerStation_capacity_lm.json");
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/powerStation_capacity_lm.json");
 
-        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact/earthquake_magnitude_ourN.json", 5,
+        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/earthquake_magnitude_ourN.json", 5,
                 "[ENTITY] had a magnitude of [QUANTITY] .",
                 Arrays.asList(new Pair<>("", "<mask>")),
                 "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-earthquake_magnitude",
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact/earthquake_magnitude_lm.json");
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/earthquake_magnitude_lm.json");
     }
 }
