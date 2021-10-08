@@ -42,7 +42,7 @@ plot1 = fig.add_subplot(gs[0:3, 1:23])
 plot2 = fig.add_subplot(gs[0:3, 30:54])
 plot3 = fig.add_subplot(gs[4:7, 0:24])
 plot4 = fig.add_subplot(gs[4:7, 30:54])
-plot5 = fig.add_subplot(gs[8:11, 7:18])
+plot5 = fig.add_subplot(gs[8:11, 9:16])
 plot6 = fig.add_subplot(gs[8:11, 25:37])
 
 ################
