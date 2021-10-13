@@ -132,25 +132,25 @@ public class RoBERTaLMBaseline {
     }
 
     public static void main(String[] args) {
-        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/building_height_ourN.json", 5,
+        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/building_height_ourN.json", 9,
                 "[ENTITY] has a height of [QUANTITY] .",
                 Arrays.asList(new Pair<>("<Metre>", "<mask> metres"), new Pair<>("<Foot_(unit)>", "<mask> feet")),
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height",
                 "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/building_height_lm.json");
 
-        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/mountain_elevation_ourN.json", 10,
+        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/mountain_elevation_ourN.json", 9,
                 "[ENTITY] is [QUANTITY] high .",
                 Arrays.asList(new Pair<>("<Metre>", "<mask> metres"), new Pair<>("<Foot_(unit)>", "<mask> feet")),
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation",
                 "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/mountain_elevation_lm.json");
 
-        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/stadium_capacity_ourN.json", 6,
+        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/stadium_capacity_ourN.json", 10,
                 "[ENTITY] has a capacity of [QUANTITY] .",
                 Arrays.asList(new Pair<>("", "<mask>")),
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity",
                 "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/stadium_capacity_lm.json");
 
-        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/river_length_ourN.json", 5,
+        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/river_length_ourN.json", 9,
                 "[ENTITY] is [QUANTITY] long .",
                 Arrays.asList(new Pair<>("<Kilometre>", "<mask> kilometers"), new Pair<>("<Mile>", "<mask> miles")),
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length",
