@@ -23,9 +23,12 @@ public class AnnotationGeneratorAndSummerization_Noise {
     public static class DoQStats {
         public double mean, std;
 
-        public DoQStats(double mean, double std) {
+        public String unit;
+
+        public DoQStats(double mean, double std, String unit) {
             this.mean = mean;
             this.std = std;
+            this.unit = unit;
         }
     }
 
@@ -372,6 +375,7 @@ public class AnnotationGeneratorAndSummerization_Noise {
     public static void generateTsvForGoogleSpreadsheet_Ours(String inputFile, int iter,
                                                             String annotatedFile,
                                                             String outputFile, DoQStats doq) throws Exception {
+//        annotatedFile = null;
         System.out.println("======== " + inputFile + " : iter@" + iter);
         QKBCResult r = Gson.fromJson(FileUtils.getContent(inputFile, "UTF-8"), QKBCResult.class);
 
@@ -423,41 +427,35 @@ public class AnnotationGeneratorAndSummerization_Noise {
     }
 
     public static void main(String[] args) throws Exception {
-//        generateTsvForGoogleSpreadsheet_Ours(
-//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/building_height_ourN.json", 5,
-//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - building_height.csv",
-//                "eval/qkbc/exp_2/annotation/building_height-noise_gg.csv", null);
+        generateTsvForGoogleSpreadsheet_Ours(
+                "eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/building_height_ourN.json", 9,
+                "eval/qkbc/exp_2/annotation_new/qkbc eval exp_2 (new) - building_height.csv",
+                "eval/qkbc/exp_2/annotation_new/building_height-noise_gg_doq.csv", new DoQStats(57.1864534673, 77.967705747, "<Foot_(unit)>"));
 //
-//        generateTsvForGoogleSpreadsheet_Ours(
-//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/mountain_elevation_ourN.json", 10,
-//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - mountain_elevation.csv",
-//                "eval/qkbc/exp_2/annotation/mountain_elevation-noise_gg.csv", null);
+        generateTsvForGoogleSpreadsheet_Ours(
+                "eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/mountain_elevation_ourN.json", 9,
+                "eval/qkbc/exp_2/annotation_new/qkbc eval exp_2 (new) - mountain_elevation.csv",
+                "eval/qkbc/exp_2/annotation_new/mountain_elevation-noise_gg_doq.csv", new DoQStats(6288.59745812, 7793.01678549, "<Foot_(unit)>"));
 //
-//        generateTsvForGoogleSpreadsheet_Ours(
-//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/river_length_ourN.json", 5,
-//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - river_length.csv",
-//                "eval/qkbc/exp_2/annotation/river_length-noise_gg.csv", null);
-//
-//        generateTsvForGoogleSpreadsheet_Ours(
-//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/stadium_capacity_ourN.json", 6,
-//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - stadium_capacity.csv",
-//                "eval/qkbc/exp_2/annotation/stadium_capacity-noise_gg.csv", null);
-//
-//        generateTsvForGoogleSpreadsheet_Ours(
-//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/company_revenue_ourN.json", 4,
-//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - company_revenue.csv",
-//                "eval/qkbc/exp_2/annotation/company_revenue-noise_gg.csv", null);
+        generateTsvForGoogleSpreadsheet_Ours(
+                "eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/river_length_ourN.json", 9,
+                "eval/qkbc/exp_2/annotation_new/qkbc eval exp_2 (new) - river_length.csv",
+                "eval/qkbc/exp_2/annotation_new/river_length-noise_gg_doq.csv", new DoQStats(16841.5585663, 28177.7293245, "<Kilometre>"));
 
+        generateTsvForGoogleSpreadsheet_Ours(
+                "eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/stadium_capacity_ourN.json", 10,
+                "eval/qkbc/exp_2/annotation_new/qkbc eval exp_2 (new) - stadium_capacity.csv",
+                "eval/qkbc/exp_2/annotation_new/stadium_capacity-noise_gg.csv", null);
 
-//        generateTsvForGoogleSpreadsheet_Ours(
-//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/powerstation_capacity_ourN.json", 3,
-//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - powerstation_capacity.csv",
-//                "eval/qkbc/exp_2/annotation/powerstation_capacity-noise_gg.csv",
-//                new DoQStats(443157278.73, 371247766.015));
-//
-//        generateTsvForGoogleSpreadsheet_Ours(
-//                "eval/qkbc/exp_1/qsearch_queries/our_output_fact/earthquake_magnitude_ourN.json", 5,
-//                "eval/qkbc/exp_2/annotation/qkbc eval exp_2 - earthquake_magnitude.csv",
-//                "eval/qkbc/exp_2/annotation/earthquake_magnitude-noise_gg.csv", null);
+        generateTsvForGoogleSpreadsheet_Ours(
+                "eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/powerstation_capacity_ourN.json", 3,
+                "eval/qkbc/exp_2/annotation_new/qkbc eval exp_2 (new) - powerstation_capacity.csv",
+                "eval/qkbc/exp_2/annotation_new/powerstation_capacity-noise_gg.csv",
+                new DoQStats(443157278.73, 371247766.015, "<Watt>"));
+
+        generateTsvForGoogleSpreadsheet_Ours(
+                "eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/earthquake_magnitude_ourN.json", 5,
+                "eval/qkbc/exp_2/annotation_new/qkbc eval exp_2 (new) - earthquake_magnitude.csv",
+                "eval/qkbc/exp_2/annotation_new/earthquake_magnitude-noise_gg.csv", null);
     }
 }
