@@ -64,6 +64,9 @@ public class RelationInstance {
     // for LM baseline
     public Map<String, ArrayList<Double>> unit2TopRoBERTaValues;
 
+    // for GPT-3
+    public String gpt3Output;
+
     public RelationInstance(String entity, String quantity, double quantityStdValue, double score, String kbcId) {
         this.entity = entity;
         this.quantity = quantity;
