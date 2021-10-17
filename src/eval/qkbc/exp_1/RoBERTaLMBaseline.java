@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import qkbc.text.RelationInstance;
 import qkbc.text.RelationInstanceNoiseFilter;
 import shaded.org.apache.http.client.utils.URIBuilder;
+import storage.text.migrate.ChronicleMapQfactStorage;
+import storage.text.migrate.TypeMatcher;
 import util.Number;
 import util.*;
 
@@ -17,14 +19,17 @@ import java.util.stream.Collectors;
 
 
 public class RoBERTaLMBaseline {
-    public static final String ROBERTA_END_POINT = "http://varuna:12993/unmask";
+    public static final String ROBERTA_END_POINT = "http://ceres:12993/unmask";
+    public static final int TOP_EVALUATED = 1;
+    public static final boolean INCLUDE_GROUNDTRUTH = false;
 
     public static String surface(String entity) {
         return NLP.stripSentence(entity.substring(1, entity.length() - 1).replace('_', ' ')
                 .replaceFirst("\\(.+\\)", ""));
     }
 
-    public static void harvest(String baseInputFile, int baseInputIter, String template,
+    public static void harvest(String baseInputFile, int baseInputIter,
+                               String type, String template,
                                List<Pair<String, String>> possibleUnits,
                                String groundTruthFile, String outputFile) {
         Map<String, WikidataGroundTruthExtractor.PredicateNumericalFact> groundTruth = groundTruthFile == null ? null :
@@ -36,11 +41,42 @@ public class RoBERTaLMBaseline {
         r.template = template;
         r.nIterations = 1;
 
+        HashSet<String> processedEntities = new HashSet<>();
         for (RelationInstance ri : r.instances) {
             ri.noiseIterIndices.clear();
             if (ri.effectivePositiveIterIndices.contains(baseInputIter)) {
                 ri.effectivePositiveIterIndices.clear();
                 ri.effectivePositiveIterIndices.add(1);
+                processedEntities.add(ri.entity);
+            } else {
+                ri.effectivePositiveIterIndices.clear();
+            }
+        }
+
+        TypeMatcher matcher = new TypeMatcher(type);
+        HashSet<String> eS = new HashSet<>();
+        for (String e : ChronicleMapQfactStorage.SEARCHABLE_ENTITIES) {
+            if (matcher.match(e)) {
+                eS.add(e);
+            }
+        }
+        if (INCLUDE_GROUNDTRUTH) {
+            for (String e : groundTruth.keySet()) {
+                if (processedEntities.contains(e) || !eS.contains(e)) {
+                    continue;
+                }
+                RelationInstance ri = new RelationInstance(e, null, -1, -1, null);
+                ri.effectivePositiveIterIndices = new ArrayList<>() {{
+                    add(1);
+                }};
+                ri.noiseIterIndices = new ArrayList<>();
+                ri.sampledEffectivePositiveIterIndices = new ArrayList<>();
+                r.instances.add(ri);
+            }
+        }
+
+        for (RelationInstance ri : r.instances) {
+            if (ri.effectivePositiveIterIndices.contains(1)) {
                 String masked = template;
                 masked = masked.replace("[ENTITY]", surface(ri.entity));
                 if (template.contains("[TIME]")) {
@@ -57,6 +93,9 @@ public class RoBERTaLMBaseline {
                         JSONArray o = new JSONArray(Crawler.getContentFromUrl(b.toString()));
                         for (int i = 0; i < o.length(); ++i) {
                             values.add(o.getJSONObject(i).getString("token_str").trim());
+                            if (values.size() >= TOP_EVALUATED) {
+                                break;
+                            }
                         }
 
                     } catch (Exception e) {
@@ -83,8 +122,6 @@ public class RoBERTaLMBaseline {
                         ri.unit2TopRoBERTaValues.get(u.first).addAll(parsedValues);
                     }
                 }
-            } else {
-                ri.effectivePositiveIterIndices.clear();
             }
         }
         // mark  groundtruth
@@ -133,28 +170,28 @@ public class RoBERTaLMBaseline {
 
     public static void main(String[] args) {
         harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/building_height_ourN.json", 9,
-                "[ENTITY] has a height of [QUANTITY] .",
+                "<wordnet_building_102913152>", "[ENTITY] has a height of [QUANTITY] .",
                 Arrays.asList(new Pair<>("<Metre>", "<mask> metres"), new Pair<>("<Foot_(unit)>", "<mask> feet")),
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-building_height",
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/building_height_lm.json");
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new_@1/building_height_lm.json");
 
         harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/mountain_elevation_ourN.json", 9,
-                "[ENTITY] is [QUANTITY] high .",
+                "<http://schema.org/Mountain>", "[ENTITY] is [QUANTITY] high .",
                 Arrays.asList(new Pair<>("<Metre>", "<mask> metres"), new Pair<>("<Foot_(unit)>", "<mask> feet")),
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-mountain_elevation",
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/mountain_elevation_lm.json");
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new_@1/mountain_elevation_lm.json");
 
         harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/stadium_capacity_ourN.json", 10,
-                "[ENTITY] has a capacity of [QUANTITY] .",
+                "<wordnet_stadium_104295881>", "[ENTITY] has a capacity of [QUANTITY] .",
                 Arrays.asList(new Pair<>("", "<mask>")),
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-stadium_capacity",
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/stadium_capacity_lm.json");
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new_@1/stadium_capacity_lm.json");
 
         harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/river_length_ourN.json", 9,
-                "[ENTITY] is [QUANTITY] long .",
+                "<wordnet_river_109411430>", "[ENTITY] is [QUANTITY] long .",
                 Arrays.asList(new Pair<>("<Kilometre>", "<mask> kilometers"), new Pair<>("<Mile>", "<mask> miles")),
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length",
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/river_length_lm.json");
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new_@1/river_length_lm.json");
 
 //        harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/company_revenue_ourN.json", 4,
 //                "[ENTITY] reported [QUANTITY] in revenue in [TIME] .",
@@ -166,16 +203,16 @@ public class RoBERTaLMBaseline {
 //                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/company_revenue_lm.json");
 
         harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/powerstation_capacity_ourN.json", 3,
-                "[ENTITY] has a capacity of [QUANTITY] .",
+                "<wordnet_power_station_103996655>", "[ENTITY] has a capacity of [QUANTITY] .",
                 Arrays.asList(new Pair<>("<megawatt_wd:Q6982035>", "<mask> MW"),
                         new Pair<>("<Kilowatt>", "<mask> kW")),
                 "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-powerStation_capacity",
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/powerStation_capacity_lm.json");
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new_@1/powerStation_capacity_lm.json");
 
         harvest("eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/earthquake_magnitude_ourN.json", 5,
-                "[ENTITY] had a magnitude of [QUANTITY] .",
+                "<wordnet_earthquake_107428954>", "[ENTITY] had a magnitude of [QUANTITY] .",
                 Arrays.asList(new Pair<>("", "<mask>")),
                 "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-earthquake_magnitude",
-                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new/earthquake_magnitude_lm.json");
+                "./eval/qkbc/exp_1/qsearch_queries/lm_output_fact_new_@1/earthquake_magnitude_lm.json");
     }
 }
