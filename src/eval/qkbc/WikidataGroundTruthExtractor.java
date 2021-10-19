@@ -16,8 +16,16 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 public class WikidataGroundTruthExtractor {
-    static String WD_QUERY_TEMPLATE = "SELECT DISTINCT ?e WHERE {\n" +
+    static boolean TRANSITIVE_TYPE = true;
+    static String WD_QUERY_TEMPLATE_TRANSITIVE = "SELECT DISTINCT ?e WHERE {\n" +
             "  ?e (wdt:P31/(wdt:P279*)) wd:<TYPE>;\n" +
+            "    wdt:<PREDICATE> ?q.\n" +
+            "  ?wikiPage schema:about ?e;\n" +
+            "    schema:isPartOf <https://en.wikipedia.org/>.\n" +
+            "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
+            "}";
+    static String WD_QUERY_TEMPLATE = "SELECT DISTINCT ?e WHERE {\n" +
+            "  ?e wdt:P31 wd:<TYPE>;\n" +
             "    wdt:<PREDICATE> ?q.\n" +
             "  ?wikiPage schema:about ?e;\n" +
             "    schema:isPartOf <https://en.wikipedia.org/>.\n" +
@@ -48,12 +56,22 @@ public class WikidataGroundTruthExtractor {
         }
     }
 
+    static boolean filterPersonalBest100MRace(JSONObject fact) {
+        try {
+            String discipline = fact.getJSONObject("qualifiers").getJSONArray("P2416").getJSONObject(0)
+                    .getJSONObject("datavalue").getJSONObject("value").getString("id");
+            return discipline.equals("Q164761") || discipline.equals("Q164731");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     static void downloadGroundTruthData(String type, String predicate, boolean refinementByYear, String outputFile) throws UnsupportedEncodingException {
         ArrayList<PredicateNumericalFact> loadedFacts = Objects.requireNonNullElse(loadPredicateGroundTruthFromFile(outputFile), new ArrayList<>());
 
         Map<String, PredicateNumericalFact> wdEntry2Fact = loadedFacts.stream().collect(Collectors.toMap(f -> f.wdEntry, f -> f));
 
-        String query = WD_QUERY_TEMPLATE.replace("<TYPE>", type).replace("<PREDICATE>", predicate);
+        String query = (TRANSITIVE_TYPE ? WD_QUERY_TEMPLATE_TRANSITIVE : WD_QUERY_TEMPLATE).replace("<TYPE>", type).replace("<PREDICATE>", predicate);
 
         System.out.println("Query:\r\n" + query);
 
@@ -117,6 +135,9 @@ public class WikidataGroundTruthExtractor {
                             qU = u.entity;
                         }
 
+//                        if (!filterPersonalBest100MRace(fact)) {
+//                            continue;
+//                        }
                         // qualifier
                         if (refinementByYear) {
                             if (!fact.has("qualifiers")) {
@@ -186,5 +207,7 @@ public class WikidataGroundTruthExtractor {
 //        downloadGroundTruthData("Q159719", "P2109", false, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-powerStation_capacity");
         // earthquake-magnitude
 //        downloadGroundTruthData("Q7944", "P2528", false, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-earthquake_magnitude");
+
+//        downloadGroundTruthData("Q5", "P2415", false, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-human_personalBest_100m");
     }
 }
