@@ -66,6 +66,16 @@ public class WikidataGroundTruthExtractor {
         }
     }
 
+    static boolean filterPersonalBest400MRace(JSONObject fact) {
+        try {
+            String discipline = fact.getJSONObject("qualifiers").getJSONArray("P2416").getJSONObject(0)
+                    .getJSONObject("datavalue").getJSONObject("value").getString("id");
+            return discipline.equals("Q334734") || discipline.equals("Q231419");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     static void downloadGroundTruthData(String type, String predicate, boolean refinementByYear, String outputFile) throws UnsupportedEncodingException {
         ArrayList<PredicateNumericalFact> loadedFacts = Objects.requireNonNullElse(loadPredicateGroundTruthFromFile(outputFile), new ArrayList<>());
 
@@ -209,5 +219,6 @@ public class WikidataGroundTruthExtractor {
 //        downloadGroundTruthData("Q7944", "P2528", false, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-earthquake_magnitude");
 
 //        downloadGroundTruthData("Q5", "P2415", false, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-human_personalBest_100m");
+//        downloadGroundTruthData("Q5", "P2415", false, "eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-human_personalBest_400m");
     }
 }
