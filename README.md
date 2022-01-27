@@ -1,7 +1,7 @@
 # Searching for Entities with Quantity Constraints over Web Content
 [![Build Status](https://travis-ci.org/hovinhthinh/Qsearch.svg?branch=master)](https://travis-ci.org/hovinhthinh/Qsearch)
 
-This is the repository of 2 projects: Qsearch, QuTE. 
+This is the repository of 3 projects: Qsearch, QuTE, QL. 
 
 ---
 ## Qsearch
