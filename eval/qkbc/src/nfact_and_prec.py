@@ -2,6 +2,9 @@
 
 import matplotlib
 import matplotlib.pyplot as plt
+matplotlib.rcParams['pdf.fonttype'] = 42
+matplotlib.rcParams['ps.fonttype'] = 42
+
 from matplotlib import gridspec
 
 # building height
@@ -36,14 +39,14 @@ matplotlib.rc('font', **font)
 
 fig = plt.figure()
 
-gs = gridspec.GridSpec(11, 54)
+gs = gridspec.GridSpec(11, 74)
 
-plot1 = fig.add_subplot(gs[0:3, 1:23])
+plot1 = fig.add_subplot(gs[0:3, 0:22])
 plot2 = fig.add_subplot(gs[0:3, 30:54])
-plot3 = fig.add_subplot(gs[4:7, 0:24])
-plot4 = fig.add_subplot(gs[4:7, 30:54])
-plot5 = fig.add_subplot(gs[8:11, 9:16])
-plot6 = fig.add_subplot(gs[8:11, 25:37])
+plot6 = fig.add_subplot(gs[0:3, 62:74])
+plot3 = fig.add_subplot(gs[4:7, 1:25])
+plot4 = fig.add_subplot(gs[4:7, 33:57])
+plot5 = fig.add_subplot(gs[4:7, 65:72])
 
 ################
 nCols = len(data1[0])
@@ -64,7 +67,6 @@ plot2.grid(axis='y', linestyle='--')
 ax2 = plot2.twinx()
 ax2.plot(range(1, nCols + 1), data2[1], color='red', label='precision', marker='x')
 ax2.set_ylim([0, 1])
-ax2.set_ylabel('prec.')
 plot2.set_title('mountain-elevation')
 
 ################
@@ -86,7 +88,6 @@ plot4.grid(axis='y', linestyle='--')
 ax2 = plot4.twinx()
 ax2.plot(range(1, nCols + 1), data4[1], color='red', label='precision', marker='x')
 ax2.set_ylim([0, 1])
-ax2.set_ylabel('prec.')
 plot4.set_title('river-length')
 
 ################
@@ -94,10 +95,10 @@ nCols = len(data5[0])
 plot5.bar(range(1, nCols + 1), data5[0], color='tab:blue', label='#facts')
 plot5.set_xticks(range(1, nCols + 1))
 plot5.grid(axis='y', linestyle='--')
-plot5.set_ylabel('#facts')
 ax2 = plot5.twinx()
 ax2.plot(range(1, nCols + 1), data5[1], color='red', label='precision', marker='x')
 ax2.set_ylim([0, 1])
+ax2.set_ylabel('prec.')
 plot5.set_title('powerstation-capacity')
 
 ################
@@ -112,7 +113,7 @@ ax2.set_ylim([0, 1])
 ax2.set_ylabel('prec.')
 plot6.set_title('earthquake-magnitude')
 
-plot6.legend(loc='center right', bbox_to_anchor=(2.2, 0.65))
-ax2.legend(loc='center right', bbox_to_anchor=(2.2, 0.4))
+plot6.legend(loc='center right', bbox_to_anchor=(-2.25, -1.8))
+ax2.legend(loc='center right', bbox_to_anchor=(-1, -1.8))
 gs.tight_layout(fig, h_pad=0, w_pad=0)
 plt.show()
