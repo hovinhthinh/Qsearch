@@ -57,6 +57,12 @@ class QfactTaggingHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         etags = params['etags'][0].strip().split()
         num_tokens = len(tokenized_sent)
 
+        if len(tokenized_sent) != len(etags) or tokenized_sent[qpos] != '<QUANTITY>':
+            return
+        for i in etags:
+            if i not in ['B', 'I', 'O']:
+                return
+
         sents = []
         sents.append([string_sequence_to_ids(tokenized_sent, data.word_dict, True),
                       [1 if j == qpos else 0 for j in range(num_tokens)],
