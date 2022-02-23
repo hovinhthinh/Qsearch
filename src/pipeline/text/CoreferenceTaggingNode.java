@@ -62,7 +62,6 @@ public class CoreferenceTaggingNode implements TaggingNode {
     }
 
     // if logErrStream is true, need to explicitly call System.exit(0) at the end of the main thread.
-    // only works
     public CoreferenceTaggingNode(boolean useAllenCoref, boolean logErrStream) {
         this.useAllenCoref = useAllenCoref;
         this.logErrStream = logErrStream;
