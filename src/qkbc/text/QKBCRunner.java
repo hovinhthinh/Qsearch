@@ -93,8 +93,8 @@ class ContextStats {
 }
 
 public class QKBCRunner {
-    public static final String QSEARCH_END_POINT = "http://127.0.0.1:" + Configuration.get("server.port") + "/kbc_text";
-
+    //    public static final String QSEARCH_END_POINT = "http://127.0.0.1:" + Configuration.get("server.port") + "/kbc_text";
+    public static final String QSEARCH_END_POINT = "http://halimede:6993/kbc_text";
     private static Random RANDOM = new Random(120993);
 
     private static ArrayList<RelationInstance> query(String yagoType, String context, KgUnit quantitySiUnit) {
