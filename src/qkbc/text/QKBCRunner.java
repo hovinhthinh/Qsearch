@@ -82,7 +82,7 @@ class ContextStats {
 
     private static double RELATIVE_SUPPORT_WEIGHT = 0.2;
     private static double QUERYING_CONF_WEIGHT = 0.5;
-    private static double DIST_CONF_WEIGHT = 0.3; // river-length: 0
+    private static double DIST_CONF_WEIGHT = 0.3;
 
     public double totalConfidence(int relSupportDenom, IntegralDistributionApproximator positiveDistAppr) {
         return (relativeSupport(relSupportDenom) * RELATIVE_SUPPORT_WEIGHT
@@ -667,7 +667,7 @@ public class QKBCRunner {
         harvest("riverLength", "<wordnet_river_109411430>", "length", KgUnit.getKgUnitFromEntityName("<Metre>"),
                 false, true, false, 0.9, 10, 20,
                 "./eval/qkbc/exp_1/wdt_groundtruth_queries/groundtruth-river_length", 200,
-                "./eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/river_length_ourN.json");
+                "./eval/qkbc/exp_1/qsearch_queries/our_output_fact_new/river_length_ourN.json"); // dc0
 //
 //
 //        harvest("companyRevenue", "<wordnet_company_108058098>", "reported revenue", KgUnit.getKgUnitFromEntityName("<United_States_dollar>"),

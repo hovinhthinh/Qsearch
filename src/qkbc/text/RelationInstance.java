@@ -103,14 +103,18 @@ public class RelationInstance {
         return getIndexedQfactFromText(kbcId).getString("source");
     }
 
+    // entity + normal, without time
     public ArrayList<String> getNormalContext() {
         ArrayList<String> ctx = new ArrayList<>();
         getIndexedQfactFromText(kbcId).getJSONArray("context").forEach(o -> {
             String s = (String) o;
-            if (s.startsWith("<E>:") || s.startsWith("<T>:")) {
+            if (s.startsWith("<T>:")) {
                 return;
             }
-            ctx.add(s.trim());
+            if (s.startsWith("<E>:")) {
+                s = s.substring(4).split("\t")[0];
+            }
+            ctx.addAll(NLP.splitSentence(s));
         });
         Quantity q = getQuantity();
         if (getQuantity().getSearchDomain().equals(QuantityDomain.Domain.DIMENSIONLESS)) {
