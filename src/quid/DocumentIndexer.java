@@ -1,9 +1,13 @@
 package quid;
 
 import net.openhft.chronicle.map.ChronicleMap;
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.util.thread.ThreadPool;
 import org.json.JSONObject;
 import util.FileUtils;
 import util.Gson;
@@ -105,8 +109,14 @@ public class DocumentIndexer extends AbstractHandler {
         m.forceShutdown();
     }
 
-    public static void startServer(int port) throws Exception {
-        Server server = new Server(port);
+    public static void startServer(int port, int nThreads) throws Exception {
+        ThreadPool threadPool = new QueuedThreadPool(nThreads, nThreads, nThreads);
+        Server server = new Server(threadPool);
+
+        ServerConnector connector = new ServerConnector(server);
+        connector.setPort(port);
+        server.setConnectors(new Connector[]{connector});
+
         DocumentIndexer indexer = new DocumentIndexer();
         indexer.load();
         server.setHandler(indexer);
@@ -115,6 +125,6 @@ public class DocumentIndexer extends AbstractHandler {
     }
 
     public static void main(String[] args) throws Exception {
-        startServer(10000);
+        startServer(10000, 32);
     }
 }
