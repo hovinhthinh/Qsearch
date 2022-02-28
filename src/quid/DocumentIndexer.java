@@ -125,6 +125,6 @@ public class DocumentIndexer extends AbstractHandler {
     }
 
     public static void main(String[] args) throws Exception {
-        startServer(10000, 32);
+        startServer(10000, 256);
     }
 }
