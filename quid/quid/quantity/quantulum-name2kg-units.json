@@ -1,0 +1,804 @@
+[
+  {
+    "quantulumName": "unk",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "dimensionless",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "pair",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "set",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "parts-per-million",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "parts-per-billion",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "parts-per-trillion",
+    "KBUnits": [
+      "<parts_per_trillion_wd:Q2215478>"
+    ]
+  },
+  {
+    "quantulumName": "count",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "turn",
+    "KBUnits": [
+      "<Turn_(angle)>"
+    ]
+  },
+  {
+    "quantulumName": "barn",
+    "KBUnits": [
+      "<Barn_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "megabarn",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "kilobarn",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "microbarn",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "nanobarn",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "picobarn",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "femtobarn",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "attobarn",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "zeptobarn",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "yoctobarn",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "inverse femtobarn",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "ell",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "foot",
+    "KBUnits": [
+      "<Foot_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "span",
+    "KBUnits": [
+      "<Span_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "\u00e5ngstr\u00f6m",
+    "KBUnits": [
+      "<Angstrom>"
+    ]
+  },
+  {
+    "quantulumName": "atomic mass unit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "pound-mass",
+    "KBUnits": [
+      "<Pound_(mass)>"
+    ]
+  },
+  {
+    "quantulumName": "ton",
+    "KBUnits": [
+      "<Tonne>"
+    ]
+  },
+  {
+    "quantulumName": "quarter",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "carat",
+    "KBUnits": [
+      "<Carat_(mass)>"
+    ]
+  },
+  {
+    "quantulumName": "bushel",
+    "KBUnits": [
+      "<bushel_(US)_wd:Q32750816>",
+      "<bushel_(UK)_wd:Q89473028>"
+    ]
+  },
+  {
+    "quantulumName": "dollar",
+    "KBUnits": [
+      "<United_States_dollar>",
+      "<Singapore_dollar>",
+      "<Canadian_dollar>",
+      "<Australian_dollar>",
+      "<Bahamian_dollar>",
+      "<Barbadian_dollar>",
+      "<Belize_dollar>",
+      "<Bermudian_dollar>",
+      "<Brunei_dollar>",
+      "<Cayman_Islands_dollar>",
+      "<Eastern_Caribbean_dollar>",
+      "<Fijian_dollar>",
+      "<Guyanese_dollar>",
+      "<Hong_Kong_dollar>",
+      "<Jamaican_dollar>",
+      "<Liberian_dollar>",
+      "<Namibian_dollar>",
+      "<New_Taiwan_dollar>",
+      "<New_Zealand_dollar>",
+      "<Surinamese_dollar>",
+      "<Solomon_Islands_dollar>",
+      "<Trinidad_and_Tobago_dollar>",
+      "<Tuvaluan_dollar>"
+    ]
+  },
+  {
+    "quantulumName": "rappen",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "chinese yuan",
+    "KBUnits": [
+      "<Renminbi>"
+    ]
+  },
+  {
+    "quantulumName": "drop",
+    "KBUnits": [
+      "<Drop_(liquid)>"
+    ]
+  },
+  {
+    "quantulumName": "barrel",
+    "KBUnits": [
+      "<barrel_(US)_for_petroleum_wd:Q89187604>",
+      "<dry_barrel_(US)_wd:Q32751296>"
+    ]
+  },
+  {
+    "quantulumName": "gallon",
+    "KBUnits": [
+      "<US_gallon>",
+      "<Imperial_gallon>",
+      "<Dry_gallon>",
+      "<Beer_gallon>"
+    ]
+  },
+  {
+    "quantulumName": "quart",
+    "KBUnits": [
+      "<liquid_quart_(US)_wd:Q98793408>",
+      "<quart_(UK)_wd:Q98793302>",
+      "<dry_quart_(US)_wd:Q98793687>"
+    ]
+  },
+  {
+    "quantulumName": "pint",
+    "KBUnits": [
+      "<liquid_pint_(US)_wd:Q32750621>",
+      "<pint_(UK)_wd:Q89662131>",
+      "<dry_pint_(US)_wd:Q32751272>"
+    ]
+  },
+  {
+    "quantulumName": "cup",
+    "KBUnits": [
+      "<Cup_(unit)>",
+      "<metric_cup_wd:Q64866333>"
+    ]
+  },
+  {
+    "quantulumName": "fluid ounce",
+    "KBUnits": [
+      "<fluid_ounce_(US)_wd:Q32750759>",
+      "<fluid_ounce_(UK)_wd:Q69878540>"
+    ]
+  },
+  {
+    "quantulumName": "dessertspoon",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "teaspoon",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "acre foot",
+    "KBUnits": [
+      "<Acre-foot>"
+    ]
+  },
+  {
+    "quantulumName": "peck",
+    "KBUnits": [
+      "<peck_(US)_wd:Q101427873>",
+      "<peck_(UK)_wd:Q101427917>"
+    ]
+  },
+  {
+    "quantulumName": "degree Celsius",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "degree fahrenheit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "degree rankine",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "pascal",
+    "KBUnits": [
+      "<Pascal_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "bar",
+    "KBUnits": [
+      "<Bar_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "megabar",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "centibar",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "pound per square inch",
+    "KBUnits": [
+      "<Pounds_per_square_inch>"
+    ]
+  },
+  {
+    "quantulumName": "millimeter of mercury",
+    "KBUnits": [
+      "<Millimetre_of_mercury>"
+    ]
+  },
+  {
+    "quantulumName": "centimeter of water",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "standard atmosphere",
+    "KBUnits": [
+      "<Standard_atmosphere_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "teraelectronvolt",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "kilowatt hour",
+    "KBUnits": [
+      "<Kilowatt-hour>"
+    ]
+  },
+  {
+    "quantulumName": "horsepower-hour",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "mega british thermal unit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "quad",
+    "KBUnits": [
+      "<Quad_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "gigaton",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "megaton",
+    "KBUnits": [
+      "<megatonne_wd:Q53951982>"
+    ]
+  },
+  {
+    "quantulumName": "newton",
+    "KBUnits": [
+      "<Newton_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "ton-force",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "pound-force",
+    "KBUnits": [
+      "<Pound_(force)>"
+    ]
+  },
+  {
+    "quantulumName": "ounce-force",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "kip",
+    "KBUnits": [
+      "<Kip_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "shake",
+    "KBUnits": [
+      "<Shake_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "month",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "kiloyear",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "megayear",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "gigayear",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "terayear",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "petayear",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "exayear",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "lustrum",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "decade",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "century",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "millennium",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "knot",
+    "KBUnits": [
+      "<Knot_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "kilometre per hour",
+    "KBUnits": [
+      "<Kilometres_per_hour>"
+    ]
+  },
+  {
+    "quantulumName": "mile per hour",
+    "KBUnits": [
+      "<Miles_per_hour>"
+    ]
+  },
+  {
+    "quantulumName": "degree angle",
+    "KBUnits": [
+      "<Degree_(angle)>"
+    ]
+  },
+  {
+    "quantulumName": "minute of arc",
+    "KBUnits": [
+      "<Arcminute>"
+    ]
+  },
+  {
+    "quantulumName": "second of arc",
+    "KBUnits": [
+      "<Arcsecond>"
+    ]
+  },
+  {
+    "quantulumName": "kilobit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "megabit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "gigabit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "terabit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "petabit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "exabit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "zettabit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "yottabit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "kibibit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "mebibit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "gibibit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "tebibit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "pebibit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "exbibit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "zebibit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "yobibit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "mibibyte",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "nibble",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "gal",
+    "KBUnits": [
+      "<Gal_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "foot per square second",
+    "KBUnits": [
+      "<Foot_per_second_squared>"
+    ]
+  },
+  {
+    "quantulumName": "metre per square second",
+    "KBUnits": [
+      "<Metre_per_second_squared>"
+    ]
+  },
+  {
+    "quantulumName": "newton metre",
+    "KBUnits": [
+      "<Newton-metre>"
+    ]
+  },
+  {
+    "quantulumName": "poise",
+    "KBUnits": [
+      "<Poise_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "stokes",
+    "KBUnits": [
+      "<Stokes_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "decibel",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "stilb",
+    "KBUnits": [
+      "<Stilb_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "lumen",
+    "KBUnits": [
+      "<Lumen_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "mole",
+    "KBUnits": [
+      "<Mole_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "ampere-hour",
+    "KBUnits": [
+      "<Ampere_hour>"
+    ]
+  },
+  {
+    "quantulumName": "milliampere-hour",
+    "KBUnits": [
+      "<milliampere_hour_wd:Q3858002>"
+    ]
+  },
+  {
+    "quantulumName": "siemens",
+    "KBUnits": [
+      "<Siemens_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "henry",
+    "KBUnits": [
+      "<Henry_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "ampere-turn",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "weber",
+    "KBUnits": [
+      "<Weber_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "maxwell",
+    "KBUnits": [
+      "<Maxwell_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "tesla",
+    "KBUnits": [
+      "<Tesla_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "gauss",
+    "KBUnits": [
+      "<Gauss_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "curie",
+    "KBUnits": [
+      "<Curie_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "rutherford",
+    "KBUnits": [
+      "<Rutherford_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "roentgen",
+    "KBUnits": [
+      "<Roentgen_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "rad",
+    "KBUnits": [
+      "<Rad_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "gray",
+    "KBUnits": [
+      "<Gray_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "pixel",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "megapixel",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "board-foot",
+    "KBUnits": [
+      "<Board_foot>"
+    ]
+  },
+  {
+    "quantulumName": "cubic foot per second",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "standard cubic centimetre per minute",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "standard cubic feet per minute",
+    "KBUnits": [
+      "<cubic_foot_per_minute_wd:Q856240>"
+    ]
+  },
+  {
+    "quantulumName": "standard litre per minute",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "pound per hour",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "bit per second",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "baud",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "kilobit per second",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "megabit per second",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "gigabit per second",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "darcy",
+    "KBUnits": [
+      "<Darcy_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "langley",
+    "KBUnits": [
+      "<Langley_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "decitex",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "millijansky",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "penny",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "cent",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "centavo",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "ton per day",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "gross",
+    "KBUnits": [
+      "<Gross_(unit)>"
+    ]
+  },
+  {
+    "quantulumName": "long hundred",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "mill",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "dime",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "quantum bit",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "base pair",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "kilo base pair",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "mega base pair",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "giga base pair",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "nucleotide",
+    "KBUnits": []
+  },
+  {
+    "quantulumName": "baker's dozen",
+    "KBUnits": []
+  }
+]
