@@ -4,12 +4,14 @@ import math
 import multiprocessing as mp
 import os
 import time
+from functools import lru_cache
 
 import requests
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 
 from quantity.kb import parse
+from util.monitor import CounterMonitor
 
 _SERVER_HOST = 'http://varuna:10000'
 _IDS_ENDPOINT = _SERVER_HOST + '/ids'
@@ -19,19 +21,31 @@ _headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36'
 }
 
+_QT_TOKEN = '__QT__'
+
 
 def _get_all_ids():
     return json.loads(requests.get(_IDS_ENDPOINT, headers=_headers).content)
 
 
-def _get_content(id):
-    return json.loads(requests.get(_CONTENT_ENDPOINT, params={'id': id}, headers=_headers).content)
+@lru_cache
+def _get_content(doc_id):
+    return json.loads(requests.get(_CONTENT_ENDPOINT, params={'id': doc_id}, headers=_headers).content)
 
 
-def _qt_recog_func(id):
-    content = _get_content(id)
+def _convert_to_train_doc(qt, doc):
+    content = doc['content']
+    return {
+        'source': doc['source'],
+        'text': '{}{}{}'.format(content[:qt['span'][0]], _QT_TOKEN, content[qt['span'][1]:]),
+        'qt': qt
+    }
+
+
+def _qt_recog_func(doc_id):
+    content = _get_content(doc_id)
     qts = []
-    for u in parse(content.pop('content')):
+    for u in parse(content['content']):
         qts.append({
             'span': u.span,
             'surface': u.surface,
@@ -44,8 +58,11 @@ def _qt_recog_func(id):
                 'conversion_to_si': u.kb_unit.conversion_to_si
             }
         })
-    content['qts'] = qts
-    return content
+    return {
+        'doc_id': content['id'],
+        'source': content['source'],
+        'qts': qts
+    }
 
 
 def _recognize_quantities(output_file):
@@ -56,7 +73,7 @@ def _recognize_quantities(output_file):
 
     n_printed = 0
     start = time.time()
-    with mp.Pool(64) as pool:
+    with mp.Pool(128) as pool:
         for doc in pool.imap_unordered(_qt_recog_func, ids):
             f.write(json.dumps(doc))
             n_printed += 1
@@ -65,8 +82,7 @@ def _recognize_quantities(output_file):
             if time.time() > start + 10:
                 print('\rProcessed: {}'.format(n_printed))
                 start = time.time()
-
-    f.write('\n]')
+    f.write(']\n')
     f.close()
 
 
@@ -178,7 +194,100 @@ def td_idf_doc_sim(content_1, content_2):
     return dot_prod / len_1 / len_2
 
 
+def _numeric_dist(a, b):
+    return 0 if a == b == 0 else abs(a - b) / max(abs(a), abs(b))
+
+
+def _generate_positive_training_pairs(input_file, output_folder):
+    domain_2_qts = {}
+
+    with gzip.open(input_file, 'rt') as f:
+        m = CounterMonitor(name='GeneratePositivePairs')
+        m.start()
+        for line in f:
+            m.inc()
+            try:
+                doc = json.loads(line.strip()[:-1])
+            except:
+                print('Err:', line)
+                continue
+            for qt in doc['qts']:
+                unit = qt['kb_unit']
+                if unit is not None:
+                    unit = unit['si_unit']
+
+                if unit not in domain_2_qts:
+                    domain_2_qts[unit] = []
+                domain_2_qts[unit].append({
+                    'doc_id': doc['doc_id'],
+                    'qt': qt
+                })
+
+        m.shutdown()
+
+    domain_2_qts = list(domain_2_qts.items())
+    domain_2_qts.sort(reverse=True, key=lambda k: len(k[1]))
+
+    print('Domain stats:')
+    for l in domain_2_qts:
+        print(l[0], len(l[1]))
+
+    os.makedirs(output_folder, exist_ok=True)
+
+    def _process_domain(domain, qts,
+                        min_doc_sim=0.1,
+                        max_candidate_relative_dist=0.02,
+                        max_on_chain_relative_dist=0.005,
+                        max_cluster_size=20):
+        for qt in qts:
+            qt['qt']['n_value'] = qt['qt']['value'] * qt['qt']['kb_unit']['conversion_to_si']
+        qts.sort(key=lambda k: k['qt']['n_value'])
+
+        out = open(os.path.join(output_folder, domain[1:-1] + '.pos'), 'w')
+
+        m = CounterMonitor('GeneratePositivePairs-{}'.format(domain), len(qts))
+        m.start()
+        r = 0
+        for l in range(len(qts)):
+            m.inc()
+            if l < r:
+                continue
+            r = l + 1
+            while r < len(qts) and _numeric_dist(qts[r - 1]['qt']['n_value'],
+                                                 qts[r]['qt']['n_value']) <= max_on_chain_relative_dist:
+                r += 1
+            if r - l > max_cluster_size:
+                continue
+            for i in range(l, r):
+                ca = _get_content(qts[i]['doc_id'])
+                for j in range(i + 1, r):
+                    if _numeric_dist(qts[i]['qt']['n_value'], qts[j]['qt']['n_value']) > max_candidate_relative_dist:
+                        break
+                    if qts[i]['doc_id'] == qts[j]['doc_id']:
+                        continue
+                    cb = _get_content(qts[j]['doc_id'])
+                    sim = td_idf_doc_sim(ca['content'], cb['content'])
+                    if sim < min_doc_sim:
+                        continue
+                    pos_sample = {
+                        'doc_1': _convert_to_train_doc(qts[i]['qt'], ca),
+                        'doc_2': _convert_to_train_doc(qts[j]['qt'], cb),
+                        'sim': sim
+                    }
+                    out.write('{}\n'.format(json.dumps(pos_sample)))
+        out.close()
+
+    for domain, qts in domain_2_qts:
+        if len(qts) < 1e5 or domain in [None, '<Second>', '<1>']:
+            continue
+        # if domain != '<Metre>':
+        #     continue
+        _process_domain(domain, qts)
+
+
 if __name__ == '__main__':
     # _create_df_wikipedia()
     # _recognize_quantities('/GW/D5data-14/hvthinh/quid/wikipedia_quantities.gz')
-    pass
+
+    _generate_positive_training_pairs('/GW/D5data-14/hvthinh/quid/wikipedia_quantities.gz',
+                                      '/GW/D5data-14/hvthinh/quid/train/positive')
