@@ -198,6 +198,34 @@ def _numeric_dist(a, b):
     return 0 if a == b == 0 else abs(a - b) / max(abs(a), abs(b))
 
 
+_QTS = None
+
+
+def _qt_pair_eval_func(input):
+    l, r, min_doc_sim, max_candidate_relative_dist = input
+    output = []
+    for i in range(l, r):
+        ca = _get_content(_QTS[i]['doc_id'])
+        for j in range(i + 1, r):
+            rel_dist = _numeric_dist(_QTS[i]['qt']['n_value'], _QTS[j]['qt']['n_value'])
+            if rel_dist > max_candidate_relative_dist:
+                break
+            if _QTS[i]['doc_id'] == _QTS[j]['doc_id']:
+                continue
+            cb = _get_content(_QTS[j]['doc_id'])
+            sim = td_idf_doc_sim(ca['content'], cb['content'])
+            if sim < min_doc_sim:
+                continue
+            output.append({
+                'doc_1': _convert_to_train_doc(_QTS[i]['qt'], ca),
+                'doc_2': _convert_to_train_doc(_QTS[j]['qt'], cb),
+                'doc_sim': sim,
+                'qt_dist': rel_dist,
+                'cl_size': r - l,
+            })
+    return output
+
+
 def _generate_positive_training_pairs(input_file, output_folder):
     domain_2_qts = {}
 
@@ -242,39 +270,36 @@ def _generate_positive_training_pairs(input_file, output_folder):
         for qt in qts:
             qt['qt']['n_value'] = qt['qt']['value'] * qt['qt']['kb_unit']['conversion_to_si']
         qts.sort(key=lambda k: k['qt']['n_value'])
+        global _QTS
+        _QTS = qts
 
         out = open(os.path.join(output_folder, domain[1:-1] + '.pos'), 'w')
 
-        m = CounterMonitor('GeneratePositivePairs-{}'.format(domain), len(qts))
-        m.start()
+        eval_input = []
+
         r = 0
         for l in range(len(qts)):
-            m.inc()
             if l < r:
                 continue
             r = l + 1
             while r < len(qts) and _numeric_dist(qts[r - 1]['qt']['n_value'],
                                                  qts[r]['qt']['n_value']) <= max_on_chain_relative_dist:
                 r += 1
-            if r - l > max_cluster_size:
+            if r - l > max_cluster_size or r - l == 1:
                 continue
-            for i in range(l, r):
-                ca = _get_content(qts[i]['doc_id'])
-                for j in range(i + 1, r):
-                    if _numeric_dist(qts[i]['qt']['n_value'], qts[j]['qt']['n_value']) > max_candidate_relative_dist:
-                        break
-                    if qts[i]['doc_id'] == qts[j]['doc_id']:
-                        continue
-                    cb = _get_content(qts[j]['doc_id'])
-                    sim = td_idf_doc_sim(ca['content'], cb['content'])
-                    if sim < min_doc_sim:
-                        continue
-                    pos_sample = {
-                        'doc_1': _convert_to_train_doc(qts[i]['qt'], ca),
-                        'doc_2': _convert_to_train_doc(qts[j]['qt'], cb),
-                        'sim': sim
-                    }
-                    out.write('{}\n'.format(json.dumps(pos_sample)))
+            eval_input.append((l, r, min_doc_sim, max_candidate_relative_dist))
+
+        m = CounterMonitor('GeneratePositivePairs-{}'.format(domain), len(eval_input))
+        m.start()
+        cnt = 0
+        with mp.Pool(128) as pool:
+            for pos_samples in pool.imap_unordered(_qt_pair_eval_func, eval_input):
+                for sample in pos_samples:
+                    cnt += 1
+                    sample['id'] = cnt
+                    out.write('{}\n'.format(json.dumps(sample)))
+                m.inc()
+
         out.close()
 
     for domain, qts in domain_2_qts:
