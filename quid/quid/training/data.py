@@ -11,6 +11,7 @@ from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 
 from quantity.kb import parse
+from util.mongo import get_collection
 from util.monitor import CounterMonitor
 
 _SERVER_HOST = 'http://varuna:10000'
@@ -226,7 +227,7 @@ def _qt_pair_eval_func(input):
     return output
 
 
-def _generate_positive_training_pairs(input_file, output_folder):
+def _generate_positive_training_pairs(input_file):
     domain_2_qts = {}
 
     with gzip.open(input_file, 'rt') as f:
@@ -260,20 +261,20 @@ def _generate_positive_training_pairs(input_file, output_folder):
     for l in domain_2_qts:
         print(l[0], len(l[1]))
 
-    os.makedirs(output_folder, exist_ok=True)
-
     def _process_domain(domain, qts,
                         min_doc_sim=0.1,
                         max_candidate_relative_dist=0.02,
-                        max_on_chain_relative_dist=0.005,
-                        max_cluster_size=20):
+                        max_on_chain_relative_dist=0.001,
+                        max_cluster_size=10):
         for qt in qts:
             qt['qt']['n_value'] = qt['qt']['value'] * qt['qt']['kb_unit']['conversion_to_si']
         qts.sort(key=lambda k: k['qt']['n_value'])
         global _QTS
         _QTS = qts
 
-        out = open(os.path.join(output_folder, domain[1:-1] + '.pos'), 'w')
+        collection = get_collection('.'.join(['train', 'positive', domain[1:-1]]))
+        collection.drop()
+        collection.create_index('_id')
 
         eval_input = []
 
@@ -296,11 +297,9 @@ def _generate_positive_training_pairs(input_file, output_folder):
             for pos_samples in pool.imap_unordered(_qt_pair_eval_func, eval_input):
                 for sample in pos_samples:
                     cnt += 1
-                    sample['id'] = cnt
-                    out.write('{}\n'.format(json.dumps(sample)))
+                    sample['_id'] = cnt
+                    collection.insert_one(sample)
                 m.inc()
-
-        out.close()
 
     for domain, qts in domain_2_qts:
         if len(qts) < 1e5 or domain in [None, '<Second>', '<1>']:
@@ -314,5 +313,4 @@ if __name__ == '__main__':
     # _create_df_wikipedia()
     # _recognize_quantities('/GW/D5data-14/hvthinh/quid/wikipedia_quantities.gz')
 
-    _generate_positive_training_pairs('/GW/D5data-14/hvthinh/quid/wikipedia_quantities.gz',
-                                      '/GW/D5data-14/hvthinh/quid/train/positive')
+    _generate_positive_training_pairs('/GW/D5data-14/hvthinh/quid/wikipedia_quantities.gz')
