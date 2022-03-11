@@ -176,9 +176,6 @@ class IDF:
             return IDF._OOV_ROBERTSON_IDF if allow_oov else IDF._MIN_IDF
 
 
-IDF._load_idf_wikipedia()
-
-
 def td_idf_doc_sim(content_1, content_2):
     tf_1 = _tf_set(content_1)
     tf_2 = _tf_set(content_2)
@@ -304,13 +301,40 @@ def _generate_positive_training_pairs(input_file):
     for domain, qts in domain_2_qts:
         if len(qts) < 1e5 or domain in [None, '<Second>', '<1>']:
             continue
-        # if domain != '<Metre>':
-        #     continue
+        if domain != '<Metre>':
+            continue
         _process_domain(domain, qts)
 
 
+def _sample_collection(source, destination, min_doc_sim=0, n=50):
+    source = get_collection(source)
+    destination = get_collection(destination)
+    filtered = source.aggregate([
+        {'$match': {'doc_sim': {'$gte': min_doc_sim}}},
+        {'$sample': {'size': n}}
+    ])
+    destination.insert_many(filtered)
+
+
+def _calculate_precision(collection):
+    total = 0
+    labeled = 0
+    positive = 0
+    for doc in get_collection(collection).find():
+        total += 1
+        if 'ok' not in doc:
+            continue
+        labeled += 1
+        positive += (1 if doc['ok'] else 0)
+    print('Precision: {} ({}/{}) -- from Total: {}'.format(None if labeled == 0 else positive / labeled, positive,
+                                                           labeled, total))
+
+
 if __name__ == '__main__':
+    # IDF._load_idf_wikipedia()
     # _create_df_wikipedia()
     # _recognize_quantities('/GW/D5data-14/hvthinh/quid/wikipedia_quantities.gz')
 
-    _generate_positive_training_pairs('/GW/D5data-14/hvthinh/quid/wikipedia_quantities.gz')
+    # _generate_positive_training_pairs('/GW/D5data-14/hvthinh/quid/wikipedia_quantities.gz')
+    # _sample_collection('train.positive.Metre', 'train.positive.Metre.shuf')
+    print(_calculate_precision('train.positive.Metre.shuf'))
