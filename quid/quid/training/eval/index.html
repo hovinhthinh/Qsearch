@@ -17,10 +17,10 @@
 <body style="height:100%;">
 <div class="container col-12">
     <div class="row mt-2">
-        <div class="col-7"><a href="#">DEV_MODE</a>&nbsp;&nbsp;<span
+        <div class="col-6"><a href="#">DEV_MODE</a>&nbsp;&nbsp;<span
                 class="font-weight-bold">Evaluation_Collection: </span>
             <span id="eval-path-label"></span></div>
-        <div class="col-5">
+        <div class="col-6">
             <span class="font-weight-bold">tf-idf_sim: </span>
             <span id="tf-idf-sim"></span>
             &nbsp;&nbsp;&nbsp;
@@ -37,13 +37,9 @@
 <div class="container col-xs-12 col-sm-12 col-md-12 col-lg-11">
     <table class="table">
         <thead id="head" hidden>
-        <tr>
-            <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col"><a target="_blank"
-                                                                                                    id="d1">doc_1</a>
-            </th>
-            <th style="width: auto !important; border-top: 0px; border-bottom: 0px;" scope="col"><a target="_blank"
-                                                                                                    id="d2">doc_2</a>
-            </th>
+        <tr class="row">
+            <th style="border: 0px;" class="col-6"><a target="_blank" id="d1">doc_1</a></th>
+            <th style="border: 0px;" class="col-6"><a target="_blank" id="d2">doc_2</a></th>
         </tr>
         </thead>
         <tbody id="data">
@@ -54,8 +50,8 @@
 <footer class="footer fixed-bottom" style="background-color: #ffffff;">
     <div class="container col-12 offset-0">
         <div class="row mb-3">
-            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-8"></div>
-            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-4">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-8"></div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
                 <span id="check-form">
                 <label class="radio-inline text-success font-weight-bold" style="white-space:nowrap;">
                     <input type="radio" name="verdict" value="true"> True
@@ -126,7 +122,7 @@
 
     function show() {
         $("#head").removeAttr("hidden");
-        var row = $("<tr style='border-top:2px solid gray'>")
+        var row = $("<tr style='border-top:2px solid gray' class='row'>")
         row.append(buildDocDiv(data['doc_1']), buildDocDiv(data['doc_2']));
 
         updateCheckForm();
@@ -134,9 +130,9 @@
         var line = row.wrapAll('<div>').parent().html();
 
         $("#data").html(line);
-        $("#tf-idf-sim").text(data['doc_sim']);
+        $("#tf-idf-sim").text(data['doc_sim'].toFixed(3));
         $("#cl-size").text(data['cl_size']);
-        $("#qt-dist").text(data['qt_dist']);
+        $("#qt-dist").text(data['qt_dist'].toFixed(3));
 
         $("#d1").attr('href', data['doc_1']['source']);
         $("#d2").attr('href', data['doc_2']['source']);
