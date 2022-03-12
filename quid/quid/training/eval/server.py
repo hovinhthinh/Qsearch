@@ -40,8 +40,13 @@ class Handler(SimpleHTTPRequestHandler):
         url = urlparse(self.path)
         if url.path != '/eval':
             return
-
-        response = {'key': 'value'}
+        params = parse_qs(str(self.rfile.read(int(self.headers.get('Content-Length', 0))), 'utf-8'))
+        c = get_collection(params['collection'][0])
+        if params['ok'][0] not in ['true', 'false']:
+            return
+        if c.update_one({'_id': int(params['_id'][0])},
+                        {"$set": {'ok': True if params['ok'][0] == 'true' else False}}).modified_count == 1:
+            response = params
         self._set_response()
         self.wfile.write("{}".format(json.dumps(response)).encode('utf-8'))
 
