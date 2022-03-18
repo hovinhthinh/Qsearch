@@ -17,12 +17,15 @@
 <body style="height:100%;">
 <div class="container col-12">
     <div class="row mt-2">
-        <div class="col-6"><a href="#">DEV_MODE</a>&nbsp;&nbsp;<span
+        <div class="col-4"><a href="#">DEV_MODE</a>&nbsp;&nbsp;<span
                 class="font-weight-bold">Evaluation_Collection: </span>
             <span id="eval-path-label"></span></div>
-        <div class="col-6">
-            <span class="font-weight-bold">tf-idf_sim: </span>
-            <span id="tf-idf-sim"></span>
+        <div class="col-8">
+            <span class="font-weight-bold">tf-idf_doc_sim: </span>
+            <span id="tf-idf-doc-sim"></span>
+            &nbsp;&nbsp;&nbsp;
+            <span class="font-weight-bold">tf-idf_par_sim: </span>
+            <span id="tf-idf-par-sim"></span>
             &nbsp;&nbsp;&nbsp;
             <span class="font-weight-bold">qt_dist: </span>
             <span id="qt-dist"></span>
@@ -78,7 +81,7 @@
             </div>
             <div class="modal-body">
                 <input class="form-control" type="text" id="eval-path"
-                       value="train.positive.Metre.shuf">
+                       value="train.positive.<Metre>.shuf">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="startEvaluating()">Start Evaluating</button>
@@ -130,7 +133,8 @@
         var line = row.wrapAll('<div>').parent().html();
 
         $("#data").html(line);
-        $("#tf-idf-sim").text(data['doc_sim'].toFixed(3));
+        $("#tf-idf-doc-sim").text(data['tfidf_doc_sim'].toFixed(3));
+        $("#tf-idf-par-sim").text(data['tfidf_par_sim'].toFixed(3));
         $("#cl-size").text(data['cl_size']);
         $("#qt-dist").text(data['qt_dist'].toFixed(3));
 

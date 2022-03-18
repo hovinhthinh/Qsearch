@@ -6,75 +6,166 @@ import os
 import time
 from functools import lru_cache
 
-import requests
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 
 from quantity.kb import parse
-from util.mongo import get_collection
+from util.iterutils import chunk
+from util.mongo import get_collection, open_client, close_client
 from util.monitor import CounterMonitor
 
-_SERVER_HOST = 'http://varuna:10000'
-_IDS_ENDPOINT = _SERVER_HOST + '/ids'
-_CONTENT_ENDPOINT = _SERVER_HOST + '/get'
+_STEMMER = PorterStemmer()
+_QT_TOKEN = '__QT__'
 
 _headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36'
 }
 
-_QT_TOKEN = '__QT__'
-
 
 def _get_all_ids():
-    return json.loads(requests.get(_IDS_ENDPOINT, headers=_headers).content)
+    return [doc['_id'] for doc in get_collection('enwiki-09-2021').find({}, {'_id': 1})]
+
+
+_get_content_collection = None
 
 
 @lru_cache
 def _get_content(doc_id):
-    return json.loads(requests.get(_CONTENT_ENDPOINT, params={'id': doc_id}, headers=_headers).content)
+    global _get_content_collection
+    if _get_content_collection is None:
+        open_client()
+        _get_content_collection = get_collection('enwiki-09-2021')
+    return _get_content_collection.find_one({'_id': doc_id})
 
 
-def _convert_to_train_doc(qt, doc):
-    content = doc['content']
+def _convert_to_train_doc(qt, passages):
+    content = '\n'.join(passages)
     return {
-        'source': doc['source'],
+        'qt': qt,
         'text': '{}{}{}'.format(content[:qt['span'][0]], _QT_TOKEN, content[qt['span'][1]:]),
-        'qt': qt
     }
+
+
+def index_wikipedia():
+    open_client()
+    m = CounterMonitor(name='IndexWikipedia')
+    m.start()
+    collection = get_collection('enwiki-09-2021')
+    collection.drop()
+    buffer = []
+    buffer_size = 128
+    for line in gzip.open('/GW/D5data-14/hvthinh/enwiki-09-2021/standardized.json.gz', 'rt'):
+        o = json.loads(line.strip())
+        buffer.append({
+            '_id': o['source'].split('?curid=')[-1],
+            'title': o['title'],
+            'source': o['source'],
+            'passages': o['content'].split('\n'),
+        })
+        m.inc()
+        if len(buffer) == buffer_size:
+            collection.insert_many(buffer)
+            buffer.clear()
+    collection.insert_many(buffer)
+    m.shutdown()
 
 
 def _qt_recog_func(doc_id):
     content = _get_content(doc_id)
+    passages = content['passages']
     qts = []
-    for u in parse(content['content']):
-        qts.append({
-            'span': u.span,
-            'surface': u.surface,
-            'value': u.value,
-            'unit': str(u.unit),
-            'kb_unit': None if u.kb_unit is None else {
-                'entity': u.kb_unit.entity,
-                'wd_entry': u.kb_unit.wd_entry,
-                'si_unit': u.kb_unit.si_unit,
-                'conversion_to_si': u.kb_unit.conversion_to_si
-            }
-        })
+    for i, p in enumerate(passages):
+        for u in parse(p):
+            qts.append({
+                'p_idx': i,
+                'span': u.span,
+                'surface': u.surface,
+                'value': u.value,
+                'unit': str(u.unit),
+                'kb_unit': None if u.kb_unit is None else {
+                    'entity': u.kb_unit.entity,
+                    'wd_entry': u.kb_unit.wd_entry,
+                    'si_unit': u.kb_unit.si_unit,
+                    'conversion_to_si': u.kb_unit.conversion_to_si
+                }
+            })
     return {
-        'doc_id': content['id'],
+        'doc_id': content['_id'],
         'source': content['source'],
         'qts': qts
     }
 
 
+def _export_quantities_to_mongo(quantity_file):
+    m = CounterMonitor(name='LoadQuantities')
+    m.start()
+
+    domain_2_qts = {}
+    with gzip.open(quantity_file, 'rt') as f:
+        for line in f:
+            m.inc()
+            try:
+                doc = json.loads(line.strip()[:-1])
+            except:
+                print('Err:', line)
+                continue
+            for qt in doc['qts']:
+                unit = qt['kb_unit']
+                if unit is not None:
+                    unit = unit['si_unit'] if unit['si_unit'] is not None else unit['entity']
+                export_qt = {
+                    'doc_id': doc['doc_id'],
+                    'source': doc['source']
+                }
+                export_qt.update(qt)
+
+                if unit not in domain_2_qts:
+                    domain_2_qts[unit] = []
+                domain_2_qts[unit].append(export_qt)
+    m.shutdown()
+
+    domain_2_qts = list(domain_2_qts.items())
+    domain_2_qts.sort(reverse=True, key=lambda k: len(k[1]))
+
+    print('Domain stats:')
+    for l in domain_2_qts:
+        print(l[0], len(l[1]))
+
+    open_client()
+
+    def _export_domain_to_mongo(domain, qts):
+        for qt in qts:
+            scale = 1 if qt['kb_unit'] is None or qt['kb_unit']['conversion_to_si'] is None \
+                else qt['kb_unit']['conversion_to_si']
+            qt['n_value'] = qt['value'] * scale
+        qts.sort(key=lambda k: k['n_value'])
+
+        collection = get_collection('.'.join(['quantities', str(domain)]))
+        collection.drop()
+        collection.create_index('_id')
+
+        m = CounterMonitor('ExportQuantitiesToMongo-{}'.format(domain), len(qts))
+        m.start()
+        for ch in chunk(qts, 128):
+            collection.insert_many(ch)
+            m.inc(len(ch))
+
+    for domain, qts in domain_2_qts:
+        if len(qts) >= 10000:
+            _export_domain_to_mongo(domain, qts)
+
+
 def _recognize_quantities(output_file):
+    open_client()
     ids = _get_all_ids()
+    close_client()
 
     f = gzip.open(output_file, 'wt')
     f.write('[\n')
 
     n_printed = 0
     start = time.time()
-    with mp.Pool(128) as pool:
+    with mp.Pool(256) as pool:
         for doc in pool.imap_unordered(_qt_recog_func, ids):
             f.write(json.dumps(doc))
             n_printed += 1
@@ -87,9 +178,6 @@ def _recognize_quantities(output_file):
     f.close()
 
 
-_STEMMER = PorterStemmer()
-
-
 # augmented frequency: tf = 0.5 + 0.5 * (f / max_f)
 def _tf_set(content):
     tf = {}
@@ -100,26 +188,28 @@ def _tf_set(content):
             tf[stemmed] += 1
         else:
             tf[stemmed] = 1
-
-    m = max(tf.values())
-    for w in tf:
-        tf[w] = 0.5 + 0.5 * tf[w] / m
+    if len(tf) > 0:
+        m = max(tf.values())
+        for w in tf:
+            tf[w] = 0.5 + 0.5 * tf[w] / m
     return tf
 
 
-def _wordset_stemming_func(id):
-    return _tf_set(_get_content(id).pop('content')).keys()
+def _wordset_stemming_func(doc_id):
+    return list(_tf_set(' '.join(_get_content(doc_id).pop('passages'))).keys())
 
 
 def _create_df_wikipedia():
+    open_client()
     ids = _get_all_ids()
+    close_client()
     count = {
         '_N_DOC': len(ids)
     }
 
     n_printed = 0
     start = time.time()
-    with mp.Pool(64) as pool:
+    with mp.Pool(256) as pool:
         for doc in pool.imap_unordered(_wordset_stemming_func, ids):
             for w in doc:
                 if w not in count:
@@ -176,7 +266,7 @@ class IDF:
             return IDF._OOV_ROBERTSON_IDF if allow_oov else IDF._MIN_IDF
 
 
-def td_idf_doc_sim(content_1, content_2):
+def tdidf_doc_sim(content_1, content_2):
     tf_1 = _tf_set(content_1)
     tf_2 = _tf_set(content_2)
 
@@ -200,123 +290,108 @@ _QTS = None
 
 
 def _qt_pair_eval_func(input):
-    l, r, min_doc_sim, max_candidate_relative_dist = input
+    l, r, thresholds = input
     output = []
     for i in range(l, r):
-        ca = _get_content(_QTS[i]['doc_id'])
+        ca = _get_content(_QTS[i]['doc_id'])['passages']
         for j in range(i + 1, r):
-            rel_dist = _numeric_dist(_QTS[i]['qt']['n_value'], _QTS[j]['qt']['n_value'])
-            if rel_dist > max_candidate_relative_dist:
+            rel_dist = _numeric_dist(_QTS[i]['n_value'], _QTS[j]['n_value'])
+            if rel_dist > thresholds['max_candidate_relative_qt_dist']:
                 break
             if _QTS[i]['doc_id'] == _QTS[j]['doc_id']:
                 continue
-            cb = _get_content(_QTS[j]['doc_id'])
-            sim = td_idf_doc_sim(ca['content'], cb['content'])
-            if sim < min_doc_sim:
+            cb = _get_content(_QTS[j]['doc_id'])['passages']
+            # TF-IDF par sim
+            par_sim = tdidf_doc_sim(ca[_QTS[i]['p_idx']], cb[_QTS[j]['p_idx']])
+            if par_sim < thresholds['min_tfidf_par_sim']:
+                continue
+            # TF-IDF doc sim
+            doc_sim = tdidf_doc_sim(' '.join(ca), ' '.join(cb))
+            if doc_sim < thresholds['min_tfidf_doc_sim']:
                 continue
             output.append({
-                'doc_1': _convert_to_train_doc(_QTS[i]['qt'], ca),
-                'doc_2': _convert_to_train_doc(_QTS[j]['qt'], cb),
-                'doc_sim': sim,
+                'doc_1': _convert_to_train_doc(_QTS[i], ca),
+                'doc_2': _convert_to_train_doc(_QTS[j], cb),
+                'tfidf_doc_sim': doc_sim,
+                'tfidf_par_sim': par_sim,
                 'qt_dist': rel_dist,
                 'cl_size': r - l,
             })
     return output
 
 
-def _generate_positive_training_pairs(input_file):
-    domain_2_qts = {}
+def _generate_positive_training_pairs(domain,
+                                      max_cluster_size=100,
+                                      max_onchain_relative_qt_dist=0,
+                                      min_tfidf_doc_sim=0.1,
+                                      min_tfidf_par_sim=0.1,
+                                      max_candidate_relative_qt_dist=0,
+                                      ):
+    open_client()
+    qts = [doc for doc in get_collection('.'.join(['quantities', domain])).find({})]
+    close_client()
 
-    with gzip.open(input_file, 'rt') as f:
-        m = CounterMonitor(name='GeneratePositivePairs')
-        m.start()
-        for line in f:
-            m.inc()
-            try:
-                doc = json.loads(line.strip()[:-1])
-            except:
-                print('Err:', line)
-                continue
-            for qt in doc['qts']:
-                unit = qt['kb_unit']
-                if unit is not None:
-                    unit = unit['si_unit']
+    for qt in qts:
+        qt.pop('_id')
 
-                if unit not in domain_2_qts:
-                    domain_2_qts[unit] = []
-                domain_2_qts[unit].append({
-                    'doc_id': doc['doc_id'],
-                    'qt': qt
-                })
+    global _QTS
+    _QTS = qts
 
-        m.shutdown()
+    eval_input = []
 
-    domain_2_qts = list(domain_2_qts.items())
-    domain_2_qts.sort(reverse=True, key=lambda k: len(k[1]))
+    r = 0
+    for l in range(len(qts)):
+        if l < r:
+            continue
+        r = l + 1
+        while r < len(qts) and _numeric_dist(qts[r - 1]['n_value'], qts[r]['n_value']) <= max_onchain_relative_qt_dist:
+            r += 1
+        if r - l > max_cluster_size or r - l == 1:
+            continue
+        eval_input.append((l, r, {
+            'min_tfidf_doc_sim': min_tfidf_doc_sim,
+            'min_tfidf_par_sim': min_tfidf_par_sim,
+            'max_candidate_relative_qt_dist': max_candidate_relative_qt_dist,
+        }))
 
-    print('Domain stats:')
-    for l in domain_2_qts:
-        print(l[0], len(l[1]))
+    m = CounterMonitor('GeneratePositivePairs-{}'.format(domain), len(eval_input))
+    m.start()
+    cnt = 0
+    with mp.Pool(256) as pool:
+        pool_output = pool.imap_unordered(_qt_pair_eval_func, eval_input)
 
-    def _process_domain(domain, qts,
-                        min_doc_sim=0.1,
-                        max_candidate_relative_dist=0.02,
-                        max_on_chain_relative_dist=0.001,
-                        max_cluster_size=10):
-        for qt in qts:
-            qt['qt']['n_value'] = qt['qt']['value'] * qt['qt']['kb_unit']['conversion_to_si']
-        qts.sort(key=lambda k: k['qt']['n_value'])
-        global _QTS
-        _QTS = qts
-
-        collection = get_collection('.'.join(['train', 'positive', domain[1:-1]]))
+        open_client()
+        collection = get_collection('.'.join(['train', 'positive', domain]))
         collection.drop()
         collection.create_index('_id')
 
-        eval_input = []
-
-        r = 0
-        for l in range(len(qts)):
-            if l < r:
-                continue
-            r = l + 1
-            while r < len(qts) and _numeric_dist(qts[r - 1]['qt']['n_value'],
-                                                 qts[r]['qt']['n_value']) <= max_on_chain_relative_dist:
-                r += 1
-            if r - l > max_cluster_size or r - l == 1:
-                continue
-            eval_input.append((l, r, min_doc_sim, max_candidate_relative_dist))
-
-        m = CounterMonitor('GeneratePositivePairs-{}'.format(domain), len(eval_input))
-        m.start()
-        cnt = 0
-        with mp.Pool(128) as pool:
-            for pos_samples in pool.imap_unordered(_qt_pair_eval_func, eval_input):
-                for sample in pos_samples:
-                    cnt += 1
-                    sample['_id'] = cnt
-                    collection.insert_one(sample)
-                m.inc()
-
-    for domain, qts in domain_2_qts:
-        if len(qts) < 1e5 or domain in [None, '<Second>', '<1>']:
-            continue
-        if domain != '<Metre>':
-            continue
-        _process_domain(domain, qts)
+        for pos_samples in pool_output:
+            for sample in pos_samples:
+                cnt += 1
+                sample['_id'] = cnt
+            if len(pos_samples) > 0:
+                collection.insert_many(pos_samples)
+            m.inc()
 
 
-def _sample_collection(source, destination, min_doc_sim=0, n=50):
+def _sample_collection(source, destination,
+                       min_tdidf_doc_sim=0,
+                       min_tdidf_par_sim=0,
+                       n=50):
+    open_client()
     source = get_collection(source)
     destination = get_collection(destination)
+    destination.drop()
     filtered = source.aggregate([
-        {'$match': {'doc_sim': {'$gte': min_doc_sim}}},
+        {'$match': {'tfidf_doc_sim': {'$gte': min_tdidf_doc_sim},
+                    'tfidf_par_sim': {'$gte': min_tdidf_par_sim}}},
         {'$sample': {'size': n}}
     ])
     destination.insert_many(filtered)
 
 
 def _calculate_precision(collection):
+    open_client()
     total = 0
     labeled = 0
     positive = 0
@@ -331,10 +406,13 @@ def _calculate_precision(collection):
 
 
 if __name__ == '__main__':
-    # IDF._load_idf_wikipedia()
+    # index_wikipedia()
     # _create_df_wikipedia()
     # _recognize_quantities('/GW/D5data-14/hvthinh/quid/wikipedia_quantities.gz')
+    # _export_quantities_to_mongo('/GW/D5data-14/hvthinh/quid/wikipedia_quantities.gz')
 
-    # _generate_positive_training_pairs('/GW/D5data-14/hvthinh/quid/wikipedia_quantities.gz')
-    # _sample_collection('train.positive.Metre', 'train.positive.Metre.shuf')
-    print(_calculate_precision('train.positive.Metre.shuf'))
+    # IDF._load_idf_wikipedia()
+    # _generate_positive_training_pairs('<Metre>')
+
+    _sample_collection('train.positive.<Metre>', 'train.positive.<Metre>.shuf')
+    # print(_calculate_precision('train.positive.<Metre>.shuf'))

@@ -5,7 +5,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer, HTTPServe
 from socketserver import ThreadingMixIn
 from urllib.parse import urlparse, parse_qs
 
-from util.mongo import get_collection
+from util.mongo import get_collection, open_client
 
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
@@ -52,6 +52,7 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 def run(port=6993):
+    open_client()
     logging.basicConfig(level=logging.INFO)
     server_address = ('0.0.0.0', port)
     httpd = ThreadingHTTPServer(server_address, Handler)

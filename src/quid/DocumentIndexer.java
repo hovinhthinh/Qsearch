@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
+@Deprecated
 public class DocumentIndexer extends AbstractHandler {
     public static final String DOCUMENT_INDEX_FILE = "/GW/D5data-14/hvthinh/quid/wikipedia.index";
 //    public static final String DOCUMENT_INDEX_FILE = " /dev/shm/wikipedia.index";
