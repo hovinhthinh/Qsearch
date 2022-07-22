@@ -69,6 +69,9 @@ GET /search_table?full=skyscrapers%20higher%20than%201000%20feet
 
 Please read the specific README at [QL.md](QL.md)
 
+## 4) Resources
+- In these projects, we developed a quantity recognition tool ([link](https://github.com/hovinhthinh/quantulum3)), which is a fork of [quantulum3](https://github.com/nielstron/quantulum3), adding an extra feature of linking recognized units to YAGO4.
+
 ---
 If you have any questions or requests, please contact me at the following email address:
 [hvthinh@mpi-inf.mpg.de](mailto:hvthinh@mpi-inf.mpg.de?subject=[Qsearch]%20Contact)
