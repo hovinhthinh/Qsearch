@@ -27,8 +27,7 @@ GET /search?full=skyscrapers%20higher%20than%201000%20feet
 | --- | ---| --- |
 | `full`      | --       |  The quantity filter query |
 | `ntop`   | `20`        | Number of top retrieved answers |
-| `model`   | `EMBEDDING`        | The ranking model being used, either `EMBEDDING` or `KL`, for *Context Embedding
-Distance* or *Kullback-Leibler Divergence* |
+| `model`   | `EMBEDDING`        | The ranking model being used, either `EMBEDDING` or `KL`, for *Context Embedding Distance* or *Kullback-Leibler Divergence* |
 | `alpha`   | `0.5`      | Parameter of `EMBEDDING` model, see [1] |
 | `lambda`   | `0.1`      | Parameter of `KL` model, see [1]  |
 
@@ -83,5 +82,5 @@ or [hovinhthinh@gmail.com](mailto:hovinhthinh@gmail.com?subject=[Qsearch]%20Cont
 [2] V.T. Ho, K. Pal, S. Razniewski, K. Berberich, and G. Weikum. Extracting Contextualized Quantity Facts from Web
 Tables. In *The Web Conference (WWW)*, 2021.
 
-[3] V.T. Ho, D. Stepanova, D. Milchevski, J. Stroetgen, and G. Weikum. enhancing Knowledge Bases with Quantity Facts.
+[3] V.T. Ho, D. Stepanova, D. Milchevski, J. Stroetgen, and G. Weikum. Enhancing Knowledge Bases with Quantity Facts.
 In *The Web Conference (WWW)*, 2022.
